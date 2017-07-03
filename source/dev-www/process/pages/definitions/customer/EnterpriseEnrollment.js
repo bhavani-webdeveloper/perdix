@@ -15,6 +15,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             //model.branchId = SessionStore.getBranchId() + '';
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
+            model.customer.enterprise = model.customer.enterprise ||{};
+            model.customer.enterprise.isGSTAvailable = 'YES';
+            model.customer.enterprise.companyRegistered = 'YES';
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -85,6 +88,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        type: "date"
                     },
                     {
+                        "type": "string",
+                        "key": "customer.enterprise.companyEmailId",
+                        "pattern": "^\\S+@\\S+$",
+                        "title": "COMPANY_EMAIL_ID"
+                    },
+                    {
                         "key": "customer.latitude",
                         "title": "BUSINESS_LOCATION",
                         "type": "geotag",
@@ -107,29 +116,78 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.companyRegistered",
                         type: "radios",
                         titleMap: {
-                            "YES": "Yes",
-                            "NO": "No"
+                            "NO": "No",
+                            "YES": "Yes"      
                         },
                         title: "IS_REGISTERED"
                     },
                     {
-                        key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_TYPE",
-                        type: "select",
-                        enumCode: "business_registration_type"
+                        key: "customer.enterprise.isGSTAvailable",
+                        type: "radios",
+                        enumCode:"decisionmaker",
+                        title: "IS_GST_AVAILABLE",
+                        "onChange": function(modelValue, form, model) {
+                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
+                                                model.customer.enterprise.companyRegistered = "YES";
+                                        }
+                                    }
                     },
                     {
-                        key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_NUMBER"
+                        key: "customer.enterpriseRegistrations",
+                        type: "array",
+                        title: "REGISTRATION_DETAILS",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
+                        items: [
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationType",
+                                title: "REGISTRATION_TYPE",
+                                type: "select",
+                                enumCode: "business_registration_type"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               title: "REGISTRATION_NUMBER"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                type: "date",
+                                title: "REGISTRATION_DATE"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].expiryDate",
+                                type: "date",
+                                title: "VALID_UPTO"
+                            },
+                            {
+                                key:"customer.enterpriseRegistrations[].documentId",
+                                type:"file",
+                                required: true,
+                                title:"REGISTRATION_DOCUMENT",
+                                category:"CustomerEnrollment",
+                                subCategory:"REGISTRATIONDOCUMENT",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            }
+                        ]
                     },
-                    {
-                        key: "customer.enterprise.registrationDate",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        type: "date",
-                        title: "REGISTRATION_DATE"
-                    },
+                    // {
+                    //     key: "customer.enterprise.registrationType",
+                    //     condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
+                    //     title: "REGISTRATION_TYPE",
+                    //     type: "select",
+                    //     enumCode: "business_registration_type"
+                    // },
+                    // {
+                    //     key: "customer.enterprise.registrationNumber",
+                    //     condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
+                    //     title: "REGISTRATION_NUMBER"
+                    // },
+                    // {
+                    //     key: "customer.enterprise.registrationDate",
+                    //     condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
+                    //     type: "date",
+                    //     title: "REGISTRATION_DATE"
+                    // },
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -420,6 +478,29 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
                     deferred.reject();
                 }
+                if (model.customer.enterprise.isGSTAvailable === "YES"){
+                    try
+                    {
+                        var count = 0;
+                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                                && model.customer.enterpriseRegistrations[i].registeredDate != ""
+                                && model.customer.enterpriseRegistrations[i].registeredDate != null) {
+                                count++;
+                            }
+                        }
+                        if (count < 1) {
+                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                            return false;
+                        }
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
+
                 return deferred.promise;
             },
             submit: function(model, form, formName){
@@ -432,6 +513,28 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     });
                     return out;
                 };
+                if (model.customer.enterprise.isGSTAvailable === "YES"){
+                    try
+                    {
+                        var count = 0;
+                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                                ) {
+                                count++;
+                            }
+                        }
+                        if (count < 1) {
+                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                            return false;
+                        }
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
+
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
                 if (reqData.customer.id) {

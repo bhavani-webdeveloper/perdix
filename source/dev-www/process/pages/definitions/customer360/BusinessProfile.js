@@ -170,6 +170,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                        type: "date"
                     },
                     {
+                        "type": "email",
+                        "key": "customer.enterprise.companyEmailId",
+                        "pattern": "^\\S+@\\S+$",
+                        "title": "COMPANY_EMAIL_ID"
+                    },
+                    {
                         "key": "customer.latitude",
                         "title": "BUSINESS_LOCATION",
                         "type": "geotag",
@@ -225,6 +231,17 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type: "select",
                         enumCode: "decisionmaker",
                         title: "IS_REGISTERED"
+                    },
+                    {
+                        key: "customer.enterprise.isGSTAvailable",
+                        type: "radios",
+                        enumCode:"decisionmaker",
+                        title: "IS_GST_AVAILABLE",
+                        "onChange": function(modelValue, form, model) {
+                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
+                                                model.customer.enterprise.companyRegistered = "YES";
+                                        }
+                                    }
                     },
                     {
                         key: "customer.enterpriseRegistrations",
@@ -1443,6 +1460,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
                     deferred.reject();
                 }
+
                 return deferred.promise;
             },
             submit: function(model, form, formName){
@@ -1455,6 +1473,27 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     });
                     return out;
                 };
+                 if (model.customer.enterprise.isGSTAvailable === "YES"){
+                    try
+                    {
+                        var count = 0;
+                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                                ) {
+                                count++;
+                            }
+                        }
+                        if (count < 1) {
+                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                            return false;
+                        }
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
                 var reqData = _.cloneDeep(model);
                 //EnrollmentHelper.fixData(reqData);
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {

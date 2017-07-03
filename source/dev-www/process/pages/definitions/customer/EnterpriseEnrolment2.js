@@ -99,7 +99,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.centreId = centreName[0];
                 model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
-            }
+                model.customer.enterprise.isGSTAvailable = 'YES';
+                model.customer.enterprise.companyRegistered = "YES";
+            }   
             if (bundlePageObj){
                 model._bundlePageObj = bundlePageObj;
             }
@@ -504,6 +506,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        type: "date"
                     },
                     {
+                        "type": "email",
+                        "key": "customer.enterprise.companyEmailId",
+                        "pattern": "^\\S+@\\S+$",
+                        "title": "COMPANY_EMAIL_ID"
+                    },
+                    {
                         "key": "customer.latitude",
                         "title": "BUSINESS_LOCATION",
                         "type": "geotag",
@@ -561,10 +569,21 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "IS_REGISTERED"
                     },
                     {
+                        key: "customer.enterprise.isGSTAvailable",
+                        type: "radios",
+                        enumCode:"decisionmaker",
+                        title: "IS_GST_AVAILABLE",
+                        "onChange": function(modelValue, form, model) {
+                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
+                                                model.customer.enterprise.companyRegistered = "YES";
+                                        }
+                                    }
+                    },
+                    {
                         key: "customer.enterpriseRegistrations",
                         type: "array",
                         title: "REGISTRATION_DETAILS",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
                         items: [
                             {
                                 key: "customer.enterpriseRegistrations[].registrationType",
@@ -3343,6 +3362,27 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
                     return false;
                 }
+                if (model.customer.enterprise.isGSTAvailable === "YES"){
+                    try
+                    {
+                        var count = 0;
+                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                                ) {
+                                count++;
+                            }
+                        }
+                        if (count < 1) {
+                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                            return false;
+                        }
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
 
                 if (model.customer.enterprise.companyRegistered != "YES"){
                     try
@@ -3398,6 +3438,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         console.error(err);
                     }
                 }
+
+                if (model.customer.enterprise.isGSTAvailable === "YES"){
+                    try
+                    {
+                        var count = 0;
+                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                                && model.customer.enterpriseRegistrations[i].registeredDate != ""
+                                && model.customer.enterpriseRegistrations[i].registeredDate != null) {
+                                count++;
+                            }
+                        }
+                        if (count < 1) {
+                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                            return false;
+                        }
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
+
                 if (model.currentStage == 'Application') {
                     if (model.customer.verifications.length<2){
                         PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
