@@ -95,13 +95,13 @@ return {
         "colClass": "col-sm-12",
         "items": [{
             "type": "array",
-            "readonly": true,
             "key": "group.jlgGroupMembers",
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
             "add": null,
             "remove": null,
             "items": [{
                 "type": "section",
+                "readonly": true,
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
@@ -158,6 +158,7 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
+                "readonly": true,
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
@@ -211,6 +212,7 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
+                "readonly": true,
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
@@ -241,6 +243,7 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
+                "readonly": true,
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
@@ -269,9 +272,41 @@ return {
                 }]
             }, {
                 "notitle": true,
+                "readonly":true,
                 "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
                 "type": "html"
+            },{
+                "type": "section",
+                "html": '<hr>'
+            },{
+            "type": "section",
+            "condition":"model.group.partnerCode=='AXIS'",
+            "htmlClass": "row",
+            "items": [{
+                "type": "section",
+                "htmlClass": "col-sm-6",
+                "items": [{
+                        "title": "IS_CUSTOMER_CALLED",
+                        "key": "group.jlgGroupMembers[].customerCalled",
+                        "type":"checkbox",
+                        "schema":{
+                            "default":true
+                        }
+                    },{
+                        "title": "CUSTOMER_CALLED_DATE",
+                        "key": "group.jlgGroupMembers[].customerCalledDate",
+                        "type":"date"
+                    },{
+                        "title": "CUSTOMER_CALLED_REMARKS",
+                        "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
+                        "type":"string"
+                    }]
+            }, {
+                "type": "section",
+                "htmlClass": "col-sm-6",
+                "items": []
             }]
+        }]
         }, {
             "type": "section",
             "htmlClass": "row",
