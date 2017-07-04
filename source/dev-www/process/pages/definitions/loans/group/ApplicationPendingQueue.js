@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.ApplicationPendingQueue",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		var branchId = SessionStore.getBranchId();
@@ -15,14 +15,19 @@ define({
 			"title": "Application Pending Queue",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("Application Pending Queue got initialized");
+				model.partner = SessionStore.session.partnerCode;
 			},
 			definition: {
 				title: "Application Pending Queue",
-				searchForm: [
-					"*"
-				],
-				//autoSearch: true,
+				searchForm: [{
+					"key": "partner",
+					"readonly": true,
+					"condition": "model.partner"
+				}, {
+					"key": "partner",
+					"condition": "!model.partner"
+				}],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -43,18 +48,14 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-					var params = {
+					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
-						'page': pageOpts.pageNo,
 						'currentStage': "ApplicationPending",
+						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
-					};
-
-					var promise = Groups.search(params).$promise;
-					return promise;
+					}).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -99,7 +100,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "GRT",
+							name: "APPLICATION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
@@ -110,6 +111,7 @@ define({
 								}, {
 									state: "Page.Engine",
 									pageName: "loans.group.ApplicationPendingQueue",
+									pageId: null
 								});
 							},
 							isApplicable: function(item, index) {
