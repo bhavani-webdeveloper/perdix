@@ -272,6 +272,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         initialize: function (model, form, formCtrl) {
             $stateParams.confirmExit = true;
             model.customer = model.customer || {};
+            model.customer.customerType="individual";
             if($stateParams.pageData)
             {
                 model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
@@ -802,6 +803,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
+                model.customer.customerType="individual";
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");
@@ -814,7 +816,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     });
                     return out;
                 };
-                model.customer.customerType="individual";
+                
                 var reqData = _.cloneDeep(model);
 
                 EnrollmentHelper.fixData(reqData);
@@ -834,6 +836,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 });
             },
             proceed: function(model, formCtrl, form, $event) {
+                model.customer.customerType="individual";
                 var reqData = _.cloneDeep(model);
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
