@@ -255,7 +255,7 @@ define({
                             return promise;*/
 
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var branches = formHelper.enum('branch_id').data;
+                            var branches = formHelper.enum('branch').data;
                             var branchId;
                             $log.info(inputModel.branchName);
                             for (var i = 0; i < branches.length; i++) {
