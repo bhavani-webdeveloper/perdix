@@ -2453,9 +2453,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 if(!validateAndPopulateMitigants(model)){
                     return;
                 }
-                if(isEnrollmentsSubmitPending(model)){
-                    return;
-                }
+                // if(isEnrollmentsSubmitPending(model)){
+                //     return;
+                // }
                 if (!preLoanSaveOrProceed(model)){
                     return;
                 }
@@ -2508,9 +2508,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside save()");
                 PageHelper.clearErrors();
                 /* TODO Call save service for the loan */
-                if(isEnrollmentsSubmitPending(model)){
-                    return;
-                }
+                // if(isEnrollmentsSubmitPending(model)){
+                //     return;
+                // }
                 if (!preLoanSaveOrProceed(model)){
                     return;
                 }
@@ -2649,9 +2649,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 PageHelper.clearErrors();
                 var nextStage = null;
                 /* TODO Call proceed servcie for the loan account */
-                if(isEnrollmentsSubmitPending(model)){
-                    return;
-                }
+                // if(isEnrollmentsSubmitPending(model)){
+                //     return;
+                // }
 
                 if (!validateForm(formCtrl)){
                     return;
