@@ -843,8 +843,8 @@
             "required":[
             ],
           "properties": {
-            "applicationFileName": {
-              "title": "applicationFileName",
+            "applicationFileId": {
+              "title": "applicationFileId",
               "type": "string",
               "captureStages": [
 				"ApplicationPending"
@@ -874,88 +874,15 @@
                 "ApplicationPending"
               ]
             },
-			 "chk1UploadFilePath": {
-              "title": "chk1UploadFilePath",
+			 "chk1FileUploadId": {
+              "title": "chk1FileUploadId",
               "type": "string",
               "captureStages": [
 			  "GroupCreation",
                 "Checker1"				
               ]
             },
-			 "customerCalled": {
-              "title": "customerCalled",
-              "type": "string",
-              "captureStages": [
-			  "GroupCreation",
-               "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "customerNotCalledReason": {
-              "title": "customerNotCalledReason",
-              "type": "string",
-              "captureStages": [
-			  "GroupCreation",
-               "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "customerNotCalledRemarks": {
-              "title": "customerNotCalledRemarks",
-              "type": "string",
-              "captureStages": [
-			  "GroupCreation",
-                "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "customerCalledDate": {
-              "title": "customerCalledDate",
-              "type": "date",
-              "captureStages": [
-			  "GroupCreation",
-                "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "customerCalledBy": {
-              "title": "customerCalledBy",
-              "type": "string",
-              "captureStages": [
-			  "GroupCreation",
-                "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "customerCalledAt": {
-              "title": "customerCalledAt",
-              "type": "date",
-              "captureStages": [
-			  "GroupCreation",
-               "Checker1",
-				"Checker2",
-				"Checker3",
-				"Checker4"
-              ]
-            },
-			 "agreementFileName": {
-              "title": "agreementFileName",
-              "type": "string",
-              "captureStages": [
-			  "GroupCreation",
-                "AgreementUploadPending"
-              ]
-            },
+			  
 			 "agreementStatus": {
               "title": "agreementStatus",
               "type": "string",
