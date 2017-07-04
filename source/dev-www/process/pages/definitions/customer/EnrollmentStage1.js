@@ -3,7 +3,7 @@ irf.pageCollection.factory("EnrollmentHelper",
 function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
 
     var fixData = function(model){
-        /* TODO Validations */
+        /* TODO Validations *
 
         /* Fix to make additionalKYCs as an array */
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
@@ -272,7 +272,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         initialize: function (model, form, formCtrl) {
             $stateParams.confirmExit = true;
             model.customer = model.customer || {};
-            model.customer.customerType="individual";
+            model.customer.customerType="Individual";
             if($stateParams.pageData)
             {
                 model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
@@ -808,7 +808,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                model.customer.customerType="individual";
+                model.customer.customerType="Individual";
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");
@@ -841,7 +841,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 });
             },
             proceed: function(model, formCtrl, form, $event) {
-                model.customer.customerType="individual";
+                model.customer.customerType="Individual";
                 var reqData = _.cloneDeep(model);
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
