@@ -340,10 +340,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 {
                     key:"customer.centreCode",
                     type:"select",
-                    filter: {
-                        "parentCode": "model.branchId"
-                    },
-                    screenFilter: true
+                    "enumCode": "centre",
+                    "parentEnumCode": "branch",
+                    "parentValueExpr": "model.branchId",
                 },
                 {
                     key:"customer.enrolledAs",
@@ -455,6 +454,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.villageName",
                             type:"select",
+                            "enumCode":"village",
                             filter: {
                             parentCode: 'model.branchId'
                             },
@@ -467,6 +467,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.district",
                             type:"select",
+                            "enumCode":"district_master",
                             screenFilter: true,
                             parentEnumCode: "bankname",
                             parentValueExpr: "model.customer.kgfsBankName"
@@ -475,6 +476,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.state",
                             type:"select",
+                            "enumCode":"state_master",
                             screenFilter: true,
                             parentEnumCode: "bankname",
                             parentValueExpr: "model.customer.kgfsBankName"
