@@ -97,6 +97,8 @@ define({
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
                 model.group.branchName = SessionStore.getCurrentBranch().branchId;
+                model.group.branchdescription =SessionStore.getBankName();
+
                 $log.info(model.group.branchName);
 
                 if ($stateParams.pageId) {
@@ -221,14 +223,15 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "select",
                                 "readonly": true,
-                                "enumCode": "branch_id"
+                                "enumCode": "branch",
+                               // "enumCode": "branch_id"
                             },
                             "centreCode": {
                                 "key": "group.centreCode",
                                 "title": "CENTRE",
                                 "enumCode": "centre",
                                 "type": "select",
-                                "parentEnumCode": "branch_id",
+                                "parentEnumCode": "branch",
                                 "parentValueExpr": "model.branchName",
                             }
                         },

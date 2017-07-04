@@ -46,7 +46,7 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 					},
 					"centreCode": {
 						"title": "CENTRE_CODE",
-						"type": "string",
+						"type":["number", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",

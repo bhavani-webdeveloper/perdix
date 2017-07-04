@@ -280,6 +280,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             }
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsBankName = SessionStore.getBankName();
+            $log.info(model.customer.kgfsBankName);
             $log.info(formHelper.enum('bank'));
             $log.info("ProfileInformation page got initialized:"+model.branchId);
         },
@@ -511,6 +512,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             key:"customer.mailingDistrict",
                             type:"select",
                             screenFilter: true,
+                            "enumCode":"district_master",
                             parentEnumCode: "bankname",
                             parentValueExpr: "model.customer.kgfsBankName"
                         },
@@ -518,6 +520,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.mailingState",
                             type:"select",
+                            "enumCode":"state_master",
                             screenFilter: true,
                             parentEnumCode: "bankname",
                             parentValueExpr: "model.customer.kgfsBankName"

@@ -46,7 +46,7 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 					},*/
 					"centreCode": {
 						"title": "CENTRE",
-						"type":["string", "null"],
+						"type":["number", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
