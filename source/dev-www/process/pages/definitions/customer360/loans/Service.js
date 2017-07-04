@@ -87,7 +87,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: 'loans.LoanRepay',
+                                            pageName: 'loans.DirectLoanRepay',
                                             pageId: [item.accountNumber,item.urnNo,item.customerId,item.bcAccountNumber,item.partner].join(".")
                                         })
                                     },
