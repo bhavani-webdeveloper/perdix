@@ -100,6 +100,32 @@ gulp.task('androidManifestUpgrade', function(){
             }
         }))
         .pipe(gulp.dest("./"));
+});
+
+gulp.task('updateLegacyURLInIndex', function(){
+    var legacySystemUrl = argv.legacySystemUrl;
+    return gulp.src(['./dev-www/index.html'])
+        .pipe($.cheerio({
+            run: function($, file){
+                console.log(file);
+                $("#i7iframe").attr("src",legacySystemUrl)
+            }
+        }))
+        .pipe(gulp.dest("./dev-www/"))
+})
+
+gulp.task('updateLegacyURLInConfig', function(){
+    var legacySystemUrl = argv.legacySystemUrl;
+    return gulp.src(['./config.xml'])
+        .pipe($.cheerio({
+            run: function($, file){
+                $("content").attr("src", legacySystemUrl);
+            },
+            parserOptions: {
+                xmlMode: true
+            }
+        }))
+        .pipe(gulp.dest("./"));
 })
 
 gulp.task('appManifestUpdate', function(){
