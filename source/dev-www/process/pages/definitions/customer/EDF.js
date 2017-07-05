@@ -13,6 +13,8 @@ irf.pageCollection.factory("Pages__EDF",
             initialize: function(model, form, formCtrl) {
                 $log.info("I got initialized");
                 $log.info($stateParams);
+                //"Page/Engine/CustomerFormDownloads",
+                //"Page/Engine/CentrePaymentCollection"
 
                 if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
 
@@ -160,3 +162,5 @@ irf.pageCollection.factory("Pages__EDF",
         }
     }
 ]);
+
+

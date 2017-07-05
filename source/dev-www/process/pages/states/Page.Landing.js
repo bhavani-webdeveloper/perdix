@@ -13,7 +13,6 @@ irf.pages.controller("PageLandingCtrl",
 			"Page/Engine/ProfileInformation",
 			"Page/Engine/CBCheckStatusQueue",
 			"Page/Engine/EnrollmentHouseVerificationQueue",
-			"Page/Engine/CentrePaymentCollection",
 			"Page/GroupDashboard",
 			"Page/Engine/InsurenceUpload"
 		]

@@ -12,7 +12,6 @@
 				"Page/Engine/CBCheckStatusQueue",
 				"Page/Engine/EnrollmentHouseVerificationQueue",
 				"Page/Offline/AssetsLiabilitiesAndHealth",
-				"Page/Engine/CustomerFormDownloads",
 				"Page/Engine/customer360.RecaptureQueue"
 			]
 		},
@@ -43,7 +42,9 @@
 				"Page/Engine/loans.groups.GroupLoanRepaymentQueue"
 
 			]
-		},
-		"Page/Engine/CentrePaymentCollection"
+		}
+		
 	]
 }
+
+
