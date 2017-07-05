@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.CGT2",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "$state", "irfSimpleModal", "GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
+    $pageFn: function($log, $state, irfSimpleModal, GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -21,7 +21,7 @@ define({
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cgt1-init", "Loading, Please Wait...");
-                    Groups.getGroup({
+                    GroupProcess.getGroup({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);

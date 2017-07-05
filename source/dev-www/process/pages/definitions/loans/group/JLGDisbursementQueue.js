@@ -1,10 +1,10 @@
 define({
     pageUID: "loans.group.JLGDisbursementQueue",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Groups","LoanProcess", "entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "GroupProcess","LoanProcess", "entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
-    $pageFn: function($log, $state, Groups,LoanProcess, entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, GroupProcess,LoanProcess, entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         var branchId = SessionStore.getBranchId();
@@ -15,13 +15,20 @@ define({
             "title": "GROUP_LOAN_DISBURSEMENT_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                model.partner = SessionStore.session.partnerCode;
+                model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
                 $log.info("Group Loan Disbursement Queue got initialized");
             },
             definition: {
                 title: "GROUP_LOAN_DISBURSEMENT_QUEUE",
-                searchForm: [
-                    "*"
-                ],
+                searchForm: [{
+                    "key": "partner",
+                    "readonly": true,
+                    "condition": "model.isPartnerChangeAllowed"
+                }, {
+                    "key": "partner",
+                    "condition": "!model.isPartnerChangeAllowed"
+                }],
                 //autoSearch: true,
                 searchSchema: {
                     "type": 'object',
@@ -53,7 +60,7 @@ define({
                         'per_page': pageOpts.itemsPerPage
                     };
 
-                    var promise = Groups.search(params).$promise;
+                    var promise = GroupProcess.search(params).$promise;
                     return promise;
                 },
                 paginationOptions: {

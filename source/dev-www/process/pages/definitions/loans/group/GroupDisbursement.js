@@ -54,7 +54,7 @@ define({
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("group-init", "Loading, Please Wait...");
-                    Groups.getGroup({
+                    GroupProcess.getGroup({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);

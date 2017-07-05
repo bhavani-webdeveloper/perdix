@@ -29,6 +29,7 @@ define({
 					model.fullAccess = true;
 				}
 				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 				$log.info("Checker1 Queue got initialized");
 			},
 			definition: {
@@ -43,24 +44,23 @@ define({
 					}, {
 						"key": "bankId",
 						"type": "select",
-						"parentEnumCode": "bank",
-						"parentValueExpr": "model.bankId",
 						"condition": "model.fullAccess"
 					}, {
 						"key": "branchId",
-						"type": "select"
+						"type": "select",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
 					}, {
 						"key": "partner",
 						"type": "select",
 						"readonly": true,
-						"condition": "model.partner"
+						"condition": "model.isPartnerChangeAllowed"
 					}, {
 						"key": "partner",
 						"type": "select",
-						"condition": "!model.partner"
+						"condition": "!model.isPartnerChangeAllowed"
 					}]
 				}],
-				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -81,7 +81,7 @@ define({
 							"enumCode": "partner"
 						}
 					},
-					"required": []
+					"required": ['partner']
 				},
 
 				getSearchFormHelper: function() {

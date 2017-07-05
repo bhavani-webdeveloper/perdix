@@ -70,7 +70,7 @@ define({
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("group-init", "Loading, Please Wait...");
-                    Groups.getGroup({
+                    GroupProcess.getGroup({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
@@ -380,7 +380,7 @@ define({
                                         $log.warn(resp);
                                         irfProgressMessage.pop('group-dsc-override-req', 'Almost Done...');
                                         var screenMode = model.group.screenMode;
-                                        Groups.getGroup({
+                                        GroupProcess.getGroup({
                                             groupId: model.group.id
                                         }, function(response, headersGetter) {
                                             PageHelper.hideLoader();
@@ -439,7 +439,7 @@ define({
                                                 urnNo: urnNo
                                             },
                                             function(resp, headers) {
-                                                Groups.getGroup({
+                                                GroupProcess.getGroup({
                                                     groupId: model.group.id
                                                 }, function(response, headersGetter) {
                                                     irfProgressMessage.pop('group-dsc-remove-req', 'Group Member Removed', 2000);

@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.CloseGroup",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		return {
@@ -49,7 +49,7 @@ define({
 						'per_page': pageOpts.itemsPerPage
 					};
 
-					var promise = Groups.search(params).$promise;
+					var promise = GroupProcess.search(params).$promise;
 					return promise;
 				},
 				paginationOptions: {

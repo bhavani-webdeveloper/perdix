@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.CreateGroup",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -105,7 +105,7 @@ define({
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("group-init", "Loading, Please Wait...");
-                    Groups.getGroup({
+                    GroupProcess.getGroup({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);

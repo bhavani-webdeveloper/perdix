@@ -1,6 +1,6 @@
 irf.models.factory('GroupProcess', function($resource, $httpParamSerializer, BASE_URL, searchResource) {
     var endpoint = BASE_URL + '/api/groupprocess';
-    return $resource(endpoint, null, {
+    var resource =  $resource(endpoint, null, {
         search:searchResource({
             method:'GET',
             url:endpoint+'/search'
@@ -23,4 +23,10 @@ irf.models.factory('GroupProcess', function($resource, $httpParamSerializer, BAS
             isArray:true
         },
     });
+
+    resource.hasPartnerCodeAccess = function(partner){
+        return (angular.isUndefined(partner) || partner == null) ? false : true;
+    }
+
+    return resource;
 });

@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.Checker4Queue",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		var branchId = SessionStore.getBranchId();
@@ -28,6 +28,8 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
+				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 				$log.info("Checker4 Queue got initialized");
 			},
 			definition: {
@@ -49,8 +51,14 @@ define({
 	                		key: "branchId", 
 	                	},
 	                	{
-	                		key: "partner", 
-	                	},
+	                		key: "partner",
+	                		"readonly": true,
+							"condition": "model.isPartnerChangeAllowed"
+						}, 
+						{
+							"key": "partner",
+							"condition": "!model.isPartnerChangeAllowed"
+						}
 	                	]
 	                }
 				],
@@ -107,7 +115,7 @@ define({
 						'per_page': pageOpts.itemsPerPage
 					};
 
-					var promise = Groups.search(params).$promise;
+					var promise = GroupProcess.search(params).$promise;
 					return promise;
 				},
 				paginationOptions: {

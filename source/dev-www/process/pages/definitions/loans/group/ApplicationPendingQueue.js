@@ -15,23 +15,70 @@ define({
 			"title": "Application Pending Queue",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
+				model.branchId = SessionStore.getCurrentBranch().branchId;
+				var bankName = SessionStore.getBankName();
+				var banks = formHelper.enum('bank').data;
+				for (var i = 0; i < banks.length; i++){
+					if(banks[i].name == bankName){
+						model.bankId = banks[i].value;
+						model.bankName = banks[i].name;
+					}
+				}
+				var userRole = SessionStore.getUserRole();
+				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+					model.fullAccess = true;
+				}
 				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 			},
 			definition: {
 				title: "Application Pending Queue",
-				searchForm: [{
+				searchForm: [
+				{
+            		key: "bankId",
+            		readonly: true, 
+            		condition: "!model.fullAccess"
+            	},
+            	{
+            		key: "bankId",
+            		condition: "model.fullAccess"
+            	},
+            	{
+            		key: "branchId", 
+            	},
+				{
 					"key": "partner",
 					"readonly": true,
-					"condition": "model.partner"
+					"condition": "model.isPartnerChangeAllowed"
 				}, {
 					"key": "partner",
-					"condition": "!model.partner"
+					"condition": "!model.isPartnerChangeAllowed"
 				}],
-				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
+						"bankId": {
+							"title": "BANK_NAME",
+							"type": ["integer", "null"],
+							enumCode: "bank",	
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true,
+
+							}
+						},
+						"branchId": {
+							"title": "BRANCH_NAME",
+							"type": ["integer", "null"],
+							"enumCode": "branch_id",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true,
+								"parentEnumCode": "bank",
+								"parentValueExpr": "model.bankId",
+							}
+						},
 						"partner": {
 							"type": "string",
 							"title": "PARTNER",
@@ -41,7 +88,7 @@ define({
 							}
 						}
 					},
-					"required": []
+					"required": ['partner']
 				},
 
 				getSearchFormHelper: function() {
@@ -49,7 +96,8 @@ define({
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
 					return GroupProcess.search({
-						'branchId': branchId,
+						'bankId': searchOptions.bankId,
+						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
 						'currentStage': "ApplicationPending",

@@ -16,16 +16,17 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 			},
 			definition: {
 				title: "DSC QUEUE",
 				searchForm: [{
 					"key": "partner",
 					"readonly": true,
-					"condition": "model.partner"
+					"condition": "model.isPartnerChangeAllowed"
 				}, {
 					"key": "partner",
-					"condition": "!model.partner"
+					"condition": "!model.isPartnerChangeAllowed"
 				}],
 				autoSearch: true,
 				searchSchema: {
