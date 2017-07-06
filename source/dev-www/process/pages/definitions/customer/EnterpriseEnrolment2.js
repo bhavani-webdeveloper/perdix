@@ -891,6 +891,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        type: "date"
                     },
                     {
+                        "type": "email",
+                        "key": "customer.enterprise.companyEmailId",
+                        "pattern": "^\\S+@\\S+$",
+                        "title": "COMPANY_EMAIL_ID"
+                    },
+                    {
                         "key": "customer.latitude",
                         "title": "BUSINESS_LOCATION",
                         "type": "geotag",
@@ -946,6 +952,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "NO": "No"
                         },
                         title: "IS_REGISTERED"
+                    },
+                    {
+                        key: "customer.enterprise.isGSTAvailable",
+                        type: "radios",
+                        enumCode:"decisionmaker",
+                        title: "IS_GST_AVAILABLE",
+                        "onChange": function(modelValue, form, model) {
+                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
+                                                model.customer.enterprise.companyRegistered = "YES";
+                                        }
+                                    }
                     },
                     {
                         key: "customer.enterpriseRegistrations",
