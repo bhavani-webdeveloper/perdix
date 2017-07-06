@@ -212,33 +212,57 @@ return {
                 "type": "section",
                 "html": '<hr>'
             }, {
-                "type": "section",
-                "readonly": true,
+                "key": "group.jlgGroupMembers[].customer.additionalKYCs",
+                "type": "array",
                 "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "KYC1_PROOF_TYPE",
-                        "key": "group.jlgGroupMembers[].customer.kyc1ProofType",
-                        "type": "select",
-                        "enumCode": "kyc"
+                "notitle": true,
+                "readonly": true,
+                "items": [
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [
+                            {
+                                
+                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofType",
+                                "title": "KYC1_PROOF_TYPE",
+                                type:"select",
+                                "enumCode": "identity_proof"
+                            },
+                            
+                            {
+                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
+                                "title": "KYC1_PROOF_NUMBER",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            }
+                        ]
                     }, {
-                        "title": "KYC1_PROOF_NUMBER",
-                        "key": "group.jlgGroupMembers[].customer.kyc1ProofNumber"
-                    }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
-                        "key": "group.jlgGroupMembers[].customer.kyc1ImagePath",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "KYC1"
-                    }]
-                }]
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [{
+                            "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
+                            "type": "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "KYC1"
+                        },
+                        {
+                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
+                            "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
+                            "type": "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "KYC1"
+                        },
+                        ]
+
+                    }
+                ]
             }, {
                 "type": "section",
                 "html": '<hr>'
@@ -250,13 +274,32 @@ return {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
+                        "title": "ACCOUNT_NUMBER",
+                        "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        "type": "string"
+                    }, {
                         "title": "PRODUCT",
                         "key": "group.productCode" // TODO: this should be product name
                     }, {
                         "title": "LOAN_AMOUNT",
-                        "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
                         "type": "amount"
-                    }]
+                    }, {
+                        "title": "TENURE",
+                        "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                        "type": "date"
+                    }, {
+                        "title": "LOAN_APPLICATION_DATE",
+                        "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+                        "type": "date"
+                    }, {
+                    "title": "APPLICATION_FILE_DOWNLOAD",
+                    "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                    "type": "file",
+                    "fileType": "*/*",
+                    "category": "Group",
+                    "subCategory": "APPLICATION"
+                }]
                 }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
@@ -276,7 +319,7 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
-                //"condition":"model.group.partnerCode=='AXIS'",
+                "condition":"model.group.partnerCode=='AXIS'",
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
@@ -288,10 +331,8 @@ return {
                             {
                                 "title": "IS_CUSTOMER_CALLED",
                                 "key": "group.jlgGroupMembers[].customerCalled",
-                                "type":"checkbox",
-                                "schema":{
-                                    "default":true
-                                }
+                                "type":"select",
+                                "enumCode":"customerTelecallingDetails"
                             },{
                                 "title": "CUSTOMER_NOT_CALLED_REASON",
                                 "key": "group.jlgGroupMembers[].customerNotCalledReason",
@@ -308,13 +349,17 @@ return {
                                 "icon": "fa fa-circle-o",
                                 "title": "SUBMIT_TELE_CALLING_INFO",
                                 "onClick": function(model, formCtrl, form, event) {
+                                    if(!model.group.jlgGroupMembers[event.arrayIndex].customerCalled){
+                                        irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
+                                        return false;
+                                    }
                                     PageHelper.showLoader();
                                     var reqData = {"processType": "JLG"};
                                     reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
                                     reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
                                     reqData.customerCalledDate = moment().format("YYYY-MM-DD");
                                     reqData.customerCalledAt = moment().format();
-                                    reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled ? "YES" : "NO";
+                                    reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
                                     reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
                                     reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
                                     reqData.customerCalledBy = SessionStore.getUsername();
@@ -385,7 +430,7 @@ return {
                     "title": "CHECKER_FILE_UPLOAD",
                     "key": "group.jlgGroupMembers[].loanAccount.chk1FileUploadId",
                     "type": "file",
-                    "fileType": "*/*",
+                    "fileType": "application/pdf,image/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "category": "Group",
                     "subCategory": "DOC1"
                 },{

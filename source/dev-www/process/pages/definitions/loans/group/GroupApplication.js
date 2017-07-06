@@ -224,7 +224,6 @@ define({
                 }, {
                     "type": "box",
                     "title": "GROUP_MEMBERS",
-                    "readonly": true,
                     "items": [{
                         "key": "group.jlgGroupMembers",
                         "type": "array",
@@ -282,25 +281,17 @@ define({
                             "title": "RELATION",
                             "type": "select",
                             "enumCode": "relation"
+                        },{
+                            
+                            "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                            "title": "APPLICATION_UPLOAD",
+                            "title": "APPLICATION_UPLOAD",
+                            "category": "Group",
+                            "subCategory": "APPLICATION",
+                            "type": "file",
+                            "fileType": "application/pdf",
+                            
                         }]
-                    }]
-                },
-                {
-                    "type": "box",
-                    "title": "APPLICATION_UPLOAD",
-                    "items": [{
-                        "key": "group.Uploadfile",
-                        "notitle": true,
-                        "title": "APPLICATION_UPLOAD",
-                        "category": "ACH",
-                        "subCategory": "cat2",
-                        "type": "file",
-                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        customHandle: function(file, progress, modelValue, form, model) {
-                            GroupProcess.leadBulkUpload(file, progress).then(function(resp) {
-                                //$state.go('Page.LeadDashboard', null);
-                            });
-                        }
                     }]
                 },
                 {
