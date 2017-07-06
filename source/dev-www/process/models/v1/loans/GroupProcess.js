@@ -22,6 +22,11 @@ irf.models.factory('GroupProcess', function($resource, $httpParamSerializer, BAS
             url: endpoint + '/grouploandsc',
             isArray:true
         },
+        telecalling: {
+            method: 'POST',
+            url: endpoint + '/telecalling',
+            isArray:true
+        },
     });
 
     resource.hasPartnerCodeAccess = function(partner){

@@ -282,26 +282,92 @@ return {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
-                            "title": "IS_CUSTOMER_CALLED",
-                            "key": "group.jlgGroupMembers[].customerCalled",
-                            "type":"checkbox",
-                            "schema":{
-                                "default":true
+                        type: "fieldset",
+                        "title": "TELE_CALLING_INFORMATION_CAPTURE",
+                        items:[
+                            {
+                                "title": "IS_CUSTOMER_CALLED",
+                                "key": "group.jlgGroupMembers[].customerCalled",
+                                "type":"checkbox",
+                                "schema":{
+                                    "default":true
+                                }
+                            },{
+                                "title": "CUSTOMER_NOT_CALLED_REASON",
+                                "key": "group.jlgGroupMembers[].customerNotCalledReason",
+                                "type":"string"
+                            },
+                            {
+                                "title": "CUSTOMER_CALLED_REMARKS",
+                                "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
+                                "type":"string"
+                            },
+                            {
+                                "type": "button",
+                                "key": "group.jlgGroupMembers[]",
+                                "icon": "fa fa-circle-o",
+                                "title": "SUBMIT_TELE_CALLING_INFO",
+                                "onClick": function(model, formCtrl, form, event) {
+                                    PageHelper.showLoader();
+                                    var reqData = {"processType": "JLG"};
+                                    reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
+                                    reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
+                                    reqData.customerCalledDate = moment().format("YYYY-MM-DD");
+                                    reqData.customerCalledAt = moment().format();
+                                    reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled ? "YES" : "NO";
+                                    reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
+                                    reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
+                                    reqData.customerCalledBy = SessionStore.getUsername();
+                                    GroupProcess.telecalling(reqData).$promise.then(function(response){
+                                        model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
+                                        model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
+                                        model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
+                                        model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
+
+                                    }).finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
+                                }
                             }
-                        },{
-                            "title": "CUSTOMER_CALLED_DATE",
-                            "key": "group.jlgGroupMembers[].customerCalledDate",
-                            "readonly": true,
-                            "type":"date"
-                        },{
-                            "title": "CUSTOMER_CALLED_REMARKS",
-                            "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                            "type":"string"
-                        }]
+                        ]
+                    }]
                 }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
-                    "items": []
+                    "items": [{
+                        "key": "group.jlgGroupMembers[].teleCallingDetails",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails.length",
+                        "title": "TELE_CALLING_HISTORY",
+                        "readonly": true,
+                        "type": "array",
+                        "items": [
+                            {
+                                "title": "IS_CUSTOMER_CALLED",
+                                "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalled",
+                                "type":"string",
+                            },
+                            {
+                                "title": "CUSTOMER_CALLED_DATE",
+                                "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledAt",
+                                "type":"date"
+                            },
+                            {
+                                "title": "CUSTOMER_CALLED_BY",
+                                "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledBy",
+                                "type":"string"
+                            },
+                            {
+                                "title": "CUSTOMER_NOT_CALLED_REASON",
+                                "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
+                                "type":"string"
+                            },
+                            {
+                                "title": "CUSTOMER_CALLED_REMARKS",
+                                "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
+                                "type":"string"
+                            }
+                        ]
+                    }]
                 }]
             }, {
                 "notitle": true,
