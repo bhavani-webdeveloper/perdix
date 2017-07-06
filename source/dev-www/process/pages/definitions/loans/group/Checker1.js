@@ -374,25 +374,24 @@ return {
                 "readonly":true,
                 "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
                 "type": "html"
-            }]
-        }, {
-            "type": "section",
-            "htmlClass": "row",
-            "items": [{
+            }, {
                 "type": "section",
-                "htmlClass": "col-sm-6",
+                "key": "group.jlgGroupMembers[]",
+                "htmlClass": "row",
                 "items": [{
+                    "type": "section",
+                    "html": '<hr>'
+                },{
                     "title": "CHECKER_FILE_UPLOAD",
-                    "key": "group.chk1UploadFilePath",
+                    "key": "group.jlgGroupMembers[].loanAccount.chk1FileUploadId",
                     "type": "file",
                     "fileType": "*/*",
                     "category": "Group",
                     "subCategory": "DOC1"
+                },{
+                    "type": "section",
+                    "html": '<hr>'
                 }]
-            }, {
-                "type": "section",
-                "htmlClass": "col-sm-6",
-                "items": []
             }]
         }]
     }, {
