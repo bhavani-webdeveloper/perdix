@@ -21,6 +21,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     PageHelper.showLoader();
                     Enrollment.get({id: $stateParams.pageId}).$promise.then(function(response){
                         model.customer = response;
+                        if(model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined){
+                                     model.customer.enterprise.isGSTAvailable = "No";
+                         }
+                         if(model.customer.enterprise.isGSTAvailable == "Yes"){
+                             model.customer.enterprise.companyRegistered = "YES";    
+                             model.customer.enterprise.isGSTAvailable = "YES";
+                         }
                         deferred.resolve();
                     }, function(errorResponse){
                         PageHelper.showErrors(errorResponse);

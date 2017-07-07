@@ -51,6 +51,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         
                         bundleModel.business = model.customer;
 
+                         if(model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined){
+                                     model.customer.enterprise.isGSTAvailable = "No";
+                         }
+                         if(model.customer.enterprise.isGSTAvailable == "Yes"){
+                             model.customer.enterprise.companyRegistered = "YES";    
+                         }
+
                         if(model.customer.enterpriseCustomerRelations)
                         {
                             var linkedIds = [];
