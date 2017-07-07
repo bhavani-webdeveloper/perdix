@@ -73,7 +73,7 @@ irf.models.factory('Enrollment', ["$resource", "$httpParamSerializer", "BASE_URL
                     if (_.has(data, 'customer.expenditures') && _.isArray(data.customer.expenditures)){
                         for (var i = 0; i <  data.customer.expenditures.length; i++) {
                             if(data.customer.expenditures[i].expenditureSource == "Others"){
-                                var tempExpenditureSource = data.customer.expenditures[i].expenditureSource + ">"+data.customer.expenditures[i].tempName;
+                                var tempExpenditureSource = data.customer.expenditures[i].expenditureSource + ">"+data.customer.expenditures[i].customExpenditureSource;
                                 var tempAnnualExpenses = data.customer.expenditures[i].annualExpenses;
                                 var tempFrequency = data.customer.expenditures[i].frequency;
                                 data.customer.expenditures[i] ={};

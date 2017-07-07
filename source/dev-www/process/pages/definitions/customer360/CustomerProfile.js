@@ -622,28 +622,35 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             "type": "box",
             "title": "EXPENDITURES",
             "items": [{
-                key:"customer.expenditures",
-                type:"array",
+                key: "customer.expenditures",
+                type: "array",
                 remove: null,
                 view: "fixed",
                 titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                items:[{
+                items: [{
+                    key: "customer.expenditures[].expenditureSource",
+                    type: "select"
+                }, {
+                    key: "customer.expenditures[].customExpenditureSource",
+                    title: "CUSTOM_EXPENDITURE_SOURCE",
+                    condition: "model.customer.expenditures[arrayIndex].expenditureSource=='Others'"
+                }, {
                     type: 'section',
                     htmlClass: 'row',
                     items: [{
                         type: 'section',
                         htmlClass: 'col-xs-6',
                         items: [{
-                            key:"customer.expenditures[].frequency",
-                            type:"select",
+                            key: "customer.expenditures[].frequency",
+                            type: "select",
                             notitle: true
                         }]
-                    },{
+                    }, {
                         type: 'section',
                         htmlClass: 'col-xs-6',
                         items: [{
                             key: "customer.expenditures[].annualExpenses",
-                            type:"amount",
+                            type: "amount",
                             notitle: true
                         }]
                     }]

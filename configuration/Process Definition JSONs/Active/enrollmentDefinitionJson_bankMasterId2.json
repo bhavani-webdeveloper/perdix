@@ -864,6 +864,22 @@
                      "Stage01"
                   ]
                },
+               "kyc2ReverseImagePath":{  
+                  "title":"Kyc2 Reverse Proof Document",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
+                  ]
+               },
+               "kyc1ReverseImagePath":{  
+                  "title":"Kyc1 Reverse Proof Document",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
+                  ]
+               },
                "kyc2ProofNumber":{  
                   "title":"Kyc2 Proof Number",
                   "type":"string",

@@ -87,7 +87,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         });
 
                     });
-
                 },
                 form: [
                     {
