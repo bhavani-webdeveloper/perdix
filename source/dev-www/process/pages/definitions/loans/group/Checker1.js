@@ -13,6 +13,15 @@ var fixData = function(model) {
     model.group.tenure = parseInt(model.group.tenure);
 };
 
+var validateForm = function(formCtrl){
+    formCtrl.scope.$broadcast('schemaFormValidate');
+    if (formCtrl && formCtrl.$invalid) {
+        PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+        return false;
+    }
+    return true;
+}
+
 var enrichCustomer = function(customer) {
     customer.fullName = Utils.getFullName(customer.firstName, customer.middleName, customer.lastName);
     customer.fatherFullName = Utils.getFullName(customer.fatherFirstName, customer.fatherMiddleName, customer.fatherLastName);
@@ -428,6 +437,7 @@ return {
                     "html": '<hr>'
                 },{
                     "title": "CHECKER_FILE_UPLOAD",
+                    required: true,
                     "key": "group.jlgGroupMembers[].loanAccount.chk1FileUploadId",
                     "type": "file",
                     "fileType": "application/pdf,image/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -439,21 +449,59 @@ return {
                 }]
             }]
         }]
-    }, {
+    }, 
+    {
+    "type": "box",
+    "title": "POST_REVIEW",
+    "items": [{
+                key: "action",
+                type: "radios",
+                titleMap: {
+                    "REJECT": "REJECT",
+                    "APPROVE": "APPROVE",
+                }
+            },
+            {
+                type: "section",
+                condition: "model.action=='REJECT'",
+                items: [{
+                        title: "REMARKS",
+                        key: "remarks",
+                        type: "textarea",
+                        required: true
+                    }, 
+                    {
+                        "type": "button",
+                        "title": "REJECT",
+                        "onClick": "actions.reject(model,formCtrl, form)"
+                    }
+                ]
+            },
+            {
+                type: "section",
+                condition: "model.action=='APPROVE'",
+                items: [{
+                        title: "REMARKS",
+                        key: "remarks",
+                        type: "textarea",
+                        required: true
+                    }, 
+                    {
+                        "type": "button",
+                        "title": "APPROVE",
+                        "onClick": "actions.approve(model,formCtrl, form)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "type": "actionbox",
         "items": [{
             "type": "button",
             "title": "SAVE",
-            "onClick": "actions.saveGroup(model,form)"
-        }, {
-            "type": "button",
-            "title": "APPROVE",
-            "onClick": "actions.approve(model,form)"
-        }, {
-            "type": "button",
-            "title": "REJECT",
-            "onClick": "actions.reject(model,form)"
-        }]
+            "onClick": "actions.saveGroup(model,formCtrl, form)"
+        },]
     }],
     schema: {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -480,9 +528,12 @@ return {
         }
     },
     actions: {
-        preSave: function(model, form, formName) {},
-        saveGroup: function(model, form) {
+        preSave: function(model, formCtrl, formName) {},
+        saveGroup: function(model, formCtrl, form) {
             $log.info("Inside submit()");
+            if(!validateForm(formCtrl)) 
+                return;
+            PageHelper.showLoader();
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'SAVE';
             PageHelper.clearErrors();
@@ -497,8 +548,11 @@ return {
                 irfProgressMessage.pop('CHECKER-save', 'Oops. Some error.', 2000);
             });
         },
-        reject: function(model, form) {
+        reject: function(model, formCtrl, form) {
             $log.info("Inside submit()");
+            if(!validateForm(formCtrl)) 
+                return;
+            PageHelper.showLoader();
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'PROCEED';
             reqData.stage = 'ApplicationPending';
@@ -508,18 +562,20 @@ return {
                 irfProgressMessage.pop('CHECKER-save', 'Done.', 5000);
                 model.group = _.clone(res.group);
                 PageHelper.hideLoader();
+                $state.go('Page.GroupDashboard', null);
             }, function(res) {
                 PageHelper.hideLoader();
                 PageHelper.showErrors(res);
                 irfProgressMessage.pop('CHECKER-save', 'Oops. Some error.', 2000);
             });
         },
-        approve: function(model, form, formName) {
+        approve: function(model, formCtrl, form) {
+            if(!validateForm(formCtrl)) 
+                return;
             PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();
             model.groupAction = "PROCEED";
-            model.group.grtDoneBy = SessionStore.getLoginname() + '-' + model.group.grtDoneBy;
             var reqData = _.cloneDeep(model);
             GroupProcess.updateGroup(reqData, function(res) {
                 PageHelper.hideLoader();

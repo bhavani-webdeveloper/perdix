@@ -14,6 +14,15 @@ define({
 			model.group.tenure = parseInt(model.group.tenure);
 		};
 
+		var validateForm = function(formCtrl){
+		    formCtrl.scope.$broadcast('schemaFormValidate');
+		    if (formCtrl && formCtrl.$invalid) {
+		        PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+		        return false;
+		    }
+		    return true;
+		}
+
 		var fillNames = function(model) {
 			var deferred = $q.defer();
 			angular.forEach(model.group.jlgGroupMembers, function(member, key) {
@@ -41,7 +50,7 @@ define({
 
 		return {
 			"type": "schema-form",
-			"title": "Agreement Pending",
+			"title": "AGREEMENT_UPLOAD",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.group = model.group || {};
@@ -154,45 +163,44 @@ define({
 							"readonly": true,
 							"title": "RELATION",
 						}, {
-							"key": "group.jlgGroupMembers[].loanAmount",
+	                        "title": "LOAN_ACCOUNT_NUMBER",
+	                        "readonly": true,
+	                        "key": "group.jlgGroupMembers[].loanAccount.accountNumber", 
+	                        "type": "string"
+	                    }, {
+	                        "title": "ACCOUNT_NUMBER",
+	                        "readonly": true,
+	                        "key": "group.jlgGroupMembers[].loanAccount.bcAccount.bcAccountNo", 
+	                        "type": "string"
+	                    }, {
+							"key": "group.jlgGroupMembers[].loanAccount.loanAmount",
 							"readonly": true,
 							"title": "LOAN_AMOUNT",
 							"type": "amount",
 						}, {
-							"key": "group.jlgGroupMembers[].loanPurpose1",
-							"readonly": true,
-							"title": "LOAN_PURPOSE_1",
-							"enumCode": "loan_purpose_1",
-							"type": "select",
-						}, {
-							"key": "group.jlgGroupMembers[].loanPurpose2",
-							"readonly": true,
-							"type": "string",
-							"title": "LOAN_PURPOSE_2",
-						}, {
-							"key": "group.jlgGroupMembers[].loanPurpose3",
-							"readonly": true,
-							"type": "string",
-							"title": "LOAN_PURPOSE3",
-						}, {
-							"key": "group.jlgGroupMembers[].witnessFirstName",
-							"readonly": true,
-							"title": "WitnessLastName",
-						}, {
-							"key": "group.jlgGroupMembers[].witnessRelationship",
-							"readonly": true,
-							"title": "RELATION",
-							"type": "select",
-							"enumCode": "relation"
-						},{
-                            
-                            "key": "group.jlgGroupMembers[].loanAccount.agreementFileId",
-                            "title": "AGREEMENT_UPLOAD",
-                            "category": "Group",
-                            "subCategory": "AGREEMENT",
-                            "type": "file",
-                            "fileType": "application/pdf", 
-                        }]
+	                        "title": "TENURE",
+	                        "readonly": true,
+	                        "key": "group.jlgGroupMembers[].loanAccount.tenure",
+	                        "type": "date"
+	                    }, {
+	                        "title": "LOAN_APPLICATION_DATE",
+	                        "readonly": true,
+	                        "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+	                        "type": "date"
+	                    }, {
+	                        "title": "LOAN_STATUS",
+	                        "readonly": true,
+	                        "key": "group.jlgGroupMembers[].loanAccount.loanApplicationStatus",
+	                        "type": "date"
+	                    }, {
+	                        "key": "group.jlgGroupMembers[].loanAccount.bcAccount.agreementFileId",
+	                        required: true,
+	                        "title": "AGREEMENT_UPLOAD",
+		                    "type": "file",
+		                    "fileType": "application/pdf,image/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		                    "category": "Group",
+		                    "subCategory": "AGREEMENT"
+	                    }]
 					}]
 				},
 
@@ -202,7 +210,7 @@ define({
                         "type": "button",
                         "icon": "fa fa-arrow-right",
                         "title": "PROCEED",
-                        "onClick": "actions.proceedAction(model,form)"
+                        "onClick": "actions.proceedAction(model, formCtrl, form)"
                     }]
 				},
 			],
@@ -225,7 +233,7 @@ define({
 							},
 							"centreCode": {
 								"title": "CENTRE_CODE",
-								"type": "integer"
+								"type": ["integer", "null"]
 							}
 						}
 					}
@@ -234,7 +242,9 @@ define({
 
 			actions: {
 				preSave: function(model, form, formName) {},
-				proceedAction: function(model, form) {
+				proceedAction: function(model, formCtrl, form) {
+					if(!validateForm(formCtrl)) 
+		                return;
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Agreement-proceed', 'Working...');
                     PageHelper.clearErrors();
@@ -242,7 +252,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('Agreement-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        irfProgressMessage.pop('Agreement-proceed', 'Operation Succeeded. Proceeded to Checker 3.', 5000);
                         $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();

@@ -1,5 +1,5 @@
 define({
-pageUID: "loans.group.Checker2",
+pageUID: "loans.group.Checker3",
 pageType: "Engine",
 dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
     "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
@@ -41,7 +41,7 @@ var enrichCustomer = function(customer) {
 
 return {
     "type": "schema-form",
-    "title": "Checker 2",
+    "title": "Checker 3",
     "subTitle": "",
     initialize: function(model, form, formCtrl) {
         var self = this;
@@ -49,7 +49,7 @@ return {
         if ($stateParams.pageId) {
             var groupId = $stateParams.pageId;
             PageHelper.showLoader();
-            irfProgressMessage.pop("Checker2", "Loading, Please Wait...");
+            irfProgressMessage.pop("Checker3", "Loading, Please Wait...");
             GroupProcess.getGroup({
                 groupId: groupId
             }, function(response) {
@@ -93,7 +93,7 @@ return {
             }, function(error) {
                 PageHelper.showErrors(error);
                 PageHelper.hideLoader();
-                irfProgressMessage.pop("Checker2", "Oops. An error occurred", 2000);
+                irfProgressMessage.pop("Checker3", "Oops. An error occurred", 2000);
             });
         } else {
             irfNavigator.goBack();
@@ -283,8 +283,13 @@ return {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
-                        "title": "ACCOUNT_NUMBER",
+                        "title": "LOAN_ACCOUNT_NUMBER",
                         "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        "type": "string"
+                    }, {
+                        "title": "ACCOUNT_NUMBER",
+                        "readonly": true,
+                        "key": "group.jlgGroupMembers[].loanAccount.bcAccount.bcAccountNo", 
                         "type": "string"
                     }, {
                         "title": "PRODUCT",
@@ -328,64 +333,9 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
-                "condition":"model.group.partnerCode=='AXIS'",
+                //"condition":"model.group.partnerCode=='AXIS'",
                 "htmlClass": "row",
                 "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        type: "fieldset",
-                        "title": "TELE_CALLING_INFORMATION_CAPTURE",
-                        items:[
-                            {
-                                "title": "IS_CUSTOMER_CALLED",
-                                "key": "group.jlgGroupMembers[].customerCalled",
-                                "type":"select",
-                                "enumCode":"customerTelecallingDetails"
-                            },{
-                                "title": "CUSTOMER_NOT_CALLED_REASON",
-                                "key": "group.jlgGroupMembers[].customerNotCalledReason",
-                                "type":"string"
-                            },
-                            {
-                                "title": "CUSTOMER_CALLED_REMARKS",
-                                "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                                "type":"string"
-                            },
-                            {
-                                "type": "button",
-                                "key": "group.jlgGroupMembers[]",
-                                "icon": "fa fa-circle-o",
-                                "title": "SUBMIT_TELE_CALLING_INFO",
-                                "onClick": function(model, formCtrl, form, event) {
-                                    if(!model.group.jlgGroupMembers[event.arrayIndex].customerCalled){
-                                        irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
-                                        return false;
-                                    }
-                                    PageHelper.showLoader();
-                                    var reqData = {"processType": "JLG"};
-                                    reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
-                                    reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
-                                    reqData.customerCalledDate = moment().format("YYYY-MM-DD");
-                                    reqData.customerCalledAt = moment().format();
-                                    reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
-                                    reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
-                                    reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
-                                    reqData.customerCalledBy = SessionStore.getUsername();
-                                    GroupProcess.telecalling(reqData).$promise.then(function(response){
-                                        model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
-                                        model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
-                                        model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
-                                        model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
-
-                                    }).finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                                }
-                            }
-                        ]
-                    }]
-                }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
@@ -436,7 +386,7 @@ return {
                     "type": "section",
                     "html": '<hr>'
                 },{
-                    "title": "CHECKER_FILE_UPLOAD",
+                    "title": "CHECKER_FILE_DOWNLOAD",
                     readonly: true,
                     "key": "group.jlgGroupMembers[].loanAccount.chk1FileUploadId",
                     "type": "file",
@@ -446,34 +396,19 @@ return {
                 },{
                     "type": "section",
                     "html": '<hr>'
+                },{
+                    "key": "group.jlgGroupMembers[].loanAccount.bcAccount.agreementFileId",
+                    readonly: true,
+                    "title": "AGREEMENT_DOWNLOAD",
+                    "type": "file",
+                    "fileType": "application/pdf,image/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "category": "Group",
+                    "subCategory": "AGREEMENT"
+                },{
+                    "type": "section",
+                    "html": '<hr>'
                 }]
             }]
-        }, {
-            "type": "section",
-            "colClass": "col-sm-6",
-            "items": [
-                {
-                    key:"group.verify.fieldVerificationReq",
-                    required: true,
-                    "title": "FIELD_VERIFICATION_REQUIRED",
-                    type:"select",
-                    titleMap: {
-                        true: "Yes",
-                        false: "No"
-                    }
-                },
-                {
-                    key:"group.verify.fieldVerificationDone",
-                    required: true,
-                    condition: "model.group.verify.fieldVerificationReq == 'true'",
-                    "title": "FIELD_VERIFICATION_DONE",
-                    type:"select",
-                    titleMap: {
-                        true: "Yes",
-                        false: "No"
-                    }
-                }
-            ]
         }
     ]
     }, 
@@ -521,15 +456,8 @@ return {
                     ]
                 }
             ]
-    },
-    {
-        "type": "actionbox",
-        "items": [{
-            "type": "button",
-            "title": "SAVE",
-            "onClick": "actions.saveGroup(model,formCtrl, form)"
-        },]
-    }],
+    }
+    ],
     schema: {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -582,7 +510,7 @@ return {
             PageHelper.showLoader();
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'PROCEED';
-            reqData.stage = 'ApplicationPending';
+            reqData.stage = 'AgreementUploadPending';
             PageHelper.clearErrors();
             Utils.removeNulls(reqData, true);
             GroupProcess.updateGroup(reqData, function(res) {
@@ -597,20 +525,11 @@ return {
             });
         },
         approve: function(model, formCtrl, form) {
-            if(!validateForm(formCtrl)) 
-                return;
-            if(model.group.verify.fieldVerificationReq == 'true' && model.group.verify.fieldVerificationDone != 'true')
-            {
-                irfProgressMessage.pop('CHECKER-proceed', 'Can not proceed further, since field verification is not marked as completed.', 5000);
-                return;
-            }
             PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();
             model.groupAction = "PROCEED";
             var reqData = _.cloneDeep(model);
-            if(model.group.partnerCode !== "AXIS")
-                reqData.stage = 'LoanDisbursement';
             GroupProcess.updateGroup(reqData, function(res) {
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('CHECKER-proceed', 'Operation Succeeded. Proceeded ', 5000);

@@ -161,7 +161,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "VIEW_GROUP",
+							name: "AGREEMENT_UPLOAD",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

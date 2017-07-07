@@ -29,6 +29,15 @@ define({
             });
         };
 
+        var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        }
+
         var checkGroupLoanActivated = function(model) {
             var deferred = $q.defer();
             try {
@@ -284,6 +293,7 @@ define({
                         },{
                             
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                            required: true,
                             "title": "APPLICATION_UPLOAD",
                             "category": "Group",
                             "subCategory": "APPLICATION",
@@ -326,7 +336,7 @@ define({
                             },
                             "centreCode": {
                                 "title": "CENTRE_CODE",
-                                "type": "integer"
+                                "type": ["integer", "null"]
                             }
                         }
                     }
@@ -358,6 +368,8 @@ define({
                     });
                 },
                 proceedAction: function(model, form) {
+                    if(!validateForm(formCtrl)) 
+                        return;
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();
