@@ -496,7 +496,19 @@
                      "GroupCreation",
                      "GRT"
                   ]
+               },"checkerRemarks": {
+                  "title": "checkerRemarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "captureStages": [
+                     "Checker1",
+					 "Checker2",
+					 "Checker3",
+					 "Checker4"
+                  ]
                }
+			   
 
 
 
