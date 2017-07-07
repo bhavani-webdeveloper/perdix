@@ -33,7 +33,7 @@
          "fingerPrint",
          "personalProfile",
          "customerPhoto",
-         "kyc"		 	 
+         "kyc"        
       ],
       "properties":{  
          "customerHealth":{  
@@ -231,7 +231,7 @@
                      "type":"string",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "annualExpenses":{  
@@ -241,7 +241,7 @@
                      "maximum":10000000,
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "frequency":{  
@@ -250,7 +250,7 @@
                      "refCodeCategory":"frequency",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   }
                }
@@ -272,7 +272,7 @@
                      "refCodeCategory":"occupation",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "incomeEarned":{  
@@ -282,7 +282,7 @@
                      "maximum":100000000,
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "frequency":{  
@@ -291,7 +291,7 @@
                      "refCodeCategory":"frequency",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "monthsPerYear":{  
@@ -299,7 +299,7 @@
                      "type":"integer",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   }
                }
@@ -404,7 +404,7 @@
                      "refCodeCategory":"liability_loan_type",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "loanSource":{  
@@ -413,7 +413,7 @@
                      "refCodeCategory":"loan_source",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "instituteName":{  
@@ -423,7 +423,7 @@
                      "maxLength":100,
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "liabilityLoanPurpose":{  
@@ -432,7 +432,7 @@
                      "refCodeCategory":"liability_loan_purpose",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "frequencyOfInstallment":{  
@@ -441,7 +441,7 @@
                      "refCodeCategory":"frequency",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "loanAmountInPaisa":{  
@@ -451,7 +451,7 @@
                      "maximum":100000000,
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "installmentAmountInPaisa":{  
@@ -461,7 +461,7 @@
                      "maximum":100000000,
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "startDate":{  
@@ -470,7 +470,7 @@
                      "format":"date",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   },
                   "maturityDate":{  
@@ -479,7 +479,7 @@
                      "format":"date",
                      "captureStages":[  
                         "Stage02",
-						      "Completed"
+                        "Completed"
                      ]
                   }
                }
@@ -511,6 +511,26 @@
                   "maxLength":16,
                   "captureStages":[  
                      "Stage01"
+                  ]
+               },
+               "parentCustomerId":{
+                  "title":"Parent Customer Id",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
+                  ]
+               },
+               "familyEnrollmentId":{
+                  "title":"Family Enrollment Id",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "doorNo":{  
