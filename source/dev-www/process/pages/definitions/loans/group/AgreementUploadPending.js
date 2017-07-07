@@ -41,7 +41,7 @@ define({
 
 		return {
 			"type": "schema-form",
-			"title": "View Group",
+			"title": "Agreement Pending",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.group = model.group || {};
@@ -129,7 +129,6 @@ define({
 					}]
 				}, {
 					"type": "box",
-					"readonly": true,
 					"title": "GROUP_MEMBERS",
 					"items": [{
 						"key": "group.jlgGroupMembers",
@@ -139,64 +138,63 @@ define({
 						"remove": null,
 						"items": [{
 							"key": "group.jlgGroupMembers[].urnNo",
+							"readonly": true,
 							"title": "URN_NO",
 						}, {
 							"key": "group.jlgGroupMembers[].firstName",
+							"readonly": true,
 							"type": "string",
 							"title": "GROUP_MEMBER_NAME"
 						}, {
 							"key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+							"readonly": true,
 							"title": "FATHER_NAME"
 						}, {
 							"key": "group.jlgGroupMembers[].relation",
+							"readonly": true,
 							"title": "RELATION",
 						}, {
 							"key": "group.jlgGroupMembers[].loanAmount",
+							"readonly": true,
 							"title": "LOAN_AMOUNT",
 							"type": "amount",
 						}, {
 							"key": "group.jlgGroupMembers[].loanPurpose1",
+							"readonly": true,
 							"title": "LOAN_PURPOSE_1",
 							"enumCode": "loan_purpose_1",
 							"type": "select",
 						}, {
 							"key": "group.jlgGroupMembers[].loanPurpose2",
+							"readonly": true,
 							"type": "string",
 							"title": "LOAN_PURPOSE_2",
 						}, {
 							"key": "group.jlgGroupMembers[].loanPurpose3",
+							"readonly": true,
 							"type": "string",
 							"title": "LOAN_PURPOSE3",
 						}, {
 							"key": "group.jlgGroupMembers[].witnessFirstName",
+							"readonly": true,
 							"title": "WitnessLastName",
 						}, {
 							"key": "group.jlgGroupMembers[].witnessRelationship",
+							"readonly": true,
 							"title": "RELATION",
 							"type": "select",
 							"enumCode": "relation"
-						}]
+						},{
+                            
+                            "key": "group.jlgGroupMembers[].loanAccount.agreementFileId",
+                            "title": "AGREEMENT_UPLOAD",
+                            "category": "Group",
+                            "subCategory": "AGREEMENT",
+                            "type": "file",
+                            "fileType": "application/pdf", 
+                        }]
 					}]
 				},
-
-				{
-                    "type": "box",
-                    "title": "APPLICATION_UPLOAD",
-                    "items": [{
-                        "key": "group.Uploadfile",
-                        "notitle": true,
-                        "title": "APPLICATION_UPLOAD",
-                        "category": "ACH",
-                        "subCategory": "cat2",
-                        "type": "file",
-                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        customHandle: function(file, progress, modelValue, form, model) {
-                            GroupProcess.leadBulkUpload(file, progress).then(function(resp) {
-                                //$state.go('Page.LeadDashboard', null);
-                            });
-                        }
-                    }]
-                },
 
 				{
 					"type": "actionbox",
@@ -238,17 +236,17 @@ define({
 				preSave: function(model, form, formName) {},
 				proceedAction: function(model, form) {
                     PageHelper.showLoader();
-                    irfProgressMessage.pop('Application-proceed', 'Working...');
+                    irfProgressMessage.pop('Agreement-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        irfProgressMessage.pop('Agreement-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
                         $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('Application-proceed', 'Oops. Some error.', 2000);
+                        irfProgressMessage.pop('Agreement-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
                 }

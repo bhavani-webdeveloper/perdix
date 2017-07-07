@@ -136,7 +136,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "CREATE_GROUP",
+            "title": "APPLICATION_PENDING",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
@@ -285,12 +285,10 @@ define({
                             
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             "title": "APPLICATION_UPLOAD",
-                            "title": "APPLICATION_UPLOAD",
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
-                            "fileType": "application/pdf",
-                            
+                            "fileType": "application/pdf", 
                         }]
                     }]
                 },
@@ -304,7 +302,7 @@ define({
                     }, {
                         "type": "button",
                         "icon": "fa fa-arrow-right",
-                        "title": "PROCEED_TO_DISBURSEMENT",
+                        "title": "PROCEED",
                         "onClick": "actions.proceedAction(model,form)"
                     }]
                 }
