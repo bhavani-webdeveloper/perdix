@@ -11,7 +11,7 @@ irf.pageCollection.factory("Pages__Grt", ["$log","authService","Groups","LoanPro
             "title": "GRT",
             "subTitle": "",
             "uri": "Groups/GRT",
-            "offline":true,
+            //"offline":true,
             getOfflineDisplayItem: function(item, index){
                 return [
                     "Group ID : "+item.group.id,

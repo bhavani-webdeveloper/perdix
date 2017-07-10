@@ -63,7 +63,7 @@ irf.pageCollection.factory("Pages__Cgt2Queue", ["$log", "formHelper", "Groups","
             "title": "CGT 2 Queue",
             "subTitle": "",
             "uri":"Groups/CGT 2 Queue",
-            offline: true,
+            //offline: true,
             getOfflineDisplayItem: groupCommons.getOfflineDisplayItem(),
             getOfflinePromise: groupCommons.getOfflinePromise('Stage05'),
             initialize: function (model, form, formCtrl) {

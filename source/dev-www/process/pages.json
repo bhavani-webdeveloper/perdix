@@ -110,7 +110,7 @@
         "title": "CGT_1_QUEUE",
         "iconClass": "fa fa-tasks",
         "directAccess": true,
-        "offline": true,
+        "offline": false,
         "state": "Page.Engine",
         "stateParams": {
             "pageName": "Cgt1Queue",
@@ -121,7 +121,7 @@
         "title": "CGT_2_QUEUE",
         "iconClass": "fa fa-tasks",
         "directAccess": true,
-        "offline": true,
+        "offline": false,
         "state": "Page.Engine",
         "stateParams": {
             "pageName": "Cgt2Queue",
@@ -132,7 +132,7 @@
         "title": "CGT_3_QUEUE",
         "iconClass": "fa fa-tasks",
         "directAccess": true,
-        "offline": true,
+        "offline": false,
         "state": "Page.Engine",
         "stateParams": {
             "pageName": "Cgt3Queue",
@@ -143,7 +143,7 @@
         "title": "GRT_QUEUE",
         "iconClass": "fa fa-tasks",
         "directAccess": true,
-        "offline": true,
+        "offline": false,
         "state": "Page.Engine",
         "stateParams": {
             "pageName": "GrtQueue",

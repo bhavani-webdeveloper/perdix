@@ -8,7 +8,7 @@ irf.pageCollection.factory("Pages__Cgt3", ["$log","authService","Groups","$state
             "title": "CGT 3",
             "subTitle": "",
             "uri": "Groups/CGT 3",
-            "offline":true,
+            //"offline":true,
             getOfflineDisplayItem: function(item, index){
                 return [
                     "Group ID : "+item.group.id,

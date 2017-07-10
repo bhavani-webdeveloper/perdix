@@ -39,7 +39,7 @@ irf.pageCollection.factory("Pages__GrtQueue", ["$log", "formHelper", "Groups","$
             "title": "GRT Queue",
             "subTitle": "",
             "uri":"Groups/GRT Queue",
-            offline: true,
+            //offline: true,
             getOfflineDisplayItem: groupCommons.getOfflineDisplayItem(),
             getOfflinePromise: groupCommons.getOfflinePromise('Stage07'),
             initialize: function (model, form, formCtrl) {
