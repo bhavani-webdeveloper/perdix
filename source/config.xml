@@ -36,5 +36,5 @@
     <plugin name="cordova-plugin-dialogs" spec="~1.2.1" />
     <plugin name="cordova-plugin-datepicker" spec="~0.9.3" />
     <plugin name="irf-bluetooth-plugin" spec="~1.1.0" />
-    <plugin name="cordova-plugin-geolocation" spec="~2.3.0" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.0" />
 </widget>
