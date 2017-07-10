@@ -1,6 +1,7 @@
 irf.pageCollection.factory(irf.page("EnrollmentHouseVerificationQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
+	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
 		"title": "T_HOUSE_VERIFICATION_PENDING_QUEUE",
@@ -63,14 +64,13 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "string",
+						"type": "number",
 						"enumCode": "centre",
+						"parentEnumCode": "branch",
+                         "parentValueExpr": "model.branch",
 						"x-schema-form": {
-							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
-							"screenFilter": true
+							"type": "select"
+							
 						}
 					}
 				}

@@ -606,6 +606,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             onCapture: function(result, model, form) {
                                 $log.info(result);
                                 model.customer.addressProofNo = result.text;
+                            },
+                            "schema":{
+                                "pattern":"^[a-zA-Z0-9]*$"
                             }
                         },
                         {
@@ -809,6 +812,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 model.customer.customerType="Individual";
+                model.customer.miscellaneous=null;
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");

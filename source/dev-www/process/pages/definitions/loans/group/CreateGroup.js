@@ -98,8 +98,8 @@ define({
                 model.group = model.group || {};
                 model.group.branchName = SessionStore.getCurrentBranch().branchId;
                 model.group.branchdescription =SessionStore.getBankName();
-
-                $log.info(model.group.branchName);
+                var date = SessionStore.getFormatedCBSDate();
+                model.group.groupFormationDate=date.split("-").reverse().join("-");
 
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
@@ -163,28 +163,65 @@ define({
                     "parentEnumCode": "branchId",
                     "parentValueExpr": "model.group.branchName"
                 }, {
-                    "key": "group.productCode",
+                    "key": "group.productName",
                     "title": "PRODUCT",
-                    "type": "select",
-                    "enumCode": "loan_product",
-                    "parentEnumCode": "partner",
-                    "parentValueExpr": "model.group.partnerCode"
+                    "type": "lov",
+                    //"field2": "JLG",
+                    //"enumCode": "loan_product",
+                    //"parentEnumCode": "partner",
+                    //"parentValueExpr": "model.group.partnerCode",
+                    autolov: true,
+                    bindMap: {},
+                    required: true,
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var product = formHelper.enum('loan_product').data;
+                        var partner = model.group.partnerCode;
+                        var out = [];
+                        if (product && product.length) {
+                            for (var i = 0; i < product.length; i++) {
+                                    if (product[i].parentCode == partner && product[i].field2 == "JLG") {
+                                        out.push({
+                                            name: product[i].name,
+                                            id: product[i].value
+                                        })
+                                    }   
+                            }
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        model.group.productCode = valueObj.id;
+                        model.group.productName = valueObj.name;
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
                 }, {
                     "key": "group.frequency",
                     "title": "FREQUENCY",
                     "type": "select",
-                    "titleMap": [{
+                    "enumCode":"loan_product_frequency"
+                    /*"titleMap": [{
                         "name": "Monthly",
                         "value": "M"
                     }, {
                         "name": "Quarterly",
                         "value": "Q"
-                    }]
+                    }]*/
                 }, {
                     "key": "group.tenure",
                     "title": "TENURE",
                 },{
                     "key": "group.groupFormationDate",
+                    "readonly":true,
                     "title": "GROUP_FORMATION_DATE",
                     "type":"date"
                 }, {
