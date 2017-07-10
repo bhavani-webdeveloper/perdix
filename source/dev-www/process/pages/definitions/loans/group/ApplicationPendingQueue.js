@@ -12,7 +12,7 @@ define({
 
 		return {
 			"type": "search-list",
-			"title": "Application Pending Queue",
+			"title": "APPLICATION_PENDING_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
@@ -32,7 +32,7 @@ define({
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 			},
 			definition: {
-				title: "Application Pending Queue",
+				title: "APPLICATION_PENDING_QUEUE",
 				searchForm: [
 				{
             		key: "bankId",

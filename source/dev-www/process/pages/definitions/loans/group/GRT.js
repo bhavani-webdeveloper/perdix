@@ -113,7 +113,7 @@ define({
 
             },{
                 "type": "box",
-                "title": "END_CGT2",
+                "title": "END_GRT",
                 "items": [{
                     "key": "group.grtDoneBy",
                     "title": "GRT_DONE_BY",
@@ -250,7 +250,7 @@ define({
                         "key": "group.jlgGroupMembers[]",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.loanId);
+                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                         }
                     }, {
                         "type": "button",
@@ -258,7 +258,7 @@ define({
                         condition: "model.group.partnerCode === 'AXIS'",
                         "title": "DOWNLOAD_AGREEMENT_FORM",
                         "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.loanId);
+                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                         }
                     }]
                 },{
