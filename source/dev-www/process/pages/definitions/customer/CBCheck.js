@@ -3,11 +3,11 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 	function($log, formHelper, Enrollment, CreditBureau, SessionStore, $state, entityManager){
 	var branch = SessionStore.getBranch();
 	return {
-		"type": "search-list",
+		"type": "search-list", 
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "CUSTOMER_SEARCH",
 		initialize: function (model, form, formCtrl) {
-			model.branchName = branch;
+			model.branchName = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-CustomerCBCheck got initialized");
 		},
 		definition: {
@@ -37,23 +37,22 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 					},
 					"branchName": {
 						"title": "BRANCH_NAME",
-						"type": "string",
-						"enumCode": "branch",
+						"type": ["integer", "null"],
+						"enumCode": "branch_id",
 						"x-schema-form": {
 							"type": "select",
-							"screenFilter": true,
+							"screenFilter": true
 						}
 					},
 					"centreCode": {
-						"title": "CENTRE_CODE",
-						"type":["number", "null"],
+						"title": "CENTRE",
+						"type": ["integer", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branchName"
-							},
-							"screenFilter": true
+							"parentEnumCode": "branch_id",
+							"parentValueExpr": "model.branchName",
+							"screenFilter": true	
 						}
 					}
 				}
@@ -62,8 +61,18 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){
+
+				var branches = formHelper.enum('branch').data;
+				var branchName = null;
+				for (var i=0;i<branches.length; i++){
+					var branch = branches[i];
+					 if (branch.code == searchOptions.branchName){
+					 	branchName = branch.name;
+					 }
+				}
+
 				var promise = Enrollment.search({
-					'branchName': searchOptions.branchName,
+					'branchName': branchName,
 					'firstName': searchOptions.firstName,
 					'centreCode': searchOptions.centreCode,
 					'kycNumber': searchOptions.kycNumber,

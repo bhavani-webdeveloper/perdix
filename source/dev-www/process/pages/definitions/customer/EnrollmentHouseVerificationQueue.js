@@ -3,12 +3,12 @@ irf.pageCollection.factory(irf.page("EnrollmentHouseVerificationQueue"),
 function($log, formHelper, Enrollment, $state, SessionStore){
 	var branch = SessionStore.getBranch();
 	return {
-		"type": "search-list",
+		"type": "search-list", 
 		"title": "T_HOUSE_VERIFICATION_PENDING_QUEUE",
 		"subTitle": "T_ENROLLMENTS_PENDING",
 		initialize: function (model, form, formCtrl) {
 			$log.info("search-list sample got initialized");
-			model.branch = SessionStore.getBranch();
+			model.branch = SessionStore.getCurrentBranch().branchId;
 			model.stage = 'Stage02';
 		},
 		offline: true,
@@ -55,8 +55,8 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 					},
 					"branch": {
 						"title": "BRANCH_NAME",
-						"type": "string",
-						"enumCode": "branch",
+						"type": ["integer", "null"],
+						"enumCode": "branch_id",
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true
@@ -64,13 +64,13 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "number",
+						"type": ["integer", "null"],
 						"enumCode": "centre",
-						"parentEnumCode": "branch",
-                         "parentValueExpr": "model.branch",
 						"x-schema-form": {
-							"type": "select"
-							
+							"type": "select",
+							"parentEnumCode": "branch_id",
+							"parentValueExpr": "model.branch",
+							"screenFilter": true	
 						}
 					}
 				}
@@ -78,9 +78,18 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+			getResultsPromise: function(searchOptions, pageOpts){    /* Should return the Promise */
+				var branches = formHelper.enum('branch').data;
+				var branchName = null;
+				for (var i=0;i<branches.length; i++){
+					var branch = branches[i];
+					 if (branch.code == searchOptions.branch){
+					 	branchName = branch.name;
+					 }
+				}
+				
 				var promise = Enrollment.search({
-					'branchName': searchOptions.branch,
+					'branchName': branchName,
 					'centreCode': searchOptions.centre,
 					'firstName': searchOptions.first_name,
 					'lastName': searchOptions.lastName,

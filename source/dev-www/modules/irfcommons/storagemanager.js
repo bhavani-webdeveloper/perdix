@@ -233,7 +233,10 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						break;
 					case "loan_product_frequency":
 						var r= irfStorageService.getMaster('frequency');
-						break;	
+						break;
+					case "branch_id":
+						var r= irfStorageService.getMaster('branch');
+						break;		
 				}
 			}
 
