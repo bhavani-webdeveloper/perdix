@@ -13,6 +13,32 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
 
+    var fixData = function(model) {
+        $log.info("Before fixData");
+        Utils.removeNulls(model, true);
+        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
+            var fields = model.customer.udf.userDefinedFieldValues;
+            $log.info(fields);
+            fields['udf17'] = Number(fields['udf17']);
+            fields['udf10'] = Number(fields['udf10']);
+            fields['udf11'] = Number(fields['udf11']);
+            fields['udf28'] = Number(fields['udf28']);
+            fields['udf32'] = Number(fields['udf32']);
+            fields['udf1'] = Boolean(fields['udf1']);
+            fields['udf6'] = Boolean(fields['udf6']);
+            fields['udf4'] = Number(fields['udf4']);
+
+            for (var i = 1; i <= 40; i++) {
+                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
+                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
+                }
+            }
+        }
+        $log.info("After fixData");
+        $log.info(model);
+        return model;
+    };
+
     return {
         "id": "ProfileBasic",
         "type": "schema-form",
@@ -22,6 +48,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
             initData(model);
+            fixData(model);
+
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -32,7 +60,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 Enrollment.getCustomerById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
-                    model = EnrollmentHelper.fixData(model);
+                    model =fixData(model);
                     if (model.customer.currentStage==='Stage01') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
@@ -518,7 +546,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 items: [
                     {
                         key:"customer.familyMembers[].customerId",
-                        readonly: true,
+                        //readonly: true,
                         type:"lov",
                         "inputMap": {
                             "firstName": {
@@ -558,7 +586,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.familyMembers[].familyMemberFirstName",
                         title:"FAMILY_MEMBER_FULL_NAME",
-                        readonly: true
+                        //readonly: true
                     },
                     {
                         key:"customer.familyMembers[].relationShip",
@@ -569,13 +597,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.familyMembers[].gender",
                         type: "radios",
                         title: "T_GENDER",
-                        readonly: true
+                        //readonly: true
                     },
                     {
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
                         title: "T_DATEOFBIRTH",
-                        readonly: true
+                        //readonly: true
                     },
                     {
                         key:"customer.familyMembers[].educationStatus",
@@ -1000,7 +1028,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf31",
-                            "type":"select"
+                            "type":"select",
+                            "titleMap": {
+                                "CONCRETE": "CONCRETE",
+                                "MUD": "MUD",
+                                "BRICK": "BRICK"
+                            }
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf32"

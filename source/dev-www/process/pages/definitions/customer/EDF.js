@@ -74,6 +74,7 @@ irf.pageCollection.factory("Pages__EDF",
                             title: "VALIDATE_BIOMETRIC",
                             items: [{
                                 key: "customer.isBiometricValidated",
+                                required:true,
                                 "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                                 type: "validatebiometric",
                                 category: 'CustomerEnrollment',
@@ -132,6 +133,11 @@ irf.pageCollection.factory("Pages__EDF",
                         elementsUtils.alert('Fingerprint not verified.');
                         return;
                     }*/
+
+                    if (model.customer.isBiometricValidated != true) {
+                        elementsUtils.alert('Fingerprint not verified.');
+                        return;  
+                    }
 
                     if(model.customer.isBiometricValidated == true)
                     {

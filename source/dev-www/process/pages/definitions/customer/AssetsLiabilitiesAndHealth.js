@@ -15,12 +15,15 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             fields['udf32'] = Number(fields['udf32']);
             fields['udf1'] = Boolean(fields['udf1']);
             fields['udf6'] = Boolean(fields['udf6']);
+            fields['udf4'] = Number(fields['udf4']);
             for (var i = 1; i <= 40; i++) {
                 if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
                     model.customer.udf.userDefinedFieldValues['udf' + i] = '';
                 }
             }
         }
+        $log.info(model.customer.udf.userDefinedFieldValues.udf4);
+
         $log.info("After fixData");
         $log.info(model);
         return model;
