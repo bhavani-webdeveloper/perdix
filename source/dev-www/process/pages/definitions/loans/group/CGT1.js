@@ -50,6 +50,7 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.cgt1DoneBy = SessionStore.getUsername();
+                        model.group.cgt1DoneBy1 = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
                         PageHelper.hideLoader();
@@ -91,7 +92,7 @@ define({
                 "type": "box",
                 "title": "END_CGT1",
                 "items": [{
-                    "key": "group.cgt1DoneBy",
+                    "key": "group.cgt1DoneBy1",
                     "title": "CGT_1_DONE_BY",
                     "readonly": true
                 },{

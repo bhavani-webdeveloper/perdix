@@ -59,6 +59,7 @@ define({
                         }
                         model.group.udfDate1 = model.group.udfDate1 || "";
                         model.group.grtDoneBy = SessionStore.getUsername();
+                        model.group.grtDoneBy1 = SessionStore.getUsername();
                         var centreCode = formHelper.enum('centre').data;
                         for (var i = 0; i < centreCode.length; i++) {
                             if (centreCode[i].code == model.group.centreCode) {
@@ -115,7 +116,7 @@ define({
                 "type": "box",
                 "title": "END_GRT",
                 "items": [{
-                    "key": "group.grtDoneBy",
+                    "key": "group.grtDoneBy1",
                     "title": "GRT_DONE_BY",
                     "readonly": true
                 },{
@@ -270,15 +271,27 @@ define({
             }, {
                 "type": "box",
                 "title": "SEND_BACK",
-                "items": [{
+                "items": [
+                {
                     type: "section",
-                    items: [{
+                    items: [
+                    {
+                        key: "group.review",
+                        type: "checkbox",
+                        schema:{
+                            "default":false
+                        },
+                        "title":"SEND_BACK"                          
+                    },
+                    {
                         title: "REMARKS",
+                        condition:"model.group.review == true",
                         key: "review.remarks",
                         type: "textarea",
                         required: true
                     }, {
                         key: "review.targetStage",
+                        condition:"model.group.review == true",
                         type: "lov",
                         autolov: true,
                         lovonly: true,
@@ -314,6 +327,7 @@ define({
                         }
                     }, {
                         key: "review.sendBackButton",
+                        condition:"model.group.review == true",
                         type: "button",
                         title: "SEND_BACK",
                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
