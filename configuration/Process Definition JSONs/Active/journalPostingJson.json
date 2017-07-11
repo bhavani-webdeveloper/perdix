@@ -36,7 +36,8 @@
                "transactionAmount",
                "transactionDate",
                "valueDate",
-               "remarks"
+               "remarks",
+			   "branchId"
             ],
             "properties": {
                "transactionName": {
@@ -160,6 +161,16 @@
                },
                "instrumentBranchName": {
                   "title": "instrumentBranchName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "branchId": {
+                  "title": "branchId",
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 200,
