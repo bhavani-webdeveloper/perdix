@@ -717,7 +717,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "type": "fieldset",
                         "title": "Account Details",
                         "items": [{
-                                "key": "loanAccount.loanAmountRequested",
+                                "key": "loanAccount.loanAmount",
                                 "type": "amount",
                                 "title": "LOAN_AMOUNT_REQUESTED",
                                 "onChange": function(value, form, model) {
