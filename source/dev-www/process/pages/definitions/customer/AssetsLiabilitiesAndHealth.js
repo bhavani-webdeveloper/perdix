@@ -486,6 +486,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                    type: "select"
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
+                                   "title":"OWNED_ASSET_DETAILS",
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
