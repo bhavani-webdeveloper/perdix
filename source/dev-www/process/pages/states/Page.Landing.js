@@ -9,10 +9,7 @@ irf.pages.controller("PageLandingCtrl",
 	var fullDefinition = {
 		"title": "FAVORITES",
 		"items": [
-			"Page/Engine/CustomerSearch",
-			"Page/Engine/loans.individual.PendingClearingQueue",
-			"Page/Engine/loans.individual.PendingCashQueue",
-			"Page/Engine/loans.individual.BounceQueue"
+			"Page/Engine/CustomerSearch"
 		]
 	};
 
