@@ -1826,7 +1826,6 @@
         "items": {
           "type": "object",
           "required": [
-            "assetType"
           ],
           "properties": {
             "nameOfOwnedAsset": {
