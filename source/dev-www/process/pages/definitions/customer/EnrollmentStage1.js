@@ -2,8 +2,17 @@ irf.pageCollection.factory("EnrollmentHelper",
 ["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
 function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
 
+    var validatePanCard = function(str, form){
+        const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
+        if (panRegex.test(panRegex)){
+
+        }else {
+            console.log(form);
+        }
+    }
+
     var fixData = function(model){
-        /* TODO Validations *
+        /* TODO Validations */
 
         /* Fix to make additionalKYCs as an array */
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
@@ -28,7 +37,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
-            //model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
             model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
@@ -44,7 +52,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
 
     var validateData = function(model) {
         PageHelper.clearErrors();
-        if (model.customer.udf && model.customer.udf.userDefinedFieldValues) {
+        if (_.hasIn(model.customer, 'udf') && model.customer.udf && model.customer.udf.userDefinedFieldValues) {
             if (model.customer.udf.userDefinedFieldValues.udf36
                 || model.customer.udf.userDefinedFieldValues.udf35
                 || model.customer.udf.userDefinedFieldValues.udf34) {
@@ -54,53 +62,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
-        if (model.customer.additionalKYCs[0]
-            && (model.customer.additionalKYCs[0].kyc1ProofNumber
-            || model.customer.additionalKYCs[0].kyc1ProofType
-            || model.customer.additionalKYCs[0].kyc1ImagePath
-            || model.customer.additionalKYCs[0].kyc1IssueDate
-            || model.customer.additionalKYCs[0].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[0].kyc1ProofNumber
-                && model.customer.additionalKYCs[0].kyc1ProofType
-                && model.customer.additionalKYCs[0].kyc1ImagePath
-                && model.customer.additionalKYCs[0].kyc1IssueDate
-                && model.customer.additionalKYCs[0].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[0].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 1'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[0].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 1'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 1'});
-                return false;
-            }
-        }
-        if (model.customer.additionalKYCs[1]
-            && (model.customer.additionalKYCs[1].kyc1ProofNumber
-            || model.customer.additionalKYCs[1].kyc1ProofType
-            || model.customer.additionalKYCs[1].kyc1ImagePath
-            || model.customer.additionalKYCs[1].kyc1IssueDate
-            || model.customer.additionalKYCs[1].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[1].kyc1ProofNumber
-                && model.customer.additionalKYCs[1].kyc1ProofType
-                && model.customer.additionalKYCs[1].kyc1ImagePath
-                && model.customer.additionalKYCs[1].kyc1IssueDate
-                && model.customer.additionalKYCs[1].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[1].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 2'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[1].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 2'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 2'});
-                return false;
-            }
+        
+        if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
+            PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
+            return false;
         }
         return true;
     };
@@ -118,19 +83,25 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         $log.info(reqData);
         PageHelper.clearErrors();
         PageHelper.showLoader();
-        irfProgressMessage.pop('enrollment-save', 'Working...');
-        reqData['enrollmentAction'] = 'SAVE';
+        if (reqData.customer.currentStage == 'Completed'){ 
+            reqData['enrollmentAction'] = 'PROCEED';
+        } else {
+            reqData['enrollmentAction'] = 'SAVE';    
+        }
+        /* TODO fix for KYC not saving **/
+       /* if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
+            reqData.customer.additionalKYCs = [];
+            reqData.customer.additionalKYCs.push({});
+        }*/
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
-            irfProgressMessage.pop('enrollment-save', 'Data Saved', 2000);
             $log.info(res);
             PageHelper.hideLoader();
             deferred.resolve(res);
         }, function (res) {
             PageHelper.hideLoader();
-            irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
             PageHelper.showErrors(res);
-            deferred.reject(false);
+            deferred.reject(res);
         });
         return deferred.promise;
 
@@ -154,17 +125,14 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         else {
             PageHelper.clearErrors();
             PageHelper.showLoader();
-            irfProgressMessage.pop('enrollment-save', 'Working...');
             res.enrollmentAction = "PROCEED";
             Enrollment.updateEnrollment(res, function (res, headers) {
                 PageHelper.hideLoader();
-                irfProgressMessage.pop('enrollment-save', 'Done. Customer created with ID: ' + res.customer.id, 5000);
                 deferred.resolve(res);
             }, function (res, headers) {
                 PageHelper.hideLoader();
-                irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
                 PageHelper.showErrors(res);
-                deferred.reject(null);
+                deferred.reject(res);
             });
         }
         return deferred.promise;
@@ -186,7 +154,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             "vtc":null,
             "dist":null,
             "state":null,
-            "pc":null
+            "pc":null,
+            "po": null
         };
         var aadhaarDoc = $.parseXML(aadhaarXml);
         aadhaarXmlData = $(aadhaarDoc).find('PrintLetterBarcodeData');
@@ -207,7 +176,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         // "lm":"" landmark
         var aadhaarData = parseAadhaar(result.text);
         $log.info(aadhaarData);
-        model.customer.aadhaarNo = aadhaarData.uid;
+        // model.customer.aadhaarNo = aadhaarData.uid;
         model.customer.firstName = aadhaarData.name;
         model.customer.gender = aadhaarData.gender;
         model.customer.doorNo = aadhaarData.house;
@@ -217,6 +186,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.district = aadhaarData.dist;
         model.customer.state = aadhaarData.state;
         model.customer.pincode = aadhaarData.pc;
+        model.customer.postOffice = aadhaarData.po;
         if (aadhaarData.dob) {
             $log.debug('aadhaarData dob: ' + aadhaarData.dob);
             if (!isNaN(aadhaarData.dob.substring(2, 3))) {
@@ -243,6 +213,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProof = 'Aadhar card';
             model.customer.addressProofNo = aadhaarData.uid;
         }
+        return aadhaarData;
     };
 
     return {
@@ -251,7 +222,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         proceedData: proceedData,
         validateData: validateData,
         parseAadhaar: parseAadhaar,
-        customerAadhaarOnCapture: customerAadhaarOnCapture
+        customerAadhaarOnCapture: customerAadhaarOnCapture,
+        validatePanCard: validatePanCard
     };
 }]);
 
