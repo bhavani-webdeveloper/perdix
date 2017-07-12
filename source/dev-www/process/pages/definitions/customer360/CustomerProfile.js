@@ -6,6 +6,30 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
     var branch = SessionStore.getBranch();
 
+    var fixData = function(model) {
+        $log.info("Before fixData");
+        Utils.removeNulls(model, true);
+        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
+            var fields = model.customer.udf.userDefinedFieldValues;
+            fields['udf17'] = Number(fields['udf17']);
+            fields['udf10'] = Number(fields['udf10']);
+            fields['udf11'] = Number(fields['udf11']);
+            fields['udf28'] = Number(fields['udf28']);
+            fields['udf32'] = Number(fields['udf32']);
+            fields['udf1'] = Boolean(fields['udf1']);
+            fields['udf6'] = Boolean(fields['udf6']);
+            fields['udf4'] = Number(fields['udf4']);
+            for (var i = 1; i <= 40; i++) {
+                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
+                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
+                }
+            }
+        }
+        $log.info("After fixData");
+        $log.info(model);
+        return model;
+    };
+
     var initData = function(model) {
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
@@ -24,6 +48,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 self.form = form;
             });
             initData(model);
+            fixData(model);
+
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -34,7 +60,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 Enrollment.getCustomerById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
-                    model = EnrollmentHelper.fixData(model);
+                    model = fixData(model);
                     if (model.customer.currentStage==='BasicEnrollment') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
