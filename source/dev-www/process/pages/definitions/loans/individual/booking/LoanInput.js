@@ -437,11 +437,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
+                                "lovonly": true,
                                 "type": "lov",
+                                bindMap: {
+                                 "Partner": "loanAccount.partnerCode",
+                                 "ProductCategory": "loanAccount.productCategory",
+                                 "Frequency": "loanAccount.frequency",
+                                },
                                 autolov: true,
                                 required: true,
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
+
                                    return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
                                 },
                                 onSelect: function(valueObj, model, context) {
