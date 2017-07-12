@@ -1,5 +1,5 @@
 {
-  "urnGenerateStage": "Completed",
+  "urnGenerateStage": "Stage02",
   "stages": [{
     "order": 1,
     "code": "Stage01",
@@ -25,9 +25,7 @@
     "customerMaxAge": 60,
     "isMinimumFingerPrintRequired": 1,
     "required": [
-      "familyHouseholdExpense",
       "bankdetails",
-      "physicalVerification",
       "fingerPrint",
       "personalProfile",
       "customerPhoto",
