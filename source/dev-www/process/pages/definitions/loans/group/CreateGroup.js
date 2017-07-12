@@ -227,6 +227,7 @@ define({
                 }, {
                     "key": "group.jlgGroupMembers",
                     "type": "array",
+                    "titleExpr": "model.group.jlgGroupMembers[arrayIndex].firstName | translate",
                     "title": "GROUP_MEMBERS",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
@@ -260,15 +261,16 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "select",
                                 "readonly": true,
-                                "enumCode": "branch",
-                               // "enumCode": "branch_id"
+                                //"enumCode": "branch",
+                                "enumCode": "branch_id"
                             },
                             "centreCode": {
                                 "key": "group.centreCode",
                                 "title": "CENTRE",
+                                "type":["number",null],
                                 "enumCode": "centre",
                                 "type": "select",
-                                "parentEnumCode": "branch",
+                                "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branchName",
                             }
                         },
@@ -369,6 +371,7 @@ define({
                         "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"
                     }, {
                         "key": "group.jlgGroupMembers[].witnessFirstName",
+                        "requrird":true,
                         "title": "WitnessLastName",
                         "type": "lov",
                         initialize: function(model, form, parentModel, context) {
