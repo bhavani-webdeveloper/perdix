@@ -1404,7 +1404,9 @@
             "title": "Kyc1 Proof Type",
             "type": "string",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ],
             "refCodeCategory": "identity_proof"
           },
@@ -1412,6 +1414,9 @@
             "title": "Kyc1 Proof Document",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1421,6 +1426,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1428,6 +1436,9 @@
             "title": "Kyc1 Issue Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1435,13 +1446,18 @@
             "title": "Kyc1 valid upto Date",
             "type": "string",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "kyc2ProofType": {
             "title": "Kyc2 Proof Type",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ],
             "refCodeCategory": "kyc"
@@ -1450,6 +1466,9 @@
             "title": "Kyc2 Proof Document",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1459,6 +1478,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1466,6 +1488,9 @@
             "title": "Kyc2 Issue Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1473,6 +1498,9 @@
             "title": "Kyc2 valid upto Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1480,6 +1508,9 @@
             "title": "kyc1 Reverse Image Path",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1487,6 +1518,9 @@
             "title": "kyc2 Reverse Image Path",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           }
