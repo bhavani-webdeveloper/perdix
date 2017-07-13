@@ -149,6 +149,7 @@ define({
                 "title": "GROUP_DETAILS",
                 "items": [{
                     "key": "group.groupName",
+                    "required": true,
                     "title": "GROUP_NAME",
                 }, {
                     "key": "group.partnerCode",
@@ -232,6 +233,7 @@ define({
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
                         "title": "URN_NO",
+                        "required": true,
                         "type": "lov",
                         "lovonly": true,
                         initialize: function(model, form, parentModel, context) {
@@ -349,15 +351,18 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].loanAmount",
                         "title": "LOAN_AMOUNT",
+                        "required": true,
                         "type": "amount",
                     }, {
                         "key": "group.jlgGroupMembers[].loanPurpose1",
                         "title": "LOAN_PURPOSE_1",
+                        "required": true,
                         "enumCode": "loan_purpose_1",
                         "type": "select",
                     }, {
                         "key": "group.jlgGroupMembers[].loanPurpose2",
                         "type": "select",
+                        "required": true,
                         "title": "LOAN_PURPOSE_2",
                         "enumCode": "loan_purpose_2",
                         "parentEnumCode": "loan_purpose_1",
@@ -365,13 +370,14 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].loanPurpose3",
                         "type": "select",
+                        "required": true,
                         "title": "LoanPurpose3",
-                        "enumCode": "loan_purpose_2",
-                        "parentEnumCode": "loan_purpose_1",
-                        "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"
+                        "enumCode": "loan_purpose_3",
+                        "parentEnumCode": "loan_purpose_2",
+                        "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
                     }, {
                         "key": "group.jlgGroupMembers[].witnessFirstName",
-                        "requrird":true,
+                        "required": true,
                         "title": "WitnessLastName",
                         "type": "lov",
                         initialize: function(model, form, parentModel, context) {

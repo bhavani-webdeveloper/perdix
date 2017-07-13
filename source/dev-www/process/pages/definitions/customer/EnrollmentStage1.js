@@ -250,7 +250,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
                 model.customer.parentCustomerId=$stateParams.pageData.customerId;
             }
-            model.branchId = SessionStore.getBranchId() + '';
+            var branch1 = formHelper.enum('branch_id').data;
+            var allowedBranch = [];
+            for (var i = 0; i < branch1.length; i++) {
+                if ((branch1[i].name) == SessionStore.getBranch()) {
+                    allowedBranch.push(branch1[i]);
+                    break;
+                }
+            }
+            model.branchId = allowedBranch.length ? allowedBranch[0].value : '';
             model.customer.kgfsBankName = SessionStore.getBankName();
             $log.info(model.customer.kgfsBankName);
             $log.info(formHelper.enum('bank'));
@@ -262,6 +270,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             irfProgressMessage.pop("enrollment-save","Loading Customer Data...");
             Enrollment.getCustomerById({id:pageId},function(resp,header){
                 var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+                model.branchId = _model.branchId;
                 model.customer = resp;
                 model = EnrollmentHelper.fixData(model);
                 model._mode = 'EDIT';
@@ -817,6 +826,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 });
             },
             proceed: function(model, formCtrl, form, $event) {
+                formCtrl.scope.$broadcast('schemaFormValidate');
+
+                if (formCtrl && formCtrl.$invalid) {
+                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                    return false;
+                }
                 model.customer.customerType="Individual";
                 var reqData = _.cloneDeep(model);
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){

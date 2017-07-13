@@ -130,6 +130,7 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 startCGT3: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.cgtDate3 = new Date();
                     model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
                     $log.info("Inside submit()");
@@ -148,6 +149,7 @@ define({
                     });
                 },
                 endCGT3: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.cgtEndDate3 = new Date();
                     model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
                     $log.info("Inside submit()");

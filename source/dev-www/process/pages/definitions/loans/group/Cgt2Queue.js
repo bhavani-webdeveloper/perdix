@@ -105,14 +105,36 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								irfNavigator.go({
-									state: "Page.Engine",
-									pageName: "loans.group.CGT2",
-									pageId:item.id
-								}, {
-									state: "Page.Engine",
-									pageName: "loans.group.Cgt2Queue",
-								});
+			                    PageHelper.clearErrors();				                	
+			                    PageHelper.showLoader();
+								Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
+				                {
+				                    if(moment().format()>=moment(item.cgtDate1, 'YYYY-MM-DD').add('days', result).format())
+				                    {
+
+				                            $log.info(item);
+				                           irfNavigator.go({
+												state: "Page.Engine",
+												pageName: "loans.group.CGT2",
+												pageId:item.id
+											}, {
+												state: "Page.Engine",
+												pageName: "loans.group.Cgt2Queue",
+											});
+				                            PageHelper.hideLoader();
+				                    }
+				                    else
+				                    {
+				                        PageHelper.hideLoader();
+				                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 Date : ('+item.cgtDate1+')',5000);
+				                                  
+				                    }
+				                },function(data)
+				                {
+				                     PageHelper.hideLoader();
+				                     PageHelper.showProgress('CgtProgress', 'Oops some error happend in getting CGT Cooling Days',5000);
+				                     PageHelper.showErrors(data);
+				                });
 							},
 							isApplicable: function(item, index) {
 

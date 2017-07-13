@@ -140,6 +140,7 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 startCGT2: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.cgtDate2 = new Date();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
@@ -157,6 +158,7 @@ define({
                     });
                 },
                 endCGT2: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.cgtEndDate2 = new Date();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
