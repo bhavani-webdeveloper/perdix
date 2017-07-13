@@ -197,10 +197,10 @@ irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 irf.pages.run(
 ["$rootScope", "$log", "$timeout", "$q", "$state", "authService", "$location", "ALLOWED_STATES",
 "irfStorageService", "entityManager", "SessionStore", "irfElementsConfig", "irfOfflineFileRegistry",
-"PageHelper", "$translate", "$injector", "irfLazyLoader",
+"PageHelper", "$translate", "$injector", "irfLazyLoader", "$filter", "formHelper",
 function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED_STATES,
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
-	PageHelper, $translate, $injector, irfLazyLoader){
+	PageHelper, $translate, $injector, irfLazyLoader, $filter, formHelper){
 
 	var setProfilePreferences = function(userData) {
 		$log.info('set ProfilePreferences');
@@ -210,6 +210,26 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
                 			branchId : SessionStore.getBranchId(),
                 			branchName: SessionStore.getBranch()
                 			});
+		var userRole = SessionStore.getUserRole(); var fullAccess = false;
+		if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+			fullAccess = true;
+		}
+		if(!fullAccess){
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			var bankId = null;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					bankId = banks[i].value;
+					break;
+				}
+			}
+			var branches = SessionStore.getItem("UserAllowedBranches");
+			branches = $filter('filter')(branches, {"bankId" : bankId}, true);
+			if(branches && branches.length && branches.length > 0) {
+				SessionStore.setItem('UserAllowedBranches', branches);
+			}
+		}
 		irfStorageService.storeJSON('UserData', userData);
 		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
 		var km = _.keys(m);

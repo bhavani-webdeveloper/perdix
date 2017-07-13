@@ -14,6 +14,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 				if(banks[i].name == bankName){
 					model.bankId = banks[i].value;
 					model.bankName = banks[i].name;
+					break;
 				}
 			}
 			var userRole = SessionStore.getUserRole();

@@ -323,7 +323,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 {
                     key:"customer.centreCode",
                     type:"select",
-                    "enumCode": "centre_code",
+                    "enumCode": "centre",
                     "parentEnumCode": "branch_id",
                     "parentValueExpr": "model.branchId",
                 },

@@ -59,7 +59,6 @@ define({
                         }
                         model.group.udfDate1 = model.group.udfDate1 || "";
                         model.group.grtDoneBy = SessionStore.getUsername();
-                        model.group.grtDoneBy1 = SessionStore.getUsername();
                         var centreCode = formHelper.enum('centre').data;
                         for (var i = 0; i < centreCode.length; i++) {
                             if (centreCode[i].code == model.group.centreCode) {
@@ -116,7 +115,7 @@ define({
                 "type": "box",
                 "title": "END_GRT",
                 "items": [{
-                    "key": "group.grtDoneBy1",
+                    "key": "group.grtDoneBy",
                     "title": "GRT_DONE_BY",
                     "readonly": true
                 },{
@@ -219,20 +218,20 @@ define({
                         "type": "select",
                         "enumCode": "relation"
                     }, {
-                        "key": "group.jlgGroupMembers[].isHouseVerificationDone",
+                        "key": "group.jlgGroupMembers[].houseVerificationDone",
                         "title": "IS_HOUSE_VERIFIED",
                         "type": "checkbox",
                          schema: { default:true }
                     }, {
                         "key": "group.jlgGroupMembers[].latitude",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].houseVerificationDone==true",
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
-                        "latitude": "group.jlgGroupMembers.latitude",
-                        "longitude":"group.jlgGroupMembers.longitude"
+                        "latitude": "group.jlgGroupMembers[].latitude",
+                        "longitude":"group.jlgGroupMembers[].longitude"
                     }, {
                         "key": "group.jlgGroupMembers[].photoImageId1",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].houseVerificationDone==true",
                         "title": "HOUSE_PHOTO",
                         "type": "file",
                         "category": "Group",
@@ -351,8 +350,9 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 startGRT: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.grtDate = new Date();
-                    model.group.grtDoneBy=SessionStore.getLoginname()+'-'+model.group.grtDoneBy;
+                    model.group.grtDoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -360,7 +360,7 @@ define({
                     Utils.removeNulls(reqData, true);
                     GroupProcess.updateGroup(reqData, function(res) {
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
-                        model.group = _.clone(res.group);
+                        model.group = _.cloneDeep(res.group);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -369,15 +369,16 @@ define({
                     });
                 },
                 endGRT: function(model, form) {
+                    PageHelper.showLoader();
                     model.group.grtEndDate = new Date();
-                    model.group.grtDoneBy=SessionStore.getLoginname()+'-'+model.group.grtDoneBy;
+                    model.group.grtDoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
                     GroupProcess.updateGroup(reqData, function(res) {
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         Utils.removeNulls(res.group, true);
-                        model.group = _.clone(res.group);
+                        model.group = _.cloneDeep(res.group);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -390,7 +391,7 @@ define({
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
-                    model.group.grtDoneBy=SessionStore.getLoginname()+'-'+model.group.grtDoneBy;
+                    model.group.grtDoneBy=SessionStore.getUsername();
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();

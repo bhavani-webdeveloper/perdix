@@ -96,7 +96,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                model.group.branchName = SessionStore.getCurrentBranch().branchId;
+                model.group.branchName = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.branchdescription =SessionStore.getBankName();
                 var date = SessionStore.getFormatedCBSDate();
                 model.group.groupFormationDate=date.split("-").reverse().join("-");
@@ -163,7 +163,7 @@ define({
                     "required": true,
                     "type": "select",
                     "enumCode": "centre",
-                    "parentEnumCode": "branchId",
+                    "parentEnumCode": "branch_id",
                     "parentValueExpr": "model.group.branchName"
                 }, {
                     "key": "group.productName",

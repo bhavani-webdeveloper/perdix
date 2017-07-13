@@ -12,10 +12,12 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 					out.push({
 						branchId: branches[i].branch_id,
 						branchCode: branches[i].branch_code,
-						branchName: branches[i].branch_name
+						branchName: branches[i].branch_name,
+						bankId : branches[i].bank_id
 					})
 				}
 				SessionStore.setItem('UserAllowedBranches', out);
+				SessionStore.setItem('AllAllowedBranches', out);
 				deferred.resolve();
 			}, function(httpResponse){
 				$log.error("Error trying to load allowed branches of user.")
