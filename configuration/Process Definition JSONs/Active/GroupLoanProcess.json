@@ -753,7 +753,7 @@
                   },
                   "isHouseVerificationDone": {
                      "title": "isHouseVerificationDone",
-                     "type": "string",
+                     "type": "boolean",
                      "captureStages": [
                         "GroupCreation",
                         "GRT"
