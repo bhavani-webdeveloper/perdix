@@ -272,6 +272,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                 model.branchId = _model.branchId;
                 model.customer = resp;
+                model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                 model = EnrollmentHelper.fixData(model);
                 model._mode = 'EDIT';
                 if (model.customer.currentStage==='Stage01') {

@@ -154,11 +154,13 @@ define({
                 }, {
                     "key": "group.partnerCode",
                     "title": "PARTNER",
+                    "required": true,
                     "type": "select",
                     "enumCode": "partner"
                 }, {
                     "key": "group.centreCode",
                     "title": "CENTRE_CODE",
+                    "required": true,
                     "type": "select",
                     "enumCode": "centre",
                     "parentEnumCode": "branchId",
@@ -166,6 +168,7 @@ define({
                 }, {
                     "key": "group.productName",
                     "title": "PRODUCT",
+                    "required": true,
                     "type": "lov",
                     //"field2": "JLG",
                     //"enumCode": "loan_product",
@@ -208,6 +211,7 @@ define({
                 }, {
                     "key": "group.frequency",
                     "title": "FREQUENCY",
+                    "required": true,
                     "type": "select",
                     "enumCode":"loan_product_frequency"
                     /*"titleMap": [{
@@ -486,6 +490,7 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
+                    reqData.group.groupStatus = true;
                     if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
                             $state.go('Page.GroupDashboard', null);
