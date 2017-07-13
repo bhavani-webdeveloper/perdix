@@ -43,6 +43,7 @@
             ]
         },
         "Page/LUCDashboard",
+        "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
         "Page/GroupDashboard",
         "Page/Engine/CentrePaymentCollectionDownload",

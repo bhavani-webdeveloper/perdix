@@ -1,6 +1,7 @@
-irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'creditMonitoring',
-    function($log, $scope, PagesDefinition, SessionStore, creditMonitoring) {
-        $log.info("Page.creditMonitoringDashboard.html loaded");
+irf.pages.controller("CreditMonitoringDashboardCtrl",
+ ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'CreditMonitoring',
+    function($log, $scope, PagesDefinition, SessionStore, CreditMonitoring) {
+        $log.info("Page.CreditMonitoringDashboard.html loaded");
 
         var fullDefinition = {
             "title": "creditMonitoring Dashboard",
@@ -13,6 +14,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue",
             ]
         };
+
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
             $scope.dashboardDefinition = resp;
             var branch = SessionStore.getCurrentBranch();
@@ -39,7 +41,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 }, function() {
                     lsqMenu.data = '-';
                 });
-            },
+            }
+
             var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"];
             if (lsqMenu) {
                 creditMonitoring.search({
@@ -56,7 +59,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 }, function() {
                     lsqMenu.data = '-';
                 });
-            },
+            }
+
             var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"];
             if (lsqMenu) {
                 creditMonitoring.search({
@@ -73,7 +77,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 }, function() {
                     lsqMenu.data = '-';
                 });
-            },
+            }
+
             var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue"];
             if (lsqMenu) {
                 creditMonitoring.search({
@@ -90,7 +95,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 }, function() {
                     lsqMenu.data = '-';
                 });
-            },
+            }
 
         });
 

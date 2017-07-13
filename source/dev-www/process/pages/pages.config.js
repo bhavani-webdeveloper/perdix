@@ -108,6 +108,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LUCDashboardCtrl"
 	},{
+		name: "Page.CreditMonitoringDashboard",
+		url: "/CreditMonitoringDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "CreditMonitoringDashboardCtrl"
+	},{
 		name: "Page.InventoryDashboard",
 		url: "/InventoryDashboard",
 		templateUrl: "process/pages/templates/Page.InventoryDashboard.html",
