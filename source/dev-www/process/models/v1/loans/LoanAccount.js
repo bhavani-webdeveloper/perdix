@@ -17,7 +17,7 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         },
         get: {
             method: 'GET',
-            url: endpoint + '/show/:accountId'
+            url: endpoint + '/show/accountId'
         },
         viewLoans: searchResource({
             method: 'GET',
