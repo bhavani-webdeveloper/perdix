@@ -120,6 +120,49 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
                 return customer;
             }
         },
+
+        updateCustomer: {
+            method: 'PUT',
+            url: endpoint,
+            transformRequest: function(data) {
+                if (_.has(data, 'customer.expenditures') && _.isArray(data.customer.expenditures)) {
+                    for (var i = 0; i < data.customer.expenditures.length; i++) {
+                        if (data.customer.expenditures[i].expenditureSource == "Others") {
+                            var tempExpenditureSource = data.customer.expenditures[i].expenditureSource + ">" + data.customer.expenditures[i].customExpenditureSource;
+                            var tempAnnualExpenses = data.customer.expenditures[i].annualExpenses;
+                            var tempFrequency = data.customer.expenditures[i].frequency;
+                            data.customer.expenditures[i] = {};
+                            data.customer.expenditures[i].annualExpenses = tempAnnualExpenses;
+                            data.customer.expenditures[i].expenditureSource = tempExpenditureSource;
+                            data.customer.expenditures[i].frequency = tempFrequency;
+                        }
+                    }
+                }
+                return JSON.stringify(data);
+            }
+        },
+        EnrollmentById: {
+            method: 'GET',
+            url: endpoint + '/:id',
+            transformResponse: function(data, headersGetter, status) {
+                var response = JSON.parse(data);
+                if (status == 200) {
+                    var customer = response;
+                    if (_.has(customer, "expenditures") && _.isArray(customer.expenditures)) {
+                        for (var i = 0; i < customer.expenditures.length; i++) {
+                            if (/Others/.test(customer.expenditures[i].expenditureSource)) {
+                                var expendituresSplitArray = customer.expenditures[i].expenditureSource.split('>');
+                                if (expendituresSplitArray.length > 1 && expendituresSplitArray[0] == "Others") {
+                                    customer.expenditures[i].expenditureSource = expendituresSplitArray[0];
+                                    customer.expenditures[i].customExpenditureSource = expendituresSplitArray[1];
+                                }
+                            }
+                        }
+                    }
+                }
+                return response;
+            }
+        },
         getWithHistory: {
             method: 'GET',
             url: endpoint+'/withhistory/:id'

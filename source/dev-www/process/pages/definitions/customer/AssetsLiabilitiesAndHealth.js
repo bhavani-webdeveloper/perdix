@@ -8,6 +8,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         Utils.removeNulls(model, true);
         if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
             var fields = model.customer.udf.userDefinedFieldValues;
+            $log.info(fields);
             fields['udf17'] = Number(fields['udf17']);
             fields['udf10'] = Number(fields['udf10']);
             fields['udf11'] = Number(fields['udf11']);
@@ -16,6 +17,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             fields['udf1'] = Boolean(fields['udf1']);
             fields['udf6'] = Boolean(fields['udf6']);
             fields['udf4'] = Number(fields['udf4']);
+
             for (var i = 1; i <= 40; i++) {
                 if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
                     model.customer.udf.userDefinedFieldValues['udf' + i] = '';
@@ -35,41 +37,24 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         "subTitle": "Enrollment Stage 2",
         "uri": "Profile/Stage 2",
         initialize: function (model, form, formCtrl) {
-            $stateParams.confirmExit = true;
-            $log.info("I got initialized");
-            $log.info($stateParams);
+            var customerId = $stateParams.pageId;
+
+            if (customerId == undefined || customerId == null) {
+                $state.go('Page.Engine', {
+                    pageName: "EnrollmentHouseVerificationQueue",
+                    pageId: null
+                });
+            }
 
             if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
-
                 PageHelper.showLoader();
                 PageHelper.showProgress("page-init","Loading...");
-                var expenditureSourcesTitlemap = formHelper.enum('expenditure').data;
-                var customerId = $stateParams.pageId;
-                if (!customerId) {
-                    PageHelper.hideLoader();
-                    $stateParams.confirmExit = false;
-                    $state.go("Page.Engine",{
-                        pageName:"EnrollmentHouseVerificationQueue",
-                        pageId:null
-                    });
-                    return;
-                }
+                
                 Enrollment.get({id: customerId},
                     function(res){
                         _.assign(model.customer, res);
                         model = fixData(model);
-
-                        
                         model.customer.date = model.customer.date || Utils.getCurrentDate();
-
-                        if (_.isArray(model.customer.expenditures) && model.customer.expenditures.length == 0) {
-                            model.customer.expenditures = [];  
-                            _.forEach(expenditureSourcesTitlemap, function(v){
-                            if (v.value !== 'Others')
-                                model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
-                            });
-                        } 
-
                         model.customer.familyMembers = model.customer.familyMembers || [];
                         var self = null;
                         var spouse = null;
@@ -93,7 +78,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             };
                             model.customer.familyMembers.push(self);
                         } else {
-                            // TODO already self available, can verify here
+                            
                         }
                         if (!spouse) {
                             spouse = {
@@ -106,7 +91,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             };
                             model.customer.familyMembers.push(spouse);
                         } else {
-                            // TODO already spouse available, can verify here
+                            
                         }
 
                         model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
@@ -163,7 +148,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             model.getFingerLabel = function(fingerId){
                 return BiometricService.getLabel(fingerId);
             }
-
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -222,7 +206,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             onSelect: function(valueObj, model, context) {
                                 var rowIndex = context.arrayIndex;
                                 PageHelper.showLoader();
-                                Enrollment.getCustomerById({id: valueObj.id}, function (resp, header) {
+                                Enrollment.EnrollmentById({id: valueObj.id}, function (resp, header) {
                                     
                                             model.customer.familyMembers[rowIndex].gender = resp.gender;
                                             model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
@@ -241,8 +225,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                             irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                                 }, function (resp) {
                                     PageHelper.hideLoader();
-                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
-                                            
+                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)           
                                 });
                                     
                             },
@@ -336,33 +319,35 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 "type": "box",
                 "title": "EXPENDITURES",
                 "items": [{
-                    key:"customer.expenditures",
-                    type:"array",
-                    remove: null,
+                    key: "customer.expenditures",
+                    type: "array",
+                    //remove: null,
                     view: "fixed",
                     titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                    items:[{
+                    items: [{
+                        key: "customer.expenditures[].expenditureSource",
+                        type: "select"
+                    }, {
+                        key: "customer.expenditures[].customExpenditureSource",
+                        title: "CUSTOM_EXPENDITURE_SOURCE",
+                        condition: "model.customer.expenditures[arrayIndex].expenditureSource=='Others'"
+                    }, {
                         type: 'section',
                         htmlClass: 'row',
                         items: [{
-                            key: "customer.expenditures[].tempName",
-                            title: 'EXPENDITURES SOURCE',
-                            condition: "model.customer.expenditures[arrayIndex].expenditureSource == 'Others'"
-
-                        },{
                             type: 'section',
                             htmlClass: 'col-xs-6',
                             items: [{
-                                key:"customer.expenditures[].frequency",
-                                type:"select",
+                                key: "customer.expenditures[].frequency",
+                                type: "select",
                                 notitle: true
                             }]
-                        },{
+                        }, {
                             type: 'section',
                             htmlClass: 'col-xs-6',
                             items: [{
                                 key: "customer.expenditures[].annualExpenses",
-                                type:"amount",
+                                type: "amount",
                                 notitle: true
                             }]
                         }]
@@ -486,7 +471,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                    type: "select"
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
-                                   "title":"OWNED_ASSET_DETAILS",
                                    type: "lov",
                                    autolov: true,
                                    lovonly:true,
@@ -582,9 +566,13 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                         ];
                                    }
                                },
-                               "customer.physicalAssets[].numberOfOwnedAsset",
+                               {
+                                key:"customer.physicalAssets[].numberOfOwnedAsset",
+                                "title": "NUMBER_OF_OWNED_ASSET",
+                               },
                                {
                                    key: "customer.physicalAssets[].ownedAssetValue",
+                                   "title": "OWNED_ASSET_VALUE"
                                }
                         ]
                     },
@@ -758,6 +746,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf31",
+                                title:"BUILD_TYPE",
                                 "type":"select",
                                 "titleMap":{
                                             "CONCRETE":"CONCRETE",
@@ -766,8 +755,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 }
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf32"
-
+                                key:"customer.udf.userDefinedFieldValues.udf32",
+                                title:"NUMBER_OF_ROOMS",
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf6"
@@ -972,7 +961,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     }
                     Utils.removeNulls(reqData,true);
                     $log.info(reqData);
-                    Enrollment.updateEnrollment(reqData,
+                    Enrollment.updateCustomer(reqData,
                         function(res, headers){
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN created : ' + res.customer.urnNo, 5000);

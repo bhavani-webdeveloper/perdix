@@ -49,29 +49,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     }
                     model._screenMode = 'VIEW';
 
-                    //try {
-                    //    if ($stateParams.pageId !== null) {
-                    //        if ($stateParams.pageData.intent !== undefined) {
-                    //            model._screenMode = $stateParams.pageData.intent;
-                    //        }
-                    //        else {
-                    //            $state.go('Page.Engine',{
-                    //                pageName:"CustomerSearch",
-                    //                pageId:null
-                    //            });
-                    //        }
-                    //    }
-                    //}catch(err){
-                    //    $log.error(err);
-                    //    $state.go('Page.Engine',{
-                    //        pageName:"CustomerSearch",
-                    //        pageId:null
-                    //    });
-                    //}
-
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...");
-                    Enrollment.getCustomerById({id: custId}, function (resp, header) {
+                    Enrollment.EnrollmentById({id: custId}, function (resp, header) {
                         PageHelper.hideLoader();
                         model.customer = _.cloneDeep(resp);
                         model = fixData(model);
@@ -84,7 +64,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             pageName: "CustomerSearch",
                             pageId: null
                         });
-
                     });
 
                 },
@@ -616,9 +595,13 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         ];
                                    }
                                },
-                               "customer.physicalAssets[].numberOfOwnedAsset",
+                               {
+                                key:"customer.physicalAssets[].numberOfOwnedAsset",
+                                "title": "NUMBER_OF_OWNED_ASSET",
+                               },
                                {
                                    key: "customer.physicalAssets[].ownedAssetValue",
+                                   "title": "OWNED_ASSET_VALUE"
                                }
                             ]
                         },
@@ -749,16 +732,17 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf31",
                                         "type":"select",
-                                        //"enumCode":"house_build_type",
-                                        "titleMap":{
-                                            "CONCRETE":"CONCRETE",
-                                            "MUD":"MUD",
-                                            "BRICK":"BRICK"
+                                        title: "BUILD_TYPE",
+                                        "type": "select",
+                                        "titleMap": {
+                                            "CONCRETE": "CONCRETE",
+                                            "MUD": "MUD",
+                                            "BRICK": "BRICK"
                                         }
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf32"
-
+                                        key:"customer.udf.userDefinedFieldValues.udf32",
+                                        title:"NUMBER_OF_ROOMS",
                                     },
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf6"
@@ -851,7 +835,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             $log.info(model);
                             var reqData = _.cloneDeep(model);
 
-                            Enrollment.updateEnrollment(reqData, function (res, headers) {
+                            Enrollment.updateCustomer(reqData, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                                 $state.go("Page.Engine", {
