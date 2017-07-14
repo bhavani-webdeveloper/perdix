@@ -169,3 +169,233 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         }
     });
 });
+
+
+irf.pageCollection.factory("EnrollmentHelper",
+["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
+
+    var validatePanCard = function(str, form){
+        const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
+        if (panRegex.test(panRegex)){
+
+        }else {
+            console.log(form);
+        }
+    }
+
+    var fixData = function(model){
+        /* TODO Validations */
+
+        /* Fix to make additionalKYCs as an array */
+        //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
+
+        /* Fix to add atleast one fingerprint */
+        model['customer']['leftHandIndexImageId'] = "232";
+
+        if (model['customer']['mailSameAsResidence'] === true){
+            model['customer']['mailingDoorNo'] = model['customer']['doorNo'];
+            model['customer']['mailingStreet'] = model['customer']['street'];
+            model['customer']['mailingLocality'] = model['customer']['locality'];
+            model['customer']['mailingPostoffice'] = model['customer']['postOffice'];
+            model['customer']['mailingDistrict'] = model['customer']['district'];
+            model['customer']['mailingPincode'] = model['customer']['pincode'];
+            model['customer']['mailingState'] = model['customer']['state'];
+        }
+
+        if(model.customer.addressProofSameAsIdProof){
+
+            model.customer.addressProof=_.clone(model.customer.identityProof);
+            model.customer.addressProofImageId=_.clone(model.customer.identityProofImageId);
+            model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
+            model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
+            model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
+            model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
+        }
+        if (model.customer.udf && model.customer.udf.userDefinedFieldValues
+            && model.customer.udf.userDefinedFieldValues.udf1) {
+            model.customer.udf.userDefinedFieldValues.udf1 =
+                model.customer.udf.userDefinedFieldValues.udf1 === true
+                || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+        }
+
+        Utils.removeNulls(model,true);
+        return model;
+    };
+
+    var validateData = function(model) {
+        PageHelper.clearErrors();
+        if (_.hasIn(model.customer, 'udf') && model.customer.udf && model.customer.udf.userDefinedFieldValues) {
+            if (model.customer.udf.userDefinedFieldValues.udf36
+                || model.customer.udf.userDefinedFieldValues.udf35
+                || model.customer.udf.userDefinedFieldValues.udf34) {
+                if (!model.customer.udf.userDefinedFieldValues.udf33) {
+                    PageHelper.setError({message:'Spouse ID Proof type is mandatory when Spouse ID Details are given'});
+                    return false;
+                }
+            }
+        }
+        
+        if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
+            PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
+            return false;
+        }
+        return true;
+    };
+    /*
+    * function saveData:
+    *
+    * if cust id is not set, data is saved and the promise is resolved with SAVE's response
+    * if cust id is set, promise is rejected with true (indicates doProceed)
+    * if error occurs during save, promise is rejected with false (indicates don't proceed
+    * */
+    var saveData = function(reqData){
+
+        var deferred = $q.defer();
+        $log.info("Attempting Save");
+        $log.info(reqData);
+        PageHelper.clearErrors();
+        PageHelper.showLoader();
+        if (reqData.customer.currentStage == 'Completed'){ 
+            reqData['enrollmentAction'] = 'PROCEED';
+        } else {
+            reqData['enrollmentAction'] = 'SAVE';    
+        }
+        /* TODO fix for KYC not saving **/
+       /* if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
+            reqData.customer.additionalKYCs = [];
+            reqData.customer.additionalKYCs.push({});
+        }*/
+        var action = reqData.customer.id ? 'update' : 'save';
+        Enrollment[action](reqData, function (res, headers) {
+            $log.info(res);
+            PageHelper.hideLoader();
+            deferred.resolve(res);
+        }, function (res) {
+            PageHelper.hideLoader();
+            PageHelper.showErrors(res);
+            deferred.reject(res);
+        });
+        return deferred.promise;
+
+    };
+    /*
+    * fn proceedData:
+    *
+    * if cust id not set, promise rejected with null
+    * if cust id set, promise resolved with PROCEED response
+    * if error occurs, promise rejected with null.
+    * */
+    var proceedData = function(res){
+
+        var deferred = $q.defer();
+        $log.info("Attempting Proceed");
+        $log.info(res);
+        if(res.customer.id===undefined || res.customer.id===null){
+            $log.info("Customer id null, cannot proceed");
+            deferred.reject(null);
+        }
+        else {
+            PageHelper.clearErrors();
+            PageHelper.showLoader();
+            res.enrollmentAction = "PROCEED";
+            Enrollment.updateEnrollment(res, function (res, headers) {
+                PageHelper.hideLoader();
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+        }
+        return deferred.promise;
+
+    };
+
+    var parseAadhaar = function(aadhaarXml) {
+        var aadhaarData = {
+            "uid" :null,
+            "name":null,
+            "gender":null,
+            "dob":null,
+            "yob":null,
+            "co":null,
+            "house":null,
+            "street":null,
+            "lm":null,
+            "loc":null,
+            "vtc":null,
+            "dist":null,
+            "state":null,
+            "pc":null,
+            "po": null
+        };
+        var aadhaarDoc = $.parseXML(aadhaarXml);
+        aadhaarXmlData = $(aadhaarDoc).find('PrintLetterBarcodeData');
+        if (aadhaarXmlData && aadhaarXmlData.length) {
+            angular.forEach(aadhaarXmlData[0].attributes, function(attr, i){
+                this[attr.name] = attr.value;
+            }, aadhaarData);
+            aadhaarData['pc'] = Number(aadhaarData['pc']);
+            var g = aadhaarData['gender'].toUpperCase();
+            aadhaarData['gender'] = (g === 'M' || g === 'MALE') ? 'MALE' : ((g === 'F' || g === 'FEMALE') ? 'FEMALE' : 'OTHERS');
+        }
+        return aadhaarData;
+    };
+
+    var customerAadhaarOnCapture = function(result, model, form) {
+        $log.info(result); // spouse id proof
+        // "co":""
+        // "lm":"" landmark
+        var aadhaarData = parseAadhaar(result.text);
+        $log.info(aadhaarData);
+        // model.customer.aadhaarNo = aadhaarData.uid;
+        model.customer.firstName = aadhaarData.name;
+        model.customer.gender = aadhaarData.gender;
+        model.customer.doorNo = aadhaarData.house;
+        model.customer.street = aadhaarData.street;
+        model.customer.locality = aadhaarData.loc;
+        model.customer.villageName = aadhaarData.vtc;
+        model.customer.district = aadhaarData.dist;
+        model.customer.state = aadhaarData.state;
+        model.customer.pincode = aadhaarData.pc;
+        model.customer.postOffice = aadhaarData.po;
+        if (aadhaarData.dob) {
+            $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+            if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                model.customer.dateOfBirth = aadhaarData.dob;
+            } else {
+                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+            }
+            $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        } else if (aadhaarData.yob) {
+            $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+            model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        }
+        if (!model.customer.identityProof && !model.customer.identityProofNo
+            && !model.customer.addressProof && !model.customer.addressProofNo) {
+            model.customer.addressProofSameAsIdProof = true;
+        }
+        if (!model.customer.identityProof && !model.customer.identityProofNo) {
+            model.customer.identityProof = 'Aadhar card';
+            model.customer.identityProofNo = aadhaarData.uid;
+        }
+        if (!model.customer.addressProof && !model.customer.addressProofNo) {
+            model.customer.addressProof = 'Aadhar card';
+            model.customer.addressProofNo = aadhaarData.uid;
+        }
+        return aadhaarData;
+    };
+
+    return {
+        fixData: fixData,
+        saveData: saveData,
+        proceedData: proceedData,
+        validateData: validateData,
+        parseAadhaar: parseAadhaar,
+        customerAadhaarOnCapture: customerAadhaarOnCapture,
+        validatePanCard: validatePanCard
+    };
+}]);
