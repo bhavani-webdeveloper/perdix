@@ -90,33 +90,6 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
-        var prepareTranslationJSON = function(arr, langCode) {
-            var result = {};
-            for (var i = arr.length - 1; i >= 0; i--) {
-                result[arr[i].code] = arr[i][langCode];
-            };
-            return result;
-        };
-        var translationResult = [];
-        var translationLangs = {};
-        resource.downloadTranslations = function() {
-            var deferred = $q.defer();
-            resource.getResult("translations.list", {}).then(function(records) {
-                if (records && records.results && records.results.length) {
-                    translationResult = records.results;
-                    deferred.resolve(translationResult);
-                }
-            }, deferred.reject);
-            return deferred.promise;
-        };
-        resource.getTranslationJSON = function(translationResult, langCode) {
-            if (!translationLangs[langCode] && translationResult && translationResult.length) {
-                $log.info('all translation array avilable in memory for ' + langCode);
-                translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
-            }
-            return translationLangs[langCode];
-        };
-
         resource.getAccountDetails = function(accountNumbers) {
             var deferred = $q.defer();
             var request = {

@@ -8,8 +8,23 @@ irf.commons.config(function($translateProvider) {
 	//$translateProvider.useMissingTranslationHandlerLog();
 });
 irf.commons.factory('irfTranslateLoader',
-['languages', 'Queries', '$q', 'irfStorageService', '$log',
-function(languages, Queries, $q, irfStorageService, $log){
+['languages', '$resource', '$q', 'irfStorageService', '$log',
+function(languages, $resource, $q, irfStorageService, $log){
+	var prepareTranslationJSON = function(arr, langCode) {
+		var result = {};
+		for (var i = arr.length - 1; i >= 0; i--) {
+			result[arr[i].code] = arr[i][langCode];
+		}
+		return result;
+	};
+	var translationLangs = {};
+	var getTranslationJSON = function(translationResult, langCode) {
+		if (!translationLangs[langCode] && translationResult && translationResult.length) {
+			$log.info('all translation array avilable in memory for ' + langCode);
+			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
+		}
+		return translationLangs[langCode];
+	};
 	return function(options) {
 		var deferred = $q.defer();
 		var translations = irfStorageService.retrieveJSON('irfTranslations');
@@ -21,14 +36,20 @@ function(languages, Queries, $q, irfStorageService, $log){
 		if (isSameWeek && translations && translations[options.key] && !options.forceServer) {
 			deferred.resolve(translations[options.key]);
 		} else {
-			Queries.downloadTranslations().then(function(translationResult) {
+			$resource(irf.MANAGEMENT_BASE_URL, null, {
+				"downloadTranslations": {
+					"method": 'GET',
+					"url": irf.MANAGEMENT_BASE_URL + "/server-ext/translations.php",
+					"isArray": true
+				}
+			}).downloadTranslations().$promise.then(function(translationResult) {
 				$log.info('Translations loading from server');
 				var langCodes = _.keys(languages);
 				translations = {
 					_timestamp: new Date().getTime()
 				};
 				for (var i = langCodes.length - 1; i >= 0; i--) {
-					translations[langCodes[i]] = Queries.getTranslationJSON(translationResult, langCodes[i]);
+					translations[langCodes[i]] = getTranslationJSON(translationResult, langCodes[i]);
 				};
 				irfStorageService.storeJSON('irfTranslations', translations);
 				deferred.resolve(translations[options.key]);

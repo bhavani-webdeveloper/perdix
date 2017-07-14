@@ -1,6 +1,6 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q', 'SysQueries', 'irfNavigator',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q, SysQueries, irfNavigator){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$q', 'SysQueries', 'irfNavigator',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $q, SysQueries, irfNavigator){
 
 	var loadUserBranches = function(username){
 		var deferred = $q.defer();
@@ -30,12 +30,8 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
-			/* Load user branches */
-			
-
 			var p = [
 				irfStorageService.cacheAllMaster(true, refresh),
-				irfTranslateLoader({forceServer: refresh}),
 				loadUserBranches(username)
 			]
 			$q.all(p).then(function(msg){
@@ -99,8 +95,10 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 					setTimeout(function() {onlineLogin(username, password, true);});
 				});
 		} else {
+			var AppLoaded = SessionStore.getItem('AppLoaded');
+			SessionStore.setItem('AppLoaded', {'loaded':true});
 			$scope.showLoading = 'cc';
-			onlineLogin(username, password);
+			onlineLogin(username, password, !AppLoaded);
 		}
 	};
 
