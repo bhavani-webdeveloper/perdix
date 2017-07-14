@@ -564,8 +564,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 return deferred.promise;
             },
             submit: function(model, form, formName){
+
                 $log.info("Inside submit()");
                 model.customer.customerType="Individual";
+                var centres = formHelper.enum('centre').data;
+                for (var i = 0; i < centres.length; i++) {
+                    if ((centres[i].code) == model.customer.centreCode) {
+                        model.customer.centreId = centres[i].id;
+                    }
+                }
+
                 model.customer.miscellaneous=null;
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {

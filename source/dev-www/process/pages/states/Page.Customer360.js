@@ -1,19 +1,56 @@
 irf.pages.controller("Customer360Ctrl",
-["$log", "$scope", "$stateParams", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
+["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
 "entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper",
-function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
+function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
 	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper){
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
 	$scope.role = SessionStore.getRole();
 	$scope.customerId = $stateParams.pageId;
+	$log.info($stateParams);
+	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
 
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
 			"Page/Engine/customer360.CustomerProfile",
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					{
+						"title": "NEW_LOAN",
+						"iconClass": "fa fa-key",
+						"items": [
+							"Page/Engine/Loans.NewJewel",
+							"Page/Engine/Loans.NewMEL"
+						]
+					},
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/customer360.loans.Service"	
+				]
+			},
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/CustomerHistory",
+			"Page/Engine/customer360.Recapture"
+		]
+	};
+
+	var enrollmentDefinition = {
+		"title": "CUSTOMER_360",
+		"items": [
+			"Page/Engine/customer360.EnrollmentProfile",
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
@@ -240,18 +277,28 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		}]
 	};
 
-	Enrollment.getSchema().$promise.then(function(customerSchemaResponse){
-		Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
-			var fullDefinition = customerDefinition;
-			if (response.customerType === 'Enterprise') {
-				fullDefinition = enterpriseDefinition;
-			}
-			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
-				$scope.dashboardDefinition = resp;
-				$scope.customerSchema = customerSchemaResponse;
-				$scope.initialize(response);
+	Enrollment.getSchema().$promise.then(function(customerSchemaResponse) {
+		Enrollment.get({
+			id: $scope.customerId
+		}).$promise.then(function(response) {
+			Queries.getGlobalSettings("siteCode").then(function(value) {
+				$scope.siteCode = value;
+				var fullDefinition = customerDefinition;
+				if (response.customerType === 'Enterprise') {
+					fullDefinition = enterpriseDefinition;
+				}
+				if ($scope.siteCode == "KGFS") {
+					fullDefinition = enrollmentDefinition;
+				}
+				$log.info("siteCode:" + $scope.siteCode);
+				PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+					$scope.dashboardDefinition = resp;
+					$scope.customerSchema = customerSchemaResponse;
+					$scope.initialize(response);
+				});
+
 			});
-		}, function(errorResponse){
+		}, function(errorResponse) {
 			PageHelper.showErrors(errorResponse);
 		});
 	});
@@ -261,14 +308,21 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		$scope.model = {customer: data};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
+		
 		if (data.customerType === 'Enterprise') {
 			$scope.introForm = enterprisePortfolioForm;
 			//$scope.pageTitle = 'BUSINESS_360';
 		} else {
 			$scope.introForm = customerPortfolioForm;
 		}
+
 		$scope.introForm.push(reportBox);
 		$log.info($scope.pageTitle);
+
+		if($scope.siteCode == "KGFS")
+		{
+			$scope.introForm = customerPortfolioForm;
+		}
 
 		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
@@ -282,6 +336,13 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);

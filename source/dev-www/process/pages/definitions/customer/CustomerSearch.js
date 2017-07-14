@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils", "PagesDefinition",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefinition){
+["$log", "formHelper", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition",
+function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -8,6 +8,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
+			//"irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
 			var bankName = SessionStore.getBankName();
 			var banks = formHelper.enum('bank').data;
 			for (var i = 0; i < banks.length; i++){
@@ -17,6 +18,12 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 					break;
 				}
 			}
+			Queries.getGlobalSettings("siteCode").then(function(value) {
+				model.siteCode = value;
+				$log.info("siteCode:" + model.siteCode);
+			}, function(err) {
+				$log.info("siteCode is not available");
+			});
 			var userRole = SessionStore.getUserRole();
 			if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 				model.fullAccess = true;
@@ -97,11 +104,11 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 						"title": "BRANCH_NAME",
 						"type": ["integer", "null"],
 						"enumCode": "branch_id",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true,
-							"parentEnumCode": "bank",
-							"parentValueExpr": "model.bankId",
 						}
 					},
 					"centre": {
@@ -230,7 +237,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 									pageId:item.id
 								});
 							},
-							isApplicable: function(item, index){
+							isApplicable: function(item, model){
 								if (item.currentStage==='BasicEnrolment')
 									return true;
 								return false;
@@ -240,17 +247,70 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefiniti
 							name: "CUSTOMER_360",
 							desc: "",
 							icon: "fa fa-user",
-							fn: function(item, index){
+							fn: function(item, model){
 								$state.go("Page.Customer360",{
-									pageId:item.id
+									pageId:item.id,
+									pageData:model.siteCode	
 								});
 							},
-							isApplicable: function(item, index){
+							isApplicable: function(item, model){
 								if (item.currentStage==='Completed')
 									return true;
 								return false;
 							}
+						},
+						{
+							name: "Edit/Enroll Customer",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"ProfileInformation",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, model){
+								if (item.currentStage==='Stage01' && model.siteCode=="KGFS")
+									return true;
+								else return false;
+							}
+						},
+						{
+							name: "Edit Enrollment",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"CustomerRUD",
+									pageId:item.id,
+									pageData:{
+										intent:'EDIT'
+									}
+								});
+							},
+							isApplicable: function(item, model){
+								if (item.currentStage !=='Stage01'&& model.siteCode=="KGFS")
+									return true;
+								else return false;
+							}
+						},
+						{
+							name: "EDF",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"EDF",
+									pageId:item.id,
+								});
+							},
+							isApplicable: function(item, model){
+								if (item.urnNo && model.siteCode=="KGFS")
+									return true;
+								else return false;
+							}
 						}
+
 					];
 				}
 			}
