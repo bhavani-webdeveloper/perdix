@@ -29,14 +29,14 @@ define({
             });
         };
 
-        // var validateForm = function(formCtrl){
-        //     formCtrl.scope.$broadcast('schemaFormValidate');
-        //     if (formCtrl && formCtrl.$invalid) {
-        //         PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
-        //         return false;
-        //     }
-        //     return true;
-        // }
+        var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        }
 
         var checkGroupLoanActivated = function(model) {
             var deferred = $q.defer();
@@ -195,126 +195,128 @@ define({
             },
 
             form: [{
-                "type": "box",
-                "readonly": true,
-                "title": "GROUP_DETAILS",
-                "items": [{
-                    "key": "group.groupName",
-                    "title": "GROUP_NAME",
-                }, {
-                    "key": "group.partnerCode",
-                    "title": "PARTNER",
-                    "type": "select",
-                    "enumCode": "partner"
-                }, {
-                    "key": "group.centreCode",
-                    "title": "CENTRE_CODE",
-                    "type": "select",
-                    "enumCode": "centre"
-                }, {
-                    "key": "group.productCode",
-                    "title": "PRODUCT",
-                    "type": "select",
-                    "enumCode": "loan_product",
-                    "parentEnumCode": "partner",
-                    "parentValueExpr": "model.group.partnerCode"
-                }, {
-                    "key": "group.frequency",
-                    "title": "FREQUENCY",
-                    "type": "select",
-                    "titleMap": {
-                        "M": "Monthly",
-                        "Q": "Quarterly"
-                    }
-                }, {
-                    "key": "group.tenure",
-                    "title": "TENURE",
-                }]
-            }, {
-                "type": "box",
-                "title": "GROUP_MEMBERS",
-                "items": [{
-                    "key": "group.jlgGroupMembers",
-                    "type": "array",
-                    "title": "GROUP_MEMBERS",
-                    "add": null,
-                    "remove": null,
+                    "type": "box",
+                    "readonly": true,
+                    "title": "GROUP_DETAILS",
                     "items": [{
-                        "key": "group.jlgGroupMembers[].urnNo",
-                        "readonly": true,
-                        "title": "URN_NO",
+                        "key": "group.groupName",
+                        "title": "GROUP_NAME",
                     }, {
-                        "key": "group.jlgGroupMembers[].firstName",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "GROUP_MEMBER_NAME"
-                    }, {
-                        "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                        "readonly": true,
-                        "title": "FATHER_NAME"
-                    }, {
-                        "key": "group.jlgGroupMembers[].relation",
-                        "readonly": true,
-                        "title": "RELATION",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanAmount",
-                        "readonly": true,
-                        "title": "LOAN_AMOUNT",
-                        "type": "amount",
-
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose1",
-                        "readonly": true,
-                        "title": "LOAN_PURPOSE_1",
-                        "enumCode": "loan_purpose_1",
+                        "key": "group.partnerCode",
+                        "title": "PARTNER",
                         "type": "select",
+                        "enumCode": "partner"
                     }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose2",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE_2",
-
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose3",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE3",
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessFirstName",
-                        "readonly": true,
-                        "title": "WitnessLastName",
-
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessRelationship",
-                        "readonly": true,
-                        "title": "RELATION",
+                        "key": "group.centreCode",
+                        "title": "CENTRE_CODE",
                         "type": "select",
-                        "enumCode": "relation"
+                        "enumCode": "centre"
                     }, {
-
-                        "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
-                        required: true,
-                        "title": "APPLICATION_UPLOAD",
-                        "category": "Group",
-                        "subCategory": "APPLICATION",
-                        "type": "file",
-                        "fileType": "application/pdf",
+                        "key": "group.productCode",
+                        "title": "PRODUCT",
+                        "type": "select",
+                        "enumCode": "loan_product",
+                        "parentEnumCode": "partner",
+                        "parentValueExpr": "model.group.partnerCode"
+                    }, {
+                        "key": "group.frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "titleMap": {
+                            "M": "Monthly",
+                            "Q": "Quarterly"
+                        }
+                    }, {
+                        "key": "group.tenure",
+                        "title": "TENURE",
                     }]
-                }]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "button",
-                    "icon": "fa fa-download",
-                    "title": "DOWNLOAD_APPLICATION",
-                    "onClick": "actions.downloadApplication(model,form)",
                 }, {
-                    "type": "button",
-                    "icon": "fa fa-arrow-right",
-                    "title": "PROCEED",
-                    "onClick": "actions.proceedAction(model,form,formCtrl)"
-                }]
-            }],
+                    "type": "box",
+                    "title": "GROUP_MEMBERS",
+                    "items": [{
+                        "key": "group.jlgGroupMembers",
+                        "type": "array",
+                        "title": "GROUP_MEMBERS",
+                        "add": null,
+                        "remove": null,
+                        "items": [{
+                            "key": "group.jlgGroupMembers[].urnNo",
+                            "readonly": true,
+                            "title": "URN_NO",
+                        }, {
+                            "key": "group.jlgGroupMembers[].firstName",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "GROUP_MEMBER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "readonly": true,
+                            "title": "FATHER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].relation",
+                            "readonly": true,
+                            "title": "RELATION",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAmount",
+                            "readonly": true,
+                            "title": "LOAN_AMOUNT",
+                            "type": "amount",
+
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "readonly": true,
+                            "title": "LOAN_PURPOSE_1",
+                            "enumCode": "loan_purpose_1",
+                            "type": "select",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE_2",
+
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE3",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "readonly": true,
+                            "title": "WitnessLastName",
+
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "readonly": true,
+                            "title": "RELATION",
+                            "type": "select",
+                            "enumCode": "relation"
+                        },{
+                            
+                            "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                            required: true,
+                            "title": "APPLICATION_UPLOAD",
+                            "category": "Group",
+                            "subCategory": "APPLICATION",
+                            "type": "file",
+                            "fileType": "application/pdf", 
+                        }]
+                    }]
+                },
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "button",
+                        "icon": "fa fa-download",
+                        "title": "DOWNLOAD_APPLICATION",
+                        "onClick": "actions.downloadApplication(model,form)",
+                    }, {
+                        "type": "button",
+                        "icon": "fa fa-arrow-right",
+                        "title": "PROCEED",
+                        "onClick": "actions.proceedAction(model, formCtrl, form)"
+                    }]
+                }
+            ],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -365,26 +367,23 @@ define({
                         PageHelper.hideLoader();
                     });
                 },
-                proceedAction: function(model, form, formCtrl) {
-                    formHelper.validate(formCtrl).then(function() {
-                        PageHelper.showLoader();
-                        irfProgressMessage.pop('Application-proceed', 'Working...');
-                        PageHelper.clearErrors();
-                        model.groupAction = "PROCEED";
-                        var reqData = _.cloneDeep(model);
-                        GroupProcess.updateGroup(reqData, function(res) {
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
-                            $state.go('Page.GroupDashboard', null);
-                        }, function(res) {
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('Application-proceed', 'Oops. Some error.', 2000);
-                            PageHelper.showErrors(res);
-                        });
+                proceedAction: function(model, formCtrl, form) {
+                    if(!validateForm(formCtrl)) 
+                        return;
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Application-proceed', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";
+                    var reqData = _.cloneDeep(model);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        $state.go('Page.GroupDashboard', null);
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Application-proceed', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
                     });
-                    // if(!validateForm(form)) 
-                    //     return;
-
                 },
             }
         }
