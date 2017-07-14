@@ -20,7 +20,7 @@ irf.pages.config([
 	var statesDefinition = [{
 		name: "Page.Landing", // Favorites
 		url: "/Landing",
-		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		templateUrl: "process/pages/templates/Page.Landing.html",
 		controller: "PageLandingCtrl"
 	},{
 		name: "Page.LeadDashboard",

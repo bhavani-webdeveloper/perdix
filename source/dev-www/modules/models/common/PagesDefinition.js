@@ -96,6 +96,20 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
+    pDef.getUserAllowedPages = function() {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            deferred.resolve(userAllowedPages);
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                deferred.resolve(userAllowedPages);
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
     pDef.getRolePageConfig = function(pageUri) {
         var deferred = $q.defer();
         if (userAllowedPages) {
