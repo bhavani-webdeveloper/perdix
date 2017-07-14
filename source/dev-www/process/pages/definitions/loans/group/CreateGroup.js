@@ -490,7 +490,6 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
-                    reqData.group.groupStatus = true;
                     if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
                             $state.go('Page.GroupDashboard', null);

@@ -218,20 +218,20 @@ define({
                         "type": "select",
                         "enumCode": "relation"
                     }, {
-                        "key": "group.jlgGroupMembers[].houseVerificationDone",
+                        "key": "group.jlgGroupMembers[].isHouseVerificationDone",
                         "title": "IS_HOUSE_VERIFIED",
                         "type": "checkbox",
                          schema: { default:true }
                     }, {
                         "key": "group.jlgGroupMembers[].latitude",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].houseVerificationDone==true",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
                         "latitude": "group.jlgGroupMembers[].latitude",
                         "longitude":"group.jlgGroupMembers[].longitude"
                     }, {
                         "key": "group.jlgGroupMembers[].photoImageId1",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].houseVerificationDone==true",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_PHOTO",
                         "type": "file",
                         "category": "Group",
