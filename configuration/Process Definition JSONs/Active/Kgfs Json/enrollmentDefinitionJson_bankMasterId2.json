@@ -16,6 +16,14 @@
     "allowedRoles": [
       "WM"
     ]
+  },{
+      "order": 3,
+      "code": "Completed",
+      "name": "Completed",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
   }],
   "schema": {
     "$schema": "http://json-schema.org/draft-04/schema#",
