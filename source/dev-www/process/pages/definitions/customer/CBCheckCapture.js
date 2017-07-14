@@ -131,9 +131,9 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				$log.info("form.$valid: " + form.$valid);
 				if (form.$valid) {
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
-					CreditBureau.creditBureauCheck({
+					CreditBureau.postcreditBureauCheck({
 						customerId: model.customerId,
-						highMarkType: model.creditBureau,
+						type: model.creditBureau,
 						purpose: model.loanPurpose1,
 						loanAmount: model.loanAmount
 					}, function(response){
