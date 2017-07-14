@@ -39,24 +39,34 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 	}
 
 	var favoritesPopupHtml = '\
-		<div ng-repeat="(uri, page) in model.pages">\
-			<div ng-if="page.directAccess" class="checkbox form-control">\
+		<input id="_favoriteSearchText" ng-model="searchText" class="form-control" placeholder="Search (Type \'favorite\' to shortlist favorites)">\
+		<div ng-show="searchText" style="position: absolute; top: 17px; right: 0px; margin-right: 15px;">\
+			<button ng-click="searchText=\'\'" class="btn btn-box-tool btn-xs" style="padding-left:5px;padding-right:7px;outline:none" tabindex="-1"><i class="fa fa-times"></i></button>\
+		</div>\
+		<div ng-repeat="page in model.pages | filter:searchText">\
+			<div ng-if="page.directAccess" class="checkbox form-control" ng-class="{\'bg-tint-theme\':page.favorited}">\
 				<label class="checkbox-inline checkbox-theme" style="width:100%">\
-					<input type="checkbox" ng-model="page.favorited">\
+					<input type="checkbox" ng-model="page.favorited" ng-true-value="\'favorite\'">\
 					<span class="control-indicator"></span>\
 					<span><i class="{{page.iconClass}}">&nbsp;</i>{{page.title|translate}}<span class="pull-right" ng-bind-html="model.pageNameHtml(page.stateParams.pageName.match(\'(^.+)[.]\')[1]||page.stateParams.pageName||page.state)"></span></span>\
 				</label>\
 			</div>\
 		</div>';
 	$scope.editFavorites = function() {
-		irfSimpleModal("Pick favorites", favoritesPopupHtml, {
-			"pages": $scope.allPages,
+		var pagesArray = [];
+		_.forOwn($scope.allPages, function(v, k) { pagesArray.push(v) });
+		var favPickerModal = irfSimpleModal("Pick favorites", favoritesPopupHtml, {
+			"pages": pagesArray,
 			"pageNameHtml": function(pageName) {
 				return $sce.trustAsHtml(irf.pageNameHtml(pageName));
 			}
-		}).closed.then(function() {
+		});
+		favPickerModal.closed.then(function() {
 			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), $scope.allPages);
 			showFavorites();
+		});
+		favPickerModal.rendered.then(function() {
+			$('#_favoriteSearchText').focus();
 		});
 	};
 }]);
@@ -70,7 +80,7 @@ function(irfStorageService, $q, PagesDefinition, SessionStore) {
 			var favoriteItems = [];
 			_.forOwn(allPages, function(v, k) {
 				if (v.favorited && newPages[k]) {
-					newPages[k].favorited = true;
+					newPages[k].favorited = "favorite";
 				}
 			});
 			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), newPages);
