@@ -96,7 +96,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                model.group.branchName = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+                model.group.branchName = model.group.branchName || SessionStore.getCurrentBranch().branchId;
                 model.group.branchdescription =SessionStore.getBankName();
                 var date = SessionStore.getFormatedCBSDate();
                 model.group.groupFormationDate=date.split("-").reverse().join("-");
@@ -234,7 +234,8 @@ define({
                     "type": "array",
                     "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "title": "GROUP_MEMBERS",
-                    "items": [{
+                    "items": [
+                   /* {
                         "key": "group.jlgGroupMembers[].urnNo",
                         "title": "URN_NO",
                         "required": true,
@@ -244,24 +245,6 @@ define({
                             model.branchName = parentModel.group.branchName;
                         },
                         "inputMap": {
-                            /*"status": {
-                                "key": "group.status",
-                                "title": "STATUS",
-                                "type": "select",
-                                "titleMap": [{
-                                    "name": "All",
-                                    "value": ""
-                                }, {
-                                    "name": "Processed",
-                                    "value": "PROCESSED"
-                                }, {
-                                    "name": "Pending",
-                                    "value": "PENDING"
-                                }, {
-                                    "name": "Error",
-                                    "value": "ERROR"
-                                }]
-                            },*/
                             "branchName": {
                                 "key": "group.branchName",
                                 "title": "BRANCH_NAME",
@@ -288,17 +271,6 @@ define({
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
-                            /*var today = moment(new Date());
-                            var nDaysBack = moment(new Date()).subtract(nDays, 'days');
-                            var promise = CreditBureau.listCreditBureauStatus({
-                                'branchName': inputModel.branchName,
-                                'status': inputModel.status,
-                                'centreCode': inputModel.centreCode,
-                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
-                                'toDate': today.format('YYYY-MM-DD')
-                            }).$promise;
-                            return promise;*/
-
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var branches = formHelper.enum('branch').data;
                             var branchId;
@@ -324,7 +296,99 @@ define({
                             $log.info("Hi Selected");
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
                         }
-                    }, {
+                    },*/
+                    {
+                        "key": "group.jlgGroupMembers[].urnNo",
+                        "title": "URN_NO",
+                        "required": true,
+                        "type": "lov",
+                        "lovonly": true,
+                        initialize: function(model, form, parentModel, context) {
+                            model.branchName = parentModel.group.branchName;
+                        },
+                        "inputMap": {
+                            "branchName": {
+                                "key": "group.branchName",
+                                "title": "BRANCH_NAME",
+                                "type": "select",
+                                "readonly": true,
+                                //"enumCode": "branch",
+                                "enumCode": "branch_id"
+                            },
+                            "centreCode": {
+                                "key": "group.centreCode",
+                                "title": "CENTRE",
+                                "type": ["number", null],
+                                "enumCode": "centre",
+                                "type": "select",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branchName",
+                            },
+                            "status": {
+                                "key": "group.status",
+                                "title": "STATUS",
+                                "type": "select",
+                                "titleMap": [{
+                                    "name": "All",
+                                    "value": ""
+                                }, {
+                                    "name": "Processed",
+                                    "value": "PROCESSED"
+                                }, {
+                                    "name": "Pending",
+                                    "value": "PENDING"
+                                }, {
+                                    "name": "Error",
+                                    "value": "ERROR"
+                                }]
+                            },
+                        },
+                        "outputMap": {
+                            "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
+                            "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
+                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
+                            "id": "group.jlgGroupMembers[arrayIndex].CustomerId",
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var branches = formHelper.enum('branch_id').data;
+                            var branchId;
+                            $log.info(branches);
+                            $log.info(inputModel.branchName);
+                            for (var i = 0; i < branches.length; i++) {
+                                if (branches[i].value == inputModel.branchName)
+                                {
+                                    branchId = branches[i].name;
+                                }
+                            }
+
+                            $log.info(branchId);
+                            branchId="Vaduvur";
+
+                            var today = moment(new Date());
+                            var nDaysBack = moment(new Date()).subtract(nDays, 'days');
+                            console.log(inputModel);
+                            var promise = CreditBureau.listCreditBureauStatus({
+                                'branchName': branchId,
+                                'status': inputModel.status,
+                                'centreCode': inputModel.centreCode,
+                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
+                                'toDate': today.format('YYYY-MM-DD')
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.urnNo,
+                                data.firstName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            $log.info("Hi Selected");
+                            model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
+                        }
+                    },
+                    {
                         "key": "group.jlgGroupMembers[].firstName",
                         "readonly": true,
                         "type": "string",
