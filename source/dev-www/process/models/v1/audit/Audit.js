@@ -315,6 +315,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
 ]);
 irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "Audit", "PageHelper", "$q", "$log",
     function(irfStorageService, OfflineManager, SessionStore, Audit, PageHelper, $q, $log) {
+        if(!irf.appManifest.ams_enabled) return;
+
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
             Audit.online.getAuditMaster().$promise.then(function(response) {
