@@ -353,18 +353,12 @@ define({
                         "search": function(inputModel, form) {
                             var branches = formHelper.enum('branch_id').data;
                             var branchId;
-                            $log.info(branches);
-                            $log.info(inputModel.branchName);
                             for (var i = 0; i < branches.length; i++) {
                                 if (branches[i].value == inputModel.branchName)
                                 {
                                     branchId = branches[i].name;
                                 }
                             }
-
-                            $log.info(branchId);
-                            branchId="Vaduvur";
-
                             var today = moment(new Date());
                             var nDaysBack = moment(new Date()).subtract(nDays, 'days');
                             console.log(inputModel);
