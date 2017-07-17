@@ -11,7 +11,7 @@ irf.pageCollection.factory("Pages__Cgt1", ["$log","authService","entityManager",
         "title": "CGT_1",
         "subTitle": "",
         "uri": "Groups/CGT 1",
-        //"offline":true,
+        "offline":true,
         getOfflineDisplayItem: function(item, index){
             return [
                 "Group ID : "+item.group.id,
