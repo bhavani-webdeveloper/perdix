@@ -664,7 +664,18 @@
             "minimum": 0,
             "maximum": 999999,
             "captureStages": [
-
+              "Stage01",
+              "Completed"
+            ]
+          },
+          "centreCode": {
+            "title": "Centre Code",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 999999,
+            "captureStages": [
+              "Stage01",
+              "Completed"
             ]
           },
           "ownership": {

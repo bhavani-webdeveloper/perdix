@@ -5,7 +5,6 @@ define({
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
-
     $pageFn: function($log, $state, irfSimpleModal, GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
@@ -26,7 +25,6 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.cgt2DoneBy = SessionStore.getUsername();
-                        model.group.cgt2DoneBy1 = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
                         PageHelper.hideLoader();
@@ -75,7 +73,7 @@ define({
                 "type": "box",
                 "title": "END_CGT2",
                 "items": [{
-                    "key": "group.cgt2DoneBy1",
+                    "key": "group.cgt2DoneBy",
                     "title": "CGT_2_DONE_BY",
                     "readonly": true
                 }, {
@@ -179,7 +177,7 @@ define({
                     irfProgressMessage.pop('CGT2-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
-                    model.group.cgt2DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt2DoneBy;
+                    model.group.cgt2DoneBy=SessionStore.getUsername();
                     if(model.group.siteCode=='sambandh')
                     {
                         var n=model.group.jlgGroupMembers.length;

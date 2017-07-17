@@ -25,7 +25,6 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.cgt3DoneBy = SessionStore.getUsername();
-                        model.group.cgt3DoneBy1 = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
                         PageHelper.hideLoader();
@@ -65,7 +64,7 @@ define({
                 "type": "box",
                 "title": "END_CGT3",
                 "items": [{
-                    "key": "group.cgt3DoneBy1",
+                    "key": "group.cgt3DoneBy",
                     "title": "CGT_3_DONE_BY",
                     "readonly": true
                 }, {
@@ -132,7 +131,7 @@ define({
                 startCGT3: function(model, form) {
                     PageHelper.showLoader();
                     model.group.cgtDate3 = new Date();
-                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -151,7 +150,7 @@ define({
                 endCGT3: function(model, form) {
                     PageHelper.showLoader();
                     model.group.cgtEndDate3 = new Date();
-                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -171,7 +170,7 @@ define({
                     irfProgressMessage.pop('CGT3-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
-                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();

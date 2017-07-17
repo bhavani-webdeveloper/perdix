@@ -296,7 +296,16 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					$scope.customerSchema = customerSchemaResponse;
 					$scope.initialize(response);
 				});
-
+			}, function(err) {
+				var fullDefinition = customerDefinition;
+				if (response.customerType === 'Enterprise') {
+					fullDefinition = enterpriseDefinition;
+				}
+				PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+					$scope.dashboardDefinition = resp;
+					$scope.customerSchema = customerSchemaResponse;
+					$scope.initialize(response);
+				});
 			});
 		}, function(errorResponse) {
 			PageHelper.showErrors(errorResponse);

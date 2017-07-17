@@ -50,7 +50,6 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.cgt1DoneBy = SessionStore.getUsername();
-                        model.group.cgt1DoneBy1 = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
                         PageHelper.hideLoader();
@@ -92,7 +91,7 @@ define({
                 "type": "box",
                 "title": "END_CGT1",
                 "items": [{
-                    "key": "group.cgt1DoneBy1",
+                    "key": "group.cgt1DoneBy",
                     "title": "CGT_1_DONE_BY",
                     "readonly": true
                 },{
@@ -195,7 +194,6 @@ define({
                     irfProgressMessage.pop('CGT1-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
-                    model.group.cgt1DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt1DoneBy;
                     if(model.group.siteCode=='sambandh')
                     {
                         var n=model.group.jlgGroupMembers.length;

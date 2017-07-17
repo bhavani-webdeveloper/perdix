@@ -232,7 +232,7 @@ define({
                 }, {
                     "key": "group.jlgGroupMembers",
                     "type": "array",
-                    "titleExpr": "model.group.jlgGroupMembers[arrayIndex].firstName | translate",
+                    "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "title": "GROUP_MEMBERS",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
