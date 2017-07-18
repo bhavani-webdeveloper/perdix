@@ -4,5 +4,5 @@
 	"version": "v8.2.2-production",
 	"connect_perdix7": false,
 	"multi_colors": false,
-	"ams_enabled":true
+	"ams_enabled":false
 }
