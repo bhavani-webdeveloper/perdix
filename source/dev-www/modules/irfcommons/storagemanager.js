@@ -231,6 +231,9 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 					case "branch_code":
 						var r= irfStorageService.getMaster('branch');
 						break;
+					case "centre_code":
+						var r= irfStorageService.getMaster('centre');
+						break;			
 					case "loan_product_frequency":
 						var r= irfStorageService.getMaster('frequency');
 						break;
@@ -264,6 +267,13 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						}
                         // console.warn(ret);
 						break;
+					case 'centre_code':
+						ret.data = _.clone(r.data);
+						for(var i = 0; i < ret.data.length; i++) {
+                            ret.data[i].value = ret.data[i].code;
+						}
+                        // console.warn(ret);
+						break;		
                     case 'village':
                         console.log("branchid:"+branchId);
 						ret.data = r.data = $filter('filter')(r.data, {parentCode:branchId}, true);

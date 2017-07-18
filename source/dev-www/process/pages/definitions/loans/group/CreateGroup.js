@@ -162,7 +162,7 @@ define({
                     "title": "CENTRE_CODE",
                     "required": true,
                     "type": "select",
-                    "enumCode": "centre",
+                    "enumCode": "centre_code",
                     "parentEnumCode": "branch_id",
                     "parentValueExpr": "model.group.branchName"
                 }, {
@@ -535,7 +535,7 @@ define({
                             },
                             "centreCode": {
                                 "title": "CENTRE_CODE",
-                                "type": "integer"
+                                "type": "string"
                             }
                         }
                     }
