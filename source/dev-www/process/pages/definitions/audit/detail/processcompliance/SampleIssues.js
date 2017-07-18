@@ -85,35 +85,53 @@ function($log, $state, irfNavigator, $stateParams, $http, Audit, PageHelper, $q,
                     }
                 };
                 model.sampleType = sampleType;
-                for (k in response.auto_sampling) {
-                    if (response.auto_sampling[k].scoring_sample_type_id == sampleTypeId) {
-                        var sampleSet = response.auto_sampling[k].sample_set;
-                        model.sampleSet = sampleSet;
-                        if (sampleType == "N") {
-                            model.sample = {
-                                "sub_id": 0,
-                                // "sample_id": 0,
-                                // "status": "2",
-                                "sample_newgen_uid": sampleSubId,
-                                "column_values": []
-                            };
-                            for (j in sampleColumnsConfig.columns) {
-                                model.sample.column_values[j] = "";
-                            }
-                        } else {
-                            for (i in sampleSet) {
-                                if (sampleType == "E") {
-                                    if (sampleSubId == sampleSet[i].sub_id) {
-                                        model.sample = sampleSet[i];
-                                        break;
-                                    }
-                                } else if (sampleSubId == sampleSet[i].sample_newgen_uid) { // sampleType == "M"
+                var auto_sampling_set_found = false;
+                var identifySample = function(auto_sampling_set) {
+                    var sampleSet = auto_sampling_set.sample_set;
+                    model.sampleSet = sampleSet;
+                    if (sampleType == "N") {
+                        model.sample = {
+                            "sub_id": 0,
+                            // "sample_id": 0,
+                            // "status": "2",
+                            "sample_newgen_uid": sampleSubId,
+                            "column_values": []
+                        };
+                        for (j in sampleColumnsConfig.columns) {
+                            model.sample.column_values[j] = "";
+                        }
+                    } else {
+                        for (i in sampleSet) {
+                            if (sampleType == "E") {
+                                if (sampleSubId == sampleSet[i].sub_id) {
                                     model.sample = sampleSet[i];
                                     break;
                                 }
+                            } else if (sampleSubId == sampleSet[i].sample_newgen_uid) { // sampleType == "M"
+                                model.sample = sampleSet[i];
+                                break;
                             }
                         }
                     }
+                };
+                if (!_.isArray(response.auto_sampling)) {
+                    response.auto_sampling = [];
+                }
+                for (k in response.auto_sampling) {
+                    if (response.auto_sampling[k].scoring_sample_type_id == sampleTypeId) {
+                        identifySample(response.auto_sampling[k]);
+                        auto_sampling_set_found = true;
+                    }
+                }
+                if (!auto_sampling_set_found) {
+                    var new_auto_sampling_set = {
+                        "sample_fetched": 0,
+                        "sample_set": [],
+                        "sample_total": 0,
+                        "scoring_sample_type_id": sampleTypeId
+                    };
+                    response.auto_sampling.push(new_auto_sampling_set);
+                    identifySample(new_auto_sampling_set);
                 }
                 var issueDetailsForm = [];
                 var processIssuesForm = function(issue, i) {
