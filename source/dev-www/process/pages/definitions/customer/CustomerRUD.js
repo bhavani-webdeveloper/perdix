@@ -48,7 +48,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         });
                     }
                     model._screenMode = 'VIEW';
-
+                    model.branch = SessionStore.getCurrentBranch().branchId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...");
                     Enrollment.EnrollmentById({id: custId}, function (resp, header) {
@@ -102,8 +102,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             {
                                 key: "customer.centreCode",
                                 type: "select",
-                                filter: {
-                                    "parentCode as branch": "model.customer.kgfsName"
+                                "enumCode": "centre",
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "parentEnumCode": "branch_id",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
                                 }
                             },
                             {
