@@ -1353,7 +1353,7 @@
                      "minLength":0,
                      "maxLength":3,
                      "captureStages":[
-                        "Screening"
+                        "Application", "Screening"
                      ]
                   },
                   "psychometricCompleted":{
