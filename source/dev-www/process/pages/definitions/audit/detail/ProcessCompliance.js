@@ -21,8 +21,13 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
             if (!$scope.$isOffline && $stateParams.pageData.auditData) {
                 pageData.auditData = $stateParams.pageData.auditData;
             }
+            var auto_sampling = process_compliance.auto_sampling;
+            $scope.dashboardDefinitions = [];
             var dashboardBox = {};
-            var addSampleSet = function(scoringSampleSet, sampleSetId) {
+            for (i in auto_sampling) {
+                var sampleSet = auto_sampling[i];
+                var sampleSetId = sampleSet.scoring_sample_type_id;
+                var scoringSampleSet = master.scoring_sample_sets[sampleSetId];
                 var module = master.process_tabs[scoringSampleSet.scoring_process_type_id];
                 var menuDefinition = {
                     "title": scoringSampleSet.scoring_sample_type,
@@ -36,25 +41,10 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
                 if (!$scope.$isOffline) {
                     menuDefinition.stateParams.pageData.auditData = $stateParams.pageData.auditData;
                 }
+
                 dashboardBox[scoringSampleSet.scoring_process_type_id] = dashboardBox[scoringSampleSet.scoring_process_type_id] || [];
                 dashboardBox[scoringSampleSet.scoring_process_type_id].push(menuDefinition);
-            };
-            if (pageData.readonly) {
-                var auto_sampling = process_compliance.auto_sampling;
-                for (i in auto_sampling) {
-                    var sampleSet = auto_sampling[i];
-                    var sampleSetId = sampleSet.scoring_sample_type_id;
-                    var scoringSampleSet = master.scoring_sample_sets[sampleSetId];
-                    addSampleSet(scoringSampleSet, sampleSetId);
-                }
-            } else {
-                _.forOwn(master.scoring_sample_sets, function(scoringSampleSet, sampleSetId) {
-                    if (scoringSampleSet.status == "1") {
-                        addSampleSet(scoringSampleSet, sampleSetId);
-                    }
-                });
             }
-            $scope.dashboardDefinitions = [];
             _.forOwn(dashboardBox, function(v, k) {
                 $scope.dashboardDefinitions.push({
                     "title": master.process_tabs[k].scoring_process_type,
