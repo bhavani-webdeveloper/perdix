@@ -74,7 +74,7 @@ define({
                             fn: function(item, index) {
                                 PageHelper.showLoader();
                                 irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                var remarks = window.prompt("Enter Remarks", "Test Remark");
+                                var remarks = window.prompt("Enter Remarks", "");
                                 if (remarks) {
                                     Groups.post({
                                         service: "overridedsc",

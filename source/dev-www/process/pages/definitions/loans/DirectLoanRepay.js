@@ -110,6 +110,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
 
                         }
                         model.repayment.accountNumber =loanAccountNo;
+                        model.repayment.instrument='CASH';
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
@@ -161,6 +162,109 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             key: "repayment.receiptNumber",
                             "title":"Receipt Number",
                             condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
+                        },
+                        {
+                            "key": "repayment.instrument",
+                            "type": "select",
+                            "required": true,
+                            "titleMap": [{
+                                    name: "Cash",
+                                    value: "CASH"
+                                }, {
+                                    "name": "Cheque",
+                                    "value": "CHQ"
+                                }, {
+                                    "name": "NEFT",
+                                    "value": "NEFT"
+                                }, {
+                                    "name": "RTGS",
+                                    "value": "RTGS"
+                                }
+
+                            ]
+                        }, {
+                            key: "repayment.reference",
+                            title: "CHEQUE_NUMBER",
+                            "schema": {
+                                type: "string",
+                                maxLength: 6,
+                                minLength: 6
+                            },
+                            required: true,
+                            condition: "model.repayment.instrument=='CHQ'"
+                        }, {
+                            key: "repayment.bankAccountNumber",
+                            type: "lov",
+                            autolov: true,
+                            condition: "model.repayment.instrument=='CHQ'",
+                            title: "REPAYMENT_TO_ACCOUNT",
+                            required: true,
+                            bindMap: {
+
+                            },
+                            outputMap: {
+                                "account_number": "repayment.bankAccountNumber"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.account_number,
+                                    item.ifsc_code + ', ' + item.bank_name,
+                                    item.branch_name
+                                ];
+                            }
+                        }, {
+                            key: "repayment.instrumentDate",
+                            title: "CHEQUE_DATE",
+                            type: "date",
+                            required: true,
+                            condition: "model.repayment.instrument=='CHQ'"
+                        }, {
+                            key: "repayment.photoId",
+                            title: "CHEQUE_PHOTO",
+                            condition: "model.repayment.instrument=='CHQ'",
+                            type: "file",
+                            fileType: "image/*",
+                            category: "Repayment",
+                            subCategory: "Cheque"
+                        }, {
+                            key: "repayment.reference",
+                            title: "REFERENCE_NUMBER",
+                            type: "string",
+                            required: true,
+                            condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                        }, {
+                            key: "repayment.bankAccountNumber",
+                            type: "lov",
+                            autolov: true,
+                            condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'",
+                            title: "REPAYMENT_TO_ACCOUNT",
+                            required: true,
+                            bindMap: {
+
+                            },
+                            outputMap: {
+                                "account_number": "repayment.bankAccountNumber"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.getBankAccountsByPartnerForLoanRepay();
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.account_number,
+                                    item.ifsc_code + ', ' + item.bank_name,
+                                    item.branch_name
+                                ];
+                            }
+                        }, {
+                            key: "repayment.instrumentDate",
+                            title: "DATE",
+                            type: "date",
+                            condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
                         },
                         "additional.override_fp", 
                         {
@@ -539,6 +643,11 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             "transactionId": {
                                 "type": "string",
                                 "title": "TRANSACTION_ID"
+                            },
+                            "instrument": {
+                                    "type": "string",
+                                    "title": "INSTRUMENT_TYPE",
+                                    "required": true
                             },
                             "transactionName": {
                                 "type": "string",
