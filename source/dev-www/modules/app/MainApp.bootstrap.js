@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 var irf = irf || {};
 $.ajax({
-	type: "POST",
+	type: "GET",
 	url: "app_manifest.json",
 	contentType: "application/json",
 	dataType: "json",
