@@ -13,6 +13,13 @@ define({
         var nDays = 15;
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            if (model.group.udf1 == "true") model.group.udf1 = true;
+            if (model.group.udf2 == "true") model.group.udf2 = true;
+            if (model.group.udf3 == "true") model.group.udf3 = true;
+            if (model.group.udf4 == "true") model.group.udf4 = true;
+            if (model.group.udf5 == "true") model.group.udf5 = true;
+            if (model.group.udf6 == "true") model.group.udf6 = true;
+
         };
 
         var fillNames = function(model) {
@@ -54,9 +61,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        for (var i = 1; i < 18; i++) {
-                            model.group["udf" + i] = model.group["udf" + i] || false;
-                        }
                         model.group.udfDate1 = model.group.udfDate1 || "";
                         model.group.grtDoneBy = SessionStore.getUsername();
                         var centreCode = formHelper.enum('centre').data;
@@ -73,8 +77,9 @@ define({
                                 PageHelper.showErrors(m);
                                 irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
                             });
-                        }
+                        }                      
                         PageHelper.hideLoader();
+
                     }, function(resp) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
@@ -137,27 +142,45 @@ define({
                     "type": "textarea"
                 },{
                     "key": "group.udf1",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_1"
                 }, {
                     "key": "group.udf2",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_2"
                 }, {
                     "key": "group.udf3",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_3"
                 }, {
                     "key": "group.udf4",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_4"
                 }, {
                     "key": "group.udf5",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_5"
                 }, {
                     "key": "group.udf6",
-                    "fullwidth": true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
                     "title": "QUESTION_6"
                 }]
             }, {
@@ -361,6 +384,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         model.group = _.cloneDeep(res.group);
+                        fixData(model);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -379,6 +403,7 @@ define({
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         Utils.removeNulls(res.group, true);
                         model.group = _.cloneDeep(res.group);
+                        fixData(model);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();

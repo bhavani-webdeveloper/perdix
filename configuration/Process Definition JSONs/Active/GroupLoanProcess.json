@@ -59,12 +59,12 @@
          "ARM",
          "RM"
       ]
-   }, {
+   },{
       "order": 6,
-      "code": "GRT",
-      "name": "GRT Process",
+      "code": "LoanBooking",
+      "name": "Loan Booking",
       "isAccountOpening": true,
-      "stageType": "GRT",
+      "stageType": "CAPTURE",
       "allowedRoles": [
          "A",
          "ARM",
@@ -72,6 +72,17 @@
       ]
    }, {
       "order": 7,
+      "code": "GRT",
+      "name": "GRT Process",
+      "isAccountOpening": false,
+      "stageType": "GRT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 8,
       "code": "ApplicationPending",
       "name": "Applications Pending",
       "isAccountOpening": false,
@@ -82,42 +93,42 @@
          "RM"
       ]
    }, {
-      "order": 8,
+      "order": 9,
       "code": "Checker1",
       "name": "Checker 1",
       "isAccountOpening": false,
       "stageType": "CAPTURE",
       "allowedRoles": []
    }, {
-      "order": 9,
+      "order": 10,
       "code": "Checker2",
       "name": "Checker 2",
       "isAccountOpening": false,
       "stageType": "CAPTURE",
       "allowedRoles": []
    }, {
-      "order": 10,
+      "order": 11,
       "code": "AgreementUploadPending",
       "name": "Agreement Upload Pending",
       "isAccountOpening": false,
       "stageType": "CAPTURE",
       "allowedRoles": []
    }, {
-      "order": 11,
+      "order": 12,
       "code": "Checker3",
       "name": "Checker 3",
       "isAccountOpening": false,
       "stageType": "CAPTURE",
       "allowedRoles": []
    }, {
-      "order": 12,
+      "order": 13,
       "code": "Checker4",
       "name": "Checker 4",
       "isAccountOpening": false,
       "stageType": "CAPTURE",
       "allowedRoles": []
    }, {
-      "order": 13,
+      "order": 14,
       "code": "LoanDisbursement",
       "name": "Loan Disbursement",
       "isAccountOpening": false,

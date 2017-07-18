@@ -829,36 +829,7 @@
                     "title": "TenureInYear"
                     
                 },
-                "udf1": {
-                    "type": "boolean",
-                    "title": "QUESTION_1"
-                    
-                },
-                "udf2": {
-                    "type": "boolean",
-                    "title": "QUESTION_2"
-                    
-                },
-                "udf3": {
-                    "type": "boolean",
-                    "title": "QUESTION_3"
-                    
-                },
-                "udf4": {
-                    "type": "boolean",
-                    "title": "QUESTION_4"
-                    
-                },
-                "udf5": {
-                    "type": "boolean",
-                    "title": "QUESTION_5"
-                    
-                },
-                "udf6": {
-                    "type": "boolean",
-                    "title": "QUESTION_6"
-                    
-                },
+                
                 "udf7": {
                     "type": "boolean",
                     "title": "QUESTION_7"

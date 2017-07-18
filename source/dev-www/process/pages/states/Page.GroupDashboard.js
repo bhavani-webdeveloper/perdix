@@ -14,6 +14,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             "Page/Engine/loans.group.Cgt1Queue",
             "Page/Engine/loans.group.Cgt2Queue",
             "Page/Engine/loans.group.Cgt3Queue",
+            "Page/Engine/loans.group.GroupLoanBookingQueue",
             "Page/Engine/loans.group.GrtQueue",
             "Page/Engine/loans.group.ApplicationPendingQueue",
             "Page/Engine/loans.group.Checker1Queue",
@@ -44,6 +45,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         var cgtone = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt1Queue"];
         var cgttwo = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt2Queue"];
         var cgtthree = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt3Queue"];
+        var book = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.GroupLoanBookingQueue"];
         var grt = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.GrtQueue"];
         var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
         var checker1 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker1Queue"];
@@ -99,6 +101,17 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'currentStage': "CGT3"
             }, function(response) {
                 cgtthree.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (book) {
+            book.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'currentStage': "LoanBooking"
+            }, function(response) {
+                book.data = Number(response.headers['x-total-count']) || 0;
             });
         }
 
