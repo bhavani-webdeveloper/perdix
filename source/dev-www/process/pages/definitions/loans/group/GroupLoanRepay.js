@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Utils", "elementsUtils", '$filter', 'LoanProducts',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Utils, elementsUtils, $filter, LoanProducts) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts) {
 
         function backToQueue() {
             $state.go("Page.Engine", {

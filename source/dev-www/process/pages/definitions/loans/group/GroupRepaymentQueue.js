@@ -27,10 +27,14 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                                 "false":"Single Loan Product",
                                 "true":"Others"
                             }
-
                         },
-                        "partner",
-                        "groupCode"
+                        {
+                            key:"partner"
+                        },
+                        {
+                            key:"groupCode",
+                            type:"string"
+                        }
                     ]
                 },
                 {
@@ -40,18 +44,17 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                             "type":"submit",
                             "style":"btn-theme",
                             "title":"SEARCH"
-
                         }
                     ]
                 }
             ],
             schema:{
-                "type": 'object',
-                "title": 'SearchOptions',
+                "type": "object",
+                "title": "SearchOptions",
                 "properties": {
                     "isLegacy":{
                         "title":"PRODUCT_TYPE",
-                        "type":"boolean",
+                        "type":"string",
                         "default":"false"
 
                     },
@@ -61,14 +64,13 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                         "enumCode":"partner",
                         "x-schema-form":{
                             "type":"select"
+
                         }
                     },
                     "groupCode":{
                         "title":"GROUP_CODE",
-                        "type":"integer"
+                        "type":"string"
                     }
-
-
                 },
                 "required":["partner","groupCode","isLegacy"]
             },
