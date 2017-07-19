@@ -29,9 +29,9 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 	if (!$scope.allPages) {
 		PagesDefinition.getUserAllowedPages().then(function(resp){
 			$scope.allPages = _.cloneDeep(resp);
-			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), $scope.allPages);
 			delete $scope.allPages.$promise;
 			delete $scope.allPages.$resolved;
+			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), $scope.allPages);
 			showFavorites();
 		});
 	} else {
@@ -83,9 +83,9 @@ function(irfStorageService, $q, PagesDefinition, SessionStore) {
 					newPages[k].favorited = "favorite";
 				}
 			});
-			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), newPages);
 			delete newPages.$promise;
 			delete newPages.$resolved;
+			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), newPages);
 			deferred.resolve();
 		}, deferred.reject);
 		return deferred.promise;
