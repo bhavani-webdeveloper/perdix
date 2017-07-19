@@ -122,7 +122,7 @@ irf.models.factory('Enrollment', ["$resource", "$httpParamSerializer", "BASE_URL
                 
                 data: {
                     file: file,
-                    feedCategory:'CustomerIdFeed'
+                    feedCategory:'PortfolioInsuranceDetails'
                 }   
             }).then(function(resp) {
                 PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
