@@ -1411,7 +1411,7 @@
                                 },
                                 "udf32": {
                                     "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-                                    "type": ["string","null"],
+                                    "type": ["integer","null"],
                                     "enumCode": "years_in_current_address"
                                 },
                                 "udf33": {

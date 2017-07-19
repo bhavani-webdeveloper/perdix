@@ -1044,7 +1044,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-                                "inputmode": "number",
                                 type: "string"
 
                             },
@@ -1066,6 +1065,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf32",
                                 title:"NUMBER_OF_ROOMS",
+                                type: "string"
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf6"
@@ -1152,8 +1152,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         reqData['enrollmentAction'] = 'SAVE';    
                     };
                     Enrollment.updateCustomer(reqData, function (res, headers) {
-                        if (res.customer)
+                        if (res.customer) {
+                            fixData(res);
                             model.customer = res.customer;
+                        }
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                     }, function (res, headers) {
