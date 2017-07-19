@@ -318,6 +318,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			            for (var i = 0; i< ret.data.length; i++){
 			              ret.data[i].value = ret.data[i].field1.toString().trim();
 			            }
+			            break;
 					default:
 						ret.data = r.data; // value <-- name
 				}

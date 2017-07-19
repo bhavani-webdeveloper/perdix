@@ -452,6 +452,7 @@ return {
         }, {
             "type": "section",
             "colClass": "col-sm-6",
+            "condition":"model.group.partnerCode=='AXIS'",
             "items": [
                 {
                     key:"group.verify.fieldVerificationReq",
@@ -600,7 +601,7 @@ return {
         approve: function(model, formCtrl, form) {
             if(!validateForm(formCtrl)) 
                 return;
-            if(model.group.verify.fieldVerificationReq == 'true' && model.group.verify.fieldVerificationDone != 'true')
+            if(model.group.partnerCode == "AXIS" && model.group.verify.fieldVerificationReq == 'true' && model.group.verify.fieldVerificationDone != 'true')
             {
                 irfProgressMessage.pop('CHECKER-proceed', 'Can not proceed further, since field verification is not marked as completed.', 5000);
                 return;
