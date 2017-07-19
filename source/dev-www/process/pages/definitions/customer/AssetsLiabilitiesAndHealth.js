@@ -874,7 +874,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         });
                         PageHelper.hideLoader();
 
-                        //return;
+                        return;
                     }
 
                     if (reqData['customer']['miscellaneous']){
