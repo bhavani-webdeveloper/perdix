@@ -39,7 +39,7 @@ function(languages, $resource, $q, irfStorageService, $log){
 			$resource(irf.MANAGEMENT_BASE_URL, null, {
 				"downloadTranslations": {
 					"method": 'GET',
-					"url": irf.MANAGEMENT_BASE_URL + "/server-ext/translations.php",
+					"url": "http://devkinara.perdix.in:8081/management" + "/server-ext/translations.php",
 					"isArray": true
 				}
 			}).downloadTranslations().$promise.then(function(translationResult) {
