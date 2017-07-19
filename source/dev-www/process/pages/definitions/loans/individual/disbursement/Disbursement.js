@@ -49,8 +49,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             $log.info("Printing the loanAccountDisbursementSchedule");
                             $log.info(model.loanAccountDisbursementSchedule);
                         }
-
-                        model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
+                        if(model.additional.netDisbursementAmount >= 200000){
+                              model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
+                        }else{
+                            model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
+                        }
+                       
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
 
                         Enrollment.getCustomerById({
@@ -106,20 +110,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "title": "MODE_OF_DISBURSEMENT",
+                        "title": "MODE_OF_DISBURSEMENT",   
                         "type": "select",
                         "titleMap": [{
-                            value: "CASH",
-                            name: "CASH"
-                        },{
                             value: "NEFT",
                             name: "NEFT"
                         },{
                             value: "RTGS",
                             name: "RTGS"
-                        },{
-                            value: "CHEQUE",
-                            name: "CHEQUE"
                         }]
                     },
                     {

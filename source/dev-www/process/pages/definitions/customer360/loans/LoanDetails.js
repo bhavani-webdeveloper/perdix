@@ -1414,8 +1414,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                 }, {
                     "type": "actionbox",
                     "items": [{
-                        "type": "save",
-                        "title": "SAVE_OFFLINE",
+                        "type": "button",
+                        "title": "DOWNLOAD_ALL_DOCS",
+                        "fieldHtmlClass": "pull-right"
+                    },{
+                        "type": "button",
+                        "title": "REPAYMENT_SCHEDULE_REPORT",
+                        "fieldHtmlClass": "pull-right"
                     }, {
                         "type": "submit",
                         "title": "SUBMIT"

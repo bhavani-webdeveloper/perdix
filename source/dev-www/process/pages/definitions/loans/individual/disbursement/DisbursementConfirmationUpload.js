@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
-            "title": "DISBURSEMENT_CONFIRMATION_UPLOAD",
+            "title": "UPLOAD_DISBURSEMENT_CONFIRMATIONS",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Disbursement confirmation leadBulkUpload  Page got initialized");
@@ -14,7 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
             getOfflineDisplayItem: function(item, index) {},
             form: [{
                 "type": "box",
-                "title": "DISBURSEMENT_CONFIRMATION_UPLOAD",
+                "title": "UPLOAD_DISBURSEMENT_CONFIRMATIONS",
                 "colClass": "col-sm-6",
                 "items": [{
                     "key": "lead.Bulkfile",

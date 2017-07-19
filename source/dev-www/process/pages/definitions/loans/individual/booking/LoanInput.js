@@ -373,7 +373,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type": "box",
                 "title": "LOAN_INPUT",
                 "colClass": "col-sm-6",
-
+                "readonly":true,
                 "items":[
                     {
                             "type": "fieldset",
@@ -864,6 +864,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"COLLATERAL",
+                "readonly":true,
                 "items":[
                     {
                         "key":"loanAccount.collateral",
@@ -939,6 +940,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 {
                 "type": "box",
                 "title": "",
+                "readonly":true,
                 "items":[
                     {
                         "type":"fieldset",
@@ -1246,6 +1248,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type":"box",
                 "title":"Deprecated Items",
                 "condition":"false",
+                "readonly":true,
                 "items":[
                     {
                         key:"loanAccount.disbursementFromBankAccountNumber",
@@ -1287,6 +1290,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"Partner Remarks",
+                "readonly":true,
                 "condition":"model.loanAccount.partnerApprovalStatus",
                 "items":[
                     {
