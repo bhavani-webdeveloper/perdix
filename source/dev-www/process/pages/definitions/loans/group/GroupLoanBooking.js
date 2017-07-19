@@ -13,6 +13,15 @@ define({
         var nDays = 15;
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            if(model.group.jlgGroupMembers && model.group.jlgGroupMembers.length)
+            {
+               if(model.group.jlgGroupMembers[0].scheduledDisbursementDate){
+                model.group.scheduledDisbursementDate=model.group.jlgGroupMembers[0].scheduledDisbursementDate;
+               }
+               if(model.group.jlgGroupMembers[0].firstRepaymentDate){
+                model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
+               }
+            }
         };
 
         var fillNames = function(model) {
@@ -94,13 +103,14 @@ define({
 
             form: [{
                 "type": "box",
-                "readonly": true,
                 "title": "GROUP_DETAILS",
                 "items": [{
                     "key": "group.groupName",
+                    "readonly": true,
                     "title": "GROUP_NAME",
                 }, {
                     "key": "group.partnerCode",
+                    "readonly": true,
                     "title": "PARTNER",
                     "type": "select",
                     "enumCode": "partner"
@@ -111,6 +121,7 @@ define({
                     "enumCode": "centre"
                 },*/ {
                     "key": "group.productCode",
+                    "readonly": true,
                     "title": "PRODUCT",
                     "type": "select",
                     "enumCode": "loan_product",
@@ -118,6 +129,7 @@ define({
                     "parentValueExpr": "model.group.partnerCode"
                 }, {
                     "key": "group.frequency",
+                    "readonly": true,
                     "title": "FREQUENCY",
                     "type": "select",
                     "titleMap": {
@@ -126,7 +138,18 @@ define({
                     }
                 }, {
                     "key": "group.tenure",
+                    "readonly": true,
                     "title": "TENURE",
+                },{
+                    "key": "group.scheduledDisbursementDate",
+                    "required":true,
+                    "title": "SCHEDULED_DISBURSEMENT_DATE",
+                    "type": "date",
+                },{
+                    "key": "group.firstRepaymentDate",
+                    "title": "FIRST_REPAYMENT_DATE",
+                    "required":true,
+                    "type": "date",
                 }]
             }, {
                 "type": "box",
@@ -137,6 +160,7 @@ define({
                     "title": "GROUP_MEMBERS",
                     "add": null,
                     "remove": null,
+                    "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
                         "readonly": true,
@@ -185,7 +209,7 @@ define({
                         "title": "RELATION",
                         "type": "select",
                         "enumCode": "relation"
-                    }, {
+                    }, /*{
                         "key": "group.jlgGroupMembers[].scheduledDisbursementDate",
                         "required":true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
@@ -195,7 +219,7 @@ define({
                         "title": "FIRST_REPAYMENT_DATE",
                         "required":true,
                         "type": "date",
-                    }]
+                    }*/]
                 }]
             }, {
                 "type": "actionbox",
@@ -220,6 +244,12 @@ define({
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
                     model.group.grtDoneBy = SessionStore.getUsername();
+                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
+                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
+                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
+                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
+                        }
+                    }
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();

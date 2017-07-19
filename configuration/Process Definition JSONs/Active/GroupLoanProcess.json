@@ -775,6 +775,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
+                        "LoanBooking",
                         "GRT"
                      ]
                   },
@@ -783,6 +784,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
+                        "LoanBooking",
                         "GRT"
                      ]
                   },

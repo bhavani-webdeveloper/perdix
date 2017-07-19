@@ -74,6 +74,12 @@
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC2"
                             },
+                            "kyc2ReverseImagePath": {
+                                "type": ["string","null"],
+                                "title": "KYC2_PROOF_DOCUMENT_BACK_SIDE",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC2"
+                            },
                             "kyc2IssueDate": {
                                 "type": ["string","null"],
                                 "title": "KYC2_ISSUE_DATE",

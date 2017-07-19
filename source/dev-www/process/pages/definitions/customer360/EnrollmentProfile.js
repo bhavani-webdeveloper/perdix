@@ -1134,7 +1134,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
-                    model.enrollmentAction = "SAVE";
+                    model.enrollmentAction = "PROCEED";
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
                     Enrollment.updateCustomer(reqData, function (res, headers) {

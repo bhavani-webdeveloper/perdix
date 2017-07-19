@@ -93,7 +93,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "offline": true
                 },
                 {
-                    key:"customer.centreCode",
+                    key:"customer.centreId",
                     type:"select",
                     "enumCode": "centre",
                     "parentEnumCode": "branch_id",

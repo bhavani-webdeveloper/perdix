@@ -149,6 +149,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                         },
                         {
                             key:"repayment.amount",
+                            type:"amount",
                             required:true,
                         },
                         "repayment.repaymentDate",
@@ -606,7 +607,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                 "title": "ACCOUNT_ID"
                             },
                             "amount": {
-                                "type": "string",
+                                "type": "number",
                                 "title": "AMOUNT"
                             },
                             "authorizationRemark": {

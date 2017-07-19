@@ -20,6 +20,15 @@ define({
             if (model.group.udf5 == "true") model.group.udf5 = true;
             if (model.group.udf6 == "true") model.group.udf6 = true;
 
+            if(model.group.jlgGroupMembers && model.group.jlgGroupMembers.length)
+            {
+               if(model.group.jlgGroupMembers[0].scheduledDisbursementDate){
+                model.group.scheduledDisbursementDate=model.group.jlgGroupMembers[0].scheduledDisbursementDate;
+               }
+               if(model.group.jlgGroupMembers[0].firstRepaymentDate){
+                model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
+               }
+            }
         };
 
         var fillNames = function(model) {
@@ -187,11 +196,23 @@ define({
                 "type": "box",
                 "title": "GROUP_MEMBERS",
                 "items": [{
+                    "key": "group.scheduledDisbursementDate",
+                    "title": "SCHEDULED_DISBURSEMENT_DATE",
+                    "required":true,
+                    "type": "date",
+                },{
+                    "key": "group.firstRepaymentDate",
+                    "title": "FIRST_REPAYMENT_DATE",
+                    "required":true,
+                    "type": "date",
+                },
+                {
                     "key": "group.jlgGroupMembers",
                     "type": "array",
                     "title": "GROUP_MEMBERS",
                     "add": null,
                     "remove": null,
+                    "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
                         "readonly": true,
@@ -261,14 +282,6 @@ define({
                         "subCategory": "GRTPHOTO",
                         "fileType": "image/*",
                     },{
-                        "key": "group.jlgGroupMembers[].scheduledDisbursementDate",
-                        "title": "SCHEDULED_DISBURSEMENT_DATE",
-                        "type": "date",
-                    },{
-                        "key": "group.jlgGroupMembers[].firstRepaymentDate",
-                        "title": "FIRST_REPAYMENT_DATE",
-                        "type": "date",
-                    }, {
                         "type": "button",
                         "key": "group.jlgGroupMembers[]",
                         "title": "DOWNLOAD_APPLICATION_FORM",
@@ -376,6 +389,12 @@ define({
                     PageHelper.showLoader();
                     model.group.grtDate = new Date();
                     model.group.grtDoneBy=SessionStore.getUsername();
+                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
+                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
+                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
+                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
+                        }
+                    }
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -385,6 +404,14 @@ define({
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         model.group = _.cloneDeep(res.group);
                         fixData(model);
+                        if (model.group.jlgGroupMembers.length > 0) {
+                            fillNames(model).then(function(m) {
+                                model = m;
+                            }, function(m) {
+                                PageHelper.showErrors(m);
+                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                            });
+                        }
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -396,6 +423,12 @@ define({
                     PageHelper.showLoader();
                     model.group.grtEndDate = new Date();
                     model.group.grtDoneBy=SessionStore.getUsername();
+                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
+                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
+                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
+                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
+                        }
+                    }
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -404,6 +437,14 @@ define({
                         Utils.removeNulls(res.group, true);
                         model.group = _.cloneDeep(res.group);
                         fixData(model);
+                        if (model.group.jlgGroupMembers.length > 0) {
+                            fillNames(model).then(function(m) {
+                                model = m;
+                            }, function(m) {
+                                PageHelper.showErrors(m);
+                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                            });
+                        }
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -417,6 +458,12 @@ define({
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
                     model.group.grtDoneBy=SessionStore.getUsername();
+                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
+                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
+                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
+                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
+                        }
+                    }
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();

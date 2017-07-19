@@ -666,7 +666,8 @@
             "minimum": 0,
             "maximum": 999999,
             "captureStages": [
-
+             "Stage01",
+             "Completed"
             ]
           },
           "ownership": {
@@ -770,6 +771,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
               "Completed"
             ]
           },
@@ -1068,7 +1070,6 @@
           "enrolledAs": {
             "title": "Enrolled as",
             "type": "string",
-            "refCodeCategory": "enrolled_as",
             "captureStages": [
               "Stage01"
             ]
