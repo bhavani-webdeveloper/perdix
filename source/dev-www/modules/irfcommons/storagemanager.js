@@ -239,6 +239,9 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						break;
 					case "branch_id":
 						var r= irfStorageService.getMaster('branch');
+						break;
+					case "jlg_loan_product":
+						var r= irfStorageService.getMaster('loan_product');
 						break;		
 				}
 			}
@@ -310,6 +313,11 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			              ret.data[i].value = ret.data[i].code;
 			            }
 			            break;
+			        case "jlg_loan_product":
+			        	ret.data = $filter('filter')(r.data, {field2:'JLG'}, true);
+			            for (var i = 0; i< ret.data.length; i++){
+			              ret.data[i].value = ret.data[i].field1.toString().trim();
+			            }
 					default:
 						ret.data = r.data; // value <-- name
 				}

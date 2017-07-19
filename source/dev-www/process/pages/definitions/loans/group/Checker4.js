@@ -222,6 +222,7 @@ return {
                 "html": '<hr>'
             }, {
                 "key": "group.jlgGroupMembers[].customer.additionalKYCs",
+                condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
                 "type": "array",
                 "htmlClass": "row",
                 "notitle": true,

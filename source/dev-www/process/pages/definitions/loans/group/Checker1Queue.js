@@ -59,6 +59,19 @@ define({
 						"key": "partner",
 						"type": "select",
 						"condition": "!model.isPartnerChangeAllowed"
+					}, {
+						"key": "product",
+						"title": "PRODUCT_CATEGORY",
+						"type": "select",
+						"enumCode": "jlg_loan_product",
+						"parentEnumCode": "partner",
+						"parentValueExpr": "model.partner"
+					}, {
+						"key": "product",
+						condition: "model.product",
+						"type": "string",
+						"title": "PRODUCT",
+						readonly: true
 					}]
 				}],
 				searchSchema: {
@@ -79,6 +92,9 @@ define({
 							"type": "string",
 							"title": "PARTNER",
 							"enumCode": "partner"
+						}, 
+						"product": {
+							"title": "PRODUCT"
 						}
 					},
 					"required": ['partner']

@@ -222,6 +222,7 @@ return {
                 "html": '<hr>'
             }, {
                 "key": "group.jlgGroupMembers[].customer.additionalKYCs",
+                condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
                 "type": "array",
                 "htmlClass": "row",
                 "notitle": true,
@@ -437,7 +438,6 @@ return {
                     "html": '<hr>'
                 },{
                     "title": "CHECKER_FILE_UPLOAD",
-                    required: true,
                     "key": "group.jlgGroupMembers[].loanAccount.chk1FileUploadId",
                     "type": "file",
                     "fileType": "application/pdf,image/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

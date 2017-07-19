@@ -45,7 +45,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						"type": "string"
 					}
 				},
-				"required":["stage"]
+				"required":["branchName"]
 			},
 
 			getSearchFormHelper: function() {

@@ -7,6 +7,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
     var branch = SessionStore.getBranch();
 
     var initData = function(model) {
+        var centres = SessionStore.getCentres();
+        if (_.isArray(centres) && centres.length > 0){
+            model.customer.centreCode = model.customer.centreCode || centres[0].centreCode;
+        }
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
         model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
@@ -667,6 +671,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 key: "customer.expenditures",
                 type: "array",
                 remove: null,
+                startEmpty: true,
                 view: "fixed",
                 titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
                 items: [{
@@ -684,16 +689,19 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         htmlClass: 'col-xs-6',
                         items: [{
                             key: "customer.expenditures[].frequency",
+                            "title": "FREQUENCY",
+                            required: true,
                             type: "select",
-                            notitle: true
+
                         }]
                     }, {
                         type: 'section',
                         htmlClass: 'col-xs-6',
                         items: [{
+                            "title": "AMOUNT",
                             key: "customer.expenditures[].annualExpenses",
+                            required: true,
                             type: "amount",
-                            notitle: true
                         }]
                     }]
                 }]
@@ -1036,6 +1044,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
+                                "inputmode": "number",
+                                type: "string"
 
                             },
                             {
@@ -1134,9 +1144,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
-                    model.enrollmentAction = "PROCEED";
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
+                    if (reqData.customer.currentStage == 'Completed'){ 
+                        reqData['enrollmentAction'] = 'PROCEED';
+                    } else {
+                        reqData['enrollmentAction'] = 'SAVE';    
+                    };
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer)
                             model.customer = res.customer;
