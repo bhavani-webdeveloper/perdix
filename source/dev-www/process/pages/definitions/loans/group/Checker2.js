@@ -1,11 +1,11 @@
 define({
 pageUID: "loans.group.Checker2",
 pageType: "Engine",
-dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+dependencies: ["$log", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
     "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "GroupProcess"
 ],
-$pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+$pageFn: function($log, irfSimpleModal, Groups, Enrollment, CreditBureau,
     Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, PagesDefinition, Queries, irfNavigator, GroupProcess) {
 
@@ -591,7 +591,7 @@ return {
                 irfProgressMessage.pop('CHECKER-save', 'Done.', 5000);
                 model.group = _.clone(res.group);
                 PageHelper.hideLoader();
-                $state.go('Page.GroupDashboard', null);
+                irfNavigator.goBack();
             }, function(res) {
                 PageHelper.hideLoader();
                 PageHelper.showErrors(res);
@@ -616,7 +616,7 @@ return {
             GroupProcess.updateGroup(reqData, function(res) {
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('CHECKER-proceed', 'Operation Succeeded. Proceeded ', 5000);
-                $state.go('Page.GroupDashboard', null);
+                irfNavigator.goBack();
             }, function(res) {
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('CHECKER-proceed', 'Oops. Some error.', 2000);

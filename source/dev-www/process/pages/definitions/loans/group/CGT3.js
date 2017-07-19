@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.CGT3",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "GroupProcess", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "irfSimpleModal", "GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, GroupProcess, Enrollment, CreditBureau,
+    $pageFn: function($log, irfSimpleModal, GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -175,7 +175,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to GRT.', 5000);
-                        $state.go('Page.GroupDashboard', null);
+                        irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('CGT3-proceed', 'Oops. Some error.', 2000);

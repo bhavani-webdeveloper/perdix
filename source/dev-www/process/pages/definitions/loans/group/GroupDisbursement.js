@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.GroupDisbursement",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "AccountingUtils", "LoanProcess", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "irfSimpleModal", "Groups","GroupProcess", "AccountingUtils", "LoanProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, AccountingUtils, LoanProcess, Enrollment, CreditBureau,
+    $pageFn: function($log, irfSimpleModal, Groups,GroupProcess, AccountingUtils, LoanProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -249,7 +249,7 @@ define({
                             GroupProcess.updateGroup(reqData, function(res) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
-                                $state.go('Page.GroupDashboard', null);
+                                irfNavigator.goBack();
                             }, function(res) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);

@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.Dsc",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -555,7 +555,7 @@ define({
                                         GroupProcess.updateGroup(reqData, function(res) {
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop('dsc-proceed', 'Operation Succeeded. Proceeded to CGT 1.', 5000);
-                                            $state.go('Page.GroupDashboard', null);
+                                            irfNavigator.goBack();
                                         }, function(res) {
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop('dsc-proceed', 'Oops. Some error.', 2000);

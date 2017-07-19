@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.CreateGroup",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -550,7 +550,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
-                            $state.go('Page.GroupDashboard', null);
+                            irfNavigator.goBack();
                         }, function(err) {
                             Utils.removeNulls(res.group, true);
                             model.group = _.clone(res.group);
@@ -560,7 +560,7 @@ define({
                     } else {
                         saveData(reqData).then(function(res) {
                             proceedData(res).then(function(res1) {
-                                $state.go('Page.GroupDashboard', null);
+                                irfNavigator.goBack();
                             }, function(err) {
                                 Utils.removeNulls(res1.group, true);
                                 model.group = _.clone(res1.group);

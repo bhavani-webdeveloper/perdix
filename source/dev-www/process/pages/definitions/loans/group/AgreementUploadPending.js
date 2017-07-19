@@ -1,11 +1,11 @@
 define({
 	pageUID: "loans.group.AgreementUploadPending",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
 
-	$pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -61,7 +61,7 @@ define({
 					var groupId = $stateParams.pageId;
 					PageHelper.showLoader();
 					irfProgressMessage.pop("group-init", "Loading, Please Wait...");
-				GroupProcess.getGroup({
+					GroupProcess.getGroup({
 						groupId: groupId
 					}, function(response, headersGetter) {
 						model.group = _.cloneDeep(response);
@@ -253,7 +253,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Agreement-proceed', 'Operation Succeeded. Proceeded to Checker 3.', 5000);
-                        $state.go('Page.GroupDashboard', null);
+                        irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Agreement-proceed', 'Oops. Some error.', 2000);

@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.GRT",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess","Enrollment", "CreditBureau",
+    dependencies: ["$log", "irfSimpleModal", "Groups","GroupProcess","Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
+    $pageFn: function($log, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -468,7 +468,7 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Proceeded to Applications Pending', 5000);
-                        $state.go('Page.GroupDashboard', null);
+                        irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Oops. Some error.', 2000);

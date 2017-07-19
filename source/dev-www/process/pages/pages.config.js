@@ -58,11 +58,6 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.CustomerHistory.html",
 		controller: "CustomerHistoryCtrl"
 	},{
-		name: "Page.GroupDashboard",
-		url: "/GroupDashboard",
-		templateUrl: "process/pages/templates/Page.GroupDashboard.html",
-		controller: "PageGroupDashboardCtrl"
-	},{
 		name: "Page.LoansDashboard",
 		url: "/LoansDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
