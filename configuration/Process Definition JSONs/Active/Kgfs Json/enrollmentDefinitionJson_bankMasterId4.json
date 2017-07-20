@@ -770,6 +770,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
               "Completed"
             ]
           },

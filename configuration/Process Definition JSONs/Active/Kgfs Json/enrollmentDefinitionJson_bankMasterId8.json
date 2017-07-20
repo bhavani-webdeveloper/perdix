@@ -779,6 +779,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
               "Completed"
             ]
           },
@@ -2428,7 +2429,7 @@
           },
           "udf32": {
             "title": "NUMBER_OF_ROOMS_IN_HOUSE",
-            "type": "number",
+            "type": "string",
             "captureStages": [
               "Stage02",
               "Completed"
