@@ -46,6 +46,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer = resp;
                 model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                 model = EnrollmentHelper.fixData(model);
+                if (model.customer.dateOfBirth) {
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
                 model._mode = 'EDIT';
                 if (model.customer.currentStage==='Stage01') {
                     irfProgressMessage.pop("enrollment-save","Load Complete",2000);

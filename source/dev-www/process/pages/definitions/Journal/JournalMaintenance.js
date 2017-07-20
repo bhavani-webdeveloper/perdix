@@ -30,6 +30,18 @@ define({
                         function(res) {
                             _.assign(model.journal, res);
                             $log.info(model.journal);
+                            var branches = formHelper.enum('branch_id').data;
+                            if(model.journal.journalBranches && model.journal.journalBranches)
+                            {
+                                for(i=0;i<model.journal.journalBranches.length;i++){
+                                    for(j=0;j<branches.length;j++){
+                                        if(model.journal.journalBranches[i].branchId==branches[j].value){
+                                           model.journal.journalBranches[i].branchName=branches[j].name;
+                                        }
+                                    }
+                                }
+                            }
+                            $log.info(model.journal);
                             PageHelper.hideLoader();
                         }
                     );

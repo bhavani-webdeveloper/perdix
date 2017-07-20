@@ -38,18 +38,31 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         model.cbsLoan = res;
 
                                         /* DATE FIXES */
+                                        if(model.cbsLoan.accountOpenDate)
                                         model.cbsLoan.accountOpenDate = Utils.dateToLocalTZ(model.cbsLoan.accountOpenDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.maturityDate)
                                         model.cbsLoan.maturityDate = Utils.dateToLocalTZ(model.cbsLoan.maturityDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.firstDisbursementDate)
                                         model.cbsLoan.firstDisbursementDate = Utils.dateToLocalTZ(model.cbsLoan.firstDisbursementDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.lastDisbursementDate)
                                         model.cbsLoan.lastDisbursementDate = Utils.dateToLocalTZ(model.cbsLoan.lastDisbursementDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.lastDemandRunDate)
                                         model.cbsLoan.lastDemandRunDate = Utils.dateToLocalTZ(model.cbsLoan.lastDemandRunDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.nextDemandRunDate)
                                         model.cbsLoan.nextDemandRunDate = Utils.dateToLocalTZ(model.cbsLoan.nextDemandRunDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.nextDemandScheduledDate)
                                         model.cbsLoan.nextDemandScheduledDate = Utils.dateToLocalTZ(model.cbsLoan.nextDemandScheduledDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.lastBookingDate)
                                         model.cbsLoan.lastBookingDate = Utils.dateToLocalTZ(model.cbsLoan.lastBookingDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.firstRepaymentDate)
                                         model.cbsLoan.firstRepaymentDate = Utils.dateToLocalTZ(model.cbsLoan.firstRepaymentDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.lastRepaymentDate)
                                         model.cbsLoan.lastRepaymentDate = Utils.dateToLocalTZ(model.cbsLoan.lastRepaymentDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.closedOnValueDate)
                                         model.cbsLoan.closedOnValueDate = Utils.dateToLocalTZ(model.cbsLoan.closedOnValueDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.nextProvisioningDate)
                                         model.cbsLoan.nextProvisioningDate = Utils.dateToLocalTZ(model.cbsLoan.nextProvisioningDate).format("D-MMM-YYYY");
+                                        if(model.cbsLoan.lastProvisioningDate)
                                         model.cbsLoan.lastProvisioningDate = Utils.dateToLocalTZ(model.cbsLoan.lastProvisioningDate).format("D-MMM-YYYY");
 
                                         
@@ -280,37 +293,37 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     {
                         "key": "cbsLoan.firstDisbursementDate",
                         "title": "FIRST_DISBURSEMENT_DAT",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastDisbursementDate",
                         "title": "LAST_DISBURSEMENT_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastRepaymentDate",
                         "title": "LAST_REPAYMENT_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastDemandRunDate",
                         "title": "LAST_DEMAND_RUN_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.nextDemandRunDate",
                         "title": "NEXT_DEMAND_RUN_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.nextDemandScheduledDate",
                         "title": "NEXT_DEMAND_RUN_DATE",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.daysPastDue",
@@ -320,7 +333,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     {
                         "key": "cbsLoan.npa",
                         "title": "NPA",
-                        "type": "string"
+                        "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.numDisbursements",
