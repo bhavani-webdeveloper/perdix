@@ -35,6 +35,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                     amount = 0;
                     break;
             }
+            repaymentObj.demandAmount= amount;
             return amount;
         }
 
