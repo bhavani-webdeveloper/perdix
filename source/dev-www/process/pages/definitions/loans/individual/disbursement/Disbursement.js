@@ -16,6 +16,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             initialize: function (model, form, formCtrl) {
                 $log.info("Disbursement Page got initialized");
                 model.customer=model.customer||{};
+                model.fee=model.fee||{};
 
                 model.additional = {"branchName":branch};
                 Queries.getGlobalSettings("siteCode").then(function(value) {
@@ -39,6 +40,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.additional.urnNo = resp[0].urnNo;
                         model.additional.fees=[];
                         model.additional.tempfees = resp[0].fees;
+                        model.additional.firstRepaymentDate = resp[0].firstRepaymentDate;
+                        model.additional.loanamount=resp[0].amount;
+                        model.additional.feeamount=resp[0].fees;
+
+
                         model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                         var j=1;
                         if(model.additional.tempfees){
@@ -63,6 +69,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }
                        
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
+                        model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
 
 
@@ -116,6 +124,35 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title":"NET_DISBURSEMENT_AMOUNT",
                         "type":"amount",
                         "readonly":true
+                    },
+                    {
+                        "key": "additional.loanamount",
+                        "condition":"model.siteCode=='KGFS'",
+                        "title":"LOAN_AMOUNT_REQUESTED",
+                        "readonly":true
+                    },
+                    {
+                        key: "additional.feeamount",
+                        "condition":"model.siteCode=='KGFS'",
+                        type: "array",
+                        add:null,
+                        title: "FEES",
+                        "titleExpr":"model.additional.feeamount[arrayIndex].param1",
+                        items: [{
+                            "key": "additional.feeamount[].param1",
+                            "readonly":true,
+                            "title": "FEE_TYPE",
+                        }, {
+                            "key": "additional.feeamount[].amount1",
+                            "readonly":true,
+                            "title": "AMOUNT",
+                        }]
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
+                        "condition":"model.siteCode=='KGFS'",
+                        "title":"FIRST_REPAYMENT_DATE",
+                        "type":"date",
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
