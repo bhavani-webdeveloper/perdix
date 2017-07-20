@@ -1248,7 +1248,7 @@
                                 },
                                 "udf4":{
                                     "title":"HOUSE_DURATION_OF_STAY",
-                                    "type":["integer","null"],
+                                    "type":["integer", "null"],
                                     "minimum": 0
                                 },
                                 "udf5": {
@@ -1392,7 +1392,8 @@
                                 },
                                 "udf28": {
                                     "title": "LAND_AREA",
-                                    "type": ["number","null"]
+                                    "type": ["number","null"],
+                                    "minimum": 0
                                 },
                                 "udf29": {
                                     "title": "YEARS_IN_CURR_ADDRESS",

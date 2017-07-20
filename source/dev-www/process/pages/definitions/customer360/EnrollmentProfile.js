@@ -136,12 +136,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 {
                     key:"customer.centreId",
                     type:"select",
-                   "x-schema-form": {
-                        "type": "select",
-                        "parentEnumCode": "branch_id",
-                        "parentValueExpr": "model.customer.customerBranchId",
-                        "screenFilter": true
-                    }
+                    "parentEnumCode": "branch_id",
+                    "parentValueExpr": "model.customer.customerBranchId",
                 },
                 {
                     key:"customer.enrolledAs",
