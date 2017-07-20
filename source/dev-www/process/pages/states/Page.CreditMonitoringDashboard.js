@@ -2,7 +2,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
     function($log, $scope, PagesDefinition, SessionStore, CreditMonitoring) {
         $log.info("Page.CreditMonitoringDashboard.html loaded");
 
-        var fullDefinition = {
+        PagesDefinition.getUserAllowedDefinition({
             "title": "creditMonitoring Dashboard",
             "iconClass": "fa fa-check-square-o",
             "items": [
@@ -12,95 +12,83 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue",
             ]
-        };
-
-        PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        }).then(function(resp) {
             $scope.dashboardDefinition = resp;
-            var branch = SessionStore.getCurrentBranch();
-            var centres = SessionStore.getCentres();
-            var centreId = [];
-            if (centres && centres.length) {
-                for (var i = 0; i < centres.length; i++) {
-                    centreId.push(centres[i].centreId);
-                }
-            }
-            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringScheduleQueue"];
-            if (lsqMenu) {
-                creditMonitoring.search({
-                    'accountNumber': '',
+            // var branch = SessionStore.getCurrentBranch();
+            // var centres = SessionStore.getCentres();
+            // var centreId = [];
+            // if (centres && centres.length) {
+            //     for (var i = 0; i < centres.length; i++) {
+            //         centreId.push(centres[i].centreId);
+            //     }
+            // }
+            var cmsq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringScheduleQueue"];
+            var cmrq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"];
+            var cmlrq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"];
+            var cmrqq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue"];
+            var cmcq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue"];
+
+            if (cmsq) cmsq.data = '-';
+            if (cmrq) cmrq.data = '-';
+            if (cmlrq) cmlrq.data = '-';
+            if (cmrqq) cmrqq.data = '-';
+            if (cmcq) cmcq.data = '-';
+
+            if (cmsq) {
+                CreditMonitoring.search({
                     'monitoringType': "CM",
                     'currentStage': "CMSchedule",
-                    'centreId': centreId[0],
-                    'branchName': branch.branchName,
-                    'page': 1,
-                    'per_page': 1,
-                    'applicantName': '',
-                    'businessName': '',
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = response.headers['x-total-count'];
+                    cmsq.data = response.headers['x-total-count'];
                 }, function() {
-                    lsqMenu.data = '-';
+                    cmsq.data = '-';
                 });
             }
 
-            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"];
-            if (lsqMenu) {
-                creditMonitoring.search({
-                    'accountNumber': '',
+            if (cmrq) {
+                CreditMonitoring.search({
                     'monitoringType': "CM",
                     'currentStage': "CMReschedule",
-                    'centreId': centreId[0],
-                    'branchName': branch.branchName,
-                    'page': 1,
-                    'per_page': 1,
-                    'applicantName': '',
-                    'businessName': '',
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = response.headers['x-total-count'];
+                    cmrq.data = response.headers['x-total-count'];
                 }, function() {
-                    lsqMenu.data = '-';
+                    cmrq.data = '-';
                 });
             }
 
-            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"];
-            if (lsqMenu) {
-                creditMonitoring.search({
-                    'accountNumber': '',
+            if (cmlrq) {
+                CreditMonitoring.search({
                     'monitoringType': "CM",
                     'currentStage': "CMLegalRecovery",
-                    'centreId': centreId[0],
-                    'branchName': branch.branchName,
-                    'page': 1,
-                    'per_page': 1,
-                    'applicantName': '',
-                    'businessName': '',
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = response.headers['x-total-count'];
+                    cmlrq.data = response.headers['x-total-count'];
                 }, function() {
-                    lsqMenu.data = '-';
+                    cmlrq.data = '-';
                 });
             }
 
-            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue"];
-            if (lsqMenu) {
-                creditMonitoring.search({
-                    'accountNumber': '',
+            if (cmrqq) {
+                CreditMonitoring.search({
+                    'monitoringType': "CM",
+                    'currentStage': "CMEscalate",
+                }).$promise.then(function(response, headerGetter) {
+                    cmrqq.data = response.headers['x-total-count'];
+                }, function() {
+                    cmrqq.data = '-';
+                });
+            }
+
+            if (cmcq) {
+                CreditMonitoring.search({
                     'monitoringType': "CM",
                     'currentStage': "CMCompleted",
-                    'centreId': centreId[0],
-                    'branchName': branch.branchName,
-                    'page': 1,
-                    'per_page': 1,
-                    'applicantName': '',
-                    'businessName': '',
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = response.headers['x-total-count'];
+                    cmcq.data = response.headers['x-total-count'];
                 }, function() {
-                    lsqMenu.data = '-';
+                    cmcq.data = '-';
                 });
             }
-
-        });
+        })
 
     }
 ]);
