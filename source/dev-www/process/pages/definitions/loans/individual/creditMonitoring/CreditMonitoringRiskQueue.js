@@ -73,6 +73,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 
                     var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
+                        'monitoringType': "CM",
                         'currentStage': "CMEscalate",
                         'centreId': searchOptions.centre,
                         'branchName': branchName,

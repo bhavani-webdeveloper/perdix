@@ -1,5 +1,4 @@
-irf.pages.controller("CreditMonitoringDashboardCtrl",
- ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'CreditMonitoring',
+irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'CreditMonitoring',
     function($log, $scope, PagesDefinition, SessionStore, CreditMonitoring) {
         $log.info("Page.CreditMonitoringDashboard.html loaded");
 
@@ -29,7 +28,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl",
             if (lsqMenu) {
                 creditMonitoring.search({
                     'accountNumber': '',
-                    'currentStage': "creditMonitoringSchedule",
+                    'monitoringType': "CM",
+                    'currentStage': "CMSchedule",
                     'centreId': centreId[0],
                     'branchName': branch.branchName,
                     'page': 1,
@@ -47,7 +47,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl",
             if (lsqMenu) {
                 creditMonitoring.search({
                     'accountNumber': '',
-                    'currentStage': "CreditMonitoringRescheduledQueue",
+                    'monitoringType': "CM",
+                    'currentStage': "CMReschedule",
                     'centreId': centreId[0],
                     'branchName': branch.branchName,
                     'page': 1,
@@ -65,7 +66,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl",
             if (lsqMenu) {
                 creditMonitoring.search({
                     'accountNumber': '',
-                    'currentStage': "CreditMonitoringLegalRecoveryQueue",
+                    'monitoringType': "CM",
+                    'currentStage': "CMLegalRecovery",
                     'centreId': centreId[0],
                     'branchName': branch.branchName,
                     'page': 1,
@@ -83,7 +85,8 @@ irf.pages.controller("CreditMonitoringDashboardCtrl",
             if (lsqMenu) {
                 creditMonitoring.search({
                     'accountNumber': '',
-                    'currentStage': "CreditMonitoringCompletedQueue",
+                    'monitoringType': "CM",
+                    'currentStage': "CMCompleted",
                     'centreId': centreId[0],
                     'branchName': branch.branchName,
                     'page': 1,

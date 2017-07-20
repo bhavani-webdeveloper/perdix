@@ -79,6 +79,7 @@ define({
                     }
                     var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
+                        'monitoringType': "CM",
                         'currentStage': "CMCompleted",
                         'centreId': searchOptions.centre,
                         'branchName': branchName,
