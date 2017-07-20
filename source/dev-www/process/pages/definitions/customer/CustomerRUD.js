@@ -286,56 +286,144 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             type: "array",
                             items: [
                                 {
-                                    key: "customer.familyMembers[].customerId"
+                            key:"customer.familyMembers[].customerId",
+                            type:"lov",
+                            "inputMap": {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME"
                                 },
-                                {
-                                    key: "customer.familyMembers[].familyMemberFirstName",
-                                    title: "FAMILY_MEMBER_FULL_NAME"
-                                },
-                                {
-                                    key: "customer.familyMembers[].relationShip",
-                                    title: "T_RELATIONSHIP"
-                                },
-                                {
-                                    key: "customer.familyMembers[].gender",
-                                    type: "radios",
-                                    title: "T_GENDER"
-                                },
-                                {
-                                    key: "customer.familyMembers[].dateOfBirth",
-                                    title: "T_DATEOFBIRTH"
-                                },
-                                {
-                                    key: "customer.familyMembers[].educationStatus",
-                                    type: "select",
-                                    title: "T_EDUCATION_STATUS"
-                                },
-                                {
-                                    key: "customer.familyMembers[].maritalStatus",
-                                    type: "select",
-                                    title: "T_MARITAL_STATUS"
-                                },
-                                "customer.familyMembers[].mobilePhone",
-                                {
-                                    key: "customer.familyMembers[].healthStatus"
-                                },
-                                {
-                                    key: "customer.familyMembers[].incomes",
-                                    type: "array",
-                                    items: [
-                                        {
-                                            key: "customer.familyMembers[].incomes[].incomeSource",
-                                            type:"select"
-                                        },
-                                        "customer.familyMembers[].incomes[].incomeEarned",
-                                        {
-                                            key: "customer.familyMembers[].incomes[].frequency",
-                                            type:"select"
-                                        }
+                                "branchName": {
+                                    "key": "customer.kgfsName",
+                                    "type": "select"
+                                }/*,
+                                "centreCode": {
+                                    "key": "customer.centreCode",
+                                    "type": "select"
+                                }*/
+                            },
+                            "outputMap": {
+                                "id": "customer.familyMembers[arrayIndex].customerId",
+                                "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var promise = Enrollment.search({
+                                    'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                    'firstName': inputModel.firstName,
+                                }).$promise;
+                                return promise;
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                var rowIndex = context.arrayIndex;
+                                PageHelper.showLoader();
+                                Enrollment.EnrollmentById({id: valueObj.id}, function (resp, header) {
+                                    
+                                            model.customer.familyMembers[rowIndex].gender = resp.gender;
+                                            model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
+                                            model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
+                                            model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
+                                            model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                            model.customer.familyMembers[rowIndex].relationShip = "";
 
-                                    ]
-
+                                           var selfIndex = _.findIndex(resp.familyMembers, function(o) { return o.relationShip.toUpperCase() == 'SELF' });
+                                           
+                                            if (selfIndex != -1) {
+                                                 model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
+                                                 model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
+                                            }
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                                }, function (resp) {
+                                    PageHelper.hideLoader();
+                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)           
+                                });
+                                    
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' '),
+                                    data.id
+                                ];
+                            }
+                        },
+                        {
+                            key:"customer.familyMembers[].familyMemberFirstName",
+                            title:"FAMILY_MEMBER_FULL_NAME"
+                        },
+                        {
+                            key:"customer.familyMembers[].relationShip",
+                            type:"select",
+                            title: "T_RELATIONSHIP"
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            type: "radios",
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            title: "AGE",
+                            type:"number",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
                                 }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            type:"date",
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key:"customer.familyMembers[].educationStatus",
+                            type:"select",
+                            title: "T_EDUCATION_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        "customer.familyMembers[].mobilePhone",
+                        {
+                            key:"customer.familyMembers[].healthStatus",
+                            type:"radios",
+                            titleMap:{
+                                "GOOD":"GOOD",
+                                "BAD":"BAD"
+                            },
+                        },
+                                {
+                            key:"customer.familyMembers[].incomes",
+                            type:"array",
+                            startEmpty: true,
+                            items:[
+                                {
+                                    key: "customer.familyMembers[].incomes[].incomeSource",
+                                    type:"select"
+                                },
+                                "customer.familyMembers[].incomes[].incomeEarned",
+                                {
+                                    key: "customer.familyMembers[].incomes[].frequency",
+                                    type: "select"
+                                },
+                                {
+                                    key: "customer.familyMembers[].incomes[].monthsPerYear"
+                                }
+                            ]
+                        }
                             ]
                         },
                             {
@@ -692,87 +780,98 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         ]
                     },
                     {
-                        "type": "box",
-                        "title": "T_HOUSE_VERIFICATION",
-                        "items": [
-                            {
-                                key:"customer.nameInLocalLanguage"
-                            },
-                            {
-                                key:"customer.addressInLocalLanguage"
-                            },
+                "type": "box",
+                "title": "T_HOUSE_VERIFICATION",
+                "items": [
+                    {
+                        "key": "customer.firstName",
+                        "title": "CUSTOMER_NAME",
+                        "readonly": true
+                    },
+                    {
+                        key:"customer.nameInLocalLanguage"
+                    },
+                    {
+                        key:"customer.addressInLocalLanguage",
+                        type:"textarea"
+                    },
 
+                    {
+                        key:"customer.religion",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.caste",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.language",
+                        type:"select"
+                    },
+                    {
+                        type:"fieldset",
+                        title:"HOUSE_DETAILS",
+                        items:[
                             {
-                                key:"customer.religion"
-                            },
-                            {
-                                key:"customer.caste"
-                            },
-                            {
-                                key:"customer.language"
-                            },
-                            {
-                                type:"fieldset",
-                                title:"HOUSE_DETAILS",
-                                items:[
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf3",
-                                        type:"select"
+                                key:"customer.udf.userDefinedFieldValues.udf3",
+                                type:"select"
 
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf2",
-                                        condition:"model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf4",
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf2",
+                                condition:"model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf4",
 
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf5",
-                                        type:"radios"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf5",
+                                type:"radios"
 
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf31",
-                                        "type":"select",
-                                        title: "BUILD_TYPE",
-                                        "type": "select",
-                                        "titleMap": {
-                                            "CONCRETE": "CONCRETE",
-                                            "MUD": "MUD",
-                                            "BRICK": "BRICK"
-                                        }
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf32",
-                                        title:"NUMBER_OF_ROOMS",
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf6"
-                                    }
-                                ]
                             },
                             {
-                                "key": "customer.latitude",
-                                "title": "House Location",
-                                "type": "geotag",
-                                "latitude": "customer.latitude",
-                                "longitude": "customer.longitude",
-                                "onChange": "fillGeolocation(modelValue, form)"
-                            },
-                            "customer.nameOfRo",
-                            {
-                                type: 'section',
-                                html: '<center><img ng-src="' + BASE_URL + '/api/stream/{{model.customer.houseVerificationPhoto}}" height="200" style="height:200px;max-width:100%" src="" /></center>'
+                                key:"customer.udf.userDefinedFieldValues.udf31",
+                                title:"BUILD_TYPE",
+                                "type":"select",
+                                "titleMap":{
+                                            "CONCRETE":"CONCRETE",
+                                            "MUD":"MUD",
+                                            "BRICK":"BRICK"
+                                }
                             },
                             {
-                                key: "customer.date",
-                                type:"text"
+                                key:"customer.udf.userDefinedFieldValues.udf32",
+                                title:"NUMBER_OF_ROOMS",
                             },
-                            "customer.place"
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf6"
+                            }
                         ]
                     },
+                    {
+                        "key": "customer.latitude",
+                        "title": "HOUSE_LOCATION",
+                        "type": "geotag",
+                        //readonly: true,
+                        "latitude": "customer.latitude",
+                        "longitude": "customer.longitude",
+                        "onChange": "fillGeolocation(modelValue, form)"
+                    },
+                    "customer.nameOfRo",
+                    {
+                        key:"customer.houseVerificationPhoto",
+                        offline: true,
+                        type:"file",
+                        fileType:"image/*"
+                    },
+                    {
+                        key: "customer.date",
+                        type:"date"
+                    },
+                    "customer.place"
+                ]
+            },
                     {
                         "type": "actionbox",
                         "items": [{
