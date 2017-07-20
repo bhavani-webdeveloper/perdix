@@ -144,7 +144,7 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "integer"
                             },
-                            "centreCode": {
+                            "centreId": {
                                 "title": "CENTRE_CODE",
                                 "type": "integer"
                             }

@@ -57,7 +57,7 @@ return {
                 var centreCode = formHelper.enum('centre').data;
                 for (var i = 0; i < centreCode.length; i++) {
                     if (centreCode[i].code == model.group.centreCode) {
-                        model.group.centreCode = centreCode[i].value;
+                        model.group.centreId = centreCode[i].value;
                     }
                 }
                 fixData(model);
@@ -548,7 +548,7 @@ return {
                         "title": "BRANCH_NAME",
                         "type": "integer"
                     },
-                    "centreCode": {
+                    "centreId": {
                         "title": "CENTRE_CODE",
                         "type": "integer"
                     }

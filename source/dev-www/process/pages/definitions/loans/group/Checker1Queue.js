@@ -146,7 +146,7 @@ define({
 					getColumns: function() {
 						return [{
 							title: 'GROUP_ID',
-							data: 'groupCode'
+							data: 'id'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'

@@ -108,7 +108,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     "includes": [
                         "CustomerInformation",
                         "CustomerInformation.branchId",
-                        "CustomerInformation.centreCode",
+                        "CustomerInformation.centreId",
                         "CustomerInformation.area",
                         //"CustomerInformation.groupName",
                         //"CustomerInformation.loanCycle",

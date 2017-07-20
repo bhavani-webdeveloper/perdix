@@ -113,7 +113,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "integer",
+						"type": ["integer", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
@@ -182,7 +182,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
 							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
 						"{{'BRANCH'|translate}} : " + item.kgfsName,
-						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreId,
 						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
 					]
 				},
@@ -216,8 +216,8 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							data: 'kgfsName'
 						},
 						{
-							title:'CENTRE_CODE',
-							data: 'centreCode'
+							title:'CENTRE',
+							data: 'centreId'
 						},
 						{
 							title:'FATHERS_NAME',

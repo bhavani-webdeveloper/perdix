@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 							"screenFilter": true
 						}
 					},
-					"centreCode": {
+					"centreId": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
 						"enumCode": "centre",
@@ -74,7 +74,7 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 				var promise = Enrollment.search({
 					'branchName': branchName,
 					'firstName': searchOptions.firstName,
-					'centreCode': searchOptions.centreCode,
+					'centreId': searchOptions.centreId,
 					'kycNumber': searchOptions.kycNumber,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,

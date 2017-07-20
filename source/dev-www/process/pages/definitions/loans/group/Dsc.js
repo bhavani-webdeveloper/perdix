@@ -64,7 +64,15 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                model.group.branchName = SessionStore.getCurrentBranch().branchId;
+                var branch1 = formHelper.enum('branch_id').data;
+                var centres = SessionStore.getCentres();
+                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].value) == model.group.branchId) {
+                        model.group.branchName = branch1[i].name;
+                    }
+                }
+                model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
                 $log.info(model.group.branchName);
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
@@ -74,12 +82,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        var centreCode = formHelper.enum('centre').data;
-                        for (var i = 0; i < centreCode.length; i++) {
-                            if (centreCode[i].code == model.group.centreCode) {
-                                model.group.centreCode = centreCode[i].value;
-                            }
-                        }
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
@@ -123,10 +125,12 @@ define({
                         "enumCode": "partner"
                             //readonly: readonly
                     }, {
-                        "key": "group.centreCode",
+                        "key": "group.centreId",
                         "title": "CENTRE_CODE",
                         "type": "select",
-                        "enumCode": "centre"
+                        "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.group.branchId",
                             //readonly: readonly
                     }, {
                         "key": "group.productCode",
@@ -175,7 +179,7 @@ define({
                             //"readonly": true
                             "type": "lov",
                             initialize: function(model, form, parentModel, context) {
-                                model.branchName = parentModel.group.branchName;
+                                model.branchId = parentModel.group.branchId;
                             },
                             "inputMap": {
                                 /*"status": {
@@ -196,19 +200,19 @@ define({
                                         "value": "ERROR"
                                     }]
                                 },*/
-                                "branchName": {
-                                    "key": "group.branchName",
+                                "branchId": {
+                                    "key": "group.branchId",
                                     "title": "BRANCH_NAME",
                                     "type": "select",
                                     "enumCode": "branch_id"
                                 },
-                                "centreCode": {
-                                    "key": "group.centreCode",
+                                "centreId": {
+                                    "key": "group.centreId",
                                     "title": "CENTRE",
                                     "enumCode": "centre",
                                     "type": "select",
                                     "parentEnumCode": "branch_id",
-                                    "parentValueExpr": "model.branchName",
+                                    "parentValueExpr": "model.branchId",
                                 }
                             },
                             "outputMap": {
@@ -221,9 +225,9 @@ define({
                                 /*var today = moment(new Date());
                                 var nDaysBack = moment(new Date()).subtract(nDays, 'days');
                                 var promise = CreditBureau.listCreditBureauStatus({
-                                    'branchName': inputModel.branchName,
+                                    'branchId': inputModel.branchId,
                                     'status': inputModel.status,
-                                    'centreCode': inputModel.centreCode,
+                                    'centreId': inputModel.centreId,
                                     'fromDate': nDaysBack.format('YYYY-MM-DD'),
                                     'toDate': today.format('YYYY-MM-DD')
                                 }).$promise;
@@ -231,14 +235,14 @@ define({
 
                                 $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                 var branches = formHelper.enum('branch_id').data;
-                                var branchId;
-                                $log.info(inputModel.branchName);
+                                var branchName;
+                                $log.info(inputModel.branchId);
                                 for (var i = 0; i < branches.length; i++) {
-                                    if (branches[i].code == inputModel.branchName)
-                                        branchId = branches[i].name;
+                                    if (branches[i].code == inputModel.branchId)
+                                        branchName = branches[i].name;
                                 }
                                 var promise = Enrollment.search({
-                                    'branchName': branchId || SessionStore.getBranch(),
+                                    'branchName': branchName || SessionStore.getBranch(),
                                     'centreId': inputModel.centreId,
                                 }).$promise;
                                 return promise;
@@ -497,7 +501,7 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "integer"
                             },
-                            "centreCode": {
+                            "centreId": {
                                 "title": "CENTRE_CODE",
                                 "type": "integer"
                             }

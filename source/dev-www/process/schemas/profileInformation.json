@@ -819,7 +819,7 @@
                     "enumCode": "centre"
                 },
                 "centreId": {
-                    "type": ["null", "number"],
+                    "type": ["null", "integer"],
                     "title": "CENTRE_ID",
                     "enumCode": "centre"
                 },

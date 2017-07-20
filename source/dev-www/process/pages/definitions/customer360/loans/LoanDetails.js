@@ -557,8 +557,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     "type": "select",
                                     "screenFilter": true
                                 },
-                                "centreCode": {
-                                    "key": "customer.centreCode",
+                                "centreId": {
+                                    "key": "customer.centreId",
                                     "type": "select",
                                     "screenFilter": true
                                 }
@@ -580,7 +580,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     'customerId': inputModel.customerId,
                                     'branchName': inputModel.branch || SessionStore.getBranch(),
                                     'firstName': inputModel.firstName,
-                                    'centreCode': inputModel.centreCode,
+                                    'centreId': inputModel.centreId,
                                     'customerType': inputModel.customerType,
                                     'stage': "Completed"
                                 }).$promise;
@@ -638,8 +638,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     "type": "select",
                                     "screenFilter": true
                                 },
-                                "centreCode": {
-                                    "key": "customer.centreCode",
+                                "centreId": {
+                                    "key": "customer.centreId",
                                     "type": "select",
                                     "screenFilter": true
                                 }
@@ -655,7 +655,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     'customerId': inputModel.customerId,
                                     'branchName': inputModel.branch || SessionStore.getBranch(),
                                     'firstName': inputModel.firstName,
-                                    'centreCode': inputModel.centreCode,
+                                    'centreId': inputModel.centreId,
                                     'customerType': "individual",
                                     'stage': "Completed"
                                 }).$promise;
@@ -691,8 +691,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     "type": "select",
                                     "screenFilter": true
                                 },
-                                "centreCode": {
-                                    "key": "customer.centreCode",
+                                "centreId": {
+                                    "key": "customer.centreId",
                                     "type": "select",
                                     "screenFilter": true
                                 }
@@ -708,7 +708,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                     'customerId': inputModel.customerId,
                                     'branchName': inputModel.branch || SessionStore.getBranch(),
                                     'firstName': inputModel.firstName,
-                                    'centreCode': inputModel.centreCode,
+                                    'centreId': inputModel.centreId,
                                     'customerType': "individual",
                                     'stage': "Completed"
                                 }).$promise;
@@ -1199,8 +1199,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         "type": "select",
                                         "screenFilter": true
                                     },
-                                    "centreCode": {
-                                        "key": "customer.centreCode",
+                                    "centreId": {
+                                        "key": "customer.centreId",
                                         "type": "select",
                                         "screenFilter": true
                                     }
@@ -1216,7 +1216,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         'customerId': inputModel.customerId,
                                         'branchName': inputModel.branch || SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode,
+                                        'centreId': inputModel.centreId,
                                         'customerType': "individual",
                                         'stage': "Completed"
                                     }).$promise;

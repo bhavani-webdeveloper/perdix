@@ -54,7 +54,8 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.group = model.group || {};
-				model.group.branchName = SessionStore.getCurrentBranch().branchId;
+				model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+				model.group.branchName = model.group.branchId || SessionStore.getCurrentBranch().branchName
 				$log.info(model.group.branchName);
 
 				if ($stateParams.pageId) {
@@ -68,7 +69,7 @@ define({
 						var centreCode = formHelper.enum('centre').data;
 						for (var i = 0; i < centreCode.length; i++) {
 							if (centreCode[i].code == model.group.centreCode) {
-								model.group.centreCode = centreCode[i].value;
+								model.group.centreId = centreCode[i].value;
 							}
 						}
 						fixData(model);
@@ -113,10 +114,12 @@ define({
 						"type": "select",
 						"enumCode": "partner"
 					}, {
-						"key": "group.centreCode",
+						"key": "group.centreId",
 						"title": "CENTRE_CODE",
 						"type": "select",
 						"enumCode": "centre"
+						"parentEnumCode": "branch_id",
+						"parentValueExpr": "model.group.branchId"
 					}, {
 						"key": "group.productCode",
 						"title": "PRODUCT",
@@ -231,7 +234,7 @@ define({
 								"title": "BRANCH_NAME",
 								"type": "integer"
 							},
-							"centreCode": {
+							"centreId": {
 								"title": "CENTRE_CODE",
 								"type": ["integer", "null"]
 							}

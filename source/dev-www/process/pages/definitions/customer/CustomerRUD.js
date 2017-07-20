@@ -100,7 +100,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "offline": true
                             },
                             {
-                                key: "customer.centreCode",
+                                key: "customer.centreId",
                                 type: "select",
                                 "enumCode": "centre",
                                 "x-schema-form": {

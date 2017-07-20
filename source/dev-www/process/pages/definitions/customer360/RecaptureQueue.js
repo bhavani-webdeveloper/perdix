@@ -21,7 +21,7 @@ irf.pageCollection.factory(irf.page("customer360.RecaptureQueue"),
 				var promise = Enrollment.search({
 					'branchName': searchOptions.branchName,
 					'firstName': searchOptions.firstName,
-					'centreCode': searchOptions.centreCode,
+					'centreId': searchOptions.centreId,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage
 				}).$promise;

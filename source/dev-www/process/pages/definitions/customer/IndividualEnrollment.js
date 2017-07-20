@@ -560,8 +560,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     "key": "customer.kgfsName",
                                     "type": "select"
                                 },
-                                "centreCode": {
-                                    "key": "customer.centreCode",
+                                "centreId": {
+                                    "key": "customer.centreId",
                                     "type": "select"
                                 }
                             },
@@ -576,6 +576,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 var promise = Enrollment.search({
                                     'branchName': SessionStore.getBranch() || inputModel.branchName,
                                     'firstName': inputModel.first_name,
+                                    'centreId': inputModel.centreId,
                                 }).$promise;
                                 return promise;
                             },

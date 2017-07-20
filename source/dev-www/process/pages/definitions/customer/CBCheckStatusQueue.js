@@ -3,14 +3,13 @@ irf.pageCollection.factory(irf.page("CBCheckStatusQueue"),
 "irfProgressMessage", "irfSimpleModal", "PageHelper",
 function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, entityManager,
 	PM, showModal, PageHelper){
-	var branch = SessionStore.getBranch();
 	var nDays = 15;
 	return {
 		"type": "search-list",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "CUSTOMER_STATUS_QUEUE",
 		initialize: function (model, form, formCtrl) {
-			model.branchName = branch;
+			model.branchName = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
@@ -44,16 +43,15 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 							"type": "select"
 						}
 					},*/
-					"centreCode": {
+					"centreId": {
 						"title": "CENTRE",
 						"type":["number", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branchName"
-							},
-							"screenFilter": true
+							"parentEnumCode": "branch_id",
+							"parentValueExpr": "model.branchName",
+							"screenFilter": true	
 						}
 					}
 				}
@@ -68,7 +66,7 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 				var promise = CreditBureau.listCreditBureauStatus({
 					'branchName': searchOptions.branchName,
                     'status': searchOptions.status,
-					'centreCode': searchOptions.centreCode,
+					'centreId': searchOptions.centreId,
 					'fromDate': nDaysBack.format('YYYY-MM-DD'),
 					'toDate': today.format('YYYY-MM-DD')
 				}).$promise;

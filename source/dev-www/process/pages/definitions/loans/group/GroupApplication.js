@@ -149,8 +149,9 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                model.group.branchName = SessionStore.getCurrentBranch().branchId;
-                $log.info(model.group.branchName);
+                var centres = SessionStore.getCentres();
+                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+                model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
@@ -159,12 +160,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        var centreCode = formHelper.enum('centre').data;
-                        for (var i = 0; i < centreCode.length; i++) {
-                            if (centreCode[i].code == model.group.centreCode) {
-                                model.group.centreCode = centreCode[i].value;
-                            }
-                        }
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
@@ -207,10 +202,12 @@ define({
                         "type": "select",
                         "enumCode": "partner"
                     }, {
-                        "key": "group.centreCode",
+                        "key": "group.centreId",
                         "title": "CENTRE_CODE",
                         "type": "select",
-                        "enumCode": "centre"
+                        "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.group.branchId",
                     }, {
                         "key": "group.productCode",
                         "title": "PRODUCT",
@@ -344,7 +341,7 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "integer"
                             },
-                            "centreCode": {
+                            "centreId": {
                                 "title": "CENTRE_CODE",
                                 "type": ["integer", "null"]
                             }

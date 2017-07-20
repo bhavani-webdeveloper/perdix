@@ -62,6 +62,10 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
+                model.group = model.group || {};
+                var centres = SessionStore.getCentres();
+                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+                model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
@@ -71,13 +75,7 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.udfDate1 = model.group.udfDate1 || "";
-                        model.group.grtDoneBy = SessionStore.getUsername();
-                        var centreCode = formHelper.enum('centre').data;
-                        for (var i = 0; i < centreCode.length; i++) {
-                            if (centreCode[i].code == model.group.centreCode) {
-                                model.group.centreCode = centreCode[i].value;
-                            }
-                        }
+                        model.group.grtDoneBy = model.group.grtDoneBy || SessionStore.getUsername();
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {

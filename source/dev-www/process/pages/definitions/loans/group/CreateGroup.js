@@ -96,7 +96,14 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                model.group.branchName = model.group.branchName || SessionStore.getCurrentBranch().branchId;
+                var branch1 = formHelper.enum('branch_id').data;
+                var centres = SessionStore.getCentres();
+                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].value) == model.group.branchId) {
+                        model.group.branchName = branch1[i].name;
+                    }
+                }
                 model.group.branchdescription =SessionStore.getBankName();
                 var date = SessionStore.getFormatedCBSDate();
                 model.group.groupFormationDate=date.split("-").reverse().join("-");
@@ -109,12 +116,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        var centreCode = formHelper.enum('centre').data;
-                        for (var i = 0; i < centreCode.length; i++) {
-                            if (centreCode[i].code == model.group.centreCode) {
-                                model.group.centreCode = centreCode[i].value;
-                            }
-                        }
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
@@ -158,13 +159,13 @@ define({
                     "type": "select",
                     "enumCode": "partner"
                 }, {
-                    "key": "group.centreCode",
+                    "key": "group.centreId",
                     "title": "CENTRE_CODE",
                     "required": true,
                     "type": "select",
-                    "enumCode": "centre_code",
+                    "enumCode": "centre",
                     "parentEnumCode": "branch_id",
-                    "parentValueExpr": "model.group.branchName"
+                    "parentValueExpr": "model.group.branchId"
                 }, {
                     "key": "group.productName",
                     "title": "PRODUCT",
@@ -304,25 +305,25 @@ define({
                         "type": "lov",
                         "lovonly": true,
                         initialize: function(model, form, parentModel, context) {
-                            model.branchName = parentModel.group.branchName;
+                            model.branchId = parentModel.group.branchId;
                         },
                         "inputMap": {
-                            "branchName": {
-                                "key": "group.branchName",
+                            "branchId": {
+                                "key": "group.branchId",
                                 "title": "BRANCH_NAME",
                                 "type": "select",
                                 "readonly": true,
                                 //"enumCode": "branch",
                                 "enumCode": "branch_id"
                             },
-                            "centreCode": {
-                                "key": "group.centreCode",
+                            "centreId": {
+                                "key": "group.centreId",
                                 "title": "CENTRE",
                                 "type": ["number", null],
                                 "enumCode": "centre",
                                 "type": "select",
                                 "parentEnumCode": "branch_id",
-                                "parentValueExpr": "model.branchName",
+                                "parentValueExpr": "model.branchId",
                             },
                             "status": {
                                 "key": "group.status",
@@ -352,20 +353,21 @@ define({
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
                             var branches = formHelper.enum('branch_id').data;
-                            var branchId;
+                            var branchName;
                             for (var i = 0; i < branches.length; i++) {
-                                if (branches[i].value == inputModel.branchName)
+                                if (branches[i].value == inputModel.branchId)
                                 {
-                                    branchId = branches[i].name;
+                                    branchName = branches[i].name;
+                                    break;
                                 }
                             }
                             var today = moment(new Date());
                             var nDaysBack = moment(new Date()).subtract(nDays, 'days');
                             console.log(inputModel);
                             var promise = CreditBureau.listCreditBureauStatus({
-                                'branchName': branchId,
+                                'branchName': branchName,
                                 'status': inputModel.status,
-                                'centreCode': inputModel.centreCode,
+                                'centreId': inputModel.centreId,
                                 'fromDate': nDaysBack.format('YYYY-MM-DD'),
                                 'toDate': today.format('YYYY-MM-DD')
                             }).$promise;
@@ -529,13 +531,13 @@ define({
                                 "title": "STATUS",
                                 "type": "string"
                             },
-                            "branchName": {
+                            "branchId": {
                                 "title": "BRANCH_NAME",
                                 "type": "integer"
                             },
-                            "centreCode": {
+                            "centreId": {
                                 "title": "CENTRE_CODE",
-                                "type": "string"
+                                "type": "integer"
                             }
                         }
                     }

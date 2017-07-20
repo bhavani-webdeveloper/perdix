@@ -7,9 +7,17 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
     var branch = SessionStore.getBranch();
 
     var initData = function(model) {
+        var branch1 = formHelper.enum('branch_id').data;
+        for (var i = 0; i < branch1.length; i++) {
+            if ((branch1[i].name) == SessionStore.getBranch()) {
+                model.customer.customerBranchId = model.customer.customerBranchId || branch1[i].value;
+                model.customer.kgfsName = model.customer.kgfsName || branch1[i].name;
+                break;
+            }
+        }
         var centres = SessionStore.getCentres();
         if (_.isArray(centres) && centres.length > 0){
-            model.customer.centreCode = model.customer.centreCode || centres[0].centreCode;
+            model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
@@ -126,12 +134,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     readonly: true
                 },
                 {
-                    key:"customer.centreCode",
+                    key:"customer.centreId",
                     type:"select",
-                    filter: {
-                        "parentCode as branch": "model.customer.kgfsName"
-                    },
-                    screenFilter: true
+                   "x-schema-form": {
+                        "type": "select",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.customer.customerBranchId",
+                        "screenFilter": true
+                    }
                 },
                 {
                     key:"customer.enrolledAs",
@@ -561,8 +571,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                                 "key": "customer.kgfsName",
                                 "type": "select"
                             },
-                            "centreCode": {
-                                "key": "customer.centreCode",
+                            "centreId": {
+                                "key": "customer.centreId",
                                 "type": "select"
                             }
                         },

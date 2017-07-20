@@ -117,7 +117,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         getOfflineDisplayItem: function(item, index){
             return [
                 item.customer.firstName,
-                item.customer.centreCode,
+                item.customer.centreId,
                 item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
             ]
         },

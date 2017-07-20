@@ -36,7 +36,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 					"branch": {
 						"title": "BRANCH_NAME",
 						"type": "string",
-						"enumCode": "branch",
+						"enumCode": "branch_id",
 						"default": branch,
 						"x-schema-form": {
 							"type": "select"
@@ -46,6 +46,8 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 						"title": "CENTRE",
 						"type": "string",
 						"enumCode": "centre",
+						"parentEnumCode": "branch_id",
+	                    "parentValueExpr": "model.branch",
 						"x-schema-form": {
 							"type": "select"
 						}
@@ -58,11 +60,19 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-
+                var branches = formHelper.enum('branch_id').data;
+                var branchName;
+                for (var i = 0; i < branches.length; i++) {
+                    if (branches[i].value == searchOptions.branch)
+                    {
+                        branchName = branches[i].name;
+                        break;
+                    }
+                }
 				var promise = Enrollment.search({
-					'branchName': searchOptions.branch,
+					'branchName': branchName,
 					'firstName': searchOptions.first_name,
-					'centreCode': searchOptions.centre,
+					'centreId': searchOptions.centre,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
                     'kycNumber': searchOptions.kyc_no,

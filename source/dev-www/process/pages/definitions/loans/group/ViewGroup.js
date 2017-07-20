@@ -56,12 +56,6 @@ define({
 						groupId: groupId
 					}, function(response, headersGetter) {
 						model.group = _.cloneDeep(response);
-						var centreCode = formHelper.enum('centre').data;
-						for (var i = 0; i < centreCode.length; i++) {
-							if (centreCode[i].code == model.group.centreCode) {
-								model.group.centreCode = centreCode[i].value;
-							}
-						}
 						fixData(model);
 						if (model.group.jlgGroupMembers.length > 0) {
 							fillNames(model).then(function(m) {
@@ -107,7 +101,9 @@ define({
 						"key": "group.centreCode",
 						"title": "CENTRE_CODE",
 						"type": "select",
-						"enumCode": "centre"
+						"enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.group.branchId",
 					}, {
 						"key": "group.productCode",
 						"title": "PRODUCT",
@@ -206,7 +202,7 @@ define({
 								"title": "BRANCH_NAME",
 								"type": "integer"
 							},
-							"centreCode": {
+							"centreId": {
 								"title": "CENTRE_CODE",
 								"type": "integer"
 							}

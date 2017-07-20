@@ -21,7 +21,7 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 		getOfflinePromise: function(searchOptions){      /* Should return the Promise */
 			var promise = Enrollment.search({
 				'branchName': searchOptions.branch,
-				'centreCode': searchOptions.centre,
+				'centreId': searchOptions.centre,
 				'firstName': searchOptions.first_name,
 				'lastName': searchOptions.last_name,
 				'page': 1,
@@ -90,7 +90,7 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 				
 				var promise = Enrollment.search({
 					'branchName': branchName,
-					'centreCode': searchOptions.centre,
+					'centreId': searchOptions.centre,
 					'firstName': searchOptions.first_name,
 					'lastName': searchOptions.lastName,
 					'page': pageOpts.pageNo,
