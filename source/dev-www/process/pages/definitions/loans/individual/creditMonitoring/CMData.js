@@ -58,7 +58,7 @@ define({
                             _.assign(model.loanMonitoringDetails, res.loanMonitoringDetails);
                             //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
-                            var loanId = res.loanId;
+                            var loanId = res.loanMonitoringDetails.loanId;
 
                             var loanresponse = IndividualLoan.get({
                                 id: loanId
@@ -67,7 +67,7 @@ define({
                                 function(response) {
                                     $log.info("printing loan account");
                                     $log.info(response);
-                                    var urn = response.applicant;
+                                    var urn = response.urnNo;
                                     var linkedurns = [urn];
                                     model.loanMonitoringDetails.udf1 = model.loanMonitoringDetails.udf1 || response.accountNumber;
                                     Queries.getCustomerBasicDetails({
