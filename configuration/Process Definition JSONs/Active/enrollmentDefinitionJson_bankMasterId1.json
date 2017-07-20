@@ -1059,6 +1059,25 @@
           }
         }
       },
+      "customerPartner": {
+        "title": "customerPartner",
+        "type": "object",
+        "required": [
+          "partnerCode"
+        ],
+        "properties": {
+          "partnerCode": {
+            "title": "partnerCode Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+		  }
+      },
       "kyc": {
         "title": "KYC Details",
         "type": "object",
