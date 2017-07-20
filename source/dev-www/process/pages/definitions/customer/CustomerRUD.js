@@ -934,9 +934,13 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         if (window.confirm("Update - Are You Sure?")) {
                             PageHelper.showLoader();
                             irfProgressMessage.pop('cust-update', 'Working...');
-                            model.enrollmentAction = "SAVE";
                             $log.info(model);
                             var reqData = _.cloneDeep(model);
+                            if (reqData.customer.currentStage == 'Completed'){ 
+                                reqData['enrollmentAction'] = 'PROCEED';
+                            } else {
+                                reqData['enrollmentAction'] = 'SAVE';
+                            };
 
                             Enrollment.updateCustomer(reqData, function (res, headers) {
                                 PageHelper.hideLoader();
