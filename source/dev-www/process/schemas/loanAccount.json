@@ -6,13 +6,13 @@
             "type":"object",
             "properties":{
                 "customerId":{
-                    "type":"integer"
+                    "type":["integer","null"] 
                 },
                 "firstName":{
-                    "type":"string"
+                    "type":["string", "null"]
                 },
                 "branch":{
-                    "type":"string",
+                    "type":["string", "null"],
                     "enumCode":"branch",
                     "title":"BRANCH"
                 },
@@ -22,10 +22,10 @@
                     "title":"CENTRE"
                 },
                 "applicantName":{
-                    "type":"string"
+                    "type":["string", "null"]
                 },
                 "customerType":{
-                    "type":"string"
+                    "type":["string", "null"]
                 }
             }
         },
@@ -34,17 +34,17 @@
             "type":"object",
             "properties":{
                 "branchName":{
-                    "type":"string",
+                    "type":["string", "null"],
                     "title":"BRANCH_NAME"
                 },
 
 
                 "processingFeeMultiplier":{
-                    "type":"number"
+                    "type":["null", "number"]
 
                 },
                 "portfolioUrnSelector":{
-                    "type":"string",
+                    "type":["string", "null"],
                     "title":"INSURED"
                 }
 
@@ -55,22 +55,22 @@
             "properties": {
                 "accountNumber": {
                     "title": "ACCOUNT_NUMBER",
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "percentageIncreasedIncome": {
                     "title": "PERCENTAGE_INCREASED_INCOME",
-                    "type": "number",
+                    "type": ["null", "number"],
                     "minimum":0,
                     "maximum":100
                 },
                 "percentageInterestSaved": {
                     "title": "PERCENTAGE_INTEREST_SAVED",
-                    "type": "number",
+                    "type":["null", "number"],
                     "minimum":0,
                     "maximum":100
                 },
                 "proposedHires":{
-                    "type":"string",
+                    "type":["string", "null"],
                     "maxLength": 2,
                     "minLength": 0,
                     "title":"PROPOSED_HIRES"
@@ -79,24 +79,24 @@
                     "type": "object",
                     "properties": {
                         "accountNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "id": {
-                            "type": "integer"
+                            "type":["null", "number"]
                         },
                         "loanId": {
-                            "type": "integer"
+                            "type": ["null", "number"]
                         },
                         "userDefinedDateFieldValues": {
-                            "type": "object",
+                            "type": ["null", "object"],
                             "properties": {}
                         },
                         "userDefinedFieldValues": {
-                            "type": "object",
+                            "type": ["null", "object"],
                             "properties": {}
                         },
                         "version": {
-                            "type": "integer"
+                            "type":["null", "number"]
                         }
                     },
                     "required": [
@@ -109,17 +109,17 @@
                     ]
                 },
                 "applicant": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "applicationFileName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "applicationStatus": {
                     "title": "STATUS",
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "applicationStatusUpdatedBy": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "npa": {
                 "type": "boolean"
@@ -128,10 +128,10 @@
                     "type": ["null", "string"]
                 },
                 "applicationStatusUpdatedOn": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "bankId": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"bank",
                     "title":"BANK"
                 },
@@ -139,34 +139,34 @@
                     "type": "object",
                     "properties": {
                         "accountNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "agreementFileId": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "agreementFileName": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "agreementStatus": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "agreementStatusUpdatedBy": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "agreementStatusUpdatedOn": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "applicationNumber": {
-                            "type": "string"
+                            "type":["string", "null"]
                         },
                         "bcAccountNo": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "bcProductCode": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "cmsDisbursementDate": {
-                            "type": "string"
+                            "type":["string", "null"]
                         },
                         "custIdSentStatus": {
                             "type": "boolean"
@@ -175,55 +175,55 @@
                             "type": "boolean"
                         },
                         "fldgUpdatedAt": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "fldgUpdatedBy": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "installmentAmountInPaisa": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "lastInstallmentAmountInPaisa": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "loanId": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "maritalStatus": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "nomineeId": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "numberOfInstallments": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         },
                         "outstandingLoanAmount": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "writeOffAmount": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "writeOffDate": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "spouseDateOfBirth": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "spouseFirstName": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "spouseLastName": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "spouseMiddleName": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "version": {
-                            "type": "integer"
+                            "type": ["null","integer"]
                         }
                     },
                     "required": [
@@ -260,17 +260,17 @@
                     "type": "boolean"
                 },
                 "branchId": {
-                    "type": "integer",
+                    "type": ["null","integer"],
                     "title":"BRANCH_ID"
                 },
                 "chk1UploadFilePath": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "closed": {
                     "type": "boolean"
                 },
                 "coApplicant": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "coBorrowerUrnNo": {
                     "type": ["null", "string"]
@@ -281,7 +281,7 @@
                         "type":"object",
                         "properties": {
                             "accountNumber": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "collateral1FilePath": {
                                 "type": ["null", "string"],
@@ -300,37 +300,37 @@
                             },
                             "collateralDescription": {
                                 "title": "COLLATERAL_DESCRIPTION",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "collateralType": {
                                 "title": "COLLATERAL_TYPE",
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "enumCode":"collateral_type"
 
                             },
                             "collateralValue": {
                                 "title": "COLLATERAL_VALUE",
-                                "type": "integer"
+                                "type": ["null","integer"]
                             },
                             "totalValue": {
                                 "title": "TOTAL_VALUE",
-                                "type": "integer"
+                                "type": ["null","integer"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type": ["null","integer"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type": ["null","integer"]
                             },
                             "loanToValue": {
-                                "type": "integer"
+                                "type": ["null","integer"]
                             },
                             "manufacturer":{
                                 "type":["null", "string"],
                                 "title":"MANUFACTURER"
                             },
                             "marginValue": {
-                                "type": ["null", "integer"]
+                                "type":  ["null","integer"]
                             },
                             "photoFilePath": {
                                 "type": ["null", "string"],
@@ -338,7 +338,7 @@
                                 "subCategory":"COLLATERALPHOTO"
                             },
                             "quantity":{
-                                "type":"integer",
+                                "type": ["null","integer"],
                                 "minimum":0,
                                 "title":"QUANTITY"
 
@@ -353,7 +353,7 @@
                                 "title":"IS_MACHINE_OLD"
                             },
                             "version": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             }
                         },
                         "required": [
@@ -367,39 +367,39 @@
                     }
                 },
                 "commercialCibilCharge":{
-                    "type":"integer",
+                    "type": ["null","integer"],
                     "title":"COMMERCIAL_CIBIL_CHARGE"
                 },
                 "createdAt": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "createdBy": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "currentStage": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "customerBank": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "customerBankAccountNumber": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "customerBankIfscCode": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "customerBranch": {
                     "title": "BRANCH_NAME",
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "customerId": {
-                    "type": "integer"
+                    "type":  ["null","integer"]
                 },
                 "disbursedAmountInPaisa": {
-                    "type": "integer"
+                    "type":  ["null","integer"]
                 },
                 "disbursementFromBankAccountNumber": {
-                    "type": "string",
+                    "type":["string", "null"],
                     "title": "DISBURSEMENT_FROM_ACCOUNT_NUMBER"
                 },
                 "disbursementSchedules": {
@@ -408,34 +408,34 @@
                         "type": "object",
                         "properties": {
                             "actualDisbursementDate": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "currentStage": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "customerSignatureDate": {
                                 "title": "CUSTOMER_SIGN_DATE",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "disbursedAmount": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "disbursementAmount": {
-                                "type": "integer",
+                                "type":  ["null","integer"],
                                 "minimum":0
                             },
                             "disbursementFromBankAccountNumber": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "scheduledDisbursementDate": {
                                 "title": "DISBURSEMENT_DATE",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "trancheNumber": {
                                 "type": ["string", null]
@@ -454,25 +454,25 @@
                     }
                 },
                 "dob": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "documentTracking": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "dscIntegrationId": {
-                    "type": "integer"
+                    "type":  ["null","integer"]
                 },
                 "dscLoanAmount": {
-                    "type": "integer"
+                    "type":  ["null","integer"]
                 },
                 "dscOverride": {
                     "type": "boolean"
                 },
                 "dscOverrideRemarks": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "endTime": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "frequency": {
                     "title": "FREQUENCY",
@@ -485,72 +485,72 @@
                         "type": "object",
                         "properties": {
                             "accountNumber": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "address": {
                                 "title": "ADDRESS",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "assetDetails": {
                                 "title": "ASSETS",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "dscIntegrationId": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "guaCustomerId": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "guaDob": {
                                 "title": "DATE_OF_BIRTH",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guaDscOverride": {
                                 "type": "boolean"
                             },
                             "guaDscRemarks": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guaFirstName": {
                                 "title": "FIRST_NAME",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guaLastName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guaMiddleName": {
                                 "title": "MIDDLE_NAME",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guaUrnNo": {
                                 "title": "GUARTANTOR_URN",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "relationFirstName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "relationLastName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "relationMiddleName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "relationship": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "enumCode":"relation"
                             },
                             "totalLiabilities": {
                                 "title": "LIABILITIES",
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             },
                             "version": {
-                                "type": "integer"
+                                "type":  ["null","integer"]
                             }
                         },
                         "required": [
@@ -559,16 +559,16 @@
                     }
                 },
                 "husbandOrFatherFirstName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "husbandOrFatherLastName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "husbandOrFatherMiddleName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "id": {
-                    "type": "integer"
+                    "type":  ["null","integer"]
                 },
                 "insuranceFee":{
                     "type":["null", "integer"],
@@ -586,43 +586,43 @@
                     "type": "object",
                     "properties": {
                         "accountNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "authenticationRegisterId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "encoreClosed": {
                             "type": "boolean"
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "jewelLoanEligibleMarketRate": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "jewelPouchLocationId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "jewelPouchLocationType": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "jewelPouchMovementId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "jewelPouchNo": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "ratePerGram22CaratInPaisa": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "transitRequest": {
                             "type": "boolean"
                         },
                         "version": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         }
                     },
                     "required": [
@@ -642,45 +642,45 @@
                     ]
                 },
                 "lastEditedAt": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "lastEditedBy": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "literateWitnessFirstName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "literateWitnessLastName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "literateWitnessMiddleName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "loanAmount": {
-                    "type": "integer",
+                    "type": ["null", "integer"],
                     "title": "LOAN_AMOUNT",
                     "minimum":0
                 },
                 "loanAmountRequested": {
-                    "type": "integer",
+                    "type": ["null", "integer"],
                     "minimum":0
                 },
                 "loanApplicationDate": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "loanCentre": {
                     "type": "object",
                     "title": "CENTER_NAME",
                     "properties": {
                         "centreId": {
-                            "type": "integer",
+                            "type": ["null", "integer"],
                             "enumCode":"centre"
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "loanId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         }
                     },
                     "required": [
@@ -690,7 +690,7 @@
                     ]
                 },
                 "loanDisbursementDate": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "loanDocuments": {
                     "type": "array",
@@ -698,28 +698,28 @@
                         "type": "object",
                         "properties": {
                             "disbursementId": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "document": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "documentId": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "documentStatus": {
-                                "type": ["null","string"]
+                                "type": ["string", "null"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "remarks": {
                                 "type": ["null","string"]
                             },
                             "version": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             }
                         },
                         "required": [
@@ -732,46 +732,46 @@
                     "type": "object",
                     "properties": {
                         "accountNumber": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "applicationDate": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "insuranceCompany": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "insuranceExpiryDate": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "insuranceFrom": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "insuranceHypothecation": {
                             "type": "boolean"
                         },
                         "insuranceId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "insuranceType": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "insurerId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "loanId": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "rfidTag": {
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "sumInsured": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         },
                         "version": {
-                            "type": "integer"
+                            "type": ["null", "integer"]
                         }
                     },
                     "required": [
@@ -793,22 +793,22 @@
                 },
                 "loanPurpose1": {
                     "title": "LOAN_PURPOSE_LEVEL_1",
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"loan_purpose_1"
                 },
                 "loanPurpose2": {
                     "title": "LOAN_PURPOSE_LEVEL_2",
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"loan_purpose_2"
                 },
                 "loanPurpose3": {
                     "title": "LOAN_PURPOSE_LEVEL_3",
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"loan_purpose_3"
                 },
                 "loanType": {
                     "title": "LOAN_TYPE",
-                    "type": ["string", "null"],
+                    "type":["string", "null"],
                     "enumCode":"loan_type"
                 },
                 "nominees": {
@@ -865,10 +865,10 @@
                                 "type": ["string", "null"]
                             },
                             "id": {
-                                "type": ["integer", "null"]
+                                "type": ["null", "integer"]
                             },
                             "loanId": {
-                                "type": ["integer", "null"]
+                                "type": ["null", "integer"]
                             },
                             "nomineeAddressSameAsCustomer": {
                                 "type": ["boolean", "null"]
@@ -944,14 +944,14 @@
                     }
                 },
                 "numberOfDisbursed": {
-                    "type": "integer"
+                    "type": ["null", "integer"]
                 },
                 "numberOfDisbursements": {
-                    "type": "integer",
+                    "type": ["null", "integer"],
                     "minimum":0
                 },
                 "originalAccountNumber": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "ornamentsAppraisals": {
                     "type": "array",
@@ -959,46 +959,46 @@
                         "type": "object",
                         "properties": {
                             "accountNumber": {
-                                "type": "string"
+                                "type":["string", "null"]
                             },
                             "grossWeightInGrams": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "jewelDefects": {
-                                "type": "string"
+                                "type":["string", "null"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "marketValueInPaisa": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "netWeightInGrams": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "noOfArticles": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "ornamentsDescription": {
-                                "type": "string"
+                                "type":["string", "null"]
                             },
                             "qualityInCarats": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "ratePerGram22CaratInPaisa": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "ratePerGramInPaisa": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "stoneDescription": {
-                                "type": "string"
+                                "type":["string", "null"]
                             },
                             "version": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             }
                         },
                         "required": [
@@ -1024,25 +1024,25 @@
                     "title":"OTHER_FEE"
                 },
                 "partnerCode": {
-                    "type": "string",
+                    "type":["string", "null"],
                     "title": "PARTNER",
                     "enumCode":"partner"
                 },
                 "pendingApproval": {
-                    "type": "string"
+                    "type":["string", "null"]
                 },
                 "portfolioInsuranceUrn":{
                     "type":["null", "string"]
 
                 },
                 "portfolioInsurancePremiumCalculated":{
-                    "type":"string"
+                    "type":["string", "null"]
                 },
                 "portfolioInsurancePremium":{
                     "type":"number"
                 },
                 "processType": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "processingFeePercentage": {
                     "title": "PROCESSING_FEES_IN_PERCENTAGE",
@@ -1052,14 +1052,14 @@
                 },
 
                 "productCode": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"loan_product"
                 },
                 "productType": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "relation": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"relationship"
 
 
@@ -1069,18 +1069,18 @@
                 },
                 "sanctionDate": {
                     "title": "SANCTION_DATE",
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "sbAccountNo": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "securityEmiRequired": {
-                    "type": ["null","string"],
+                    "type": ["string", "null"],
                     "title": "SECURITY_EMI",
                     "enumCode": "decisionmaker"
                 },
                 "startTime": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "tenure": {
                     "type": ["integer", "string"],
@@ -1091,25 +1091,25 @@
                     "type": "integer"
                 },
                 "urnNo": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "witness": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "witnessFirstName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "witnessLastName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "witnessMiddleName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "witnessRelationship": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 },
                 "wmName": {
-                    "type": "string"
+                    "type": ["string", "null"]
                 }
             },
             "required": [

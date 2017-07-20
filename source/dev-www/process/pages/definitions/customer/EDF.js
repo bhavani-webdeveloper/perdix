@@ -147,7 +147,7 @@ irf.pageCollection.factory("Pages__EDF",
                     var reqData = _.cloneDeep(model);
                     Utils.removeNulls(reqData,true);
                     $log.info(reqData);
-                    reqData['enrollmentAction'] = 'SAVE';
+                    reqData['enrollmentAction'] = 'PROCEED';
                     Enrollment.updateEnrollment(reqData,
                         function(res, headers){
                             PageHelper.hideLoader();

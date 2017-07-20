@@ -151,6 +151,7 @@ define({
                     "type": "textarea"
                 },{
                     "key": "group.udf1",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false
@@ -158,6 +159,7 @@ define({
                     "title": "QUESTION_1"
                 }, {
                     "key": "group.udf2",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false
@@ -165,6 +167,7 @@ define({
                     "title": "QUESTION_2"
                 }, {
                     "key": "group.udf3",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false
@@ -172,6 +175,7 @@ define({
                     "title": "QUESTION_3"
                 }, {
                     "key": "group.udf4",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false
@@ -179,6 +183,7 @@ define({
                     "title": "QUESTION_4"
                 }, {
                     "key": "group.udf5",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false
@@ -186,6 +191,7 @@ define({
                     "title": "QUESTION_5"
                 }, {
                     "key": "group.udf6",
+                    "required":true,
                     "type":"checkbox",
                     "schema":{
                         "default":false

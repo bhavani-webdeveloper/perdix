@@ -299,17 +299,27 @@ define({
                             "subCategory": "APPLICATION",
                             "type": "file",
                             "fileType": "application/pdf", 
+                        }, {
+                            "type": "button",
+                            "key": "group.jlgGroupMembers[]",
+                            "title": "DOWNLOAD_APPLICATION_FORM",
+                            "onClick": function(model, form, schemaForm, event) {
+                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
+                            }
+                        }, {
+                            "type": "button",
+                            "key": "group.jlgGroupMembers[]",
+                            condition: "model.group.partnerCode === 'AXIS'",
+                            "title": "DOWNLOAD_AGREEMENT_FORM",
+                            "onClick": function(model, form, schemaForm, event) {
+                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
+                            }
                         }]
                     }]
                 },
                 {
                     "type": "actionbox",
                     "items": [{
-                        "type": "button",
-                        "icon": "fa fa-download",
-                        "title": "DOWNLOAD_APPLICATION",
-                        "onClick": "actions.downloadApplication(model,form)",
-                    }, {
                         "type": "button",
                         "icon": "fa fa-arrow-right",
                         "title": "PROCEED",
@@ -345,28 +355,6 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
-                downloadApplication: function(model, form) {
-                    PageHelper.showLoader();
-                    checkGroupLoanActivated(model).then(function(isActivated) {
-                        PageHelper.hideLoader();
-                        if (isActivated) {
-                            try {
-                                var url = irf.FORM_DOWNLOAD_URL + '?form_name=app_loan&record_id=' + model._loanAccountId;
-                                try {
-                                    cordova.InAppBrowser.open(url, '_system', 'location=yes');
-                                } catch (err) {
-                                    window.open(url, '_blank', 'location=yes');
-                                }
-                            } catch (err) {
-                                irfProgressMessage.pop('ap-download', 'An Error Occur during download. Please Try Again', 2000);
-                            }
-                        } else {
-                            irfProgressMessage.pop('ap-download', 'An Error Occur during download. Please Try Again', 2000);
-                        }
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                    });
-                },
                 proceedAction: function(model, formCtrl, form) {
                     if(!validateForm(formCtrl)) 
                         return;

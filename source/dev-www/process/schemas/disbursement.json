@@ -180,7 +180,6 @@
         "customerSignatureDate",
         "disbursedAmount",
         "disbursementAmount",
-        "disbursementFromBankAccountNumber",
         "id",
         "loanId",
         "remarks",

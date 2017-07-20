@@ -18,6 +18,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.customer=model.customer||{};
 
                 model.additional = {"branchName":branch};
+                Queries.getGlobalSettings("siteCode").then(function(value) {
+                    model.siteCode = value;
+                    $log.info("siteCode:" + model.siteCode);
+                }, function(err) {
+                    $log.info("siteCode is not available");
+                });
+
                 try {
                     var loanId = ($stateParams['pageId'].split('.'))[0];
                     var disbursementId = ($stateParams['pageId'].split('.'))[1];
@@ -55,7 +62,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
                         }
                        
+                        model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
+
 
                         Enrollment.getCustomerById({
                                 id: model.additional.customerId
@@ -166,6 +175,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.overrideRequested",
+                        "condition":"model.siteCode=='KGFS'",
                         "type": "checkbox",
                         "title": "OVERRIDE_FINGERPRINT",
                         "schema":{
@@ -177,11 +187,23 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "type":"textarea",
                         required:true,
                         "title": "OVERRIDE_REMARKS",
-                        "condition": "model.loanAccountDisbursementSchedule.overrideRequested"
+                        "condition": "model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS'"
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.overrideStatus",
+                        "type":"select",
+                        required:true,
+                        readonly:true,
+                        "titleMap":{
+                            "Requested":"Requested",
+                            "Approved":"Approved"
+                        },
+                        "title": "OVERRIDE_STATUS",
+                        "condition": "model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS'"
                     },
                     {
                         type: "fieldset",
-                        condition: "!model.loanAccountDisbursementSchedule.overrideRequested",
+                        condition: "!model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS'",
                         title: "VALIDATE_BIOMETRIC",
                         items: [{
                             key: "loanAccountDisbursementSchedule.fpVerified",
@@ -274,6 +296,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     var toSendData = [];
                                     toSendData.push(model.loanAccountDisbursementSchedule);
                                     var reqData = {};
+
                                     reqData.stage = "DisbursementConfirmation";
                                     reqData.loanAccountDisbursementSchedules = toSendData;
                                     $log.info(reqData);
@@ -306,7 +329,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 PageHelper.showErrors(res);
                                 PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
                             });
-
                     }
 
                 },
