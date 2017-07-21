@@ -4,7 +4,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
         function ($log, $q, Enrollment, PageHelper, irfProgressMessage, $stateParams, $state,
                   formHelper, BASE_URL, $window, SessionStore, Utils) {
 
-            var fixData = function (model) {
+            var fixData = function (model) { 
                 $log.info("Before fixData");
                 Utils.removeNulls(model, true);
                 if (_.has(model.customer, 'udf.userDefinedFieldValues')){
@@ -139,18 +139,30 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             {
                                 key: "customer.spouseFirstName",
                                 title: "SPOUSE_FULL_NAME",
-                                condition: "model.customer.maritalStatus==='MARRIED'"
-                            },
-                            {
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                type: "qrcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    $log.info(aadhaarData);
+                                    model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                                    model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                    model.customer.spouseFirstName = aadhaarData.name;
+                                    if (aadhaarData.yob) {
+                                        model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                    }
+                                }
+                            }, {
                                 key: "customer.spouseDateOfBirth",
                                 type: "date",
-                                condition: "model.customer.maritalStatus==='MARRIED'"
-                            },
-                            {
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.spouseDateOfBirth) {}
+                                }
+                            }, {
                                 key: "customer.udf.userDefinedFieldValues.udf1",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 title: "SPOUSE_LOAN_CONSENT"
-
                             }
 
                         ]
@@ -208,75 +220,219 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             ]
                         }
                         ]
-                    }, {
+                    }, 
+                    {
                         type: "box",
                         title: "KYC",
-                        items: [
-                            {
+                        items: [{
+                                "key": "customer.aadhaarNo",
+                                type: "qrcode",
+                                onChange: "actions.setProofs(model)",
+                                onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                            }, {
                                 type: "fieldset",
                                 title: "IDENTITY_PROOF",
-                                items: [
-                                    {
-                                        key: "customer.identityProof",
-                                        type: "select"
+                                items: [{
+                                    key: "customer.identityProof",
+                                    type: "select"
+                                }, {
+                                    key: "customer.identityProofImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.identityProofImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
+                                    "offline": true
+                                }, {
+                                    key: "customer.identityProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.identityProofReverseImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
-                                    },
-                                    "customer.identityProofNo",
-                                    {
-                                        key: "customer.idProofIssueDate",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.idProofValidUptoDate",
-                                        type: "date"
+                                    "offline": true
+                                }, {
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
                                     }
-                                ]
-                            },
-                            {
+                                }, {
+                                    key: "customer.idProofIssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.idProofValidUptoDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.addressProofSameAsIdProof"
+                                }]
+                            }, {
+                                type: "fieldset",
+                                title: "SPOUSE_IDENTITY_PROOF",
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                items: [{
+                                    key: "customer.udf.userDefinedFieldValues.udf33",
+                                    type: "select",
+                                    onChange: function(modelValue) {
+                                        $log.info(modelValue);
+                                    }
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf34",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
+                                    },
+                                    "offline": true
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf35",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
+                                    },
+                                    "offline": true
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf36",
+                                    condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result); // spouse id proof
+                                        model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                    }
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf36",
+                                    condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                    type: "qrcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result); // spouse id proof
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        $log.info(aadhaarData);
+                                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                        model.customer.spouseFirstName = aadhaarData.name;
+                                        if (aadhaarData.yob) {
+                                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                        }
+                                    }
+                                }]
+                            }, {
                                 type: "fieldset",
                                 title: "ADDRESS_PROOF",
                                 condition: "!model.customer.addressProofSameAsIdProof",
-                                items: [
-                                    {
-                                        key: "customer.addressProof",
-                                        type: "select"
+                                items: [{
+                                    key: "customer.addressProof",
+                                    type: "select"
+                                }, {
+                                    key: "customer.addressProofImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.addressProofImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
+                                    "offline": true
+                                }, {
+                                    key: "customer.addressProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.addressProofReverseImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
-                                    },
-                                    "customer.addressProofNo",
-                                    {
-                                        key: "customer.addressProofIssueDate",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.addressProofValidUptoDate",
-                                        type: "date"
-                                    },
-                                ]
+                                    "offline": true
+                                }, {
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
+                                    }
+                                }, {
+                                    key: "customer.addressProofIssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.addressProofValidUptoDate",
+                                    type: "date"
+                                }, ]
                             }
 
                         ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "ADDITIONAL_KYC",
+                        "items": [{
+                            "key": "customer.additionalKYCs",
+                            "type": "array",
+                            "add": null,
+                            "remove": null,
+                            "title": "ADDITIONAL_KYC",
+                            "items": [{
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
+
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ProofType",
+                                type: "select"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1IssueDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ValidUptoDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ProofNumber",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
+                                }
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ProofType",
+                                type: "select"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2IssueDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ValidUptoDate",
+                                type: "date"
+                            }]
+                        }]
                     },
                     {
                         "type": "box",

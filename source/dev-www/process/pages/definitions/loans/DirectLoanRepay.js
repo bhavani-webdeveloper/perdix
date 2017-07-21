@@ -700,6 +700,10 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                     if (window.confirm("Are you Sure?")) {
                         PageHelper.showLoader();
                         model.repayment.cashCollectionRemark= model.repayment.cashCollectionRemark + model.repayment.receiptNumber;
+                        model.repayment.tempaccountId=model.repayment.accountId;
+                        model.repayment.tempencoreId=model.repayment.accountNumber;
+                        model.repayment.accountId=model.repayment.accountNumber;
+                        model.repayment.accountNumber=model.repayment.tempaccountId;
                         var postData = _.cloneDeep(model.repayment);
                         postData.amount = parseInt(Number(postData.amount)) + "";
                         LoanAccount.repay(postData, function(resp, header) {
@@ -709,7 +713,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                 $log.info(resp);
                                 model.repay = resp;
                                 model.repay.submissionDone = "yes";
-                                model.repay.accountNumber=model.repayment.accountNumber;
+                                model.repay.accountNumber=model.repayment.tempencoreId;
+                                model.repay.accountId=model.repayment.tempencoreId;
                             } catch (err) {
 
                             }

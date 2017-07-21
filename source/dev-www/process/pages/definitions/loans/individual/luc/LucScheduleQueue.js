@@ -78,6 +78,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 						'currentStage': "LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
 						'centreId': centreId[0],
+						'monitoringType':"LUC",
 						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,

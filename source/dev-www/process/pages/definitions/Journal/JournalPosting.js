@@ -18,6 +18,8 @@ define({
                     model.journal.journalEntryDto = {};
                 }
                 model.journal.journalEntryDto.valueDate = moment(new Date()).format("YYYY-MM-DD");
+                model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+
 
                 if (!(model && model.journal && model.journal.journalEntryDto && model.journal.journalEntryDto.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -103,7 +105,9 @@ define({
                             data.transactionDescription
                         ];
                     },
-                    onSelect: function(valueObj, model, context) {}
+                    onSelect: function(valueObj, model, context) {
+                        
+                    }
                 }, {
                     key: "journal.journalEntryDto.transactionDescription",
                     readonly: true,

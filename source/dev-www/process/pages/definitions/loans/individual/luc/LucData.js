@@ -62,7 +62,7 @@ define({
                                 _.assign(model.loanMonitoringDetails, res.loanMonitoringDetails);
                                 //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                                 model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
-                                var loanId = res.loanId;
+                                var loanId = res.loanMonitoringDetails.loanId;
 
                                 var loanresponse = IndividualLoan.get({
                                     id: loanId
