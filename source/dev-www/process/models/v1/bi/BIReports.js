@@ -1,4 +1,4 @@
-    irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource) {
+    irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource, formHelper, SessionStore, Enrollment, IndividualLoan) {
     var endpoint = irf.BI_BASE_URL;
 	var endpoint2 = irf.MANAGEMENT_BASE_URL;
 
@@ -107,6 +107,97 @@
         }
 		
     });
+
+    var biReportsUtil = res.Utils = {};
+
+    biReportsUtil.setOptionsForReportParameter = function(item, reportParameter) {
+
+        item['key'] = "bi." + reportParameter.parameter;
+        item['title'] = reportParameter.name;
+        item['titleMap'] = reportParameter.titleMap;
+
+        if(reportParameter.type.indexOf(':') > -1){
+            var fieldArray = reportParameter.type.split(':');
+            var typeOfSearch = fieldArray[1];
+            item['type'] = fieldArray[0];
+            item['autolov'] = false;
+            item['inputMap'] = {
+                "branchId": {
+                    "key": "bi.branchId",
+                    "title": "BRANCH_NAME",
+                    "type": "select",
+                    "enumCode": "branch_id"
+                },
+                "centreId": {
+                    "key": "bi.centreId",
+                    "title": "CENTRE",
+                    "enumCode": "centre",
+                    "type": "select",
+                    "parentEnumCode": "branch_id",
+                    "parentValueExpr": "model.branchId",
+                },
+                "firstName": {
+                    "key": "bi.firstName",
+                    "title": "CUSTOMER_NAME",
+                    "type": "string"
+                }
+            };
+            item["searchHelper"] = formHelper;
+            item["search"] = function(inputModel, form) {
+                var branches = formHelper.enum('branch_id').data;
+                var branchName;
+                for (var i=0; i<branches.length;i++){
+                    if(branches[i].code==inputModel.branchId)
+                        branchName = branches[i].name;
+                }
+                var promise;
+                if (typeOfSearch == 'customerSearch') {
+                    promise = Enrollment.search({
+                        'branchName': branchName ||SessionStore.getBranch(),
+                        'firstName': inputModel.firstName,
+                        'centreId':inputModel.centreId,
+                    }).$promise;
+                } else if(typeOfSearch == 'accountNumber') {
+
+                    promise = IndividualLoan.search({
+                        'branchName':branchName ||SessionStore.getBranch(),                       
+                        'customerName': inputModel.firstName,
+                        'centreCode': inputModel.centreId
+
+                    }).$promise;
+                }
+                
+                return promise;
+            };
+            if(typeOfSearch == 'customerSearch') {
+                item["getListDisplayItem"] = function(data, index) {
+                    return [
+                        [data.firstName, data.fatherFirstName].join(' | '),
+                        data.id,
+                        data.urnNo 
+                    ];
+                };
+                item["onSelect"] = function(valueObj, model, context) {
+                    model.bi.urn = valueObj.urnNo;
+                };
+            } else if (typeOfSearch == 'accountNumber') {
+                 item["getListDisplayItem"] = function(data, index) {
+                    return [
+                        data.customerName,
+                        data.id,
+                        data.accountNumber 
+                    ];
+                };
+                item["onSelect"] = function(valueObj, model, context) {
+                    model.bi.loan_account_id = valueObj.accountNumber;
+                };
+            }
+            
+
+        } else {
+            item['type'] = reportParameter.type;
+        }
+    }
 
     return res;
 });

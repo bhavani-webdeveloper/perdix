@@ -55,11 +55,8 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             continue;
                         }
                         item = {};
-                        item['key'] = "bi." + result[i].parameter;
+                        BIReports.Utils.setOptionsForReportParameter(item, result[i]);
                         console.log (item['key']);
-                        item['type'] = result[i].type;
-                        item['title'] = result[i].name;
-                        item['titleMap'] = result[i].titleMap;
                         item['condition'] = "model.selectedReport && model.selectedReport.parameters.indexOf('" + result[i].parameter + "') != -1";
                         self.formSource[0].items.push(item);    
                     }
@@ -115,6 +112,21 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                             "to_date": {
                                 "type": "string",
                                 "title": "TO_DATE"
+                            },
+                            "branchId": {
+                                "key": "branchId",
+                                "title": "BRANCH_NAME",
+                                "type": "select",
+                            },
+                            "centreId": {
+                                "key": "centreId",
+                                "title": "CENTRE",
+                                "type": "select",
+                            },
+                            "firstName": {
+                                "key": "firstName",
+                                "title": "CUSTOMER_NAME",
+                                "type": "string",
                             },
                         },
                         "required": [
