@@ -4,9 +4,7 @@ define({
     dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
     $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
-
         var branch = SessionStore.getBranch();
-
         var validateDate = function(req) {
             if (req.loanMonitoringDetails && req.loanMonitoringDetails.lucRescheduledDate) {
                 var today = moment(new Date()).format("YYYY-MM-DD");
@@ -18,56 +16,50 @@ define({
             }
             return true;
         }
-
-        var orderLUCDocuments = function(model) {
-
-            var lucDocuments = model.loanMonitoringDetails.loanMonitoringDocuments || [];
-
-            for (var i = 0; i < lucDocuments.length; i++) {
-
-                lucDocuments[i]["documentSl"] = (i + 1);
+        var orderCMDocuments = function(model) {
+            var cmDocuments = model.loanMonitoringDetails.loanMonitoringDocuments || [];
+            for (var i = 0; i < cmDocuments.length; i++) {
+                cmDocuments[i]["documentSl"] = (i + 1);
             }
         }
-
 
         return {
             "type": "schema-form",
             "title": "CREDIT_MONITORING_DATA_CAPTURE",
             "subTitle": "CREDIT_MONITORING",
             initialize: function(model, form, formCtrl) {
-                model.lucCompleted = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
+                model.cmCompleted = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
                 model.loanMonitoringDetails = model.loanMonitoringDetails || {};
-                if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
-                    model.loanMonitoringDetails.socialImpactDetails = {};
-                }
+                // if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                //     model.loanMonitoringDetails.socialImpactDetails = {};
+                // }
                 model = Utils.removeNulls(model, true);
                 $log.info("luc page got initiated");
 
                 if (!(model && model.loanMonitoringDetails && model.loanMonitoringDetails.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
-                    var lucId = $stateParams.pageId;
-                    if (!lucId) {
+                    var cmId = $stateParams.pageId;
+                    if (!cmId) {
                         PageHelper.hideLoader();
                     }
                     LUC.get({
-                            id: lucId
+                            id: cmId
                         },
                         function(res) {
                             $log.info(res);
                             _.assign(model.loanMonitoringDetails, res.loanMonitoringDetails);
-                            //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
-
                             var loanresponse = IndividualLoan.get({
                                 id: loanId
                             }).$promise;
+
                             loanresponse.then(
                                 function(response) {
                                     $log.info("printing loan account");
                                     $log.info(response);
-                                    var urn = response.urnNo;
+                                    var urn = response.urn;
                                     var linkedurns = [urn];
                                     model.loanMonitoringDetails.udf1 = model.loanMonitoringDetails.udf1 || response.accountNumber;
                                     Queries.getCustomerBasicDetails({
@@ -87,19 +79,19 @@ define({
                                                         $log.info("printing customer2");
                                                         $log.info(response2);
 
-                                                        if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
-                                                            model.loanMonitoringDetails.socialImpactDetails = {};
-                                                        }
+                                                        // if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                                                        //     model.loanMonitoringDetails.socialImpactDetails = {};
+                                                        // }
 
-                                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-                                                            if (response2.familyMembers && response2.familyMembers.length) {
-                                                                for (i = 0; i < response2.familyMembers.length; i++) {
-                                                                    if (response2.familyMembers[i].relationShip == "self") {
-                                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = response2.familyMembers[i].salary;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
+                                                        // if (model.loanMonitoringDetails.currentStage == "CMSchedule") {
+                                                        //     if (response2.familyMembers && response2.familyMembers.length) {
+                                                        //         for (i = 0; i < response2.familyMembers.length; i++) {
+                                                        //             if (response2.familyMembers[i].relationShip == "self") {
+                                                        //                 model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = response2.familyMembers[i].salary;
+                                                        //             }
+                                                        //         }
+                                                        //     }
+                                                        // }
                                                     }, function(httpRes) {
                                                         PageHelper.showErrors(httpRes);
                                                     })
@@ -110,7 +102,7 @@ define({
                                         }
                                     });
                                     var assetvalue = 0;
-                                    if (model.loanMonitoringDetails.currentStage == "LUCSchedule" && !(model.loanMonitoringDetails.lucEscalatedReason)) {
+                                    if (model.loanMonitoringDetails.currentStage == "CMSchedule" && !(model.loanMonitoringDetails.lucEscalatedReason)) {
                                         $log.info("inside sc");
                                         if (response.collateral && response.collateral.length) {
                                             $log.info("inside col");
@@ -158,16 +150,16 @@ define({
                                                 $log.info(response1);
                                                 model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || (response1.doorNo + " " + response1.street + " " + response1.locality);
                                                 model.loanMonitoringDetails.customerName = response1.firstName;
-                                                if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
-                                                    model.loanMonitoringDetails.socialImpactDetails = {};
-                                                }
-                                                if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-                                                    model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
-                                                    model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
-                                                    if (response1.buyerDetails && response1.buyerDetails.length) {
-                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
-                                                    }
-                                                }
+                                                // if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                                                //     model.loanMonitoringDetails.socialImpactDetails = {};
+                                                // }
+                                                // if (model.loanMonitoringDetails.currentStage == "CMSchedule") {
+                                                //     model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
+                                                //     model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
+                                                //     if (response1.buyerDetails && response1.buyerDetails.length) {
+                                                //         model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
+                                                //     }
+                                                // }
 
                                             }, function(httpRes) {
                                                 PageHelper.showErrors(httpRes);
@@ -230,11 +222,9 @@ define({
                         title: "ACCOUNT_NUMBER",
                         "readonly": true
                     }]
-                }, {
+                },  {
                     "type": "box",
                     "title": "LOAN_UTILIZATION",
-                    "condition": "model.lucCompleted",
-                    readonly: true,
                     "items": [{
                             key: "loanMonitoringDetails.loanSeries",
                             type: "number",
@@ -261,8 +251,6 @@ define({
                             "readonly": true
                         }, {
                             type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
                             items: [{
                                 key: "loanMonitoringDetails.numberOfAssetsDelivered",
                                 type: "select",
@@ -295,542 +283,7 @@ define({
                                 key: "loanMonitoringDetails.reasonForNotOrderingAssets",
                                 type: "string",
                                 condition: "model.loanMonitoringDetails.isAssetsOrdered==0",
-                            }, {
-                                key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.udf2",
-                                type: "select",
-                                title: "RESCHEDULED_REMARKS",
-                                titleMap: {
-                                    "Partially utilized ": "Partially utilized ",
-                                    "Not utilized ": "Not utilized ",
-                                    "Customer not available": "Customer not available",
-                                },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "select",
-                                titleMap: {
-                                    "Value of the machine is less than the given quotation": "Value of the machine is less than the given quotation",
-                                    "Mis match in the Machine type & accessories": "Mis match in the Machine type & accessories",
-                                    "Mis match in no of Machineries": "Mis match in no of Machineries",
-                                    "Non operational Machinery": "Non operational Machinery",
-                                    "Non delivery of Machine": "Non delivery of Machine",
-                                },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.udf3",
-                                title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }]
-                        }, {
-                            key: "loanMonitoringDetails.machineDetails",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
-                            type: "array",
-                            //startEmpty: true,
-                            //view:"fixed",
-                            title: "MACHINE",
-                            items: [{
-                                key: "loanMonitoringDetails.machineDetails[].make",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].type",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].year",
-                                type: "date",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].model",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].serialNumber",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].assetType",
-                                type: "select",
-                                titleMap: {
-                                    "NEW": "NEW",
-                                    "OLD": "OLD",
-                                },
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].udf1",
-                                type: "select",
-                                title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].udf2",
-                                type: "select",
-                                title: "HYPOTHECATED_TO_KINARA",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
-                                type: "select",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
-                                type: "select",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
-                                type: "select",
-                                titleMap: {
-                                    "VHFPL": "VHFPL",
-                                },
-                            }]
-                        }, {
-                            type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'||model.loanMonitoringDetails.loanPurposeCategory == 'Line of credit'",
-                            items: [{
-                                key: "loanMonitoringDetails.loanAmountUsed",
-                                type: "amount",
-                                "onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
-                                    model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
-                                }
-
-                            }, {
-                                key: "loanMonitoringDetails.loanAmountPurpose",
-                                type: "select",
-                                titleMap: {
-                                    "Raw material": "Raw material",
-                                },
-
-                            }, {
-                                key: "loanMonitoringDetails.verifiedBy",
-                                type: "select",
-                                titleMap: {
-                                    "Bill ": "Bill ",
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.amountUsedPercentage",
-                                "readonly": true,
-                                title: "%OF_AMOUNT_UTILISED",
-                                type: "integer"
-                            }, {
-                                key: "loanMonitoringDetails.intendedPurposeAmount",
-                                type: "amount",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                "onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                    model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
-                                    model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
-                                    var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                    model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.intendedPurposePercentage",
-                                title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "integer",
-                                "readonly": true,
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "amount",
-
-                                /* "onChange": function(modelValue, form, model) {
-                                     var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                     model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
-                                 }*/
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposePercentage",
-                                title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "integer",
-                                "readonly": true
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                            }, {
-                                key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.udf2",
-                                type: "select",
-                                title: "RESCHEDULED_REMARKS",
-                                titleMap: {
-                                    "Partially utilized ": "Partially utilized ",
-                                    "Not utilized ": "Not utilized ",
-                                    "Customer not available": "Customer not available",
-                                },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "select",
-                                titleMap: {
-                                    "Mis utilized": "Mis utilized",
-                                    "Not utilized": "Not utilized",
-                                    "Partially utilized": "Partially utilized",
-                                },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.udf3",
-                                title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }]
-                        }, {
-                            type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Machine Refinance'",
-                            items: [{
-                                key: "loanMonitoringDetails.repayedDebitAmount",
-                                type: "amount",
-                                "onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.repayedDebitAmount) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
-                                    model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.monthlyInterestForDebit",
-                                type: "amount"
-                            }, {
-                                key: "loanMonitoringDetails.remainingAmountPurpose",
-                            }, {
-                                key: "loanMonitoringDetails.remainingAmountUtilizedOn",
-                                type: "date"
-                            }, {
-                                key: "loanMonitoringDetails.amountUsedPercentage",
-                                title: "%OF_AMOUNT_UTILISED",
-                                type: "integer",
-                                "readonly": true
-                            }, {
-                                key: "loanMonitoringDetails.intendedPurposeAmount",
-                                type: "amount",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                "onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
-                                    model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
-                                    model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.repayedDebitAmount - model.loanMonitoringDetails.intendedPurposeAmount;
-                                    var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
-                                    model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.intendedPurposePercentage",
-                                title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "integer",
-                                "readonly": true,
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "amount",
-                                "readonly": true,
-                                /*"onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                    model.loanMonitoringDetails.nonIntendedPurposePercentage =parseInt(a.toFixed());
-                                }*/
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposePercentage",
-                                title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                type: "integer",
-                                "readonly": true
-                            }, {
-                                key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                            }, {
-                                key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.udf2",
-                                type: "select",
-                                title: "RESCHEDULED_REMARKS",
-                                titleMap: {
-                                    "Partially utilized ": "Partially utilized ",
-                                    "Not utilized ": "Not utilized ",
-                                    "Customer not available": "Customer not available",
-                                },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "select",
-                                titleMap: {
-                                    "Mis utilized": "Mis utilized",
-                                    "Not utilized": "Not utilized",
-                                    "Partially utilized": "Partially utilized",
-                                },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.udf3",
-                                title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }]
-                        },
-
-                    ]
-                }, {
-                    "type": "box",
-                    "title": "LOAN_UTILIZATION",
-                    "condition": "!model.lucCompleted",
-                    "items": [{
-                            key: "loanMonitoringDetails.loanSeries",
-                            type: "number",
-                            "readonly": true
-                        }, {
-                            key: "loanMonitoringDetails.loanProductName",
-                            type: "string",
-                            "readonly": true
-                        }, {
-                            key: "loanMonitoringDetails.loanPurposeCategory",
-                            "readonly": true,
-                            title: "LOAN_PURPOSE_1",
-                        }, {
-                            key: "loanMonitoringDetails.loanPurpose",
-                            title: "LOAN_SUB_PURPOSE",
-                            "readonly": true
-                        }, {
-                            key: "loanMonitoringDetails.loanAmount",
-                            type: "amount",
-                            //"readonly": true
-                        }, {
-                            key: "loanMonitoringDetails.disbursementDate",
-                            type: "date",
-                            "readonly": true
-                        }, {
-                            type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
-                            items: [{
-                                key: "loanMonitoringDetails.numberOfAssetsDelivered",
-                                type: "select",
-                                titleMap: {
-                                    "ALL": "All",
-                                    "SOME": "Some",
-                                    "NONE": "None",
-                                },
-                            }, {
-                                key: "loanMonitoringDetails.amountUtilizedForAssetsPurchase",
-                                type: "amount",
-                                "onChange": function(modelValue, form, model) {
-                                    var a = ((parseFloat(model.loanMonitoringDetails.amountUtilizedForAssetsPurchase) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
-                                    model.loanMonitoringDetails.percentage = parseInt(a.toFixed());
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.percentage",
-                                title: "%OF_AMOUNT_UTILISED",
-                                type: "integer",
-                                "readonly": true
-
-                            }, {
-                                key: "loanMonitoringDetails.totalCreationAssetValue",
-                                type: "number"
-                            }, {
-                                key: "loanMonitoringDetails.isAssetsOrdered",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.reasonForNotOrderingAssets",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.isAssetsOrdered==0",
-                            }, {
-                                key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.udf2",
-                                type: "select",
-                                title: "RESCHEDULED_REMARKS",
-                                titleMap: {
-                                    "Partially utilized ": "Partially utilized ",
-                                    "Not utilized ": "Not utilized ",
-                                    "Customer not available": "Customer not available",
-                                },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "select",
-                                titleMap: {
-                                    "Value of the machine is less than the given quotation": "Value of the machine is less than the given quotation",
-                                    "Mis match in the Machine type & accessories": "Mis match in the Machine type & accessories",
-                                    "Mis match in no of Machineries": "Mis match in no of Machineries",
-                                    "Non operational Machinery": "Non operational Machinery",
-                                    "Non delivery of Machine": "Non delivery of Machine",
-                                },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.udf3",
-                                title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }]
-                        }, {
-                            key: "loanMonitoringDetails.machineDetails",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
-                            type: "array",
-                            //startEmpty: true,
-                            //view:"fixed",
-                            title: "MACHINE",
-                            items: [{
-                                key: "loanMonitoringDetails.machineDetails[].make",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].type",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].year",
-                                type: "date",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].model",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].serialNumber",
-                                type: "string",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].assetType",
-                                type: "select",
-                                titleMap: {
-                                    "NEW": "NEW",
-                                    "OLD": "OLD",
-                                },
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].udf1",
-                                type: "select",
-                                title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].udf2",
-                                type: "select",
-                                title: "HYPOTHECATED_TO_KINARA",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
-                                type: "select",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
-                                type: "select",
-                                enumCode: "decisionmaker1",
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
-                                type: "select",
-                                titleMap: {
-                                    "VHFPL": "VHFPL",
-                                },
-                            }]
-                        }, {
-                            type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'||model.loanMonitoringDetails.loanPurposeCategory == 'Line of credit'",
-                            items: [{
+                            },{
                                 key: "loanMonitoringDetails.loanAmountUsed",
                                 type: "amount",
                                 "onChange": function(modelValue, form, model) {
@@ -891,68 +344,7 @@ define({
                             }, {
                                 key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
                                 condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                            }, {
-                                key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
-                                    }
-                                }
-                            }, {
-                                key: "loanMonitoringDetails.udf2",
-                                type: "select",
-                                title: "RESCHEDULED_REMARKS",
-                                titleMap: {
-                                    "Partially utilized ": "Partially utilized ",
-                                    "Not utilized ": "Not utilized ",
-                                    "Customer not available": "Customer not available",
-                                },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "select",
-                                titleMap: {
-                                    "Mis utilized": "Mis utilized",
-                                    "Not utilized": "Not utilized",
-                                    "Partially utilized": "Partially utilized",
-                                },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }, {
-                                key: "loanMonitoringDetails.udf3",
-                                title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-                            }]
-                        }, {
-                            type: "fieldset",
-                            title: "",
-                            condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Machine Refinance'",
-                            items: [{
+                            },{
                                 key: "loanMonitoringDetails.repayedDebitAmount",
                                 type: "amount",
                                 "onChange": function(modelValue, form, model) {
@@ -1009,22 +401,31 @@ define({
                                 condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             }, {
                                 key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
+                                type: "select",
+                                titleMap:{
+                                    "Yes":"Yes",
+                                    "No":"No"
+                                },
+                                //enumCode: "decisionmaker1",
                                 "onChange": function(modelValue, form, model) {
                                     if (model.loanMonitoringDetails.lucDone == "Yes") {
-                                        model.loanMonitoringDetails.lucRescheduled = "No";
-                                        model.loanMonitoringDetails.lucEscalated = "No";
+                                        model.loanMonitoringDetails.CMReschedule = "No";
+                                        model.loanMonitoringDetails.CMEscalate = "No";
                                     }
                                 }
                             }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
+                                key: "loanMonitoringDetails.CMReschedule",
+                                "title": "CM_RESCHEDULED",
+                                condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                type: "select",
+                                titleMap:{
+                                    "Yes":"Yes",
+                                    "No":"No"
+                                },
+                                //enumCode: "decisionmaker1",
                                 "onChange": function(modelValue, form, model) {
-                                    if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
-                                        model.loanMonitoringDetails.lucEscalated = "No";
+                                    if (model.loanMonitoringDetails.CMReschedule == "Yes") {
+                                        model.loanMonitoringDetails.CMEscalate = "No";
                                     }
                                 }
                             }, {
@@ -1036,42 +437,101 @@ define({
                                     "Not utilized ": "Not utilized ",
                                     "Customer not available": "Customer not available",
                                 },
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                             }, {
                                 key: "loanMonitoringDetails.lucRescheduleReason",
                                 type: "string",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                             }, {
                                 key: "loanMonitoringDetails.lucRescheduledDate",
                                 type: "date",
-                                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                             }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker1",
-                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                key: "loanMonitoringDetails.CMEscalate",
+                                "title" : "CM_ESCALATED",
+                                type: "select",
+                                titleMap:{
+                                    "Yes":"Yes",
+                                    "No":"No"
+                                },
+                                //enumCode: "decisionmaker1",
+                                condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='CMLegalRecovery'",
                             }, {
                                 key: "loanMonitoringDetails.lucEscalatedReason",
                                 type: "select",
                                 titleMap: {
-                                    "Mis utilized": "Mis utilized",
-                                    "Not utilized": "Not utilized",
-                                    "Partially utilized": "Partially utilized",
+                                    "Value of the machine is less than the given quotation": "Value of the machine is less than the given quotation",
+                                    "Mis match in the Machine type & accessories": "Mis match in the Machine type & accessories",
+                                    "Mis match in no of Machineries": "Mis match in no of Machineries",
+                                    "Non operational Machinery": "Non operational Machinery",
+                                    "Non delivery of Machine": "Non delivery of Machine",
                                 },
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                condition: "model.loanMonitoringDetails.CMEscalate=='Yes' && model.loanMonitoringDetails.currentStage !=='CMLegalRecovery'",
                             }, {
                                 key: "loanMonitoringDetails.udf3",
                                 title: "ESCALATED_REMARKS",
-                                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                condition: "model.loanMonitoringDetails.CMEscalate=='Yes' && model.loanMonitoringDetails.currentStage !=='CMLegalRecovery'",
                             }]
-                        },
-
+                        }, {
+                            key: "loanMonitoringDetails.machineDetails",
+                            type: "array",
+                            //startEmpty: true,
+                            //view:"fixed",
+                            title: "MACHINE",
+                            items: [{
+                                key: "loanMonitoringDetails.machineDetails[].make",
+                                type: "string",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].type",
+                                type: "string",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].year",
+                                type: "date",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].model",
+                                type: "string",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].serialNumber",
+                                type: "string",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].assetType",
+                                type: "select",
+                                titleMap: {
+                                    "NEW": "NEW",
+                                    "OLD": "OLD",
+                                },
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].udf1",
+                                type: "select",
+                                title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                enumCode: "decisionmaker1",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].udf2",
+                                type: "select",
+                                title: "HYPOTHECATED_TO_KINARA",
+                                enumCode: "decisionmaker1",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
+                                type: "select",
+                                enumCode: "decisionmaker1",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
+                                type: "select",
+                                enumCode: "decisionmaker1",
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
+                                type: "select",
+                                titleMap: {
+                                    "VHFPL": "VHFPL",
+                                },
+                            }]
+                        }, 
                     ]
                 }, {
                     "type": "box",
                     "title": "CREDIT_MONITORING_DOCUMENTS",
                     "readonly": true,
-                    "condition": "model.lucCompleted",
+                    "condition": "model.cmCompleted",
                     "items": [{
                         "key": "loanMonitoringDetails.loanMonitoringDocuments",
                         "type": "array",
@@ -1095,7 +555,7 @@ define({
                 }, {
                     "type": "box",
                     "title": "CREDIT_MONITORING_DOCUMENTS",
-                    "condition": "!model.lucCompleted",
+                    "condition": "!model.cmCompleted",
                     "items": [{
                         "key": "loanMonitoringDetails.loanMonitoringDocuments",
                         "type": "array",
@@ -1120,7 +580,7 @@ define({
 
                 {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && model.loanMonitoringDetails.lucEscalated=='No' ",
+                    condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && model.loanMonitoringDetails.CMEscalate=='No' ",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-backward",
@@ -1136,7 +596,7 @@ define({
                                 return out;
                             };
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                orderCMDocuments(model);
                                 var reqData = _.cloneDeep(model);
 
                                 if (!(validateDate(reqData))) {
@@ -1156,7 +616,7 @@ define({
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='CMLegalRecovery'",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-forward",
@@ -1173,7 +633,7 @@ define({
                             };
 
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                orderCMDocuments(model);
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.escalate(reqData).then(function(resp) {
@@ -1187,21 +647,21 @@ define({
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !model.lucCompleted",
+                    condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !model.cmCompleted",
                     "items": [{
                         "type": "submit",
                         "title": "Close"
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "!model.lucCompleted",
+                    condition: "!model.cmCompleted",
                     "items": [{
                         "type": "save",
                         "title": "OffLine Save"
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'|| model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
+                    condition: "model.loanMonitoringDetails.currentStage=='CMEscalate'|| model.loanMonitoringDetails.currentStage=='CMLegalRecovery'",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-backward",
@@ -1217,7 +677,7 @@ define({
                                 return out;
                             };
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                orderCMDocuments(model);
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.goBack(reqData).then(function(resp) {
@@ -1231,7 +691,7 @@ define({
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "model.lucCompleted",
+                    condition: "model.cmCompleted",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-backward",
@@ -1267,10 +727,10 @@ define({
                         });
                         return out;
                     };
-                    orderLUCDocuments(model);
+                    orderCMDocuments(model);
                     var reqData = _.cloneDeep(model);
 
-                    reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                    reqData.loanMonitoringDetails.currentStage = "CMSchedule";
                     if (reqData.loanMonitoringDetails.id) {
                         LucHelper.proceedData(reqData).then(function(resp) {
                             $state.go('Page.LUCDashboard', null);
