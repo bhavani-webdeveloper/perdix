@@ -980,8 +980,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                     
                     var repaymentsData = [];
                     var loanDemandScheduleDtoData = [];
+
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
+                            reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
+
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
                             }
@@ -990,6 +993,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                     }
                     if (reqData.loanDemandScheduleDto && reqData.loanDemandScheduleDto.length) {
                         for (var i = 0; i < reqData.loanDemandScheduleDto.length; i++) {
+                            reqData.loanDemandScheduleDto[i].accountNumber=reqData.loanDemandScheduleDto[i].accountId;
                             if (reqData.loanDemandScheduleDto[i].amount != 0) {
                                 loanDemandScheduleDtoData.push(reqData.loanDemandScheduleDto[i]);
                             }
