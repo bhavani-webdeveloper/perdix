@@ -101,7 +101,7 @@ define({
 						"key": "group.centreCode",
 						"title": "CENTRE_CODE",
 						"type": "select",
-						"enumCode": "centre",
+						"enumCode": "centre_code",
                         "parentEnumCode": "branch_id",
                         "parentValueExpr": "model.group.branchId",
 					}, {

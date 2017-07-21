@@ -60,7 +60,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "CREATE_GROUP",
+            "title": "GROUP",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
@@ -125,10 +125,10 @@ define({
                         "enumCode": "partner"
                             //readonly: readonly
                     }, {
-                        "key": "group.centreId",
+                        "key": "group.centreCode",
                         "title": "CENTRE_CODE",
                         "type": "select",
-                        "enumCode": "centre",
+                        "enumCode": "centre_code",
                         "parentEnumCode": "branch_id",
                         "parentValueExpr": "model.group.branchId",
                             //readonly: readonly

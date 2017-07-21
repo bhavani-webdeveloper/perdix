@@ -306,6 +306,10 @@ define({
                         "lovonly": true,
                         initialize: function(model, form, parentModel, context) {
                             model.branchId = parentModel.group.branchId;
+                            model.centreId = parentModel.group.centreId;
+                        },
+                        "bindMap": {
+                            "centreId": "group.centreId",
                         },
                         "inputMap": {
                             "branchId": {
@@ -318,6 +322,7 @@ define({
                             },
                             "centreId": {
                                 "key": "group.centreId",
+                                "readonly": true,
                                 "title": "CENTRE",
                                 "type": ["number", null],
                                 "enumCode": "centre",
@@ -529,7 +534,7 @@ define({
                         "properties": {
                             "status": {
                                 "title": "STATUS",
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "branchId": {
                                 "title": "BRANCH_NAME",
