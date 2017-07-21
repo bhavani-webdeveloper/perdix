@@ -55,6 +55,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
+                model.group = model.group || {};
                 var centres = SessionStore.getCentres();
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
