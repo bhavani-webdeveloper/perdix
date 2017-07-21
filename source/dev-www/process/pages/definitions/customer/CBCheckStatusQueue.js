@@ -9,7 +9,8 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "CUSTOMER_STATUS_QUEUE",
 		initialize: function (model, form, formCtrl) {
-			model.branchName = SessionStore.getCurrentBranch().branchId;
+			model.branchName = SessionStore.getCurrentBranch().branchName;
+			model.branchId = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
@@ -50,7 +51,7 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 						"x-schema-form": {
 							"type": "select",
 							"parentEnumCode": "branch_id",
-							"parentValueExpr": "model.branchName",
+							"parentValueExpr": "model.branchId",
 							"screenFilter": true	
 						}
 					}
