@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
 
         function backToQueue() {
             $state.go("Page.Engine", {
-                pageName: "loans.groups.GroupLoanRepaymentQueue",
+                pageName: "loans.group.GroupLoanRepaymentQueue",
                 pageId: null
             });
         }
@@ -68,7 +68,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
-
                 //pageId = PartnerCode.GroupCode.isLegacy
                 model.bankName = SessionStore.getBankName();
                 model.branch = SessionStore.getBranch();
@@ -90,7 +89,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                 promise.then(function(resp) { /* SUCCESS */
                         delete resp.$promise;
                         delete resp.$resolved;
-
                         console.warn(resp);
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
@@ -152,7 +150,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 model.repayments.push(aRepayment);
 
                                 model.total += aRepayment.amount; //parseInt(Number(repData.equatedInstallment));
-
                             }
                             if (model.repayments.length < 1) {
                                 PageHelper.showProgress("group-repayment", "No Records", 3000);
