@@ -24,7 +24,7 @@
       "allowedRoles": [
         "WM"
       ]
-  }],
+    }],
   "schema": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
@@ -33,9 +33,7 @@
     "customerMaxAge": 60,
     "isMinimumFingerPrintRequired": 1,
     "required": [
-      "familyHouseholdExpense",
       "bankdetails",
-      "physicalVerification",
       "fingerPrint",
       "personalProfile",
       "customerPhoto",
@@ -204,7 +202,7 @@
               "minimum": 0,
               "maximum": 100000000,
               "captureStages": [
-                
+
               ]
             },
             "healthStatus": {
@@ -666,7 +664,8 @@
             "minimum": 0,
             "maximum": 999999,
             "captureStages": [
-
+             "Stage01",
+             "Completed"
             ]
           },
           "ownership": {
@@ -799,7 +798,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              
+
             ]
           },
           "inCurrentAreaSince": {
@@ -807,7 +806,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              
+
             ]
           },
           "mobilePhone": {
@@ -1069,7 +1068,6 @@
           "enrolledAs": {
             "title": "Enrolled as",
             "type": "string",
-            "refCodeCategory": "enrolled_as",
             "captureStages": [
               "Stage01"
             ]
@@ -1079,6 +1077,25 @@
             "type": "string",
             "captureStages": [
               "Stage01"
+            ]
+          }
+        }
+      },
+      "customerPartner": {
+        "title": "customerPartner",
+        "type": "object",
+        "required": [
+          "partnerCode"
+        ],
+        "properties": {
+          "partnerCode": {
+            "title": "partnerCode Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
             ]
           }
         }
@@ -1413,7 +1430,9 @@
             "title": "Kyc1 Proof Type",
             "type": "string",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ],
             "refCodeCategory": "identity_proof"
           },
@@ -1421,6 +1440,9 @@
             "title": "Kyc1 Proof Document",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1430,6 +1452,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1437,6 +1462,9 @@
             "title": "Kyc1 Issue Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1444,13 +1472,18 @@
             "title": "Kyc1 valid upto Date",
             "type": "string",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "kyc2ProofType": {
             "title": "Kyc2 Proof Type",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ],
             "refCodeCategory": "kyc"
@@ -1459,6 +1492,9 @@
             "title": "Kyc2 Proof Document",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1468,6 +1504,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1475,6 +1514,9 @@
             "title": "Kyc2 Issue Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1482,6 +1524,9 @@
             "title": "Kyc2 valid upto Date",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1489,6 +1534,9 @@
             "title": "kyc1 Reverse Image Path",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -1496,6 +1544,9 @@
             "title": "kyc2 Reverse Image Path",
             "type": "string",
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           }
@@ -1519,7 +1570,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "referenceMiddleName": {
@@ -1528,7 +1581,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "referenceLastName": {
@@ -1537,28 +1592,36 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "relationship": {
             "title": "Relationship",
             "type": "string",
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "occupation": {
             "title": "Occupation",
             "type": "string",
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "houseNo": {
             "title": "Longitude",
             "type": "string",
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "houseNoIsVerified": {
@@ -1567,7 +1630,9 @@
             "minLength": 0,
             "maxLength": 1,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "businessSector": {
@@ -1576,7 +1641,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "businessSubSector": {
@@ -1585,7 +1652,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "selfReportedIncome": {
@@ -1594,7 +1663,9 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "businessName": {
@@ -1603,7 +1674,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "mobileNo": {
@@ -1612,7 +1685,9 @@
             "minLength": 1,
             "maxLength": 10,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "customerResponse": {
@@ -1621,7 +1696,9 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "remarks": {
@@ -1630,7 +1707,9 @@
             "minLength": 1,
             "maxLength": 500,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "address": {
@@ -1639,7 +1718,9 @@
             "minLength": 1,
             "maxLength": 300,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "knownSince": {
@@ -1648,7 +1729,9 @@
             "minimum": 0,
             "maximum": 99,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "opinion": {
@@ -1657,7 +1740,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "financialStatus": {
@@ -1666,7 +1751,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "goodsSold": {
@@ -1675,7 +1762,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "goodsBought": {
@@ -1684,7 +1773,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "paymentTerms": {
@@ -1693,7 +1784,9 @@
             "minLength": 1,
             "maxLength": 50,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "modeOfPayment": {
@@ -1702,7 +1795,9 @@
             "minLength": 1,
             "maxLength": 50,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "outstandingPayable": {
@@ -1711,7 +1806,9 @@
             "minimum": 1,
             "maximum": 10000000,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "outstandingReceivable": {
@@ -1720,7 +1817,9 @@
             "minimum": 1,
             "maximum": 10000000,
             "captureStages": [
-              
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           }
         }
@@ -1730,9 +1829,7 @@
         "type": "array",
         "items": {
           "type": "object",
-          "required": [
-            "assetType"
-          ],
+          "required": [],
           "properties": {
             "nameOfOwnedAsset": {
               "title": "Name Of Owned Asset",
@@ -2383,14 +2480,14 @@
             "minLength": 1,
             "maxLength": 500,
             "captureStages": [
-              
+
             ]
           },
           "udf2": {
             "title": "Availed Any MFI service?",
             "type": "boolean",
             "captureStages": [
-              
+
             ]
           },
           "udf3": {
@@ -2399,21 +2496,21 @@
             "minLength": 1,
             "maxLength": 500,
             "captureStages": [
-              
+
             ]
           },
           "udf4": {
             "title": "Enterprise Name 1",
             "type": "string",
             "captureStages": [
-              
+
             ]
           },
           "udf5": {
             "title": "Enterprise Name 2",
             "type": "string",
             "captureStages": [
-              
+
             ]
           }
         }
@@ -2430,14 +2527,14 @@
             "title": "date1",
             "type": "string",
             "captureStages": [
-              
+
             ]
           },
           "udfDate2": {
             "title": "date2",
             "type": "string",
             "captureStages": [
-              
+
             ]
           }
         }
@@ -2455,7 +2552,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "landLineNo": {
@@ -2464,7 +2561,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "landmark": {
@@ -2473,7 +2570,7 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-              
+
             ]
           },
           "mobilePhone": {
@@ -2482,7 +2579,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "stdCode": {
@@ -2491,7 +2588,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "doorNo": {
@@ -2500,7 +2597,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "street": {
@@ -2509,7 +2606,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "oldCustomerId": {
@@ -2518,7 +2615,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "postOffice": {
@@ -2527,7 +2624,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "locality": {
@@ -2536,7 +2633,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "district": {
@@ -2545,7 +2642,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "state": {
@@ -2554,7 +2651,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "pincode": {
@@ -2563,14 +2660,14 @@
             "minimum": 100000,
             "maximum": 999999,
             "captureStages": [
-              
+
             ]
           },
           "verified": {
             "title": "verified",
             "type": "boolean",
             "captureStages": [
-              
+
             ]
           },
           "villageName": {
@@ -2579,7 +2676,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "distanceFromBranch": {
@@ -2588,7 +2685,7 @@
             "minimum": 0,
             "maximum": 100,
             "captureStages": [
-              
+
             ]
           },
           "properAndMatchingSignboard": {
@@ -2597,7 +2694,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "bribeOffered": {
@@ -2606,7 +2703,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "shopOrganized": {
@@ -2615,7 +2712,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "isIndustrialArea": {
@@ -2624,7 +2721,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "customerAttitudeToKinara": {
@@ -2633,7 +2730,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "bookKeepingQuality": {
@@ -2642,7 +2739,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "challengingChequeBounce": {
@@ -2651,7 +2748,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "allMachinesAreOperational": {
@@ -2660,7 +2757,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "employeeSatisfaction": {
@@ -2669,7 +2766,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "politicalOrPoliceConnections": {
@@ -2678,7 +2775,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "multipleProducts": {
@@ -2687,7 +2784,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "multipleBuyers": {
@@ -2696,7 +2793,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "seasonalBusiness": {
@@ -2705,7 +2802,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "incomeStability": {
@@ -2714,7 +2811,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "utilisationOfBusinessPremises": {
@@ -2723,7 +2820,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "approachForTheBusinessPremises": {
@@ -2732,7 +2829,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "safetyMeasuresForEmployees": {
@@ -2741,7 +2838,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "childLabours": {
@@ -2750,7 +2847,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "isBusinessEffectingTheEnvironment": {
@@ -2759,7 +2856,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "stockMaterialManagement": {
@@ -2768,7 +2865,7 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-              
+
             ]
           },
           "customerWalkinToBusiness": {
@@ -2777,7 +2874,7 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-              
+
             ]
           },
           "partnerCode": {
@@ -2786,7 +2883,7 @@
             "minLength": 0,
             "maxLength": 45,
             "captureStages": [
-              
+
             ]
           }
         }
@@ -2807,7 +2904,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessHistory": {
@@ -2816,7 +2913,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessDescription": {
@@ -2825,7 +2922,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "corporateName": {
@@ -2834,7 +2931,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "registeredOffice": {
@@ -2843,7 +2940,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "companyOperatingSince": {
@@ -2852,7 +2949,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "registeredAt": {
@@ -2861,7 +2958,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "registrationDate": {
@@ -2869,7 +2966,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              
+
             ]
           },
           "registrationNumber": {
@@ -2878,7 +2975,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "companyWebsite": {
@@ -2887,7 +2984,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessName": {
@@ -2896,7 +2993,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessType": {
@@ -2905,7 +3002,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessLine": {
@@ -2914,7 +3011,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessActivity": {
@@ -2923,7 +3020,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessSector": {
@@ -2932,7 +3029,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessSubsector": {
@@ -2941,7 +3038,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessConstitution": {
@@ -2950,7 +3047,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessAddress1": {
@@ -2959,7 +3056,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessAddress2": {
@@ -2968,7 +3065,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "state": {
@@ -2977,7 +3074,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "district": {
@@ -2986,7 +3083,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "pincode": {
@@ -2995,7 +3092,7 @@
             "minimum": 100000,
             "maximum": 999999,
             "captureStages": [
-              
+
             ]
           },
           "businessLandline1": {
@@ -3004,7 +3101,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "landmark": {
@@ -3013,7 +3110,7 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-              
+
             ]
           },
           "referredBy": {
@@ -3022,7 +3119,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "referredName": {
@@ -3031,7 +3128,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "ownership": {
@@ -3040,7 +3137,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "companyRegistered": {
@@ -3049,7 +3146,7 @@
             "minLength": 1,
             "maxLength": 3,
             "captureStages": [
-              
+
             ]
           },
           "registrationType": {
@@ -3058,7 +3155,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "monthlyTurnover": {
@@ -3067,7 +3164,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "monthlyBusinessExpenses": {
@@ -3076,7 +3173,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "avgMonthlyNetIncome": {
@@ -3085,7 +3182,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "noOfFemaleEmployees": {
@@ -3094,7 +3191,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "noOfMaleEmployees": {
@@ -3103,7 +3200,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "avgMonthlySalary": {
@@ -3112,7 +3209,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "itrAvailable": {
@@ -3121,7 +3218,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "anyPartnerOfPresentBusiness": {
@@ -3130,7 +3227,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "partnershipDissolvedDate": {
@@ -3139,7 +3236,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "noOfPartners": {
@@ -3148,7 +3245,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "businessInCurrentAddressSince": {
@@ -3157,7 +3254,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "businessInPresentAreaSince": {
@@ -3166,7 +3263,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "rawMaterial": {
@@ -3175,7 +3272,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "cashAtBank": {
@@ -3184,7 +3281,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
-              
+
             ]
           },
           "workInProgress": {
@@ -3193,7 +3290,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
-              
+
             ]
           },
           "isGSTAvailable": {
@@ -3202,7 +3299,7 @@
             "minLength": 0,
             "maxLength": 10,
             "captureStages": [
-              
+
             ]
           },
           "companyEmailId": {
@@ -3211,7 +3308,7 @@
             "minLength": 0,
             "maxLength": 100,
             "captureStages": [
-              
+
             ]
           },
           "finishedGoods": {
@@ -3220,7 +3317,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
-              
+
             ]
           }
         }
@@ -3240,7 +3337,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "relationshipType": {
@@ -3248,14 +3345,14 @@
             "type": "string",
             "refCodeCategory": "relationship_type",
             "captureStages": [
-              
+
             ]
           },
           "linkedToCustomerId": {
             "title": "linkedToCustomerId",
             "type": "number",
             "captureStages": [
-              
+
             ]
           },
           "linkedToCompleted": {
@@ -3264,7 +3361,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "businessInvolvement": {
@@ -3273,7 +3370,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
-              
+
             ]
           },
           "partnerOfAnyOtherCompany": {
@@ -3282,7 +3379,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
-              
+
             ]
           },
           "otherBusinessClosed": {
@@ -3291,7 +3388,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
-              
+
             ]
           },
           "otherBusinessClosureDate": {
@@ -3299,7 +3396,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              
+
             ]
           },
           "experienceInBusiness": {
@@ -3308,7 +3405,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
-              
+
             ]
           }
         }
@@ -3325,7 +3422,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "customerBankName": {
@@ -3334,7 +3431,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "confirmedAccountNumber": {
@@ -3343,7 +3440,7 @@
             "minimum": 0,
             "maximum": 100,
             "captureStages": [
-              
+
             ]
           },
           "limit": {
@@ -3352,14 +3449,14 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "bankStatementDocId": {
             "title": "Bank Statement Doc Id",
             "type": "string",
             "captureStages": [
-              
+
             ]
           },
           "customerBankBranchName": {
@@ -3368,7 +3465,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "ifscCode": {
@@ -3377,7 +3474,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "accountNumber": {
@@ -3386,7 +3483,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "accountType": {
@@ -3395,28 +3492,28 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
-              
+
             ]
           },
           "isDisbersementAccount": {
             "title": "DISBURSEMENT_ACCOUNT",
             "type": "boolean",
             "captureStages": [
-              
+
             ]
           },
           "bankingSince": {
             "title": "BANKING_SINCE",
             "type": "string",
             "captureStages": [
-              
+
             ]
           },
           "netBankingAvailable": {
             "title": "netBankingAvailable",
             "type": "string",
             "captureStages": [
-              
+
             ]
           },
           "sanctionedAmount": {
@@ -3425,14 +3522,14 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-              
+
             ]
           },
           "customerNameAsInBank": {
             "title": "customerNameAsInBank",
             "type": "string",
             "captureStages": [
-              
+
             ]
           }
         }
@@ -3455,7 +3552,7 @@
               "minLength": 1,
               "maxLength": 1000,
               "captureStages": [
-                
+
               ]
             },
             "registrationNumber": {
@@ -3464,7 +3561,7 @@
               "minLength": 1,
               "maxLength": 1000,
               "captureStages": [
-                
+
               ]
             },
             "registeredDate": {
@@ -3472,7 +3569,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             },
             "expiryDate": {
@@ -3480,7 +3577,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             },
             "documentId": {
@@ -3489,7 +3586,7 @@
               "minLength": 1,
               "maxLength": 500,
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3514,7 +3611,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             },
             "totalDeposits": {
@@ -3523,7 +3620,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "totalWihdrawals": {
@@ -3532,7 +3629,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "balanceAsOn15th": {
@@ -3541,7 +3638,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "noOfChequeBounced": {
@@ -3550,7 +3647,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "noOfEmiChequeBounced": {
@@ -3559,7 +3656,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3582,21 +3679,21 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "incomeType": {
               "title": "Income Type",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "invoiceType": {
               "title": "Invoice Type",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "amount": {
@@ -3604,7 +3701,7 @@
               "type": "number",
               "minimum": 0,
               "captureStages": [
-                
+
               ]
             },
             "incomeSalesDate": {
@@ -3612,7 +3709,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3634,7 +3731,7 @@
               "type": "string",
               "refCodeCategory": "occupation",
               "captureStages": [
-                
+
               ]
             },
             "amount": {
@@ -3643,7 +3740,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "otherBusinessIncomeDate": {
@@ -3651,7 +3748,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3674,7 +3771,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "rawMaterialType": {
@@ -3682,7 +3779,7 @@
               "type": "string",
               "refCodeCategory": "income_type",
               "captureStages": [
-                
+
               ]
             },
             "amount": {
@@ -3691,7 +3788,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "rawMaterialDate": {
@@ -3699,7 +3796,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3718,7 +3815,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "manufacturerName": {
@@ -3727,7 +3824,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "hypothecatedTo": {
@@ -3736,7 +3833,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "hypothecatedToUs": {
@@ -3745,7 +3842,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "machineType": {
@@ -3753,7 +3850,7 @@
               "type": "string",
               "refCodeCategory": "collateral_type",
               "captureStages": [
-                
+
               ]
             },
             "machineModel": {
@@ -3762,7 +3859,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "serialNumber": {
@@ -3771,7 +3868,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "purchasePrice": {
@@ -3780,7 +3877,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "machinePurchasedYear": {
@@ -3789,7 +3886,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "presentValue": {
@@ -3798,7 +3895,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "isTheMachineNew": {
@@ -3806,14 +3903,14 @@
               "type": "string",
               "refCodeCategory": "new_machine",
               "captureStages": [
-                
+
               ]
             },
             "fundingSource": {
               "title": "Funding Source",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "isTheMachineHypothecated": {
@@ -3821,7 +3918,7 @@
               "type": "string",
               "refCodeCategory": "decisionmaker",
               "captureStages": [
-                
+
               ]
             },
             "machinePermanentlyFixedToBuilding": {
@@ -3829,7 +3926,7 @@
               "type": "string",
               "refCodeCategory": "decisionmaker",
               "captureStages": [
-                
+
               ]
             },
             "machineBillsDocId": {
@@ -3838,7 +3935,7 @@
               "minLength": 1,
               "maxLength": 500,
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3859,7 +3956,7 @@
               "type": "string",
               "refCodeCategory": "enterprice_asset_types",
               "captureStages": [
-                
+
               ]
             },
             "vehicleModel": {
@@ -3868,7 +3965,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "valueOfAsset": {
@@ -3877,7 +3974,7 @@
               "minimum": 0,
               "maximum": 10000000000,
               "captureStages": [
-                
+
               ]
             }
           }
@@ -3907,7 +4004,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "purchases": {
@@ -3916,7 +4013,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "operatingExpenses": {
@@ -3925,7 +4022,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "householdExpenses": {
@@ -3934,7 +4031,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "fixedObligations": {
@@ -3943,7 +4040,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "netBusinessIncome": {
@@ -3952,7 +4049,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "otherIncome": {
@@ -3961,7 +4058,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "disposableIncome": {
@@ -3970,7 +4067,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "instalmentAmount": {
@@ -3979,7 +4076,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "availableSurplus": {
@@ -3988,7 +4085,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             }
           }
@@ -4016,14 +4113,14 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "customerSince": {
               "title": "Customer Since",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "sector": {
@@ -4032,7 +4129,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-               
+
               ]
             },
             "subSector": {
@@ -4041,7 +4138,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "product": {
@@ -4050,7 +4147,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
-                
+
               ]
             },
             "paymentTerms": {
@@ -4059,7 +4156,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-                
+
               ]
             },
             "paymentDate": {
@@ -4067,7 +4164,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
-                
+
               ]
             },
             "paymentFrequency": {
@@ -4075,7 +4172,7 @@
               "type": "string",
               "refCodeCategory": "payment_frequency",
               "captureStages": [
-                
+
               ]
             },
             "receivablesOutstanding": {
@@ -4084,7 +4181,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
-               
+
               ]
             }
           }
@@ -4106,28 +4203,28 @@
               "title": "Supplier Name",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "supplierType": {
               "title": "Supplier Type",
               "type": "string",
               "captureStages": [
-                
+
               ]
             },
             "paymentTerms": {
               "title": "Payment Terms",
               "type": "integer",
               "captureStages": [
-                
+
               ]
             },
             "amount": {
               "title": "Amount",
               "type": "number",
               "captureStages": [
-                
+
               ]
             }
           }
@@ -4146,52 +4243,52 @@
               "minLength": 1,
               "maxLength": 100,
               "enum": [
-                
+
               ],
               "captureStages": [
-                
+
               ]
             },
             "fileId": {
               "title": "fileId",
               "type": "string",
               "captureStages": [
-               
+
               ]
             },
             "doubtful": {
               "title": "doubtful",
               "type": "number",
               "captureStages": [
-                
+
               ]
             },
             "loss": {
               "title": "loss",
               "type": "number",
               "captureStages": [
-                
+
               ]
             },
             "specialMentionAccount": {
               "title": "specialMentionAccount",
               "type": "number",
               "captureStages": [
-               
+
               ]
             },
             "standard": {
               "title": "standard",
               "type": "number",
               "captureStages": [
-                
+
               ]
             },
             "subStandard": {
               "title": "subStandard",
               "type": "number",
               "captureStages": [
-                
+
               ]
             }
           }
