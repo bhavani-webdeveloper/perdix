@@ -108,8 +108,13 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                         if(model.repayment.transactionName=='Scheduled Demand')
                         {
                             model.repayment.amount= parseFloat(data.totalDemandDue + data.totalFeeDue);
-
+                            model.repayment.demandAmount=parseFloat(data.totalDemandDue + data.totalFeeDue);
+                        }else if (model.repayment.transactionName == 'Pre-closure') {
+                            model.repayment.demandAmount = model.repayment.totalPayoffAmountToBePaid;
+                        } else if (model.repayment.transactionName == 'Fee Payment') {
+                            model.repayment.demandAmount = model.repayment.totalFeeDue;
                         }
+                       
                         model.repayment.accountNumber =loanAccountNo;
                         model.repayment.instrument='CASH';
 
@@ -704,6 +709,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                         model.repayment.tempencoreId=model.repayment.accountNumber;
                         model.repayment.accountId=model.repayment.accountNumber;
                         model.repayment.accountNumber=model.repayment.tempaccountId;
+
+                        
                         var postData = _.cloneDeep(model.repayment);
                         postData.amount = parseInt(Number(postData.amount)) + "";
                         LoanAccount.repay(postData, function(resp, header) {
