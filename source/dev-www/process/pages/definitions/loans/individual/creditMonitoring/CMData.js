@@ -729,11 +729,10 @@ define({
                     };
                     orderCMDocuments(model);
                     var reqData = _.cloneDeep(model);
-
                     reqData.loanMonitoringDetails.currentStage = "CMSchedule";
                     if (reqData.loanMonitoringDetails.id) {
                         LucHelper.proceedData(reqData).then(function(resp) {
-                            $state.go('Page.LUCDashboard', null);
+                            $state.go('Page.CreditMonitoringDashboard', null);
                         });
 
                     } else {

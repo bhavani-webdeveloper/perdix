@@ -81,7 +81,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
             if (cmcq) {
                 CreditMonitoring.search({
                     'monitoringType': "CM",
-                    'currentStage': "CMCompleted",
+                    'currentStage': "Completed",
                 }).$promise.then(function(response, headerGetter) {
                     cmcq.data = response.headers['x-total-count'];
                 }, function() {
