@@ -96,7 +96,7 @@ define({
 							data: 'partnerCode'
 						}, {
 							title: 'GROUP_CODE',
-							data: 'productCode'
+							data: 'groupCode'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
