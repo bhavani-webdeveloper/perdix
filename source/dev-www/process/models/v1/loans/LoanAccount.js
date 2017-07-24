@@ -177,8 +177,7 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
           }),*/
         getGroupRepaymentDetails: {
             method: 'GET',
-            url: endpoint + '/grouprepayment/:partnerCode/:groupCode/:isLegacy',
-            isArray: true
+            url: endpoint + '/grouprepayment/:partnerCode/:groupCode/:isLegacy'
         },
         groupRepayment: {
             method: 'POST',
