@@ -35,7 +35,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             fields['udf10'] = Number(fields['udf10']);
             fields['udf11'] = Number(fields['udf11']);
             fields['udf28'] = Number(fields['udf28']);
-            fields['udf32'] = Number(fields['udf32']);
+            //fields['udf32'] = Number(fields['udf32']);
             fields['udf1'] = Boolean(fields['udf1']);
             fields['udf6'] = Boolean(fields['udf6']);
             fields['udf4'] = Number(fields['udf4']);
@@ -812,153 +812,140 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         {
             "type": "box",
             "title": "T_ASSETS",
-            "items": [
-                {
-                    key: "customer.physicalAssets",
-                    type: "array",
-                    startEmpty: true,
-                    items: [
-                               {
-                                   key: "customer.physicalAssets[].assetType",
-                                   "title": "ASSET_TYPE",
-                                   type: "select"
-                               }, {
-                                   key: "customer.physicalAssets[].ownedAssetDetails",
-                                   type: "lov",
-                                   autolov: true,
-                                   lovonly:true,
-                                   bindMap: {},
-                                   searchHelper: formHelper,
-                                   search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var ownedAssetDetails = formHelper.enum('asset_Details').data;
-                                       var out = [];
-                                       if (ownedAssetDetails && ownedAssetDetails.length) {
-                                           for (var i = 0; i < ownedAssetDetails.length; i++) {
-                                               
-                                                   if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
-                                                       out.push({
-                                                           name: ownedAssetDetails[i].name,
-                                                           id: ownedAssetDetails[i].value
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
-                                       {
-                                            out.push({
-                                                name: "No Records",
-                                            })
-                                       }
-                                       return $q.resolve({
-                                           headers: {
-                                               "x-total-count": out.length
-                                           },
-                                           body: out
-                                       });
-                                   },
-                                   onSelect: function(valueObj, model, context) {
-                                    if(valueObj.name=="No Records")
-                                    {
-                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = ''; 
-                                    }else{
-                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = valueObj.name;
-                                    }
-                                   },
-                                   getListDisplayItem: function(item, index) {
-                                        return [
-                                            item.name
-                                        ];
-                                   }
-                               }, {
-                                   key: "customer.physicalAssets[].unit",
-                                   "title": "UNIT",
-                                   type: "lov",
-                                   autolov: true,
-                                   lovonly:true,
-                                   bindMap: {},
-                                   searchHelper: formHelper,
-                                   search: function(inputModel, form, model, context) {
-                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
-                                       var assetunit = formHelper.enum('asset_unit').data;
-                                       var out = [];
-                                       if (assetunit && assetunit.length) {
-                                           for (var i = 0; i < assetunit.length; i++) {
-                                               
-                                                   if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase() ){
-                                                       out.push({
-                                                           name: assetunit[i].name,
-                                                       })
-                                                   }
-                                           }
-                                       }
-                                       if(!out.length)
-                                       {
-                                            out.push({
-                                                name: "No Records",
-                                            })
-                                       }
-                                       return $q.resolve({
-                                           headers: {
-                                               "x-total-count": out.length
-                                           },
-                                           body: out
-                                       });
-                                   },
-                                   onSelect: function(valueObj, model, context) {
-                                    if(valueObj.name=="No Records")
-                                    {
-                                        model.customer.physicalAssets[context.arrayIndex].unit = ''; 
-                                    }else{
-                                        model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
-                                    }
-                                   },
-                                   getListDisplayItem: function(item, index) {
-                                        return [
-                                            item.name
-                                        ];
-                                   }
-                               },
-                               "customer.physicalAssets[].numberOfOwnedAsset", 
-                               {
-                                   key: "customer.physicalAssets[].ownedAssetValue",
-                               }
-                    ]
-                },
-                {
-                    key: "customer.financialAssets",
-                    title:"FINANCIAL_ASSETS",
-                    type: "array",
-                    startEmpty: true,
-                    items: [
-                        {
-                            key:"customer.financialAssets[].instrumentType",
-                            type:"select"
-                        },
-                        "customer.financialAssets[].nameOfInstitution",
-                        {
-                            key:"customer.financialAssets[].instituteType",
-                            type:"select"
-                        },
-                        {
-                            key: "customer.financialAssets[].amountInPaisa",
-                            type: "amount"
-                        },
-                        {
-                            key:"customer.financialAssets[].frequencyOfDeposite",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.financialAssets[].startDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.financialAssets[].maturityDate",
-                            type:"date"
+            "items": [{
+                key: "customer.physicalAssets",
+                type: "array",
+                items: [{
+                    key: "customer.physicalAssets[].assetType",
+                    "title": "ASSET_TYPE",
+                    "enumCode": "asset_type",
+                    type: "select"
+                }, {
+                    key: "customer.physicalAssets[].ownedAssetDetails",
+                    type: "lov",
+                    autolov: true,
+                    lovonly: true,
+                    bindMap: {},
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
+                        var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                        var out = [];
+                        if (ownedAssetDetails && ownedAssetDetails.length) {
+                            for (var i = 0; i < ownedAssetDetails.length; i++) {
+
+                                if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                    out.push({
+                                        name: ownedAssetDetails[i].name,
+                                        id: ownedAssetDetails[i].value
+                                    })
+                                }
+                            }
                         }
-                    ]
-                }
-            ]
+                        if (!out.length) {
+                            out.push({
+                                name: "No Records",
+                            })
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        if (valueObj.name == "No Records") {
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = '';
+                        } else {
+                            model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = valueObj.name;
+                        }
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                }, {
+                    key: "customer.physicalAssets[].unit",
+                    "title": "UNIT",
+                    type: "lov",
+                    autolov: true,
+                    lovonly: true,
+                    bindMap: {},
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
+                        var assetunit = formHelper.enum('asset_unit').data;
+                        var out = [];
+                        if (assetunit && assetunit.length) {
+                            for (var i = 0; i < assetunit.length; i++) {
+
+                                if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                    out.push({
+                                        name: assetunit[i].name,
+                                    })
+                                }
+                            }
+                        }
+                        if (!out.length) {
+                            out.push({
+                                name: "No Records",
+                            })
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        if (valueObj.name == "No Records") {
+                            model.customer.physicalAssets[context.arrayIndex].unit = '';
+                        } else {
+                            model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
+                        }
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                }, {
+                    key: "customer.physicalAssets[].numberOfOwnedAsset",
+                    "title": "NUMBER_OF_OWNED_ASSET",
+                }, {
+                    key: "customer.physicalAssets[].ownedAssetValue",
+                    "title": "OWNED_ASSET_VALUE"
+                }]
+            }, {
+                key: "customer.financialAssets",
+                title: "Financial Assets",
+                type: "array",
+                startEmpty: true,
+                items: [{
+                        key: "customer.financialAssets[].instrumentType",
+                        type: "select"
+                    },
+                    "customer.financialAssets[].nameOfInstitution", {
+                        key: "customer.financialAssets[].instituteType",
+                        type: "select"
+                    }, {
+                        key: "customer.financialAssets[].amountInPaisa",
+                        type: "amount"
+                    }, {
+                        key: "customer.financialAssets[].frequencyOfDeposite",
+                        type: "select"
+                    }, {
+                        key: "customer.financialAssets[].startDate",
+                        type: "date"
+                    }, {
+                        key: "customer.financialAssets[].maturityDate",
+                        type: "date"
+                    }
+                ]
+            }]
         },
         {
             type:"box",
@@ -1071,7 +1058,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf32",
                                 title:"NUMBER_OF_ROOMS",
-                                type: "string"
+                                "type":"string",
+                                "schema":{
+                                    "type":"string"
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf6"

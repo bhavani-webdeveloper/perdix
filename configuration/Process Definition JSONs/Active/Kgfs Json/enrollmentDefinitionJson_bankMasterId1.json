@@ -1045,6 +1045,17 @@
             "captureStages": [
 
             ]
+          },
+          "biometricEnrollment": {
+            "title": "biometricEnrollment",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 100,
+            "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
+            ]
           }
         }
       },

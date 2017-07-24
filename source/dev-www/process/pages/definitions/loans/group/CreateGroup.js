@@ -353,7 +353,7 @@ define({
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
-                            "id": "group.jlgGroupMembers[arrayIndex].CustomerId",
+                            "customerId": "group.jlgGroupMembers[arrayIndex].CustomerId",
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
@@ -375,7 +375,26 @@ define({
                                 'centreId': inputModel.centreId,
                                 'fromDate': nDaysBack.format('YYYY-MM-DD'),
                                 'toDate': today.format('YYYY-MM-DD')
-                            }).$promise;
+                            }).$promise.then(function(response){
+                                $log.info(response.body);
+                                var ret = [];
+                                angular.forEach(response.body,function(value,key){
+                                    var isDuplicate = false;
+                                    for(var i=0;i<ret.length;i++){
+                                        if(ret[i].urnNo === value.urnNo){
+                                            isDuplicate = true;
+                                            break;
+                                        }
+                                    }
+                                    if(value.urnNo!=null && !isDuplicate) ret.push(value);
+                                });
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": ret.length
+                                    },
+                                    body: ret
+                                });
+                            });
                             return promise;
                         },
                         getListDisplayItem: function(data, index) {
