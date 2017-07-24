@@ -38,7 +38,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             //fields['udf32'] = Number(fields['udf32']);
             fields['udf1'] = Boolean(fields['udf1']);
             fields['udf6'] = Boolean(fields['udf6']);
-            fields['udf4'] = Number(fields['udf4']);
+            //fields['udf4'] = Number(fields['udf4']);
 
             for (var i = 1; i <= 40; i++) {
                 if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
@@ -1037,8 +1037,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-                                type: "string"
-
+                                type: "string",
+                                "schema":{
+                                    "type":"string"
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf5",
