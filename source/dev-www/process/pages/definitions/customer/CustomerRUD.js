@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__CustomerRUD",
     ["$log", "$q", "Enrollment", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state',
-        'formHelper', "BASE_URL", "$window", "SessionStore", "Utils",
+        'formHelper', "BASE_URL", "$window", "SessionStore", "Utils", "EnrollmentHelper",
         function ($log, $q, Enrollment, PageHelper, irfProgressMessage, $stateParams, $state,
-                  formHelper, BASE_URL, $window, SessionStore, Utils) {
+                  formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
 
             var fixData = function (model) { 
                 $log.info("Before fixData");
