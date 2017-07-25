@@ -425,6 +425,15 @@ return {
                     }]
                 }]
             }, {
+                "type": "section",
+                "htmlClass": "col-sm-6",
+                "items": [{
+                    "title": "DSC_STATUS",
+                    "readonly":true,
+                    "key": "group.jlgGroupMembers[].dscStatus",
+                    "type": "text"
+                }]
+            }, {
                 "notitle": true,
                 "readonly":true,
                 "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
