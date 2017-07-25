@@ -109,7 +109,7 @@ define({
 			                    PageHelper.showLoader();
 								Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
 				                {
-				                    if(moment().format()>=moment(item.cgtDate1, 'YYYY-MM-DD').add('days', result).format())
+				                    if(moment().format()>=moment(item.cgtEndDate1, 'YYYY-MM-DD').add('days', result).format())
 				                    {
 
 				                            $log.info(item);
@@ -126,7 +126,7 @@ define({
 				                    else
 				                    {
 				                        PageHelper.hideLoader();
-				                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 Date : ('+item.cgtDate1+')',5000);
+				                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 End Date : ('+item.cgtEndDate1+')',5000);
 				                                  
 				                    }
 				                },function(data)
