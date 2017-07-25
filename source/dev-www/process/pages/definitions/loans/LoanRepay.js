@@ -1,6 +1,7 @@
-irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils) {
+irf.pageCollection.factory(irf.page('loans.LoanRepay'),
+ ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils",'Queries',
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils,Queries) {
 
         function backToLoansList() {
             try {
@@ -57,6 +58,17 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                 var customerId = ($stateParams.pageId.split("."))[2];
                 var bcaccountnumber = ($stateParams.pageId.split("."))[3];
                 var partner = ($stateParams.pageId.split("."))[4];
+
+                Queries.getUserBankDetails(model.bankName).then(function(value) {
+                    model.bank = value.body;
+                    model.helpline = value.body[0].help_line_no;
+
+                    $log.info(model.bank);
+                    $log.info(model.bank);
+                    $log.info("bank details:available");
+                }, function(err) {
+                    $log.info("bank details is not available");
+                });
 
                 $log.info(bcaccountnumber);
 
@@ -409,6 +421,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
 
                             var fullPrintData = new PrinterData();
 
+                            var helpline=model.helpline||"";
+
                             var opts = {
                                 'branch': model.branch,
                                 'entity_name': model.bankName + " KGFS",
@@ -418,7 +432,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                                 'address2': 'Kanagam Village, Taramani',
                                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
                                 'website': "http://ruralchannels.kgfs.co.in",
-                                'helpline': '18001029370',
+                                'helpline': helpline,
                                 'branch_id': model.branchId,
                                 'branch_code': model.branchCode
                             };
