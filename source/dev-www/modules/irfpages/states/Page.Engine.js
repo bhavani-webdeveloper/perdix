@@ -98,7 +98,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 					$scope.error = true;
 				}
 			}, function(err){
-        		$log.info("[REQUIRE] Error loading page(" + toParams.pageName + ")");
+        		$log.info("[REQUIRE] Error loading page(" + $scope.pageName + ")");
         		$log.error(err);
         	})
 		} catch(e) {
@@ -108,7 +108,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
-	var setupPage = function () {
+	function setupPage () {
 		if ($scope.page) {
 			if($scope.page.type == 'schema-form') {
 				$scope.model = entityManager.getModel($scope.pageName);
