@@ -14,6 +14,15 @@ define({
 			model.group.tenure = parseInt(model.group.tenure);
 		};
 
+		var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        }
+
 		var fillNames = function(model) {
 			var deferred = $q.defer();
 			angular.forEach(model.group.jlgGroupMembers, function(member, key) {
@@ -214,8 +223,7 @@ define({
 			actions: {
 				preSave: function(model, form, formName) {},
 				closeGroup: function(model, form) {
-					if(!validateForm(formCtrl)) 
-                        return;
+					
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Close-proceed', 'Working...');
                     PageHelper.clearErrors();
