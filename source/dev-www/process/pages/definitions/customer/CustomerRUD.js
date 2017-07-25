@@ -11,7 +11,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     var fields = model.customer.udf.userDefinedFieldValues;
                     $log.info(fields);
                     fields['udf17'] = Number(fields['udf17']);
-                    filds['udf10'] = Number(fields['udf10']);
+                    fields['udf10'] = Number(fields['udf10']);
                     fields['udf11'] = Number(fields['udf11']);
                     fields['udf28'] = Number(fields['udf28']);
                     fields['udf32'] = Number(fields['udf32']);
