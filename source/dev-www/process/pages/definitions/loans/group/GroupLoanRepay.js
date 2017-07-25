@@ -1,9 +1,10 @@
-irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q", "SessionStore", "$state", "formHelper",
+irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
+ ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts','Queries',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts,Queries) {
 
         function backToQueue() {
             $state.go("Page.Engine", {
@@ -68,6 +69,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
+                model.bank={};
 
                 //pageId = PartnerCode.GroupCode.isLegacy
                 model.bankName = SessionStore.getBankName();
@@ -81,6 +83,17 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                 } catch (err) {
                     isLegacy = false;
                 }
+
+                Queries.getUserBankDetails(model.bankName).then(function(value) {
+                    model.bank = value.body;
+                    model.helpline = value.body[0].help_line_no;
+
+                    $log.info(model.bank);
+                    $log.info(model.bank);
+                    $log.info("bank details:available");
+                }, function(err) {
+                    $log.info("bank details is not available");
+                });
 
                 var promise = LoanAccount.getGroupRepaymentDetails({
                     partnerCode: groupParams[0],
@@ -609,6 +622,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         }
 
                         var fullPrintData = new PrinterData();
+                        var helpline=model.helpline||"";
 
                         var opts = {
                             'branch': model.branch,
@@ -619,9 +633,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                             'address2': 'Kanagam Village, Taramani',
                             'address3': 'Chennai - 600113, Phone: 91 44 66687000',
                             'website': "http://ruralchannels.kgfs.co.in",
-                            'helpline': '18001029370',
+                            'helpline': helpline,
                             'branch_id': model.branchId,
-                            'branch_code': model.branchCode
+                            'branch_code': model.branchCode,
+
                         };
 
                         if (model._partnerCode != "AXIS") {

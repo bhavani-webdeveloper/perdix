@@ -136,6 +136,25 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getUserBankDetails = function(bankName) {
+            var deferred = $q.defer();
+            var request = {
+                "bankName": bankName
+            };
+            resource.getResult("userbank.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
         resource.getLoanAccountByAccountNumber = function(accountNumber) {
             var deferred = $q.defer();
             resource.getResult('loanAccountsByAccountNumber', {

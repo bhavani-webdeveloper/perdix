@@ -25,6 +25,7 @@ customersBankAccounts.list=SELECT cb.*, c.urn_no, c.first_name from customer_ban
 loanCustomerRelations.list=select l.urn, l.relation, c.first_name from loan_customer_relation l left join customer c on (l.urn = c.urn_no) where l.loan_id = (select id from loan_accounts where account_number = :accountNumber)
 collectionsBranchSet.list=select * from collections_branch_set
 cbsBanks.list=select * from cbs_banks
+userbank.list=select * from bank_master where bank_name= :bankName
 unApprovedPaymentForAccount.list=SELECT id, account_number, current_stage, repayment_amount from loan_collections where account_number=:account_number and current_stage not in ('Completed', 'Rejected')
 Allloanpurpose1.list=SELECT DISTINCT lm.loan_purpose_first_level purpose1 FROM loan_purpose_mapping_master lm where lm.loan_purpose_first_level NOT IN ('Line of credit','Debt Consolidation')
 Allloanpurpose2.list=SELECT DISTINCT lm.loan_purpose_second_level purpose2 FROM loan_purpose_mapping_master lm WHERE lm.loan_purpose_first_level = :purpose1
