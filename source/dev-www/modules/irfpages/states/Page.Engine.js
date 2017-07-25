@@ -72,42 +72,6 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	$log.info("Page.Engine.html loaded");
 	/* =================================================================================== */
 
-	$scope.pageName = $stateParams.pageName;
-	$scope.formName = irf.form($scope.pageName);
-	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
-	$scope.pageId = $stateParams.pageId;
-	$scope.error = false;
-	try {
-		$scope.page = $injector.get(irf.page($scope.pageName));
-		setupPage();
-	} catch (e) {
-		try {
-			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
-			PageHelper.showLoader();
-			require([pageDefPath], function(pageDefObj){
-        		/* Page is loaded, now bind it to pages */
-        		$log.info("[REQUIRE] Done loading page(" + $scope.pageName + ")");
-        		irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
-
-				try {
-					$scope.page = $injector.get(irf.page($scope.pageName));
-					setupPage();
-					PageHelper.hideLoader();
-				} catch (e) {
-					$log.error(e);
-					$scope.error = true;
-				}
-			}, function(err){
-        		$log.info("[REQUIRE] Error loading page(" + $scope.pageName + ")");
-        		$log.error(err);
-        	})
-		} catch(e) {
-			$log.error(e);
-			$scope.error = true;
-		}
-		//$state.go('Page.EngineError', {pageName:$scope.pageName});
-	}
-
 	function setupPage () {
 		if ($scope.page) {
 			if($scope.page.type == 'schema-form') {
@@ -176,6 +140,42 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				}
 			}
 		}
+	}
+
+	$scope.pageName = $stateParams.pageName;
+	$scope.formName = irf.form($scope.pageName);
+	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
+	$scope.pageId = $stateParams.pageId;
+	$scope.error = false;
+	try {
+		$scope.page = $injector.get(irf.page($scope.pageName));
+		setupPage();
+	} catch (e) {
+		try {
+			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
+			PageHelper.showLoader();
+			require([pageDefPath], function(pageDefObj){
+        		/* Page is loaded, now bind it to pages */
+        		$log.info("[REQUIRE] Done loading page(" + $scope.pageName + ")");
+        		irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+
+				try {
+					$scope.page = $injector.get(irf.page($scope.pageName));
+					setupPage();
+					PageHelper.hideLoader();
+				} catch (e) {
+					$log.error(e);
+					$scope.error = true;
+				}
+			}, function(err){
+        		$log.info("[REQUIRE] Error loading page(" + $scope.pageName + ")");
+        		$log.error(err);
+        	})
+		} catch(e) {
+			$log.error(e);
+			$scope.error = true;
+		}
+		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
 	$scope.callAction = function(actionId) {
