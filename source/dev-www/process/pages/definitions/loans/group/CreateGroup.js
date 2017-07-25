@@ -404,6 +404,7 @@ define({
                                 id: model.group.jlgGroupMembers[context.arrayIndex].CustomerId,
                             }).$promise.then(function(res) {
                                 var familyMembers = [];
+                                model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                 //var obj={};
                                 for (i in res.familyMembers) {
                                     var obj = {};

@@ -214,29 +214,23 @@ define({
 			actions: {
 				preSave: function(model, form, formName) {},
 				closeGroup: function(model, form) {
-					if (window.confirm("Close Group - Are you sure?")) {
-						var remarks = window.prompt("Enter Remarks", "Test Remarks");
-						if (remarks) {
-							PageHelper.showLoader();
-							irfProgressMessage.pop('close-group', "Working...");
-							Groups.update({
-								service: "close"
-							}, {
-								"groupId": model.group.id,
-								"remarks": remarks
-							}, function(resp, header) {
-
-								PageHelper.hideLoader();
-								irfProgressMessage.pop('close-group', "Done", 5000);
-								//backToDashboard();
-							}, function(res) {
-								$log.error(res);
-								PageHelper.hideLoader();
-								irfProgressMessage.pop('close-group', "Oops. An Error Occurred, Please try Again", 5000);
-								PageHelper.showErrors(res);
-							});
-						}
-					}
+					if(!validateForm(formCtrl)) 
+                        return;
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Close-proceed', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";
+                    model.group.groupStatus=false;
+                    var reqData = _.cloneDeep(model);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Close-proceed', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });
 				},
 			}
 		}
