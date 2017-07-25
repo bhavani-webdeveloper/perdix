@@ -476,8 +476,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 {
                     "key":"customer.additionalKYCs",
                     "type":"array",
-                    "add":null,
-                    "remove":null,
+                    "startEmpty": true,
+                    "schema": {
+                        "maxItems": 1
+                    },
                     "title":"ADDITIONAL_KYC",
                     "items":[
                         {
@@ -491,16 +493,19 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ProofType",
+                            required: true,
                             type:"select"
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ImagePath",
+                            required: true,
                             type:"file",
                             fileType:"image/*",
                             "offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            required: true,
                             type:"file",
                             fileType:"image/*",
                             "offline": true

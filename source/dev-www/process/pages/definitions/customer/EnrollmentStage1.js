@@ -30,11 +30,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     break;
                 }
             }
-            model.branchId = allowedBranch.length ? allowedBranch[0].value : '';
+            model.customer.customerBranchId = allowedBranch.length ? allowedBranch[0].value : '';
             model.customer.kgfsBankName = SessionStore.getBankName();
             $log.info(model.customer.kgfsBankName);
             $log.info(formHelper.enum('bank'));
-            $log.info("ProfileInformation page got initialized:"+model.branchId);
+            $log.info("ProfileInformation page got initialized:"+model.customer.customerBranchId);
         },
         modelPromise: function(pageId, _model) {
             var deferred = $q.defer();
@@ -42,8 +42,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             irfProgressMessage.pop("enrollment-save","Loading Customer Data...");
             Enrollment.getCustomerById({id:pageId},function(resp,header){
                 var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                model.branchId = _model.branchId;
                 model.customer = resp;
+                model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
                 model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                 model = EnrollmentHelper.fixData(model);
                 if (model.customer.dateOfBirth) {
@@ -100,7 +100,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     type:"select",
                     "enumCode": "centre",
                     "parentEnumCode": "branch_id",
-                    "parentValueExpr": "model.branchId",
+                    "parentValueExpr": "model.customer.customerBranchId",
                 },
                 {
                     key:"customer.enrolledAs",
@@ -214,7 +214,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             type:"select",
                             "enumCode":"village",
                             filter: {
-                            parentCode: 'model.branchId'
+                            parentCode: 'model.customer.customerBranchId'
                             },
                             screenFilter: true
                         },
@@ -438,8 +438,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 {
                     "key":"customer.additionalKYCs",
                     "type":"array",
-                    "add":null,
-                    "remove":null,
+                    "startEmpty": true,
+                    "schema": {
+                        "maxItems": 1
+                    },
                     "title":"ADDITIONAL_KYC",
                     "items":[
                         {
@@ -453,17 +455,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ProofType",
+                            required: true,
                             type:"select"
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ImagePath",
                             type:"file",
+                            required: true,
                             fileType:"image/*",
                             "offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
                             type:"file",
+                            required: true,
                             fileType:"image/*",
                             "offline": true
                         },

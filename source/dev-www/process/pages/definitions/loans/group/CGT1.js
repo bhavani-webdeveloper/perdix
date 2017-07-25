@@ -123,8 +123,9 @@ define({
                     "type": "save",
                     "title": "SAVE_OFFLINE",
                 }, {
-                    "type": "submit",
-                    "title": "PROCEED"
+                    "type": "button",
+                    "title": "PROCEED",
+                    "onClick":"actions.submit(model,form,formName)" 
                 }]
             }],
 

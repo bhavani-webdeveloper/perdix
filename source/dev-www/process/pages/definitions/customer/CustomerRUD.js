@@ -396,8 +396,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         "items": [{
                             "key": "customer.additionalKYCs",
                             "type": "array",
-                            "add": null,
-                            "remove": null,
+                            "startEmpty": true,
+                            "schema": {
+                                "maxItems": 1
+                            },
                             "title": "ADDITIONAL_KYC",
                             "items": [{
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
@@ -409,15 +411,18 @@ irf.pageCollection.factory("Pages__CustomerRUD",
 
                             }, {
                                 key: "customer.additionalKYCs[].kyc1ProofType",
+                                required: true,
                                 type: "select"
                             }, {
                                 key: "customer.additionalKYCs[].kyc1ImagePath",
                                 type: "file",
+                                required: true,
                                 fileType: "image/*",
                                 "offline": true
                             }, {
                                 key: "customer.additionalKYCs[].kyc1ReverseImagePath",
                                 type: "file",
+                                required: true,
                                 fileType: "image/*",
                                 "offline": true
                             }, {

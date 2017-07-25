@@ -53,6 +53,19 @@ define({
 				}, {
 					"key": "partner",
 					"condition": "!model.isPartnerChangeAllowed"
+				}, {
+					"key": "product",
+					"title": "PRODUCT_CATEGORY",
+					"type": "select",
+					"enumCode": "jlg_loan_product",
+					"parentEnumCode": "partner",
+					"parentValueExpr": "model.partner"
+				}, {
+					"key": "product",
+					condition: "model.product",
+					"type": "string",
+					"title": "PRODUCT",
+					readonly: true
 				}],
 				searchSchema: {
 					"type": 'object',
@@ -86,6 +99,9 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
+						}, 
+						"product": {
+							"title": "PRODUCT"
 						}
 					},
 					"required": ['partner']
@@ -99,7 +115,8 @@ define({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
-						//'groupStatus': true,
+						'product': searchOptions.product,
+						'groupStatus': true,
 						'currentStage': "ApplicationPending",
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage

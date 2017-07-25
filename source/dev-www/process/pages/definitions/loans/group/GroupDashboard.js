@@ -65,6 +65,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "DSC"
             }, function(response) {
                 dscMenu.data = Number(response.headers['x-total-count']) || 0;
@@ -76,6 +77,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "CGT1",
             }, function(response) {
                 cgtone.data = Number(response.headers['x-total-count']) || 0;
@@ -88,6 +90,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "CGT2"
             }, function(response) {
                 cgttwo.data = Number(response.headers['x-total-count']) || 0;
@@ -100,6 +103,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "CGT3"
             }, function(response) {
                 cgtthree.data = Number(response.headers['x-total-count']) || 0;
@@ -111,6 +115,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "LoanBooking"
             }, function(response) {
                 book.data = Number(response.headers['x-total-count']) || 0;
@@ -123,6 +128,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "GRT"
             }, function(response) {
                 grt.data = Number(response.headers['x-total-count']) || 0;
@@ -135,6 +141,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "ApplicationPending"
             }, function(response) {
                 application.data = Number(response.headers['x-total-count']) || 0;
@@ -146,6 +153,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "Checker1"
             }, function(response) {
                 checker1.data = Number(response.headers['x-total-count']) || 0;
@@ -157,6 +165,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "Checker2"
             }, function(response) {
                 checker2.data = Number(response.headers['x-total-count']) || 0;
@@ -168,6 +177,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "AgreementUploadPending"
             }, function(response) {
                 agmtUpldPendingq.data = Number(response.headers['x-total-count']) || 0;
@@ -179,6 +189,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "Checker3"
             }, function(response) {
                 checker3.data = Number(response.headers['x-total-count']) || 0;
@@ -190,6 +201,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "Checker4"
             }, function(response) {
                 checker4.data = Number(response.headers['x-total-count']) || 0;
@@ -201,6 +213,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'partner': userPartner,
+                'groupStatus': true,
                 'currentStage': "LoanDisbursement"
             }, function(response) {
                 disbursement.data = Number(response.headers['x-total-count']) || 0;
@@ -211,7 +224,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             close.data = '-';
             GroupProcess.search({
                 'branchId': branchId,
-                'groupStatus': false,
+                'groupStatus': true,
                 'partner': userPartner
             }, function(response) {
                 close.data = Number(response.headers['x-total-count']) || 0;

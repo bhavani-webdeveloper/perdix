@@ -124,7 +124,8 @@ define({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
-						//'groupStatus': true,
+						'product': searchOptions.product,
+						'groupStatus': true,
 						'page': pageOpts.pageNo,
 						'currentStage': "Checker2",
 						'per_page': pageOpts.itemsPerPage

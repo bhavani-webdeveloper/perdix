@@ -51,7 +51,7 @@ define({
 					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
-						//'groupStatus': true,
+						'groupStatus': true,
 						'currentStage': "CGT1",
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
