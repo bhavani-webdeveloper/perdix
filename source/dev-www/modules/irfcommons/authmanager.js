@@ -25,6 +25,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		if (_userData && _userData.login) {
 			userData = _userData;
 			$log.error(_userData);
+			SessionStore.setSession(userData);
 			return true;
 		}
 		return false;

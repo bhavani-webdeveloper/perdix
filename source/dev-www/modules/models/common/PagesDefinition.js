@@ -1,6 +1,6 @@
 irf.USER_ALLOWED_PAGES = "UserAllowedPages__";
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link", "$rootScope",
-    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link, $rootScope) {
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "SysQueries", "SessionStore", "Link", "$rootScope",
+    function($resource, $log, BASE_URL, $q, SysQueries, SessionStore, Link, $rootScope) {
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
@@ -16,7 +16,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         var deferred = $q.defer();
         //pDef.getPagesJson().$promise
         var localPages = SessionStore.getItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname());
-        Queries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
+        SysQueries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
         .then(function(response){
             delete response.$promise;
             delete response.$resolved;

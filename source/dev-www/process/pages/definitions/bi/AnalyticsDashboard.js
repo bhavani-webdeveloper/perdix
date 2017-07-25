@@ -7,7 +7,7 @@ function($scope, BIAnalytics, irfNavigator, $log, $sce, $window) {
 		}).$promise;
 	}).then(function(resp) {
 		$log.info(resp);
-		$scope.analyticsDashboardURL = $sce.trustAsResourceUrl(irf.ANALYTICS_WEB_URL + "/embedded-mode/home");///TeamA/ProjectA/home
+		$scope.analyticsDashboardURL = $sce.trustAsResourceUrl(irf.ANALYTICS_WEB_URL + "/embedded-mode/TeamA/ProjectA/home?show-navigator=true");///TeamA/ProjectA/home
 		function setAnalyticsFrameHeight() {
 			$(".analytics-iframe, .analytics-root").css('height', ($(window).height()-139)+'px');
 		}

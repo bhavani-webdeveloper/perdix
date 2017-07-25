@@ -530,7 +530,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         $timeout(function() {
             $(".bundle-page .irf-tabset ul.nav-tabs").affix({
                 offset: {
-                    top: 50
+                    top: 87
                 }
             }).on("affix.bs.affix", function() {
                 $(".bundle-page .irf-tabset ul.nav-tabs").addClass("bg-tint-theme");

@@ -21,54 +21,6 @@ irf.models.factory('Queries', [
             }).$promise;
         };
 
-        resource.getPagesDefinition = function(userId, skip_relogin) {
-            var deferred = $q.defer();
-            resource.query({
-                identifier: 'userpages.list',
-                limit: 0,
-                offset: 0,
-                parameters: {
-                    user_id: userId
-                },
-                skip_relogin: skip_relogin || false
-            }).$promise.then(function(records) {
-                if (records && records.results) {
-                    var def = {};
-                    _.each(records.results, function(v, k) {
-                        var d = {
-                            "uri": v.uri,
-                            "offline": v.offline,
-                            "directAccess": v.directAccess,
-                            "title": v.title,
-                            "shortTitle": v.shortTitle,
-                            "iconClass": v.iconClass,
-                            "state": v.state,
-                            "stateParams": {
-                                "pageName": v.pageName,
-                                "pageId": v.pageId
-                            },
-                            "config": v.pageConfig
-                        };
-                        if (v.addlParams) {
-                            try {
-                                var ap = JSON.parse(v.addlParams);
-                                angular.extend(d.stateParams, ap);
-                            } catch (e) {}
-                        }
-                        if (v.pageConfig) {
-                            try {
-                                var pc = JSON.parse(v.pageConfig);
-                                d.config = pc;
-                            } catch (e) {}
-                        }
-                        def[v.uri] = d;
-                    });
-                    deferred.resolve(def);
-                }
-            }, deferred.reject);
-            return deferred.promise;
-        };
-
         resource.searchPincodes = function(pincode, district, state) {
             var deferred = $q.defer();
             var request = {

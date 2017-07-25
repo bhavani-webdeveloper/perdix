@@ -17,7 +17,6 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
 	resource.getPagesDefinition = function(userId, skip_relogin) {
 		var deferred = $q.defer();
-		$log.info("Inside getPagesDefinition --- SPK");
 		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
 			if (records && records.results) {
 				var def = {};
