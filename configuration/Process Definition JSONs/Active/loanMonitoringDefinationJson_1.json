@@ -1094,6 +1094,56 @@
                                 "LUCReschedule",
                                 "LUCLegalRecovery"
                             ]
+                        },
+                        "noOfJobsAdded": {
+                            "title": "noOfJobsAdded",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "noOfWomenInAddedJobs": {
+                            "title": "noOfWomenInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "noOfMenInAddedJobs": {
+                            "title": "noOfMenInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "noOfFreshersInAddedJobs": {
+                            "title": "noOfFreshersInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "avgSalaryOfNewJoinees": {
+                            "title": "avgSalaryOfNewJoinees",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
                         }
                     }
                 }
