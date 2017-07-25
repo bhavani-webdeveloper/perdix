@@ -1,6 +1,6 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
-function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
+["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper",
+function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper) {
 	var self = this;
 
 	$scope.boxHeads = [];
@@ -79,79 +79,105 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	$scope.error = false;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
+		setupPage();
 	} catch (e) {
-		$log.error(e);
-		$scope.error = true;
+		try {
+			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
+			PageHelper.showLoader();
+			require([pageDefPath], function(pageDefObj){
+        		/* Page is loaded, now bind it to pages */
+        		$log.info("[REQUIRE] Done loading page(" + $scope.pageName + ")");
+        		irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+
+				try {
+					$scope.page = $injector.get(irf.page($scope.pageName));
+					setupPage();
+					PageHelper.hideLoader();
+				} catch (e) {
+					$log.error(e);
+					$scope.error = true;
+				}
+			}, function(err){
+        		$log.info("[REQUIRE] Error loading page(" + toParams.pageName + ")");
+        		$log.error(err);
+        	})
+		} catch(e) {
+			$log.error(e);
+			$scope.error = true;
+		}
 		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
-	if ($scope.page) {
-		if($scope.page.type == 'schema-form') {
-			$scope.model = entityManager.getModel($scope.pageName);
-			if (angular.isFunction($scope.page.schema)) {
-				var promise = $scope.page.schema();
-				promise.then(function(data){
-					$scope.schema = data;
+	var setupPage = function () {
+		if ($scope.page) {
+			if($scope.page.type == 'schema-form') {
+				$scope.model = entityManager.getModel($scope.pageName);
+				if (angular.isFunction($scope.page.schema)) {
+					var promise = $scope.page.schema();
+					promise.then(function(data){
+						$scope.schema = data;
+					});
+				} else {
+					$scope.schema = $scope.page.schema;
+				}
+				// formFn support discontinued
+				$scope.formHelper = formHelper;
+
+				$scope.$on('irf-sf-init', function(event){
+					$scope.formCtrl = event.targetScope[$scope.formName];
 				});
-			} else {
-				$scope.schema = $scope.page.schema;
-			}
-			// formFn support discontinued
-			$scope.formHelper = formHelper;
+				$scope.$on('sf-render-finished', function(event){
+					$log.warn("on sf-render-finished on page, rendering layout");
+					//initializeCardLayout(); // Feature disabled
+				});
+			} else if ($scope.page.type == 'search-list') {
+				$scope.model = entityManager.getModel($scope.pageName);
+				$scope.page.definition.formName = $scope.formName;
+				if ($scope.page.offline === true) {
+					$scope.page.definition.offline = true;
+					var acts = $scope.page.definition.actions = $scope.page.definition.actions || {};
+					acts.preSave = function(model, formCtrl, formName) {
+						var deferred = $q.defer();
+						$log.warn('on pageengine preSave');
+						var offlinePromise = $scope.page.getOfflinePromise(model);
+						if (offlinePromise && _.isFunction(offlinePromise.then)) {
+							offlinePromise.then(function(out){
+								$log.warn('offline results:');
+								$log.warn(out.body.length);
+								/* Build results */
+								var items = $scope.page.definition.listOptions.getItems(out.body, out.headers);
+								model._result = model._result || {};
+								model._result.items = items;
 
-			$scope.$on('irf-sf-init', function(event){
-				$scope.formCtrl = event.targetScope[$scope.formName];
-			});
-			$scope.$on('sf-render-finished', function(event){
-				$log.warn("on sf-render-finished on page, rendering layout");
-				//initializeCardLayout(); // Feature disabled
-			});
-		} else if ($scope.page.type == 'search-list') {
-			$scope.model = entityManager.getModel($scope.pageName);
-			$scope.page.definition.formName = $scope.formName;
-			if ($scope.page.offline === true) {
-				$scope.page.definition.offline = true;
-				var acts = $scope.page.definition.actions = $scope.page.definition.actions || {};
-				acts.preSave = function(model, formCtrl, formName) {
-					var deferred = $q.defer();
-					$log.warn('on pageengine preSave');
-					var offlinePromise = $scope.page.getOfflinePromise(model);
-					if (offlinePromise && _.isFunction(offlinePromise.then)) {
-						offlinePromise.then(function(out){
-							$log.warn('offline results:');
-							$log.warn(out.body.length);
-							/* Build results */
-							var items = $scope.page.definition.listOptions.getItems(out.body, out.headers);
-							model._result = model._result || {};
-							model._result.items = items;
-
-							deferred.resolve();
-						}).catch(function(){
+								deferred.resolve();
+							}).catch(function(){
+								deferred.reject();
+							});
+						} else {
 							deferred.reject();
-						});
-					} else {
-						deferred.reject();
-					}
-					return deferred.promise;
-				};
+						}
+						return deferred.promise;
+					};
+				}
 			}
-		}
-		if ($scope.page.uri)
-			$scope.breadcrumb = $scope.page.uri.split("/");
-		$log.info("Current Page Loaded: " + $scope.pageName);
+			if ($scope.page.uri)
+				$scope.breadcrumb = $scope.page.uri.split("/");
+			$log.info("Current Page Loaded: " + $scope.pageName);
 
-		if ($scope.pageId && angular.isFunction($scope.page.modelPromise)) {
-			var promise = $scope.page.modelPromise($scope.pageId, $scope.model);
-			if (promise && angular.isFunction(promise.then)) {
-				promise.then(function(model) {
-					$scope.model = model;
-					$log.info(model);
-				});
-			} else {
-				$log.error("page.modelPromise didn't return promise as promised");
+			if ($scope.pageId && angular.isFunction($scope.page.modelPromise)) {
+				var promise = $scope.page.modelPromise($scope.pageId, $scope.model);
+				if (promise && angular.isFunction(promise.then)) {
+					promise.then(function(model) {
+						$scope.model = model;
+						$log.info(model);
+					});
+				} else {
+					$log.error("page.modelPromise didn't return promise as promised");
+				}
 			}
 		}
 	}
+
 	$scope.callAction = function(actionId) {
 		if (self.actionsFactory && self.actionsFactory.StageActions && 
 					self.actionsFactory.StageActions[stage.stageName] && 

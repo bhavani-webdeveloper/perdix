@@ -94,7 +94,11 @@ irf.pages.provider("irfNavigator", function() {
 			return !!callstack.length;
 		},
 		goBack: function() {
+			console.log("callstack");
+			console.log(callstack);
 			if (callstack.length < 1) {
+				console.log("STATE MOVE HOME: ");
+				console.log(callstack.length < 1)
 				$this.factory.goHome();
 				return;
 			}
@@ -106,6 +110,7 @@ irf.pages.provider("irfNavigator", function() {
 				"pageId": backParam.pageId,
 				"pageData": backParam.pageData
 			});
+			console.log("STATE MOVE BACK");
 		},
 		goHome: function() {
 			callstack.length = 0;
@@ -263,17 +268,17 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Hiding Loader */
         PageHelper.hideLoader();
 
-        if (toState.name === 'Page.Engine' || toState.name === 'Page.Bundle'){
-        	/* Checking Existence of the page */
-	        var pageAvailable = $injector.has(irf.page(toParams.pageName));
-	        $log.info("Destination page (" + toParams.pageName + ") is already loaded? " + pageAvailable);
+        // if (toState.name === 'Page.Engine' || toState.name === 'Page.Bundle'){
+        // 	/* Checking Existence of the page */
+	       //  var pageAvailable = $injector.has(irf.page(toParams.pageName));
+	       //  $log.info("Destination page (" + toParams.pageName + ") is already loaded? " + pageAvailable);
 
-	        /* If Page is not available. Load it using the RequireJS */
-	        if (false == pageAvailable){
-	        	event.preventDefault();
-	        	return irfLazyLoader.loadPage(toState, toParams, options);
-	        }	
-        }
+	       //  /* If Page is not available. Load it using the RequireJS */
+	       //  if (false == pageAvailable){
+	       //  	event.preventDefault();
+	       //  	return irfLazyLoader.loadPage(toState, toParams, options);
+	       //  }	
+        // }
 
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
