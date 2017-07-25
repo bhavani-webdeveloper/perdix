@@ -101,10 +101,14 @@ define({
                         {
                             title: 'TRANSACTION_DESCRIPTION',
                             data: 'transactionDescription'
+                        },
+                        {
+                            title: 'TRANSACTION_DATE',
+                            data: 'transactionDate'
                         }]
                     },
                     getActions: function() {
-                        return [{
+                        return [/*{
                             name: "UPDATE_JOURNAL_ENTRY",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
@@ -123,7 +127,7 @@ define({
 
                                 return true;
                             }
-                        }];
+                        }*/];
                     }
                 }
             }

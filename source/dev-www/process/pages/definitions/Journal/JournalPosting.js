@@ -119,6 +119,7 @@ define({
                     readonly: true,
                 }, {
                     key: "journal.journalEntryDto.transactionAmount",
+                    "required":true,
                     type: "amount"
                 }, {
                     key: "journal.journalEntryDto.instrumentBankName",
@@ -155,9 +156,11 @@ define({
                     type: "date"
                 }, {
                     key: "journal.journalEntryDto.relatedAccountNo",
-                    title: "RELATED_ACCOUNT_NO"
+                    title: "RELATED_ACCOUNT_NO",
+                    "required":true
                 }, {
                     key: "journal.journalEntryDto.remarks",
+                    "required":true
                 }]
             }, {
                 "type": "actionbox",

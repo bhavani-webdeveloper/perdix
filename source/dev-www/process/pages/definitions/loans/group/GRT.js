@@ -209,6 +209,10 @@ define({
                     "title": "FIRST_REPAYMENT_DATE",
                     "required":true,
                     "type": "date",
+                },{
+                    "key": "group.groupCode",
+                    "title": "GROUP_CODE",
+                    "readonly":true
                 },
                 {
                     "key": "group.jlgGroupMembers",

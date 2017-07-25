@@ -97,6 +97,9 @@ define({
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}]
 					},
 					getActions: function() {

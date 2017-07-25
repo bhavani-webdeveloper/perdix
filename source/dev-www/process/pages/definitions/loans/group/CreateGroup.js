@@ -171,10 +171,6 @@ define({
                     "title": "PRODUCT",
                     "required": true,
                     "type": "lov",
-                    //"field2": "JLG",
-                    //"enumCode": "loan_product",
-                    //"parentEnumCode": "partner",
-                    //"parentValueExpr": "model.group.partnerCode",
                     autolov: true,
                     bindMap: {},
                     required: true,
@@ -215,13 +211,6 @@ define({
                     "required": true,
                     "type": "select",
                     "enumCode":"loan_product_frequency"
-                    /*"titleMap": [{
-                        "name": "Monthly",
-                        "value": "M"
-                    }, {
-                        "name": "Quarterly",
-                        "value": "Q"
-                    }]*/
                 }, {
                     "key": "group.tenure",
                     "title": "TENURE",
@@ -236,68 +225,6 @@ define({
                     "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "title": "GROUP_MEMBERS",
                     "items": [
-                   /* {
-                        "key": "group.jlgGroupMembers[].urnNo",
-                        "title": "URN_NO",
-                        "required": true,
-                        "type": "lov",
-                        "lovonly": true,
-                        initialize: function(model, form, parentModel, context) {
-                            model.branchName = parentModel.group.branchName;
-                        },
-                        "inputMap": {
-                            "branchName": {
-                                "key": "group.branchName",
-                                "title": "BRANCH_NAME",
-                                "type": "select",
-                                "readonly": true,
-                                //"enumCode": "branch",
-                                "enumCode": "branch_id"
-                            },
-                            "centreCode": {
-                                "key": "group.centreCode",
-                                "title": "CENTRE",
-                                "type":["number",null],
-                                "enumCode": "centre",
-                                "type": "select",
-                                "parentEnumCode": "branch_id",
-                                "parentValueExpr": "model.branchName",
-                            }
-                        },
-                        "outputMap": {
-                            "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
-                            "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
-                            "id": "group.jlgGroupMembers[arrayIndex].CustomerId",
-                        },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var branches = formHelper.enum('branch').data;
-                            var branchId;
-                            $log.info(inputModel.branchName);
-                            for (var i = 0; i < branches.length; i++) {
-                                if (branches[i].code == inputModel.branchName)
-                                    branchId = branches[i].name;
-                            }
-                            var promise = Enrollment.search({
-                                'branchName': branchId || SessionStore.getBranch(),
-                                'centreId': inputModel.centreId,
-                                'customerType': "individual",
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                data.urnNo,
-                                data.firstName
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            $log.info("Hi Selected");
-                            model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
-                        }
-                    },*/
                     {
                         "key": "group.jlgGroupMembers[].urnNo",
                         "title": "URN_NO",
@@ -354,6 +281,7 @@ define({
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
                             "customerId": "group.jlgGroupMembers[arrayIndex].CustomerId",
+                            "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
@@ -421,22 +349,17 @@ define({
                         "key": "group.jlgGroupMembers[].relation",
                         "readonly": true,
                         "title": "RELATION",
-                        //"readonly": readonly,
-                        /*"type": "select",
-                        "titleMap": {
-                            "Father": "Father",
-                            "Husband": "Husband"
-                        }*/
                     },{
                         "key": "group.jlgGroupMembers[].maritalStatus",
                         "title": "MARITAL_STATUS",
                         "type":"select",
                         "enumCode":"marital_status"
                     },{
-                        "key": "group.jlgGroupMembers[].outStandingLoanAmount",
-                        "type": "amount",
-                        "title": "OUTSTANDING_LOAN_AMOUNT"
-                    }, {
+                        "key": "group.jlgGroupMembers[].maritalStatus",
+                        "title": "MARITAL_STATUS",
+                        "type":"select",
+                        "enumCode":"marital_status"
+                    },{
                         "key": "group.jlgGroupMembers[].loanAmount",
                         "title": "LOAN_AMOUNT",
                         "required": true,
@@ -477,20 +400,6 @@ define({
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
-                            /*var branches = formHelper.enum('branch_id').data;
-                            var branchId;
-                            $log.info(inputModel.branchName);
-                            for (var i = 0; i < branches.length; i++) {
-                                if (branches[i].code == inputModel.branchName)
-                                    branchId = branches[i].name;
-                            }
-                            var promise = Enrollment.search({
-                                'urnNo': model.group.jlgGroupMembers[context.arrayIndex].urnNo,
-                                'branchName': branchId || SessionStore.getBranch(),
-                                'customerType': "individual",
-                            }).$promise;
-                            return promise;*/
-
                             var promise = Enrollment.getCustomerById({
                                 id: model.group.jlgGroupMembers[context.arrayIndex].CustomerId,
                             }).$promise.then(function(res) {
@@ -522,13 +431,12 @@ define({
                             ];
                         },
                         onSelect: function(valueObj, model, context) {}
-                            //"readonly": readonly
+                            
                     }, {
                         "key": "group.jlgGroupMembers[].witnessRelationship",
                         "title": "RELATION",
                         "type": "select",
                         "enumCode": "relation"
-                            //"readonly": readonly
                     }]
                 }]
             }, {

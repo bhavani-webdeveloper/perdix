@@ -116,7 +116,11 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 key: "user.accessType",
                                 type: "select",
                                 title: "ACCESS_TYPE",
-                                enumCode: "access_type"
+                                "titleMap":{
+                                    "BRANCH":"BRANCH",
+                                    "PARTNER":"PARTNER"
+                                },
+                                //enumCode: "access_type"
                             },
                             {
                                 key: "user.partnerCode",

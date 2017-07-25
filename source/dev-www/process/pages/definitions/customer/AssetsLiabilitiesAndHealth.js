@@ -24,6 +24,9 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 }
             }
         }
+        if (model.customer.dateOfBirth) {
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        }
         $log.info("After fixData");
         $log.info(model);
         return model;

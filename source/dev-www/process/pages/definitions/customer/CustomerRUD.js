@@ -11,7 +11,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     var fields = model.customer.udf.userDefinedFieldValues;
                     $log.info(fields);
                     fields['udf17'] = Number(fields['udf17']);
-                    fields['udf10'] = Number(fields['udf10']);
+                    filds['udf10'] = Number(fields['udf10']);
                     fields['udf11'] = Number(fields['udf11']);
                     fields['udf28'] = Number(fields['udf28']);
                     fields['udf32'] = Number(fields['udf32']);
@@ -24,6 +24,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             model.customer.udf.userDefinedFieldValues['udf'+i] = '';
                         }
                     }
+                }
+                if (model.customer.dateOfBirth) {
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
                 $log.info("After fixData");
                 $log.info(model);
@@ -125,8 +128,26 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 type: "radios"
                             },
                             {
+                                key: "customer.age",
+                                title: "AGE",
+                                type: "number",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.age > 0) {
+                                        if (model.customer.dateOfBirth) {
+                                            model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                        } else {
+                                            model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                        }
+                                    }
+                                }
+                            }, {
                                 key: "customer.dateOfBirth",
-                                type: "date"
+                                type: "date",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
                             },
                             {
                                 key: "customer.fatherFirstName",

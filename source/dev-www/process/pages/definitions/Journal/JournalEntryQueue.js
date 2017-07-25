@@ -101,6 +101,10 @@ define({
                         {
                             title: 'TRANSACTION_DESCRIPTION',
                             data: 'transactionDescription'
+                        },
+                        {
+                            title: 'TRANSACTION_DATE',
+                            data: 'transactionDate'
                         }]
                     },
                     getActions: function() {

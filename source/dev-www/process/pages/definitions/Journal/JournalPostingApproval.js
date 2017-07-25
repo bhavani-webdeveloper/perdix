@@ -170,27 +170,27 @@ define({
                                     },
                                     "instrumentBankName": {
                                         "title": "INSTRUMENT_BANK_NAME",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                     "instrumentBranchName": {
                                         "title": "INSTRUMENT_BRANCH_NAME",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                     "instrumentType": {
                                         "title": "INSTRUMENT_TYPE",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                     "instrumentNumber": {
                                         "title": "INSTRUMENT_NUMBER",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                     "instrumentDate": {
                                         "title": "INSTRUMENT_DATE",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                     "ifscCode": {
                                         "title": "IFSC_CODE",
-                                        "type": "string"
+                                        "type": ["string","null"]
                                     },
                                 }
                             }
