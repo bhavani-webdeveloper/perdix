@@ -193,6 +193,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         /* Fix to add atleast one fingerprint */
         model['customer']['leftHandIndexImageId'] = "232";
 
+        if (model.customer.dateOfBirth) {
+            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        }
+
         if (model['customer']['mailSameAsResidence'] === true){
             model['customer']['mailingDoorNo'] = model['customer']['doorNo'];
             model['customer']['mailingStreet'] = model['customer']['street'];

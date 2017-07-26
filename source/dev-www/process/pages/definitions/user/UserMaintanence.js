@@ -26,7 +26,9 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             "userBranches": [
                             ]
                         };
+                        model.user.bankName = SessionStore.getBankName();
                     }
+
                     else{
                         PageHelper.showBlockingLoader("Loading the user...");
                         PageHelper.showProgress("loading-user", 'Loading user...');
@@ -41,7 +43,6 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 PageHelper.hideBlockingLoader();
                             })
                     }
-
                 },
 
                 form: [
@@ -155,7 +156,6 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 model.user = {
                                     "roleCode": "A",
                                     "activated": true,
-                                    "bankName": "Kinara",
                                     "userState": "ACTIVE",
                                     "userType": "A",
                                     "validUntil": "2010-05-26",
@@ -163,6 +163,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                     "userRoles": [],
                                     "userBranches": []
                                 };
+                                model.user.bankName = SessionStore.getBankName();
                             }
                         }]
                     }
