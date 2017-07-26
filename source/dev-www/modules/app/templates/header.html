@@ -17,8 +17,8 @@
         </a>
         <!-- <a href="#" class="logo-mobile-title" data-toggle="offcanvas"><span><b>IRF</b>{{ $parent.appName }}</span></a> -->
 
-        <div class="header-corporate-logo">
-            <img class="header-corporate-logo-img" src="img/corporate_logo.png" />
+        <div class="header-corporate-logo" ng-show="$parent.app_manifest.corporate_logo">
+            <img class="header-corporate-logo-img" src="" ng-src="{{$parent.app_manifest.corporate_logo}}" />
         </div>
 
         <div class="navbar-custom-menu">
@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <!-- Colors: style cannot ;) be found in dropdown.less - TODO check themeswitch.js -->
-                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true && $parent.app_manifest.multi_colors">
+                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true && $parent.app_manifest.multi_colors && !$parent.app_manifest.force_color">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-paint-brush"></i>
                     </a>

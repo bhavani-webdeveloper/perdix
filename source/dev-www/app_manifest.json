@@ -3,6 +3,8 @@
 	"title": "Perdix",
 	"version": "v8.2.2-production",
 	"connect_perdix7": false,
-	"multi_colors": false,
+	"corporate_logo": "img/corporate_logo.png",
+	"multi_colors": true,
+	"force_color": "",
 	"ams_enabled": false
 }

@@ -42,15 +42,11 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 		}
 	}, 300);
 
-	$.getJSON("app_manifest.json", function(json) {
-		$scope.$apply(function(){
-			$scope.app_manifest = json;
-			$scope.appName = json.title;
-			document.mainTitle = json.name;
-		});
-		checkLatestVersion();
-		connectPerdix7();
-	});
+	$scope.app_manifest = irf.appManifest;
+	$scope.appName = irf.appManifest.title;
+	document.mainTitle = irf.appManifest.name;
+	checkLatestVersion();
+	connectPerdix7();
 
 	$scope.$on('irf-login-success', function($event){
 		checkLatestVersion();
