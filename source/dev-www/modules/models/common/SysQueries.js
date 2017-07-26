@@ -55,9 +55,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return deferred.promise;
 	};
 
-	resource.getUserBranches = function(userId){
+	resource.getGlobalSettings = function() {
 		var deferred = $q.defer();
-    	resource.getResult("userBranches.list", {"user_id": userId}).then(function(records){
+		resource.getResult('globalSettings.list', {}).then(function(res) {
+			if (res && res.results && res.results.length) {
+				var globalSettings = _.reduce(res.results, function(map, v) { map[v.name] = v.value; return map; }, {})
+				deferred.resolve(globalSettings);
+			} else {
+				deferred.reject(res);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	}
+
+	resource.getUserBranches = function(userId) {
+		var deferred = $q.defer();
+		resource.getResult("userBranches.list", {"user_id": userId}).then(function(records){
 			if (records && records.results) {
 				var result = {
 					headers: {
@@ -67,8 +80,8 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				};
 				deferred.resolve(result);
 			}
-    	}, deferred.reject);
-    	return deferred.promise;
+		}, deferred.reject);
+		return deferred.promise;
 	}
 
 	return resource;

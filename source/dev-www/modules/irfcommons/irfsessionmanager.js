@@ -133,6 +133,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		return moment(session.cbsDate, self.getSystemDateFormat()).format(self.getDateFormat());
 	}
 
+	self.getGlobalSetting = function(key) {
+		return session.global[key];
+	};
+
 	self.setItem = function(key, value){
 		value = JSON.stringify(value);
 		$window.localStorage.setItem(key, value);

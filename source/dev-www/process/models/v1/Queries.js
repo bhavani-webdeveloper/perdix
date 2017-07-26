@@ -1,6 +1,6 @@
 irf.models.factory('Queries', [
-    "$resource", "SysQueries", "$httpParamSerializer", "BASE_URL", "$q", "$log",
-    function($resource, SysQueries, $httpParamSerializer, BASE_URL, $q, $log) {
+    "$resource", "SysQueries", "$httpParamSerializer", "BASE_URL", "$q", "$log", "SessionStore",
+    function($resource, SysQueries, $httpParamSerializer, BASE_URL, $q, $log, SessionStore) {
         var endpoint = BASE_URL + '/api';
 
         var resource = $resource(endpoint, null, {
@@ -116,28 +116,11 @@ irf.models.factory('Queries', [
         }
 
         resource.getGlobalSettings = function(name, skipResultCheck) {
-            var deferred = $q.defer();
-            resource.getResult('globalSettings.list', {
-                name: name
-            }).then(
-                function(res) {
-                    $log.info("checking checking");
-                    $log.info(res);
-                    if (res && res.results && res.results.length) {
-                        deferred.resolve(res.results[0].value);
-                    } else {
-                        if(skipResultCheck){
-                            deferred.resolve();
-                        } else {
-                            deferred.reject(res);
-                        }
-                    }
-                },
-                function(err) {
-                    deferred.reject(err);
-                }
-            )
-            return deferred.promise;
+            var globalSetting = SessionStore.getGlobalSetting(name);
+            if (skipResultCheck || globalSetting) {
+                return $q.resolve(globalSetting);
+            }
+            return $q.reject();
         }
 
         resource.getCustomerBankAccounts = function(customerId) {

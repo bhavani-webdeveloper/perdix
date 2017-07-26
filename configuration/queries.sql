@@ -8,7 +8,8 @@ userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class ico
 account.list=select * from loan_accounts
 pincode.list=SELECT p.pincode, p.division, p.region, p.taluk, p.district, p.state FROM pincode_master p WHERE p.pincode like concat(:pincode,'%') AND LOWER(p.district) LIKE concat(LOWER(:district), '%') AND LOWER(p.state) like concat(LOWER(:state),'%')
 loan_products.list=SELECT * from loan_account_documents where product_code = :product_code and process = :process and stage = :stage
-globalSettings.list=SELECT * from global_settings where name = :name
+globalSettings.one=SELECT * from global_settings where name = :name
+globalSettings.list=SELECT * from global_settings
 customerBankAccounts.list=SELECT * from customer_bank_accounts where customer_id = :customer_id
 bankAccounts.list=SELECT * from bank_account_master
 bankAccountsByPartnerCode.list=SELECT * from bank_account_master where partner_code=:partner_code

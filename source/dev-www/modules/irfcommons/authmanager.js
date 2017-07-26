@@ -8,8 +8,8 @@
  */
 
 irf.commons.factory('authService',
-['Auth', 'Account', '$q', '$log', 'SessionStore', 'irfStorageService', 'AuthTokenHelper', 'BankMaster',
-function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelper, BankMaster) {
+['Auth', 'Account', '$q', '$log', 'SessionStore', 'irfStorageService', 'AuthTokenHelper', 'BankMaster', 'SysQueries',
+function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelper, BankMaster, SysQueries) {
 	var userData = null;
 
 	var login = function(username, password) {
@@ -38,16 +38,33 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 
 	var getUser = function() {
 		var deferred = $q.defer();
-		Account.get({'service': 'account'}, function(accountResponse){
+		Account.get({'service': 'account'}, function(accountResponse) {
+			var loginError = null;
 			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
 				accountResponse.centres = resp;
 				return BankMaster.getCBSDate();
 			}).then(function(cbsDate) {
 				accountResponse.cbsDate = cbsDate;
 				return Account.getUserRole({'userId':accountResponse.login}).$promise;
+			}, function(err) {
+				loginError = { 'statusText': 'Failed to load CBS Date' };
+				$log.error(err);
 			}).then(function(role) {
 				accountResponse.role = role;
+				return SysQueries.getGlobalSettings();
+			}, function(err) {
+				loginError = { 'statusText': 'Failed to load User Role' };
+				$log.error(err);
+			}).then(function(globalSettings) {
+				accountResponse.global = globalSettings;
+			}, function(err) {
+				loginError = { 'statusText': 'Failed to load Global Settings' };
+				$log.error(err);
 			}).finally(function() {
+				if (loginError) {
+					deferred.reject(loginError);
+					return;
+				}
 				setUserData(accountResponse);
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);
