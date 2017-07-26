@@ -49,10 +49,10 @@ define({
 				{
 					"key": "partner",
 					"readonly": true,
-					"condition": "model.isPartnerChangeAllowed"
+					"condition": "!model.isPartnerChangeAllowed"
 				}, {
 					"key": "partner",
-					"condition": "!model.isPartnerChangeAllowed"
+					"condition": "model.isPartnerChangeAllowed"
 				}, {
 					"key": "product",
 					"title": "PRODUCT_CATEGORY",

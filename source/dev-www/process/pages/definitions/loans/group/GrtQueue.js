@@ -23,10 +23,10 @@ define({
 				searchForm: [{
 					"key": "partner",
 					"readonly": true,
-					"condition": "model.isPartnerChangeAllowed"
+					"condition": "!model.isPartnerChangeAllowed"
 				}, {
 					"key": "partner",
-					"condition": "!model.isPartnerChangeAllowed"
+					"condition": "model.isPartnerChangeAllowed"
 				}],
 				autoSearch: true,
 				searchSchema: {

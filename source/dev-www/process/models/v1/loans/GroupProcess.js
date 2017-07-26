@@ -30,7 +30,7 @@ irf.models.factory('GroupProcess', function($resource, $httpParamSerializer, BAS
     });
 
     resource.hasPartnerCodeAccess = function(partner){
-        return (angular.isUndefined(partner) || partner == null) ? false : true;
+        return (angular.isUndefined(partner) || partner == null) ? true : false;
     }
 
     return resource;

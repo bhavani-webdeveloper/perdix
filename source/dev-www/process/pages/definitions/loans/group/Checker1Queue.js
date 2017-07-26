@@ -54,11 +54,11 @@ define({
 						"key": "partner",
 						"type": "select",
 						"readonly": true,
-						"condition": "model.isPartnerChangeAllowed"
+						"condition": "!model.isPartnerChangeAllowed"
 					}, {
 						"key": "partner",
 						"type": "select",
-						"condition": "!model.isPartnerChangeAllowed"
+						"condition": "model.isPartnerChangeAllowed"
 					}, {
 						"key": "product",
 						"title": "PRODUCT_CATEGORY",
