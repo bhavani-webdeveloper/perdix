@@ -1666,6 +1666,14 @@
                 "BasicEnrolment",
                 "Completed"
               ]
+            },
+            "assetType": {
+              "title": "assetType",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
             }
           }
         }
