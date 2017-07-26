@@ -49,6 +49,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
+        if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
+                if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
+                        model.customer.udf.userDefinedFieldValues.udf26 = true;
+                }
+                if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
+                        model.customer.udf.userDefinedFieldValues.udf26 = false;
+                }
+
+        }
         $log.info("After fixData");
         $log.info(model);
         return model;
@@ -454,7 +463,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             onCapture: function(result, model, form) {
                                 $log.info(result);
                                 model.customer.addressProofNo = result.text;
+                            },
+                            "schema":{
+                                "pattern":"^[a-zA-Z0-9]*$"
                             }
+
                         },
                         {
                             key:"customer.addressProofIssueDate",

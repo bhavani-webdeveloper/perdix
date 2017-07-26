@@ -27,6 +27,15 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
+        if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
+            if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
+                    model.customer.udf.userDefinedFieldValues.udf26 = true;
+            }
+            if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
+                    model.customer.udf.userDefinedFieldValues.udf26 = false;
+            }
+
+         }
         $log.info("After fixData");
         $log.info(model);
         return model;
