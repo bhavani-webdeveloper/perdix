@@ -99,6 +99,8 @@ define({
                                         irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
                                         PageHelper.showErrors(resp);
                                     });
+                                } else {
+                                    PageHelper.hideLoader();
                                 }
                             },
                             isApplicable: function(item, index) {
