@@ -454,6 +454,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 if(model.currentStage=='Rejected')
                                 {
+                                    model.review.preStage = model.loanSummary[i].preStage;
                                     model.review.targetStage = model.loanSummary[i].preStage;
                                 }
                             }
@@ -2331,9 +2332,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         required: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
-                            var stage1 = model.review.targetStage;
+                            var stage1 = model.review.preStage;
                             var targetstage = formHelper.enum('targetstage').data;
-                            var out = [];
+                            var out = [{'name': stage1, 'value': stage1}];
                             for (var i = 0; i < targetstage.length; i++) {
                                 var t = targetstage[i];
                                 if (t.field1 == stage1) {
