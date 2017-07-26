@@ -1174,6 +1174,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         if (res.customer) {
                             fixData(res);
                             model.customer = res.customer;
+                            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
+                            model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+                            model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        
                         }
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
