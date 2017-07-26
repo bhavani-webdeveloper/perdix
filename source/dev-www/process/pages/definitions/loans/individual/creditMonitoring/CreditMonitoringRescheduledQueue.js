@@ -4,9 +4,8 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
         return {
             "type": "search-list",
             "title": "CREDIT_MONITORING_RESCHEDULED_QUEUE",
-            "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                $log.info("luc Schedule Queue got initialized");
+                $log.info("creditMonitoring Schedule Queue got initialized");
             },
             definition: {
                 title: "SEARCH CUSTOMER",

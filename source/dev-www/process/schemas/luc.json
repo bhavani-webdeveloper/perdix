@@ -112,10 +112,6 @@
 					"title": "LOAN_ID",
 					"type": "number"
 				},
-				"accountNumber": {
-					"title": "ACCOUNT_NUMBER",
-					"type": "number"
-				},
 				"customerId": {
 					"title": "CUSTOMER_ID",
 					"type": "number"
