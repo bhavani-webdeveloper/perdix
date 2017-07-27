@@ -84,16 +84,22 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                                     "data": "title",
                                     render: function(data, type, full, meta) {
                                         return '<i class="' + full.icon_class + '">&nbsp;</i>' + translateFilter(data);
-                                    }
+                                    },
+                                    editable: false
                                 }, {
                                     "title": "State",
-                                    "data": "state"
+                                    "data": "state",
+                                    editable: false
                                 }, {
                                     "title": "Page Name",
-                                    "data": "page_name"
+                                    "data": "page_name",
+                                    editable: false
                                 }, {
                                     "title": "Page Config",
-                                    "data": "page_config"
+                                    "data": "page_config",
+                                    edit: function(data, type, full, meta) {
+                                        // future implementation
+                                    }
                                 }]
                             }
                         }
