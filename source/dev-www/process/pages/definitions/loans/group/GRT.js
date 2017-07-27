@@ -63,6 +63,7 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
                 model.group = model.group || {};
+                model.review = model.review || {};
                 var centres = SessionStore.getCentres();
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
@@ -202,12 +203,12 @@ define({
                 "items": [{
                     "key": "group.scheduledDisbursementDate",
                     "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "required":true,
+                    "readonly":true,
                     "type": "date",
                 },{
                     "key": "group.firstRepaymentDate",
                     "title": "FIRST_REPAYMENT_DATE",
-                    "required":true,
+                    "readonly":true,
                     "type": "date",
                 },{
                     "key": "group.groupCode",
@@ -397,12 +398,6 @@ define({
                     PageHelper.showLoader();
                     model.group.grtDate = new Date();
                     model.group.grtDoneBy=SessionStore.getUsername();
-                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
-                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
-                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
-                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
-                        }
-                    }
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -428,15 +423,13 @@ define({
                     });
                 },
                 endGRT: function(model, form) {
+                    if(!model.group.grtDate) {
+                        irfProgressMessage.pop('GRT-End', 'GRT is not yet started.', 3000);
+                        return;
+                    }
                     PageHelper.showLoader();
                     model.group.grtEndDate = new Date();
                     model.group.grtDoneBy=SessionStore.getUsername();
-                    if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
-                        for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
-                            model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;
-                            model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
-                        }
-                    }
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -461,6 +454,12 @@ define({
                     });
                 },
                 submit: function(model, form, formName) {
+
+                    if(!model.group.grtEndDate) {
+                        irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
+                        return;
+                    }
+
                     PageHelper.showLoader();
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
