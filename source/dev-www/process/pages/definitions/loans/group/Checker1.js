@@ -424,7 +424,16 @@ return {
                         ]
                     }]
                 }]
-            }, {
+            }, 
+            {
+              "type": "section",
+              "htmlClass": "col-sm-6", 
+              "items": [{
+                    "type": "section",
+                    "html": '<hr>'
+                    }]
+            },
+            {
                 "type": "section",
                 "htmlClass": "col-sm-6",
                 "items": [{

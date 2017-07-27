@@ -156,8 +156,8 @@ define({
                     type: "date"
                 }, {
                     key: "journal.journalEntryDto.relatedAccountNo",
-                    title: "RELATED_ACCOUNT_NO",
-                    "required":true
+                    title: "RELATED_ACCOUNT_NO"
+                    // "required":true
                 }, {
                     key: "journal.journalEntryDto.remarks",
                     "required":true
