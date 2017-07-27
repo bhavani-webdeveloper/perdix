@@ -7,13 +7,7 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 	$scope.role = SessionStore.getRole();
 
 	$scope.allPages = null;
-	var showFavorites = function() {
-		var favoriteItems = [];
-		_.forOwn($scope.allPages, function(v, k) {
-			if (v.favorited) {
-				favoriteItems.push(k);
-			}
-		});
+	var showFavorites = function(favoriteItems) {
 		if (!favoriteItems.length) {
 			favoriteItems.push("Page/Engine/CustomerSearch");
 		}
@@ -25,18 +19,22 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 		});
 	};
 
-	$scope.allPages = SessionStore.getItem("UserFavorites_" + SessionStore.getLoginname());
-	if (!$scope.allPages) {
-		PagesDefinition.getUserAllowedPages().then(function(resp){
-			$scope.allPages = _.cloneDeep(resp);
-			delete $scope.allPages.$promise;
-			delete $scope.allPages.$resolved;
-			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), $scope.allPages);
-			showFavorites();
-		});
-	} else {
-		showFavorites();
+	var favoriteItems = SessionStore.getItem("UserFavorites_" + SessionStore.getLoginname());
+	if (!favoriteItems || !favoriteItems.length) {
+		favoriteItems = [];
+		SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), favoriteItems);
 	}
+	PagesDefinition.getUserAllowedPages().then(function(resp){
+		$scope.allPages = _.cloneDeep(resp);
+		var allowedFavorites = [];
+		for (i in favoriteItems) {
+			if ($scope.allPages[favoriteItems[i]]) {
+				allowedFavorites.push(favoriteItems[i]);
+			}
+		}
+		favoriteItems = allowedFavorites;
+		showFavorites(favoriteItems);
+	});
 
 	var favoritesPopupHtml = '\
 		<input id="_favoriteSearchText" ng-model="searchText" class="form-control" placeholder="Search (Type \'favorite\' to shortlist favorites)">\
@@ -54,7 +52,13 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 		</div>';
 	$scope.editFavorites = function() {
 		var pagesArray = [];
-		_.forOwn($scope.allPages, function(v, k) { pagesArray.push(v) });
+		_.forOwn($scope.allPages, function(v, k) {
+			v.favorited = false;
+			pagesArray.push(v);
+		});
+		for (i in favoriteItems) {
+			$scope.allPages[favoriteItems[i]].favorited = 'favorite';
+		}
 		var favPickerModal = irfSimpleModal("Pick favorites", favoritesPopupHtml, {
 			"pages": pagesArray,
 			"pageNameHtml": function(pageName) {
@@ -62,32 +66,17 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 			}
 		});
 		favPickerModal.closed.then(function() {
-			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), $scope.allPages);
-			showFavorites();
+			favoriteItems = [];
+			for (i in pagesArray) {
+				if (pagesArray[i].favorited) {
+					favoriteItems.push(pagesArray[i].uri);
+				}
+			}
+			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), favoriteItems);
+			showFavorites(favoriteItems);
 		});
 		favPickerModal.rendered.then(function() {
 			$('#_favoriteSearchText').focus();
 		});
 	};
-}]);
-irf.pageCollection.run(["irfStorageService", "$q", "PagesDefinition", "SessionStore",
-function(irfStorageService, $q, PagesDefinition, SessionStore) {
-	irfStorageService.onMasterUpdate(function() {
-		var deferred = $q.defer();
-		PagesDefinition.getUserAllowedPages().then(function(resp){
-			var allPages = SessionStore.getItem("UserFavorites_" + SessionStore.getLoginname());
-			var newPages = _.cloneDeep(resp);
-			var favoriteItems = [];
-			_.forOwn(allPages, function(v, k) {
-				if (v.favorited && newPages[k]) {
-					newPages[k].favorited = "favorite";
-				}
-			});
-			delete newPages.$promise;
-			delete newPages.$resolved;
-			SessionStore.setItem("UserFavorites_" + SessionStore.getLoginname(), newPages);
-			deferred.resolve();
-		}, deferred.reject);
-		return deferred.promise;
-	});
 }]);

@@ -3,21 +3,53 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
     function($resource, $log, BASE_URL, $q, SysQueries, SessionStore, Link, $rootScope) {
     var endpoint = BASE_URL + '/api';
 
-    var pDef = $resource(endpoint, null, {
-        getPagesJson: {
-            method:'GET',
-            url:'process/pages.json'
-        },
-    });
+    var pDef = {};
+
+    pDef.getPagesDefinition = function(userId, skip_relogin) {
+        var deferred = $q.defer();
+        SysQueries.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
+            if (records && records.results) {
+                var def = {};
+                _.each(records.results, function(v, k){
+                    var d = {
+                        "uri": v.uri,
+                        "offline": v.offline,
+                        "directAccess": v.directAccess,
+                        "title": v.title,
+                        "shortTitle": v.shortTitle,
+                        "iconClass": v.iconClass,
+                        "state": v.state,
+                        "stateParams": {
+                            "pageName": v.pageName,
+                            "pageId": v.pageId
+                        },
+                        "config": v.pageConfig
+                    };
+                    if (v.addlParams) {
+                        try {
+                            var ap = JSON.parse(v.addlParams);
+                            angular.extend(d.stateParams, ap);
+                        } catch (e) {}
+                    }
+                    if (v.pageConfig) {
+                        try {
+                            var pc = JSON.parse(v.pageConfig);
+                            d.config = pc;
+                        } catch (e) {}
+                    }
+                    def[v.uri] = d;
+                });
+                deferred.resolve(def);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
 
     var userAllowedPages = null;
-
     pDef.getRoleAllowedPageList = function() {
         var deferred = $q.defer();
-        //pDef.getPagesJson().$promise
         var localPages = SessionStore.getItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname());
-        SysQueries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
-        .then(function(response){
+        pDef.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length)).then(function(response){
             delete response.$promise;
             delete response.$resolved;
             userAllowedPages = response;
@@ -188,31 +220,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
         });
         return false;
     };
-/*
-    pDef.isStateAllowed = function(state) {
-        var deferred = $q.defer();
-        if (userAllowedPages) {
-            var p = isStateAllowed(state);
-            if (p) {
-                deferred.resolve(p);
-            } else {
-                deferred.reject("PAGE_ACCESS_RESTRICTED");
-            }
-        } else {
-            pDef.getRoleAllowedPageList().then(function(response){
-                var p = isStateAllowed(state);
-                if (p) {
-                    deferred.resolve(p);
-                } else {
-                    deferred.reject("PAGE_ACCESS_RESTRICTED");
-                }
-            }, function(errorResponse){
-                deferred.reject(errorResponse);
-            });
-        }
-        return deferred.promise;
-    };
-*/
+
     var readOnlyFormCache = {};
     pDef.setReadOnlyByRole = function(pageUri, form) {
         var deferred = $q.defer();

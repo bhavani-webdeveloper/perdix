@@ -178,10 +178,10 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left" ng-show="!$parent.latest_apk_force_upgrade">
-                                <a ng-click="gotoPageEngine({pageName: 'UserProfile', pageId: ss.session.login})" href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a ng-click="gotoPageEngine({pageName: 'UserProfile', pageId: ss.session.login})" href="#" class="btn btn-default btn-flat" onClick="$('.dropdown.user.user-menu').removeClass('open')">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a ng-click="logout()" class="btn btn-default btn-flat">Sign out</a>
+                                <a ng-click="logout()" class="btn btn-default btn-flat" onClick="$('.dropdown.user.user-menu').removeClass('open')">Sign out</a>
                             </div>
                         </li>
                     </ul>
