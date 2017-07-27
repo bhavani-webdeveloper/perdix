@@ -460,6 +460,142 @@ return {
         }]
     }, 
     {
+            "type": "box",
+            "title": "CGT And GRT Details",
+            "colClass": "col-sm-12",
+            "items": [
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [
+                                    {
+                                    "title": "CGT_1_PHOTO",
+                                    readonly: true,
+                                    "key": "group.cgt1Photo",
+                                    "category": "Group",
+                                    "subCategory": "CGT1PHOTO",
+                                    "type": "file",
+                                    "fileType": "image/*",
+                                    },
+                                    {
+                                        readonly: true,
+                                        "key": "group.cgt1EndPhoto",
+                                        "title": "CGT_1_PHOTO",
+                                        "category": "Group",
+                                        "subCategory": "CGT1PHOTO",
+                                        "type": "file",
+                                        "fileType": "image/*"
+                                    },
+                                    {
+                                        "key": "group.cgt1Latitude",
+                                        "title": "CGT_1_LOCATION",
+                                        "type": "geotag",
+                                        "latitude": "group.cgt1Latitude",
+                                        "longitude": "group.cgt1Longitude",
+                                        "readonly": true
+                                    }
+                            ]
+                    }, 
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [
+                                    {
+                                        "title": "CGT_2_PHOTO",
+                                        readonly: true,
+                                        "key": "group.cgt2Photo",
+                                        "category": "Group",
+                                        "subCategory": "CGT1PHOTO",
+                                        "type": "file",
+                                        "fileType": "image/*",
+                                    },
+                                    {
+                                        "title": "CGT_2_PHOTO",
+                                        readonly: true,
+                                        "key": "group.cgt2EndPhoto",
+                                        "category": "Group",
+                                        "subCategory": "CGT1PHOTO",
+                                        "type": "file",
+                                        "fileType": "image/*"
+                                    },
+                                    {
+                                        "key": "group.cgt2Latitude",
+                                        "title": "CGT_2_LOCATION",
+                                        "type": "geotag",
+                                        "latitude": "group.cgt2Latitude",
+                                        "longitude": "group.cgt2Longitude",
+                                        "readonly": true
+                                    }
+                            ]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [
+                                    {
+                                    "title": "CGT_3_PHOTO",
+                                    readonly: true,
+                                    "key": "group.cgt3Photo",
+                                    "category": "Group",
+                                    "subCategory": "CGT1PHOTO",
+                                    "type": "file",
+                                    "fileType": "image/*",
+                                    },
+                                    {
+                                        readonly: true,
+                                        "key": "group.cgt3EndPhoto",
+                                        "title": "CGT_3_PHOTO",
+                                        "category": "Group",
+                                        "subCategory": "CGT1PHOTO",
+                                        "type": "file",
+                                        "fileType": "image/*"
+                                    },
+                                    {
+                                        "key": "group.cgt1Latitude",
+                                        "title": "CGT_3_LOCATION",
+                                        "type": "geotag",
+                                        "latitude": "group.cgt3Latitude",
+                                        "longitude": "group.cgt3Longitude",
+                                        "readonly": true
+                                    }
+                            ]
+                    }, 
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-6",
+                        "items": [
+                                    {
+                                        
+                                        "key": "group.grtPhoto",
+                                        "title": "GRT_PHOTO",
+                                        "category": "Group",
+                                        "subCategory": "GRTPHOTO",
+                                        "fileType": "image/*",
+                                         "type": "file",
+                                        readonly: true,
+                                    },
+                                    {
+                                        "key": "group.grtEndPhoto",
+                                        "title": "GRT_PHOTO",
+                                        "category": "Group",
+                                        "subCategory": "GRTPHOTO",
+                                        "fileType": "image/*",
+                                         "type": "file",
+                                         readonly: true,
+                                    },
+                                    {
+                                        "key": "group.grtLatitude",
+                                        "title": "GRT_LOCATION",
+                                        "type": "geotag",
+                                        "latitude": "group.grtLatitude",
+                                        "longitude": "group.grtLongitude",
+                                        "readonly": true
+                                    }
+                            ]
+                    }
+                ]
+        },
+    {
     "type": "box",
     "title": "POST_REVIEW",
     "items": [{
