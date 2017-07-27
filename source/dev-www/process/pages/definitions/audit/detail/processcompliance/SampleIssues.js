@@ -82,6 +82,7 @@ function($log, $state, irfNavigator, $stateParams, $http, Audit, PageHelper, $q,
                                 columnForm.required = true;
                             }
                         }
+                        break; // very important break to preserve - sampleColumnsConfig
                     }
                 };
                 model.sampleType = sampleType;
