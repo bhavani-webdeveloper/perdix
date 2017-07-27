@@ -227,7 +227,7 @@ define({
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Close-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    model.groupAction = "PROCEED";
+                    model.groupAction = "SAVE";
                     model.group.groupStatus=false;
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {

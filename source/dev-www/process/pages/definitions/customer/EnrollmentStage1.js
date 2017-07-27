@@ -43,7 +43,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             Enrollment.getCustomerById({id:pageId},function(resp,header){
                 var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                 model.customer = resp;
-                model.customer.addressProofSameAsIdProof=model.customer.ageProof;
+                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                 model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
                 model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                 model = EnrollmentHelper.fixData(model);
@@ -452,7 +452,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 $log.info(result);
                                 model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
                             }
-
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ProofType",
@@ -576,7 +575,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                 $log.info("Inside submit()");
                 model.customer.customerType="Individual";
-                model.customer.ageProof=model.customer.addressProofSameAsIdProof;
+                model.customer.title=String(model.customer.addressProofSameAsIdProof);
                /* var centres = formHelper.enum('centre').data;
                 for (var i = 0; i < centres.length; i++) {
                     if ((centres[i].code) == model.customer.centreCode) {

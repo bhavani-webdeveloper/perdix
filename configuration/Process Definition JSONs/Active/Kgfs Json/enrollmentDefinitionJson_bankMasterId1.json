@@ -655,7 +655,9 @@
             "minLength": 1,
             "maxLength": 10,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "centreId": {
@@ -750,6 +752,7 @@
             "maxLength": 100,
             "captureStages": [
               "Stage01",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1046,7 +1049,7 @@
 
             ]
           },
-          "biometricEnrollment": {
+           "biometricEnrollment": {
             "title": "biometricEnrollment",
             "type": "string",
             "minLength": 0,
@@ -1349,6 +1352,14 @@
               "Completed"
             ]
           },
+          "addressProofSameAsIdProof": {
+            "title": "addressProofSameAsIdProof",
+            "type": "string",
+            "captureStages": [
+              "Stage01",
+              "Completed"
+            ]
+          },
           "panCardImageId": {
             "title": "Pan Card Image",
             "type": "string",
@@ -1360,7 +1371,9 @@
             "title": "Age Proof",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "ageProofImageId": {
@@ -1846,6 +1859,7 @@
               "title": "Name Of Owned Asset",
               "type": "string",
               "captureStages": [
+                "Stage01",
                 "Stage02",
                 "Completed"
               ]
@@ -1854,6 +1868,7 @@
               "title": "Asset Type",
               "type": "string",
               "captureStages": [
+                "Stage01",
                 "Stage02",
                 "Completed"
               ]
@@ -1862,6 +1877,7 @@
               "title": "Unit",
               "type": "string",
               "captureStages": [
+                "Stage01",
                 "Stage02",
                 "Completed"
               ]
@@ -1872,6 +1888,7 @@
               "minimum": 1,
               "maximum": 10000,
               "captureStages": [
+                "Stage01",
                 "Stage02",
                 "Completed"
               ]
@@ -1898,6 +1915,7 @@
               "maximum": 1000000,
               "captureStages": [
                 "Stage02",
+                "Stage01",
                 "Completed"
               ]
             },
@@ -1906,6 +1924,7 @@
               "type": "string",
               "captureStages": [
                 "Stage02",
+                "Stage01",
                 "Completed"
               ]
             },
@@ -1914,6 +1933,7 @@
               "type": "string",
               "captureStages": [
                 "Stage02",
+                "Stage01",
                 "Completed"
               ]
             }

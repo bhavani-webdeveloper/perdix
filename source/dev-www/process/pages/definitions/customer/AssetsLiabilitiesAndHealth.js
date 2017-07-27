@@ -49,16 +49,16 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         "subTitle": "Enrollment Stage 2",
         "uri": "Profile/Stage 2",
         initialize: function (model, form, formCtrl) {
+
             var customerId = $stateParams.pageId;
 
-            if (customerId == undefined || customerId == null) {
-                $state.go('Page.Engine', {
-                    pageName: "EnrollmentHouseVerificationQueue",
-                    pageId: null
-                });
-            }
-
             if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
+                if (customerId == undefined || customerId == null) {
+                    $state.go('Page.Engine', {
+                        pageName: "EnrollmentHouseVerificationQueue",
+                        pageId: null
+                    });
+                }
                 PageHelper.showLoader();
                 PageHelper.showProgress("page-init","Loading...");
                 

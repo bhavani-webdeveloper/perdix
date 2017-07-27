@@ -8,9 +8,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
             "items": [
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringScheduleQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue",
-                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue",
-                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue",
-                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue",
+                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue"
             ]
         }).then(function(resp) {
             $scope.dashboardDefinition = resp;
@@ -22,6 +20,9 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
             //         centreId.push(centres[i].centreId);
             //     }
             // }
+
+            //"Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue",
+            //"Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue",
             var cmsq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringScheduleQueue"];
             var cmrq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"];
             var cmlrq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"];

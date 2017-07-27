@@ -35,8 +35,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
                             model.customer.udf.userDefinedFieldValues.udf26 = false;
                     }
-
-                 }
+                }
+                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                 $log.info("After fixData");
                 $log.info(model);
                 return model;
@@ -1128,6 +1128,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         if (window.confirm("Update - Are You Sure?")) {
                             PageHelper.showLoader();
                             irfProgressMessage.pop('cust-update', 'Working...');
+                            model.customer.title=String(model.customer.addressProofSameAsIdProof);
                             $log.info(model);
                             var reqData = _.cloneDeep(model);
                             if (reqData.customer.currentStage == 'Completed'){ 

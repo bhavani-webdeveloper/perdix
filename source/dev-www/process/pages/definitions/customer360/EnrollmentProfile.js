@@ -49,15 +49,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
-        if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
-                if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
-                        model.customer.udf.userDefinedFieldValues.udf26 = true;
-                }
-                if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
-                        model.customer.udf.userDefinedFieldValues.udf26 = false;
-                }
-
+        if (model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
+            if (model.customer.udf.userDefinedFieldValues.udf26 === "true") {
+                model.customer.udf.userDefinedFieldValues.udf26 = true;
+            }
+            if (model.customer.udf.userDefinedFieldValues.udf26 === "false") {
+                model.customer.udf.userDefinedFieldValues.udf26 = false;
+            }
         }
+        model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
         $log.info("After fixData");
         $log.info(model);
         return model;
@@ -73,7 +73,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
             $log.info("Profile Page got initialized");
             initData(model);
             fixData(model);
-
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -1163,6 +1162,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
+                    model.customer.title=String(model.customer.addressProofSameAsIdProof);
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
                     if (reqData.customer.currentStage == 'Completed'){ 

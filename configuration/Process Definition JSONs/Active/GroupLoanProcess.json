@@ -201,7 +201,8 @@
                   "title": "Group  Status",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation"
+                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker2",
+                     "Checker2","Checker3","Checker4","AgreementUploadPending"
                   ]
                },
                "startTime": {
