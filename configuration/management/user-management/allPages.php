@@ -5,7 +5,7 @@ require '_Pages.php';
 header("Access-Control-Request-Method: GET");
 
 $PM_QUERY = "
-SELECT p.id, p.uri, rpa.id rpa_id, rpa.page_config
+SELECT p.id, p.uri, rpa.id rpa_id, rpa.page_config, p.title, p.icon_class, p.state, p.page_name
 FROM ".DB_SCHEMA.".pages p
 LEFT OUTER
 JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = 

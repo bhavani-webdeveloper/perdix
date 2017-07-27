@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("management.RolesPages"),
-["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils",
-    function($log, SessionStore, PageHelper, formHelper, RolesPages, Utils) {
+["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter",
+    function($log, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter) {
 
         var branch = SessionStore.getBranch();
 
@@ -47,7 +47,11 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                                                 uri: result.body[i].uri,
                                                 rpa_id: result.body[i].rpa_id,
                                                 page_config: result.body[i].page_config,
-                                                access: !!result.body[i].rpa_id
+                                                title: result.body[i].title,
+                                                icon_class: result.body[i].icon_class,
+                                                state: result.body[i].state,
+                                                page_name: result.body[i].page_name,
+                                                $selected: !!result.body[i].rpa_id
                                             };
                                             model.rolePage.access.push(a);
                                         };
@@ -65,42 +69,33 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                         {
                             key: "rolePage.access",
                             condition: "model.rolePage.access.length",
-                            type: "array",
-                            add: null,
-                            remove: null,
-                            titleExpr: "(model.rolePage.access[arrayIndex].access?'⚫ ':'⚪ ') + model.rolePage.access[arrayIndex].uri",
-                            items: [
-                                {
-                                    type: "section",
-                                    htmlClass: "row",
-                                    items: [
-                                        {
-                                            type: "section",
-                                            htmlClass: "col-sm-3",
-                                            items: [
-                                                {
-                                                    key: "rolePage.access[].access",
-                                                    title: "Allow Access",
-                                                    type: "checkbox",
-                                                    fullwidth: true,
-                                                    schema: { default:true }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            type: "section",
-                                            htmlClass: "col-sm-9",
-                                            items: [
-                                                {
-                                                    key: "rolePage.access[].page_config",
-                                                    title: "Config",
-                                                    type: "textarea"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
+                            type: "tableview",
+                            "notitle": true,
+                            "selectable": true,
+                            "editable": true,
+                            "tableConfig": {
+                                "searching": true,
+                                "paginate": true,
+                                "pageLength": 10
+                            },
+                            getColumns: function(){
+                                return [{
+                                    "title": "Page Title",
+                                    "data": "title",
+                                    render: function(data, type, full, meta) {
+                                        return '<i class="' + full.icon_class + '">&nbsp;</i>' + translateFilter(data);
+                                    }
+                                }, {
+                                    "title": "State",
+                                    "data": "state"
+                                }, {
+                                    "title": "Page Name",
+                                    "data": "page_name"
+                                }, {
+                                    "title": "Page Config",
+                                    "data": "page_config"
+                                }]
+                            }
                         }
                     ]
                 },
@@ -143,7 +138,7 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                     };
 
                     for (var i = model.rolePage.access.length - 1; i >= 0; i--) {
-                        if (model.rolePage.access[i].access) {
+                        if (model.rolePage.access[i].$selected) {
                             var a = {
                                 page_id: model.rolePage.access[i].id,
                                 page_config: model.rolePage.access[i].page_config
