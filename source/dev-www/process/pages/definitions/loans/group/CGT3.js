@@ -149,6 +149,10 @@ define({
                     });
                 },
                 endCGT3: function(model, form) {
+                    if(!model.group.cgtDate3) {
+                        irfProgressMessage.pop('CGT-End', 'CGT is not yet started.', 3000);
+                        return;
+                    }
                     PageHelper.showLoader();
                     model.group.cgtEndDate3 = new Date();
                     model.group.cgt3DoneBy=SessionStore.getUsername();
@@ -167,6 +171,10 @@ define({
                     });
                 },
                 submit: function(model, form, formName) {
+                    if(!model.group.cgtEndDate3) {
+                        irfProgressMessage.pop('CGT-proceed', 'Please End CGT before proceeding.', 3000);
+                        return;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('CGT3-proceed', 'Working...');
                     PageHelper.clearErrors();

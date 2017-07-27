@@ -41,6 +41,8 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
+                model.review = model.review || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
@@ -175,6 +177,10 @@ define({
                     });
                 },
                 endCGT1: function(model, form) {
+                    if(!model.group.cgtDate1) {
+                        irfProgressMessage.pop('CGT-End', 'CGT is not yet started.', 3000);
+                        return;
+                    }
                     PageHelper.showLoader();
                     model.group.cgtEndDate1 = new Date();
                     $log.info("Inside submit()");
@@ -191,6 +197,10 @@ define({
                     });
                 },
                 submit: function(model, form, formName) {
+                    if(!model.group.cgtEndDate1) {
+                        irfProgressMessage.pop('CGT-proceed', 'Please End CGT before proceeding.', 3000);
+                        return;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('CGT1-proceed', 'Working...');
                     PageHelper.clearErrors();
