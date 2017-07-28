@@ -50,6 +50,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
+                if (model.customer.spouseDateOfBirth) {
+                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
                 model._mode = 'EDIT';
                 if (model.customer.currentStage==='Stage01') {
                     irfProgressMessage.pop("enrollment-save","Load Complete",2000);

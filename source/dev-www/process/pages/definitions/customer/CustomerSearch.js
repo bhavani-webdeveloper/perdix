@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition",
-function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition){
+["$log", "formHelper", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
+function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -18,12 +18,8 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 					break;
 				}
 			}
-			Queries.getGlobalSettings("siteCode").then(function(value) {
-				model.siteCode = value;
-				$log.info("siteCode:" + model.siteCode);
-			}, function(err) {
-				$log.info("siteCode is not available");
-			});
+			model.siteCode = SessionStore.getGlobalSetting("siteCode");
+			$log.info("siteCode:" + model.siteCode);
 			var userRole = SessionStore.getUserRole();
 			if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 				model.fullAccess = true;
@@ -220,7 +216,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							data: 'centreId'
 						},
 						{
-							title:'FATHERS_NAME',
+							title:'FATHER_NAME',
 							data: 'fatherFirstName'
 						}
 					]
@@ -238,7 +234,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 								});
 							},
 							isApplicable: function(item, model){
-								if (item.currentStage==='BasicEnrolment')
+								if (item.currentStage==='BasicEnrolment' )
 									return true;
 								return false;
 							}
@@ -250,7 +246,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							fn: function(item, model){
 								$state.go("Page.Customer360",{
 									pageId:item.id,
-									pageData:model.siteCode	
+									pageData:model.siteCode
 								});
 							},
 							isApplicable: function(item, model){
@@ -260,57 +256,39 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							}
 						},
 						{
-							name: "Edit/Enroll Customer",
-							desc: "",
-							icon: "fa fa-user-plus",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"ProfileInformation",
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, model){
-								if (item.currentStage==='Stage01' && model.siteCode=="KGFS")
-									return true;
-								else return false;
-							}
-						},
-						{
-							name: "Edit Enrollment",
+							name: "Edit Customer",
 							desc: "",
 							icon: "fa fa-pencil",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"CustomerRUD",
-									pageId:item.id,
-									pageData:{
-										intent:'EDIT'
-									}
-								});
+							fn: function(item, model){
+								if (item.currentStage === 'Stage01') {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "ProfileInformation",
+										pageId: item.id
+									});
+								}
+								else if (item.currentStage === 'Stage02') {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "AssetsLiabilitiesAndHealth",
+										pageId: item.id
+									});
+								}
+								else if (item.currentStage === 'Completed') {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "CustomerRUD",
+										pageId: item.id,
+										pageData: {
+											intent:'EDIT'
+										}
+									});
+								}
 							},
 							isApplicable: function(item, model){
-								if (item.currentStage !=='Stage01'&& model.siteCode=="KGFS")
-									return true;
-								else return false;
-							}
-						},
-						{
-							name: "EDF",
-							desc: "",
-							icon: "fa fa-pencil",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"EDF",
-									pageId:item.id,
-								});
-							},
-							isApplicable: function(item, model){
-								if (item.urnNo && model.siteCode=="KGFS")
-									return true;
-								else return false;
+								return model.siteCode === "KGFS";
 							}
 						}
-
 					];
 				}
 			}

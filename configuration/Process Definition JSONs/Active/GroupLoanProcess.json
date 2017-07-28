@@ -890,7 +890,9 @@
               "type": "string",
               "captureStages": [
 			  "GroupCreation",
-                "Checker1"				
+                "Checker1",
+				"AgreementUploadPending"
+				
               ]
             },
 			  

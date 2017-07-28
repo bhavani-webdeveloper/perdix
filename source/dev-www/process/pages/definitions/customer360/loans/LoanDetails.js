@@ -524,7 +524,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         },{
                             "key":"loanAccount.expectedInterestRate",
                             title:"Expected Interest Rate",
-                            "type":"number"
+                            "type":"number",
+                            "condition": "!loanAccount.loanType == 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -618,10 +619,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }, {
                             "key": "customer.firstName",
                             "title": "ENTITY_NAME",
-                            "readonly": true
+                            "readonly": true,
+                            "condition": "!loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.applicant",
                             "title": "APPLICANT_URN_NO",
+                            "condition": "!loanAccount.loanType == 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -671,10 +674,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }, {
                             "key": "customer.applicantName",
                             "title": "APPLICANT_NAME",
-                            "readonly": true
+                            "readonly": true,
+                            "condition": "!loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.coBorrowerUrnNo",
                             "title": "CO_APPLICANT_URN_NO",
+                            "condition": "!loanAccount.loanType == 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -724,7 +729,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }, {
                             "key": "customer.coBorrowerName",
                             "title": "COAPPLICANT_NAME",
-                            "readonly": true
+                            "readonly": true,
+                            "condition": "!loanAccount.loanType == 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
