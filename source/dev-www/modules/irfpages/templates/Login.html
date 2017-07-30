@@ -15,18 +15,20 @@
         </div>
         <div class="box-body animat error-body" ng-class="{anim:errorMessage}">{{errorMessage|translate}}</div>
         <div class="box-footer animat">
-            <form ng-show="isOnline" class="form-horizontal">
+            <form name="onlineForm" ng-show="isOnline" class="form-horizontal" ng-submit="c.onlineLogin(c.username, c.password)">
                 <div ng-show="isOnline" class="box-body pass-form">
                     <input type="text" ng-model="c.username" class="form-control" id="inputEmail3" placeholder="Username" autocomplete="off" required>
                     <br/>
                     <input type="password" ng-model="c.password" class="form-control" id="inputPassword3" placeholder="Password" autocomplete="off" required>
+                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
                 </div>
             </form>
-            <form ng-hide="isOnline" class="form-horizontal">
+            <form name="offlineForm" ng-hide="isOnline" class="form-horizontal" ng-submit="c.offlineLogin(c.pin)">
                 <div ng-hide="isOnline" class="box-body pin-form">
                     <div style="padding:6px 12px;text-align:center">{{offlineUserName}}</div>
                     <br/>
                     <input type="password" pattern="[0-9]*" ng-model="c.pin" class="form-control" id="inputPassword4" placeholder="4 Digit PIN" required minLength="4" maxLength="4" autocomplete="off" onClick="this.select();">
+                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
                 </div>
             </form>
                 <div class="box-footer">
