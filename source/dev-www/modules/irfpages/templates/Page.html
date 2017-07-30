@@ -2,7 +2,7 @@
     <irf-header theme="theme"></irf-header>
     <irf-main-menu></irf-main-menu>
 
-    <div class="content-wrapper bg-tint-theme">
+    <div class="content-wrapper bg-tint-theme" ng-style="showLoaderBlocking?{position:initial}:{}">
         <ol class="breadcrumb" ng-show="breadcrumb.callstack.length || breadcrumb.current()">
             <li ng-repeat="callstack in breadcrumb.callstack">
                 <a href="#" ng-click="breadcrumb.goBackTo($event, $index)" class="color-theme">
@@ -31,7 +31,7 @@
         </div>
         <div class="spinner-wrapper spinner-section-far-wrapper" ng-show="showSectionFarLoader">
             <div class="spinner-section-far"></div>
-            <!--<div class="spinner-jovey-timer"></div>-->
+            <div class="spinner-section-far-text" ng-bind="showLoaderMsg"></div>
         </div>
 
         <ui-view onload="" ng-class="slide">

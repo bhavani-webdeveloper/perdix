@@ -69,8 +69,9 @@ gulp.task('cordovaAssets', function(){
 })
 
 gulp.task('html', function(){
-    gulp.src(['!dev-www/index.html', 'dev-www/*.+(json|js|html)']).pipe(gulp.dest('www/'));
+    gulp.src(['!dev-www/index.html', 'dev-www/*.+(json|js|html)']).pipe(gulp.dest(buildDirectory));
     return gulp.src('dev-www/index.html')
+        .pipe($.inject(gulp.src('dev-www/css/custom-' + argv.siteCode + '.css'), {relative: true}))
         .pipe($.useref())
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
