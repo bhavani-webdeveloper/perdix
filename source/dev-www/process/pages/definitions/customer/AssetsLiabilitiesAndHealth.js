@@ -68,6 +68,15 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         model = fixData(model);
                         model.customer.date = model.customer.date || Utils.getCurrentDate();
                         model.customer.familyMembers = model.customer.familyMembers || [];
+
+                        if(model.customer.currentStage=='EDF'){
+                            model.customer.edf_done_at = model.customer.edf_done_at || Utils.getCurrentDate();
+                            model.customer.edf_captured_user_name = model.customer.edf_captured_user_name || SessionStore.getLoginname();
+                            if (!model.customer.biometricEnrollment) {
+                                model.customer.biometricEnrollment = "PENDING";
+                            }
+                        }
+
                         var self = null;
                         var spouse = null;
                         _.each(model.customer.familyMembers, function(v){
@@ -821,7 +830,65 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 ]
             },
             {
+                "type": "box",
+                "condition":"model.customer.currentStage=='EDF'",
+                "title": "EDF",
+                "items": [{
+                        "key": "customer.terms_and_conditions_explained",
+                        title: "IS_TERMS_AND_CONDITIONS_EXPLAINED",
+                        type: "radios",
+                        titleMap: {
+                            "YES": "YES",
+                            "NO": "NO",
+                        }
+                    }, {
+                        type: "fieldset",
+                        condition: "model.customer.terms_and_conditions_explained =='YES'",
+                        title: "VALIDATE_BIOMETRIC",
+                        items: [{
+                            key: "customer.isBiometricValidated",
+                            //required:true,
+                            "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                            type: "validatebiometric",
+                            category: 'CustomerEnrollment',
+                            subCategory: 'FINGERPRINT',
+                            helper: formHelper,
+                            biometricMap: {
+                                leftThumb: "model.customer.leftHandThumpImageId",
+                                leftIndex: "model.customer.leftHandIndexImageId",
+                                leftMiddle: "model.customer.leftHandMiddleImageId",
+                                leftRing: "model.customer.leftHandRingImageId",
+                                leftLittle: "model.customer.leftHandSmallImageId",
+                                rightThumb: "model.customer.rightHandThumpImageId",
+                                rightIndex: "model.customer.rightHandIndexImageId",
+                                rightMiddle: "model.customer.rightHandMiddleImageId",
+                                rightRing: "model.customer.rightHandRingImageId",
+                                rightLittle: "model.customer.rightHandSmallImageId"
+                            },
+                            viewParams: function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                        }, {
+                            "key": "customer.biometricEnrollment",
+                            readonly: true,
+                            condition: "model.customer.biometricEnrollment == 'AUTHENTICATED'",
+                            title: "BIOMETRIC_AUTHENTICATION",
+                            type: "select",
+                            titleMap: {
+                                "NOT-ENABLE": "NOT-ENABLE",
+                                "PENDING": "PENDING",
+                                "AUTHENTICATED": "AUTHENTICATED"
+                            }
+                        }, ]
+                    },
+
+                ]
+            },
+            {
                 "type": "actionbox",
+                "condition":"model.customer.currentStage=='Stage02'",
                 "items": [{
                     "type": "save",
                     "title": "Save Offline",
@@ -829,8 +896,19 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     "type": "submit",
                     "title": "Submit"
                 }]
-            }
-
+            },
+            {
+                "type": "actionbox",
+                "condition":"model.customer.currentStage=='EDF'",
+                "items": [{
+                    "type": "save",
+                    "title": "Save Offline",
+                },{
+                    "type": "button",
+                    "onClick": "actions.proceed(model, formCtrl, form, $event)",
+                    "title": "EDF"
+                }]
+            },
         ],
         schema: function() {
             return Enrollment.getSchema().$promise;
@@ -838,6 +916,41 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         actions: {
             captureBiometric: function(model, form, formName){
 
+            },
+            proceed: function(model, formCtrl, form, $event) {
+                if (model.customer.isBiometricValidated || model.customer.isBiometricValidated != true) {
+                    elementsUtils.alert('Fingerprint not verified.');
+                    return;
+                }
+                model.customer.isBiometricValidated = true;
+                if (model.customer.isBiometricValidated != true) {
+                    elementsUtils.alert('Fingerprint not verified.');
+                    return;
+                }
+
+                if (model.customer.isBiometricValidated == true) {
+                    model.customer.biometricEnrollment = "AUTHENTICATED";
+                }
+
+                $log.info("Inside submit()");
+                $log.info(model);
+                var reqData = _.cloneDeep(model);
+                Utils.removeNulls(reqData, true);
+                $log.info(reqData);
+                reqData['enrollmentAction'] = 'PROCEED';
+                Enrollment.updateEnrollment(reqData,
+                    function(res, headers) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN Updated : ' + res.customer.urnNo, 5000);
+                        $log.info("Inside EDF  Success!");
+                        $state.go("Page.Landing");
+                    },
+                    function(res, headers) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('enrollment-submit', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    })
+                $log.info(reqData);
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");

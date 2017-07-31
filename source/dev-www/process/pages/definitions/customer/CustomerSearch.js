@@ -267,7 +267,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 										pageId: item.id
 									});
 								}
-								else if (item.currentStage === 'Stage02') {
+								else if (item.currentStage === 'Stage02'||item.currentStage === 'EDF') {
 									irfNavigator.go({
 										state: "Page.Engine",
 										pageName: "AssetsLiabilitiesAndHealth",
