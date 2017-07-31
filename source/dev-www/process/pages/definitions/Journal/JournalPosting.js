@@ -144,9 +144,11 @@ define({
                         "value": "RTGS"
                     }]
                 }, {
-                    key: "journal.journalEntryDto.instrumentNumber"
+                    key: "journal.journalEntryDto.instrumentNumber",
+                    "title": "INSTRUMENT_DATE"
                 }, {
                     key: "journal.journalEntryDto.instrumentDate",
+                    "title": "INSTRUMENT_NUMBER",
                     type: "date"
                 }, {
                     key: "journal.journalEntryDto.ifscCode",
