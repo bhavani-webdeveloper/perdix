@@ -151,6 +151,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		$scope.page = $injector.get(irf.page($scope.pageName));
 		setupPage();
 	} catch (e) {
+		$log.error(e);
 		try {
 			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
 			PageHelper.showLoader();
