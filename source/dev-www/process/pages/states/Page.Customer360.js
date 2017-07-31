@@ -7,6 +7,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	$scope.branch = SessionStore.getBranch();
 	$scope.role = SessionStore.getRole();
+	$scope.siteCode=SessionStore.getGlobalSetting("siteCode");
 	$scope.customerId = $stateParams.pageId;
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
@@ -281,31 +282,18 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		Enrollment.get({
 			id: $scope.customerId
 		}).$promise.then(function(response) {
-			Queries.getGlobalSettings("siteCode").then(function(value) {
-				$scope.siteCode = value;
-				var fullDefinition = customerDefinition;
-				if (response.customerType === 'Enterprise') {
-					fullDefinition = enterpriseDefinition;
-				}
-				if ($scope.siteCode == "KGFS") {
-					fullDefinition = enrollmentDefinition;
-				}
-				$log.info("siteCode:" + $scope.siteCode);
-				PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
-					$scope.dashboardDefinition = resp;
-					$scope.customerSchema = customerSchemaResponse;
-					$scope.initialize(response);
-				});
-			}, function(err) {
-				var fullDefinition = customerDefinition;
-				if (response.customerType === 'Enterprise') {
-					fullDefinition = enterpriseDefinition;
-				}
-				PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
-					$scope.dashboardDefinition = resp;
-					$scope.customerSchema = customerSchemaResponse;
-					$scope.initialize(response);
-				});
+			var fullDefinition = customerDefinition;
+			if (response.customerType === 'Enterprise') {
+				fullDefinition = enterpriseDefinition;
+			}
+			if ($scope.siteCode == "KGFS") {
+				fullDefinition = enrollmentDefinition;
+			}
+			$log.info("siteCode:" + $scope.siteCode);
+			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+				$scope.dashboardDefinition = resp;
+				$scope.customerSchema = customerSchemaResponse;
+				$scope.initialize(response);
 			});
 		}, function(errorResponse) {
 			PageHelper.showErrors(errorResponse);

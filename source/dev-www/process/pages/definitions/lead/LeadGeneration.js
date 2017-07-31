@@ -11,12 +11,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
-                Queries.getGlobalSettings("siteCode").then(function(value) {
-                   model.lead.siteCode = value;
-                    $log.info("siteCode:" + model.lead.siteCode);
-                }, function(err) {
-                    $log.info("siteCode is not available");
-                });
+                model.lead.siteCode = SessionStore.getGlobalSetting("siteCode");
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
                     model.lead.leadStatus = "Incomplete";

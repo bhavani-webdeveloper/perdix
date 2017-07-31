@@ -19,13 +19,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.fee=model.fee||{};
 
                 model.additional = {"branchName":branch};
-                Queries.getGlobalSettings("siteCode").then(function(value) {
-                    model.siteCode = value;
-                    $log.info("siteCode:" + model.siteCode);
-                }, function(err) {
-                    $log.info("siteCode is not available");
-                });
 
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 try {
                     var loanId = ($stateParams['pageId'].split('.'))[0];
                     var disbursementId = ($stateParams['pageId'].split('.'))[1];
