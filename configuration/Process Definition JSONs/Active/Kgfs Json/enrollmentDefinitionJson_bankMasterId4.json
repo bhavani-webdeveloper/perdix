@@ -1,5 +1,5 @@
 {
-  "urnGenerateStage": "Stage02",
+  "urnGenerateStage": "EDF",
   "stages": [{
     "order": 1,
     "code": "Stage01",
@@ -17,7 +17,15 @@
       "WM"
     ]
   },{
-      "order": 3,
+    "order": 3,
+    "code": "EDF",
+    "name": "EDF",
+    "stageType": "CAPTURE",
+    "allowedRoles": [
+      "WM"
+    ]
+  },{
+      "order": 4,
       "code": "Completed",
       "name": "Completed",
       "stageType": "CAPTURE",
@@ -1055,9 +1063,8 @@
             "minLength": 0,
             "maxLength": 100,
             "captureStages": [
-              "Stage01",
-              "Stage02",
-              "Completed"
+              "Completed",
+              "EDF"
             ]
           }
         }
