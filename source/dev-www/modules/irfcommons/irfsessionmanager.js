@@ -31,7 +31,8 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 			branchNamme: "",
 			branchId: ""
 		},
-		activeBranch: null
+		activeBranch: null,
+		global: {}
 	};
 	var session = self.session;
 

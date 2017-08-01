@@ -45,7 +45,6 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.app_manifest = irf.appManifest;
 	$scope.appName = irf.appManifest.title;
 	document.mainTitle = irf.appManifest.name;
-	checkLatestVersion();
 	connectPerdix7();
 
 	$scope.$on('irf-login-success', function($event){
