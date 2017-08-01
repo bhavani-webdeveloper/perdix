@@ -15,13 +15,5 @@ $.ajax({
 });
 
 $(document).ready(function(){
-	angular.bootstrap($("html"), ['MainApp']);
-
-	$.event.special.destroyed = {
-		remove: function(o) {
-			if (o.handler && o.type !== 'destroyed') {
-				o.handler()
-			}
-		}
-	}
+    angular.bootstrap($("html"), ['MainApp']);
 });
