@@ -1,7 +1,7 @@
 irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
-["$log","formHelper","Enrollment", '$state','$stateParams', '$q', 'irfProgressMessage', 'PageHelper',
+["$log","formHelper","Enrollment", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
     'SessionStore','Utils','authService', 'BiometricService', 'Files',
-function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage, PageHelper,
+function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
          SessionStore,Utils,authService, BiometricService, Files) {
     var fixData = function(model) {
         $log.info("Before fixData");
