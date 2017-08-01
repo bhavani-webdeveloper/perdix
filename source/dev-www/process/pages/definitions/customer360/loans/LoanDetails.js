@@ -525,7 +525,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "key":"loanAccount.expectedInterestRate",
                             title:"Expected Interest Rate",
                             "type":"number",
-                            "condition": "!loanAccount.loanType == 'JLG'"
+                            "condition": "!model.loanAccount.loanType == 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -620,11 +620,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "key": "customer.firstName",
                             "title": "ENTITY_NAME",
                             "readonly": true,
-                            "condition": "!loanAccount.loanType == 'JLG'"
+                            "condition": "!model.loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.applicant",
                             "title": "APPLICANT_URN_NO",
-                            "condition": "!loanAccount.loanType == 'JLG'",
+                            "condition": "!model.loanAccount.loanType == 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -675,11 +675,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "key": "customer.applicantName",
                             "title": "APPLICANT_NAME",
                             "readonly": true,
-                            "condition": "!loanAccount.loanType == 'JLG'"
+                            "condition": "!model.loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.coBorrowerUrnNo",
                             "title": "CO_APPLICANT_URN_NO",
-                            "condition": "!loanAccount.loanType == 'JLG'",
+                            "condition": "!model.loanAccount.loanType == 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -730,7 +730,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "key": "customer.coBorrowerName",
                             "title": "COAPPLICANT_NAME",
                             "readonly": true,
-                            "condition": "!loanAccount.loanType == 'JLG'"
+                            "condition": "!model.loanAccount.loanType == 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -1369,6 +1369,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     "items": [{
                         "type": "fieldset",
                         "title": "EXISTING_LOAN_DOCUMENTS",
+                        "condition": "!model.loanAccount.loanType == 'JLG'",
                         "items": [{
                             "type": "array",
                             "key": "loanDocuments.existingDocuments",
@@ -1395,6 +1396,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     }, {
                         "type": "fieldset",
                         "title": "ADD_LOAN_DOCUMENTS",
+                        "condition": "!model.loanAccount.loanType == 'JLG'",
                         "items": [{
                             "type": "array",
                             "key": "loanDocuments.newLoanDocuments",
@@ -1429,6 +1431,30 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                 // }
                             ]
                         }]
+                    },{
+                        "title": "Loan Doument Download",
+                        "key": "loanAccount.applicationFileId",
+                        "condition": "model.loanAccount.loanType == 'JLG'",
+                        "type": "file",
+                        "fileType": "*/*",
+                        "category": "Loan",
+                        "subCategory": "DOC1"
+                    },{
+                        "title": "CHK1 File Download",
+                        "key": "loanAccount.chk1FileUploadId",
+                        "condition": "model.loanAccount.loanType == 'JLG'",
+                        "type": "file",
+                        "fileType": "*/*",
+                        "category": "Loan",
+                        "subCategory": "DOC1"
+                    },{
+                        "title": "Agreement File Download",
+                        "key": "loanAccount.bcAccount.agreementFileId",
+                        "condition": "model.loanAccount.loanType == 'JLG'",
+                        "type": "file",
+                        "fileType": "*/*",
+                        "category": "Loan",
+                        "subCategory": "DOC1"
                     }]
                 }, {
                     "type": "actionbox",
