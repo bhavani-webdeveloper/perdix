@@ -922,12 +922,12 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     elementsUtils.alert('Fingerprint not verified.');
                     return;
                 }
-                model.customer.isBiometricValidated = true;
+                /*model.customer.isBiometricValidated = true;
                 if (model.customer.isBiometricValidated != true) {
                     elementsUtils.alert('Fingerprint not verified.');
                     return;
                 }
-
+*/
                 if (model.customer.isBiometricValidated == true) {
                     model.customer.biometricEnrollment = "AUTHENTICATED";
                 }
