@@ -383,7 +383,7 @@ define({
                                     }, {}, function(resp, header) {
                                         $log.warn(resp);
                                         irfProgressMessage.pop('group-dsc-override-req', 'Almost Done...');
-                                        var screenMode = model.group.screenMode;
+                                        //var screenMode = model.group.screenMode;
                                         GroupProcess.getGroup({
                                             groupId: model.group.id
                                         }, function(response, headersGetter) {
@@ -448,7 +448,6 @@ define({
                                                 }, function(response, headersGetter) {
                                                     irfProgressMessage.pop('group-dsc-remove-req', 'Group Member Removed', 2000);
                                                     model.group = _.cloneDeep(response);
-                                                    model.group.screenMode = screenMode;
                                                     fixData(model);
                                                     PageHelper.hideLoader();
 
