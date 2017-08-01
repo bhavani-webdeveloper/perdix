@@ -435,6 +435,7 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].witnessRelationship",
                         "title": "RELATION",
+                        "required":true,
                         "type": "select",
                         "enumCode": "relation"
                     }]
