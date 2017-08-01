@@ -242,8 +242,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "Queries",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, Queries) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
     var self = this;
 
     $scope.pages = [];
@@ -365,16 +365,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             return BundleManager.saveOffline();
         } else {
             return $q.reject();
-        }
-    };
-
-    var isAutoSaveOffline = true;
-    var autoSaveOffline = function(n) {
-        if (isAutoSaveOffline) {
-            BundleManager.saveOffline();
-            $timeout(function() {
-                autoSaveOffline(n);
-            }, n);
         }
     };
 
@@ -514,18 +504,21 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         return deferredInitBundle.promise;
     };
 
+    var autoSaveOfflineTimer = null;
+    var stopAutoSaveOffline = function() {
+        if (autoSaveOfflineTimer) {
+            clearInterval(autoSaveOfflineTimer);
+            autoSaveOfflineTimer = null;
+        }
+    };
+
     $scope.initBundle().then(function(){
         if ($scope.pages && $scope.pages.length) {
             BundleManager.initializePageUI($scope.pages[0]);
         }
-        if ($scope.bundlePage.offline) {
-            Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
-                var n = Number(value);
-                $timeout(function() {
-                    isAutoSaveOffline = true;
-                    autoSaveOffline(n);
-                }, n);
-            });
+        stopAutoSaveOffline();
+        if ($scope.bundlePage.offline && (n = (n = SessionStore.getGlobalSetting('bundle.offline.autosave.timeout'))? Number(n): 0)) {
+            autoSaveOfflineTimer = setInterval(BundleManager.saveOffline, n);
         }
         $timeout(function() {
             $(".bundle-page .irf-tabset ul.nav-tabs").affix({
@@ -537,11 +530,15 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             }).on("affix-top.bs.affix", function() {
                 $(".bundle-page .irf-tabset ul.nav-tabs").removeClass("bg-tint-theme");
             });
+
+            $('.bundle-page').bind('destroyed', function() {
+                stopAutoSaveOffline();
+            });
         });
     });
 
     $scope.$on('$destroy', function() {
-        isAutoSaveOffline = false;
+        stopAutoSaveOffline();
     });
 
 }]);
