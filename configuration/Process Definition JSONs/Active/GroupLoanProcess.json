@@ -97,14 +97,14 @@
       "code": "Checker1",
       "name": "Checker 1",
       "isAccountOpening": false,
-      "stageType": "CAPTURE",
+      "stageType": "CHECKER",
       "allowedRoles": []
    }, {
       "order": 10,
       "code": "Checker2",
       "name": "Checker 2",
       "isAccountOpening": false,
-      "stageType": "CAPTURE",
+      "stageType": "CHECKER",
       "allowedRoles": []
    }, {
       "order": 11,
@@ -118,14 +118,14 @@
       "code": "Checker3",
       "name": "Checker 3",
       "isAccountOpening": false,
-      "stageType": "CAPTURE",
+      "stageType": "CHECKER",
       "allowedRoles": []
    }, {
       "order": 13,
       "code": "Checker4",
       "name": "Checker 4",
       "isAccountOpening": false,
-      "stageType": "CAPTURE",
+      "stageType": "CHECKER",
       "allowedRoles": []
    }, {
       "order": 14,
