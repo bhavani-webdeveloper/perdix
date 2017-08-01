@@ -132,7 +132,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         if (model.cbsLoan.transactions.length > 0) {
                                             model.cbsLoan.orgTransactions.columns =  [
                                                 {
-                                                    "title": "Transaction ID",
+                                                    "title": "Transaction ID", 
                                                     "data": "transactionId",
                                                     "onClick": function(data){
                                                         PageHelper.showLoader();
@@ -229,55 +229,66 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     {
                         "key": "cbsLoan.accountId",
                         "title": "ACCOUNT_NUMBER",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.accountName",
+                        "required":false,
                         "title": "PRODUCT",
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.accountBalance",
                         "title": "ACCOUNT_BALANCE",
+                        "required":false,
                         "type": "amount"
                     },
                     {
-                            "key": "cbsLoan.operationalStatus",
+                        "key": "cbsLoan.operationalStatus",
                         "title": "OPERATIONAL_STATUS",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.accountOpenDate",
                         "title": "ACCOUNT_OPEN_DATE",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.maturityDate",
                         "title": "MATURITY_DATE",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.normalInterestRate",
                         "title": "NORMAL_INTEREST_RATE",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.penalInterestRate",
                         "title": "PENAL_INTEREST_RATE",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.postMaturityNormalInterestRate",
                         "title": "POST_MATURITY_NORMAL_INTEREST_RATE",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.tenureStr",
+                        "required":false,
                         "title": "TENURE",
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.equatedInstallment",
+                        "required":false,
                         "title": "EMI",
                         "type": "amount"
                     }
@@ -293,51 +304,61 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     {
                         "key": "cbsLoan.firstDisbursementDate",
                         "title": "FIRST_DISBURSEMENT_DAT",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastDisbursementDate",
                         "title": "LAST_DISBURSEMENT_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastRepaymentDate",
                         "title": "LAST_REPAYMENT_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.lastDemandRunDate",
                         "title": "LAST_DEMAND_RUN_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.nextDemandRunDate",
                         "title": "NEXT_DEMAND_RUN_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.nextDemandScheduledDate",
                         "title": "NEXT_DEMAND_RUN_DATE",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.daysPastDue",
                         "title": "DAYS_PAST_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.npa",
                         "title": "NPA",
+                        "required":false,
                         "type": ["string","null"]
                     },
                     {
                         "key": "cbsLoan.numDisbursements",
                         "title": "NUMBER_OF_DISBURSEMENTS",
+                        "required":false,
                         "type": "number"
                     }
                 ]
@@ -351,136 +372,163 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     {
                         "key": "cbsLoan.totalDisbursed",
                         "title": "TOTAL_DISBURSED",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.disbursableAmount",
                         "title": "TOTAL_DISBURSABLE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.numRepayments",
                         "title": "NUMBER_OF_REPAYMENTS",
+                        "required":false,
                         "type": "string"
                     },
                     {
                         "key": "cbsLoan.totalPrincipalRaised",
                         "title": "TOTAL_PRINCIPAL_RAISED",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPrincipalRepaid",
                         "title": "TOTAL_PRINCIPAL_REPAID",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPrincipalDue",
                         "title": "TOTAL_PRINCIPAL_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalNormalInterestRaised",
                         "title": "TOTAL_INTEREST_RAISED",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalNormalInterestRepaid",
                         "title": "TOTAL_INTEREST_REPAID",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalNormalInterestDue",
                         "title": "TOTAL_INTEREST_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRaised",
                         "title": "TOTAL_INTEREST_RAISED",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRepaid",
                         "title": "TOTAL_INTEREST_REPAID",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestDue",
                         "title": "TOTAL_INTEREST_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalFeeRepaid",
                         "title": "TOTAL_FEE_REPAID",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalFeeDue",
                         "title": "TOTAL_FEE_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalDemandRaised",
                         "title": "TOTAL_INTEREST_RAISED",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalRepaid",
                         "title": "TOTAL_INTEREST_REPAID",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalDemandDue",
                         "title": "TOTAL_INTEREST_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.bookedNormalInterest",
                         "title": "NORMAL_INTEREST_BOOKED",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.bookedNotDueNormalInterest",
                         "title": "NORMAL_INTEREST_BOOKED_NOT_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.principalNotDue",
                         "title": "PRINCIPAL_NOT_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.preclosureFee",
                         "title": "PRECLOSURE_FEE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.payOffAmount",
                         "title": "PAYOFF_AMOUNT",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.payOffAndDueAmount",
                         "title": "PAYOFF_AMOUNT_WITH_DUE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.demandAdjustment",
                         "title": "DEMAND_ADJUSTMENT",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.securityDeposit",
                         "title": "TOTAL_SECURITY_DEPOSIT",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.nextProvisioningDate",
                         "title": "NEXT_PROVISIONING_DATE",
+                        "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.lastProvisioningDate",
                         "title": "LAST_PROVISIONING_DATE",
+                        "required":false,
                         "type": "number"
                     }
                 ]
@@ -497,10 +545,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             key: "loanAccount.loanCentre.centreId",
                             title: "CENTRE_NAME",
                             "type": "select",
+                            "required":false,
                             enumCode: "centre"
                         }, {
                             "key": "loanAccount.partnerCode",
                             "title": "PARTNER",
+                            "required":false,
                             "type": "select"
                         }]
                     }, {
@@ -510,20 +560,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "key": "loanAccount.id",
                             "title": "LOAN_ID",
                             "condition": "model.loanAccount.id",
+                            "required":false,
                             "readonly": true
                         }, {
                             "key": "loanAccount.productCode",
                             "title": "PRODUCT",
+                            "required":false,
                             "type": "select"
                         }, {
                             "key": "loanAccount.tenure",
+                            "required":false,
                             "title": "DURATION_IN_MONTHS"
                         }, {
                             "key": "loanAccount.frequency",
+                            "required":false,
                             "type": "select"
                         },{
                             "key":"loanAccount.expectedInterestRate",
                             title:"Expected Interest Rate",
+                            "required":false,
                             "type":"number",
                             "condition": "!model.loanAccount.loanType == 'JLG'"
                         }]
@@ -533,6 +588,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "items": [{
                             "key": "loanAccount.urnNo",
                             "title": "URN_NO",
+                            "required":false,
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -614,15 +670,18 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             "key": "loanAccount.customerId",
+                            "required":false,
                             "title": "ENTITY_ID",
                             "readonly": true
                         }, {
                             "key": "customer.firstName",
+                            "required":false,
                             "title": "ENTITY_NAME",
                             "readonly": true,
                             "condition": "!model.loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.applicant",
+                            "required":false,
                             "title": "APPLICANT_URN_NO",
                             "condition": "!model.loanAccount.loanType == 'JLG'",
                             "type": "lov",
@@ -674,10 +733,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }, {
                             "key": "customer.applicantName",
                             "title": "APPLICANT_NAME",
+                            "required":false,
                             "readonly": true,
                             "condition": "!model.loanAccount.loanType == 'JLG'"
                         }, {
                             "key": "loanAccount.coBorrowerUrnNo",
+                            "required":false,
                             "title": "CO_APPLICANT_URN_NO",
                             "condition": "!model.loanAccount.loanType == 'JLG'",
                             "type": "lov",
@@ -728,6 +789,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             "key": "customer.coBorrowerName",
+                            "required":false,
                             "title": "COAPPLICANT_NAME",
                             "readonly": true,
                             "condition": "!model.loanAccount.loanType == 'JLG'"
@@ -738,6 +800,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "items": [{
                                 "key": "loanAccount.loanAmount",
                                 "type": "amount",
+                                "required":false,
                                 "title": "LOAN_AMOUNT_REQUESTED",
                                 "onChange": function(value, form, model) {
                                     model.loanAccount.insuranceFee = 0.004 * value;
@@ -745,41 +808,50 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                 }
                             }, {
                                 key: "loanAccount.insuranceFee",
+                                "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
                                     getSanctionedAmount(model);
                                 }
                             }, {
                                 key: "loanAccount.commercialCibilCharge",
+                                "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
                                     getSanctionedAmount(model);
                                 }
                             }, {
                                 key: "loanAccount.securityEmi",
+                                "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
                                     getSanctionedAmount(model);
                                 }
                             }, {
                                 key: "loanAccount.processingFeeInPaisa",
+                                "required":false,
                                 type: "amount"
                             }, {
                                 key: "loanAccount.otherFee",
+                                "required":false,
                                 type: "amount"
                             }, {
                                 "key": "additional.loanAmount",
+                                "required":false,
                                 "type": "amount",
                                 "title": "NET_DISBURSEMENT_AMOUNT"
                             }, {
                                 "key": "loanAccount.interestRate",
+                                "required":false,
                                 "type": "number"
                             }, {
                                 "key": "loanAccount.loanApplicationDate",
+                                "required":false,
                                 "title": "LOAN_APPLICATION_DATE",
                                 "type": "date"
                             }, {
                                 "key": "loanAccount.loanPurpose1",
+                                "required":false,
                                 "title": "LOAN_PURPOSE",
                                 "type": "select"
                             }
@@ -1035,9 +1107,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "items": [{
                             key: "loanAccount.sanctionDate",
                             type: "date",
+                            "required":false,
                             title: "SANCTION_DATE"
                         }, {
                             key: "loanAccount.numberOfDisbursements",
+                            "required":false,
                             title: "NUM_OF_DISBURSEMENTS",
                             onChange: function(value, form, model) {
                                 $log.info(value);
@@ -1053,6 +1127,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             key: "loanAccount.customerBankAccountNumber",
+                            "required":false,
                             type: "lov",
                             autolov: true,
                             title: "CUSTOMER_BANK_ACC_NO",
@@ -1080,28 +1155,34 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             key: "loanAccount.customerBankIfscCode",
+                            "required":false,
                             title: "CUSTOMER_BANK_IFSC",
                             "readonly": true
                         }, {
                             key: "loanAccount.customerBank",
+                            "required":false,
                             title: "CUSTOMER_BANK",
                             "readonly": true
                         }, {
                             key: "loanAccount.customerBranch",
+                            "required":false,
                             title: "BRANCH_NAME",
                             "readonly": true
                         }, {
                             key: "loanAccount.disbursementSchedules",
+                            "required":false,
                             title: "DISBURSEMENT_SCHEDULES",
                             add: null,
                             remove: null,
                             items: [{
                                 key: "loanAccount.disbursementSchedules[].trancheNumber",
+                                "required":false,
                                 title: "TRANCHE_NUMBER",
                                 readonly: true
                             }, {
                                 key: "loanAccount.disbursementSchedules[].disbursementAmount",
                                 title: "DISBURSEMENT_AMOUNT",
+                                "required":false,
                                 type: "amount"
                             }]
                         }]
@@ -1113,27 +1194,35 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     "readonly": true,
                     "items": [{
                         "key": "loanAccount.collateral",
+                        "required":false,
                         "title": "COLLATERAL",
                         "condition": "model.loanAccount.collateral.length>0",
                         "type": "array",
                         "items": [{
                             "key": "loanAccount.collateral[].collateralType",
+                            "required":false,
                             "type": "select"
                         }, {
-                            "key": "loanAccount.collateral[].collateralDescription"
+                            "key": "loanAccount.collateral[].collateralDescription",
+                            "required":false,
                         }, {
-                            "key": "loanAccount.collateral[].manufacturer"
+                            "key": "loanAccount.collateral[].manufacturer",
+                            "required":false,
                         }, {
                             "key": "loanAccount.collateral[].quantity",
+                            "required":false,
                             "onChange": function(value, form, model, event) {
                                 calculateTotalValue(value, form, model);
                             }
                         }, {
-                            "key": "loanAccount.collateral[].modelNo"
+                            "key": "loanAccount.collateral[].modelNo",
+                            "required":false,
                         }, {
-                            "key": "loanAccount.collateral[].machineOld"
+                            "key": "loanAccount.collateral[].machineOld",
+                            "required":false,
                         }, {
                             "key": "loanAccount.collateral[].collateralValue",
+                            "required":false,
                             "type": "amount",
                             "title": "COLLATERAL_VALUE",
                             "onChange": function(value, form, model, event) {
@@ -1141,30 +1230,37 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             "key": "loanAccount.collateral[].totalValue",
+                            "required":false,
                             "type": "amount",
                             "title": "TOTAL_VALUE"
                         }, {
                             "key": "loanAccount.collateral[].marginValue",
+                            "required":false,
                             "type": "amount",
                             "title": "PURCHASE_PRICE"
                         }, {
                             "key": "loanAccount.collateral[].loanToValue",
+                            "required":false,
                             "type": "amount",
                             "title": "PRESENT_VALUE"
                         }, {
                             "key": "loanAccount.collateral[].collateral1FilePath",
+                            "required":false,
                             "type": "file",
                             "title": "DOCUMENT_1"
                         }, {
                             "key": "loanAccount.collateral[].collateral2FilePath",
+                            "required":false,
                             "type": "file",
                             "title": "DOCUMENT_2"
                         }, {
                             "key": "loanAccount.collateral[].collateral3FilePath",
+                            "required":false,
                             "type": "file",
                             "title": "DOCUMENT_3"
                         }, {
                             "key": "loanAccount.collateral[].photoFilePath",
+                            "required":false,
                             "type": "file",
                             "fileType": "image/*",
                             "title": "PHOTO"
@@ -1180,6 +1276,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "title": "GUARANTOR",
                         "items": [{
                             key: "loanAccount.guarantors",
+                            "required":false,
                             notitle: "true",
                             view: "fixed",
                             "condition": "model.loanAccount.guarantors.length>0",
@@ -1246,6 +1343,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "title": "INSURANCE_POLICY",
                         "items": [{
                             "key": "additional.portfolioUrnSelector",
+                            "required":false,
                             "type": "select",
                             "titleMap": {
                                 "applicant": "Applicant",
@@ -1282,6 +1380,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                         }, {
                             key: "loanAccount.portfolioInsuranceUrn",
+                            "required":false,
                             "title": "URN_NO"
                         }]
                     }, {
@@ -1296,26 +1395,33 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             "remove": null,
                             "items": [{
                                 key: "loanAccount.nominees[].nomineeFirstName",
+                                "required":false,
                                 "title": "NAME"
                             }, {
                                 key: "loanAccount.nominees[].nomineeGender",
+                                "required":false,
                                 type: "select",
                                 "title": "GENDER"
                             }, {
                                 key: "loanAccount.nominees[].nomineeDOB",
+                                "required":false,
                                 type: "date",
                                 "title": "DATE_OF_BIRTH"
                             }, {
                                 key: "loanAccount.nominees[].nomineeDoorNo",
+                                "required":false,
                                 "title": "DOOR_NO"
                             }, {
                                 key: "loanAccount.nominees[].nomineeLocality",
+                                "required":false,
                                 "title": "LOCALITY"
                             }, {
                                 key: "loanAccount.nominees[].nomineeStreet",
+                                "required":false,
                                 "title": "STREET"
                             }, {
                                 key: "loanAccount.nominees[].nomineePincode",
+                                "required":false,
                                 type: "lov",
                                 fieldType: "number",
                                 autolov: true,
@@ -1351,13 +1457,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                 }
                             }, {
                                 key: "loanAccount.nominees[].nomineeDistrict",
+                                "required":false,
                                 type: "text",
                                 "title": "DISTRICT"
                             }, {
                                 key: "loanAccount.nominees[].nomineeState",
+                                "required":false,
                                 "title": "STATE"
                             }, {
                                 key: "loanAccount.nominees[].nomineeRelationship",
+                                "required":false,
                                 type: "select",
                                 "title": "RELATIONSHIP"
                             }]
@@ -1372,6 +1481,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "condition": "!model.loanAccount.loanType == 'JLG'",
                         "items": [{
                             "type": "array",
+                            "required":false,
                             "key": "loanDocuments.existingDocuments",
                             "add": null,
                             "startEmpty": true,
@@ -1399,6 +1509,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "condition": "!model.loanAccount.loanType == 'JLG'",
                         "items": [{
                             "type": "array",
+                            "required":false,
                             "key": "loanDocuments.newLoanDocuments",
                             "title": "ADD_DOCUMENTS",
                             "startEmpty": true,
@@ -1416,6 +1527,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                 // },
                                 {
                                     "title": "Upload",
+                                    "required":false,
                                     "key": "loanDocuments.newLoanDocuments[].documentId",
                                     type: "file",
                                     fileType: "*/*",
@@ -1492,7 +1604,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     model.reqData.loanAccount = _.cloneDeep(model.loanAccount);
                     //alert(model.reqData.loanAccount.loanDocuments.length);
                     model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
-                    model.reqData.loanProcessAction = "SAVE";
+                    model.reqData.loanProcessAction = "PROCEED";
                     model.reqData.stage = null;
                     if (model.loanDocuments.newLoanDocuments) {
                         for (var i = 0; i < model.loanDocuments.newLoanDocuments.length; i++) {
