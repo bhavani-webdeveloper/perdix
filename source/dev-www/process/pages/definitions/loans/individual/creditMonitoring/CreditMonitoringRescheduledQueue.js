@@ -37,12 +37,12 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                                 "screenFilter": true
                             }
                         },
-                        "applicantName": {
-                            "title": "APPLICANT_NAME",
-                            "type": "string"
-                        },
+                        // "applicantName": {
+                        //     "title": "APPLICANT_NAME",
+                        //     "type": "string"
+                        // },
                         "businessName": {
-                            "title": "BUSINESS_NAME",
+                            "title": "APPLICANT_NAME",
                             "type": "number"
                         },
                         "cmRescheduledDate": {
@@ -123,11 +123,13 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         };
                     },
                     getColumns: function() {
-                        return [{
+                        return [
+                        // {
+                        //     title: 'Applicant Name',
+                        //     data: 'customerName'
+                        // }, 
+                        {
                             title: 'Applicant Name',
-                            data: 'customerName'
-                        }, {
-                            title: 'Business Name',
                             data: 'bussinessName'
                         }, {
                             title: 'Account Number',

@@ -144,9 +144,12 @@ define({
                         key: "loanMonitoringDetails.udf3",
                         type: "select",
                         titleMap: {
-                            // "ALL": "All",
-                            // "SOME": "Some",
-                            // "NONE": "None",
+                            "Hardship": "Hardship",
+                            "Last two repayments pending": "Last two repayments pending",
+                            "Can pay": "Can pay",
+                            "Wilful default": "Wilful default",
+                            "Others": "Others",
+                            "Claim": "Claim"
                         },
                         title: "REASON_FOR_FOR_NON_REPAYMENT"
                     }]
