@@ -153,7 +153,12 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                             title: 'Rescheduled Date',
                             data: 'lucRescheduledDate',
                             render: function(data, type, full, meta) {
-                                return (moment(data).format("DD-MM-YYYY"));
+                                if(data){
+                                    return (moment(data).format("DD-MM-YYYY"));
+                                }
+                                else{
+                                   return data; 
+                                }
                             }
                         }, {
                             title: 'Rescheduled Reason',

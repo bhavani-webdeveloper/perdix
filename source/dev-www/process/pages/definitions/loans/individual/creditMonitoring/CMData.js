@@ -293,7 +293,7 @@ define({
 
                                 if (reqData.loanMonitoringDetails.id) {
                                     CMHelper.reschedule(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
+                                        $state.go('Page.CreditMonitoringDashboard', null);
                                     });
 
                                 } else {
@@ -325,7 +325,7 @@ define({
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     CMHelper.escalate(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
+                                       $state.go('Page.CreditMonitoringDashboard', null);
                                     });
                                 } else {
                                     $log.info("Id is not in the model");
@@ -369,7 +369,7 @@ define({
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     CMHelper.goBack(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
+                                       $state.go('Page.CreditMonitoringDashboard', null);
                                     });
                                 } else {
                                     $log.info("Id is not in the model");
