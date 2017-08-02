@@ -40,12 +40,12 @@ define({
                                 "screenFilter": true
                             }
                         },
-                        "applicantName": {
-                            "title": "APPLICANT_NAME",
-                            "type": "string"
-                        },
+                        // "applicantName": {
+                        //     "title": "APPLICANT_NAME",
+                        //     "type": "string"
+                        // },
                         "businessName": {
-                            "title": "BUSINESS_NAME",
+                            "title": "APPLICANT_NAME",
                             "type": "string"
                         },
                         "accountNumber": {
@@ -135,11 +135,13 @@ define({
                         }, {
                             title: 'CENTRE',
                             data: 'centreName'
-                        }, {
+                        }, 
+                        // {
+                        //     title: 'APPLICANT_NAME',
+                        //     data: 'customerName'
+                        // }, 
+                        {
                             title: 'APPLICANT_NAME',
-                            data: 'customerName'
-                        }, {
-                            title: 'BUSINESS_NAME',
                             data: 'bussinessName'
                         }, {
                             title: 'LOAN_ACCOUNT_NUMBER',
