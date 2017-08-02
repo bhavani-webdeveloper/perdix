@@ -81,7 +81,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicationName,
-                        'businessName': searchOptions.businessName,
+                        'bussinessName': searchOptions.businessName,
                     }).$promise;
 
                     return promise;

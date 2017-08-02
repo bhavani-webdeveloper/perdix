@@ -62,7 +62,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,
-						'businessName': searchOptions.businessName,
+						'bussinessName': searchOptions.businessName,
 					}).$promise;
 
 					return promise;

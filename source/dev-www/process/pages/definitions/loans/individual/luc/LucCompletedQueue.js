@@ -69,7 +69,7 @@ define({
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
-                        'businessName': searchOptions.businessName,
+                        'bussinessName': searchOptions.businessName,
                         'lucDate': searchOptions.lucCompletedDate
                     }).$promise;
 

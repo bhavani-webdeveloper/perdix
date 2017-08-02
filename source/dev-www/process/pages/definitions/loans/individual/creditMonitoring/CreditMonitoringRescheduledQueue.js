@@ -43,7 +43,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         // },
                         "businessName": {
                             "title": "APPLICANT_NAME",
-                            "type": "number"
+                            "type": "string"
                         },
                         "cmRescheduledDate": {
                             "title": "CM_RESCHEDULED_DATE",
@@ -81,7 +81,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
-                        'businessName': searchOptions.businessName,
+                        'bussinessName': searchOptions.businessName,
                     }).$promise;
 
                     return promise;
