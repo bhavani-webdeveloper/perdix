@@ -16,7 +16,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             if (n > o && n == 1) {
                 $log.info("Inside LoginPipeProcessor");
                 SessionStore.session.offline = true;
-                themeswitch.changeTheme('deepteal');
+                themeswitch.changeTheme('offline');
 
                 self.launchRelogin().then(function(){
                     SessionStore.session.offline = false;

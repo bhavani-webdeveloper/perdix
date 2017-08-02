@@ -112,7 +112,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 		if (pin === $scope.offlinePin) {
 			authService.setUserData(userData);
 			SessionStore.session.offline = true;
-			themeswitch.changeTheme('deepteal');
+			themeswitch.changeTheme('offline');
 			$log.debug("Offline login success");
 			irfNavigator.goHome();
 		} else {

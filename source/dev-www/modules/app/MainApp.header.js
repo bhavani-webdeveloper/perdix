@@ -17,9 +17,9 @@ MainApp.directive('irfHeader', function(){
 
 MainApp.controller("irfHeaderController",
 ["$scope", "$log", "$http", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User", "Message",
-	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account", "formHelper",
+	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account", "formHelper", "elementsUtils",
 function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User, Message,
-	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account, formHelper) {
+	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account, formHelper, elementsUtils) {
 
 	$scope.ss = SessionStore;
 
@@ -560,4 +560,13 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 			return false;
 		}
 	})();
+
+	try {
+		$scope.themeColors = elementsUtils.getAllThemeColors();
+	} catch (e) {
+		$log.error(e);
+	}
+	$scope.changeTheme = function(color) {
+		return themeswitch.changeTheme(color, true)
+	}
 }]);
