@@ -16,12 +16,7 @@ define({
                 }
                 return true;
             }
-            // var orderCMDocuments = function(model) {
-            //     var cmDocuments = model.loanMonitoringDetails.loanMonitoringDocuments || [];
-            //     for (var i = 0; i < cmDocuments.length; i++) {
-            //         cmDocuments[i]["documentSl"] = (i + 1);
-            //     }
-            // }
+           
 
         return {
             "type": "schema-form",
@@ -120,7 +115,7 @@ define({
                     }, {
                         key: "loanMonitoringDetails.loginName",
                         type: "string",
-                        title: "USER_ID_AND_NAME_OF_SWM/ARM/RM",
+                        title: "User Id And Name of SWM/ARM/RM",
                         "readonly": true
                     }, {
                         key: "loanMonitoringDetails.disbursementDate",
@@ -135,11 +130,38 @@ define({
                             "REGULAR": "Regular",
                             "OVERDUE": "Overdue"
                         },
-                    }, {
+                    },
+                    {
                         key: "loanMonitoringDetails.udf2",
                         type: "string",
-                        title: "BIOMETRIC_OF_THE_CUSTOMER_TO_BE_CAPTURED",
+                        title: "Reschedule Remarks",
                         "readonly": true
+                    },  
+                   {
+                        key: "loanMonitoringDetails.udf13",
+                        required:true,
+                        "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                        type: "validatebiometric",
+                        category: 'CustomerEnrollment',
+                        subCategory: 'FINGERPRINT',
+                        helper: formHelper,
+                        biometricMap: {
+                            leftThumb: "model.customer.leftHandThumpImageId",
+                            leftIndex: "model.customer.leftHandIndexImageId",
+                            leftMiddle: "model.customer.leftHandMiddleImageId",
+                            leftRing: "model.customer.leftHandRingImageId",
+                            leftLittle: "model.customer.leftHandSmallImageId",
+                            rightThumb: "model.customer.rightHandThumpImageId",
+                            rightIndex: "model.customer.rightHandIndexImageId",
+                            rightMiddle: "model.customer.rightHandMiddleImageId",
+                            rightRing: "model.customer.rightHandRingImageId",
+                            rightLittle: "model.customer.rightHandSmallImageId"
+                        },
+                        viewParams: function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
                     }, {
                         key: "loanMonitoringDetails.udf3",
                         type: "select",
@@ -177,7 +199,7 @@ define({
                         type: "string",
                         title: "SALES_PER_DAY_AS_PER_JUDGEMENT_OF_SWM/ARM"
                     },{
-                        key: "loanMonitoringDetails.udf7",
+                        key: "loanMonitoringDetails.udf12",
                         type: "string",
                         title: "SALES_PER_DAY_AS_PER_BUSINESS_OWNER"
                     }, {
@@ -187,7 +209,7 @@ define({
                     }, {
                         key: "loanMonitoringDetails.loanAmountUsed",
                         type: "amount",
-                        title: "LOAN_AMOUNT_AVAILED_USED_IN_THE_BUSINESS(FULLY_USED/PARTLY_USED/NOT_USED)"
+                        title: "Loan Amount Availed Used in the Business(Fully Used/Partly Used/Not Used)"
                     }, {
                         key: "loanMonitoringDetails.udf9",
                         type: "amount",

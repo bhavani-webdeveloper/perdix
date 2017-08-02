@@ -569,7 +569,7 @@
                             ]
                         },
                         "udf1": {
-                            "title": "udf1",
+                            "title": "STATUS_OF_LOAN_ACCOUNT",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -579,7 +579,7 @@
                             ]
                         },
                         "udf2": {
-                            "title": "udf2",
+                            "title": "RESCHEDULED_REMARKS",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -589,7 +589,7 @@
                             ]
                         },
                         "udf3": {
-                            "title": "udf3",
+                            "title": "REASON_FOR_FOR_NON_REPAYMENT",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -599,7 +599,7 @@
                             ]
                         },
                         "udf4": {
-                            "title": "udf4",
+                            "title": "NATURE_OF_BUSINESS_AT_THE_TIME_OF_CURRENT_VERIFICATION",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -609,7 +609,7 @@
                             ]
                         },
                         "udf5": {
-                            "title": "udf5",
+                            "title": "DIFFERENCE_BETWEEN_THE_NATURE_AT_THE_TIME_OF_LOAN_AND_VERIFICATION",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -619,7 +619,7 @@
                             ]
                         },
                         "udf6": {
-                            "title": "udf6",
+                            "title": "REASON_FOR_DIFFERENCE_IN_NATURE_OF_BUSINESS",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -629,7 +629,7 @@
                             ]
                         },
                         "udf7": {
-                            "title": "udf7",
+                            "title": "SALES_PER_DAY_AS_PER_JUDGEMENT_OF_SWM/ARM",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -639,7 +639,7 @@
                             ]
                         },
                         "udf8": {
-                            "title": "udf8",
+                            "title": "MONTHLY_STOCK_PURCHASE_VALUE",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -649,7 +649,7 @@
                             ]
                         },
                         "udf9": {
-                            "title": "udf9",
+                            "title": "VALUE_OF_THE_STOCK_AS_PER_JUDGEMENT_OF_SWM/ARM",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -659,7 +659,7 @@
                             ]
                         },
                         "udf10": {
-                            "title": "udf10",
+                            "title": "VALUE_OF_THE_STOCK_AS_PER_BUSINESS_OWNER",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -669,7 +669,7 @@
                             ]
                         },
                         "udf11": {
-                            "title": "udf11",
+                            "title": "LOCATION_OF_THE_SHOP",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -679,7 +679,7 @@
                             ]
                         },
                         "udf12": {
-                            "title": "udf12",
+                            "title": "SALES_PER_DAY_AS_PER_BUSINESS_OWNER",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -689,7 +689,7 @@
                             ]
                         },
                         "udf13": {
-                            "title": "udf13",
+                            "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
