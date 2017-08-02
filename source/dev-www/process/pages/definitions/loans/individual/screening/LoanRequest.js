@@ -407,7 +407,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.customer.customerType = "Enterprise";
                 model.loanAccount = {};
                 model.loanAccount.loanCustomerRelations = [];
-                model.loanAccount.frequency = 'M';
+                // model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";
                 model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
