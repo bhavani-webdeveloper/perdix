@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", "$state", "Enrollment", "IrfFormRequestProcessor", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "irfNavigator",
     function($log, $state, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -380,12 +380,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp) {
-                            $state.go('Page.Landing', null);
+                            irfNavigator.goBack();
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res) {
                             EnrollmentHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.Landing', null);
+                                irfNavigator.goBack();
                             }, function(err) {
                                 Utils.removeNulls(res.customer, true);
                                 model.customer = res.customer;

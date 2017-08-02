@@ -443,6 +443,11 @@ irf.pages.config([
 		},
 		templateUrl: "modules/irfpages/templates/pages/Page.Timeline.html",
 		controller: "PageTimelineCtrl"
+	},{
+		name: "Page.Landing", // Favorites
+		url: "/Landing",
+		templateUrl: "process/pages/templates/Page.Landing.html",
+		controller: "PageLandingCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){

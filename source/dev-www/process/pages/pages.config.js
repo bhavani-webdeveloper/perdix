@@ -2,11 +2,6 @@ irf.pages.config([
 	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider",
 	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider) {
 	var statesDefinition = [{
-		name: "Page.Landing", // Favorites
-		url: "/Landing",
-		templateUrl: "process/pages/templates/Page.Landing.html",
-		controller: "PageLandingCtrl"
-	},{
 		name: "Page.LeadDashboard",
 		url: "/LeadDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",

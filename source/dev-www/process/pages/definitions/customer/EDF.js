@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__EDF",
  ["$log", "formHelper", "Enrollment","elementsUtils", "entityManager", '$state', '$stateParams', '$q', 'LoanAccount', 'LoanProcess', 'irfProgressMessage', 'PageHelper',
-    'SessionStore', 'Utils', 'authService', 'BiometricService', 'Files',
+    'SessionStore', 'Utils', 'authService', 'BiometricService', 'Files', 'irfNavigator',
     function($log, formHelper, Enrollment,elementsUtils, entityManager, $state, $stateParams, $q, LoanAccount, LoanProcess, irfProgressMessage, PageHelper,
-        SessionStore, Utils, authService, BiometricService, Files) {
+        SessionStore, Utils, authService, BiometricService, Files, irfNavigator) {
         return {
             "id": "EDF",
             "type": "schema-form",
@@ -153,7 +153,7 @@ irf.pageCollection.factory("Pages__EDF",
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN Updated : ' + res.customer.urnNo, 5000);
                             $log.info("Inside EDF  Success!");
-                            $state.go("Page.Landing");
+                            irfNavigator.goBack();
                         },
                         function(res, headers){
                             PageHelper.hideLoader();

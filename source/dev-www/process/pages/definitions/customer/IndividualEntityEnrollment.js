@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEntityEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "irfNavigator",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams){
+    irfProgressMessage,SessionStore,$state,$stateParams, irfNavigator){
 
     var branch = SessionStore.getBranch();
 
@@ -495,7 +495,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model = EnrollmentHelper.fixData(model);
                     /*reqData = _.cloneDeep(model);
                     EnrollmentHelper.proceedData(reqData).then(function(res){
-                        $state.go("Page.Landing");
+                        irfNavigator.goBack();
                     });*/
                     $state.go("Page.Engine", {
                         pageName: 'ProfileInformation',
@@ -508,7 +508,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
                     EnrollmentHelper.proceedData(reqData).then(function (res) {
-                        $state.go("Page.Landing");
+                        irfNavigator.goBack();
                     });
                 }
             },

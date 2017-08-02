@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
 ["$log","formHelper","Enrollment", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
-    'SessionStore','Utils','authService', 'BiometricService', 'Files',
+    'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',
 function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
-         SessionStore,Utils,authService, BiometricService, Files) {
+         SessionStore,Utils,authService, BiometricService, Files, irfNavigator) {
     var fixData = function(model) {
         $log.info("Before fixData");
         Utils.removeNulls(model, true);
@@ -943,7 +943,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN Updated : ' + res.customer.urnNo, 5000);
                         $log.info("Inside EDF  Success!");
-                        $state.go("Page.Landing");
+                        irfNavigator.goBack();
                     },
                     function(res, headers) {
                         PageHelper.hideLoader();
@@ -1092,7 +1092,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN created : ' + res.customer.urnNo, 5000);
                             $log.info("Inside updateEnrollment Success!");
                             $stateParams.confirmExit = false;
-                            $state.go("Page.Landing");
+                            irfNavigator.goBack();
                         },
                         function(res, headers){
                             PageHelper.hideLoader();

@@ -1,9 +1,9 @@
 
 irf.pageCollection.factory("Pages__ProfileInformation",
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "irfNavigator",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams){
+    irfProgressMessage,SessionStore,$state,$stateParams, irfNavigator){
 
     var branch = SessionStore.getBranch();
 
@@ -61,7 +61,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 } else {
                     irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" already enrolled", 5000);
                     $stateParams.confirmExit = false;
-                    $state.go("Page.Landing");
+                    irfNavigator.goBack();
                 }
                 PageHelper.hideLoader();
             },function(resp){
@@ -609,7 +609,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model = EnrollmentHelper.fixData(model);
                     /*reqData = _.cloneDeep(model);
                     EnrollmentHelper.proceedData(reqData).then(function(res){
-                        $state.go("Page.Landing");
+                        irfNavigator.goBack();
                     });*/
                     $stateParams.confirmExit = false;
                     $state.go("Page.Engine", {
@@ -632,7 +632,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     $log.info("Customer id not null, skipping save");
                     EnrollmentHelper.proceedData(reqData).then(function (res) {
                         $stateParams.confirmExit = false;
-                        $state.go("Page.Landing");
+                        irfNavigator.goBack();
                     });
                 }
             },
