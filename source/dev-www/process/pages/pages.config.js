@@ -1,19 +1,3 @@
-
-irf.HOME_PAGE = {
-	"url": "Page/Landing",
-	"to": "Page.Landing",
-	"params": {
-
-	},
-	"options": {
-
-	}
-};
-
-irf.goHome = function($state) {
-	$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
-};
-
 irf.pages.config([
 	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider",
 	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider) {

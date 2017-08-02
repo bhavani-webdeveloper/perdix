@@ -8,7 +8,22 @@ irf.HOME_PAGE = {
 	},
 	"options": {
 
+	},
+	"iconClass": "fa fa-dashboard",
+	"title": "HOME"
+};
+
+var __saved_HOME_PAGE = localStorage.getItem("UserHomePage");
+if (__saved_HOME_PAGE) {
+	__saved_HOME_PAGE = JSON.parse(__saved_HOME_PAGE);
+	if (__saved_HOME_PAGE && __saved_HOME_PAGE.url && __saved_HOME_PAGE.to && __saved_HOME_PAGE.params) {
+		irf.HOME_PAGE = __saved_HOME_PAGE;
 	}
+}
+delete __saved_HOME_PAGE;
+
+irf.goHome = function($state) {
+	$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 };
 
 irf.page = function(path) {

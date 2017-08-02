@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("UserProfile"),
 ["$log", "$q", "SessionStore", "languages", "dateFormats", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader", "Account",
+	"irfStorageService", "irfElementsConfig","PageHelper", "formHelper", "irfTranslateLoader", "Account", "PagesDefinition", "translateFilter",
 function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
-	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader, Account) {
+	irfStorageService, irfElementsConfig,PageHelper, formHelper, irfTranslateLoader, Account, PagesDefinition, translateFilter) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -30,6 +30,9 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 			}
 			model.profile.userName = SessionStore.getUsername();
 			model.profile.openChangePassword = false;
+
+			model.landing = irf.HOME_PAGE;
+			model.settings.landingHtml = '<i class="{{model.landing.iconClass}}">&nbsp;</i>{{model.landing.title|translate}}<button irf-lov irf-model-value="model.landing" irf-form="form" irf-model="model" class="pull-right btn btn-default btn-xs">Change</button>';
 		},
 		modelPromise: function(pageId) {
 			var deferred = $q.defer();
@@ -86,11 +89,46 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 				"settings.loginMode",
 				"settings.offlinePin",
 				{
+					key: "settings.landingHtml",
+					title: "Home Page",
+					type: "html",
+					searchHelper: formHelper,
+					search: function(inputModel, form, model, context) {
+						var deferred = $q.defer();
+						PagesDefinition.getUserAllowedPages().then(function(resp) {
+							var pagesArray = [];
+							_.forOwn(_.cloneDeep(resp), function(v, k){pagesArray.push(v)});
+							deferred.resolve({
+								headers: {
+									"x-total-count": pagesArray.length
+								},
+								body: pagesArray
+							});
+						}, deferred.reject);
+						return deferred.promise;
+					},
+					onSelect: function(valueObj, model, context) {
+						model.landing = valueObj;
+						irf.HOME_PAGE = {
+							"url": valueObj.uri,
+							"to": valueObj.state,
+							"params": valueObj.stateParams,
+							"iconClass": valueObj.iconClass,
+							"title": valueObj.title
+						};
+						localStorage.setItem("UserHomePage", JSON.stringify(irf.HOME_PAGE));
+					},
+					getListDisplayItem: function(item, index) {
+						return ['<span><i class="'+item.iconClass+'">&nbsp;</i>'+translateFilter(item.title)+'<span class="pull-right">'+irf.pageNameHtml(item.stateParams.pageName&&item.stateParams.pageName.match('(^.+)[.]')&&item.stateParams.pageName.match('(^.+)[.]')[1]||item.stateParams.pageName||item.state)+'</span></span>'];
+					}
+				},
+				{
 					type: "fieldset",
 					title: "LOGGING",
 					items: [
 						{
 							key: "settings.consoleLog",
+							fullwidth: true,
 							onChange: function(modelValue, form, model) {
 								if (!modelValue) {
 									model.settings.consoleLogAutoClear = false;
@@ -99,10 +137,12 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 						},
 						{
 							key: "settings.consoleLogAutoClear",
+							fullwidth: true,
 							condition: "model.settings.consoleLog"
 						},
 						{
 							key: "settings.consoleLogAutoClearDuration",
+							fullwidth: true,
 							condition: "model.settings.consoleLogAutoClear"
 						}
 					]
@@ -116,6 +156,7 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 			},{
 				"type":"button",
 				"icon":"fa fa-refresh",
+				"fieldHtmlClass": "pull-right",
 				"title":"REFRESH_CACHE",
 				"onClick":"actions.refreshMasters()"
 			}]
