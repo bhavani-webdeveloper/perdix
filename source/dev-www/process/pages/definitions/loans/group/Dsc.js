@@ -144,23 +144,13 @@ define({
                         "key": "group.frequency",
                         "title": "FREQUENCY",
                         "type": "select",
-                        //"enumCode": "frequency",
-                        /*"titleMap": [{
-                            "name": "Monthly",
-                            "value": "M"
-                        }, {
-                            "name": "Quarterly",
-                            "value": "Q"
-                        }],*/
                         "titleMap": {
                             "M": "Monthly",
                             "Q": "Quarterly"
                         }
-                        //readonly: readonly
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
-                        //readonly: readonly
                     }]
                 }, {
                     "type": "box",
@@ -169,91 +159,11 @@ define({
                         "key": "group.jlgGroupMembers",
                         "type": "array",
                         "title": "GROUP_MEMBERS",
-                        //"condition": "model.group.jlgGroupMembers.length>0",
                         "add": null,
-                        "remove": null,
                         "items": [{
                             "key": "group.jlgGroupMembers[].urnNo",
                             "readonly": true,
-                            "title": "URN_NO",
-                            //"readonly": true
-                            "type": "lov",
-                            initialize: function(model, form, parentModel, context) {
-                                model.branchId = parentModel.group.branchId;
-                            },
-                            "inputMap": {
-                                /*"status": {
-                                    "key": "group.status",
-                                    "title": "STATUS",
-                                    "type": "select",
-                                    "titleMap": [{
-                                        "name": "All",
-                                        "value": ""
-                                    }, {
-                                        "name": "Processed",
-                                        "value": "PROCESSED"
-                                    }, {
-                                        "name": "Pending",
-                                        "value": "PENDING"
-                                    }, {
-                                        "name": "Error",
-                                        "value": "ERROR"
-                                    }]
-                                },*/
-                                "branchId": {
-                                    "key": "group.branchId",
-                                    "title": "BRANCH_NAME",
-                                    "type": "select",
-                                    "enumCode": "branch_id"
-                                },
-                                "centreId": {
-                                    "key": "group.centreId",
-                                    "title": "CENTRE",
-                                    "enumCode": "centre",
-                                    "type": "select",
-                                    "parentEnumCode": "branch_id",
-                                    "parentValueExpr": "model.branchId",
-                                }
-                            },
-                            "outputMap": {
-                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
-                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form) {
-                                /*var today = moment(new Date());
-                                var nDaysBack = moment(new Date()).subtract(nDays, 'days');
-                                var promise = CreditBureau.listCreditBureauStatus({
-                                    'branchId': inputModel.branchId,
-                                    'status': inputModel.status,
-                                    'centreId': inputModel.centreId,
-                                    'fromDate': nDaysBack.format('YYYY-MM-DD'),
-                                    'toDate': today.format('YYYY-MM-DD')
-                                }).$promise;
-                                return promise;*/
-
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var branches = formHelper.enum('branch_id').data;
-                                var branchName;
-                                $log.info(inputModel.branchId);
-                                for (var i = 0; i < branches.length; i++) {
-                                    if (branches[i].code == inputModel.branchId)
-                                        branchName = branches[i].name;
-                                }
-                                var promise = Enrollment.search({
-                                    'branchName': branchName || SessionStore.getBranch(),
-                                    'centreId': inputModel.centreId,
-                                }).$promise;
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    data.urnNo,
-                                    data.firstName
-                                ];
-                            },
-                            onSelect: function(valueObj, model, context) {}
+                            "title": "URN_NO"
                         }, {
                             "key": "group.jlgGroupMembers[].firstName",
                             "readonly": true,
@@ -269,81 +179,31 @@ define({
                             "key": "group.jlgGroupMembers[].relation",
                             "readonly": true,
                             "title": "RELATION",
-                            //"readonly": readonly,
-                            /*"type": "select",
-                            "titleMap": {
-                                "Father": "Father",
-                                "Husband": "Husband"
-                            }*/
                         }, {
                             "key": "group.jlgGroupMembers[].loanAmount",
                             "readonly": true,
                             "title": "LOAN_AMOUNT",
                             "type": "amount",
-
-                            //readonly: readonly
-
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose1",
                             "readonly": true,
                             "title": "LOAN_PURPOSE_1",
                             "enumCode": "loan_purpose_1",
                             "type": "select",
-                            //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose2",
                             "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE_2",
-                            //"enumCode": "loan_purpose_2",
-                            /*"parentEnumCode": "loan_purpose_1",
-                            "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"*/
-                            //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose3",
                             "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE3",
-                            //"enumCode": "loan_purpose_2",
-                            //"parentEnumCode": "loan_purpose_2",
-                            //"parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
-                            //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
                             "title": "WitnessLastName",
-                            "type": "lov",
-                            initialize: function(model, form, parentModel, context) {
-                                model.branchName = parentModel.group.branchName;
-                            },
-                            "outputMap": {
-                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
-                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form, model) {
-                                var branches = formHelper.enum('branch_id').data;
-                                var branchId;
-                                $log.info(inputModel.branchName);
-                                for (var i = 0; i < branches.length; i++) {
-                                    if (branches[i].code == inputModel.branchName)
-                                        branchId = branches[i].name;
-                                }
-                                var promise = Enrollment.search({
-                                    'urnNo': model.group.jlgGroupMembers.urnNo,
-                                    'branchName': branchId || SessionStore.getBranch()
-                                }).$promise;
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    data.urnNo,
-                                    data.firstName
-                                ];
-                            },
-                            onSelect: function(valueObj, model, context) {}
-                                //"readonly": readonly
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -420,7 +280,7 @@ define({
                                     var dscId = model.group.jlgGroupMembers[i].dscId;
                                     showDscData(dscId);
                                 }
-                            }, {
+                            }, /*{
                                 "key": "group.jlgGroupMembers[].removeMember",
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "type": "button",
@@ -467,7 +327,7 @@ define({
                                             });
                                     }
                                 },
-                            }]
+                            }*/]
                         }]
                     }]
                 },
@@ -476,10 +336,12 @@ define({
                     "type": "actionbox",
                     "condition": "model.group.id",
                     "items": [{
-                        //"style": "btn-primary",
                         "title": "PERFORM_DSC_CHECK",
                         "type": "button",
                         "onClick": "actions.doDSCCheck(model,form)"
+                    },{
+                        "title": "SAVE",
+                        "type": "submit"
                     }]
                 }
             ],
@@ -511,6 +373,26 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
+                submit: function(model, formCtrl, form) {
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Save', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "SAVE";
+                    var reqData = _.cloneDeep(model);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        model.group = _.cloneDeep(response);
+                        fixData(model);
+                        fillNames(model);
+                        irfProgressMessage.pop('Save', 'Operation Succeeded.', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Save', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });
+                },
+
                 doDSCCheck: function(model, form) {
                     PageHelper.clearErrors();
                     PageHelper.showLoader();

@@ -926,8 +926,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 if (model.customer.isBiometricValidated != true) {
                     elementsUtils.alert('Fingerprint not verified.');
                     return;
-                }
-*/
+                }*/
+
                 if (model.customer.isBiometricValidated == true) {
                     model.customer.biometricEnrollment = "AUTHENTICATED";
                 }
