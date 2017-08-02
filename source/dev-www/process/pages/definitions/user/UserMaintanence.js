@@ -16,7 +16,6 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                         model.user = {
                             "roleCode": "A",
                             "activated": true,
-                            "bankName": "Kinara",
                             "userState": "ACTIVE",
                             "userType": "A",
                             "validUntil": "2010-05-26",
@@ -37,6 +36,13 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
+                                var branches = formHelper.enum('branch').data;
+                                for (var i = 0; i < branches.length; i++) {
+                                    var branch = branches[i];
+                                    if (branch.name == model.user.branchName) {
+                                        model.user.branchId = branch.value;
+                                    }
+                                }
                             }, function(httpResponse){
                                 PageHelper.showProgress('loading-user', 'Failed.', 5000);
                             }).finally(function(){
@@ -92,10 +98,10 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 required: true
                             },
                             {
-                                key: "user.branchName",
+                                key: "user.branchId",
                                 title: "HOME_BRANCH",
                                 type: "select",
-                                enumCode: "branch",
+                                enumCode: "branch_id",
                                 required: true
                             },
                             {
@@ -164,6 +170,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                     "userBranches": []
                                 };
                                 model.user.bankName = SessionStore.getBankName();
+
                             }
                         }]
                     }
@@ -175,6 +182,13 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                     submit: function(model, form, formName){
                         $log.info("Inside submit()");
                         PageHelper.clearErrors();
+                        var branches = formHelper.enum('branch').data;
+                        for (var i = 0; i < branches.length; i++) {
+                            var branch = branches[i];
+                            if (branch.code == model.user.branchId) {
+                                model.user.branchName = branch.name;
+                            }
+                        }
 
                         if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
 
@@ -198,6 +212,13 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         .then(function(response){
                                             PageHelper.showProgress("user-update", 'Done', 5000);
                                             model.user = response;
+                                            var branches = formHelper.enum('branch').data;
+                                            for (var i = 0; i < branches.length; i++) {
+                                                var branch = branches[i];
+                                                if (branch.name == model.user.branchName) {
+                                                    model.user.branchId = branch.value;
+                                                }
+                                            }
                                         }, function(httpResponse){
                                             PageHelper.showProgress("user-update", 'Failed.', 5000);
                                             PageHelper.showErrors(httpResponse);
