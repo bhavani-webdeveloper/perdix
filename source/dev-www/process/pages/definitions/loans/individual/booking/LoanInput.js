@@ -347,6 +347,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
             form: [{
                     "type": "box",
                     "title": "LOAN_INPUT",
+                    "condition": "model.siteCode != 'IFMRCapital'",
                     "colClass": "col-sm-6",
                     "items": [{
                         "type": "fieldset",
@@ -1220,6 +1221,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
                 }, {
                     "type": "box",
                     "title": "COLLATERAL",
+                    "condition": "model.siteCode != 'IFMRCapital'",
                     "items": [{
                         "key": "loanAccount.collateral",
                         "title": "COLLATERAL",
@@ -1308,6 +1310,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
                 {
                     "type": "box",
                     "title": "",
+                    "condition": "model.siteCode != 'IFMRCapital'",
                     "items": [{
                         "type": "fieldset",
                         "title": "GUARANTOR",
@@ -1846,7 +1849,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
                 }, {
                     "type": "box",
                     "title": "Deprecated Items",
-                    "condition": "false",
+                    "condition": "model.siteCode != 'IFMRCapital' && false",
                     "items": [{
                         key: "loanAccount.disbursementFromBankAccountNumber",
                         title: "DISBURSEMENT_ACCOUNT"
@@ -1909,7 +1912,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
                 }, {
                     "type": "box",
                     "title": "Partner Remarks",
-                    "condition": "model.loanAccount.partnerApprovalStatus",
+                    "condition": "model.siteCode != 'IFMRCapital' && model.loanAccount.partnerApprovalStatus",
                     "items": [{
                         key: "loanAccount.partnerApprovalStatus",
                         title: "PARTNER_APPROVAL_STATUS"
@@ -1920,9 +1923,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"), ["$lo
                 }, {
                     "type": "box",
                     "title": "Partner Remarks",
-                    "condition": "model.siteCode == 'IFMRCapital'",
-                    "readonly": true,
-                    "condition": "model.loanAccount.partnerApprovalStatus",
+                    "condition": "model.siteCode == 'IFMRCapital' && model.loanAccount.partnerApprovalStatus",
+                    "readonly": true,                    
                     "items": [{
                         key: "loanAccount.partnerApprovalStatus",
                         title: "PARTNER_APPROVAL_STATUS"
