@@ -379,17 +379,22 @@ return {
                                                         "title": "IS_CUSTOMER_CALLED",
                                                         "key": "group.jlgGroupMembers[].customerCalled",
                                                         "type":"select",
-                                                        "enumCode":"customerTelecallingDetails"
+                                                        titleMap: {
+                                                            "Yes": "Yes",
+                                                            "No": "No"
+                                                        }
                                                     },
                                                     {
                                                         "title": "CUSTOMER_NOT_CALLED_REASON",
                                                         "key": "group.jlgGroupMembers[].customerNotCalledReason",
-                                                        "type":"string"
+                                                        "type":"string",
+                                                        "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
                                                     },
                                                     {
                                                         "title": "CUSTOMER_CALLED_REMARKS",
                                                         "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                                                        "type":"string"
+                                                        "type":"select",
+                                                        "enumCode":"customerTelecallingDetails",
                                                     },
                                                     {
                                                         "type": "button",
