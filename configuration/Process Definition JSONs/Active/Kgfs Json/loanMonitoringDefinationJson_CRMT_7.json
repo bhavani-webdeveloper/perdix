@@ -225,7 +225,7 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmDone": {
+                        "lucDone": {
                             "title": "Luc Done",
                             "type": "string",
                             "minLength": 1,
@@ -237,8 +237,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmRescheduled": {
-                            "title": "cmRescheduled",
+                        "lucRescheduled": {
+                            "title": "lucRescheduled",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -247,8 +247,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmRescheduleReason": {
-                            "title": "cmRescheduleReason",
+                        "lucRescheduleReason": {
+                            "title": "lucRescheduleReason",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -257,8 +257,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmRescheduledDate": {
-                            "title": "cmRescheduledDate",
+                        "lucRescheduledDate": {
+                            "title": "lucRescheduledDate",
                             "type": "date",
                             "captureStages": [
                                 "CMSchedule",
@@ -267,8 +267,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmEscalated": {
-                            "title": "cmEscalated",
+                        "lucEscalated": {
+                            "title": "lucEscalated",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -277,8 +277,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmEscalatedReason": {
-                            "title": "cmEscalatedReason",
+                        "lucEscalatedReason": {
+                            "title": "lucEscalatedReason",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
@@ -391,8 +391,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "cmDate": {
-                            "title": "cmDate",
+                        "lucDate": {
+                            "title": "lucDate",
                             "type": "date",
                              "captureStages": [
                                 "CMSchedule",
@@ -550,6 +550,18 @@
                             "title": "remainingAmountUtilizedOn",
                             "type": "date",
                              "captureStages": [
+                                "CMSchedule",
+                                "CMEscalate",
+                                "CMReschedule",
+                                "CMLegalRecovery"
+                            ]
+                        },
+                        "branchName": {
+                            "title": "branchName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
                                 "CMSchedule",
                                 "CMEscalate",
                                 "CMReschedule",
@@ -817,34 +829,44 @@
                                 "CMLegalRecovery"
                             ]
                         },
+                        "centreId": {
+                            "title": "centreId",
+                            "type": "number",
+                            "captureStages": [
+                                "CMSchedule",
+                                "CMEscalate",
+                                "CMReschedule",
+                                "CMLegalRecovery"
+                            ]
+                        },
                         "presentOutStandingLoanAmount": {
                             "title": "presentOutStandingLoanAmount",
                             "type": "number",
                             "captureStages": [
-                                "LUCSchedule",
-                                "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "CMSchedule",
+                                "CMEscalate",
+                                "CMReschedule",
+                                "CMLegalRecovery"
                             ]
                         },
                         "numberOfInstallmentsDue": {
                             "title": "numberOfInstallmentsDue",
                             "type": "number",
                             "captureStages": [
-                                "LUCSchedule",
-                                "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "CMSchedule",
+                                "CMEscalate",
+                                "CMReschedule",
+                                "CMLegalRecovery"
                             ]
                         },
                         "statusOfLoanAccount": {
                             "title": "statusOfLoanAccount",
                             "type": "string",
                             "captureStages": [
-                                "LUCSchedule",
-                                "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "CMSchedule",
+                                "CMEscalate",
+                                "CMReschedule",
+                                "CMLegalRecovery"
                             ]
                         }
                     }
