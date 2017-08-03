@@ -295,13 +295,14 @@ define({
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
-                            "fileType": "application/pdf", 
-                        }, {
+                            "fileType": "application/pdf",  
+                        }, 
+                        {
                             "type": "button",
                             "key": "group.jlgGroupMembers[]",
                             "title": "DOWNLOAD_APPLICATION_FORM",
                             "onClick": function(model, form, schemaForm, event) {
-                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
+                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
                         }, {
                             "type": "button",
@@ -309,9 +310,10 @@ define({
                             condition: "model.group.partnerCode === 'AXIS'",
                             "title": "DOWNLOAD_AGREEMENT_FORM",
                             "onClick": function(model, form, schemaForm, event) {
-                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
+                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=agmt_loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
-                        }]
+                        }
+                        ]
                     }]
                 },
                 {
@@ -362,7 +364,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();

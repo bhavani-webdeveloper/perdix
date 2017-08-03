@@ -25,6 +25,7 @@ define({
             initialize: function(model, form, formCtrl) {
                 model.Completed = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
                 model.loanMonitoringDetails = model.loanMonitoringDetails || {};
+                model.loanDetails = model.loanDetails || {};
                 model.loanMonitoringDetails.loginName = SessionStore.getLoginname();
                 model = Utils.removeNulls(model, true);
                 $log.info("luc page got initiated");
@@ -42,8 +43,13 @@ define({
                             $log.info(res);
                             $log.info("res");
                             _.assign(model.loanMonitoringDetails, res.loanMonitoringDetails);
+                            _.assign(model.loanDetails, res.loanOdSummaryWSDto);
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
+                            model.loanMonitoringDetails.address=model.loanMonitoringDetails.address || (model.loanDetails.customer1Address1 + " " + model.loanDetails.customer1Address2 + " " + model.loanDetails.customer1Address3);
+                            model.loanMonitoringDetails.presentOutStandingLoanAmount=Number(model.loanDetails.accountBalance);
+
+
                             var loanresponse = IndividualLoan.get({
                                 id: loanId
                             }).$promise;
@@ -79,7 +85,7 @@ define({
                         title: "BRANCH_NAME",
                         "readonly": true
                     }, {
-                        key: "loanMonitoringDetails.customerName",
+                        key: "loanMonitoringDetails.bussinessName",
                         type: "string",
                         "readonly": true
                     }, {
@@ -179,8 +185,8 @@ define({
                     "type": "box",
                     "title": "BUSINESS_DETAILS",
                     "items": [{
-                        key: "loanMonitoringDetails.intendedPurposeAmount",
-                        type: "number",
+                        key: "loanMonitoringDetails.udf14",
+                        type: "string",
                         title: "NATURE_OF_BUSINESS_AT_THE_TIME_OF_AVAILING_LOAN"
                     }, {
                         key: "loanMonitoringDetails.udf4",

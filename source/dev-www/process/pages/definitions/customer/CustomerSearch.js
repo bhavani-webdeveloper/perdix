@@ -267,10 +267,17 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 										pageId: item.id
 									});
 								}
-								else if (item.currentStage === 'Stage02'||item.currentStage === 'EDF') {
+								else if (item.currentStage === 'Stage02') {
 									irfNavigator.go({
 										state: "Page.Engine",
 										pageName: "AssetsLiabilitiesAndHealth",
+										pageId: item.id
+									});
+								}
+								else if (item.currentStage === 'EDF') {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "EDF",
 										pageId: item.id
 									});
 								}

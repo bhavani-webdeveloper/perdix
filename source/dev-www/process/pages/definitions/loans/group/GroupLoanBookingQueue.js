@@ -101,7 +101,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "GRT",
+							name: "Loan Booking",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

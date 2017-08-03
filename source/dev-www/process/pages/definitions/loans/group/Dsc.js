@@ -251,12 +251,14 @@ define({
                                             irfProgressMessage.pop('group-dsc-override-req', 'DSC Override Requested', 2000);
                                             model.group = _.cloneDeep(response);
                                             fixData(model);
+                                            fillNames(model);
                                         }, function(resp) {
                                             $log.error(resp);
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
                                             PageHelper.showErrors(resp);
                                             fixData(model);
+                                            fillNames(model);
                                         });
                                     }, function(resp, header) {
                                         $log.error(resp);
