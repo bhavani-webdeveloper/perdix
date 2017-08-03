@@ -97,7 +97,9 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 						var deferred = $q.defer();
 						PagesDefinition.getUserAllowedPages().then(function(resp) {
 							var pagesArray = [];
-							_.forOwn(_.cloneDeep(resp), function(v, k){pagesArray.push(v)});
+							_.forOwn(_.cloneDeep(resp), function(v, k) {
+								if (v.directAccess) pagesArray.push(v)
+							});
 							deferred.resolve({
 								headers: {
 									"x-total-count": pagesArray.length
