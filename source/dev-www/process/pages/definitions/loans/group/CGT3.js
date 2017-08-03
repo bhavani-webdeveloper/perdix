@@ -10,6 +10,31 @@ define({
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
+        var fillNames = function(model) {
+            var deferred = $q.defer();
+            angular.forEach(model.group.jlgGroupMembers, function(member, key) {
+                Enrollment.get({
+                    id: member.customerId
+                }, function(resp, headers) {
+                    model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    try {
+                        if (resp.middleName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
+                        if (resp.lastName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.lastName;
+                    } catch (err) {
+
+                    }
+                    if (key >= model.group.jlgGroupMembers.length - 1) {
+                        deferred.resolve(model);
+                    }
+                }, function(res) {
+                    deferred.reject(res);
+                });
+            });
+            return deferred.promise;
+        };
+
         return {
             "type": "schema-form",
             "title": "CGT_3",
@@ -24,6 +49,8 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
+                        fillNames(model);
+                        model.group.tenure = parseInt(model.group.tenure);
                         model.group.cgt3DoneBy = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
@@ -48,6 +75,20 @@ define({
                 "type":"box",
                 "title":"START_CGT3",
                 "items":[{
+                    "key": "group.groupName",
+                    "readonly":true,
+                    "title": "GROUP_NAME",
+                },{
+                    "key": "group.groupCode",
+                    "readonly":true,
+                    "title": "GROUP_CODE",
+                }, {
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "readonly":true,
+                    "type": "select",
+                    "enumCode": "partner"
+                },{
                     "key": "group.cgt3Photo",
                     "title": "CGT_3_PHOTO",
                     "category": "Group",
@@ -90,7 +131,69 @@ define({
                     "type":"button",
                     "onClick":"actions.endCGT3(model,form)"   
                 }]
-            }, {
+            },
+            {
+                "type": "box",
+                "title": "GROUP_MEMBERS",
+                "items": [{
+                    "key": "group.jlgGroupMembers",
+                    "type": "array",
+                    "title": "GROUP_MEMBERS",
+                    "add": null,
+                    //"remove": null,
+                    "titleExpr": "model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
+                    "items": [{
+                        "key": "group.jlgGroupMembers[].urnNo",
+                        "readonly": true,
+                        "title": "URN_NO",
+                    }, {
+                        "key": "group.jlgGroupMembers[].firstName",
+                        "readonly": true,
+                        "type": "string",
+                        "title": "GROUP_MEMBER_NAME"
+                    }, {
+                        "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                        "readonly": true,
+                        "title": "FATHER_NAME"
+                    }, {
+                        "key": "group.jlgGroupMembers[].relation",
+                        "readonly": true,
+                        "title": "RELATION",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanAmount",
+                        "readonly": true,
+                        "title": "LOAN_AMOUNT",
+                        "type": "amount",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose1",
+                        "readonly": true,
+                        "title": "LOAN_PURPOSE_1",
+                        "enumCode": "loan_purpose_1",
+                        "type": "select",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose2",
+                        "readonly": true,
+                        "type": "string",
+                        "title": "LOAN_PURPOSE_2",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose3",
+                        "readonly": true,
+                        "type": "string",
+                        "title": "LOAN_PURPOSE3",
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessFirstName",
+                        "readonly": true,
+                        "title": "WitnessLastName",
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessRelationship",
+                        "readonly": true,
+                        "title": "RELATION",
+                        "type": "select",
+                        "enumCode": "relation"
+                    }]
+                }]
+            }, 
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "save",

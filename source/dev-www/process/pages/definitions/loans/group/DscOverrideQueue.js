@@ -75,6 +75,7 @@ define({
                                 PageHelper.showLoader();
                                 irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                                 var remarks = window.prompt("Enter Remarks", "");
+                                //model.group.dscOverrideRemarks=remarks;
                                 if (remarks) {
                                     Groups.post({
                                         service: "overridedsc",

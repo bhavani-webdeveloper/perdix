@@ -356,6 +356,7 @@ define({
                         "enumCode":"marital_status"
                     },{
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
+                        "condition":"model.group.partnerCode=='AXIS'",
                         "type": "amount",
                         "title": "OUTSTANDING_LOAN_AMOUNT"
                     },{

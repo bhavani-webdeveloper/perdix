@@ -173,7 +173,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         type: "lov",
                         autolov: true,
-                        "required":true,
+                        //"required":true,
                         title:"DISBURSEMENT_FROM_ACCOUNT",
                         bindMap: {
 

@@ -220,6 +220,12 @@ define({
                                 "title": "DSC_STATUS",
                                 "readonly": true,
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
+                            },{
+                                "key": "group.jlgGroupMembers[].dscOverrideRemarks",
+                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                                "title": "DSC_OVERRIDE_REMARKS",
+                                "readonly": true,
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
                                 "key": "group.jlgGroupMembers[].requestDSCOverride",
                                 "type": "button",

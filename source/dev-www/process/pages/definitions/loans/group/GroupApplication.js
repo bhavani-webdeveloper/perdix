@@ -317,6 +317,28 @@ define({
                     }]
                 },
                 {
+                    type: "box",
+                    "readonly":true,
+                    title: "CHECKER_HISTORY",
+                    items: [{
+                        key: "group.checkerTransactionHistory",
+                        type: "array",
+                        //add: null,
+                        //remove: null,
+                        title: "CHECKER_HISTORY",
+                        items: [{
+                            key: "group.checkerTransactionHistory[].remarks",
+                            title: "CHECKER_REMARKS",
+                        }, {
+                            key: "group.checkerTransactionHistory[].status",
+                            title: "STATUS",
+                        }, {
+                            key: "group.checkerTransactionHistory[].typeOfApprover",
+                            title: "APPROVER_TYPE",
+                        }]
+                    }]
+                },
+                {
                     "type": "actionbox",
                     "items": [{
                         "type": "button",

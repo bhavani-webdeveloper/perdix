@@ -220,7 +220,7 @@ define({
                     "type": "array",
                     "title": "GROUP_MEMBERS",
                     "add": null,
-                    "remove": null,
+                    //"remove": null,
                     "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
@@ -330,8 +330,17 @@ define({
                     {
                         title: "REMARKS",
                         condition:"model.group.review == true",
-                        key: "review.remarks",
-                        type: "textarea",
+                        key: "group.udf8",
+                        "titleMap":{
+                            "Blood relative":"Blood relative",
+                            "Distance more than 1 km":"Distance more than 1 km",
+                            "Customer not aware of product details":"Customer not aware of product details",
+                            "Others":"Others"
+                        },
+                        type: "select",
+                        "schema":{
+                            "type":"string"
+                        },
                         required: true
                     }, {
                         key: "review.targetStage",
