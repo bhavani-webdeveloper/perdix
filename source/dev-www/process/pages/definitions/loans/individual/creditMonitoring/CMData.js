@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.creditMonitoring.CMData",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "CMHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
-    $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, CMHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    dependencies: ["$log", "$state", "$stateParams","LoanAccount", "LUC", "Enrollment", "IndividualLoan", "CMHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
+    $pageFn: function($log, $state, $stateParams,LoanAccount, LUC, Enrollment, IndividualLoan, CMHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
         var branch = SessionStore.getBranch();
         var validateDate = function(req) {
@@ -26,6 +26,7 @@ define({
                 model.Completed = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
                 model.loanMonitoringDetails = model.loanMonitoringDetails || {};
                 model.loanDetails = model.loanDetails || {};
+                model.loanAccount={};
                 model.loanMonitoringDetails.loginName = SessionStore.getLoginname();
                 model = Utils.removeNulls(model, true);
                 $log.info("luc page got initiated");
@@ -46,17 +47,24 @@ define({
                             _.assign(model.loanDetails, res.loanOdSummaryWSDto);
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
+                            var accountNumber = res.loanMonitoringDetails.accountNumber;
                             model.loanMonitoringDetails.address=model.loanMonitoringDetails.address || (model.loanDetails.customer1Address1 + " " + model.loanDetails.customer1Address2 + " " + model.loanDetails.customer1Address3);
                             model.loanMonitoringDetails.presentOutStandingLoanAmount=Number(model.loanDetails.accountBalance);
 
 
-                            var loanresponse = IndividualLoan.get({
-                                id: loanId
+                            var loanresponse = LoanAccount.get({
+                                accountId: accountNumber
                             }).$promise;
                             loanresponse.then(
                                 function(response) {
                                     $log.info("printing loan account");
                                     $log.info(response);
+                                    model.loanAccount=response;
+                                    if(model.loanAccount.daysPastDue>0){
+                                        model.loanMonitoringDetails.udf15="Overdue";
+                                    }else{
+                                        model.loanMonitoringDetails.udf15="Regular";
+                                    }
                                 },
                                 function(httpRes) {
                                     PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
@@ -112,6 +120,11 @@ define({
                         key: "loanMonitoringDetails.presentOutStandingLoanAmount",
                         type: "amount",
                         title: "PRESENT_OUTSTANDING_LOAN_AMOUNT",
+                        "readonly": true
+                    },{
+                        key: "loanMonitoringDetails.udf15",
+                        type: "string",
+                        title: "REPAYMENT_STATUS",
                         "readonly": true
                     }, {
                         key: "loanMonitoringDetails.numberOfInstallmentsDue",
