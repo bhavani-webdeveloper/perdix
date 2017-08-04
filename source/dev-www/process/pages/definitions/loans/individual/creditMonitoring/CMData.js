@@ -27,6 +27,7 @@ define({
                 model.loanMonitoringDetails = model.loanMonitoringDetails || {};
                 model.loanDetails = model.loanDetails || {};
                 model.loanAccount={};
+                model.customer={};
                 model.loanMonitoringDetails.loginName = SessionStore.getLoginname();
                 model = Utils.removeNulls(model, true);
                 $log.info("luc page got initiated");
@@ -50,8 +51,30 @@ define({
                             var accountNumber = res.loanMonitoringDetails.accountNumber;
                             model.loanMonitoringDetails.address=model.loanMonitoringDetails.address || (model.loanDetails.customer1Address1 + " " + model.loanDetails.customer1Address2 + " " + model.loanDetails.customer1Address3);
                             model.loanMonitoringDetails.presentOutStandingLoanAmount=Number(model.loanDetails.accountBalance);
-
-
+                            var urn = model.loanMonitoringDetails.urn;
+                            var linkedurns = [urn];
+                            Queries.getCustomerBasicDetails({
+                                "urns": linkedurns
+                            }).then(function(result) {
+                                if (result && result.urns) {
+                                    var cust = result.urns[urn]
+                                    if (cust) {
+                                        Enrollment.getCustomerById({
+                                                id: cust.id
+                                            })
+                                            .$promise
+                                            .then(function(response2) {
+                                                $log.info(response2);
+                                                model.customer=response2;   
+                                            }, function(httpRes) {
+                                                PageHelper.showErrors(httpRes);
+                                            })
+                                            .finally(function() {
+                                                PageHelper.hideLoader();
+                                            });
+                                    }
+                                }
+                            });
                             var loanresponse = LoanAccount.get({
                                 accountId: accountNumber
                             }).$promise;
@@ -61,9 +84,9 @@ define({
                                     $log.info(response);
                                     model.loanAccount=response;
                                     if(model.loanAccount.daysPastDue>0){
-                                        model.loanMonitoringDetails.udf15="Overdue";
+                                        model.loanMonitoringDetails.udf1="Overdue";
                                     }else{
-                                        model.loanMonitoringDetails.udf15="Regular";
+                                        model.loanMonitoringDetails.udf1="Regular";
                                     }
                                 },
                                 function(httpRes) {
@@ -122,10 +145,10 @@ define({
                         title: "PRESENT_OUTSTANDING_LOAN_AMOUNT",
                         "readonly": true
                     },{
-                        key: "loanMonitoringDetails.udf15",
+                        key: "loanMonitoringDetails.udf1",
+                        "readonly":true,
+                        title: "STATUS_OF_LOAN_ACCOUNT",
                         type: "string",
-                        title: "REPAYMENT_STATUS",
-                        "readonly": true
                     }, {
                         key: "loanMonitoringDetails.numberOfInstallmentsDue",
                         type: "string",
@@ -141,15 +164,7 @@ define({
                         type: "date",
                         title: "DATE_WHEN_THE_BIOMETRIC_WAS_TAKEN",
                         "readonly": true
-                    }, {
-                        key: "loanMonitoringDetails.udf1",
-                        title: "STATUS_OF_LOAN_ACCOUNT",
-                        type: "select",
-                        titleMap: {
-                            "REGULAR": "Regular",
-                            "OVERDUE": "Overdue"
-                        },
-                    },
+                    }, 
                     {
                         key: "loanMonitoringDetails.udf2",
                         type: "string",
