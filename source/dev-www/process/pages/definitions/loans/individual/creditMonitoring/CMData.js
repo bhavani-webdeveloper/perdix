@@ -202,15 +202,15 @@ define({
                         title: "REASON_FOR_DIFFERENCE_IN_NATURE_OF_BUSINESS"
                     }, {
                         key: "loanMonitoringDetails.udf7",
-                        type: "string",
+                        type: "number",
                         title: "SALES_PER_DAY_AS_PER_JUDGEMENT_OF_SWM/ARM"
                     },{
                         key: "loanMonitoringDetails.udf12",
-                        type: "string",
+                        type: "number",
                         title: "SALES_PER_DAY_AS_PER_BUSINESS_OWNER"
                     }, {
                         key: "loanMonitoringDetails.udf8",
-                        type: "string",
+                        type: "number",
                         title: "MONTHLY_STOCK_PURCHASE_VALUE"
                     }, {
                         key: "loanMonitoringDetails.loanAmountUsed",

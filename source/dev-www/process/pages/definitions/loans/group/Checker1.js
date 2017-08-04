@@ -26,13 +26,14 @@ define({
             customer.fullName = Utils.getFullName(customer.firstName, customer.middleName, customer.lastName);
             customer.fatherFullName = Utils.getFullName(customer.fatherFirstName, customer.fatherMiddleName, customer.fatherLastName);
             customer.spouseFullName = Utils.getFullName(customer.spouseFirstName, customer.spouseMiddleName, customer.spouseLastName);
+
             var addr = [];
             if (customer.street) addr.push(customer.street);
-            if (customer.postOffice) addr.push(customer.postOffice);
+            //if (customer.postOffice) addr.push(customer.postOffice);
             if (customer.locality) addr.push(customer.locality);
-            if (customer.villageName) addr.push(customer.villageName);
-            if (customer.district) addr.push(customer.district);
-            if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
+            //if (customer.villageName) addr.push(customer.villageName);
+            //if (customer.district) addr.push(customer.district);
+            //if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
             customer.addressHtml = addr.join(',<br>');
             if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
             customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
@@ -191,6 +192,18 @@ define({
                                 "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
                                 "key": "group.jlgGroupMembers[].customer.addressHtml",
                                 "type": "html"
+                            },{
+                                "title": "VILLAGE_NAME",
+                                "key": "group.jlgGroupMembers[].customer.villageName"
+                            },{
+                                "title": "POST_OFFICE",
+                                "key": "group.jlgGroupMembers[].customer.postOffice"
+                            },{
+                                "title": "DISTRICT",
+                                "key": "group.jlgGroupMembers[].customer.district"
+                            },{
+                                "title": "PIN_CODE",
+                                "key": "group.jlgGroupMembers[].customer.pincode"
                             }, {
                                 "title": "MOBILE_PHONE",
                                 "key": "group.jlgGroupMembers[].customer.mobilePhone"
@@ -355,15 +368,19 @@ define({
                                     "title": "IS_CUSTOMER_CALLED",
                                     "key": "group.jlgGroupMembers[].customerCalled",
                                     "type": "select",
-                                    "enumCode": "customerTelecallingDetails"
+                                    "titleMap":{
+                                        "Yes":"Yes",
+                                        "No":"No"
+                                    }
                                 }, {
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
                                     "key": "group.jlgGroupMembers[].customerNotCalledReason",
-                                    "type": "string"
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
                                     "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                                    "type": "string"
+                                    "enumCode": "customerTelecallingDetails",
+                                    "type": "select"
                                 }, {
                                     "type": "button",
                                     "key": "group.jlgGroupMembers[]",
@@ -445,6 +462,11 @@ define({
                             "readonly": true,
                             "key": "group.jlgGroupMembers[].dscStatus",
                             "type": "text"
+                        },{
+                            "key": "group.jlgGroupMembers[].dscOverrideRemarks",
+                            "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                            "title": "DSC_OVERRIDE_REMARKS",
+                            "readonly": true
                         }]
                     }, {
                         "notitle": true,
@@ -472,7 +494,6 @@ define({
                     }]
                 }]
             }, 
-
             {
                 "type": "box",
                 "title": "CGT And GRT Details",

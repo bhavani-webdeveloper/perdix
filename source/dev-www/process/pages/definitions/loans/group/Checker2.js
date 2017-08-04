@@ -28,11 +28,11 @@ define({
             customer.spouseFullName = Utils.getFullName(customer.spouseFirstName, customer.spouseMiddleName, customer.spouseLastName);
             var addr = [];
             if (customer.street) addr.push(customer.street);
-            if (customer.postOffice) addr.push(customer.postOffice);
+            //if (customer.postOffice) addr.push(customer.postOffice);
             if (customer.locality) addr.push(customer.locality);
-            if (customer.villageName) addr.push(customer.villageName);
-            if (customer.district) addr.push(customer.district);
-            if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
+            //if (customer.villageName) addr.push(customer.villageName);
+            //if (customer.district) addr.push(customer.district);
+            //if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
             customer.addressHtml = addr.join(',<br>');
             if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
             customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
@@ -182,6 +182,18 @@ define({
                                 "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
                                 "key": "group.jlgGroupMembers[].customer.addressHtml",
                                 "type": "html"
+                            },{
+                                "title": "VILLAGE_NAME",
+                                "key": "group.jlgGroupMembers[].customer.villageName"
+                            },{
+                                "title": "POST_OFFICE",
+                                "key": "group.jlgGroupMembers[].customer.postOffice"
+                            },{
+                                "title": "DISTRICT",
+                                "key": "group.jlgGroupMembers[].customer.district"
+                            },{
+                                "title": "PIN_CODE",
+                                "key": "group.jlgGroupMembers[].customer.pincode"
                             }, {
                                 "title": "MOBILE_PHONE",
                                 "key": "group.jlgGroupMembers[].customer.mobilePhone"
@@ -289,14 +301,19 @@ define({
                             }, {
                                 "title": "PRODUCT",
                                 "key": "group.productCode" // TODO: this should be product name
+                            },{
+                                "title": "GROUP_CODE",
+                                "key": "group.groupCode" //loanCycle TODO: this should be product name
                             }, {
                                 "title": "LOAN_AMOUNT",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
                                 "type": "amount"
+                            },{
+                                "title": "LOAN_CYCLE",
+                                "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
                             }, {
                                 "title": "TENURE",
-                                "key": "group.jlgGroupMembers[].loanAccount.tenure",
-                                "type": "date"
+                                "key": "group.jlgGroupMembers[].loanAccount.tenure"
                             }, {
                                 "title": "LOAN_APPLICATION_DATE",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
@@ -428,6 +445,11 @@ define({
                             "readonly": true,
                             "key": "group.jlgGroupMembers[].dscStatus",
                             "type": "text"
+                        },{
+                            "key": "group.jlgGroupMembers[].dscOverrideRemarks",
+                            "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                            "title": "DSC_OVERRIDE_REMARKS",
+                            "readonly": true
                         }]
                     }, {
                         "notitle": true,
