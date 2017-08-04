@@ -8,14 +8,26 @@ define({
         var validateDate = function(req) {
                 if (req.loanMonitoringDetails && req.loanMonitoringDetails.lucRescheduledDate) {
                     var today = moment(new Date()).format("YYYY-MM-DD");
+                    var rescheduledate=req.loanMonitoringDetails.lucRescheduledDate;
                     if (req.loanMonitoringDetails.lucRescheduledDate <= today) {
                         $log.info("bad night");
                         PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date must be a Future Date', 5000);
                         return false;
                     }
+                    var date1 = moment(rescheduledate,SessionStore.getSystemDateFormat());
+                    var date2 = moment(today,SessionStore.getSystemDateFormat());
+                    var diffDays = date1.diff(date2, "days");
+                    //var timeDiff =Math.abs(rescheduledate.getTime() - today.getTime());
+                    //var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    $log.info(diffDays);
+                    if (diffDays >15) {
+                        $log.info("bad night");
+                        PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date should not exceed 15 days from today', 5000);
+                        return false;
+                    }
                 }
                 return true;
-            }
+        }
            
 
         return {
@@ -173,7 +185,7 @@ define({
                     },  
                    {
                         key: "loanMonitoringDetails.udf13",
-                        required:true,
+                        //required:true,
                         "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                         type: "validatebiometric",
                         category: 'CustomerEnrollment',
