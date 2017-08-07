@@ -30,59 +30,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             $log.info(model.customer.kgfsBankName);
             $log.info(formHelper.enum('bank'));
 
-            if($stateParams.pageData)
-            {
-                $log.info($stateParams.pageData);
-                if($stateParams.pageData.enrolledUrnNo)
-                {
-                    var linkedurns = [$stateParams.pageData.enrolledUrnNo];
-                    Queries.getCustomerBasicDetails({
-                        "urns": linkedurns
-                    }).then(function(result) {
-                        if (result && result.urns) {
-                            var cust = result.urns[urn]
-                            if (cust) {
-                                Enrollment.getCustomerById({
-                                        id: cust.id
-                                    })
-                                    .$promise
-                                    .then(function(response2) {
-                                        $log.info("printing customer");
-                                        $log.info(response2);
-                                        model.customer = response2;
-                                        model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
-                                        model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
-                                        model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
-                                        model = EnrollmentHelper.fixData(model);
-                                        if (model.customer.dateOfBirth) {
-                                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                        if (model.customer.spouseDateOfBirth) {
-                                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                        model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
-                                        model.customer.parentCustomerId=$stateParams.pageData.customerId;
-                                    }, function(httpRes) {
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function() {
-                                        PageHelper.hideLoader();
-                                    });
-                            }
-                        }
-                    });
-                }else{
-                    model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
-                    model.customer.parentCustomerId=$stateParams.pageData.customerId;
-                    model.customer.dateOfBirth=$stateParams.pageData.dateOfBirth;
-                    model.customer.educationStatus=$stateParams.pageData.educationStatus;
-                    model.customer.firstName=$stateParams.pageData.familyMemberFirstName;
-                    model.customer.gender=$stateParams.pageData.gender;
-                    model.customer.maritalStatus=$stateParams.pageData.maritalStatus;
-                    model.customer.mobilePhone=$stateParams.pageData.mobilePhone;
-                    if (model.customer.dateOfBirth) {
-                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                    }
+            if ($stateParams.pageData) {
+                model.customer.familyEnrollmentId = $stateParams.pageData.enrollmentId;
+                model.customer.parentCustomerId = $stateParams.pageData.customerId;
+                model.customer.dateOfBirth = $stateParams.pageData.dateOfBirth;
+                model.customer.educationStatus = $stateParams.pageData.educationStatus;
+                model.customer.firstName = $stateParams.pageData.familyMemberFirstName;
+                model.customer.gender = $stateParams.pageData.gender;
+                model.customer.maritalStatus = $stateParams.pageData.maritalStatus;
+                model.customer.mobilePhone = $stateParams.pageData.mobilePhone;
+                if (model.customer.dateOfBirth) {
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
             }
             $log.info("ProfileInformation page got initialized:"+model.customer.customerBranchId);
@@ -105,7 +63,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
                 model._mode = 'EDIT';
-                /*if (model.customer.currentStage==='Stage01') {
+                if (model.customer.currentStage==='Stage01') {
                     irfProgressMessage.pop("enrollment-save","Load Complete",2000);
                     deferred.resolve(model);
                     window.scrollTo(0, 0);
@@ -113,7 +71,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" already enrolled", 5000);
                     $stateParams.confirmExit = false;
                     irfNavigator.goBack();
-                }*/
+                }
                 PageHelper.hideLoader();
             },function(resp){
                 PageHelper.hideLoader();
