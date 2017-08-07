@@ -17,8 +17,6 @@ define({
                     var date1 = moment(rescheduledate,SessionStore.getSystemDateFormat());
                     var date2 = moment(today,SessionStore.getSystemDateFormat());
                     var diffDays = date1.diff(date2, "days");
-                    //var timeDiff =Math.abs(rescheduledate.getTime() - today.getTime());
-                    //var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
                     $log.info(diffDays);
                     if (diffDays >15) {
                         $log.info("bad night");

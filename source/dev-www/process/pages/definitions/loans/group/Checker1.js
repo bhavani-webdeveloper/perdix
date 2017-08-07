@@ -268,10 +268,25 @@ define({
                                     type: "select",
                                     "enumCode": "identity_proof"
                                 },
-
                                 {
                                     key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
                                     "title": "KYC1_PROOF_NUMBER",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                },
+                                {
+
+                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
+                                    "title": "KYC2_PROOF_TYPE",
+                                    type: "select",
+                                    "enumCode": "identity_proof"
+                                },
+                                {
+                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofNumber",
+                                    "title": "KYC2_PROOF_NUMBER",
                                     type: "barcode",
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
@@ -296,8 +311,22 @@ define({
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
+                            },{
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
+                                "title": "KYC2_PROOF_DOCUMENT",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ReverseImagePath",
+                                "title": "KYC2_PROOF_DOCUMENT_BACK_SIDE",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
                             }, ]
-
                         }]
                     }, {
                         "type": "section",
@@ -382,6 +411,7 @@ define({
                                     "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
                                     "enumCode": "customerTelecallingDetails",
                                     "type": "select"
@@ -442,10 +472,12 @@ define({
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
                                     "type": "string"
                                 }]

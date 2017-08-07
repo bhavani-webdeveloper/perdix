@@ -288,7 +288,24 @@ define({
                             "type": "select",
                             "enumCode": "relation"
                         },{
-                            
+                            "title": "LOAN_ACCOUNT_NUMBER",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.accountNumber", 
+                            "type": "string"
+                        },{
+                            "title": "TENURE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.tenure"
+                        },{
+                            "title": "LOAN_APPLICATION_DATE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+                            "type": "date"
+                        }, {
+                            "title": "LOAN_STATUS",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.loanApplicationStatus",
+                        },{
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             required: true,
                             "title": "APPLICATION_UPLOAD",

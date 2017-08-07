@@ -244,6 +244,8 @@ define({
                     GroupProcess.updateGroup(reqData, function(res) {
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         model.group = _.clone(res.group);
+                        fillNames(model);
+                        model.group.tenure = parseInt(model.group.tenure);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();
@@ -266,6 +268,8 @@ define({
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         Utils.removeNulls(res.group, true);
                         model.group = _.clone(res.group);
+                        fillNames(model);
+                        model.group.tenure = parseInt(model.group.tenure);
                         PageHelper.hideLoader();
                     }, function(res) {
                         PageHelper.hideLoader();

@@ -1570,6 +1570,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     }]
                 }, {
                     "type": "actionbox",
+                    "condition": "!model.loanAccount.loanType == 'JLG'",
                     "items": [{
                         "type": "button",
                         "title": "DOWNLOAD_ALL_DOCS",

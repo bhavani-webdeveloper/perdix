@@ -201,16 +201,6 @@ define({
                 "type": "box",
                 "title": "GROUP_MEMBERS",
                 "items": [{
-                    "key": "group.scheduledDisbursementDate",
-                    "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "readonly":true,
-                    "type": "date",
-                },{
-                    "key": "group.firstRepaymentDate",
-                    "title": "FIRST_REPAYMENT_DATE",
-                    "readonly":true,
-                    "type": "date",
-                },{
                     "key": "group.groupCode",
                     "title": "GROUP_CODE",
                     "readonly":true
@@ -352,23 +342,23 @@ define({
                         bindMap: {},
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-                            var targetstage = formHelper.enum('targetstage').data;
-                            var out = [];
-                            for (var i = 0; i < targetstage.length; i++) {
-                                var t = targetstage[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: t.name,
-                                    })
+                            var stage1 = model.group.currentStage;
+                                var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                var out = [];
+                                for (var i = 0; i < targetstage.length; i++) {
+                                    var t = targetstage[i];
+                                    if (t.name == stage1) {
+                                        out.push({
+                                            name: t.field1,
+                                        })
+                                    }
                                 }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
                         },
                         onSelect: function(valueObj, model, context) {
                             model.review.targetStage = valueObj.name;
@@ -461,6 +451,32 @@ define({
                         PageHelper.showErrors(res);
                         irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
                     });
+                },
+                sendBack: function(model, form, formName) {
+                    /*if (!model.review.targetStage){
+                        irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.grtRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
+                        return false;
+                    }*/
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Send Back', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";                    
+                    var reqData = _.cloneDeep(model);
+                    //reqData.stage = model.review.targetStage;
+                    reqData.stage = "CGT1";
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Done', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('GRT-proceed', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });   
                 },
                 submit: function(model, form, formName) {
 

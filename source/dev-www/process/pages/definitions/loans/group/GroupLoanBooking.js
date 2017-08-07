@@ -59,6 +59,9 @@ define({
                 var centres = SessionStore.getCentres();
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 model.group.centreId = model.group.centreId || ((_.isArray(centres) && centres.length > 0) ? centres[0].value : model.group.centreId);
+                var date = SessionStore.getFormatedCBSDate();
+                model.group.scheduledDisbursementDate=date.split("-").reverse().join("-");
+
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
@@ -78,6 +81,8 @@ define({
                                 irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
                             });
                         }
+                        var date = SessionStore.getFormatedCBSDate();
+                        model.group.scheduledDisbursementDate=model.group.scheduledDisbursementDate||date.split("-").reverse().join("-");
 
                         PageHelper.hideLoader();
                     }, function(resp) {
@@ -135,16 +140,6 @@ define({
                     "key": "group.tenure",
                     "readonly": true,
                     "title": "TENURE",
-                },{
-                    "key": "group.scheduledDisbursementDate",
-                    "required":true,
-                    "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "type": "date",
-                },{
-                    "key": "group.firstRepaymentDate",
-                    "title": "FIRST_REPAYMENT_DATE",
-                    "required":true,
-                    "type": "date",
                 }]
             }, {
                 "type": "box",

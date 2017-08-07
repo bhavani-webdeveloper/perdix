@@ -183,8 +183,7 @@ define({
 						}, {
 	                        "title": "TENURE",
 	                        "readonly": true,
-	                        "key": "group.jlgGroupMembers[].loanAccount.tenure",
-	                        "type": "date"
+	                        "key": "group.jlgGroupMembers[].loanAccount.tenure"
 	                    }, {
 	                        "title": "LOAN_APPLICATION_DATE",
 	                        "readonly": true,
