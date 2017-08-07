@@ -208,6 +208,39 @@ define({
 				},
 
 				{
+                    type: "box",
+                    "readonly":true,
+                    "condition":"model.group.checkerTransactionHistory.length",
+                    title: "CHECKER_HISTORY",
+                    items: [{
+                        key: "group.checkerTransactionHistory",
+                        "titleExpr":"model.group.checkerTransactionHistory[arrayIndex].typeOfApprover + ' : ' + model.group.checkerTransactionHistory[arrayIndex].status",
+                        type: "array",
+                        "add": null,
+                        "remove": null,
+                        title: "CHECKER_HISTORY",
+                        items: [{
+                            key: "group.checkerTransactionHistory[].remarks",
+                            title: "CHECKER_REMARKS",
+                        }, {
+                            key: "group.checkerTransactionHistory[].status",
+                            title: "STATUS",
+                        }, {
+                            key: "group.checkerTransactionHistory[].typeOfApprover",
+                            title: "APPROVER_TYPE",
+                        },
+						{
+							key: "group.checkerTransactionHistory[].statusUpDatedBy",
+							title: "APPROVER",
+						}, {
+							key: "group.checkerTransactionHistory[].statusUpDatedAt",
+							title: "APPROVED_AT",
+						}
+                        ]
+                    }]
+                },
+
+				{
 					"type": "actionbox",
 					"items": [{
                         "type": "button",

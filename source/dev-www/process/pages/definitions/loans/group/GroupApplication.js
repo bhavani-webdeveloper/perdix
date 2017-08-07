@@ -319,12 +319,14 @@ define({
                 {
                     type: "box",
                     "readonly":true,
+                    "condition":"model.group.checkerTransactionHistory.length",
                     title: "CHECKER_HISTORY",
                     items: [{
                         key: "group.checkerTransactionHistory",
+                        "titleExpr":"model.group.checkerTransactionHistory[arrayIndex].typeOfApprover + ' : ' + model.group.checkerTransactionHistory[arrayIndex].status",
                         type: "array",
-                        //add: null,
-                        //remove: null,
+                        "add": null,
+                        "remove": null,
                         title: "CHECKER_HISTORY",
                         items: [{
                             key: "group.checkerTransactionHistory[].remarks",
@@ -335,6 +337,12 @@ define({
                         }, {
                             key: "group.checkerTransactionHistory[].typeOfApprover",
                             title: "APPROVER_TYPE",
+                        },{
+                           key: "group.checkerTransactionHistory[].statusUpDatedBy",
+                           title: "APPROVER",
+                        },{
+                           key: "group.checkerTransactionHistory[].statusUpDatedAt",
+                           title: "APPROVED_AT",
                         }]
                     }]
                 },

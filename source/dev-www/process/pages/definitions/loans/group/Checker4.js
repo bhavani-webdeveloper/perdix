@@ -71,6 +71,15 @@ define({
                             dscPromises.push(Groups.getDSCData({
                                 "dscId": member.dscId
                             }).$promise);
+                            model.group.checkerTransactionHistoryDTO = {
+                                "branchId": model.group.branchId,
+                                "statusUpDatedBy": SessionStore.getUsername(),
+                                "statusUpDatedAt": Utils.getCurrentDate(),
+                                "typeOfApprover":"Checker4",
+                                "product":model.group.productCode,
+                                "groupId":model.group.id,
+                                "groupCode":model.group.groupCode
+                            };
                         }
                         $q.all([
                             $q.all(customerPromises).then(function(data) {
@@ -436,44 +445,88 @@ define({
                         }]
                     }]
                 }]
-            }, {
-                "type": "box",
-                "title": "POST_REVIEW",
-                "items": [{
-                    key: "action",
-                    type: "radios",
-                    titleMap: {
-                        "REJECT": "REJECT",
-                        "APPROVE": "APPROVE",
+            },
+
+            {
+                type: "box",
+                title: "CHECKER_REMARKS",
+                items: [
+                    {
+                        key: "group.checkerTransactionHistoryDTO.status",
+                        title: "STATUS",
+                        "type":"select",
+                        titleMap: {
+                        "ACCEPT": "ACCEPT",    
+                        "REJECT": "REJECT"
+                        }
+                    },
+                    {
+                        key: "group.checkerTransactionHistoryDTO.remarks",
+                        "required":true,
+                        title: "CHECKER_REMARKS",
+                    }, {
+                        key: "group.checkerTransactionHistoryDTO.typeOfApprover",
+                        "readonly":true,
+                        title: "APPROVER_TYPE",
                     }
-                }, {
-                    type: "section",
-                    condition: "model.action=='REJECT'",
+                ]
+            },
+            {
+                type: "box",
+                "readonly": true,
+                "condition":"model.group.checkerTransactionHistory.length",
+                title: "CHECKER_HISTORY",
+                items: [{
+                    key: "group.checkerTransactionHistory",
+                    "titleExpr":"model.group.checkerTransactionHistory[arrayIndex].typeOfApprover + ' : ' + model.group.checkerTransactionHistory[arrayIndex].status",
+                    type: "array",
+                    "add": null,
+                    "remove": null,
+                    title: "CHECKER_HISTORY",
                     items: [{
-                        title: "REMARKS",
-                        key: "remarks",
-                        type: "textarea",
-                        required: true
+                        key: "group.checkerTransactionHistory[].remarks",
+                        title: "CHECKER_REMARKS",
                     }, {
-                        "type": "button",
-                        "title": "REJECT",
-                        "onClick": "actions.reject(model,formCtrl, form)"
-                    }]
-                }, {
-                    type: "section",
-                    condition: "model.action=='APPROVE'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "remarks",
-                        type: "textarea",
-                        required: true
+                        key: "group.checkerTransactionHistory[].status",
+                        title: "STATUS",
                     }, {
-                        "type": "button",
-                        "title": "APPROVE",
-                        "onClick": "actions.approve(model,formCtrl, form)"
+                        key: "group.checkerTransactionHistory[].typeOfApprover",
+                        title: "APPROVER_TYPE",
+                    },{
+                        key: "group.checkerTransactionHistory[].statusUpDatedBy",
+                        title: "APPROVER",
+                    },{
+                        key: "group.checkerTransactionHistory[].statusUpDatedAt",
+                        title: "APPROVED_AT",
                     }]
                 }]
-            }],
+            },
+
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "button",
+                    "title": "SAVE",
+                    "onClick": "actions.saveGroup(model,formCtrl, form)"
+                }]
+            },{
+                "type": "actionbox",
+                "condition":"model.group.checkerTransactionHistoryDTO.status=='ACCEPT'",
+                "items": [{
+                    "type": "button",
+                    "title": "APPROVE",
+                    "onClick": "actions.approve(model,formCtrl, form)"
+                }, ]
+            },{
+                "type": "actionbox",
+                "condition":"model.group.checkerTransactionHistoryDTO.status=='REJECT'",
+                "items": [{
+                    "type": "button",
+                    "title": "REJECT",
+                    "onClick": "actions.reject(model,formCtrl, form)"
+                }, ]
+            } 
+            ],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
