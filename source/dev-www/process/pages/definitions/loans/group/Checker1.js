@@ -278,7 +278,6 @@ define({
                                     }
                                 },
                                 {
-
                                     key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
                                     "title": "KYC2_PROOF_TYPE",
                                     type: "select",
@@ -389,7 +388,7 @@ define({
                         "html": '<hr>'
                     }, {
                         "type": "section",
-                        "condition": "model.group.partnerCode=='AXIS'",
+                        //"condition": "model.group.partnerCode=='AXIS'",
                         "htmlClass": "row",
                         "items": [{
                             "type": "section",
@@ -411,7 +410,7 @@ define({
                                     "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
                                     "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
                                     "enumCode": "customerTelecallingDetails",
                                     "type": "select"
@@ -472,15 +471,20 @@ define({
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
+                                    //"condition": "model.group.jlgGroupMembers[form.key[2]].teleCallingDetails[form.key[3]].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
+                                    //"condition": "model.group.jlgGroupMembers[form.key[2]].teleCallingDetails[form.key[3]].customerCalled == 'Yes'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
-                                    "type": "string"
-                                }]
+                                    "type": "text"
+                                },/* {
+                                    "title": "SECTION",
+                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
+                                    "type": "section",
+                                    "html": '<pre>{{form.key[4]}}</pre>'
+                                }*/]
                             }]
                         }]
                     }, {
@@ -814,6 +818,7 @@ define({
                     if (!validateForm(formCtrl))
                         return;
                     PageHelper.showLoader();
+                    model.group.endTime= new Date();
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'PROCEED';
                     reqData.stage = 'ApplicationPending';
@@ -837,6 +842,7 @@ define({
                     irfProgressMessage.pop('CHECKER-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
+                    model.group.endTime= new Date();
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();

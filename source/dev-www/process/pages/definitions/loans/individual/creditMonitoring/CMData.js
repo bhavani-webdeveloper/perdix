@@ -30,7 +30,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "CREDIT_MONITORING_DATA_CAPTURE",
+            "title": "CREDIT_MONITORING_DETAILS",
             "subTitle": "CREDIT_MONITORING",
             initialize: function(model, form, formCtrl) {
                 model.Completed = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
@@ -61,6 +61,12 @@ define({
                             var accountNumber = res.loanMonitoringDetails.accountNumber;
                             model.loanMonitoringDetails.address=model.loanMonitoringDetails.address || (model.loanDetails.customer1Address1 + " " + model.loanDetails.customer1Address2 + " " + model.loanDetails.customer1Address3);
                             model.loanMonitoringDetails.presentOutStandingLoanAmount=Number(model.loanDetails.accountBalance);
+                            model.loanMonitoringDetails.udf7=Number(model.loanMonitoringDetails.udf7);
+                            model.loanMonitoringDetails.udf12=Number(model.loanMonitoringDetails.udf12);
+                            model.loanMonitoringDetails.udf8=Number(model.loanMonitoringDetails.udf8);
+                            model.loanMonitoringDetails.udf9=Number(model.loanMonitoringDetails.udf9);
+                            model.loanMonitoringDetails.udf10=Number(model.loanMonitoringDetails.udf10);
+
                             var urn = model.loanMonitoringDetails.urn;
                             var linkedurns = [urn];
                             Queries.getCustomerBasicDetails({
@@ -180,8 +186,44 @@ define({
                         type: "string",
                         title: "Reschedule Remarks",
                         "readonly": true
+                    },
+                    {
+                        key: "loanMonitoringDetails.udf3",
+                        "condition":"model.loanMonitoringDetails.currentStage!=='Completed'",
+                        type: "select",
+                        titleMap: {
+                            "Hardship": "Hardship",
+                            "Last two repayments pending": "Last two repayments pending",
+                            "Can pay": "Can pay",
+                            "Wilful default": "Wilful default",
+                            "Others": "Others",
+                            "Claim": "Claim"
+                        },
+                        title: "REASON_FOR_FOR_NON_REPAYMENT"
+                    },
+                    {
+                        key: "loanMonitoringDetails.udf3",
+                        "condition":"model.loanMonitoringDetails.currentStage =='Completed'",
+                        "readonly":true,
+                        type: "select",
+                        titleMap: {
+                            "Hardship": "Hardship",
+                            "Last two repayments pending": "Last two repayments pending",
+                            "Can pay": "Can pay",
+                            "Wilful default": "Wilful default",
+                            "Others": "Others",
+                            "Claim": "Claim"
+                        },
+                        title: "REASON_FOR_FOR_NON_REPAYMENT"
                     },  
-                   {
+                    ]
+                },
+                {
+                    "type":"box",
+                    "condition": "model.lucCompleted",
+                    "title":"VALIDATE_BIOMETRIC",
+                    "items":[
+                    {
                         key: "loanMonitoringDetails.udf13",
                         //required:true,
                         "title": "CHOOSE_A_FINGER_TO_VALIDATE",
@@ -206,22 +248,14 @@ define({
                                 customerId: model.customer.id
                             };
                         },
-                    }, {
-                        key: "loanMonitoringDetails.udf3",
-                        type: "select",
-                        titleMap: {
-                            "Hardship": "Hardship",
-                            "Last two repayments pending": "Last two repayments pending",
-                            "Can pay": "Can pay",
-                            "Wilful default": "Wilful default",
-                            "Others": "Others",
-                            "Claim": "Claim"
-                        },
-                        title: "REASON_FOR_FOR_NON_REPAYMENT"
-                    }]
-                }, {
+                    }
+                    ]
+                },
+                
+                {
                     "type": "box",
                     "title": "BUSINESS_DETAILS",
+                    //"condition":"model.lucCompleted",
                     "items": [{
                         key: "loanMonitoringDetails.udf14",
                         type: "string",
@@ -278,9 +312,27 @@ define({
                     }]
                 }, {
                     "type": "box",
+                    //"condition":"model.lucCompleted",
                     "title": "CM_DETAILS",
                     "items": [{
                         key: "loanMonitoringDetails.lucDone",
+                        "condition":"model.loanMonitoringDetails.currentStage !=='Completed'",
+                        type: "select",
+                        titleMap: {
+                            "Yes": "Yes",
+                            "No": "No"
+                        },
+                        //enumCode: "decisionmaker1",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                model.loanMonitoringDetails.CMReschedule = "No";
+                                model.loanMonitoringDetails.CMEscalate = "No";
+                            }
+                        }
+                    },{
+                        key: "loanMonitoringDetails.lucDone",
+                        "readonly":true,
+                        "condition":"model.loanMonitoringDetails.currentStage =='Completed'",
                         type: "select",
                         titleMap: {
                             "Yes": "Yes",
@@ -294,9 +346,9 @@ define({
                             }
                         }
                     }, {
-                        key: "loanMonitoringDetails.CMReschedule",
+                        key: "loanMonitoringDetails.lucRescheduled",
                         "title": "CM_RESCHEDULED",
-                        condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='CMReschedule')",
+                        condition: "model.loanMonitoringDetails.lucDone=='No'",
                         type: "select",
                         titleMap: {
                             "Yes": "Yes",
@@ -317,20 +369,19 @@ define({
                             "Not utilized ": "Not utilized ",
                             "Customer not available": "Customer not available",
                         },
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='CMReschedule')",
+                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduleReason",
                         type: "string",
                         title: "CM_RESCHEDULED_REASON",
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='CMReschedule')",
+                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduledDate",
                         type: "date",
                         title: "CM_RESCHEDULED_DATE",
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && (model.loanMonitoringDetails.currentStage =='CMSchedule'||model.loanMonitoringDetails.currentStage =='CMReschedule')",
-                    }, ]
+                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
+                    }]
                 },
-
 
                 {
                     "type": "actionbox",
@@ -401,7 +452,7 @@ define({
                     }]
                 }, {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !model.Completed",
+                    condition: "model.loanMonitoringDetails.lucDone== 'Yes' && model.loanMonitoringDetails.currentStage !=='Completed'",
                     "items": [{
                         "type": "submit",
                         "title": "Close"

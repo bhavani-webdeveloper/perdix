@@ -415,12 +415,12 @@ define({
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
+                                    //"condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
+                                    //"condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
                                     "type": "string"
                                 }]
@@ -590,6 +590,7 @@ define({
                     if (!validateForm(formCtrl))
                         return;
                     PageHelper.showLoader();
+                    model.group.endTime= new Date();
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
                     PageHelper.clearErrors();
@@ -609,6 +610,7 @@ define({
                     if (!validateForm(formCtrl))
                         return;
                     PageHelper.showLoader();
+                    model.group.endTime= new Date();
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'PROCEED';
                     reqData.stage = 'AgreementUploadPending';
@@ -629,6 +631,7 @@ define({
                     PageHelper.showLoader();
                     irfProgressMessage.pop('CHECKER-proceed', 'Working...');
                     PageHelper.clearErrors();
+                    model.group.endTime= new Date();
                     model.groupAction = "PROCEED";
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {

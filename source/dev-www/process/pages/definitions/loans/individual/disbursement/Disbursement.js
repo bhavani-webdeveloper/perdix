@@ -150,6 +150,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "type":"date",
                     },
                     {
+                        "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
+                        "condition":"model.siteCode=='KGFS'",
+                        "title":"FIRST_REPAYMENT_DATE",
+                        "type":"date",
+                    },
+                    {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
                         "condition":"model.siteCode !=='KGFS'",
                         "title": "MODE_OF_DISBURSEMENT",   
@@ -172,6 +178,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         type: "lov",
+                        "schema":{
+                            "type":["string","null"]
+                        },
                         autolov: true,
                         //"required":true,
                         title:"DISBURSEMENT_FROM_ACCOUNT",

@@ -183,6 +183,7 @@ define({
                         "title": "GROUP_MEMBERS",
                         "add": null,
                         "remove": null,
+                        "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                         "items": [{
                             "key": "group.jlgGroupMembers[].urnNo",
                             "title": "URN_NO",

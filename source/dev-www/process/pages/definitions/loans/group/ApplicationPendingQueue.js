@@ -156,11 +156,22 @@ define({
 							title: 'GROUP_ID',
 							data: 'id'
 						}, {
-							title: 'PARTNER_CODE',
-							data: 'partnerCode'
-						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
+						}, {
+							title: 'PARTNER',
+							data: 'partnerCode'
+						},{
+							title: 'TRANSACTION_DATE',
+							data: 'endTime',
+							render: function(data, type, full, meta) {
+                                if(data){
+                                    return (moment(data).format("DD-MM-YYYY"));
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
 						}]
 					},
 					getActions: function() {

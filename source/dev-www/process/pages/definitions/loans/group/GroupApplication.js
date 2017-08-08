@@ -75,6 +75,14 @@ define({
                     id: member.customerId
                 }, function(resp, headers) {
                     model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    if (model.group.jlgGroupMembers[key].loanAccount) {
+                        if (model.group.jlgGroupMembers[key].loanAccount.closed == true) {
+                            model.group.jlgGroupMembers[key].closed1 = "Inactive";
+                        } else {
+                            model.group.jlgGroupMembers[key].closed1 = "Active";
+                        }
+                    }
+
                     try {
                         if (resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
@@ -293,6 +301,12 @@ define({
                             "key": "group.jlgGroupMembers[].loanAccount.accountNumber", 
                             "type": "string"
                         },{
+                            "title": "ACCOUNT_NUMBER",
+                            "condition":"model.group.partnerCode=='AXIS'",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.bcAccount.bcAccountNo", 
+                            "type": "string"
+                        },{
                             "title": "TENURE",
                             "readonly": true,
                             "key": "group.jlgGroupMembers[].loanAccount.tenure"
@@ -304,7 +318,7 @@ define({
                         }, {
                             "title": "LOAN_STATUS",
                             "readonly": true,
-                            "key": "group.jlgGroupMembers[].loanAccount.loanApplicationStatus",
+                            "key": "group.jlgGroupMembers[].closed1",
                         },{
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             required: true,
@@ -407,6 +421,7 @@ define({
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();
+                    model.group.endTime= new Date();
                     model.groupAction = "PROCEED";
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
