@@ -344,6 +344,7 @@ define({
                         search: function(inputModel, form, model, context) {
                             var stage1 = model.group.currentStage;
                                 var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                $log.info(targetstage);
                                 var out = [];
                                 for (var i = 0; i < targetstage.length; i++) {
                                     var t = targetstage[i];
@@ -453,21 +454,21 @@ define({
                     });
                 },
                 sendBack: function(model, form, formName) {
-                    /*if (!model.review.targetStage){
+                    if (!model.review.targetStage){
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.grtRemarks){
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
-                    }*/
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";                    
                     var reqData = _.cloneDeep(model);
-                    //reqData.stage = model.review.targetStage;
-                    reqData.stage = "CGT1";
+                    reqData.stage = model.review.targetStage;
+                    //reqData.stage = "CGT1";
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Done', 5000);

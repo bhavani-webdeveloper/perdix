@@ -18,10 +18,18 @@ define({
                     var date2 = moment(today,SessionStore.getSystemDateFormat());
                     var diffDays = date1.diff(date2, "days");
                     $log.info(diffDays);
-                    if (diffDays >15) {
-                        $log.info("bad night");
-                        PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date should not exceed 15 days from today', 5000);
-                        return false;
+                    if(req.loanMonitoringDetails.currentStage=='CMReschedule'){
+                        if (diffDays > 90) {
+                            $log.info("bad night");
+                            PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date should not exceed 90 days from today', 5000);
+                            return false;
+                        }
+                    }else{
+                        if (diffDays > 15) {
+                            $log.info("bad night");
+                            PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date should not exceed 15 days from today', 5000);
+                            return false;
+                        }
                     }
                 }
                 return true;
@@ -148,7 +156,7 @@ define({
                     }, {
                         key: "loanMonitoringDetails.address",
                         type: "string",
-                        title: "SHOP_ADDR",
+                        title: "SHOP_ADDRESS",
                         "readonly": true
                     }, {
                         key: "loanMonitoringDetails.loanAmount",
@@ -220,7 +228,7 @@ define({
                 },
                 {
                     "type":"box",
-                    "condition": "model.lucCompleted",
+                    //"condition": "model.lucCompleted",
                     "title":"VALIDATE_BIOMETRIC",
                     "items":[
                     {
@@ -369,23 +377,23 @@ define({
                             "Not utilized ": "Not utilized ",
                             "Customer not available": "Customer not available",
                         },
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduleReason",
                         type: "string",
                         title: "CM_RESCHEDULED_REASON",
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduledDate",
                         type: "date",
                         title: "CM_RESCHEDULED_DATE",
-                        condition: "model.loanMonitoringDetails.CMReschedule=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                     }]
                 },
 
                 {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.CMReschedule=='Yes' && model.loanMonitoringDetails.CMEscalate=='No' ",
+                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-backward",
@@ -413,37 +421,6 @@ define({
                                         $state.go('Page.CreditMonitoringDashboard', null);
                                     });
 
-                                } else {
-                                    $log.info("Id is not in the model");
-                                }
-                            });
-                        }
-                    }]
-                }, {
-                    "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='CMLegalRecovery'",
-                    "items": [{
-                        type: "button",
-                        icon: "fa fa-step-forward",
-                        title: "Escalate",
-                        onClick: function(model, formCtrl) {
-                            $log.info("Inside submit()");
-                            $log.warn(model);
-                            var sortFn = function(unordered) {
-                                var out = {};
-                                Object.keys(unordered).sort().forEach(function(key) {
-                                    out[key] = unordered[key];
-                                });
-                                return out;
-                            };
-
-                            formHelper.validate(formCtrl).then(function() {
-                                // orderCMDocuments(model);
-                                var reqData = _.cloneDeep(model);
-                                if (reqData.loanMonitoringDetails.id) {
-                                    CMHelper.escalate(reqData).then(function(resp) {
-                                       $state.go('Page.CreditMonitoringDashboard', null);
-                                    });
                                 } else {
                                     $log.info("Id is not in the model");
                                 }
