@@ -510,6 +510,26 @@
                      "GroupCreation",
                      "GRT"
                   ]
+               },
+               "groupRemarks": {
+                  "title": "groupRemarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 250,
+                  "captureStages": [
+                     "GroupCreation",
+                     "GRT"
+                  ]
+               },
+               "groupPhotoFileId": {
+                  "title": "groupPhotoFileId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "GroupCreation",
+                     "GRT"
+                  ]
                }
             }
          },
