@@ -112,6 +112,17 @@ define({
                                     }else{
                                         model.loanMonitoringDetails.udf1="Regular";
                                     }
+                                    var totalSatisfiedDemands = 0;
+                                    if (model.loanAccount.repaymentSchedule && model.loanAccount.repaymentSchedule.length) {
+                                        for (i = 0; i < model.loanAccount.repaymentSchedule.length; i++) {
+                                            if (model.loanAccount.repaymentSchedule[i].description == 'Due') {
+                                                totalSatisfiedDemands++;
+                                                $log.info("inc s");
+                                            } 
+                                        }
+                                    }
+                                    $log.info(totalSatisfiedDemands);
+                                    model.loanMonitoringDetails.numberOfInstallmentsDue = totalSatisfiedDemands;
                                 },
                                 function(httpRes) {
                                     PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
@@ -377,23 +388,23 @@ define({
                             "Not utilized ": "Not utilized ",
                             "Customer not available": "Customer not available",
                         },
-                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& model.loanMonitoringDetails.lucDone=='No'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduleReason",
                         type: "string",
                         title: "CM_RESCHEDULED_REASON",
-                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& model.loanMonitoringDetails.lucDone=='No'",
                     }, {
                         key: "loanMonitoringDetails.lucRescheduledDate",
                         type: "date",
                         title: "CM_RESCHEDULED_DATE",
-                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& model.loanMonitoringDetails.lucDone=='No'",
                     }]
                 },
 
                 {
                     "type": "actionbox",
-                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& model.loanMonitoringDetails.lucDone=='No'",
                     "items": [{
                         type: "button",
                         icon: "fa fa-step-backward",
