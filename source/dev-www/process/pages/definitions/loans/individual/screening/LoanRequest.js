@@ -2703,7 +2703,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 }
                             }
                         }
-                        if(model.loanAccount.loanAmountRequested > 500000 || model.enterprise.enterprise.businessConstitution == 'Private'){
+                        if(model.loanAccount.loanAmountRequested > parseInt(SessionStore.getGlobalSetting("MinLoanAmountForCommercialCB")) || model.enterprise.enterprise.businessConstitution == 'Private'){
                                 PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
                                 return false;
                         }
