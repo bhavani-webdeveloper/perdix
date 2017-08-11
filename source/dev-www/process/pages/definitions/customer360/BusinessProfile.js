@@ -237,13 +237,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.enterprise.companyRegistered",
                         type: "select",
                         enumCode: "decisionmaker",
-                        title: "IS_REGISTERED"
+                        title: "IS_REGISTERED",
+                        required: true
                     },
                     {
                         key: "customer.enterprise.isGSTAvailable",
                         type: "radios",
                         enumCode:"decisionmaker",
                         title: "IS_GST_AVAILABLE",
+                        required: true,
                         "onChange": function(modelValue, form, model) {
                                         if (model.customer.enterprise.isGSTAvailable === "YES") {
                                                 model.customer.enterprise.companyRegistered = "YES";
