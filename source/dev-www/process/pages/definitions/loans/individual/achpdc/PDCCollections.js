@@ -128,7 +128,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
 
                         ACHPDCBatchProcess.fetchDemandDetails({
                             demandDate: model.pdc.pdcDemandListDate,
-                            repaymentType: 'PDC'
+                            repaymentType: 'PDC',
+                            partner: model.pdc.partnerCode
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.pdcSearch = res;
@@ -175,7 +176,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         "searchHelper": formHelper,
                         "search": function(model, formCtrl, form) {
                             var filteredDemandList = $filter('filter')(allDemands, {
-                                accountId: model.accountNumber,
+                                accountNumber: model.accountNumber,
                             });
                             return $q.resolve({
                                 "header": {

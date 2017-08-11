@@ -123,7 +123,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "searchHelper": formHelper,
                     "search": function(model, formCtrl, form) {
                         var filteredDemandList = $filter('filter')(allUpdateDemands, {
-                                    accountNumber: model.loanAccountNumber
+                                    accountNumber: model.accountNumber
                                 });
                                 return $q.resolve({
                                     "header": {
