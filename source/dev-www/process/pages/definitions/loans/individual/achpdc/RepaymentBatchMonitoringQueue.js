@@ -46,14 +46,14 @@ define({
 							"screenFilter": true
 						}
 					},
-					"status": {
+					"processingStatus": {
 						"title": "STATUS",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select",
 							"titleMap": {
-								"IN_PROCESS" : "In Progress",
-								"COMPLETED" : "Completed",
+								"FAILURE" : "Failure",
+								"SUCCESS" : "Success",
 							},
 							"screenFilter": true
 						}
