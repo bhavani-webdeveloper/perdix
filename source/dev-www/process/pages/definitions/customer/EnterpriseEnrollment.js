@@ -119,13 +119,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "NO": "No",
                             "YES": "Yes"      
                         },
-                        title: "IS_REGISTERED"
+                        title: "IS_REGISTERED",
+                        "required": true
                     },
                     {
                         key: "customer.enterprise.isGSTAvailable",
                         type: "radios",
                         enumCode:"decisionmaker",
                         title: "IS_GST_AVAILABLE",
+                        "required": true,
                         "onChange": function(modelValue, form, model) {
                                         if (model.customer.enterprise.isGSTAvailable === "YES") {
                                                 model.customer.enterprise.companyRegistered = "YES";
