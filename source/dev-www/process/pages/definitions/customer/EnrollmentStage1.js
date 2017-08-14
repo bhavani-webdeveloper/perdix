@@ -56,6 +56,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
                 model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                 model = EnrollmentHelper.fixData(model);
+                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
@@ -612,10 +613,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 var reqData = _.cloneDeep(model);
 
                 EnrollmentHelper.fixData(reqData);
+                reqData.customer.addressProofSameAsIdProof=Boolean(reqData.customer.title);
                 $log.info(JSON.stringify(sortFn(reqData)));
                 EnrollmentHelper.saveData(reqData).then(function(res){
                     model.customer = _.clone(res.customer);
                     model = EnrollmentHelper.fixData(model);
+                    model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
+
                     /*reqData = _.cloneDeep(model);
                     EnrollmentHelper.proceedData(reqData).then(function(res){
                         irfNavigator.goBack();
