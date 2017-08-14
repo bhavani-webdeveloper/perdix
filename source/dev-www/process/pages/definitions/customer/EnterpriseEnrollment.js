@@ -91,7 +91,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "type": "string",
                         "key": "customer.enterprise.companyEmailId",
                         "pattern": "^\\S+@\\S+$",
-                        "title": "COMPANY_EMAIL_ID"
+                        "title": "COMPANY_EMAIL_ID",
+                        required:true
                     },
                     {
                         "key": "customer.latitude",
