@@ -37,23 +37,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.additional.tempfees = resp[0].fees;
                         model.additional.firstRepaymentDate = resp[0].firstRepaymentDate;
                         model.additional.loanamount=resp[0].amount;
-                        if(model.siteCode == 'KGFS' && resp[0].fees) {
-                            model.additional.feeamount = [];
-                            for (var i = 0; i < resp[0].fees.length; i++){
-                                if(resp[0].fees[i].param1 != "Cibil Charges") {
-                                    model.additional.feeamount.push(resp[0].fees[i]);
-                                }
-                            }
-                        } else {
-                            model.additional.feeamount=resp[0].fees;
-                        }
+                        model.additional.feeamount=resp[0].fees;
+
 
                         model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                         var j=1;
                         if(model.additional.tempfees){
                             for (var i=0;i<model.additional.tempfees.length; i++) {
-                                if(model.siteCode == 'KGFS' && model.additional.tempfees[i].param1 == "Cibil Charges")
-                                    continue;
                                 if(model.additional.tempfees[i].amount1 != "0")
                                     model.additional.fees.push(model.additional.tempfees[i]);
                             }
