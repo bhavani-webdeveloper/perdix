@@ -222,7 +222,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 model.customer.udf.userDefinedFieldValues.udf1 === true
                 || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
         }
-        model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
 
         Utils.removeNulls(model,true);
         return model;
