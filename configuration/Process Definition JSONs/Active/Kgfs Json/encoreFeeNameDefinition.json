@@ -1,0 +1,34 @@
+{
+   "feeNames":[
+      {
+         "displayFeeName":"Processing Fee",
+         "encoreFeeName":"Processing Fee",
+         "feeColumnName":"processingFeeInPaisa",
+         "override":"No"
+      },
+      {
+         "displayFeeName":"Portfolio Insurance Premium",
+         "encoreFeeName":"Portfolio Insurance",
+         "feeColumnName":"portfolioInsurancePremium",
+         "override":"No"
+      },
+      {
+         "displayFeeName":"Fee3",
+         "encoreFeeName":"fee3",
+         "feeColumnName":"fee3",
+         "override":"No"
+      },
+      {
+         "displayFeeName":"Fee4",
+         "encoreFeeName":"fee4",
+         "feeColumnName":"fee3",
+         "override":"No"
+      },
+      {
+         "displayFeeName":"Fee5",
+         "encoreFeeName":"fee5",
+         "feeColumnName":"fee5",
+         "override":"No"
+      }
+   ]
+}
