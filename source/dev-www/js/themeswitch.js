@@ -10,7 +10,7 @@ themeswitch.changeTheme = function(color, saveOffline) {
 	return false;
 };
 themeswitch.getThemeColor = function(){
-	return irf.appManifest && irf.appManifest.force_color? irf.appManifest.force_color: (localStorage.getItem("irfThemeColor") || 'blue');
+	return irf.appConfig && irf.appConfig.FORCE_COLOR? irf.appConfig.FORCE_COLOR: (localStorage.getItem("irfThemeColor") || 'blue');
 };
 themeswitch.saveThemeColor = function(color){
 	return localStorage.setItem("irfThemeColor", color);

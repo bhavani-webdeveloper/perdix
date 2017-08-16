@@ -7,11 +7,11 @@
             <div class="widget-user-image">
                 <img class="img-circle" src="img/icon.png" style="opacity:.8">
             </div><!-- /.widget-user-image -->
-            <div class="login-corporate-logo" ng-show="$parent.app_manifest.corporate_logo">
-                <img class="login-corporate-logo-img" src="" ng-src="{{$parent.app_manifest.corporate_logo}}"/>
+            <div class="login-corporate-logo" ng-show="$parent.appConfig.CORPORATE_LOGO">
+                <img class="login-corporate-logo-img" src="" ng-src="{{$parent.appConfig.CORPORATE_LOGO}}"/>
             </div>
-            <h3 class="widget-user-username" ng-hide="$parent.app_manifest.corporate_logo">Perdix</h3>
-            <h5 class="widget-user-desc" ng-hide="$parent.app_manifest.corporate_logo">Sign in to Perdix</h5>
+            <h3 class="widget-user-username" ng-hide="$parent.appConfig.CORPORATE_LOGO">{{ $parent.appName }}</h3>
+            <h5 class="widget-user-desc" ng-hide="$parent.appConfig.CORPORATE_LOGO">Sign in to {{ $parent.appName }}</h5>
         </div>
         <div class="box-body animat error-body" ng-class="{anim:errorMessage}">{{errorMessage|translate}}</div>
         <div class="box-footer animat">

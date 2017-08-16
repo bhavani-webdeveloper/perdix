@@ -15,7 +15,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 		if ($scope.isCordova) {
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
 				$scope.latest_version = value;
-				if ($scope.app_manifest.version != $scope.latest_version) {
+				if ($scope.appManifest.version != $scope.latest_version) {
 					Queries.getGlobalSettings('cordova.latest_apk_url').then(function(url){
 						$log.debug('latest_apk_url:'+url);
 						$scope.latest_apk_url = url;
@@ -28,13 +28,6 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 		}
 	};
 
-	var connectPerdix7 = function() {
-		if ($scope.app_manifest.connect_perdix7) {
-			$scope.connect_perdix7 = true;
-			$log.info("Legacy Perdix7 interoperability enabled");
-		}
-	};
-
 	$timeout(function() {
 		if ($state.current.name === irf.REDIRECT_STATE) {
 			$log.debug("Trying redirect assuming token is avilable.");
@@ -42,10 +35,15 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 		}
 	}, 300);
 
-	$scope.app_manifest = irf.appManifest;
-	$scope.appName = irf.appManifest.title;
-	document.mainTitle = irf.appManifest.name;
-	connectPerdix7();
+	$.getJSON("app_manifest.json", function(json) {
+		$scope.$apply(function(){
+			irf.appManifest = json;
+			$scope.appManifest = irf.appManifest;
+			$scope.appName = irf.appManifest.title;
+		});
+		document.mainTitle = irf.appManifest.name;
+	});
+	$scope.appConfig = irf.appConfig;
 
 	$scope.$on('irf-login-success', function($event){
 		checkLatestVersion();

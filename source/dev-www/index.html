@@ -57,6 +57,9 @@
         <div class="cantina-loader-wrapper"><div class="cantina-loader"></div></div>
     </ui-view>
 
+<script type="text/javascript">
+    var irf = irf || {}; irf.appConfig = irf.appConfig || {}; irf.appManifest = irf.appManifest || {};
+</script>
 <script src="js/irf-env.js"></script>
 
 <!--Cordova-->
@@ -162,6 +165,9 @@
 <script src="modules/app/MainApp.header.js"></script>
 <script src="modules/app/MainApp.menu.js"></script>
 <script src="modules/app/MainApp.bootstrap.js"></script>
+<!-- inject:js -->
+<script src="js/irf-config.js"></script>
+<!-- endinject -->
 <!-- endbuild -->
 
 <script src="js/themeswitch.js"></script>

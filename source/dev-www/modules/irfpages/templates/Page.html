@@ -41,10 +41,7 @@
     </div>
 
     <footer class="main-footer">
-        <div class="footer-version pull-right hidden-xs"></div>
+        <div class="footer-version pull-right hidden-xs">{{$parent.appManifest.version}}</div>
         <strong>Copyright &copy; 2017 IFMR Rural Finance.</strong> All rights reserved.
     </footer>
-    <script type="text/javascript">
-        $(".footer-version").html(irf.appManifest.version);
-    </script>
 </div>

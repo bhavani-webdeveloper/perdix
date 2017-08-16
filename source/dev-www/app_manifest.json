@@ -1,10 +1,5 @@
 {
 	"name": "Perdix Mobility",
 	"title": "Perdix",
-	"version": "v8.2.2-production",
-	"connect_perdix7": false,
-	"corporate_logo": null,
-	"corporate_logo_backup": "img/corporate_logo.png",
-	"force_color": "",
-	"ams_enabled": false
+	"version": "v8.2.2-production"
 }

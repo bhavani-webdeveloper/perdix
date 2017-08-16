@@ -17,8 +17,8 @@
         </a>
         <!-- <a href="#" class="logo-mobile-title" data-toggle="offcanvas"><span><b>IRF</b>{{ $parent.appName }}</span></a> -->
 
-        <div class="header-corporate-logo" ng-show="$parent.app_manifest.corporate_logo">
-            <img class="header-corporate-logo-img" src="" ng-src="{{$parent.app_manifest.corporate_logo}}" />
+        <div class="header-corporate-logo" ng-show="$parent.appConfig.CORPORATE_LOGO">
+            <img class="header-corporate-logo-img" src="" ng-src="{{$parent.appConfig.CORPORATE_LOGO}}" />
         </div>
 
         <div class="navbar-custom-menu">
@@ -30,13 +30,13 @@
                     </a>
                 </li>
                 <!-- For perdix 7 compatibility -->
-                <li id="connect_perdix7" ng-show="$parent.connect_perdix7" class="dropdown notifications-menu">
+                <li id="connect_perdix7" ng-show="$parent.appConfig.CONNECT_PERDIX7" class="dropdown notifications-menu">
                     <a href="" class="dropdown-toggle" onclick="integrationApi.switchApp()">
                         <strong>7</strong>
                     </a>
                 </li>
                 <!-- Colors: style cannot ;) be found in dropdown.less - TODO check themeswitch.js -->
-                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true && !$parent.app_manifest.force_color">
+                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true && !$parent.appConfig.FORCE_COLOR">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-paint-brush"></i>
                     </a>
