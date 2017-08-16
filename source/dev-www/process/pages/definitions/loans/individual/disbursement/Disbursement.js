@@ -38,7 +38,17 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.additional.firstRepaymentDate = resp[0].firstRepaymentDate;
                         model.additional.loanamount=resp[0].amount;
                         model.additional.feeamount=resp[0].fees;
-
+                        /*if(model.siteCode == 'KGFS' && resp[0].fees) {
+                            model.additional.feeamount = [];
+                            for (var i = 0; i < resp[0].fees.length; i++){
+                                if(resp[0].fees[i].param1 != "Cibil Charges") {
+                                    model.additional.feeamount.push(resp[0].fees[i]);
+                                }
+                            }
+                        } else {
+                            model.additional.feeamount=resp[0].fees;
+                        }
+*/
 
                         model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                         var j=1;

@@ -115,6 +115,25 @@ define({
 
 								return true;
 							}
+						},{
+							name: "EDIT_GROUP",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "loans.group.CreateGroup",
+									pageId: item.id,
+								}, {
+									state: "Page.Engine",
+									pageName: "loans.group.CloseGroup",
+								});
+							},
+							isApplicable: function(item, index) {
+								if (item.currentStage==='GroupCreation')
+									return true;
+								return false;
+							}
 						}];
 					}
 				}

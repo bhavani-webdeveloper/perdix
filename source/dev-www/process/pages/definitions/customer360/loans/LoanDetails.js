@@ -1583,6 +1583,20 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "type": "submit",
                         "title": "SUBMIT"
                     }]
+                },{
+                    "type": "actionbox",
+                    "condition": "model.loanAccount.loanType == 'JLG'",
+                    "items": [{
+                        "type": "button",
+                        "title": "REPAYMENT_SCHEDULE_REPORT",
+                        "onClick": function(model, form, schemaForm, event) {
+                            var url = LoanAccount.getRepaymentScheduleDownloadURL(model.cbsLoan.accountId);
+                            Utils.downloadFile(url);
+                            // LoanAccount.downloadScheduleInCSV({accountNumber:model.cbsLoan.accountId}).$promise.then(function(responseData){
+                            //     Utils.downloadFile(responseData);
+                            // });
+                        }
+                    }]
                 }
             ],
             schema: function() {

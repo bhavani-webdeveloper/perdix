@@ -3,7 +3,7 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
     /*var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
     var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';*/
 
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
         activateLoan: {
             method: 'GET',
             url: BASE_URL + '/api/loanaccounts/activate/:accountId',
@@ -224,4 +224,9 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
             url: BASE_URL + '/api/loanaccounts/freeze/:accountId'
         }
     });
+
+    resource.getRepaymentScheduleDownloadURL = function(accountNumber) {
+        return endpoint + "/repaymentScheduleDownload?accountNumber=" + accountNumber;
+    }
+    return resource;
 });

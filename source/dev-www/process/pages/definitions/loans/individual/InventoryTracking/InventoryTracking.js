@@ -13,6 +13,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.inventory = model.inventory || {};
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 if (!_.hasIn(model.inventory, 'inventoryTrackerDto') || model.inventory.inventoryTrackerDto == null) {
                     model.inventory.inventoryTrackerDto = {};
                 }
@@ -49,8 +50,6 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
             },
 
             form: [
-
-
                 {
                     type: "box",
                     title: "INVENTORY_DETAILS",
@@ -69,14 +68,26 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                             condition:"model.inventory.inventoryTrackerDto.id",
                             "title": "BATCH_NUMBER"
                         },
-                         {
+                        {
                             key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs",
                             type: "array",
                             startEmpty: true,
                             title: "INVENTORY",
                             items: [{
-                                key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs[].inventoryName",
+                                key: "inventory.inventryTrackingDetails[].inventoryName",
+                                "title": "DOCUMENT_NAME",
                                 type:"select",
+                                condition:"model.siteCode=='KGFS'",
+                                "titleMap":{
+                                    "Receipt book":"Receipt book",
+                                    "AXIS agreement":"AXIS agreement",
+                                    "Stamp paper":"Stamp paper"
+                                }
+                            },{
+                                key: "inventory.inventryTrackingDetails[].inventoryName",
+                                "title": "DOCUMENT_NAME",
+                                type:"select",
+                                condition:"model.siteCode!=='KGFS'",
                                 enumCode:"Inventory_details"
                             }, {
                                 key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs[].numberOfInventories",

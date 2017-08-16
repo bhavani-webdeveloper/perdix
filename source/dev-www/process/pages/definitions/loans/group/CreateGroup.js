@@ -12,6 +12,18 @@ define({
         var nDays = 15;
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            var product = formHelper.enum('loan_product').data;
+            for (var i = 0; i < product.length; i++) {
+                if (product[i].value == model.group.productCode) {
+                    model.group.productName=product[i].name;    
+                }
+            }
+            var centre = formHelper.enum('centre').data;
+            for (var i = 0; i < centre.length; i++) {
+                if (centre[i].field3 == model.group.centreCode) {
+                    model.group.centreId=centre[i].value;   
+                }
+            }
         };
         var fillNames = function(model) {
             var deferred = $q.defer();
@@ -33,6 +45,7 @@ define({
                     if (key >= model.group.jlgGroupMembers.length - 1) {
                         deferred.resolve(model);
                     }
+                    //$log.info(model.group.jlgGroupMembers[key].firstName);
                 }, function(res) {
                     deferred.reject(res);
                 });
@@ -116,21 +129,18 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
                                 model = m;
+                                $log.info(m);
                                 PageHelper.hideLoader();
                             }, function(m) {
                                 PageHelper.showErrors(m);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
                             });
-                        } else {
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
-                            backToDashboard();
                         }
+                        fixData(model);
                     }, function(resp) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
@@ -451,7 +461,19 @@ define({
                     "type": "save",
                     "title": "SAVE_OFFLINE"
                 }]
+            }, {
+                "type": "actionbox",
+                "condition": "model.group.id",
+                "items": [{
+                    "type": "submit",
+                    "title": "EDIT_GROUP"
+                }, {
+                    "type": "save",
+                    "title": "SAVE_OFFLINE"
+                }]
             }],
+
+            
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -482,6 +504,7 @@ define({
                 preSave: function(model, form, formName) {},
 
                 submit: function(model, form, formName) {
+                    
                     $log.info("Inside submit()");
                     var centres = formHelper.enum('centre').data;
                     for (var i = 0; i < centres.length; i++) {

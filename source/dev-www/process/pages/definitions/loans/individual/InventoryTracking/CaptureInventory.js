@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
             initialize: function(model, form, formCtrl) {
                 model.inventory = model.inventory || {};
                 model.inventory.branchId = SessionStore.getBranchId();
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
 
                 var promise = Inventory.searchInventory({
@@ -64,8 +65,20 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                             items: [{
                                 key: "inventory.inventryTrackingDetails[].inventoryName",
                                 type:"select",
+                                "title": "DOCUMENT_NAME",
+                                condition:"model.siteCode=='KGFS'",
+                                "titleMap":{
+                                    "Receipt book":"Receipt book",
+                                    "AXIS agreement":"AXIS agreement",
+                                    "Stamp paper":"Stamp paper"
+                                }
+                            },{
+                                key: "inventory.inventryTrackingDetails[].inventoryName",
+                                "title": "DOCUMENT_NAME",
+                                type:"select",
+                                condition:"model.siteCode!=='KGFS'",
                                 enumCode:"Inventory_details"
-                            }, {
+                            },{
                                 key: "inventory.inventryTrackingDetails[].numberOfInventories",
                             }]
                         },
