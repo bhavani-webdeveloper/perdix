@@ -504,7 +504,7 @@ define({
                 preSave: function(model, form, formName) {},
 
                 submit: function(model, form, formName) {
-                    
+
                     $log.info("Inside submit()");
                     var centres = formHelper.enum('centre').data;
                     for (var i = 0; i < centres.length; i++) {
@@ -521,6 +521,9 @@ define({
                     var reqData = _.cloneDeep(model);
                     if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
+                            model.group = _.clone(res.group);
+                            fixData(model);
+                            fillNames(model);
                             irfNavigator.goBack();
                             PageHelper.hideLoader();
                         }, function(err) {

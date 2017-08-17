@@ -31,6 +31,14 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
+						},
+						"stage": {
+							"title": "STAGE",
+							"type": ["string", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "groupLoanStages"
+							}
 						}
 					},
 					"required": []
@@ -46,6 +54,7 @@ define({
 						'partner': searchOptions.partner,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
+						'currentStage': searchOptions.stage,
 						'per_page': pageOpts.itemsPerPage
 					};
 

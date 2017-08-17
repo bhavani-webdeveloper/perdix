@@ -471,14 +471,12 @@ define({
                                     "type": "string"
                                 }, {
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
-                                    //"condition": "model.group.jlgGroupMembers[form.key[2]].teleCallingDetails[form.key[3]].customerCalled == 'No'",
+                                    //"condition": "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails[arrayIndex].customerCalled =='No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
-                                    "type": "string"
                                 }, {
                                     "title": "CUSTOMER_CALLED_REMARKS",
-                                    //"condition": "model.group.jlgGroupMembers[form.key[2]].teleCallingDetails[form.key[3]].customerCalled == 'Yes'",
+                                    //"condition": "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails[arrayIndex].customerCalled =='Yes'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
-                                    "type": "text"
                                 },/* {
                                     "title": "SECTION",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",

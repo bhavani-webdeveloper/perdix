@@ -458,7 +458,7 @@ define({
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
-                    if (!model.group.grtRemarks){
+                    if (!model.group.udf8){
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
