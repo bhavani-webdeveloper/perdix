@@ -67,6 +67,7 @@ define({
                         'centreId': centreId[0],
                         'branchName': branch.branchName,
                         'page': pageOpts.pageNo,
+                        'monitoringType':"LUC",
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
                         'bussinessName': searchOptions.businessName,

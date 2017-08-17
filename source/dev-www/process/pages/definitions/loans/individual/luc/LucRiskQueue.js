@@ -57,6 +57,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCEscalate",
+						'monitoringType':"LUC",
 						'centreId': centreId[0],
 						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
