@@ -103,20 +103,9 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                             title: "INVENTORY",
                             items: [{
                                 key: "inventory.inventryTrackingDetails[].inventoryName",
-                                type:"select",
-                                "title": "DOCUMENT_NAME",
-                                condition:"model.siteCode=='KGFS'",
-                                "titleMap":{
-                                    "Receipt book":"Receipt book",
-                                    "AXIS agreement":"AXIS agreement",
-                                    "Stamp paper":"Stamp paper"
-                                }
-                            },{
-                                key: "inventory.inventryTrackingDetails[].inventoryName",
                                 "title": "DOCUMENT_NAME",
                                 type:"select",
-                                condition:"model.siteCode!=='KGFS'",
-                                enumCode:"Inventory_details"
+                                enumCode:"inventory"
                             }, {
                                 key: "inventory.inventryTrackingDetails[].numberOfInventories",
                             }]
@@ -138,7 +127,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                             items: [{
                                 key: "inventory.consumableInventoryDetailsDTOs[].inventoryName",
                                 type:"select",
-                                enumCode:"Inventory_details"
+                                enumCode:"inventory"
                             }, {
                                 key: "inventory.consumableInventoryDetailsDTOs[].numberOfInventories",
                             }]

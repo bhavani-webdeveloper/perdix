@@ -77,18 +77,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                                 key: "inventory.inventryTrackingDetails[].inventoryName",
                                 "title": "DOCUMENT_NAME",
                                 type:"select",
-                                condition:"model.siteCode=='KGFS'",
-                                "titleMap":{
-                                    "Receipt book":"Receipt book",
-                                    "AXIS agreement":"AXIS agreement",
-                                    "Stamp paper":"Stamp paper"
-                                }
-                            },{
-                                key: "inventory.inventryTrackingDetails[].inventoryName",
-                                "title": "DOCUMENT_NAME",
-                                type:"select",
-                                condition:"model.siteCode!=='KGFS'",
-                                enumCode:"Inventory_details"
+                                enumCode:"inventory"
                             }, {
                                 key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs[].numberOfInventories",
                             }]
