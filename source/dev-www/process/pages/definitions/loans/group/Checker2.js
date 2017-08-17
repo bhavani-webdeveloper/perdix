@@ -80,6 +80,13 @@ define({
                                 "groupId":model.group.id,
                                 "groupCode":model.group.groupCode
                             };
+                            for (j in member.teleCallingDetails) {
+                                var telecal = member.teleCallingDetails[j];
+                                var temp = [];
+                                if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
+                                if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
+                                telecal.remarks = temp.join('<br>');
+                            }
                         }
                         $q.all([
                             $q.all(customerPromises).then(function(data) {
@@ -466,7 +473,10 @@ define({
                                     "title": "CUSTOMER_CALLED_BY",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledBy",
                                     "type": "string"
-                                }, {
+                                },{
+                                    "title": "REMARKS",
+                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].remarks",
+                                } /*{
                                     "title": "CUSTOMER_NOT_CALLED_REASON",
                                     //"condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
@@ -476,7 +486,7 @@ define({
                                     //"condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
                                     "type": "string"
-                                }]
+                                }*/]
                             }]
                         }]
                     }, {
