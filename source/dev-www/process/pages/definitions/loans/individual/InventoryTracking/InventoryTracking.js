@@ -74,7 +74,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                             startEmpty: true,
                             title: "INVENTORY",
                             items: [{
-                                key: "inventory.inventryTrackingDetails[].inventoryName",
+                                key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs[].inventoryName",
                                 "title": "DOCUMENT_NAME",
                                 type:"select",
                                 enumCode:"inventory"
