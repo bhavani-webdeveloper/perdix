@@ -446,6 +446,17 @@ define({
                                             model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
                                             model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
 
+                                            var arraymember=model.group.jlgGroupMembers[event.arrayIndex];
+
+                                            for (j in arraymember.teleCallingDetails) {
+                                                $log.info
+                                                var telecal = arraymember.teleCallingDetails[j];
+                                                var temp = [];
+                                                if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
+                                                if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
+                                                telecal.remarks = temp.join('<br>');
+                                            }
+
                                         }).finally(function() {
                                             PageHelper.hideLoader();
                                         })

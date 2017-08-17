@@ -444,10 +444,23 @@ define({
                                         reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
                                         reqData.customerCalledBy = SessionStore.getUsername();
                                         GroupProcess.telecalling(reqData).$promise.then(function(response) {
+                                            $log.info(response);
                                             model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
                                             model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
                                             model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
                                             model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
+
+                                            var arraymember=model.group.jlgGroupMembers[event.arrayIndex];
+
+                                            for (j in arraymember.teleCallingDetails) {
+                                                $log.info
+                                                var telecal = arraymember.teleCallingDetails[j];
+                                                var temp = [];
+                                                if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
+                                                if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
+                                                telecal.remarks = temp.join('<br>');
+                                            }
+
 
                                         }).finally(function() {
                                             PageHelper.hideLoader();
