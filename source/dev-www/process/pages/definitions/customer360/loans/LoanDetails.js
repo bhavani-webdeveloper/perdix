@@ -128,8 +128,56 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         }
 
                                         model.cbsLoan.orgTransactions = {};
+                                        model.cbsLoan.invoiceTransactions = {};
 
                                         if (model.cbsLoan.transactions.length > 0) {
+                                            model.cbsLoan.invoiceTransactions.columns = [
+                                                {
+                                                    "title": "Invoice #",
+                                                    "data": "entityId"
+                                                },
+                                                {
+                                                    "title": "Date",
+                                                    "data": "valueDateStr"
+                                                },
+                                                {
+                                                    "title": "Amount",
+                                                    "data": "amount1"
+                                                },
+                                                {
+                                                    "title": "Type",
+                                                    "data": "transactionName"
+                                                },
+                                                {
+                                                    "title": "Download Invoice",
+                                                    "data": "downloadText",
+                                                    "onClick": function(data){
+                                                        var recordStr = data.accountId + "~" + data.sequenceNum;
+                                                        if (data.transactionName == 'Demand'){
+                                                            if (data.status =="false"){
+                                                                // Penal Interest
+                                                            } else if (data.status == "true"){
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bill_of_supply_emi_payment&record_id=" + recordStr);
+                                                            }
+                                                        } else if (data.transactionName == 'Fee Charge'){
+                                                            var chargeFees = formHelper.enum("charge_fee_type").data;
+
+                                                            var fee = _.find(chargeFees, function(e){
+                                                                if (e.name == data.description){
+                                                                    return true;
+                                                                }
+                                                                return false;
+                                                            });
+
+                                                            var formName = fee.field1;
+                                                            if (formName){
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);    
+                                                            }
+                                                        }
+                                                        return Utils.alert("Form not maintained");
+                                                    }
+                                                }
+                                            ];
                                             model.cbsLoan.orgTransactions.columns =  [
                                                 {
                                                     "title": "Transaction ID", 
@@ -180,6 +228,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                                 }
                                             ];
                                             model.cbsLoan.orgTransactions.data = $filter('filter')(model.cbsLoan.transactions, {transactionName: '!Demand'});
+                                            model.cbsLoan.invoiceTransactions.data = $filter('filter')(model.cbsLoan.transactions, function(value, index, array){
+                                                return value.transactionName =='Demand' || value.transactionName == 'Fee Charge';
+                                            });
+                                            _.forEach(model.cbsLoan.invoiceTransactions.data, function(txn){
+                                                txn.downloadText = 'Download';
+                                            });
                                         }
                                         var loanDocuments = model.loanAccount.loanDocuments;
                                         var availableDocCodes = [];
@@ -1058,16 +1112,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
-                    "title": "TRANSACTION_ACCOUNTING_DETAILS",
+                    "title": "INVOICE",
                     "htmlClass": "text-danger",
                     "items": [
                         {
                             type: "section",
                             colClass: "col-sm-12",
-                            html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgTransactions'></irf-simple-summary-table>"
+                            html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.invoiceTransactions'></irf-simple-summary-table>"
                         }
                     ] // END of box items
                 },
+
                 // {
                 //     "type": "box",
                 //     "title": "REPAYMENT_SCHEDULE",
