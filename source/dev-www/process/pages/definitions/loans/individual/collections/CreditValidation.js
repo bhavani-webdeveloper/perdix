@@ -357,8 +357,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                                 reqParams.loanCollection.penalInterestWaiverAmount = 0;
                                 reqParams.loanCollection.feeAmount = model._credit.feeDue;
                                 reqParams.loanCollection.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
-                                reqParams.loanCollection.scheduleDemandAmount=model._credit.repaymentAmount - reqParams.loanCollection.feeAmount - reqParams.loanCollection.securityEmiAmount;
-
+                                reqParams.loanCollection.scheduleDemandAmount=math.round(model._credit.repaymentAmount - reqParams.loanCollection.feeAmount - reqParams.loanCollection.securityEmiAmount,2);
 
                             } else if (model.creditValidation.statusValue == 2 || model.pageRules.forceToTransAuth == true) {
                                 $log.info("Inside PartialPayment()");
