@@ -117,7 +117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                             "title": "IS_BATCH_RECEIVED",
                         },{
                             key: "inventory.inventoryTrackerDto.courierReceivedDate",
-                            condition:"model.inventory.inventoryTrackerDto.udf1 =='YES'",
+                            condition:"model.inventory.inventoryTrackerDto.udf1 =='Yes'",
                             "type": "date",
                             "title": "COURIER_RECEIVED_DATE",
                         }, {
@@ -227,7 +227,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                  submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     $log.warn(model);
-                    if(model.inventory.inventoryTrackerDto.udf1 =='NO')
+                    if(model.inventory.inventoryTrackerDto.udf1 =='No')
                     {
                         model.inventory.action='SAVE';
                     }

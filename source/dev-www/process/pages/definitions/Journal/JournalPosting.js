@@ -88,15 +88,45 @@ define({
                         "creditGLNo": "journal.journalEntryDto.creditGLNo",
                     },
                     "searchHelper": formHelper,
-                    "search": function(inputModel, form) {
-                        var promise = Journal.journalSearch({
+                    "search": function(inputModel, form,model) {
+                        var ret = [];
+                        var defered = $q.defer();
+                        Journal.journalSearch({
                             'transactionName': inputModel.transactionName,
                             'transactionDescription': inputModel.transactionDescription,
                             'debitGLNo': inputModel.debitGLNo,
                             'creditGLNo': inputModel.creditGLNo,
                             'isApplicable': 0,
-                        }).$promise;
-                        return promise;
+                        }).$promise.then(function(response){
+                            var count=0; 
+                            angular.forEach(response.body, function(value, key) {
+                                $log.info(value);
+                                Journal.get({
+                                    id: value.id
+                                }, function(res) {
+                                    $log.info(model.journal.journalEntryDto.branchId);
+                                    if (res.journalBranches && res.journalBranches) {
+                                        for (k = 0; k < res.journalBranches.length; k++) {
+                                            if (res.journalBranches[k].branchId == model.journal.journalEntryDto.branchId) {
+                                                $log.info("hi");
+                                                ret.push(value);
+                                            }
+                                        }
+                                    }
+                                    count++;
+                                    if(count==response.body.length)
+                                    {
+                                        defered.resolve({
+                                            headers: {
+                                                "x-total-count": ret.length
+                                            },
+                                            body: ret
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                        return defered.promise;
                     },
                     getListDisplayItem: function(data, index) {
                         return [

@@ -130,8 +130,11 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 								});
 							},
 							isApplicable: function(item, index) {
-
-								return true;
+								if(item.udf1=="Yes")
+								{
+									return true;
+								}
+								return false;
 							}
 						}];
 					}
