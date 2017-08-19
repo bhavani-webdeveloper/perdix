@@ -160,19 +160,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bill_of_supply_emi_payment&record_id=" + recordStr);
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
-                                                            var chargeFees = formHelper.enum("charge_fee_type").data;
-
-                                                            var fee = _.find(chargeFees, function(e){
-                                                                if (e.name == data.description){
-                                                                    return true;
-                                                                }
-                                                                return false;
-                                                            });
-
-                                                            var formName = fee.field1;
-                                                            if (formName){
-                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);    
+                                                            var formName;
+                                                            if (data.param1 == 'Preclosure Charges') {
+                                                                formName = 'taxable_invoice_cheque_preclosure_charges';
+                                                            } else if (data.param1 = 'CBC') {
+                                                                formName = 'taxable_invoice_cheque_bounce_charges';
+                                                            } else if (data.param1 = 'AdHoc Fee') {
+                                                                formName = 'taxable_invoice_adhoc_charges';
                                                             }
+                                                            return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);
                                                         }
                                                         return Utils.alert("Form not maintained");
                                                     }
