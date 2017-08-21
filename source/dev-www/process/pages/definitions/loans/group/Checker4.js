@@ -316,14 +316,18 @@ return {
                             "category": "CustomerEnrollment",
                             "subCategory": "KYC1"
                         },
-                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
-                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
-                                "title": "KYC2_PROOF_DOCUMENT",
-                                "type": "file",
-                                "fileType": "image/*",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "KYC1"
-                            }, {
+                        {
+                            "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                            key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
+                            "title": "KYC2_PROOF_DOCUMENT",
+                            "type": "file",
+                            "fileType": "image/*",
+                            "category": "CustomerEnrollment",
+                            "subCategory": "KYC1"
+
+                        },
+
+                             {
                                 key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ReverseImagePath",
                                 "title": "KYC2_PROOF_DOCUMENT_BACK_SIDE",
                                 "type": "file",
@@ -490,7 +494,7 @@ return {
                     }]
                 }]
             },
-	{
+	/*{
                 type: "box",
                 title: "CHECKER_REMARKS",
                 items: [
@@ -513,7 +517,7 @@ return {
                         title: "APPROVER_TYPE",
                     }
                 ]
-            },
+            },*/
             {
                 type: "box",
                 "readonly": true,
@@ -571,7 +575,7 @@ return {
                 key: "action",
                 type: "radios",
                 titleMap: {
-                    "PROCEED": "PROCEED",
+                    "APPROVE": "Approve",
                     "REJECT": "REJECT",
                     "SEND_BACK": "SEND_BACK",
                 },
@@ -600,7 +604,7 @@ return {
                         key: "group.groupRemarks",
                         type: "textarea",
                         required: true
-                    }, {
+                    }, /*{
                         key: "review.rejectStage",
                         condition:"model.action == 'REJECT'",
                         type: "lov",
@@ -637,7 +641,7 @@ return {
                                 item.name
                             ];
                         }
-                    },
+                    },*/
                     {
                         "type": "button",
                         "title": "REJECT",
@@ -647,7 +651,7 @@ return {
             },
             {
                 type: "section",
-                condition: "model.action=='SEND_BACK'",
+                condition: "model.action=='SEND_BACK'&& model.siteCode == 'sambandh'",
                 items: [{
                         title: "REMARKS",
                         key: "group.groupRemarks",
@@ -702,7 +706,7 @@ return {
             },
             {
                 type: "section",
-                condition: "model.action=='PROCEED'",
+                condition: "model.action=='APPROVE'",
                 items: [{
                         title: "REMARKS",
                         key: "group.groupRemarks",
@@ -791,10 +795,12 @@ return {
             if(!validateForm(formCtrl)) 
                 return;
             PageHelper.showLoader();
+            model.group.checkerTransactionHistoryDTO.status="REJECT";
+            model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
             model.group.endTime= new Date();
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'PROCEED';
-            reqData.stage = model.review.rejectStage;
+            reqData.stage = "AgreementUploadPending";
             PageHelper.clearErrors();
             Utils.removeNulls(reqData, true);
             GroupProcess.updateGroup(reqData, function(res) {
@@ -812,6 +818,8 @@ return {
             PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();
+            model.group.checkerTransactionHistoryDTO.status="ACCEPT";
+            model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
             model.group.endTime= new Date();
             model.groupAction = "PROCEED";
             var reqData = _.cloneDeep(model);

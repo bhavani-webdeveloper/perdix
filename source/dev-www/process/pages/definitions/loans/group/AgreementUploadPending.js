@@ -36,6 +36,10 @@ define({
 						} else {
 							model.group.jlgGroupMembers[key].closed1 = "Active";
 						}
+						model.group.jlgGroupMembers[key].loanAccount.applicationStatus="OPEN";
+                        if(model.group.jlgGroupMembers[key].loanAccount.bcAccount){
+                            model.group.jlgGroupMembers[key].loanAccount.bcAccount.agreementStatus="OPEN";
+                        }
 					}
 					try {
 						if (resp.middleName.length > 0)

@@ -880,41 +880,50 @@
               "title": "applicationFileId",
               "type": "string",
               "captureStages": [
-				"ApplicationPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
             "applicationStatus": {
               "title": "applicationStatus",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "ApplicationPending"
+			      "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
             "applicationStatusUpdatedBy": {
               "title": "applicationStatusUpdatedBy",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "ApplicationPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			 "applicationStatusUpdatedOn": {
               "title": "applicationStatusUpdatedOn",
               "type": "date",
               "captureStages": [
-			  "GroupCreation",
-                "ApplicationPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			 "chk1FileUploadId": {
               "title": "chk1FileUploadId",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "Checker1",
-				"AgreementUploadPending"
-				
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			  
@@ -922,32 +931,40 @@
               "title": "agreementStatus",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "AgreementUploadPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			 "agreementStatusUpdatedBy": {
               "title": "agreementStatusUpdatedBy",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "AgreementUploadPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			 "agreementStatusUpdatedOn": {
               "title": "agreementStatusUpdatedOn",
               "type": "date",
               "captureStages": [
-			  "GroupCreation",
-                "AgreementUploadPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             },
 			"agreementFileId": {
               "title": "agreementFileId",
               "type": "string",
               "captureStages": [
-			  "GroupCreation",
-                "AgreementUploadPending"
+               "GroupCreation",
+               "ApplicationPending",
+               "AgreementUploadPending",
+               "Checker1"
               ]
             }
           }
