@@ -618,12 +618,53 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getLatestCBCheckDoneDateByCustomerIds = function(customerIds) {
+            var deferred = $q.defer();
+            resource.getResult("CBCheck.customerList", {
+                    "customerIds": customerIds
+                })
+                .then(function(records) {
+                    if (records && records.results) {
+                        deferred.resolve(records.results);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        }
+
+        resource.getGroupLoanRemarksHistoryById = function(groupId) {
+            var deferred = $q.defer();
+            resource.getResult("groupProcess.remarksHistory", {
+                    "groupId": groupId
+                })
+                .then(function(records) {
+                    if (records && records.results) {
+                        deferred.resolve(records.results);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        }
 
         resource.UserList = function(userId) {
             var deferred = $q.defer();
             request = {};
             request.userId = userId || null;
             resource.getResult("UserList.list", request, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
+        resource.getGroupLoanProductsByPartner = function(partnerCode) {
+            var deferred = $q.defer();
+            resource.getResult("groupLoanProductsByPartner.list", {'partner': partnerCode}).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {

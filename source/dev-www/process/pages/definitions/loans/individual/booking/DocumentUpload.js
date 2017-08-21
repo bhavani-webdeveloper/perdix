@@ -18,6 +18,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model._queue = $stateParams.pageData;
                 if (!model._queue) {
                     $log.info("Screen directly launched hence redirecting to queue screen");
@@ -503,7 +504,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             {
                 "type": "box",
                 "title": "POST_REVIEW",
-                "condition": "model.loanAccount.id",
+                "condition": "model.loanAccount.id && model.siteCode != 'sambandh'",
                 "items": [
                     {
                         key: "review.action",
@@ -522,8 +523,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             {
                                 title: "REMARKS",
                                 key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
                                 type: "textarea",
                                 required: true
+                            }, 
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
                             },
                             {
                                 key: "loanAccount.rejectReason",
@@ -585,8 +593,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             {
                                 title: "REMARKS",
                                 key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
                                 type: "textarea",
                                 required: true
+                            },
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
                             },
                             {
                                 key: "review.holdButton",
@@ -603,8 +618,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         items: [{
                             title: "REMARKS",
                             key: "review.remarks",
+                            condition: "model.siteCode != 'sambandh'",
                             type: "textarea",
                             required: true
+                        },
+                        {
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            condition: "model.siteCode == 'sambandh'"
                         }, {
                             key: "review.targetStage",
                             title: "SEND_BACK_TO_STAGE",
@@ -629,8 +651,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             {
                                 title: "REMARKS",
                                 key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
                                 type: "textarea",
                                 required: true
+                            },
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
                             },
                             {
                                 key: "review.proceedButton",
@@ -641,7 +670,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         ]
                     }
                 ]
-            }, {
+            },          
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "button",

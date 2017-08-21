@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.InitiationQueue"),
-["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
-function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+["$log","irfNavigator", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
+function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
 
 	var branch = SessionStore.getBranch();
 
@@ -11,6 +11,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 
 		initialize: function (model, form, formCtrl) {
 			// model.branch = branch;
+			model.siteCode = SessionStore.getGlobalSetting("siteCode");
 		},
 
 		definition: {
@@ -108,14 +109,30 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						desc: "",
 						icon: "fa fa-book",
 						fn: function(item, index){
-							$state.go("Page.Engine",{
-								pageName:"loans.individual.booking.LoanInput",
-								pageId:item.loanId,
-								pageData: item
-							});
+							irfNavigator.go({
+                                'state': 'Page.Engine',
+                                'pageName': 'loans.individual.booking.LoanInput',
+                                'pageId': item.loanId,
+                                'pageData': item
+                            });							
 						},
-						isApplicable: function(item, index){
-							return true;
+						isApplicable: function(item, model){
+							return model.searchOptions.siteCode != 'sambandh';
+						}
+					},{
+						name: "LOAN_INPUT",
+						desc: "",
+						icon: "fa fa-book",
+						fn: function(item, index){
+							irfNavigator.go({
+                                'state': 'Page.Engine',
+                                'pageName': 'loans.individual.booking.SimpleLoanInput',
+                                'pageId': item.loanId,
+                                'pageData': item
+                            });								
+						},
+						isApplicable: function(item, model){
+							return model.searchOptions.siteCode == 'sambandh';
 						}
 					}];
 				}

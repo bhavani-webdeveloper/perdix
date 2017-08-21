@@ -38,6 +38,9 @@ familyMembers.list=select fa.family_member_first_name as nomineeFirstName, fa.ge
 globalSettingsIn.list=SELECT * from global_settings where name in (:names)
 enterpriseRelations.list= (SELECT id,`first_name` as firstName FROM `customer` WHERE `urn_no`in (SELECT `urn` FROM `loan_customer_relation` WHERE `loan_id`in (SELECT id FROM `loan_accounts` WHERE `customer_id`=:customerId)) )union(SELECT id,`first_name` as firstName FROM `customer` WHERE `id`in (SELECT `linked_to_customer_id` FROM `enterprise_customer_relations` WHERE `customer_id`=:customerId)) 
 LoanRepayBankAccountsByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code
-loanProductCode.list=SELECT `product_code` as productCode FROM `loan_products` WHERE `product_category`=:productCategory and `partner_code`=:partner and `frequency`=:frequency
+loanProductCode.list=SELECT `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `product_category`=:productCategory and `partner_code`=:partner and `frequency`=:frequency
 UserList.list=select user_name as user_id from oauth_access_token where user_name != :userId
+CBCheck.customerList=select max(created_at) as created_at, customer_id from highmark_interface where customer_id in (:customerIds) and status = 'PROCESSED' group by customer_id
+groupProcess.remarksHistory = SELECT pre_stage as stage, actions as action, group_remarks as remarks, created_by as updatedBy, created_at as updatedOn  FROM jlg_groups_snapshot where group_id = :groupId and group_remarks IS NOT NULL 
+groupLoanProductsByPartner.list=SELECT product_name as productName, `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `partner_code`=:partner and loan_type = 'JLG'
 

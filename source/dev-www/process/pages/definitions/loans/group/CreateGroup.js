@@ -8,22 +8,42 @@ define({
     $pageFn: function($log, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-
+        var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        }
+        var bankName = SessionStore.getBankName();
+        var banks = formHelper.enum('bank').data;
+        var branch1 = formHelper.enum('branch_id').data;
+        var centres = SessionStore.getCentres();
         var nDays = 15;
         var fixData = function(model) {
+            for (var i = 0; i < banks.length; i++){
+                if(banks[i].name == bankName){
+                    model.group.bankId = model.group.bankId || banks[i].value;
+                    model.bankName = banks[i].name;
+                    break;
+                }
+            }
+            model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
+            for (var i = 0; i < branch1.length; i++) {
+                if ((branch1[i].value) == model.group.branchId) {
+                    model.group.branchName = branch1[i].name;
+                    break;
+                }
+            }
+            var products = formHelper.enum('loan_product').data;
+            for (var i = 0; i < products.length; i++) {
+                if ((products[i].value) == model.group.productCode) {
+                    model.group.productName = products[i].name;
+                    break;
+                }
+            }
             model.group.tenure = parseInt(model.group.tenure);
-            var product = formHelper.enum('loan_product').data;
-            for (var i = 0; i < product.length; i++) {
-                if (product[i].value == model.group.productCode) {
-                    model.group.productName=product[i].name;    
-                }
-            }
-            var centre = formHelper.enum('centre').data;
-            for (var i = 0; i < centre.length; i++) {
-                if (centre[i].field3 == model.group.centreCode) {
-                    model.group.centreId=centre[i].value;   
-                }
-            }
         };
         var fillNames = function(model) {
             var deferred = $q.defer();
@@ -31,13 +51,13 @@ define({
                 Enrollment.get({
                     id: member.customerId
                 }, function(resp, headers) {
-                    if (resp.firstName > 0) {
+                    if (resp.firstName && resp.firstName.length > 0) {
                         model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     }
                     try {
-                        if (resp.middleName.length > 0)
+                        if (resp.middleName && resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
-                        if (resp.lastName.length > 0)
+                        if (resp.lastName && resp.lastName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.lastName;
                     } catch (err) {
 
@@ -45,7 +65,6 @@ define({
                     if (key >= model.group.jlgGroupMembers.length - 1) {
                         deferred.resolve(model);
                     }
-                    //$log.info(model.group.jlgGroupMembers[key].firstName);
                 }, function(res) {
                     deferred.reject(res);
                 });
@@ -105,12 +124,17 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "CREATE_GROUP",
+            "title": "CREATE_EDIT_GROUP",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
-                var branch1 = formHelper.enum('branch_id').data;
-                var centres = SessionStore.getCentres();
+                for (var i = 0; i < banks.length; i++){
+                    if(banks[i].name == bankName){
+                        model.group.bankId = model.group.bankId || banks[i].value;
+                        model.bankName = banks[i].name;
+                        break;
+                    }
+                }
                 model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 for (var i = 0; i < branch1.length; i++) {
                     if ((branch1[i].value) == model.group.branchId) {
@@ -129,18 +153,21 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
+                        fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
                                 model = m;
-                                $log.info(m);
                                 PageHelper.hideLoader();
                             }, function(m) {
                                 PageHelper.showErrors(m);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
                             });
+                        } else {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
+                            backToDashboard();
                         }
-                        fixData(model);
                     }, function(resp) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
@@ -169,11 +196,18 @@ define({
                     "type": "select",
                     "enumCode": "partner"
                 }, {
-                    "key": "group.centreId",
+                    "key": "group.branchId",
+                    "title": "BRANCH_NAME",
+                    "required": true,
+                    readonly: true,
+                    "parentEnumCode": "bank",
+                    "parentValueExpr": "model.group.bankId",
+                }, {
+                    "key": "group.centreCode",
                     "title": "CENTRE_CODE",
                     "required": true,
                     "type": "select",
-                    "enumCode": "centre",
+                    "enumCode": "centre_code",
                     "parentEnumCode": "branch_id",
                     "parentValueExpr": "model.group.branchId"
                 }, {
@@ -182,37 +216,46 @@ define({
                     "required": true,
                     "type": "lov",
                     autolov: true,
-                    bindMap: {},
+                    bindMap: {"Partner": "group.partnerCode"},
                     required: true,
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var product = formHelper.enum('loan_product').data;
-                        var partner = model.group.partnerCode;
-                        var out = [];
-                        if (product && product.length) {
-                            for (var i = 0; i < product.length; i++) {
-                                    if (product[i].parentCode == partner && product[i].field2 == "JLG") {
-                                        out.push({
-                                            name: product[i].name,
-                                            id: product[i].value
-                                        })
-                                    }   
-                            }
-                        }
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": out.length
-                            },
-                            body: out
-                        });
+                        // var product = formHelper.enum('loan_product').data;
+                        // var partner = model.group.partnerCode;
+                        // var out = [];
+                        // if (product && product.length) {
+                        //     for (var i = 0; i < product.length; i++) {
+                        //             if (product[i].parentCode == partner && product[i].field2 == "JLG") {
+                        //                 out.push({
+                        //                     name: product[i].name,
+                        //                     id: product[i].value
+                        //                 })
+                        //             }   
+                        //     }
+                        // }
+                        // return $q.resolve({
+                        //     headers: {
+                        //         "x-total-count": out.length
+                        //     },
+                        //     body: out
+                        // });
+                        return Queries.getGroupLoanProductsByPartner(model.group.partnerCode);
                     },
                     onSelect: function(valueObj, model, context) {
-                        model.group.productCode = valueObj.id;
-                        model.group.productName = valueObj.name;
+                        model.group.productCode = valueObj.productCode;
+                        model.group.productName = valueObj.productName;
+                        model.group.frequency = valueObj.frequency;
+                        if(valueObj.tenure_from == valueObj.tenure_to) {
+                            model.group.tenure = valueObj.tenure_to;
+                        }
+                        else {
+                            delete model.group.tenure;
+                            model.tenurePlaceHolderExpr = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                        }
                     },
                     getListDisplayItem: function(item, index) {
                         return [
-                            item.name
+                            item.productName
                         ];
                     }
                 }, {
@@ -223,6 +266,8 @@ define({
                     "enumCode":"loan_product_frequency"
                 }, {
                     "key": "group.tenure",
+                    "required": true,
+                    "placeholderExpr": "model.tenurePlaceHolderExpr",
                     "title": "TENURE",
                 },{
                     "key": "group.groupFormationDate",
@@ -243,10 +288,16 @@ define({
                         "lovonly": true,
                         initialize: function(model, form, parentModel, context) {
                             model.branchId = parentModel.group.branchId;
-                            model.centreId = parentModel.group.centreId;
+                            var centres = formHelper.enum('centre').data;
+                            for (var i = 0; i < centres.length; i++) {
+                                if ((centres[i].field3) == parentModel.group.centreCode) {
+                                    model.centreId = centres[i].value;
+                                    break;
+                                }
+                            }
                         },
                         "bindMap": {
-                            "centreId": "group.centreId",
+                            "Spoke": "group.centreCode",
                         },
                         "inputMap": {
                             "branchId": {
@@ -290,7 +341,7 @@ define({
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
-                            "customerId": "group.jlgGroupMembers[arrayIndex].CustomerId",
+                            "customerId": "group.jlgGroupMembers[arrayIndex].customerId",
                             "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
                         "searchHelper": formHelper,
@@ -354,7 +405,7 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
                         "readonly": true,
-                        "title": "FATHER_NAME"
+                        "title": "HUSBAND_OR_FATHER_NAME"
                     }, {
                         "key": "group.jlgGroupMembers[].relation",
                         "readonly": true,
@@ -399,11 +450,12 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].witnessFirstName",
                         "required": true,
-                        "title": "WitnessLastName",
+                        "title": "WitnessFirstName",
                         "type": "lov",
                         initialize: function(model, form, parentModel, context) {
                             model.branchName = parentModel.group.branchName;
                         },
+                        "bindMap": {"urnNo": "group.jlgGroupMembers[arrayIndex].urnNo"},
                         "outputMap": {
                             "name": "group.jlgGroupMembers[arrayIndex].witnessFirstName",
                             "relationShip": "group.jlgGroupMembers[arrayIndex].witnessRelationship",
@@ -411,8 +463,8 @@ define({
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
                             var promise = Enrollment.getCustomerById({
-                                id: model.group.jlgGroupMembers[context.arrayIndex].CustomerId,
-                            }).$promise.then(function(res) {
+                                id: model.group.jlgGroupMembers[context.arrayIndex].customerId,
+                            }, function(res) {
                                 var familyMembers = [];
                                 model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                 //var obj={};
@@ -432,7 +484,7 @@ define({
                                     },
                                     body: familyMembers
                                 });
-                            });
+                            }, function(res){}).$promise;
                             return promise;
                         },
                         getListDisplayItem: function(data, index) {
@@ -473,8 +525,6 @@ define({
                 }]
             }],
 
-            
-
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
@@ -489,7 +539,12 @@ define({
                             },
                             "branchId": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer"
+                                "type": ["integer", "null"],
+                                "enumCode": "branch_id",
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "screenFilter": true,
+                                }
                             },
                             "centreId": {
                                 "title": "CENTRE_CODE",
@@ -504,15 +559,17 @@ define({
                 preSave: function(model, form, formName) {},
 
                 submit: function(model, form, formName) {
-
                     $log.info("Inside submit()");
-                    var centres = formHelper.enum('centre').data;
-                    for (var i = 0; i < centres.length; i++) {
-                        if ((centres[i].value) == model.group.centreId) {
-                            model.group.centreCode = centres[i].field3;
-                            break;
-                        }
+                    if(!validateForm(form)) {
+                        return;
                     }
+                    // var centres = formHelper.enum('centre').data;
+                    // for (var i = 0; i < centres.length; i++) {
+                    //     if ((centres[i].value) == model.group.centreId) {
+                    //         model.group.centreCode = centres[i].field3;
+                    //         break;
+                    //     }
+                    // }
                     for (var i=0; i< model.group.jlgGroupMembers.length; i++){
                         model.group.jlgGroupMembers[i].centreCode = model.group.centreCode;
                     }
@@ -521,9 +578,6 @@ define({
                     var reqData = _.cloneDeep(model);
                     if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
-                            model.group = _.clone(res.group);
-                            fixData(model);
-                            fillNames(model);
                             irfNavigator.goBack();
                             PageHelper.hideLoader();
                         }, function(err) {

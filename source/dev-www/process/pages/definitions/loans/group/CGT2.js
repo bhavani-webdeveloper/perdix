@@ -50,10 +50,22 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        fillNames(model);
-                        model.group.tenure = parseInt(model.group.tenure);
                         model.group.cgt2DoneBy = SessionStore.getUsername();
-                        PageHelper.hideLoader();
+                        model.group.groupRemarks = null;
+                        if (model.group.jlgGroupMembers.length > 0) {
+                            fillNames(model).then(function(m) {
+                                model = m;
+                                Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
+                                    model.group.remarksHistory = resp;
+                                }).finally(function(){
+                                    PageHelper.hideLoader();
+                                });
+                            }, function(m) {
+                                PageHelper.showErrors(m);
+                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                                PageHelper.hideLoader();        
+                            });
+                        }
                     }, function(resp) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
@@ -62,14 +74,6 @@ define({
                 } else {
                     irfNavigator.goBack();
                 }
-
-                Queries.getGlobalSettings("siteCode").then(function(value) {
-                   model.group.siteCode = value;
-                    $log.info("siteCode:" + model.group.siteCode);
-                }, function(err) {
-                    $log.info("siteCode is not available");
-                });
-
             },
             offline: true,
             getOfflineDisplayItem: function(item, index) {
@@ -83,12 +87,11 @@ define({
             form: [{
                 "type":"box",
                 "title":"START_CGT2",
-                "items":[
-                {
+                "items":[{
                     "key": "group.groupName",
-                    "readonly":true,
+                    readonly: true,
                     "title": "GROUP_NAME",
-                },{
+                }, {
                     "key": "group.groupCode",
                     "readonly":true,
                     "title": "GROUP_CODE",
@@ -98,9 +101,25 @@ define({
                     "readonly":true,
                     "type": "select",
                     "enumCode": "partner"
-                },
-                {
+                }, {
+                    "key": "group.branchId",
+                    "title": "BRANCH_NAME",
+                    readonly: true,
+                    "type": "select",
+                    "enumCode": "branch_id",
+                    "parentEnumCode": "bank",
+                    "parentValueExpr": "model.group.bankId",
+                }, {
+                    "key": "group.centreCode",
+                    "title": "CENTRE_CODE",
+                    readonly: true,
+                    "type": "select",
+                    "enumCode": "centre_code",
+                    "parentEnumCode": "branch_id",
+                    "parentValueExpr": "model.group.branchId",
+                }, {
                     "key": "group.cgt2Photo",
+                    required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -122,99 +141,314 @@ define({
                     "readonly": true
                 }, {
                     "key": "group.cgt2Latitude",
+                    "condition": "model.siteCode !== 'sambandh'",
+                    "title": "CGT_2_LOCATION",
+                    "type": "geotag",
+                    "latitude": "group.cgt2Latitude",
+                    "longitude": "group.cgt2Longitude"
+                }, {
+                    "key": "group.cgt2Latitude",
+                    required: true,
+                    "condition": "model.siteCode == 'sambandh'",
                     "title": "CGT_2_LOCATION",
                     "type": "geotag",
                     "latitude": "group.cgt2Latitude",
                     "longitude": "group.cgt2Longitude"
                 }, {
                     "key": "group.cgt2EndPhoto",
+                    required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT2PHOTO",
                     "type": "file",
                     "fileType": "image/*",
                 }, {
-                    "key": "group.cgt2Remarks",
-                    "title": "CGT_2_REMARKS",
-                    "type": "textarea"
-                },{
                     "key": "group.Cgtbutton",
                     "title": "END_CGT2",
                     "type":"button",
                     "onClick":"actions.endCGT2(model,form)"   
-                }]
-            },
-            {
+                }, {
+                    title: "CGT_2_REMARKS",
+                    key: "group.cgt2Remarks",
+                    type: "textarea",
+                    required: true
+                },]
+            }, { 
                 "type": "box",
                 "title": "GROUP_MEMBERS",
+                "items": [
+                    {
+                        "key": "group.jlgGroupMembers",
+                        "condition": "model.siteCode !== 'sambandh'",
+                        "type": "array",
+                        "title": "GROUP_MEMBERS",
+                        "add": null,
+                        "remove": null,
+                        "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
+                        "items": [{
+                            "key": "group.jlgGroupMembers[].urnNo",
+                            "readonly": true,
+                            "title": "URN_NO",
+                        }, {
+                            "key": "group.jlgGroupMembers[].firstName",
+                            "type": "string",
+                            "readonly": true,
+                            "title": "GROUP_MEMBER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "readonly": true,
+                            "title": "HUSBAND_OR_FATHER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].relation",
+                            "readonly": true,
+                            "title": "RELATION",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAmount",
+                            "readonly": true,
+                            "title": "LOAN_AMOUNT",
+                            "type": "amount",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "readonly": true,
+                            "title": "LOAN_PURPOSE_1",
+                            "enumCode": "loan_purpose_1",
+                            "type": "select",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE_2",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE3",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "readonly": true,
+                            "title": "WitnessLastName",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "readonly": true,
+                            "title": "RELATION",
+                            "type": "select",
+                            "enumCode": "relation"
+                        }]
+                    },
+                    {
+                        "key": "group.jlgGroupMembers",
+                        "condition": "model.siteCode == 'sambandh'",
+                        "type": "array",
+                        "title": "GROUP_MEMBERS",
+                        "add": null,
+                        "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
+                        "items": [{
+                            "key": "group.jlgGroupMembers[].urnNo",
+                            "readonly": true,
+                            "title": "URN_NO",
+                        }, {
+                            "key": "group.jlgGroupMembers[].firstName",
+                            "type": "string",
+                            "readonly": true,
+                            "title": "GROUP_MEMBER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "readonly": true,
+                            "title": "HUSBAND_OR_FATHER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].relation",
+                            "readonly": true,
+                            "title": "RELATION",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAmount",
+                            "readonly": true,
+                            "title": "LOAN_AMOUNT",
+                            "type": "amount",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "readonly": true,
+                            "title": "LOAN_PURPOSE_1",
+                            "enumCode": "loan_purpose_1",
+                            "type": "select",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE_2",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "readonly": true,
+                            "type": "string",
+                            "title": "LOAN_PURPOSE3",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "readonly": true,
+                            "title": "WitnessLastName",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "readonly": true,
+                            "title": "RELATION",
+                            "type": "select",
+                            "enumCode": "relation"
+                        }]
+                    }
+                ]
+            }, {
+                "title": "REMARKS_HISTORY",
+                "type": "box",
+                condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
                 "items": [{
-                    "key": "group.jlgGroupMembers",
+                    "key": "group.remarksHistory",
                     "type": "array",
-                    "title": "GROUP_MEMBERS",
-                    "add": null,
-                    //"remove": null,
-                    "titleExpr": "model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
+                    "view": "fixed",
+                    add: null,
+                    remove: null,
                     "items": [{
-                        "key": "group.jlgGroupMembers[].urnNo",
-                        "readonly": true,
-                        "title": "URN_NO",
-                    }, {
-                        "key": "group.jlgGroupMembers[].firstName",
-                        "type": "string",
-                        "readonly": true,
-                        "title": "GROUP_MEMBER_NAME"
-                    }, {
-                        "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                        "readonly": true,
-                        "title": "FATHER_NAME"
-                    }, {
-                        "key": "group.jlgGroupMembers[].relation",
-                        "readonly": true,
-                        "title": "RELATION",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanAmount",
-                        "readonly": true,
-                        "title": "LOAN_AMOUNT",
-                        "type": "amount",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose1",
-                        "readonly": true,
-                        "title": "LOAN_PURPOSE_1",
-                        "enumCode": "loan_purpose_1",
-                        "type": "select",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose2",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE_2",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose3",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE3",
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessFirstName",
-                        "readonly": true,
-                        "title": "WitnessLastName",
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessRelationship",
-                        "readonly": true,
-                        "title": "RELATION",
-                        "type": "select",
-                        "enumCode": "relation"
+                        "type": "section",
+                        "htmlClass": "",
+                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
+                        <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
+                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
+                        <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
                     }]
                 }]
-            },
-            {
+            }, {
+                "type": "box",
+                "title": "POST_REVIEW",
+                "items": [
+                    {
+                        key: "action",
+                        type: "radios",
+                        titleMap: {
+                            "PROCEED": "PROCEED",
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                        },
+                        onChange: function(modelValue, form, model, formCtrl, event) {
+                            if(model.action == 'PROCEED') {
+                                return;
+                            }
+                            var stage1 = model.group.currentStage;
+                            var targetstage = formHelper.enum('groupLoanBackStages').data;
+                            var out = [];
+                            for (var i = 0; i < targetstage.length; i++) {
+                                var t = targetstage[i];
+                                if (t.name == stage1 && 'default' == t.field2) {
+                                    model.review.targetStage = t.field1;
+                                    model.review.rejectStage = "Rejected";
+                                    break;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        type: "section",
+                        condition:"model.action",
+                        items: [
+                        {
+                            title: "REMARKS",
+                            key: "group.groupRemarks",
+                            type: "textarea",
+                            required: true
+                        }, {
+                            key: "review.targetStage",
+                            required: true,
+                            condition:"model.action == 'SEND_BACK'",
+                            type: "lov",
+                            autolov: true,
+                            lovonly: true,
+                            title: "SEND_BACK_TO_STAGE",
+                            bindMap: {},
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model, context) {
+                                var stage1 = model.group.currentStage;
+                                var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                var out = [];
+                                for (var i = 0; i < targetstage.length; i++) {
+                                    var t = targetstage[i];
+                                    if (t.name == stage1) {
+                                        out.push({
+                                            name: t.field1,
+                                        })
+                                    }
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                model.review.targetStage = valueObj.name;
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.name
+                                ];
+                            }
+                        }, {
+                            key: "review.sendBackButton",
+                            condition:"model.action == 'SEND_BACK'",
+                            type: "button",
+                            title: "SEND_BACK",
+                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                        }, {
+                                key: "review.rejectStage",
+                                condition:"model.action == 'REJECT'",
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                title: "SEND_BACK_TO_STAGE",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    // var stage1 = model.group.currentStage;
+                                    // var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                    var out = [{name: "Rejected"}];
+                                    // for (var i = 0; i < targetstage.length; i++) {
+                                    //     var t = targetstage[i];
+                                    //     if (t.name == stage1 && 'default' == t.field2) {
+                                    //         out.push({
+                                    //             name: t.field1,
+                                    //         });
+                                    //         break;
+                                    //     }
+                                    // }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.review.rejectStage = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            }, {
+                                key: "review.reject",
+                                condition:"model.action == 'REJECT'",
+                                type: "button",
+                                title: "REJECT",
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }, {
+                            "type": "submit",
+                            condition:"model.action == 'PROCEED'",
+                            "title": "PROCEED"
+                        }]
+                    }
+                ]
+            }, {
                 "type": "actionbox",
                 "items": [{
                     "type": "save",
                     "title": "SAVE_OFFLINE",
-                }, {
-                    "type": "button",
-                    "title": "PROCEED",
-                    "onClick":"actions.submit(model,form,formName)" 
-                }]
+                },]
             }],
 
             schema: {
@@ -297,35 +531,93 @@ define({
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
                     model.group.cgt2DoneBy=SessionStore.getUsername();
-                    if(model.group.siteCode=='sambandh')
+                    var validPromiseArray = [];
+                    if(model.siteCode=='sambandh')
                     {
-                        var n=model.group.jlgGroupMembers.length;
-                        var c=0;
-                        for(i=0;i<model.group.jlgGroupMembers.length;i++)
+                        var numOfMembers = model.group.jlgGroupMembers.length;
+                        var oldCustomers =0;
+                        for(i=0; i<model.group.jlgGroupMembers.length; i++)
                         {
-                            if(model.group.jlgGroupMembers[i].loanCycle <=1)
+                            if(model.group.jlgGroupMembers[i].loanCycle && model.group.jlgGroupMembers[i].loanCycle >= 1)
                             {
-                                c++;
+                                oldCustomers++;
                             }
                         }
-                        var percentage=Math.round((c/n)*100);
-                        if(percentage <= 50)
+                        if(oldCustomers >= (numOfMembers/2))
                         {
                             model.stage='GRT';
+
+                            var cbPromise = GroupProcess.isCBCheckValid(model);
+                            validPromiseArray.push(cbPromise);
                         }
                     }
                 
                     var reqData = _.cloneDeep(model);
-
+                    $q.all(validPromiseArray).then(function(){ 
+                        GroupProcess.updateGroup(reqData, function(res) {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('CGT2-proceed', 'Operation Succeeded. Proceeded to CGT 3.', 5000);
+                            irfNavigator.goBack();
+                        }, function(res) {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('CGT2-proceed', 'Oops. Some error.', 2000);
+                            PageHelper.showErrors(res);
+                        });
+                    }, function (respErr){
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('CGT2-proceed', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(respErr);
+                    });
+                },
+                sendBack: function(model, form, formName) {
+                    if (!model.review.targetStage){
+                        irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
+                        return false;
+                    }
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Send Back', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";                    
+                    var reqData = _.cloneDeep(model);
+                    reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT2-proceed', 'Operation Succeeded. Proceeded to CGT 3.', 5000);
+                        irfProgressMessage.pop('Send back', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT2-proceed', 'Oops. Some error.', 2000);
+                        irfProgressMessage.pop('Send back', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
-                    });
+                    });   
+                },
+                reject: function(model, form, formName) {
+                    if (!model.review.rejectStage){
+                        irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
+                        return false;
+                    }
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Reject', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";
+                    var reqData = _.cloneDeep(model);
+                    reqData.stage = model.review.rejectStage;
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Reject', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });   
                 }
             }
         }

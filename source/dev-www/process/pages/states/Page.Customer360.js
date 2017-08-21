@@ -7,8 +7,8 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	$scope.branch = SessionStore.getBranch();
 	$scope.role = SessionStore.getRole();
-	$scope.siteCode=SessionStore.getGlobalSetting("siteCode");
 	$scope.customerId = $stateParams.pageId;
+	var siteCode = SessionStore.getGlobalSetting('siteCode');
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
@@ -16,7 +16,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
-			"Page/Engine/customer360.CustomerProfile",
+			(siteCode == 'sambandh') ? "Page/Engine/customer.IndividualEnrollment3" : "Page/Engine/customer360.CustomerProfile",
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
@@ -286,7 +286,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			if (response.customerType === 'Enterprise') {
 				fullDefinition = enterpriseDefinition;
 			}
-			if ($scope.siteCode == "KGFS") {
+			if (siteCode == "KGFS") {
 				fullDefinition = enrollmentDefinition;
 			}
 			$log.info("siteCode:" + $scope.siteCode);
@@ -338,6 +338,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return $q.resolve(menu);
 		};
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollment3']) {
+			$scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollment3'].onClick = function(event, menu) {
+				menu.stateParams.pageId = $scope.customerId;
+				return $q.resolve(menu);
+			};
+		}
+		
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;

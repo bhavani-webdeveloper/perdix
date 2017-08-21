@@ -151,7 +151,7 @@ define({
 							"title": "GROUP_MEMBER_NAME"
 						}, {
 							"key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-							"title": "FATHER_NAME"
+							"title": "HUSBAND_OR_FATHER_NAME"
 						}, {
 							"key": "group.jlgGroupMembers[].relation",
 							"title": "RELATION",

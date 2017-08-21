@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CBCheckCapture"),
-	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage",
-	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM){
+	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter",
+	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter){
 	return {
 		"type": "schema-form",
 		"title": "CREDIT_BUREAU_CHECK",
@@ -10,6 +10,10 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 			if (model._request) {
 				model.customerName = model._request.firstName;
 				model.customerId = model._request.id;
+
+				var creditBureauTypes = formHelper.enum('creditBureauTypes').data;
+				creditBureauTypes = $filter('filter')(creditBureauTypes, {field1: 'default'});
+				model.creditBureau = creditBureauTypes && creditBureauTypes.length > 0 ? creditBureauTypes[0].value: '';
 			} else {
 				$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 			}
@@ -41,6 +45,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 						"name": "Highmark - Base"
 					}]
 				},*/
+				"creditBureau",
 				"loanAmount",
 				"loanPurpose1"/*,
 				{
@@ -104,7 +109,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				"creditBureau": {
 					"title": "CREDIT_BUREAU",
 					"type": "string",
-					"enum":["AOR", "Base"],
+					"enumCode": "creditBureauTypes",
 					"x-schema-form":{
 						"type":"select"
 					}

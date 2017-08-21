@@ -35,7 +35,7 @@ define({
                     "title": 'SearchOptions',
                     "properties": {
                         "partner": {
-                            "type": "string",
+                            "type": ["string", "null"],
                             "title": "PARTNER",
                             "x-schema-form": {
                                 "type": "select",
@@ -54,7 +54,7 @@ define({
                     var params = {
                         'branchId': branchId,
                         'partner': searchOptions.partner,
-                        //'groupStatus': true,
+                        'groupStatus': true,
                         'page': pageOpts.pageNo,
                         'currentStage': "LoanDisbursement",
                         'per_page': pageOpts.itemsPerPage

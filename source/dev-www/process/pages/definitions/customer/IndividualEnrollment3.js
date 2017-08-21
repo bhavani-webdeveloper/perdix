@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", "$state", "Enrollment", "IrfFormRequestProcessor", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "irfNavigator",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$stateParams", "Lead",
     function($log, $state, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $stateParams, Lead) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -9,23 +9,40 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.customer = model.customer || {};
-                model.branchId = SessionStore.getBranchId() + '';
+                model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
                 model.customer.date = model.customer.date || Utils.getCurrentDate();
                 model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
                 model = Utils.removeNulls(model, true);
-                model.customer.kgfsName = SessionStore.getBranch();
-                model.customer.customerType = 'Individual';
+                model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
+                model.customer.customerType = model.customer.customerType || 'Individual';
+                var centres = SessionStore.getCentres();
+                if(centres && centres.length > 0){
+                    model.customer.centreId = model.customer.centreId || centres[0].id;
+                }
                 var self = this;
                 var formRequest = {
                     "overRides": {
                         "KYC.additionalKYCs.kyc1ProofType": {
                             title: "MY CUSTOM TITLE"
                         },
+                        "CustomerInformation.centreId" : {
+                            "title": "CENTRE",
+                        },
+                        "CustomerInformation.spouseFirstName" : {
+                            "required": true
+                        },
+                        "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                            "required": false
+                        },
+                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
+                            "enumCode": "years_of_business",
+                            "title": "AGE_OF_ENTERPRISE"
+                        },
                         "BusinessOccupationDetails.businessDetails.businessVillage": {
                             title: "NO_OF_WORKERS_EMPLOYED"
                         },
                         "BusinessOccupationDetails.businessDetails.businessLandmark": {
-                            title: "WHO_MANAGES_THE_BUSINESS",
+                            title: "KIND_OF_EMPLOYEES",
                             type: "select",
                             titleMap: {
                                 "Female": "Female",
@@ -34,7 +51,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             }
                         },
                         "BusinessOccupationDetails.businessDetails.businessPincode": {
-                            title: "ARE_YOU_INVOLVED_IN_MARKET_RELATED_BUSINESS_TRANSACTIONS",
+                            title: "INVOLVEMENT_MARKET_RELATED_TRANSACTIONS",
                             type: "select",
                             titleMap: {
                                 "YES": "Yes",
@@ -45,7 +62,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             }
                         },
                         "BusinessOccupationDetails.businessDetails.businessPhone": {
-                            title: "WHO_TAKE_CARE_OF_THE_BUSINESS_WHEN_YOU_ARE_NOT_AVAILABLE",
+                            title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
                             type: "select",
                             titleMap: {
                                 "Family Member": "Family Member",
@@ -58,23 +75,80 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "BusinessOccupationDetails.agricultureDetails.cropName": {
                             title: "NON_IRRIGATED_LAND",
-                            "type": "string"
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
                         },
                         "BusinessOccupationDetails.agricultureDetails.irrigated": {
                             title: "IRRIGATED_LAND",
-                            "type": "string"
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
                         },
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth": {
                             title: "TOTAL_LAND",
-                            "type": "string"
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
                         },
                         "BusinessOccupationDetails.agricultureDetails.landArea": {
                             title: "DAIRY_ANIMALS",
-                            "type": "select"
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "HouseVerification.HouseDetails.HouseOwnership" : {
+                            required:true,
+                            enumCode: "house_ownership",
+                        },
+                        "familyDetails.familyMembers": {
+                            onArrayAdd : function (value, form, model, formCtrl, event) {
+                                if((model.customer.familyMembers.length -1) === 0){
+                                    model.customer.familyMembers[0].relationShip = 'self';
+                                }
+                            }
+                        },
+                        "familyDetails.familyMembers.incomes.monthsPerYear" : {
+                            required:true,
+                        },
+                        "familyDetails.additionalDetails.medicalCondition" : {
+                            title: "FAMILY_MEDICAL_CONDITION_QUESTION",
+                            required:true,
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                            }
+                        },
+                        "familyDetails.additionalDetails.privateHospitalTreatment" : {
+                            title: "HOSPITAL_TREATMENT_QUESTION",
+                            required:true,
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                                "NA" : "NA",
+                            }
+                        },
+                        "familyDetails.additionalDetails.householdFinanceRelatedDecision" : {
+                             title: "HOUSEHOLD_FINANCE_DECISION_QUESTION",
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                                "NA" : "NA",
+                            }
+                        },
+                        "HouseVerification.HouseDetails.buildType" : {
+                            required:true,
                         },
                         "HouseVerification.HouseDetails.landLordName":{
                             title: "DRINKING_WATER",
-                            //condition:true,
+                            required:true,
                             "type": "select",
                             "titleMap": {
                                 "Owned": "Owned",
@@ -84,6 +158,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "HouseVerification.HouseDetails.HouseVerification": {
                             title: "WATER_FILTER",
+                            required:true,
                             "type": "radios",
                             "titleMap": {
                                 "Yes": "Yes",
@@ -92,7 +167,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "HouseVerification.HouseDetails.durationOfStay": {
                             title: "TYPE_OF_TOILET_FACILITY",
-                            condition: "model.customer.udf.userDefinedFieldValues.udf6==true",
+                            required:true,
                             "type": "select",
                             order: 100,
                             "titleMap": {
@@ -104,10 +179,47 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "type":["string","null"],
                             }
                         },
+                        "assets.financialAssets.instrumentType" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.nameOfInstitution" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.instituteType" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.amountInPaisa" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.frequencyOfDeposite" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanType" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanSource" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.instituteName" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanAmountInPaisa" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.installmentAmountInPaisa" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.frequencyOfInstallment" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.liabilityLoanPurpose" : {
+                            required:false,
+                        },
+
                     },
                     "includes": [
                         "CustomerInformation",
-                        "CustomerInformation.branchId",
+                        "CustomerInformation.customerBranchId",
                         "CustomerInformation.centreId",
                         "CustomerInformation.area",
                         //"CustomerInformation.groupName",
@@ -121,12 +233,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "CustomerInformation.spouseFirstName",
                         "CustomerInformation.religion",
                         "CustomerInformation.caste",
-                        "CustomerInformation.dateOfBirth",
+                        "CustomerInformation.dateOfBirth",                       
                         "KYC",
                         "KYC.IdentityProof1",
                         "KYC.IdentityProof1.identityProof",
                         "KYC.IdentityProof1.identityProofImageId",
-                        "KYC.IdentityProof1.identityProofReverseImageId",
+                        // "KYC.IdentityProof1.identityProofReverseImageId",
                         "KYC.IdentityProof1.identityProofNo",
                         "KYC.IdentityProof1.idProofIssueDate",
                         "KYC.IdentityProof1.idProofValidUptoDate",
@@ -134,7 +246,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "KYC.addressProof1",
                         "KYC.addressProof1.addressProof",
                         "KYC.addressProof1.addressProofImageId",
-                        "KYC.addressProof1.addressProofReverseImageId",
+                        // "KYC.addressProof1.addressProofReverseImageId",
                         "KYC.addressProof1.addressProofNo",
                         "KYC.addressProof1.addressProofIssueDate",
                         "KYC.addressProof1.addressProofValidUptoDate",
@@ -177,13 +289,19 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "familyDetails.familyMembers.incomes.incomeEarned",
                         "familyDetails.familyMembers.incomes.frequency",
                         "familyDetails.familyMembers.incomes.monthsPerYear",
+                        "familyDetails.additionalDetails",
+                        "familyDetails.additionalDetails.medicalCondition",
+                        "familyDetails.additionalDetails.privateHospitalTreatment",
+                        "familyDetails.additionalDetails.householdFinanceRelatedDecision",
                         "HouseVerification",
                         "HouseVerification.HouseDetails",
                         "HouseVerification.HouseDetails.HouseOwnership",
-                        "HouseVerification.HouseDetails.landLordName",
-                        "HouseVerification.HouseDetails.HouseVerification",
-                        "HouseVerification.HouseDetails.Toilet",
-                        "HouseVerification.HouseDetails.durationOfStay",
+                        "HouseVerification.HouseDetails.landLordName",//drinkingwater
+                        "HouseVerification.HouseDetails.HouseVerification",//waterfilter
+                        //"HouseVerification.HouseDetails.Toilet",//is toilet available
+                        "HouseVerification.HouseDetails.durationOfStay",//toilet facility
+                        "HouseVerification.HouseDetails.buildType",
+                        "HouseVerification.latitude",
                         "Liabilities1",
                         "Liabilities1.liabilities",
                         "Liabilities1.liabilities.loanType",
@@ -199,12 +317,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "assets.physicalAssets",
                         "assets.physicalAssets.assetType",
                         "assets.physicalAssets.ownedAssetDetails",
-                        "assets.physicalAssets.unit",
                         "assets.physicalAssets.numberOfOwnedAsset",
                         "assets.physicalAssets.ownedAssetValue",
                         "assets.financialAssets",
                         "assets.financialAssets.instrumentType",
                         "assets.financialAssets.nameOfInstitution",
+                        "assets.financialAssets.ownedBy",
+                        "assets.financialAssets.insuranceType",
                         "assets.financialAssets.instituteType",
                         "assets.financialAssets.amountInPaisa",
                         "assets.financialAssets.frequencyOfDeposite",
@@ -219,25 +338,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "Expenditures1.expenditures.expendituresSection.frequencySection.frequency",
                         "Expenditures1.expenditures.expendituresSection.annualExpensesSection",
                         "Expenditures1.expenditures.expendituresSection.annualExpensesSection.annualExpenses",
-                        "Expenditures1.netIncome",
-                        "Expenditures1.totalMonthlySurplus",
-                        "Expenditures1.totalAnnualSurplus",
-                        "Expenditures1.inflowOutflowDifferenceMonthly",
-                        "Expenditures1.inflowOutflowDifferenceYearly",
                         "BusinessOccupationDetails",
                         "BusinessOccupationDetails.customerOccupationType",
                         "BusinessOccupationDetails.businessDetails",
                         "BusinessOccupationDetails.businessDetails.relationshipWithBusinessOwner",
                         "BusinessOccupationDetails.businessDetails.business/employerName",
-                        "BusinessOccupationDetails.businessDetails.businessRegNo",
+                        //"BusinessOccupationDetails.businessDetails.businessRegNo",
                         "BusinessOccupationDetails.businessDetails.businessVillage",
                         "BusinessOccupationDetails.businessDetails.businessLandmark",
                         "BusinessOccupationDetails.businessDetails.businessPincode",
                         "BusinessOccupationDetails.businessDetails.businessPhone",
-                        "BusinessOccupationDetails.businessDetails.workPeriod",
+                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise",
+                        // "BusinessOccupationDetails.businessDetails.workPeriod",
                         "BusinessOccupationDetails.businessDetails.workPlaceType",
-                        "BusinessOccupationDetails.businessDetails.WorkPlace",
-                        "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
+                        // "BusinessOccupationDetails.businessDetails.WorkPlace",
+                        // "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
                         "BusinessOccupationDetails.agricultureDetails",
                         "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
                         "BusinessOccupationDetails.agricultureDetails.landOwnership",
@@ -245,6 +360,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.irrigated",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
                         "BusinessOccupationDetails.agricultureDetails.landArea",
+                        "loanInformation",
+                        "loanInformation.requestedLoanAmount",
+                        "loanInformation.requestedLoanPurpose",
                         "actionbox",
                         "actionbox.submit",
                         "actionbox.save",
@@ -254,13 +372,73 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     ]
                 };
 
+                if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("Enrollment-input", 'Loading lead details');
+                    var _leadId = $stateParams.pageData['lead_id'];
+                    Lead.get({id: _leadId})
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress('Enrollment-input', 'Done.', 5000);
+                            model.customer.mobilePhone = res.mobileNo;
+                            model.customer.gender = res.gender;
+                            model.customer.firstName = res.leadName;
+                            model.customer.maritalStatus=res.maritalStatus;
+                            model.customer.customerBranchId=res.branchId;
+                            model.customer.centreId=res.centreId;
+                            model.customer.centreName=res.centreName;
+                            model.customer.street=res.addressLine2;
+                            model.customer.doorNo=res.addressLine1;
+                            model.customer.pincode=res.pincode;
+                            model.customer.district=res.district;
+                            model.customer.state=res.state;
+                            model.customer.locality=res.area;
+                            model.customer.villageName=res.cityTownVillage;
+                            model.customer.landLineNo=res.alternateMobileNo;
+                            model.customer.dateOfBirth=res.dob;
+                            model.customer.age=res.age;
+                            model.customer.gender=res.gender;
+                            model.customer.landLineNo = res.alternateMobileNo;
 
+
+                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                $log.info(model.customer.familyMembers[i].relationShip);
+                                model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                            } 
+                        }, function(httpRes){
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                }
 
                 this.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest);
                 //this.form.push(actionbox);
                 console.log(this.form);
             },
-            offline: false,
+            modelPromise: function(pageId, _model) {
+                var deferred = $q.defer();
+                PageHelper.showLoader();
+                irfProgressMessage.pop("enrollment","Loading Customer Data...");
+                Enrollment.getCustomerById({id:pageId},function(resp,header){
+                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+                    model.customer = resp;
+                    deferred.resolve(model);
+                    PageHelper.hideLoader();
+                },function(resp){
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop("enrollment","An Error Occurred. Failed to fetch Data",5000);
+                    $stateParams.confirmExit = false;
+                    $state.go("Page.Engine",{
+                        pageName:"CustomerSearch",
+                        pageId:null
+                    });
+                    deferred.reject();
+                });
+                return deferred.promise;
+            },
+            offline: true,
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item.customer.urnNo,
@@ -296,7 +474,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 },
                 reload: function(model, formCtrl, form, $event) {
                     $state.go("Page.Engine", {
-                        pageName: 'customer.IndividualEnrollment',
+                        pageName: 'customer.IndividualEnrollment3',
                         pageId: model.customer.id
                     }, {
                         reload: true,
@@ -380,12 +558,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp) {
-                            irfNavigator.goBack();
+                            PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            $state.go('Page.Landing', null);
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res) {
                             EnrollmentHelper.proceedData(res).then(function(resp) {
-                                irfNavigator.goBack();
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                $state.go('Page.Landing', null);
                             }, function(err) {
                                 Utils.removeNulls(res.customer, true);
                                 model.customer = res.customer;

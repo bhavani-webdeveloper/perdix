@@ -4,6 +4,8 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 		var centres = SessionStore.getCentres();
 		var centreName = [];
 
+		var siteCode = SessionStore.getGlobalSetting('siteCode');
+
 		if(centres && centres.length)
 		{
 		for (var i = 0; i < centres.length; i++) {
@@ -28,7 +30,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 */
 		return {
 			"type": "search-list",
-			"title": "READY_FOR_SCREENING",
+			"title": siteCode == 'sambandh' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -220,7 +222,26 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return true;
+								return siteCode !== 'sambandh' ? true : false;
+							}
+						},
+						{
+							name: "DO_ENROLLMENT",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								entityManager.setModel('lead.LeadGeneration', {
+									_request: item
+								});
+								$state.go("Page.Engine", {
+									pageName: "customer.IndividualEnrollment3",
+									pageData: {
+										lead_id: item.id
+									}
+								});
+							},
+							isApplicable: function(item, index) {
+								return siteCode == 'sambandh' ? true : false;
 							}
 						},
 						{

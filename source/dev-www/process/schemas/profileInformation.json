@@ -683,6 +683,16 @@
                                 "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
+                            },
+                            "udf1": {
+                                "title": "INSURANCE_TYPE",
+                                "type": ["string","null"],
+                                "maxLength": 100
+                            },
+                            "udf2": {
+                                "title": "OWNED_BY",
+                                "type": ["string","null"],
+                                "maxLength": 100
                             }
                         },
                         "required": [
@@ -1434,6 +1444,22 @@
                                 "udf36": {
                                     "type": ["string","null"],
                                     "title": "SPOUSE_IDENTITY_PROOF_NO"
+                                },
+                                "udf37": {
+                                    "type": ["string","null"],
+                                    "title": "INSURANCE_TYPE"
+                                },
+                                "udf38": {
+                                    "type": ["string","null"],
+                                    "title": "OWNED_BY"
+                                },
+                                "udf39": {
+                                    "type": ["string","null"],
+                                    "title": "OWNED_BY"
+                                },
+                                "udf40": {
+                                    "type": ["string","null"],
+                                    "title": "OWNED_BY"
                                 }
                             }
                         },
@@ -1651,7 +1677,15 @@
                                   }
                                 }
                               }
+                            },
+                            "requestedLoanAmount":{
+                                "type": ["string", "null"]
+                            },
+                            "requestedLoanPurpose":{
+                                "type": ["string", "null"],
+                                "enumCode": "loan_purpose_1"
                             }
+
                         }
                     }
                 }

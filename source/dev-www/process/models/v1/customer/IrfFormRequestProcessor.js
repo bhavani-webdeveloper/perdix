@@ -22,18 +22,29 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         fileType: "image/*",
                         "offline": true
                     },
-                    "branchId": {
+                    "customerBranchId": {
                         orderNo: 30,
-                        key: "branchId",
+                        "required": true,
+                        "type": "select",
+                        key: "customer.customerBranchId",
                         "title": "BRANCH_NAME",
                         "readonly": true
                     },
                     "centreCode": {
                         orderNo: 40,
+                        "required": true,
                         key: "customer.centreCode",
                         type: "select",
                         parentEnumCode: "branch_id",
-                        parentValueExpr: "model.branchId",
+                        parentValueExpr: "model.customer.customerBranchId",
+                    },
+                    "centreId": {
+                        orderNo: 40,
+                        key: "customer.centreId",
+                        "required": true,
+                        type: "select",
+                        parentEnumCode: "branch_id",
+                        parentValueExpr: "model.customer.customerBranchId",
                     },
                     "area": {
                         orderNo: 50,
@@ -107,8 +118,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "fatherFirstName": {
                         orderNo: 150,
+                        // condition: "model.customer.maritalStatus !== 'MARRIED'",
                         key: "customer.fatherFirstName",
-                        title: "FATHER_FULL_NAME"
+                        title: "FATHER/FATHER_IN_LAW'S_NAME"
                     },
                     "spouseFirstName": {
                         orderNo: 160,
@@ -163,9 +175,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title: "SPOUSE_LOAN_CONSENT"
                     }
                 }
-            },
+            },            
             "ContactInformation": {
                 "type": "box",
+                orderNo: 20,
                 "title": "CONTACT_INFORMATION",
                 "items": {
                     "CustomerResidentialAddress": {
@@ -365,6 +378,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "KYC": {
                 type: "box",
+                orderNo: 30,
                 title: "KYC",
                 items: {
                     "aadhaarNo": {
@@ -384,16 +398,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "identityProofImageId": {
                                 key: "customer.identityProofImageId",
                                 type: "file",
-                                fileType: "image/*",
+                                fileType:"application/pdf",
+                                using: "scanner"
                             },
                             "identityProofReverseImageId": {
                                 key: "customer.identityProofReverseImageId",
                                 type: "file",
-                                fileType: "image/*",
+                                fileType:"application/pdf",
+                                using: "scanner"
                             },
                             "identityProofNo": {
                                 key: "customer.identityProofNo",
-                                type: "barcode",
+                                type:"qrcode",
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
@@ -424,13 +440,15 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "addressProofImageId": {
                                 key: "customer.addressProofImageId",
                                 type: "file",
-                                fileType: "image/*",
-                                "offline": true
+                                fileType:"application/pdf",
+                                using: "scanner",
+                                //"offline": true
                             },
                             "addressProofReverseImageId": {
                                 key: "customer.addressProofReverseImageId",
                                 type: "file",
-                                fileType: "image/*",
+                                fileType:"application/pdf",
+                                using: "scanner",
                                 "offline": true
                             },
                             "addressProofNo": {
@@ -504,6 +522,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "AdditionalKYC": {
                 "type": "box",
+                orderNo: 40,
                 "title": "ADDITIONAL_KYC",
                 "items": {
                     "additionalKYCs": {
@@ -571,6 +590,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "familyDetails": {
                 "type": "box",
+                orderNo: 50,
                 "title": "T_FAMILY_DETAILS",
                 "items": {
                     "familyMembers": {
@@ -578,8 +598,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "array",
                         startEmpty: true,
                         items: {
+                            "relationShip": {
+                                key: "customer.familyMembers[].relationShip",
+                                type: "select",
+                                title: "T_RELATIONSHIP",
+                                "onChange": function(modelValue, form, model, formCtrl, event) {
+                                    if(model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                    } 
+                                    else if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
+                                    }
+                                    else {
+                                        model.customer.familyMembers[form.arrayIndex].gender = undefined;
+                                    }
+                                }
+                            },
                             "customerId": {
                                 key: "customer.familyMembers[].customerId",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
                                 type: "lov",
                                 "inputMap": {
                                     "firstName": {
@@ -649,12 +686,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "familyMemberFirstName": {
                                 key: "customer.familyMembers[].familyMemberFirstName",
-                                title: "FAMILY_MEMBER_FULL_NAME"
-                            },
-                            "relationShip": {
-                                key: "customer.familyMembers[].relationShip",
-                                type: "select",
-                                title: "T_RELATIONSHIP"
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
+                                title: "FAMILY_MEMBER_FULL_NAME"                             
                             },
                             "gender": {
                                 key: "customer.familyMembers[].gender",
@@ -709,7 +742,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "incomes": {
                                 key: "customer.familyMembers[].incomes",
                                 type: "array",
-                                startEmpty: true,
+                                startEmpty: false,
                                 items: {
                                     "incomeSource": {
                                         key: "customer.familyMembers[].incomes[].incomeSource",
@@ -717,22 +750,43 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     },
                                     "incomeEarned": {
                                         key: "customer.familyMembers[].incomes[].incomeEarned",
+                                        type: "amount",
                                     },
                                     "frequency": {
                                         key: "customer.familyMembers[].incomes[].frequency",
                                         type: "select"
                                     },
                                     "monthsPerYear": {
-                                        key: "customer.familyMembers[].incomes[].monthsPerYear"
+                                        key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                        "title": "MONTHS_PER_YEAR",
                                     }
                                 }
                             }
+                        }
+                    },
+                    "additionalDetails": {
+                        key: "customer",
+                        type: "section",
+                        items: {
+                            "medicalCondition": {
+                                key: "customer.udf.userDefinedFieldValues.udf38",
+                                orderNo: 10,
+                            },
+                            "privateHospitalTreatment": {
+                                key: "customer.udf.userDefinedFieldValues.udf39",
+                                orderNo: 20,
+                            },
+                            "householdFinanceRelatedDecision": {
+                                key: "customer.udf.userDefinedFieldValues.udf40",
+                                orderNo: 30,
+                            },
                         }
                     }
                 }
             },
             "Expenditures1": {
                 "type": "box",
+                orderNo: 60,
                 "title": "EXPENDITURES",
                 "items": {
                     "expenditures": {
@@ -781,48 +835,36 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             }
                         }
                     },
-                    "netIncome": {
-                        key: "customer.udf.userDefinedFieldValues.udf31",
-                        title:"TOTAL_CASH_INFLOW"
-                    },
-                    "totalMonthlySurplus": {
-                        key: "customer.udf.userDefinedFieldValues.udf32",
-                        title:"TOTAL_MONTHLY_SURPLUS"
-                    },
-                    "totalAnnualSurplus": {
-                        key: "customer.udf.userDefinedFieldValues.udf33",
-                        title:"TOTAL_ANNUAL_SURPLUS"
-                    },
-                    "inflowOutflowDifferenceMonthly": {
-                        key: "customer.udf.userDefinedFieldValues.udf34",
-                        title:"INFLOW_MINUS_OUTFLOW_MONTHLY"
-                    },
-                    "inflowOutflowDifferenceYearly": {
-                        key: "customer.udf.userDefinedFieldValues.udf35",
-                        title:"INFLOW_MINUS_OUTFLOW_YEARLY"
-                    },
                 }
             },
             "BusinessOccupationDetails": {
                 "type": "box",
-                "title": "BUSINESS_OCCUPATION_DETAILS",
+                orderNo: 70,
+                "title": "OCCUPATION_DETAILS",
                 "items": {
                     "customerOccupationType": {
                         key: "customer.udf.userDefinedFieldValues.udf13",
-                        type: "select"
+                        type: "select",
+                        enumCode: "broad_occupation_type"
                     },
                     "businessDetails": {
                         type: "fieldset",
-                        //condition: "model.customer.udf.userDefinedFieldValues.udf13=='Business' || model.customer.udf.userDefinedFieldValues.udf13=='Employed'",
+                        "title": "BUSINESS_OCCUPATION_DETAILS",
+                        condition: "model.customer.udf.userDefinedFieldValues.udf13=='Business' || model.customer.udf.userDefinedFieldValues.udf13=='Employed'",
                         items: {
                             "relationshipWithBusinessOwner": {
                                 key: "customer.udf.userDefinedFieldValues.udf14",
                                 type: "select",
-                                orderNo: 10,
+                                orderNo: 20,
                             },
                             "business/employerName": {
                                 key: "customer.udf.userDefinedFieldValues.udf7",
-                                orderNo: 20,
+                                orderNo: 10,
+                            },
+                            "ageOfEnterprise": {
+                                key: "customer.udf.userDefinedFieldValues.udf23",
+                                orderNo: 30,
+                                type: "select",
                             },
                             "businessRegNo": {
                                 key: "customer.udf.userDefinedFieldValues.udf22",
@@ -847,11 +889,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "OwnerOfShop": {
                                 key: "customer.udf.userDefinedFieldValues.udf12",
                                 orderNo: 80,
-                            },
-                            "business/employerName": {
-                                key: "customer.udf.userDefinedFieldValues.udf23",
-                                type: "radios",
-                                orderNo: 90,
                             },
                             "workPeriod": {
                                 key: "customer.udf.userDefinedFieldValues.udf17",
@@ -891,18 +928,27 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "agricultureDetails": {
                         type: "fieldset",
-                        //condition: "model.customer.udf.userDefinedFieldValues.udf13=='Agriculture'",
+                        condition: "model.customer.udf.userDefinedFieldValues.udf13=='Agriculture'",
                         title: "AGRICULTURE_DETAILS",
                         items: {
                             "relationwithFarmer": {
                                 key: "customer.udf.userDefinedFieldValues.udf24",
                                 orderNo: 10,
-                                type: "select"
+                                type: "select",
+                                titleMap: {
+                                    "Self":"Self",
+                                    "Partner" : "Partner",
+                                    "Others":"Others",
+                                }
                             },
                             "landOwnership": {
                                 key: "customer.udf.userDefinedFieldValues.udf25",
                                 orderNo: 20,
-                                type: "select"
+                                type: "select",
+                                titleMap: {
+                                    "Self":"Self",
+                                    "Others":"Others",
+                                }
                             },
                             "cropName": {
                                 key: "customer.udf.userDefinedFieldValues.udf15",
@@ -928,35 +974,43 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
             "HouseVerification": {
                 "type": "box",
+                orderNo: 80,
                 "title": "T_HOUSE_VERIFICATION",
                 "items": {
                     "firstName": {
                         "key": "customer.firstName",
+                        orderNo: 10,
                         "title": "CUSTOMER_NAME",
                         "readonly": true
                     },
                     "nameInLocalLanguage": {
+                        orderNo: 20,
                         key: "customer.nameInLocalLanguage"
                     },
                     "addressInLocalLanguage": {
+                        orderNo: 30,
                         key: "customer.addressInLocalLanguage",
                         type: "textarea"
                     },
 
                     "religion": {
+                        orderNo: 40,
                         key: "customer.religion",
                         type: "select"
                     },
                     "caste": {
                         key: "customer.caste",
+                        orderNo: 50,
                         type: "select"
                     },
                     "language": {
                         key: "customer.language",
+                        orderNo: 60,
                         type: "select"
                     },
                     "HouseDetails": {
                         type: "fieldset",
+                        orderNo: 70,
                         title: "HOUSE_DETAILS",
                         items: {
                             "HouseOwnership": {
@@ -965,43 +1019,46 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "select"
 
                             },
-                            "landLordName": {
+                            "buildType": {
                                 order:20,
+                                key: "customer.udf.userDefinedFieldValues.udf31",
+                                title:"BUILD_TYPE",
+                                "type": "select",
+                                enumCode: "houseBuildTypes",
+                                "titleMap": {
+                                    "CONCRETE": "Kachha",
+                                    "MUD": "Pucca",
+                                    "BRICK": "Ardha Pucca"
+                                }
+                            },
+                            "landLordName": {
+                                order:30,
                                 key: "customer.udf.userDefinedFieldValues.udf2",
                                 //condition: "model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
                             },
                             "HouseVerification": {
-                                order:30,
+                                order:40,
                                 key: "customer.udf.userDefinedFieldValues.udf5",
 
                             },
-                            "Toilet": {
-                                order:40,
-                                key: "customer.udf.userDefinedFieldValues.udf6"
-                            },
+                            // "Toilet": {
+                            //     order:40,
+                            //     key: "customer.udf.userDefinedFieldValues.udf6"
+                            // },
                             "durationOfStay": {
                                 order:50,
                                 key: "customer.udf.userDefinedFieldValues.udf4",
                                 type: "radios"
                             },
-                            "YearsOfBusinessPresentArea": {
-                                order:60,
-                                key: "customer.udf.userDefinedFieldValues.udf31",
-                                "type": "select",
-                                "titleMap": {
-                                    "CONCRETE": "CONCRETE",
-                                    "MUD": "MUD",
-                                    "BRICK": "BRICK"
-                                }
-                            },
                             "YearsOfBusinessPresentAddress": {
-                                order:70,
+                                order:60,
                                 key: "customer.udf.userDefinedFieldValues.udf32"
                             }
                         }
                     },
                     "latitude": {
                         "key": "customer.latitude",
+                        orderNo: 80,
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
                         //readonly: true,
@@ -1051,6 +1108,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "assets": {
                 "type": "box",
+                orderNo: 90,
                 "title": "T_ASSETS",
                 "items": {
                     "physicalAssets": {
@@ -1061,12 +1119,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "assetType": {
                                 key: "customer.physicalAssets[].assetType",
                                 "title": "ASSET_TYPE",
-                                type: "select"
+                                type: "select",
+                                enumCode: "asset_type"
                             },
                             "ownedAssetDetails": {
                                 key: "customer.physicalAssets[].ownedAssetDetails",
                                 type: "select",
                                 screenFilter: true,
+                                enumCode: "asset_Details",
                                 parentEnumCode: "asset_type",
                                 parentValueExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                             },
@@ -1084,6 +1144,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "ownedAssetValue": {
                                 key: "customer.physicalAssets[].ownedAssetValue",
+                                type: "amount"
                             }
                         }
                     },
@@ -1099,6 +1160,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "nameOfInstitution": {
                                 key: "customer.financialAssets[].nameOfInstitution",
+                            },
+                            "insuranceType": {
+                                "type": "select",
+                                key: "customer.financialAssets[].udf1",
+                                condition: "model.customer.financialAssets[arrayIndex].instrumentType == 'INSURANCE'",
+                                "title": "INSURANCE_TYPE",
+                                titleMap: {
+                                    "Health" : "Health",
+                                    "Life" : "Life"
+                                }
+                            },
+                            "ownedBy": {
+                                "type": "select",
+                                key: "customer.financialAssets[].udf2",
+                                "title": "OWNED_BY",
+                                titleMap: {
+                                    "Self" : "Self",
+                                    "Others" : "Other Family Members"
+                                }
                             },
                             "instituteType": {
                                 key: "customer.financialAssets[].instituteType",
@@ -1119,13 +1199,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "maturityDate": {
                                 key: "customer.financialAssets[].maturityDate",
                                 type: "date"
-                            }
+                            },
                         }
                     }
                 }
             },
             "Liabilities1": {
                 type: "box",
+                orderNo: 100,
                 title: "T_LIABILITIES",
                 items: {
                     "liabilities": {
@@ -1153,6 +1234,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.liabilities[].installmentAmountInPaisa",
                                 type: "amount"
                             },
+                            "outstandingAmountInPaisa" :{
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                            },
                             "startDate": {
                                 key: "customer.liabilities[].startDate",
                                 type: "date"
@@ -1173,9 +1259,28 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-            
+            "loanInformation": {
+                "type": "box",
+                orderNo: 110,
+                "title": "LOAN_INFORMATION",
+                "items": {
+                    "requestedLoanAmount": {
+                        orderNo: 10,
+                        key: "customer.requestedLoanAmount",
+                        title: "REQUESTED_LOAN_INFORMATION"
+                    },
+                    "requestedLoanPurpose": {
+                        orderNo: 20,
+                        key: "customer.requestedLoanPurpose",
+                        title: "REQUESTED_LOAN_PURPOSE",
+                        "enumCode": "loan_purpose_1",
+                        type: "select"
+                    },
+                }
+            },
             "actionbox": {
                 "type": "actionbox",
+                orderNo: 120,
                 //"condition": "model.customer.id",
                 "items": {
                     "submit": {
@@ -1200,12 +1305,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     return form;
                 }
                 keys = Object.keys(formRequest);
-                if (!keys || keys.length < 0 || keys.indexOf("overRides") === -1 || keys.indexOf("includes") === -1 || keys.indexOf("excludes") === -1) {
+                if (!keys || keys.length < 0 || keys.indexOf("overrides") === -1 || keys.indexOf("includes") === -1 || keys.indexOf("excludes") === -1) {
                     return form;
                 }
                 var includes = formRequest.includes || [];
                 var excludes = formRequest.excludes || [];
-                var overRides = formRequest.overRides || {};
+                var overrides = formRequest.overrides || {};
                 var getKeyString = function(parentKey, key) {
                     if (!parentKey || parentKey === "") {
                         return key;
@@ -1229,8 +1334,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             //All the excludes are not processed.
                             continue;
                         }
-                        if (overRides[_key]) {
-                            _defn = _.merge({}, repo[keylist[itr]], overRides[_key]);
+                        if (overrides[_key]) {
+                            _defn = _.merge({}, repo[keylist[itr]], overrides[_key]);
                         } else {
                             _defn = _.merge({}, repo[keylist[itr]]);
                         }

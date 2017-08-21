@@ -7,10 +7,13 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
 
     PageHelper.clearErrors();
 
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
+
     var fullDefinition = {
         "title": "GROUP_DASHBOARD",
         "items": [
             "Page/Engine/loans.group.CreateGroup",
+            "Page/Engine/loans.group.EditGroupQueue",
             "Page/Engine/loans.group.DscQueue",
             "Page/Engine/loans.group.DscOverrideQueue",
             "Page/Engine/loans.group.Cgt1Queue",
@@ -30,6 +33,26 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         ]
     };
 
+    if(siteCode == 'sambandh') {
+        fullDefinition.items = [
+            "Page/Engine/loans.group.CreateGroup",
+            "Page/Engine/loans.group.EditGroupQueue",
+            "Page/Engine/loans.group.DscQueue",
+            "Page/Engine/loans.group.DscOverrideQueue",
+            "Page/Engine/loans.group.Checker1Queue",
+            "Page/Engine/loans.group.Checker2Queue",
+            "Page/Engine/loans.group.Cgt1Queue",
+            "Page/Engine/loans.group.Cgt2Queue",
+            "Page/Engine/loans.group.Cgt3Queue",
+            "Page/Engine/loans.group.GrtQueue",
+            "Page/Engine/loans.group.GroupLoanBookingQueue",
+            "Page/Engine/loans.group.ApplicationPendingQueue",
+            "Page/Engine/loans.group.JLGDisbursementQueue",
+            "Page/Engine/loans.group.CloseGroup",
+            "Page/Engine/loans.group.GroupLoanRepaymentQueue"
+        ]
+    }
+
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
         $scope.dashboardDefinition = _.cloneDeep(resp);
         var userPartner = SessionStore.session.partnerCode;
@@ -43,6 +66,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             }
         }
 
+        var edtGrpMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.EditGroupQueue"];
         var dscMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.DscQueue"];
         var cgtone = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt1Queue"];
         var cgttwo = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt2Queue"];
@@ -59,6 +83,18 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         var disbursement = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.JLGDisbursementQueue"];
         var close = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.CloseGroup"];
         var dscoverrideMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.DscOverrideQueue"];
+
+        if (edtGrpMenu) {
+            edtGrpMenu.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "GroupCreation"
+            }, function(response) {
+                edtGrpMenu.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
 
         if (dscMenu) {
             dscMenu.data = '-';

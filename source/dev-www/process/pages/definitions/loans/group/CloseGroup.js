@@ -53,8 +53,8 @@ define({
 						//'branchId': branchId,
 						'partner': searchOptions.partner,
 						'groupStatus': true,
-						'page': pageOpts.pageNo,
 						'currentStage': searchOptions.stage,
+						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
 					};
 
@@ -123,25 +123,6 @@ define({
 							isApplicable: function(item, index) {
 
 								return true;
-							}
-						},{
-							name: "EDIT_GROUP",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								irfNavigator.go({
-									state: "Page.Engine",
-									pageName: "loans.group.CreateGroup",
-									pageId: item.id,
-								}, {
-									state: "Page.Engine",
-									pageName: "loans.group.CloseGroup",
-								});
-							},
-							isApplicable: function(item, index) {
-								if (item.currentStage==='GroupCreation')
-									return true;
-								return false;
 							}
 						}];
 					}

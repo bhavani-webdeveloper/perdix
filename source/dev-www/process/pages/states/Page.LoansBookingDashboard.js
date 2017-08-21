@@ -2,7 +2,7 @@ irf.pages.controller("LoansBookingDashboardCtrl",
 ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'IndividualLoan',
 function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
     $log.info("Page.LoansBookingDashboard.html loaded");
-
+    var siteCode = SessionStore.getGlobalSetting("siteCode");
     var fullDefinition = {
         "title": "Loan Booking Dashboard",
         "iconClass": "fa fa-book",
@@ -15,6 +15,14 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.booking.PendingVerificationQueue"
         ]
     };
+    if(siteCode == 'sambandh') {
+        fullDefinition.items = [
+            "Page/Engine/loans.individual.booking.SimpleLoanInput",
+            "Page/Engine/loans.individual.booking.InitiationQueue",
+            "Page/Engine/loans.individual.booking.PendingQueue",
+            "Page/Engine/loans.individual.booking.DocumentUploadQueue"
+        ]
+    }
 
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
         $scope.dashboardDefinition = resp;

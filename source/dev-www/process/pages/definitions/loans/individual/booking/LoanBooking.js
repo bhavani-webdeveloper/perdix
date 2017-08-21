@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
-    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries",
-    function ($log, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils,Queries) {
+    ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries", "$q",
+    function ($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils,Queries, $q) {
 
         var branch = SessionStore.getBranch();
         var pendingDisbursementDays;
@@ -12,6 +12,39 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             $log.info("pendingDisbursementDays is not available");
         });
 
+        var isCBCheckValid = function (model) {
+            var deferred = $q.defer();
+            var customerIdList = [model.loanAccount.customerId];
+            var validUrns = [model.loanAccount.customer.urnNo];
+            var urns = [], invalidUrns = [];
+
+            Queries.getLatestCBCheckDoneDateByCustomerIds(customerIdList).then(function(resp) {
+                if(resp && resp.length > 0){
+                    for (var i = 0; i < resp.length; i++) {
+                        if (moment().diff(moment(resp[i].created_at, SessionStore.getSystemDateFormat()), 'days') <= 
+                            Number(SessionStore.getGlobalSetting('cerditBureauValidDays'))) {
+                            validUrns.push(urns[customerIdList.indexOf(resp[i].customer_id)]);
+                        }
+                    }
+
+                    if(validUrns.length === urns.length) {
+                        deferred.resolve();
+                    } else {
+                        invalidUrns = urns.filter(function(urn){  return (validUrns.indexOf(urn) == -1) })
+                        deferred.reject({data: {error: "There is no valid CB check for following customers: " + invalidUrns.join(",")+ ". Please do CBCheck and try again." }});
+                    }
+                } else {
+                    deferred.reject({data: {error: "There is no valid CB check for following customers: " + urns.join(",")+ ". Please do CBCheck and try again." }});
+                }
+            }, function(res) {
+                if(res.data) {
+                    res.data.error = res.data.errorMsg;
+                }
+                deferred.reject(res);
+            });
+            return deferred.promise;
+        }
+
         var populateDisbursementDate = function(modelValue,form,model){
             if (modelValue){
                 modelValue = new Date(modelValue);
@@ -22,9 +55,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         return {
             "type": "schema-form",
             "title": "CAPTURE_DATES",
-            "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 PageHelper.showProgress('load-loan', 'Loading loan account...');
                 IndividualLoan.get({id: $stateParams.pageId})
                     .$promise
@@ -32,8 +65,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         function (res) {
 
                             $log.info(res);
-
-
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'LoanBooking'){
                                 PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
@@ -53,6 +84,36 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             }
 
                             model.loanAccount = res;
+                            var ids = [];
+                            var urns = [];
+                            if (model.loanAccount.customerId){
+                                ids.push(model.loanAccount.customerId);
+                            }
+
+                            if (model.loanAccount.applicant){
+                                urns.push(model.loanAccount.applicant);
+                            }
+
+                            if (model.loanAccount.portfolioInsuranceUrn){
+                                urns.push(model.loanAccount.portfolioInsuranceUrn);
+                            }
+
+                            Queries.getCustomerBasicDetails({
+                                urns: urns,
+                                ids: ids
+                            }).then(
+                                function (resQuery) {
+                                    if (_.hasIn(resQuery.urns, model.loanAccount.applicant))
+                                        model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name;
+                                    
+                                    if (_.hasIn(resQuery.urns, model.loanAccount.portfolioInsuranceUrn))
+                                        model.loanAccount.portfolioInsuranceCustomerName = resQuery.urns[model.loanAccount.portfolioInsuranceUrn].first_name;
+                                   
+                                    
+                                },
+                                function (errQuery) {
+                                }
+                            );
                             PageHelper.showProgress('load-loan', 'Almost Done...');
 
                             if(model.loanAccount.collateral.length > 0){
@@ -106,6 +167,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
+                        condition : "model.siteCode != 'sambandh'",
                         type: "string",
                         title: "EMI_PAYMENT_DATE_REQUESTED",
                         readonly: true
@@ -123,12 +185,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 "colClass": "col-sm-6", // col-sm-6 is default, optional
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
-
                     {
                         "key": "loanAccount.partnerCode",
-                        "title": "PARTNER_NAME",
+                        "title": "PARTNER_NAME",//add label in translation                        
+                        "type": "select",
+                        "enumCode":"partner",
                         "readonly": true
                     },
+                    {
+                        "key": "loanAccount.partnerCode",
+                        "title": "PARTNER_CODE",                        
+                        "readonly": true
+                    },                    
                     /*{
                         "key": "loanAccount.loanType",
                         "readonly": true
@@ -166,19 +234,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.loanPurpose1",
                         "readonly": true
                     },
-                    /*{
-                        "key": "loanAccount.loanPurpose2",
-                        "readonly": true
-                    },
                     {
-                        "key": "loanAccount.loanPurpose3",
-                        "readonly": true
-                    },*/
+                        "key": "loanAccount.loanPurpose2",
+                        "readonly": true,
+                        "condition": "model.siteCode == 'sambandh'"
+                    },
+                    // {
+                    //     "key": "loanAccount.loanPurpose3",
+                    //     "readonly": true
+                    // },
+                     {
+                        "key": "loanAccount.branch",
+                        "condition": "model.siteCode == 'sambandh'",
+                        "title": "BRANCH",
+                        "type": "string",
+                        "readonly": true,
+                    },
                     {
                         "key": "loanAccount.loanCentre.centreId",
                         "title": "CENTRE",
                         "readonly": true,
-                        "type":"select"
+                        "type":"select",
                     },
                     {
                         "key": "loanAccount.interestRate",
@@ -190,28 +266,52 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         "key": "loanAccount.portfolioInsurancePremium",
+                        "condition": "model.siteCode != 'sambandh'",
                         "title": "INSURANCE",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.commercialCibilCharge",
+                        "condition": "model.siteCode != 'sambandh'",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.loanAmountRequested",
+                        "condition": "model.siteCode != 'sambandh'",
                         "title": "LOAN_AMOUNT_REQUESTED",
                         "type":"amount",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.securityEmiRequired",
+                        "condition": "model.siteCode != 'sambandh'",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.sanctionDate",
+                        "condition": "model.siteCode != 'sambandh'",
                         "readonly": true
-                    }/*,
+                    },
+                    {
+                        "key":"additional.portfolioUrnSelector",
+                        "condition": "model.siteCode == 'sambandh'",
+                        "type":"string",
+                        "readonly": true                     
+                    },
+                    {
+                        key:"loanAccount.portfolioInsuranceUrn",
+                        "condition": "model.siteCode == 'sambandh'",
+                        "title":"URN_NO",
+                        "readonly": true
+                    },
+                    {
+                        key: "loanAccount.portfolioInsuranceCustomerName",
+                        "condition": "model.siteCode == 'sambandh'",
+                        title: "NAME",
+                        readonly: true
+                    }
+                    /*,
                     {
                         "type": "fieldset",
                         "title": "GUARANTOR_DETAILS",
@@ -238,6 +338,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }*/,
                     {
                         "type": "fieldset",
+                        "condition": "model.siteCode != 'sambandh'",
                         "notitle": true,
                         "items": [
                             {
@@ -332,7 +433,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             actions: {
                 submit: function (model, form, formName) {
-
                     $log.info("submitting");
 
                     if(model._currentDisbursement.scheduledDisbursementDate)
@@ -353,29 +453,37 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
 
-
-                    if (diffDays > pendingDisbursementDays){
-                        PageHelper.showProgress("loan-create","Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days",5000);
-                        return false;
+                    if(model.siteCode != 'sambandh'){
+                        if (diffDays > pendingDisbursementDays) {
+                            PageHelper.showProgress("loan-create", "Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days", 5000);
+                            return false;
+                        }
+                        if (customerSignatureDate.isBefore(sanctionDate)) {
+                            PageHelper.showProgress("loan-create", "Customer sign date should be greater than the Loan sanction date", 5000);
+                            return false;
+                           }
+                        if (model.loanAccount.firstRepaymentDate) {
+                            if (firstRepaymentDate.diff(scheduledDisbursementDate, "days") <= 0) {
+                                PageHelper.showProgress("loan-create", "Repayment date should be greater than sanction date", 5000);
+                                return false;
+                            }
+                        }
                     }
-                    if (customerSignatureDate.isBefore(sanctionDate)){
-                        PageHelper.showProgress("loan-create","Customer sign date should be greater than the Loan sanction date",5000);
-                        return false;
-                    }
+                    
 
                     if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
                         PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
                         return false;
                     }
 
-                    if (model.loanAccount.firstRepaymentDate){
-                        if (firstRepaymentDate.diff(scheduledDisbursementDate,"days") <= 0){
-                            PageHelper.showProgress("loan-create","Repayment date should be greater than sanction date",5000);
-                            return false;
-                        }
+                    var validatePromise = [];
+                    if(model.siteCode == 'sambandh' && SessionStore.getGlobalSetting('individualLoan.cbCheck.required') == "true" && 
+                        model.loanAccount.loanAmount >= Number(SessionStore.getGlobalSetting('individualLoan.cbCheck.thresholdAmount'))) {
+                        validatePromise.push(isCBCheckValid(model));
                     }
 
-                    Utils.confirm("Ready to book the loan?")
+                    $q.all(validatePromise).then(function() {
+                        Utils.confirm("Ready to book the loan?")
                         .then(function(){
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
@@ -387,7 +495,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 .then(
                                     function(res){
                                         PageHelper.showProgress('update-loan', 'Done', 2000);
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        // $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        irfNavigator.goBack();
                                         return;
                                     }, function(httpRes){
                                         PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
@@ -397,6 +506,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }, function(){
                             $log.info("User selected No");
                         })
+                    }, function(httpRes){
+                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                        PageHelper.showErrors(httpRes);
+                    });
                 },
                 reject: function (model, form, formName) {
 
@@ -411,7 +524,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 .then(
                                     function(res){
                                         PageHelper.showProgress('update-loan', 'Done', 2000);
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        // $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        irfNavigator.goBack();
                                         return;
                                     }, function(httpRes){
                                         PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);

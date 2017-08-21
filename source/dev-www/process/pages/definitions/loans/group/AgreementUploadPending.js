@@ -61,6 +61,8 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.group = model.group || {};
+				model.review = model.review || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
 				model.group.branchName = model.group.branchId || SessionStore.getCurrentBranch().branchName
 				$log.info(model.group.branchName);
@@ -73,6 +75,7 @@ define({
 						groupId: groupId
 					}, function(response, headersGetter) {
 						model.group = _.cloneDeep(response);
+						model.group.groupRemarks = null;
 						var centreCode = formHelper.enum('centre').data;
 						for (var i = 0; i < centreCode.length; i++) {
 							if (centreCode[i].code == model.group.centreCode) {
@@ -83,7 +86,11 @@ define({
 						if (model.group.jlgGroupMembers.length > 0) {
 							fillNames(model).then(function(m) {
 								model = m;
-								PageHelper.hideLoader();
+								Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
+                                    model.group.remarksHistory = resp;
+                                }).finally(function(){
+                                    PageHelper.hideLoader();
+                                });
 							}, function(m) {
 								PageHelper.showErrors(m);
 								PageHelper.hideLoader();
@@ -167,7 +174,7 @@ define({
 						}, {
 							"key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
 							"readonly": true,
-							"title": "FATHER_NAME"
+							"title": "HUSBAND_OR_FATHER_NAME"
 						}, {
 							"key": "group.jlgGroupMembers[].relation",
 							"readonly": true,
@@ -211,7 +218,6 @@ define({
 	                    }]
 					}]
 				},
-
 				{
                     type: "box",
                     "readonly":true,
@@ -244,16 +250,160 @@ define({
                         ]
                     }]
                 },
-
+{
+	                "title": "REMARKS_HISTORY",
+	                "type": "box",
+	                condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
+	                "items": [{
+	                    "key": "group.remarksHistory",
+	                    "type": "array",
+	                    "view": "fixed",
+	                    add: null,
+	                    remove: null,
+	                    "items": [{
+	                        "type": "section",
+	                        "htmlClass": "",
+	                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
+	                        <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
+	                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
+	                        <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
+	                    }]
+	                }]
+	            }, 
 				{
-					"type": "actionbox",
-					"items": [{
-                        "type": "button",
-                        "icon": "fa fa-arrow-right",
-                        "title": "PROCEED",
-                        "onClick": "actions.proceedAction(model, formCtrl, form)"
-                    }]
-				},
+	                "type": "box",
+	                "title": "POST_REVIEW",
+	                "items": [
+	                    {
+	                        key: "action",
+	                        type: "radios",
+	                        titleMap: {
+	                        	"PROCEED": "PROCEED",
+	                        	"REJECT": "REJECT",
+	                            "SEND_BACK": "SEND_BACK",
+	                        },
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                if(model.action == 'PROCEED') {
+                                    return;
+                                }
+                                var stage1 = model.group.currentStage;
+                                var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                var out = [];
+                                for (var i = 0; i < targetstage.length; i++) {
+                                    var t = targetstage[i];
+                                    if (t.name == stage1 && 'default' == t.field2) {
+                                        model.review.targetStage = t.field1;
+                                        model.review.rejectStage = "Rejected";
+                                        break;
+                                    }
+                                }
+                            }
+	                    },	                    
+	                    {
+	                        type: "section",
+	                        condition:"model.action",
+	                        items: [
+	                        {
+	                            title: "REMARKS",
+	                            key: "group.groupRemarks",
+	                            type: "textarea",
+	                            required: true
+	                        }, 
+	                        {
+	                            key: "review.targetStage",
+	                            required: true,
+	                            condition:"model.action == 'SEND_BACK'",
+	                            type: "lov",
+	                            autolov: true,
+	                            lovonly: true,
+	                            title: "SEND_BACK_TO_STAGE",
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            search: function(inputModel, form, model, context) {
+	                                var stage1 = model.group.currentStage;
+	                                var targetstage = formHelper.enum('groupLoanBackStages').data;
+	                                var out = [];
+	                                for (var i = 0; i < targetstage.length; i++) {
+	                                    var t = targetstage[i];
+	                                    if (t.name == stage1) {
+	                                        out.push({
+	                                            name: t.field1,
+	                                        })
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.review.targetStage = valueObj.name;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
+	                        }, {
+	                            key: "review.sendBackButton",
+	                            condition:"model.action == 'SEND_BACK'",
+	                            type: "button",
+	                            title: "SEND_BACK",
+	                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+	                        }, {
+                                key: "review.rejectStage",
+                                condition:"model.action == 'REJECT'",
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                title: "SEND_BACK_TO_STAGE",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    // var stage1 = model.group.currentStage;
+                                    // var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                    var out = [{name: "Rejected"}];
+                                    // for (var i = 0; i < targetstage.length; i++) {
+                                    //     var t = targetstage[i];
+                                    //     if (t.name == stage1 && 'default' == t.field2) {
+                                    //         out.push({
+                                    //             name: t.field1,
+                                    //         });
+                                    //         break;
+                                    //     }
+                                    // }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.review.rejectStage = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            }, {
+                                key: "review.reject",
+                                condition:"model.action == 'REJECT'",
+                                type: "button",
+                                title: "REJECT",
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }, {
+	                            "type": "button",
+	                            condition:"model.action == 'PROCEED'",
+	                            "title": "PROCEED",
+	                            "onClick": "actions.proceedAction(model, formCtrl, form)"
+	                        }]
+	                    }
+	                ]
+	            }, 
 			],
 
 			schema: {
@@ -301,6 +451,48 @@ define({
                         irfProgressMessage.pop('Agreement-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
+                },
+                sendBack: function(model, form, formName) {
+                	if (!model.review.targetStage){
+                        irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Send Back', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";                    
+                    var reqData = _.cloneDeep(model);
+                    reqData.stage = model.review.targetStage;
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Send back', 'Operation Succeeded. Done', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Send back', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });   
+                },
+                reject: function(model, form, formName) {
+                	if (!model.review.rejectStage){
+                        irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('Reject', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";
+                    var reqData = _.cloneDeep(model);
+                    reqData.stage = model.review.rejectStage;
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
+                        irfNavigator.goBack();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Reject', 'Oops. Some error.', 2000);
+                        PageHelper.showErrors(res);
+                    });   
                 }
 			}
 		}

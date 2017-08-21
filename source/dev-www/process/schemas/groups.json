@@ -128,7 +128,7 @@
                 "frequency": {
                     "type": "string",
                     "title": "FREQUENCY",
-                    "enumCode":"frequency"
+                    "enumCode":"loan_product_frequency"
                     
                 },
                 "groupCode": {
@@ -255,7 +255,7 @@
                                 
                             },
                             "husbandOrFatherFirstName": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "HUSBAND_OR_FATHER_NAME"
                                 
                             },
@@ -411,7 +411,6 @@
                             "dscOverrideRemarks",
                             "dscStatus",
                             "groupId",
-                            "husbandOrFatherFirstName",
                             "husbandOrFatherLastName",
                             "husbandOrFatherMiddleName",
                             "id",

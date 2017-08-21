@@ -34,7 +34,7 @@ define({
 					"title": 'SearchOptions',
 					"properties": {
 						"partner": {
-							"type": "string",
+							"type": ["string", "null"],
 							"title": "PARTNER",
 							"x-schema-form": {
 								"type": "select",
