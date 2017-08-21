@@ -424,7 +424,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "date"
                             },
                             "addressProofSameAsIdProof": {
-                                key: "customer.addressProofSameAsIdProof"
+                                key: "customer.addressProofSameAsIdProof",
+                                condition:"model.customer.identityProof != 'Pan Card'"
                             }
                         }
                     },

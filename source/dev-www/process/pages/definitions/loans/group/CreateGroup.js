@@ -128,6 +128,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
+                model.group.siteCode = SessionStore.getGlobalSetting("siteCode");
                 for (var i = 0; i < banks.length; i++){
                     if(banks[i].name == bankName){
                         model.group.bankId = model.group.bankId || banks[i].value;

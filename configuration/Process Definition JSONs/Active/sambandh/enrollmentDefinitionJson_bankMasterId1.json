@@ -1,5 +1,6 @@
 {
   "urnGenerateStage": "BasicEnrolment",
+  "cbValidationStage": "BasicEnrolment",
   "stages": [
     {
       "order": 1,
@@ -899,6 +900,24 @@
           },
           "fatherMiddleName": {
             "title": "Father's Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "requestedLoanAmount": {
+            "title": "requestedLoanAmount",
+            "type": "number",           
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "requestedLoanPurpose": {
+            "title": "requestedLoanPurpose",
             "type": "string",
             "minLength": 1,
             "maxLength": 100,

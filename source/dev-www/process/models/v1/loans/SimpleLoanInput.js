@@ -262,7 +262,7 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     },
                     "loanPurpose2": {
                         "type": ["string", "null"],
-                        "title": "LOAN_SUBPURPOSE_2",
+                        "title": "LOAN_PURPOSE_2",
                         "lovonly": true,
                         "x-schema-form": {
                             "type": "lov",
