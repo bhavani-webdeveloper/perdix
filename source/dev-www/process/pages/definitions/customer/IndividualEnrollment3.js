@@ -96,7 +96,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "BusinessOccupationDetails.agricultureDetails.landArea": {
                             title: "DAIRY_ANIMALS",
-                            "type": "string",
+                            "type": "select",
+                            titleMap: {
+                                "One": "One",
+                                "Two": "Two",
+                                "Three": "Three",
+                                "Three": "Three",
+                                "More": "If more, specify",
+                            },
                             schema:{
                                 "type":["string","null"],
                             }

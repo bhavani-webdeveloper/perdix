@@ -376,7 +376,7 @@ define({
                                         }
                                     }
                                     if(value.urnNo!=null && !isDuplicate) ret.push(value);
-                                });
+                                });                                
                                 return $q.resolve({
                                     headers: {
                                         "x-total-count": ret.length
@@ -395,6 +395,18 @@ define({
                         onSelect: function(valueObj, model, context) {
                             $log.info("Hi Selected");
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
+                            Enrollment.getCustomerById({id:valueObj.customerId}).$promise
+                                 .then(function(res){
+                                 model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
+                                 model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
+                                 console.log(model.customer);
+                                }, function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
+                                
                         }
                     },
                     {
