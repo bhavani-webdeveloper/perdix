@@ -12,6 +12,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
                    model.lead.siteCode = SessionStore.getGlobalSetting('siteCode');
+
+                   
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
                     model.lead.leadStatus = "Incomplete";
@@ -26,7 +28,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
 
                 model = Utils.removeNulls(model, true);
-
+                if(model.lead.siteCode == 'sambandh'){
+                    model.lead.customerType = "Individual";
+                   }
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
 
                     PageHelper.showLoader();
@@ -366,7 +370,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     titleMap: {
                                         "Individual": "Individual",
                                         "Enterprise": "Individual and Enterprise"
-                                    }
+                                    },
+                                   readonly:true
 
                                 }, {
                                     type: "fieldset",
