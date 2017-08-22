@@ -143,8 +143,7 @@ define({
                     }
                 }
                 model.group.branchdescription =SessionStore.getBankName();
-                var date = SessionStore.getFormatedCBSDate();
-                model.group.groupFormationDate=date.split("-").reverse().join("-");
+                model.group.groupFormationDate= SessionStore.getCBSDate();
 
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;

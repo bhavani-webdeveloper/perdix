@@ -1268,12 +1268,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "requestedLoanAmount": {
                         orderNo: 10,
                         key: "customer.requestedLoanAmount",
+                        required: true,
                         title: "REQUESTED_LOAN_INFORMATION"
                     },
                     "requestedLoanPurpose": {
                         orderNo: 20,
                         key: "customer.requestedLoanPurpose",
                         title: "REQUESTED_LOAN_PURPOSE",
+                        required: true,
                         "enumCode": "loan_purpose_1",
                         type: "select"
                     },
