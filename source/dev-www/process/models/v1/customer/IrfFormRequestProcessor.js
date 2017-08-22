@@ -410,6 +410,44 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "identityProofNo": {
                                 key: "customer.identityProofNo",
                                 type:"qrcode",
+                                condition: "model.customer.identityProof == 'Aadhar Card'",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            "identityProofNo1": {
+                                key: "customer.identityProofNo",
+                                type:"qrcode",
+                                condition: "model.customer.identityProof == 'Pan Card'",
+                                schema: {
+                                    "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            "identityProofNo2": {
+                                key: "customer.identityProofNo",
+                                type:"qrcode",
+                                condition: "model.customer.identityProof == 'Passport'",
+                                schema: {
+                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$", 
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            "identityProofNo3": {
+                                key: "customer.identityProofNo",
+                                type:"qrcode",
+                                condition: "model.customer.identityProof !== 'Aadhar Card' && model.customer.identityProof !== 'Pan Card' && model.customer.identityProof !== 'Passport'",
+                                // "pattern": ".*", 
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
@@ -455,6 +493,34 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "addressProofNo": {
                                 key: "customer.addressProofNo",
                                 type: "barcode",
+                                condition: "model.customer.addressProof == 'Aadhar Card'",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$", 
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.addressProofNo = result.text;
+                                }
+                            },
+                            "addressProofNo1": {
+                                key: "customer.addressProofNo",
+                                type: "barcode",
+                                condition: "model.customer.addressProof == 'Passport'",
+                                schema: {
+                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.addressProofNo = result.text;
+                                }
+                            },
+                            "addressProofNo2": {
+                                key: "customer.addressProofNo",
+                                type: "barcode",
+                                condition: "model.customer.addressProof !== 'Aadhar Card' && model.customer.addressProof !== 'Passport'",
+                                schema: {
+                                    "pattern": ".*", 
+                                },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.addressProofNo = result.text;
