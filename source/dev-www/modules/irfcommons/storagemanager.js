@@ -242,7 +242,10 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						break;
 					case "jlg_loan_product":
 						var r= irfStorageService.getMaster('loan_product');
-						break;		
+						break;
+					case "groupLoanStages":
+					var r= irfStorageService.getMaster('groupLoanBackStages');
+					break;		
 				}
 			}
 
@@ -271,7 +274,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
                         // console.warn(ret);
 						break;
 					case 'centre_code':
-						ret.data = _.clone(r.data);
+						ret.data = _.cloneDeep(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
                             ret.data[i].value = ret.data[i].field3;
 						}
@@ -295,7 +298,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						}
 						break;
 					case 'loan_product_frequency':
-						ret.data = _.clone(r.data);
+						ret.data = _.cloneDeep(r.data);
 						for (var i=0; i<ret.data.length; i++){
 							ret.data[i].value = ret.data[i].field1;
 						}
@@ -319,6 +322,25 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			              ret.data[i].value = ret.data[i].field1.toString().trim();
 			            }
 			            break;
+			        case 'creditBureauTypes':
+						ret.data = _.clone(r.data);
+						for(var i = 0; i < ret.data.length; i++) {
+								ret.data[i].value = ret.data[i].code;
+						}
+						break;
+					case "groupLoanStages":
+						ret.data = _.cloneDeep(r.data);
+						var filterData = [] , names = [];
+						for(var i = 0; i < ret.data.length; i++) {
+							if(names.indexOf(ret.data[i].code) > -1)
+								continue;
+							ret.data[i].value = ret.data[i].code;
+							filterData.push(ret.data[i]);
+							names.push(ret.data[i].code);
+							
+						}
+						ret.data = filterData;
+						break;
 					default:
 						ret.data = r.data; // value <-- name
 				}
