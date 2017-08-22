@@ -21,7 +21,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 }
                 var self = this;
                 var formRequest = {
-                    "overRides": {
+                    "overrides": {
                         "KYC.additionalKYCs.kyc1ProofType": {
                             title: "MY CUSTOM TITLE"
                         },
