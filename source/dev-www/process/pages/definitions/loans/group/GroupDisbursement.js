@@ -87,59 +87,6 @@ define({
                         backToDashboard();
                     });
                 }
-
-
-                /*if ($stateParams.pageId) {
-                    var groupInfo = $stateParams.pageId.split('.');
-                    var partnerCode = groupInfo[0];
-                    var groupCode = groupInfo[1];
-                    $log.info("Group Code ::" + groupCode + "\nPartner Code::" + partnerCode);
-                    PageHelper.showLoader();
-                    irfProgressMessage.pop('group-disbursement', 'Loading Disbursement Details');
-                    LoanProcess.disbursementList({
-                        partnerCode: partnerCode,
-                        groupCode: groupCode
-                    }, function(data) {
-                        var disbursementDTOs = [];
-                        disbursementDTOs = data.body.disbursementDTOs;
-                        $log.info(disbursementDTOs);
-                        for (var i = 0; i < disbursementDTOs.length; i++) {
-                            var account = disbursementDTOs[i];
-                            var totalFeeAmount = 0;
-                            if (account && account['fees']) {
-                                for (var j = 0; j < account['fees'].length; j++) {
-                                    var fee = parseFloat(account['fees'][j]['amount1']);
-                                    totalFeeAmount = totalFeeAmount + fee;
-                                }
-                            }
-                            var disburseAmount = parseFloat(account['amount']);
-                            account['totalFeeAmount'] = AccountingUtils.formatMoney(totalFeeAmount);
-                            account['finalDisbursementAmount'] = AccountingUtils.formatMoney(disburseAmount - totalFeeAmount);
-                        }
-                        model.disbursements = disbursementDTOs[i];
-                        irfProgressMessage.pop('group-disbursement', 'Loading Group Details');
-                        Groups.search({
-                                groupCode: groupCode,
-                                partner: partnerCode
-                            },
-                            function(res) {
-                                if (res.body.length > 0) {
-                                    group = res.body[0];
-                                    model.group = group;
-                                }
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop('group-disbursement', 'Done.', 2000);
-                            },
-                            function(res) {
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop('group-disbursement', 'Error loading group details.', 2000);
-                            }
-                        )
-                    }, function(resp) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('group-disbursement', 'Error loading disbursement details.', 2000);
-                    });
-                }*/
             },
             offline: false,
             form: [{
@@ -198,7 +145,6 @@ define({
                 }, {
                     "type": "box",
                     "condition": "model.siteCode !== 'sambandh'",
-                    "readonly": true,
                     "title": "GROUP_MEMBERS",
                     "items": [{
                         "key": "group.jlgGroupMembers",
@@ -209,42 +155,60 @@ define({
                         "remove": null,
                         "items": [{
                             "key": "group.jlgGroupMembers[].urnNo",
+                            "readonly": true,
                             "title": "URN_NO",
                         }, {
                             "key": "group.jlgGroupMembers[].firstName",
+                            "readonly": true,
                             "type": "string",
                             "title": "GROUP_MEMBER_NAME"
                         }, {
                             "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "readonly": true,
                             "title": "HUSBAND_OR_FATHER_NAME"
                         }, {
                             "key": "group.jlgGroupMembers[].relation",
+                            "readonly": true,
                             "title": "RELATION",
                         }, {
                             "key": "group.jlgGroupMembers[].loanAmount",
+                            "readonly": true,
                             "title": "LOAN_AMOUNT",
                             "type": "amount",
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "readonly": true,
                             "title": "LOAN_PURPOSE_1",
                             "enumCode": "loan_purpose_1",
                             "type": "select",
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE_2",
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE3",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "readonly": true,
                             "title": "WitnessLastName",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "readonly": true,
                             "title": "RELATION",
                             "type": "select",
                             "enumCode": "relation"
+                        }, {
+                            "key": "group.jlgGroupMembers[]",
+                            "title": "PRINT",
+                            "type": "button",
+                            "onClick": function(model, formCtrl, form, $event) {
+                                var jlgData = model.group.jlgGroupMembers;
+                                GroupProcess.printLoan(jlgData);
+                            }
                         }]
                     }]
                 }, {
@@ -305,6 +269,15 @@ define({
                             "type": "select",
                             "readonly": true,
                             "enumCode": "relation"
+                        }, {
+                            "key": "group.jlgGroupMembers[]",
+                            "title": "PRINT",
+                            "type": "button",
+                            "onClick": function(model, formCtrl, form, $event) {
+                                // Utils.removeNulls(model.group.jlgGroupMembers, true);
+                                var jlgData = model.group.jlgGroupMembers;
+                                GroupProcess.printLoan(jlgData)
+                            }
                         }]
                     }]
                 },
