@@ -866,6 +866,7 @@ define({
                             }, function(response, headersGetter) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('group-dsc-check', 'DSC Check Complete', 2000);
+                                response.groupRemarks = model.group.groupRemarks;
                                 model.group = _.cloneDeep(response);
                                 fixData(model);
                                 fillNames(model).then(function(m) {

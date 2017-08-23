@@ -215,6 +215,7 @@ define({
                     "title": "PRODUCT",
                     "required": true,
                     "type": "lov",
+                    lovonly: true,
                     autolov: true,
                     bindMap: {"Partner": "group.partnerCode"},
                     required: true,
@@ -441,8 +442,31 @@ define({
                         "key": "group.jlgGroupMembers[].loanPurpose1",
                         "title": "LOAN_PURPOSE_1",
                         "required": true,
-                        "enumCode": "loan_purpose_1",
-                        "type": "select",
+                        // "enumCode": "loan_purpose_1",
+                        // "type": "select",
+                        bindMap: {"URN": "group.jlgGroupMembers[arrayIndex].urnNo"},
+                        "lovonly": true,
+                        "type": "lov",
+                        outputMap: {
+                            
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            if (model.group.productCode)
+                                return Queries.getLoanPurpose1(model.group.productCode);
+                            else
+                                return Queries.getAllLoanPurpose1();
+
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose1
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = result.purpose1;
+                            model.group.jlgGroupMembers[context.arrayIndex].loanPurpose2 = undefined;
+                        }
                     }, {
                         "key": "group.jlgGroupMembers[].loanPurpose2",
                         "type": "select",
