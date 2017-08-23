@@ -163,9 +163,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                                             var formName;
                                                             if (data.param1 == 'Preclosure Charges') {
                                                                 formName = 'taxable_invoice_cheque_preclosure_charges';
-                                                            } else if (data.param1 = 'CBC') {
+                                                            } else if (data.param1 == 'CBC') {
                                                                 formName = 'taxable_invoice_cheque_bounce_charges';
-                                                            } else if (data.param1 = 'AdHoc Fee') {
+                                                            } else if (data.param1 == 'AdHoc Fee') {
                                                                 formName = 'taxable_invoice_adhoc_charges';
                                                             }
                                                             return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);
