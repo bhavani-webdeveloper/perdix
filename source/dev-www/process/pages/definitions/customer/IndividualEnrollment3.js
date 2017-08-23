@@ -94,20 +94,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "type":["string","null"],
                             }
                         },
-                        "BusinessOccupationDetails.agricultureDetails.landArea": {
-                            title: "DAIRY_ANIMALS",
-                            "type": "select",
-                            titleMap: {
-                                "One": "One",
-                                "Two": "Two",
-                                "Three": "Three",
-                                "Three": "Three",
-                                "More": "If more, specify",
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
+                        // "BusinessOccupationDetails.agricultureDetails.landArea": {
+                        //     title: "DAIRY_ANIMALS",
+                        //     "type": "select",
+                        //     titleMap: {
+                        //         "One": "One",
+                        //         "Two": "Two",
+                        //         "Three": "Three",
+                        //         "Three": "Three",
+                        //         "More": "If more, specify",
+                        //     },
+                        //     schema:{
+                        //         "type":["string","null"],
+                        //     }
+                        // },
                         "HouseVerification.HouseDetails.HouseOwnership" : {
                             required:true,
                             enumCode: "house_ownership",
@@ -375,7 +375,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.cropName",
                         "BusinessOccupationDetails.agricultureDetails.irrigated",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
-                        "BusinessOccupationDetails.agricultureDetails.landArea",
+                        //"BusinessOccupationDetails.agricultureDetails.landArea",
                         "loanInformation",
                         "loanInformation.requestedLoanAmount",
                         "loanInformation.requestedLoanPurpose",
