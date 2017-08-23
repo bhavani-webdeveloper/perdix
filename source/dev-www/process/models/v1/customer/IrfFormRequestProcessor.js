@@ -672,6 +672,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 "onChange": function(modelValue, form, model, formCtrl, event) {
                                     if(model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
                                         model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
                                     } 
                                     else if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
                                         model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
@@ -681,6 +682,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     }
                                     else {
                                         model.customer.familyMembers[form.arrayIndex].gender = undefined;
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = undefined;
                                     }
                                 }
                             },
