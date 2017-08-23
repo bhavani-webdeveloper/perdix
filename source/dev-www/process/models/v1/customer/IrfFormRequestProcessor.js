@@ -673,6 +673,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     if(model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
                                         model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
                                     } 
                                     else if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
                                         model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
