@@ -937,6 +937,7 @@ return {
         },
 	    {
                 "type": "box",
+                "condition": "model.siteCode !== 'sambandh'",
                 "title": "CGT And GRT Details",
                 "colClass": "col-sm-12",
                 "items": [{
