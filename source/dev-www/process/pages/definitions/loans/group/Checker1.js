@@ -1385,7 +1385,7 @@ return {
             model.groupAction = "PROCEED";
             if(model.siteCode == 'sambandh') {
                 var totalAmt = 0;
-                for(var itr = 0 ; itr <= model.group.jlgGroupMembers.length; itr++) {
+                for(var itr = 0 ; itr < model.group.jlgGroupMembers.length; itr++) {
                     totalAmt += model.group.jlgGroupMembers[itr].loanAmount;
                 }
                 if(totalAmt < 250000.00) {
