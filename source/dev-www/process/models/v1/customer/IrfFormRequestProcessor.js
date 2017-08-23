@@ -674,16 +674,22 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
                                         model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                                     } 
-                                    else if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
-                                    }
-                                    else if(model.customer.familyMembers[form.arrayIndex].relationShip == "Husband" || model.customer.familyMembers[form.arrayIndex].relationShip == "Wife") {
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                    }
                                     else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
+                                        model.customer.familyMembers[form.arrayIndex].age = undefined;
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = undefined;
                                         model.customer.familyMembers[form.arrayIndex].gender = undefined;
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = undefined;
+                                        if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
+                                        }
+                                        else if(model.customer.familyMembers[form.arrayIndex].relationShip == "Husband" || model.customer.familyMembers[form.arrayIndex].relationShip == "Wife") {
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                        }
+                                        else {
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = undefined;
+                                        }
                                     }
                                 }
                             },

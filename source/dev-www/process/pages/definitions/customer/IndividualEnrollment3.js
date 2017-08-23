@@ -116,6 +116,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             onArrayAdd : function (value, form, model, formCtrl, event) {
                                 if((model.customer.familyMembers.length -1) === 0){
                                     model.customer.familyMembers[0].relationShip = 'self';
+                                    model.customer.familyMembers[0].gender = model.customer.gender;
+                                    model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
+                                    model.customer.familyMembers[0].age = model.customer.age;
+                                    model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
                                 }
                             }
                         },
