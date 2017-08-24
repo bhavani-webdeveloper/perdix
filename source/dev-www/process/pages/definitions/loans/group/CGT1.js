@@ -391,7 +391,7 @@ define({
                                 var out = [];
                                 for (var i = 0; i < targetstage.length; i++) {
                                     var t = targetstage[i];
-                                    if (t.name == stage1) {
+                                    if (t.name == stage1 && 'reject' != t.field2) {
                                         out.push({
                                             name: t.field1,
                                         })

@@ -1053,12 +1053,19 @@ return {
                         var stage1 = model.group.currentStage;
                         var targetstage = formHelper.enum('groupLoanBackStages').data;
                         var out = [];
+                        var cnt = 0;
                         for (var i = 0; i < targetstage.length; i++) {
                             var t = targetstage[i];
-                            if (t.name == stage1 && 'default' == t.field2) {
-                                model.review.targetStage = t.field1;
-                                model.review.rejectStage = "Rejected";
-                                break;
+                            if (t.name == stage1) {
+                                if('default' == t.field2) {
+                                    model.review.targetStage = t.field1;
+                                    cnt++;
+                                }
+                                if('reject' == t.field2) {
+                                    model.review.rejectStage = t.field1;
+                                    cnt++;
+                                }
+                                if(cnt == 2) break;
                             }
                         }
                     }
@@ -1071,7 +1078,7 @@ return {
                             key: "group.groupRemarks",
                             type: "textarea",
                             required: true
-                        }, /*{
+                        }, {
                             key: "review.rejectStage",
                             condition:"model.action == 'REJECT'",
                             type: "lov",
@@ -1081,18 +1088,18 @@ return {
                             bindMap: {},
                             searchHelper: formHelper,
                             search: function(inputModel, form, model, context) {
-                                // var stage1 = model.group.currentStage;
-                                // var targetstage = formHelper.enum('groupLoanBackStages').data;
-                                var out = [{name: "Rejected"}];
-                                // for (var i = 0; i < targetstage.length; i++) {
-                                //     var t = targetstage[i];
-                                //     if (t.name == stage1 && 'default' == t.field2) {
-                                //         out.push({
-                                //             name: t.field1,
-                                //         });
-                                //         break;
-                                //     }
-                                // }
+                                var stage1 = model.group.currentStage;
+                                var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                var out = [];
+                                for (var i = 0; i < targetstage.length; i++) {
+                                    var t = targetstage[i];
+                                    if (t.name == stage1 && 'reject' == t.field2) {
+                                        out.push({
+                                            name: t.field1,
+                                        });
+                                        break;
+                                    }
+                                }
                                 return $q.resolve({
                                     headers: {
                                         "x-total-count": out.length
@@ -1108,7 +1115,7 @@ return {
                                     item.name
                                 ];
                             }
-                        },*/
+                        },
                         {
                             "type": "button",
                             "title": "REJECT",
@@ -1140,7 +1147,7 @@ return {
                                 var out = [];
                                 for (var i = 0; i < targetstage.length; i++) {
                                     var t = targetstage[i];
-                                    if (t.name == stage1) {
+                                    if (t.name == stage1 && 'reject' != t.field2) {
                                         out.push({
                                             name: t.field1,
                                         })
