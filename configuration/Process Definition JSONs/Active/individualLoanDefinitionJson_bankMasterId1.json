@@ -962,6 +962,13 @@
                      "Application", "Screening", "FieldAppraisal", "LoanInitiation","DocumentUpload"
                   ]
                },
+			   "scheduleStartDate":{
+                  "title":"scheduleStartDate",
+                  "type":"string",
+                  "captureStages":[
+                     "LoanInitiation"
+                  ]
+               },
                "status": {
                   "title": "status",
                   "type": "string",
