@@ -1,5 +1,5 @@
 irf.models.factory('GroupProcess', 
-    function($log,$filter,$resource, $httpParamSerializer, BASE_URL, searchResource, $q, Queries, SessionStore) {
+    function($log,$resource,$filter, $httpParamSerializer, BASE_URL, searchResource, $q, Queries, SessionStore) {
     var endpoint = BASE_URL + '/api/groupprocess';
     var resource =  $resource(endpoint, null, {
         search:searchResource({
@@ -180,7 +180,7 @@ irf.models.factory('GroupProcess',
                 font: PrinterConstants.FONT_SMALL_NORMAL
             })
             //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
-            .addLine("LOAN REPAYMENT", {
+            .addLine("DISBURSEMENT", {
                 'center': true,
                 font: PrinterConstants.FONT_LARGE_BOLD
             })
@@ -188,11 +188,14 @@ irf.models.factory('GroupProcess',
                 'center': true,
                 font: PrinterConstants.FONT_SMALL_NORMAL
             })
-            .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {
+            .addLine(repaymentInfo['partnerCode'] + "-" + repaymentInfo["productCode"], {
                 'center': true,
                 font: PrinterConstants.FONT_SMALL_BOLD
             })
             .addKeyValueLine("Branch Code", opts['branch_code'], {
+                font: PrinterConstants.FONT_SMALL_NORMAL
+            })
+            .addKeyValueLine("Customer URN", repaymentInfo['customerId'], {
                 font: PrinterConstants.FONT_SMALL_NORMAL
             })
             .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
@@ -210,17 +213,10 @@ irf.models.factory('GroupProcess',
             .addKeyValueLine("Transaction ID", repaymentInfo['transactionID'], {
                 font: PrinterConstants.FONT_SMALL_NORMAL
             })
-            .addKeyValueLine("Demand Amount", parseFloat(repaymentInfo['demandAmount']) == 0 ? "Nil" : formatAmount(repaymentInfo["demandAmount"]), {
+            .addKeyValueLine("Loan Amount", formatAmount(repaymentInfo['loanAmount']), {
                 font: PrinterConstants.FONT_SMALL_BOLD
             })
-            .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {
-                font: PrinterConstants.FONT_SMALL_BOLD
-            })
-            .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount']) - parseFloat(repaymentInfo['amountPaid'])), {
-                font: PrinterConstants.FONT_SMALL_BOLD
-            })
-            // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-            .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {
+            .addKeyValueLine("Disbursed Amount", formatAmount(parseFloat(repaymentInfo['loanAmount']) - parseFloat(repaymentInfo['processingFee'])), {
                 font: PrinterConstants.FONT_SMALL_BOLD
             })
             .addStrRepeatingLine("-", {
@@ -268,8 +264,53 @@ irf.models.factory('GroupProcess',
         return pData;
     }
 
+    var getWebReceipt = function(repaymentInfo, opts) {
+        $log.info(repaymentInfo);
+        $log.info(opts);
+
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        var curTime = moment();
+        var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "RECEIPT" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + opts.entity_name + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + opts.branch + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Date:" + curTimeStr + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "DISBURSEMENT" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + repaymentInfo.partnerCode + repaymentInfo.productCode + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Branch Code :" + opts.branch_code + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Customer Id :" + repaymentInfo.customerId + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Customer URN :" + repaymentInfo.customerURN + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Customer Name :" + repaymentInfo.customerName + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Loan A/C No :" + repaymentInfo.accountNumber + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Transaction Type :" + repaymentInfo.transactionType + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Transaction ID :" + repaymentInfo.transactionID + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Loan Amount :" + repaymentInfo.loanAmount + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: false"> ' + '<h1>' + "Disbursed Amount :" + repaymentInfo.disbursedamount + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "------------------------" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + opts.company_name + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "CIN :"+ opts.cin + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "Address :"+ opts.address1 + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + opts.address2 + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + opts.address3 + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "Website :"+ opts.website + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>' + "HelpLine No"+ opts.helpline + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>'  + "" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>'  + "" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>'  + "Signature not required as this is an" + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>'  + "electronically generated receipt." + '</h1>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="center: true"> ' + '<h1>'  + "------------------------------------" + '</h1>' + '</div>' + '</html>');
+
+
+        mywindow.print();
+        mywindow.close();
+        return true;
+    }
+
     var getLoanPrint = function(repaymentInfo, opts) {
         var isCordova = false;
+        var repaymentInfo=repaymentInfo;
+        var opts=opts;
         try {
             if (cordova) {
                 var fullPrintData = new PrinterData();
@@ -293,46 +334,27 @@ irf.models.factory('GroupProcess',
             pData.addLine("", {});
             fullPrintData.addLines(pData.getLines());
             $log.info(fullPrintData);
-            var mywindow = window.open('', 'my div', 'height=400,width=600');
-            var curTime = moment();
-            var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
-            mywindow.document.write('</body>' + '<div style=""> ' + '<h1>' + "Group Repayment Print :" + repaymentInfo.repaymentDate + '</h1>' + '</div>' + '</html>');
-            mywindow.print();
-            mywindow.close();
-            return true;
+            var webdata= getWebReceipt(repaymentInfo, opts);  
         }
     }
 
-    resource.printLoan = function(repay, fullPrintData) {
-        var jlgGroupMembers = repay;
-        for (i in jlgGroupMembers) {
-            $log.info(jlgGroupMembers)
-            $log.info("jlgGroupMembers")
-            var r = jlgGroupMembers[i];
-            var repaymentInfo = {
-                'repaymentDate': r.firstRepaymentDate,
-                'customerURN': r.urnNo,
-                'accountNumber': r.customerAccountNumber,
-                'transactionType': r.transactionName,
-                'transactionID': 1,
-                'demandAmount': r.demandAmount,
-                'amountPaid': r.demandAmount,
-                'payOffAmount': r.payOffAmount,
-                'accountName': r.firstName,
-                'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
-            };
-            var opts = {
-                'entity_name': "Pudhuaaru KGFS",
-                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                'cin': 'U74990TN2011PTC081729',
-                'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                'address2': 'Kanagam Village, Taramani',
-                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                'website': "http://ruralchannels.kgfs.co.in",
-                'helpline': '18001029370'
-            }
-            var pData = getLoanPrint(repaymentInfo, opts);
-        }
+    resource.printLoan = function(repay, opts) {
+        var r = repay;
+        var opts = opts
+        var repaymentInfo = {
+            'customerURN': r.urnNo,
+            'customerId': r.customerId,
+            'customerName':r.firstName,
+            'accountNumber': r.loanAccount.accountNumber,
+            'transactionType': "Disbursement",
+            'transactionID': 1,
+            'productCode': r.loanAccount.productCode,
+            'loanAmount': r.loanAmount,
+            'disbursedamount':(r.loanAmount-(r.loanAccount.processingFeeInPaisa / 100)) ,
+            'partnerCode': r.loanAccount.partnerCode,
+            'processingFee': (r.loanAccount.processingFeeInPaisa / 100)
+        };
+        var pData = getLoanPrint(repaymentInfo, opts);   
     }
 
     return resource;
