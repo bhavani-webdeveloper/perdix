@@ -142,7 +142,12 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 						purpose: model.loanPurpose1,
 						loanAmount: model.loanAmount
 					}, function(response){
-						PM.pop('cbcheck-submit', 'CB Check successfully sent for ' + model.customerName, 5000);
+						if(response.success==true){
+							PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
+						}
+						else{
+							PM.pop('cbcheck-submit', 'CB Check Failed' + model.customerName, 5000);
+						}
 						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 					}, function(errorResponse){
 						PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);
