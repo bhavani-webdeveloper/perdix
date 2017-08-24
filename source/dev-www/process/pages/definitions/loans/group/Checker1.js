@@ -1143,6 +1143,7 @@ return {
                         var stage1 = model.group.currentStage;
                         var targetstage = formHelper.enum('groupLoanBackStages').data;
                         var out = [];
+                        var cnt = 0;
                         for (var i = 0; i < targetstage.length; i++) {
                             var t = targetstage[i];
                             if (t.name == stage1) {
