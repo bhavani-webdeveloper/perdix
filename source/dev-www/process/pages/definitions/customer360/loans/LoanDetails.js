@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal",
-    function($log, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal) {
+irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
+ ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal",
+    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -10,6 +11,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
             "title": "Loan Details",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.transactions=model.transactions||{};
                 var loanAccountId = $stateParams.pageId;
                 model.loanAccount = model.loanAccount || [];
                 model.loanDocuments = model.loanDocuments || {};
@@ -78,7 +81,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                             t.transactionIdName = t.transactionId + " / " + t.transactionName;
                                             t.valueDateTransDate = t.valueDate + " / " + t.transactionDate;
                                             t.principalInterestPenal = t.part2 + " / " + t.part1 + " / " + t.part3;
-
+                                            if (model.cbsLoan.transactions[i].transactionName == "Disbursement") {
+                                                //$log.info(model.cbsLoan.transactions[i]);
+                                                model.transactions.transactionId = model.cbsLoan.transactions[i].transactionId;
+                                                model.transactions.transactionType = model.cbsLoan.transactions[i].instrument;
+                                            }
                                         }
                                         for (var i = 0; i < model.cbsLoan.repaymentSchedule.length; i++) {
                                             model.cbsLoan.repaymentSchedule[i].valueDate = moment.utc(model.cbsLoan.repaymentSchedule[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");
@@ -1646,6 +1653,40 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             // LoanAccount.downloadScheduleInCSV({accountNumber:model.cbsLoan.accountId}).$promise.then(function(responseData){
                             //     Utils.downloadFile(responseData);
                             // });
+                        }
+                    },
+                    {
+                        "title": "Print Receipt",
+                        "condition": "model.siteCode=='KGFS'",
+                        "type": "button",
+                        "onClick": function(model, formCtrl, form, $event) {
+                            var repaymentInfo = {
+                                'customerURN': model.loanAccount.urnNo,
+                                'customerId': model.loanAccount.customerId,
+                                'customerName': model.cbsLoan.customer1FirstName,
+                                'accountNumber': model.loanAccount.accountNumber,
+                                'transactionType': "Disbursement",
+                                'transactionID': model.transactions.transactionId,
+                                'productCode': model.loanAccount.productCode,
+                                'loanAmount': model.loanAccount.loanAmountRequested,
+                                'disbursedamount': model.loanAccount.loanAmount,
+                                'partnerCode': model.loanAccount.partnerCode,
+                            };
+
+                            var opts = {
+                                'branch': SessionStore.getBranch(),
+                                'entity_name': SessionStore.getBankName() + " KGFS",
+                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                'cin': 'U74990TN2011PTC081729',
+                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                'address2': 'Kanagam Village, Taramani',
+                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                'website': "http://ruralchannels.kgfs.co.in",
+                                'helpline': '18001029370',
+                                'branch_id': SessionStore.getBranchId(),
+                                'branch_code': SessionStore.getBranchCode()
+                            };
+                            GroupProcess.getLoanPrint(repaymentInfo, opts);
                         }
                     }]
                 }

@@ -307,7 +307,7 @@ irf.models.factory('GroupProcess',
         return true;
     }
 
-    var getLoanPrint = function(repaymentInfo, opts) {
+    resource.getLoanPrint = function(repaymentInfo, opts) {
         var isCordova = false;
         var repaymentInfo=repaymentInfo;
         var opts=opts;
@@ -327,35 +327,9 @@ irf.models.factory('GroupProcess',
                 }, fullPrintData.getLines());
             }
         } catch (err) {
-            var fullPrintData = new PrinterData();
-            var pData = getPrintReceipt(repaymentInfo, opts);
-            $log.info(pData);
-            pData.addLine("", {});
-            pData.addLine("", {});
-            fullPrintData.addLines(pData.getLines());
-            $log.info(fullPrintData);
             var webdata= getWebReceipt(repaymentInfo, opts);  
         }
     }
-
-    resource.printLoan = function(repay, opts) {
-        var r = repay;
-        var opts = opts
-        var repaymentInfo = {
-            'customerURN': r.urnNo,
-            'customerId': r.customerId,
-            'customerName':r.firstName,
-            'accountNumber': r.loanAccount.accountNumber,
-            'transactionType': "Disbursement",
-            'transactionID': 1,
-            'productCode': r.loanAccount.productCode,
-            'loanAmount': r.loanAmount,
-            'disbursedamount':(r.loanAmount-(r.loanAccount.processingFeeInPaisa / 100)) ,
-            'partnerCode': r.loanAccount.partnerCode,
-            'processingFee': (r.loanAccount.processingFeeInPaisa / 100)
-        };
-        var pData = getLoanPrint(repaymentInfo, opts);   
-    }
-
+    
     return resource;
 });

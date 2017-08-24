@@ -207,7 +207,20 @@ define({
                             "type": "button",
                             "onClick": function(model, formCtrl, form, $event) {
                                 $log.info(model.group.jlgGroupMembers[form.arrayIndex]);
-                                var jlgData = model.group.jlgGroupMembers[form.arrayIndex];
+                                var r = model.group.jlgGroupMembers[form.arrayIndex];
+                                var repaymentInfo = {
+                                    'customerURN': r.urnNo,
+                                    'customerId': r.customerId,
+                                    'customerName': r.firstName,
+                                    'accountNumber': r.loanAccount.accountNumber,
+                                    'transactionType': "Disbursement",
+                                    'transactionID': 1,
+                                    'productCode': r.loanAccount.productCode,
+                                    'loanAmount': r.loanAmount,
+                                    'disbursedamount': (r.loanAmount - (r.loanAccount.processingFeeInPaisa / 100)),
+                                    'partnerCode': r.loanAccount.partnerCode,
+                                    'processingFee': (r.loanAccount.processingFeeInPaisa / 100)
+                                };
                                 var opts = {
                                     'branch': SessionStore.getBranch(),
                                     'entity_name': SessionStore.getBankName() + " KGFS",
@@ -221,7 +234,7 @@ define({
                                     'branch_id': SessionStore.getBranchId(),
                                     'branch_code': SessionStore.getBranchCode()
                                 };
-                                GroupProcess.printLoan(jlgData,opts);
+                                GroupProcess.getLoanPrint(repaymentInfo,opts);
                             }
                         }]
                     }]
