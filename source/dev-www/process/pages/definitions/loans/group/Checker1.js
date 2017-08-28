@@ -103,6 +103,11 @@ return {
                         }
                     }),
                     Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
+                        for(i=0;i<resp.length;i++){
+                            $log.info("hi");
+                            resp[i].updatedOn=moment(resp[i].updatedOn).format("DD-MM-YYYY");
+                            $log.info(resp[i].updatedOn);    
+                        }
                         model.group.remarksHistory = resp;
                     })
                 ]).finally(PageHelper.hideLoader);

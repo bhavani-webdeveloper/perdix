@@ -228,7 +228,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
 
                             IndividualLoan.updateDisbursement(reqData,function(resp,header){
                                 PageHelper.showProgress("upd-disb","Done.","5000");
-                                //backToQueue();
+                                backToQueue();
                             },function(resp){
                                 PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
                                 PageHelper.showErrors(resp);

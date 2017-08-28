@@ -79,6 +79,11 @@ define({
                             fillNames(model).then(function(m) {
                                 model = m;
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
+                                    for (i = 0; i < resp.length; i++) {
+                                        $log.info("hi");
+                                        resp[i].updatedOn = moment(resp[i].updatedOn).format("DD-MM-YYYY");
+                                        $log.info(resp[i].updatedOn);
+                                    }
                                     model.group.remarksHistory = resp;
                                 }).finally(function(){
                                     PageHelper.hideLoader();
@@ -164,17 +169,6 @@ define({
                     "key": "group.tenure",
                     "readonly": true,
                     "title": "TENURE",
-                },{
-                    "key": "group.scheduledDisbursementDate",
-                    "required":true,
-                    "readOnly": true,
-                    "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "type": "date",
-                },{
-                    "key": "group.firstRepaymentDate",
-                    "title": "FIRST_REPAYMENT_DATE",
-                    "required":true,
-                    "type": "date",
                 }]
             }, {
                 "type": "box",
@@ -235,17 +229,7 @@ define({
                         "title": "RELATION",
                         "type": "select",
                         "enumCode": "relation"
-                    }, /*{
-                        "key": "group.jlgGroupMembers[].scheduledDisbursementDate",
-                        "required":true,
-                        "title": "SCHEDULED_DISBURSEMENT_DATE",
-                        "type": "date",
-                    }, {
-                        "key": "group.jlgGroupMembers[].firstRepaymentDate",
-                        "title": "FIRST_REPAYMENT_DATE",
-                        "required":true,
-                        "type": "date",
-                    }*/]
+                    }]
                 }, {
                     "key": "group.jlgGroupMembers",
                     "type": "array",
@@ -301,17 +285,7 @@ define({
                         "title": "RELATION",
                         "type": "select",
                         "enumCode": "relation"
-                    }, /*{
-                        "key": "group.jlgGroupMembers[].scheduledDisbursementDate",
-                        "required":true,
-                        "title": "SCHEDULED_DISBURSEMENT_DATE",
-                        "type": "date",
-                    }, {
-                        "key": "group.jlgGroupMembers[].firstRepaymentDate",
-                        "title": "FIRST_REPAYMENT_DATE",
-                        "required":true,
-                        "type": "date",
-                    }*/]
+                    }]
                 }]
             }, {
                     "title": "REMARKS_HISTORY",
