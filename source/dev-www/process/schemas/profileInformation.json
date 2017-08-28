@@ -476,8 +476,7 @@
                             "expenditureSource": {
                                 "type": ["string","null"],
                                 "title": "EXPENDITURE_SOURCE",
-                                "enumCode": "expenditure",
-                                "default": "Other"
+                                "enumCode": "expenditure"
                             },
                             "frequency": {
                                 "type": ["string","null"],

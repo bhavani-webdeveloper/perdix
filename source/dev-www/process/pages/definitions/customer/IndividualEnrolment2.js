@@ -112,7 +112,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             if(!model.customer.expenditures){
                                 model.customer.expenditures = [];
                                 model.customer.expenditures.push({
-                                    "expenditureSource": "expenditure",
+                                    "expenditureSource": "Monthly Declared Household expenses",
                                     "frequency": "Monthly"
                                 });
                             }
@@ -1376,6 +1376,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
+                                            required: true,
                                             "title": "EXPENSE_TYPE"
                                         },
                                         {
@@ -1383,11 +1384,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "type": "amount",
                                             "title": "AMOUNT"
                                         },
-                                        /*{
+                                        {
                                             "key": "customer.expenditures[].frequency",
-                                            "type": "string",
+                                            "type": "select",
+                                            readonly: true,
                                             "title": "FREQUENCY"
-                                        }*/
+                                        }
                                      ]
                                 }
                               

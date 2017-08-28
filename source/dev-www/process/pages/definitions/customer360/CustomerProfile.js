@@ -8,6 +8,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
     var fixData = function(model) {
         $log.info("Before fixData");
+        model.siteCode = SessionStore.getGlobalSetting('siteCode');
         Utils.removeNulls(model, true);
         if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
             var fields = model.customer.udf.userDefinedFieldValues;
@@ -576,6 +577,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
+                                            required: true,
                                             "title": "EXPENSE_TYPE"
                                         },
                                         {
@@ -583,6 +585,19 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                             "type": "amount",
                                             "title": "AMOUNT"
                                         },
+                                        {
+                                            "key": "customer.expenditures[].frequency",
+                                            "type": "select",
+                                            "condition": "model.siteCode == 'kinara'",
+                                            readonly: true,
+                                            "title": "FREQUENCY"
+                                        },
+                                        {
+                                            "key": "customer.expenditures[].frequency",
+                                            "type": "select",
+                                            "condition": "model.siteCode != 'kinara'",
+                                            "title": "FREQUENCY"
+                                        }
                                      ]
                                 }
                               
