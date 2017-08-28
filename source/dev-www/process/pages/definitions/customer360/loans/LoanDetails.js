@@ -168,31 +168,29 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "data": "downloadText",
                                                     "onClick": function(data){
                                                         var recordStr = data.accountId + "~" + data.sequenceNum;
+                                                        var feesFormMapDataWithDescription = [];
+                                                        var feesFormMapDataWithoutDescription = [];
+                                                        if(model.feesFormMappingList){
+                                                            feesFormMapDataWithDescription = feesFormMapDataWithDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: data.description , invoice_type: 'Fee Charge'});
+                                                            if(feesFormMapDataWithDescription.length == 0){
+                                                                feesFormMapDataWithoutDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: "ALL", invoice_type: 'Fee Charge'});  
+                                                            }
+                                                        }
                                                         if (data.transactionName == 'Demand'){
                                                             if (data.status =="false"){
                                                                 // Penal Interest
                                                             } else if (data.status == "true"){
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bill_of_supply_emi_payment&record_id=" + recordStr);
                                                             }
-                                                        } else if (data.transactionName == 'Fee Charge'){
+                                                        } else if (feesFormMapDataWithDescription.length || feesFormMapDataWithoutDescription.length){
                                                             var formName;
                                                             if(model.feesFormMappingList){
-                                                               var feesFormMapDataWithDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: data.description});  
-                                                               var feesFormMapDataWithoutDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: "ALL"});  
-
-                                                               if(feesFormMapDataWithDescription.length){
+                                                                if(feesFormMapDataWithDescription.length){
                                                                     formName =  feesFormMapDataWithDescription[0].form_name;     
                                                                }else if(feesFormMapDataWithoutDescription){
                                                                     formName =  feesFormMapDataWithoutDescription[0].form_name; 
                                                                }           
                                                             }
-                                                            // if (data.param1 == 'Preclosure Charges') {
-                                                            //     formName = 'taxable_invoice_cheque_preclosure_charges';
-                                                            // } else if (data.param1 == 'CBC') {
-                                                            //     formName = 'taxable_invoice_cheque_bounce_charges';
-                                                            // } else if (data.param1 == 'AdHoc Fee') {
-                                                            //     formName = 'taxable_invoice_adhoc_charges';
-                                                            // }
                                                             return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);
                                                         }
                                                         return Utils.alert("Form not maintained");

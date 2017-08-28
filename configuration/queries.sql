@@ -43,5 +43,5 @@ UserList.list=select user_name as user_id from oauth_access_token where user_nam
 CBCheck.customerList=select max(created_at) as created_at, customer_id from highmark_interface where customer_id in (:customerIds) and status = 'PROCESSED' group by customer_id
 groupProcess.remarksHistory = SELECT pre_stage as stage, actions as action, group_remarks as remarks, created_by as updatedBy, created_at as updatedOn  FROM jlg_groups_snapshot where group_id = :groupId and group_remarks IS NOT NULL 
 groupLoanProductsByPartner.list=SELECT product_name as productName, `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `partner_code`=:partner and loan_type = 'JLG'
-feesFormMapping.list = select * from fees_form_mapping
+feesFormMapping.list = select * from invoice_form_mapping
 
