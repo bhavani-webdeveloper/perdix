@@ -116,6 +116,10 @@ irf.models.factory('GroupProcess',
             customerIdList.push(model.group.jlgGroupMembers[idx].customerId);
             urns.push(model.group.jlgGroupMembers[idx].urnNo);
         }
+        if (SessionStore.getGlobalSetting('highmarkMandatory') == 'N') {
+            deferred.resolve();
+            return deferred.promise;
+        }
         Queries.getLatestCBCheckDoneDateByCustomerIds(customerIdList).then(function(resp) {
             if(resp && resp.length > 0){
                 for (var i = 0; i < resp.length; i++) {
