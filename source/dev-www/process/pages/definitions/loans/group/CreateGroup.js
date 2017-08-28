@@ -221,25 +221,6 @@ define({
                     required: true,
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        // var product = formHelper.enum('loan_product').data;
-                        // var partner = model.group.partnerCode;
-                        // var out = [];
-                        // if (product && product.length) {
-                        //     for (var i = 0; i < product.length; i++) {
-                        //             if (product[i].parentCode == partner && product[i].field2 == "JLG") {
-                        //                 out.push({
-                        //                     name: product[i].name,
-                        //                     id: product[i].value
-                        //                 })
-                        //             }   
-                        //     }
-                        // }
-                        // return $q.resolve({
-                        //     headers: {
-                        //         "x-total-count": out.length
-                        //     },
-                        //     body: out
-                        // });
                         return Queries.getGroupLoanProductsByPartner(model.group.partnerCode);
                     },
                     onSelect: function(valueObj, model, context) {
@@ -306,7 +287,6 @@ define({
                                 "title": "BRANCH_NAME",
                                 "type": "select",
                                 "readonly": true,
-                                //"enumCode": "branch",
                                 "enumCode": "branch_id"
                             },
                             "centreId": {
@@ -395,19 +375,30 @@ define({
                         },
                         onSelect: function(valueObj, model, context) {
                             $log.info("Hi Selected");
+                            var familyMembers = [];
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
                             Enrollment.getCustomerById({id:valueObj.customerId}).$promise
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
-                                 console.log(model.customer);
+                                 model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
+                                for (i in res.familyMembers) {
+                                    var obj = {};
+                                    if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
+                                        obj.name = res.familyMembers[i].familyMemberFirstName;
+                                        obj.relationShip = res.familyMembers[i].relationShip;
+                                        familyMembers.push(obj);
+                                    }
+                                }
+                                model.group.jlgGroupMembers[context.arrayIndex].familyMembers=familyMembers;
+                                $log.info(model.group.jlgGroupMembers[context.arrayIndex].familyMembers);
+
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })
                                 .finally(function(){
                                     PageHelper.hideLoader();
-                                })
-                                
+                                })        
                         }
                     },
                     {
@@ -483,45 +474,19 @@ define({
                         "enumCode": "loan_purpose_3",
                         "parentEnumCode": "loan_purpose_2",
                         "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
-                    }, {
+                    },{
                         "key": "group.jlgGroupMembers[].witnessFirstName",
                         "required": true,
-                        "title": "WitnessFirstName",
+                        "title": "WitnessLastName",
                         "type": "lov",
-                        initialize: function(model, form, parentModel, context) {
-                            model.branchName = parentModel.group.branchName;
-                        },
-                        "bindMap": {"urnNo": "group.jlgGroupMembers[arrayIndex].urnNo"},
-                        "outputMap": {
-                            "name": "group.jlgGroupMembers[arrayIndex].witnessFirstName",
-                            "relationShip": "group.jlgGroupMembers[arrayIndex].witnessRelationship",
-                        },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
-                            var promise = Enrollment.getCustomerById({
-                                id: model.group.jlgGroupMembers[context.arrayIndex].customerId,
-                            }, function(res) {
-                                var familyMembers = [];
-                                model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
-                                //var obj={};
-                                for (i in res.familyMembers) {
-                                    var obj = {};
-                                    if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
-                                        obj.name = res.familyMembers[i].familyMemberFirstName;
-                                        obj.relationShip = res.familyMembers[i].relationShip;
-                                        familyMembers.push(obj);
-                                    }
-                                }
-                                $log.info(familyMembers);
-
-                                return $q.resolve({
-                                    headers: {
-                                        "x-total-count": familyMembers.length
-                                    },
-                                    body: familyMembers
-                                });
-                            }, function(res){}).$promise;
-                            return promise;
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length
+                                },
+                                body: model.group.jlgGroupMembers[context.arrayIndex].familyMembers
+                            });
                         },
                         getListDisplayItem: function(data, index) {
                             return [
@@ -529,8 +494,10 @@ define({
                                 data.relationShip,
                             ];
                         },
-                        onSelect: function(valueObj, model, context) {}
-                            
+                        onSelect: function(valueObj, model, context) {
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName=valueObj.name;
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship=valueObj.relationShip;
+                        }       
                     }, {
                         "key": "group.jlgGroupMembers[].witnessRelationship",
                         "title": "RELATION",
