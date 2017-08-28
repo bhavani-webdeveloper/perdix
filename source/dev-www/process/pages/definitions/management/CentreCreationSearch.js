@@ -24,7 +24,7 @@ define({
 				"properties": 
        					{
         					 "branchId": {
-           					 "type": ["string", "null"],
+           					 "type": ["number", "null"],
                              "title": "BRANCH_ID",
                              "x-schema-form": {
 									"type": "select",

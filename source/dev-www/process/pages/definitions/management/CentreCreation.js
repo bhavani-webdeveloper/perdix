@@ -1,9 +1,9 @@
 define({
     pageUID: "management.CentreCreation",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams"],
+    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages"],
     $pageFn: 
-    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams){
+    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages){
     var branch = SessionStore.getBranch();
     return {
                 "type": "schema-form",
@@ -67,7 +67,37 @@ define({
                                         type: "date"
                                     },
                                     {
-                                        key: "centre.employee"
+                                        key: "centre.employee",
+                                        type: "lov",
+                                        lovonly: true,
+                                        searchHelper: formHelper,
+                                        inputMap: {
+                                            "userId": {
+                                                "key": "centre.employee",
+                                                "title": "USER_ID"
+                                            },
+                                            "userName": {
+                                                "key": "centre.employeeName",
+                                                "title": "USER_NAME",
+                                                "type": "string"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "userId": "centre.employee"
+                                        },
+                                        search: function(inputModel, form, model) {
+                                            return RolesPages.searchUsers({
+                                                userId: inputModel.userId,
+                                                userName: inputModel.userName
+                                            }).$promise;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.userId + ': ' + item.userName,
+                                                item.roleId ? (item.roleId + ': ' + item.roleName) : ''
+                                            ];
+                                        }
+                
                                     },
                                     {
                                         key: "centre.centreLeaderUrn",

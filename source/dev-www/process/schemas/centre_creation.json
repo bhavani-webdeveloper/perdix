@@ -27,7 +27,7 @@
               "title": "LOCATION"
             },          
             "centreCode": {
-               "type": ["number", "null"],
+               "type": ["string", "null"],
                "title": "CENTRE_CODE1"
             },
             "centreGpsCaptureDate": {
@@ -45,6 +45,10 @@
             "employee": {
                "type": ["string", "null"],
                "title": "EMPLOYEE_CODE"
+            },
+            "employeeName": {
+               "type": ["string", "null"],
+               "title": "EMPLOYEE_NAME"
             },
             "monthlyMeeting": {
                "type": ["string", "null"],
