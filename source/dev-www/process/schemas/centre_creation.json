@@ -38,6 +38,10 @@
                "type": ["string", "null"],
                "title": "CENTRE_LEADER_URN"
             },
+            "centreLatitude": {
+               "type": ["string", "null"],
+               "title": "LOCATION"
+            },
             "centreName": {
                "type": ["string", "null"],
                "title": "CENTRE_NAME_"

@@ -10,7 +10,9 @@ define({
                 "title": "Centre_Creation",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
+                    model.editMode = false;
                     if ($stateParams.pageId) {
+                        model.editMode = true;
                         var id = $stateParams.pageId;
                         PageHelper.showLoader();
                         
@@ -34,10 +36,22 @@ define({
                         "title": "CENTRE_CREATION",
                         "items": [
                                     {
-                                        key: "centre.centreName"
+                                        key: "centre.centreName",
+                                        condition:"model.editMode",
+                                        readonly: true
                                     },
                                     {
                                         key: "centre.centreCode",
+                                        condition:"model.editMode",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "centre.centreName",
+                                        condition:"!model.editMode"
+                                    },
+                                    {
+                                        key: "centre.centreCode",
+                                        condition:"!model.editMode"
                                     },
                                     {
                                         key: "centre.centreAddress",
@@ -46,7 +60,15 @@ define({
                                     {
                                         key: "centre.branchId",
                                         type: "select",
-                                        enumCode: "branch_id"
+                                        enumCode: "branch_id",
+                                        condition:"!model.editMode"
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        enumCode: "branch_id",
+                                        condition: "model.editMode",
+                                        readonly: true
                                     },
                                     {
                                         key: "centre.status",
@@ -57,10 +79,11 @@ define({
                                         }
                                     },
                                     {
-                                        key: "centre.centreAltitude",
+                                        key: "centre.centreLatitude",
                                         type: "geotag",
-                                        latitude: "centre.latitude",
-                                        longitude: "centre.longitude"
+                                        required: false,
+                                        latitude: "centre.centreLatitude",
+                                        longitude: "centre.centreLongitude"
                                     },
                                     {
                                         key: "centre.centreGpsCaptureDate",
@@ -210,41 +233,36 @@ define({
                         return CentreCreationResource.getSchema().$promise;
                 },
                 actions: {
-                        submit: function(model, form, formName){
+                    submit: function(model, form, formName){
+                        PageHelper.showLoader();
+                        PageHelper.clearErrors();
+                        PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
+                        var tempModelData = _.clone(model.centre);
+                        delete tempModelData['monthlyMeeting'];
+                        var deferred = {};
 
-                                PageHelper.showLoader();
-                                PageHelper.clearErrors();
-                                PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
-
-                            console.log(model.centre);
-                            var tempModelData = _.clone(model.centre);
-                            delete tempModelData['monthlyMeeting'];
-
-                            var deferred = {};
-
-                            if((model.centre.id!="")&&(model.centre.id!=undefined)){
-                                deferred =   CentreCreationResource.centreEdit(tempModelData).$promise;
-                            }
-                            else{
-                                deferred = CentreCreationResource.centreCreation(tempModelData).$promise;
-                            }
-
-                            deferred.then(function(data) {
-                                          PageHelper.hideLoader();
-                                          PageHelper.showProgress('centreCreationSubmitRequest', 'Done',5000);
-                                          
-                                          model.centre={};
-                                          form.$setPristine();
-                                                            
-                                     },
-                                     function(data){
-                                         PageHelper.hideLoader();
-                                         PageHelper.showProgress('centreCreationSubmitRequest', 'Oops some error happend',5000);
-                                         PageHelper.showErrors(data);
-                                        
-                                   });
-
+                        if((model.centre.id!="")&&(model.centre.id!=undefined)){
+                            deferred =   CentreCreationResource.centreEdit(tempModelData).$promise;
                         }
+                        else{
+                            deferred = CentreCreationResource.centreCreation(tempModelData).$promise;
+                        }
+
+                        deferred.then(function(data) {
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress('centreCreationSubmitRequest', 'Done',5000);
+                            model.centre={};
+                            form.$setPristine();
+                            irfNavigator.goBack();
+                                                        
+                        }, function(data){
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress('centreCreationSubmitRequest', 'Oops some error happend',5000);
+                            PageHelper.showErrors(data);
+                                    
+                        });
+
+                    }
                 }
             };
     }
