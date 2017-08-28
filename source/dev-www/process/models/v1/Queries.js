@@ -677,6 +677,23 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         }
+
+        resource.feesFormMapping = function() {
+            var deferred = $q.defer();
+            resource.getResult("feesFormMapping.list",{}).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
         return resource;
     }
 ]);

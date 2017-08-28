@@ -23,6 +23,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.reqData.loanAccount = model.reqData.loanAccount || {};
                 model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                 PageHelper.showLoader();
+
+                var promise = Queries.feesFormMapping().then(function(response) {
+                                    var test = response;
+                                    if (response && response.body && response.body.length) {
+                                        model.feesFormMappingList = response.body;
+                                    }
+                                });
+
                 IndividualLoan.get({
                         id: loanAccountId
                     })
@@ -168,13 +176,23 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
                                                             var formName;
-                                                            if (data.param1 == 'Preclosure Charges') {
-                                                                formName = 'taxable_invoice_cheque_preclosure_charges';
-                                                            } else if (data.param1 == 'CBC') {
-                                                                formName = 'taxable_invoice_cheque_bounce_charges';
-                                                            } else if (data.param1 == 'AdHoc Fee') {
-                                                                formName = 'taxable_invoice_adhoc_charges';
+                                                            if(model.feesFormMappingList){
+                                                               var feesFormMapDataWithDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: data.description});  
+                                                               var feesFormMapDataWithoutDescription = $filter('filter')(model.feesFormMappingList, {fee_category: data.param1, fee_description: "ALL"});  
+
+                                                               if(feesFormMapDataWithDescription.length){
+                                                                    formName =  feesFormMapDataWithDescription[0].form_name;     
+                                                               }else if(feesFormMapDataWithoutDescription){
+                                                                    formName =  feesFormMapDataWithoutDescription[0].form_name; 
+                                                               }           
                                                             }
+                                                            // if (data.param1 == 'Preclosure Charges') {
+                                                            //     formName = 'taxable_invoice_cheque_preclosure_charges';
+                                                            // } else if (data.param1 == 'CBC') {
+                                                            //     formName = 'taxable_invoice_cheque_bounce_charges';
+                                                            // } else if (data.param1 == 'AdHoc Fee') {
+                                                            //     formName = 'taxable_invoice_adhoc_charges';
+                                                            // }
                                                             return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + formName + "&record_id=" + recordStr);
                                                         }
                                                         return Utils.alert("Form not maintained");

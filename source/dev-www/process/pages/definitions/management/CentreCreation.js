@@ -7,7 +7,7 @@ define({
     var branch = SessionStore.getBranch();
     return {
                 "type": "schema-form",
-                "title": "Centre_Creation",
+                "title": "CENTRE_CREATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     model.editMode = false;
