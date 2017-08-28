@@ -538,7 +538,7 @@ define({
                         var oldCustomers =0;
                         for(i=0; i<model.group.jlgGroupMembers.length; i++)
                         {
-                            if(model.group.jlgGroupMembers[i].loanCycle && model.group.jlgGroupMembers[i].loanCycle >= 1)
+                            if(model.group.jlgGroupMembers[i].loanCycle && model.group.jlgGroupMembers[i].loanCycle > 1)
                             {
                                 oldCustomers++;
                             }
