@@ -687,7 +687,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();
