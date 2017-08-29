@@ -169,6 +169,19 @@ define({
                     "key": "group.tenure",
                     "readonly": true,
                     "title": "TENURE",
+                },{
+                    "key": "group.scheduledDisbursementDate",
+                    "required":true,
+                    "readOnly": true,
+                    "title": "SCHEDULED_DISBURSEMENT_DATE",
+                    "condition": "model.siteCode == 'sambandh'",
+                    "type": "date",
+                },{
+                    "key": "group.firstRepaymentDate",
+                    "title": "FIRST_REPAYMENT_DATE",
+                    "required":true,
+                    "condition": "model.siteCode == 'sambandh'",
+                    "type": "date",
                 }]
             }, {
                 "type": "box",
