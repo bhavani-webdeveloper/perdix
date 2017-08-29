@@ -1,32 +1,60 @@
-irf.pageCollection.factory(irf.page("bank.Survey"), 
-    ["$log", "SessionStore", "$state", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation",
-    function($log, SessionStore, $state, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation) {
+irf.pageCollection.factory(irf.page("bank.Survey"),
+ ["$log", "SessionStore", "$state","$stateParams","Utils", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation",
+    function($log, SessionStore, $state,$stateParams,Utils, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation) {
         return {
             "type": "schema-form",
             "title": "SURVEY",
             initialize: function(model, form, formCtrl) {
-                PageHelper.hideLoader();
                 model.bank_survey = model.bank_survey || {};
-                model.branchName = SessionStore.getBranch();
+
+                if (!(model && model.bank_survey && model.bank_survey.id && model.$$STORAGE_KEY$$)) {
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("page-init", "Loading...");
+                    model.bank_survey.branchId = model.bank_survey.branchId||SessionStore.getCurrentBranch().branchId;
+                    model.bank_survey.surveyDate = model.bank_survey.surveyDate||Utils.getCurrentDate();
+                    model.bank_survey.surveyOfficerName= model.bank_survey.surveyOfficerName||SessionStore.getUsername();
+                    var surveyId = $stateParams.pageId;
+                    if (!surveyId) {
+                        PageHelper.hideLoader();
+                    } else {
+                        SurveyInformation.get({
+                                id: surveyId
+                            },
+                            function(res) {
+                                _.assign(model.bank_survey, res);
+                                $log.info(model.bank_survey);
+                                model = Utils.removeNulls(model, true);
+                                PageHelper.hideLoader();
+                            }
+                        );
+                    }
+                    $log.info("Capture survey page  is initiated ");
+                }
+            },
+            offline: true,
+            getOfflineDisplayItem: function(item, index) {
+                return [
+                    item.bank_survey.date
+                ]
             },
             form: [{
                 "type": "box",
                 "title": "GENERAL",
                 "items": [
-                    "bank_survey.date",
-                    "bank_survey.branchName",
-                    "bank_survey.fso_name",
-                    "bank_survey.village",
-                    "bank_survey.block",
+                    "bank_survey.surveyDate",
+                    "bank_survey.surveyOfficerName",
+                    "bank_survey.branchId",
+                    "bank_survey.surveyVillage",
+                    "bank_survey.surveyBlock",
                     "bank_survey.population",
                     "bank_survey.region",
-                    "bank_survey.house_hold",
-                    "bank_survey.area_type",
+                    "bank_survey.household",
+                    "bank_survey.areaType",
                     "bank_survey.migration",
-                    "bank_survey.poverty_level",
+                    "bank_survey.povertyLevel",
                     "bank_survey.communities"
                 ]
-            }, {
+            }, /*{
                 "type": "box",
                 "title": "DISTANCE(IN_KMS)_FROM",
                 "items": [
@@ -41,84 +69,102 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.phc",
                     "bank_survey.qualified_doctor"
                 ]
-            }, {
+            },*/
+            {
+                type: "box",
+                title: "DISTANCE(IN_KMS)_FROM",
+                items: [{
+                    key: "bank_survey.surveyFacilityDistance",
+                    type: "array",
+                    items: [
+                        "bank_survey.surveyFacilityDistance[].facilityName",
+                        "bank_survey.surveyFacilityDistance[].facilityDistance",
+                    ]
+                }]
+            },{
                 "type": "box",
                 "title": "INFRASTRUCTURE/SOCIAL_ORDER",
                 "items": [
                     "bank_survey.electricity",
-                    "bank_survey.drinking_water",
-                    "bank_survey.irrigation_source",
-                    "bank_survey.raod_quality",
-                    "bank_survey.public_transport",
-                    "bank_survey.irrigation_available",
-                    "bank_survey.kinara_shop",
-                    "bank_survey.tea_shops",
-                    "bank_survey.well",
-                    "bank_survey.hand_pumps",
-                    "bank_survey.business_location",
-                    "bank_survey.sarpanch_councillor_name",
-                    "bank_survey.workBy_panchayat",
-                    "bank_survey.law_order",
-                    "bank_survey.social_relation",
-                    "bank_survey.political_climate"
+                    "bank_survey.drinkingWater",
+                    "bank_survey.irrigationSource",
+                    "bank_survey.roadQuality",
+                    "bank_survey.publicTransport",
+                    "bank_survey.irrigationAvailable",
+                    "bank_survey.noOfKiranaShop",
+                    "bank_survey.noOfTeaShops",
+                    "bank_survey.noOfWell",
+                    "bank_survey.noOfHandPumps",
+                    "bank_survey.businessAtmosphere",
+                    "bank_survey.councillorName",
+                    "bank_survey.workDone",
+                    "bank_survey.lawAndOrder",
+                    "bank_survey.socialRelation",
+                    "bank_survey.politicalClimate"
                 ]
             }, {
                 "type": "box",
                 "title": "ECONOMIC_ACTIVITIES/LIVELYHOOD_OF_THE_DWELLERS",
                 "items": [
-                    "bank_survey.activity"
+                    "bank_survey.udf1"
                 ]
             }, {
                 "type": "box",
                 "title": "SOURCE_OF_CREDIT_IN_THE_VILLAGE/SLUM",
                 "items": [
-                    "bank_survey.source",
-                    "bank_survey.institute_name",
-                    "bank_survey.difficult_source",
-                    "bank_survey.minimum_loan_size",
-                    "bank_survey.maximum_loan_size",
-                    "bank_survey.interest_rates",
-                    "bank_survey.repayment_period",
-                    "bank_survey.repayment_frequency",
-                    "bank_survey.collateral",
-                    "bank_survey.penalty_action",
-                    "bank_survey.client_base",
-                    "bank_survey.operation_since"
+                    "bank_survey.udf3",
+                    "bank_survey.udf4",
+                    "bank_survey.udf5",
+                    "bank_survey.udf6",
+                    "bank_survey.udf7",
+                    "bank_survey.udf8",
+                    "bank_survey.udf9",
+                    "bank_survey.udf10",
+                    "bank_survey.udf11",
+                    "bank_survey.udf12",
+                    "bank_survey.udf13",
+                    "bank_survey.udf14"
                 ]
             }, {
                 "type": "box",
                 "title": "SOURCE_OF_SAVING,INSURENCE,MONEY_TRANSFER",
                 "items": [
-                    "bank_survey.bank",
-                    "bank_survey.mfi",
-                    "bank_survey.money_leader",
-                    "bank_survey.whole_saler",
-                    "bank_survey.post_office1"
+                    "bank_survey.bankAvailable",
+                    "bank_survey.mfiAvailable",
+                    "bank_survey.moneylenderAvailable",
+                    "bank_survey.wholeSalerAvailable",
+                    "bank_survey.postOfficeAvailable"
                 ]
             }, {
                 "type": "box",
                 "title": "MICROFINANCE_DEMAND",
                 "items": [
-                    "bank_survey.microfinance_village",
-                    "bank_survey.potential_village",
-                    "bank_survey.member_profile",
-                    "bank_survey.motivation_required",
-                    "bank_survey.comment"
+                    "bank_survey.microfinanceRequired",
+                    "bank_survey.noOfPotentialMember",
+                    "bank_survey.memberProfile",
+                    "bank_survey.motivationRequired",
+                    "bank_survey.udf2"
                 ]
             }, {
                 "type": "box",
                 "title": "MAP_INCLUDE",
                 "items": [
-                    "bank_survey.geo_tag"
+                    "bank_survey.latitude"  
                 ]
-            }, {
-                "type": "box",
-                "title": "DETAILS_OF_PERSONS_CONTACTED",
-                "items": [
-                    "bank_survey.name",
-                    "bank_survey.contact"
-                ]
-            }, {
+            },
+            {
+                type: "box",
+                title: "DETAILS_OF_PERSONS_CONTACTED",
+                items: [{
+                    key: "bank_survey.surveyContacts",
+                    type: "array",
+                    items: [
+                        "bank_survey.surveyContacts[].contactName",
+                        "bank_survey.surveyContacts[].mobileNo",
+                    ]
+                }]
+            },
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "save",
@@ -132,24 +178,12 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                 return $q.resolve(SurveyInformation.getSchema());
             },
             actions: {
-                changeStatus: function(modelValue, form, model) {
-
-                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
-                        model.lead.leadStatus = "Reject";
-                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
-                        model.lead.leadStatus = "Screening";
-                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
-                        model.lead.leadStatus = "FollowUp";
-                    } else {
-                        model.lead.leadStatus = "Incomplete";
-                    }
-                },
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
-                    if (model.lead.leadName) {
+                    if (model.bank_survey.date) {
                         deferred.resolve();
                     } else {
-                        irfProgressMessage.pop('lead-save', 'Applicant Name is required', 3000);
+                        irfProgressMessage.pop('save', 'date is required', 3000);
                         deferred.reject();
                     }
                     return deferred.promise;
@@ -157,46 +191,38 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    model.lead.productCategory = "Asset";
-                    model.lead.productSubCategory = "Loan";
-                    $log.warn(model);
-                    var sortFn = function(unordered) {
-                        var out = {};
-                        Object.keys(unordered).sort().forEach(function(key) {
-                            out[key] = unordered[key];
-                        });
-                        return out;
-                    };
-                    var reqData = _.cloneDeep(model);
-                    var centres = formHelper.enum('centre').data;
-                    for (var i = 0; i < centres.length; i++) {
-                        if ((centres[i].code) == reqData.lead.centreId) {
-                            reqData.lead.centreName = centres[i].name;
-                        }
-                    }
-                    if (reqData.lead.id) {
-
-                        if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
-                            LeadHelper.followData(reqData).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
-                            });
-                        } else {
-                            LeadHelper.proceedData(reqData).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
-                            }, function(err) {
-                                Utils.removeNulls(resp.lead, true);
-                                model.lead = resp.lead;
-                            });
-                        }
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("Survey Save", "Working...");
+                    if (model.bank_survey.id) {
+                        //model.bank_survey.journalEntryProcessAction = "PROCEED",
+                            SurveyInformation.update(model.bank_survey)
+                            .$promise
+                            .then(function(res) {
+                                PageHelper.showProgress("Survey Save", "Survey Updated with id" +" "+ res.id, 3000);
+                                $log.info(res);
+                                model.bank_survey = res;
+                                //$state.go('Page.JournalPostingDashboard', null);
+                            }, function(httpRes) {
+                                PageHelper.showProgress("Survey Save", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            })
                     } else {
-                        LeadHelper.saveData(reqData).then(function(res) {
-                            LeadHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
-                            }, function(err) {
-                                Utils.removeNulls(resp.lead, true);
-                                model.lead = resp.lead;
-                            });
-                        });
+                        //model.journal.journalEntryProcessAction = "SAVE",   
+                        SurveyInformation.save(model.bank_survey)
+                            .$promise
+                            .then(function(res) {
+                                PageHelper.showProgress("Survey Save", "Survey Updated with id"+" "+ res.id, 3000);
+                                $log.info(res);
+                                model.bank_survey = res;
+                                //$state.go('Page.JournalPostingDashboard', null);
+                            }, function(httpRes) {
+                                PageHelper.showProgress("Survey Save", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            })
                     }
                 }
             }

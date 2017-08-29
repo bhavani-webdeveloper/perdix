@@ -1,5 +1,6 @@
 irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL, searchResource) {
-    var endpoint = BASE_URL + '/api/enrollments';
+
+    var endpoint = BASE_URL + '/api/survey';
 
     var surverJson = {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -9,13 +10,17 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
             "bank_survey": {
                 "type": "object",
                 "properties": {
-                    "date": {
+                    "surveyDate": {
                         "type": ["string", "null"],
                         "title": "DATE",
                         "format": "date",
                         "readonly": true
                     },
-                    "branchName": {
+                    "surveyOfficerName":{
+                        "type": ["string", "null"],
+                        "title": "FSO_NAME"
+                    },
+                    "branchId": {
                         "type": ["integer", "null"],
                         "title": "BRANCH_NAME",
                         "enumCode": "branch_id",
@@ -23,31 +28,27 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             "type": "select"
                         }
                     },
-                    "fso_name": {
-                        "type": ["string", "null"],
-                        "title": "FSO_NAME"
-                    },
-                    "village": {
+                    "surveyVillage": {
                         "type": ["string", "null"],
                         "title": "VILLAGE/SLUM"
                     },
-                    "block": {
+                    "surveyBlock": {
                         "type": ["string", "null"],
                         "title": "BLOCK/WARD"
                     },
                     "population": {
-                        "type": ["string", "null"],
+                        "type": ["number", "null"],
                         "title": "POPULATION"
                     },
                     "region": {
                         "type": ["string", "null"],
                         "title": "REGION"
                     },
-                    "house_hold": {
+                    "household": {
                         "type": ["string", "null"],
                         "title": "HOUSEHOLD"
                     },
-                    "area_type": {
+                    "areaType": {
                         "type": ["string", "null"],
                         "title": "AREA_TYPE",
                         "x-schema-form": {
@@ -81,7 +82,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "poverty_level": {
+                    "povertyLevel": {
                         "type": ["string", "null"],
                         "title": "POVERTY_LEVEL",
                         "x-schema-form": {
@@ -181,7 +182,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "drinking_water": {
+                    "drinkingWater": {
                         "type": ["string", "null"],
                         "title": "DRINKING_WATER",
                         "x-schema-form": {
@@ -201,7 +202,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "irrigation_source": {
+                    "irrigationSource": {
                         "type": ["string", "null"],
                         "title": "IRRIGATION_SOURCE",
                         "x-schema-form": {
@@ -221,7 +222,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "raod_quality": {
+                    "roadQuality": {
                         "type": ["string", "null"],
                         "title": "ROAD_QUALITY",
                         "x-schema-form": {
@@ -238,7 +239,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "public_transport": {
+                    "publicTransport": {
                         "type": ["string", "null"],
                         "title": "PUBLIC_TRANSPORT",
                         "x-schema-form": {
@@ -255,27 +256,27 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "irrigation_available": {
+                    "irrigationAvailable": {
                         "type": ["string", "null"],
                         "title": "IRRIGATION_AVAILABLE"
                     },
-                    "kinara_shop": {
+                    "noOfKiranaShop": {
                         "type": ["string", "null"],
                         "title": "KINARA_SHOP"
                     },
-                    "tea_shops": {
+                    "noOfTeaShops": {
                         "type": ["string", "null"],
                         "title": "TEA_SHOPS"
                     },
-                    "well": {
+                    "noOfWell": {
                         "type": ["string", "null"],
                         "title": "WELL"
                     },
-                    "hand_pumps": {
+                    "noOfHandPumps": {
                         "type": ["string", "null"],
                         "title": "HAND_PUMPS"
                     },
-                    "business_location": {
+                    "businessAtmosphere": {
                         "type": ["string", "null"],
                         "title": "BUSINESS_ATMOSPHERE_IN_LOCATION",
                         "x-schema-form": {
@@ -292,15 +293,15 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "sarpanch_councillor_name": {
+                    "councillorName": {
                         "type": ["string", "null"],
                         "title": "SARPANCH/COUNCILLOR_NAME"
                     },
-                    "workBy_panchayat": {
+                    "workDone": {
                         "type": ["string", "null"],
                         "title": "WORK_DONE_BY_PANCHAYAT/MUNICIPALITY"
                     },
-                    "law_order": {
+                    "lawAndOrder": {
                         "type": ["string", "null"],
                         "title": "LAW_&_ORDER/CRIME",
                         "x-schema-form": {
@@ -320,7 +321,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "social_relation": {
+                    "socialRelation": {
                         "type": ["string", "null"],
                         "title": "SOCIAL_RELATION",
                         "x-schema-form": {
@@ -340,7 +341,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "political_climate": {
+                    "politicalClimate": {
                         "type": ["string", "null"],
                         "title": "POLITICAL_CLIMATE",
                         "x-schema-form": {
@@ -358,11 +359,11 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         }
 
                     },
-                    "activity": {
+                    "udf1": {
                         "type": ["string", "null"],
                         "title": "ACTIVITY"
                     },
-                    "source": {
+                    "udf3": {
                         "type": ["string", "null"],
                         "title": "SOURCE",
                         "x-schema-form": {
@@ -382,11 +383,11 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "institute_name": {
+                    "udf4": {
                         "type": ["string", "null"],
                         "title": "INSTITUTE_NAME"
                     },
-                    "difficult_source": {
+                    "udf5": {
                         "type": ["string", "null"],
                         "title": "DIFFICULTY_SOURCING",
                         "x-schema-form": {
@@ -403,23 +404,36 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "minimum_loan_size": {
+                    "latitude": {
+                        "type": ["string", "null"],
+                        "title": "GEO_TAG",
+                        "x-schema-form": {
+                            "type": "geotag",
+                            "latitude": "latitude",
+                            "longitude": "longitude",
+                        }
+                    },
+                    "longitude": {
+                        "type": ["string", "null"],
+                        "title": "LONGITUDE"
+                    },
+                    "udf6": {
                         "type": ["number", "null"],
                         "title": "MINIMUM_LOAN_SIZE"
                     },
-                    "maximum_loan_size": {
+                    "udf7": {
                         "type": ["number", "null"],
                         "title": "MAXIMUM_LOAN_SIZE"
                     },
-                    "interest_rates": {
+                    "udf8": {
                         "type": ["number", "null"],
                         "title": "INTEREST_RATES"
                     },
-                    "repayment_period": {
+                    "udf9": {
                         "type": ["number", "null"],
                         "title": "REPAYMENT_PERIOD(MONTHS)"
                     },
-                    "repayment_frequency": {
+                    "udf10": {
                         "type": ["string", "null"],
                         "title": "REPAYMENT_FREQUENCY",
                         "x-schema-form": {
@@ -445,43 +459,43 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "collateral": {
+                    "udf11": {
                         "type": ["string", "null"],
                         "title": "COLLATERAL"
                     },
-                    "penalty_action": {
+                    "udf12": {
                         "type": ["string", "null"],
                         "title": "PENALTY_ACTION"
                     },
-                    "client_base": {
+                    "udf13": {
                         "type": ["string", "null"],
                         "title": "CLIENT_BASE"
                     },
-                    "operation_since": {
+                    "udf14": {
                         "type": ["number", "null"],
                         "title": "OPERATION_SINCE"
                     },
-                    "bank": {
+                    "bankAvailable": {
                         "type": ["string", "null"],
                         "title": "BANK"
                     },
-                    "mfi": {
+                    "mfiAvailable": {
                         "type": ["string", "null"],
                         "title": "MFI"
                     },
-                    "money_leader": {
+                    "moneylenderAvailable": {
                         "type": ["string", "null"],
                         "title": "MONEY_LENDER"
                     },
-                    "whole_saler": {
+                    "wholeSalerAvailable": {
                         "type": ["string", "null"],
                         "title": "WHOLE_SALER"
                     },
-                    "post_office1": {
+                    "postOfficeAvailable": {
                         "type": ["string", "null"],
                         "title": "POST_OFFICE"
                     },
-                    "microfinance_village": {
+                    "microfinanceRequired": {
                         "type": ["string", "null"],
                         "title": "NEED_FOR_MICROFINANCE_IN_VILLAGE/SLUM",
                         "x-schema-form": {
@@ -495,11 +509,11 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "potential_village": {
+                    "noOfPotentialMember": {
                         "type": ["string", "null"],
                         "title": "POTENTIAL_#_MEMBER_IN_VILLAGE/SLUM"
                     },
-                    "member_profile": {
+                    "memberProfile": {
                         "type": ["string", "null"],
                         "title": "MEMBER_PROFILE",
                         "x-schema-form": {
@@ -516,7 +530,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "motivation_required": {
+                    "motivationRequired": {
                         "type": ["string", "null"],
                         "title": "MOTIVATION_REQUIRED",
                         "x-schema-form": {
@@ -533,7 +547,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "comment": {
+                    "udf2": {
                         "type": ["string", "null"],
                         "title": "COMMENT",
                         "x-schema-form": {
@@ -547,13 +561,71 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
-                    "name": {
-                        "type": ["string", "null"],
-                        "title": "NAME"
+                    "surveyContacts": {
+                        "type": "array",
+                        "title": "DETAILS_OF_PERSONS_CONTACTED",
+                        "items": {
+                            "type": "object",
+                            "required": ["contactName"],
+                            "properties": {
+                                "contactName": {
+                                    "type": ["string", "null"],
+                                    "title": "NAME"
+                                },
+                                "mobileNo": {
+                                    "type": ["string", "null"],
+                                    "title": "MOBILE_NUMBER"
+                                },
+                            }
+                        }
                     },
-                    "contact": {
-                        "type": ["string", "null"],
-                        "title": "CONTACT"
+                    "surveyFacilityDistance": {
+                        "type": "array",
+                        "title": "SURVER_FACILITY_DISTANCE",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "facilityName": {
+                                    "type": ["string", "null"],
+                                    "title": "NAME",
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "titleMap": [{
+                                            "name": "Market",
+                                            "value": "Market"
+                                        }, {
+                                            "name": "Main Road",
+                                            "value": "Main Road"
+                                        }, {
+                                            "name": "Highway",
+                                            "value": "Highway"
+                                        }, {
+                                            "name": "Block HQ/Municipality Office",
+                                            "value": "Block HQ/Municipality Office"
+                                        }, {
+                                            "name": "Bank",
+                                            "value": "Bank"
+                                        }, {
+                                            "name": "Post Office",
+                                            "value": "Post Office"
+                                        }, {
+                                            "name": "School(Class 10)",
+                                            "value": "School(Class 10)"
+                                        }, {
+                                            "name": "PHC",
+                                            "value": "PHC"
+                                        }, {
+                                            "name": "Qualified Doctor",
+                                            "value": "Qualified Doctor"
+                                        },]
+                                    }
+                                },
+                                "facilityDistance": {
+                                    "type": ["number", "null"],
+                                    "title": "DISTANCE"
+                                },
+                            }
+                        }
                     },
                     "geo_tag": {
                         "type": "geotag",
@@ -584,10 +656,27 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
         ]
     };
     var res = $resource(endpoint, null, {
-
+        search: searchResource({
+            method: 'GET',
+            url: endpoint
+        }),
+        save: {
+            method: 'POST',
+            url: endpoint
+        },
+        update: {
+            method: 'PUT',
+            url: endpoint
+        },
+        get: {
+            method: 'GET',
+            url: endpoint + '/{id}'
+        },
     });
+
     res.getSchema = function() {
         return surverJson;
     }
+
     return res;
 });

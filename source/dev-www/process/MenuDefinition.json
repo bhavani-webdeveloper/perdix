@@ -71,7 +71,8 @@
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
                 "Page/CentreCreationDashboard",
-                "Page/UserDashboard"    
+                "Page/UserDashboard",
+                "Page/Adhoc/bank.Survey.SurveyDashboard" 
             ]
         },
         {
