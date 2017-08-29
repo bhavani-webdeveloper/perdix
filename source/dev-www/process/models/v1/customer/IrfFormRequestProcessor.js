@@ -383,12 +383,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 items: {
                     "aadhaarNo": {
                         "key": "customer.aadhaarNo",
+                        orderNo: 10,
                         type: "qrcode",
                         onChange: "actions.setProofs(model)",
                         onCapture: EnrollmentHelper.customerAadhaarOnCapture
                     },
                     "IdentityProof1": {
                         type: "fieldset",
+                        orderNo: 20,
                         title: "IDENTITY_PROOF",
                         items: {
                             "identityProof": {
@@ -469,6 +471,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "addressProof1": {
                         type: "fieldset",
+                        orderNo: 30,
                         title: "ADDRESS_PROOF",
                         condition: "!model.customer.addressProofSameAsIdProof",
                         items: {
@@ -538,6 +541,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "spouseIdProof": {
                         type: "fieldset",
+                        orderNo: 40,
                         title: "SPOUSE_IDENTITY_PROOF",
                         condition: "model.customer.maritalStatus==='MARRIED'",
                         items: {
@@ -560,17 +564,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "udf36": {
                                 key: "customer.udf.userDefinedFieldValues.udf36",
-                                condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
-                                type: "barcode",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 != 'Aadhar Card'",
+                                //type: "barcode",
                                 onCapture: function(result, model, form) {
                                     $log.info(result); // spouse id proof
                                     model.customer.udf.userDefinedFieldValues.udf36 = result.text;
                                 }
                             },
-                            "udf36": {
+                            "udf36_1": {
                                 key: "customer.udf.userDefinedFieldValues.udf36",
-                                condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
-                                type: "qrcode",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 == 'Aadhar Card'",
+                                //type: "qrcode",
                                 onCapture: function(result, model, form) {
                                     $log.info(result); // spouse id proof
                                     var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);

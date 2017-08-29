@@ -12,14 +12,14 @@ define({
 
 		return {
 			"type": "search-list",
-			"title": "GRT Queue",
+			"title": "GRT_2_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 			},
 			definition: {
-				title: "GRT QUEUE",
+				title: "GRT_2_QUEUE",
 				searchForm: [{
 					"key": "partner",
 					"readonly": true,
@@ -104,17 +104,17 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "GRT",
+							name: "GRT2",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.GRT",
+									pageName: "loans.group.GRT2",
 									pageId:item.id
 								}, {
 									state: "Page.Engine",
-									pageName: "loans.group.GrtQueue",
+									pageName: "loans.group.Grt2Queue",
 								});
 							},
 							isApplicable: function(item, index) {

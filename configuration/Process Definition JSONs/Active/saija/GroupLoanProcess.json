@@ -25,20 +25,6 @@
       ]
    }, {
       "order": 3,
-      "code": "Checker1",
-      "name": "Checker 1",
-      "isAccountOpening": false,
-      "stageType": "CAPTURE",
-      "allowedRoles": []
-   }, {
-      "order": 4,
-      "code": "Checker2",
-      "name": "Checker 2",
-      "isAccountOpening": false,
-      "stageType": "CAPTURE",
-      "allowedRoles": []
-   }, {
-      "order": 5,
       "code": "CGT1",
       "name": "CGT 1",
       "requiredIfLoanCycleLessThan": 100,
@@ -50,7 +36,7 @@
          "RM"
       ]
    }, {
-      "order": 6,
+      "order": 4,
       "code": "CGT2",
       "name": "CGT 2",
       "requiredIfLoanCycleLessThan": 3,
@@ -62,19 +48,7 @@
          "RM"
       ]
    }, {
-      "order": 7,
-      "code": "CGT3",
-      "name": "CGT 3",
-      "requiredIfLoanCycleLessThan": 3,
-      "isAccountOpening": false,
-      "stageType": "CGT",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 8,
+      "order": 5,
       "code": "GRT",
       "name": "GRT Process",
       "isAccountOpening": false,
@@ -85,7 +59,18 @@
          "RM"
       ]
    }, {
-      "order": 9,
+      "order": 6,
+      "code": "GRT2",
+      "name": "GRT Process 2",
+      "isAccountOpening": false,
+      "stageType": "GRT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 7,
       "code": "LoanBooking",
       "name": "Loan Booking",
       "isAccountOpening": true,
@@ -96,7 +81,7 @@
          "RM"
       ]
    }, {
-      "order": 10,
+      "order": 8,
       "code": "ApplicationPending",
       "name": "Applications Pending",
       "isAccountOpening": false,
@@ -107,7 +92,7 @@
          "RM"
       ]
    }, {
-      "order": 11,
+      "order": 9,
       "code": "LoanDisbursement",
       "name": "Loan Disbursement",
       "isAccountOpening": false,
@@ -118,7 +103,7 @@
          "RM"
       ]
    }, {
-      "order": 12,
+      "order": 10,
       "code": "Rejected",
       "name": "Rejected",
       "isAccountOpening": false,

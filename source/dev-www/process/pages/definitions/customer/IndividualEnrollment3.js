@@ -3,25 +3,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
     function($log, $state, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $stateParams, Lead) {
         var branch = SessionStore.getBranch();
-        return {
-            "type": "schema-form",
-            "title": "INDIVIDUAL_ENROLLMENT_3",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                model.customer = model.customer || {};
-                model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
-                model.customer.date = model.customer.date || Utils.getCurrentDate();
-                model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-                model = Utils.removeNulls(model, true);
-                model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
-                model.customer.customerType = model.customer.customerType || 'Individual';
-                var centres = SessionStore.getCentres();
-                if(centres && centres.length > 0){
-                    model.customer.centreId = model.customer.centreId || centres[0].id;
-                }
-                var self = this;
-                var formRequest = {
-                    "overrides": {
+        var getOverrides = function (model) {
+
+            if (model.siteCode == "sambandh") {
+                return {
                         "KYC.additionalKYCs.kyc1ProofType": {
                             title: "MY CUSTOM TITLE"
                         },
@@ -227,8 +212,223 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             required:false,
                         },
 
-                    },
-                    "includes": [
+                };
+            } else if (model.siteCode == "saija"){
+                return {
+                        "KYC.additionalKYCs.kyc1ProofType": {
+                            title: "MY CUSTOM TITLE"
+                        },
+                        "CustomerInformation.centreId" : {
+                            "title": "CENTRE",
+                        },
+                        "CustomerInformation.spouseFirstName" : {
+                            "required": true
+                        },
+                        "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                            "required": false
+                        },
+                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
+                            "enumCode": "years_of_business",
+                            "title": "AGE_OF_ENTERPRISE"
+                        },
+                        "BusinessOccupationDetails.businessDetails.businessVillage": {
+                            title: "NO_OF_WORKERS_EMPLOYED"
+                        },
+                        "BusinessOccupationDetails.businessDetails.businessLandmark": {
+                            title: "KIND_OF_EMPLOYEES",
+                            type: "select",
+                            titleMap: {
+                                "Female": "Female",
+                                "Male": "Male",
+                                "Both": "Both"
+                            }
+                        },
+                        "BusinessOccupationDetails.businessDetails.businessPincode": {
+                            title: "INVOLVEMENT_MARKET_RELATED_TRANSACTIONS",
+                            type: "select",
+                            titleMap: {
+                                "YES": "Yes",
+                                "NO": "NO",
+                            },
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.businessDetails.businessPhone": {
+                            title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
+                            type: "select",
+                            titleMap: {
+                                "Family Member": "Family Member",
+                                "Employee": "Employee",
+                                "Business Is Closed": "Business Is Closed"
+                            },
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.cropName": {
+                            title: "NON_IRRIGATED_LAND",
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.irrigated": {
+                            title: "IRRIGATED_LAND",
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.harvestMonth": {
+                            title: "TOTAL_LAND",
+                            "type": "string",
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        // "BusinessOccupationDetails.agricultureDetails.landArea": {
+                        //     title: "DAIRY_ANIMALS",
+                        //     "type": "select",
+                        //     titleMap: {
+                        //         "One": "One",
+                        //         "Two": "Two",
+                        //         "Three": "Three",
+                        //         "Three": "Three",
+                        //         "More": "If more, specify",
+                        //     },
+                        //     schema:{
+                        //         "type":["string","null"],
+                        //     }
+                        // },
+                        "HouseVerification.HouseDetails.HouseOwnership" : {
+                            required:true,
+                            enumCode: "house_ownership",
+                        },
+                        "familyDetails.familyMembers": {
+                            onArrayAdd : function (value, form, model, formCtrl, event) {
+                                if((model.customer.familyMembers.length -1) === 0){
+                                    model.customer.familyMembers[0].relationShip = 'self';
+                                    model.customer.familyMembers[0].gender = model.customer.gender;
+                                    model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
+                                    model.customer.familyMembers[0].age = model.customer.age;
+                                    model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
+                                }
+                            }
+                        },
+                        "familyDetails.familyMembers.incomes.monthsPerYear" : {
+                            required:true,
+                        },
+                        "familyDetails.additionalDetails.medicalCondition" : {
+                            title: "FAMILY_MEDICAL_CONDITION_QUESTION",
+                            required:true,
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                            }
+                        },
+                        "familyDetails.additionalDetails.privateHospitalTreatment" : {
+                            title: "HOSPITAL_TREATMENT_QUESTION",
+                            required:true,
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                                "NA" : "NA",
+                            }
+                        },
+                        "familyDetails.additionalDetails.householdFinanceRelatedDecision" : {
+                             title: "HOUSEHOLD_FINANCE_DECISION_QUESTION",
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                                "NA" : "NA",
+                            }
+                        },
+                        "HouseVerification.HouseDetails.buildType" : {
+                            required:true,
+                        },
+                        "HouseVerification.HouseDetails.landLordName":{
+                            title: "NO_OF_ROOMS",
+                            required:true,
+                            "type": "select",
+                            "titleMap": {
+                                "1": "1",
+                                "2": "2",
+                                "3": "3",
+                                "4": "4",
+                                ">4": ">4",
+                            }
+                        },
+                        "HouseVerification.HouseDetails.HouseVerification": {
+                            title: "HOUSE_CONDITION",
+                            required:true,
+                            "type": "radios",
+                            "titleMap": {
+                                "Good": "Good",
+                                "Average": "Average",
+                                "Poor": "Poor",
+                            }
+                        },
+                        "HouseVerification.HouseDetails.durationOfStay": {
+                            title: "TYPE_OF_TOILET_FACILITY",
+                            required:true,
+                            "type": "select",
+                            order: 100,
+                            "titleMap": {
+                                "Own toilet": "Own toilet",
+                                "Shared/public": "Shared/public",
+                                "None/open space": "None/open space",
+                            },
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "assets.financialAssets.instrumentType" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.nameOfInstitution" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.instituteType" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.amountInPaisa" : {
+                            required:false,
+                        },
+                        "assets.financialAssets.frequencyOfDeposite" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanType" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanSource" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.instituteName" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.loanAmountInPaisa" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.installmentAmountInPaisa" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.frequencyOfInstallment" : {
+                            required:false,
+                        },
+                        "Liabilities1.liabilities.liabilityLoanPurpose" : {
+                            required:false,
+                        },
+
+                };
+            }
+        }
+        var getIncludes = function (model) {
+            if (model.siteCode == "sambandh") {
+                return [
                         "CustomerInformation",
                         "CustomerInformation.customerBranchId",
                         "CustomerInformation.centreId",
@@ -382,7 +582,191 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "actionbox",
                         "actionbox.submit",
                         "actionbox.save",
-                    ],
+                ];
+            } else if (model.siteCode == "saija") {
+                return [
+                        "CustomerInformation",
+                        "CustomerInformation.customerBranchId",
+                        "CustomerInformation.centreId",
+                        "CustomerInformation.area",
+                        //"CustomerInformation.groupName",
+                        //"CustomerInformation.loanCycle",
+                        "CustomerInformation.firstName",
+                        "CustomerInformation.gender",
+                        "CustomerInformation.age",
+                        "CustomerInformation.dateOfBirth",
+                        "CustomerInformation.maritalStatus",
+                        "CustomerInformation.fatherFirstName",
+                        "CustomerInformation.spouseFirstName",
+                        "CustomerInformation.religion",
+                        "CustomerInformation.caste",
+                        "CustomerInformation.dateOfBirth",                       
+                        "KYC",
+                        "KYC.IdentityProof1",
+                        "KYC.IdentityProof1.identityProof",
+                        "KYC.IdentityProof1.identityProofImageId",
+                        // "KYC.IdentityProof1.identityProofReverseImageId",
+                        "KYC.IdentityProof1.identityProofNo",
+                        "KYC.IdentityProof1.identityProofNo1",
+                        "KYC.IdentityProof1.identityProofNo2",
+                        "KYC.IdentityProof1.identityProofNo3",
+                        "KYC.IdentityProof1.idProofIssueDate",
+                        "KYC.IdentityProof1.idProofValidUptoDate",
+                        "KYC.IdentityProof1.addressProofSameAsIdProof",
+                        "KYC.addressProof1",
+                        "KYC.addressProof1.addressProof",
+                        "KYC.addressProof1.addressProofImageId",
+                        // "KYC.addressProof1.addressProofReverseImageId",
+                        "KYC.addressProof1.addressProofNo",
+                        "KYC.addressProof1.addressProofNo1",
+                        "KYC.addressProof1.addressProofNo2",
+                        "KYC.addressProof1.addressProofIssueDate",
+                        "KYC.addressProof1.addressProofValidUptoDate",
+                        "KYC.spouseIdProof",
+                        "KYC.spouseIdProof.udf33",
+                        "KYC.spouseIdProof.udf35",
+                        "KYC.spouseIdProof.udf36",
+                        "KYC.spouseIdProof.udf36_1",
+                        "ContactInformation",
+                        "ContactInformation.CustomerResidentialAddress",
+                        "ContactInformation.CustomerResidentialAddress.doorNo",
+                        "ContactInformation.CustomerResidentialAddress.street",
+                        "ContactInformation.CustomerResidentialAddress.locality",
+                        "ContactInformation.CustomerResidentialAddress.villageName",
+                        "ContactInformation.CustomerResidentialAddress.postOffice",
+                        "ContactInformation.CustomerResidentialAddress.district",
+                        "ContactInformation.CustomerResidentialAddress.pincode",
+                        "ContactInformation.CustomerResidentialAddress.state",
+                        "ContactInformation.CustomerResidentialAddress.stdCode",
+                        "ContactInformation.CustomerResidentialAddress.landLineNo",
+                        "ContactInformation.CustomerResidentialAddress.mobilePhone",
+                        "ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
+                        "ContactInformation.CustomerPermanentAddress",
+                        "ContactInformation.CustomerPermanentAddress.mailingDoorNo",
+                        "ContactInformation.CustomerPermanentAddress.mailingStreet",
+                        "ContactInformation.CustomerPermanentAddress.mailingLocality",
+                        "ContactInformation.CustomerPermanentAddress.mailingPostoffice",
+                        "ContactInformation.CustomerPermanentAddress.mailingDistrict",
+                        "ContactInformation.CustomerPermanentAddress.mailingPincode",
+                        "ContactInformation.CustomerPermanentAddress.mailingState",
+                        "familyDetails",
+                        "familyDetails.familyMembers",
+                        "familyDetails.familyMembers.customerId",
+                        "familyDetails.familyMembers.familyMemberFirstName",
+                        "familyDetails.familyMembers.relationShip",
+                        "familyDetails.familyMembers.gender",
+                        "familyDetails.familyMembers.age",
+                        "familyDetails.familyMembers.dateOfBirth",
+                        "familyDetails.familyMembers.educationStatus",
+                        "familyDetails.familyMembers.maritalStatus",
+                        "familyDetails.familyMembers.mobilePhone",
+                        "familyDetails.familyMembers.healthStatus",
+                        "familyDetails.familyMembers.incomes",
+                        "familyDetails.familyMembers.incomes.incomeSource",
+                        "familyDetails.familyMembers.incomes.incomeEarned",
+                        "familyDetails.familyMembers.incomes.frequency",
+                        "familyDetails.familyMembers.incomes.monthsPerYear",
+                        "familyDetails.additionalDetails",
+                        // "familyDetails.additionalDetails.medicalCondition",
+                        // "familyDetails.additionalDetails.privateHospitalTreatment",
+                        // "familyDetails.additionalDetails.householdFinanceRelatedDecision",
+                        "HouseVerification",
+                        "HouseVerification.HouseDetails",
+                        "HouseVerification.HouseDetails.HouseOwnership",
+                        "HouseVerification.HouseDetails.landLordName",//drinkingwater
+                        "HouseVerification.HouseDetails.HouseVerification",//waterfilter
+                        //"HouseVerification.HouseDetails.Toilet",//is toilet available
+                        "HouseVerification.HouseDetails.durationOfStay",//toilet facility
+                        "HouseVerification.HouseDetails.buildType",
+                        "HouseVerification.latitude",
+                        "Liabilities1",
+                        "Liabilities1.liabilities",
+                        "Liabilities1.liabilities.loanType",
+                        "Liabilities1.liabilities.loanSource",
+                        "Liabilities1.liabilities.instituteName",
+                        "Liabilities1.liabilities.loanAmountInPaisa",
+                        "Liabilities1.liabilities.installmentAmountInPaisa",
+                        "Liabilities1.liabilities.startDate",
+                        "Liabilities1.liabilities.maturityDate",
+                        "Liabilities1.liabilities.frequencyOfInstallment",
+                        "Liabilities1.liabilities.liabilityLoanPurpose",
+                        "assets",
+                        "assets.physicalAssets",
+                        "assets.physicalAssets.assetType",
+                        "assets.physicalAssets.ownedAssetDetails",
+                        "assets.physicalAssets.numberOfOwnedAsset",
+                        "assets.physicalAssets.ownedAssetValue",
+                        "assets.financialAssets",
+                        "assets.financialAssets.instrumentType",
+                        "assets.financialAssets.nameOfInstitution",
+                        "assets.financialAssets.ownedBy",
+                        "assets.financialAssets.insuranceType",
+                        "assets.financialAssets.instituteType",
+                        "assets.financialAssets.amountInPaisa",
+                        "assets.financialAssets.frequencyOfDeposite",
+                        "assets.financialAssets.startDate",
+                        "assets.financialAssets.maturityDate",
+                        "Expenditures1",
+                        "Expenditures1.expenditures",
+                        "Expenditures1.expenditures.expendituresSection",
+                        "Expenditures1.expenditures.expendituresSection.expenditureSource",
+                        "Expenditures1.expenditures.expendituresSection.customExpenditureSource",
+                        "Expenditures1.expenditures.expendituresSection.frequencySection",
+                        "Expenditures1.expenditures.expendituresSection.frequencySection.frequency",
+                        "Expenditures1.expenditures.expendituresSection.annualExpensesSection",
+                        "Expenditures1.expenditures.expendituresSection.annualExpensesSection.annualExpenses",
+                        "BusinessOccupationDetails",
+                        "BusinessOccupationDetails.customerOccupationType",
+                        "BusinessOccupationDetails.businessDetails",
+                        "BusinessOccupationDetails.businessDetails.relationshipWithBusinessOwner",
+                        "BusinessOccupationDetails.businessDetails.business/employerName",
+                        //"BusinessOccupationDetails.businessDetails.businessRegNo",
+                        "BusinessOccupationDetails.businessDetails.businessVillage",
+                        "BusinessOccupationDetails.businessDetails.businessLandmark",
+                        "BusinessOccupationDetails.businessDetails.businessPincode",
+                        "BusinessOccupationDetails.businessDetails.businessPhone",
+                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise",
+                        // "BusinessOccupationDetails.businessDetails.workPeriod",
+                        "BusinessOccupationDetails.businessDetails.workPlaceType",
+                        // "BusinessOccupationDetails.businessDetails.WorkPlace",
+                        // "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
+                        "BusinessOccupationDetails.agricultureDetails",
+                        "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
+                        "BusinessOccupationDetails.agricultureDetails.landOwnership",
+                        "BusinessOccupationDetails.agricultureDetails.cropName",
+                        "BusinessOccupationDetails.agricultureDetails.irrigated",
+                        "BusinessOccupationDetails.agricultureDetails.harvestMonth",
+                        //"BusinessOccupationDetails.agricultureDetails.landArea",
+                        "loanInformation",
+                        "loanInformation.requestedLoanAmount",
+                        "loanInformation.requestedLoanPurpose",
+                        "actionbox",
+                        "actionbox.submit",
+                        "actionbox.save",
+                ];
+            }
+        }
+        return {
+            "type": "schema-form",
+            "title": "INDIVIDUAL_ENROLLMENT_3",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                model.customer = model.customer || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
+                model.customer.date = model.customer.date || Utils.getCurrentDate();
+                model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+                model = Utils.removeNulls(model, true);
+                model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
+                model.customer.customerType = model.customer.customerType || 'Individual';
+                var centres = SessionStore.getCentres();
+                if(centres && centres.length > 0){
+                    model.customer.centreId = model.customer.centreId || centres[0].id;
+                }
+                var self = this;
+                var formRequest = {
+                    "overrides": getOverrides(model),
+                    "includes": getIncludes (model),
                     "excludes": [
                         "KYC.addressProofSameAsIdProof",
                     ]

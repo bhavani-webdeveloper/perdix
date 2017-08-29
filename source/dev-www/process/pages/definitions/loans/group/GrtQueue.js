@@ -52,7 +52,7 @@ define({
 					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
-						//'groupStatus': true,
+						'groupStatus': true,
 						'currentStage': "GRT",
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage

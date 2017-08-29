@@ -145,6 +145,16 @@ define({
                     readonly: true,
                     "title": "GROUP_NAME",
                 }, {
+                    "key": "group.groupCode",
+                    "readonly":true,
+                    "title": "GROUP_CODE",
+                }, {
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "readonly":true,
+                    "type": "select",
+                    "enumCode": "partner"
+                }, {
                     "key": "group.branchId",
                     "title": "BRANCH_NAME",
                     readonly: true,
@@ -178,7 +188,7 @@ define({
             }, {
                 "type": "box",
                 "title": "END_GRT",
-                "condition": "model.siteCode !== 'sambandh'",
+                "condition": "model.siteCode == 'KGFS'",
                 "items": [{
                     "key": "group.grtDoneBy",
                     "title": "GRT_DONE_BY",
@@ -467,6 +477,176 @@ define({
                 },]
             }, {
                 "type": "box",
+                "title": "END_GRT",
+                "condition": "model.siteCode == 'saija'",
+                "items": [{
+                    "key": "group.grtDoneBy",
+                    "title": "GRT_DONE_BY",
+                    "readonly": true
+                }, {
+                    "key": "group.grtLatitude",
+                    "title": "GRT_LOCATION",
+                    required: true,
+                    "type": "geotag",
+                    "latitude": "group.grtLatitude",
+                    "longitude": "group.grtLongitude"
+                }, {
+                    "key": "group.grtEndPhoto",
+                    "type": "file",
+                    required: true,
+                    "title": "GRT_PHOTO",
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "fileType": "image/*",
+                }, {
+                    "key": "group.udf1",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_1"
+                }, {
+                    "key": "group.udf2",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_2"
+                }, {
+                    "key": "group.udf3",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_3"
+                }, {
+                    "key": "group.udf4",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_4"
+                }, {
+                    "key": "group.udf5",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_5"
+                }, {
+                    "key": "group.udf6",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_6"
+                }, {
+                    "key": "group.udf7",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_7"
+                }, {
+                    "key": "group.udf8",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_8"
+                }, {
+                    "key": "group.udf9",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_9"
+                }, {
+                    "key": "group.udf10",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_10"
+                }, {
+                    "key": "group.udf11",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_11"
+                }, {
+                    "key": "group.udf12",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_12"
+                }, {
+                    "key": "group.udf13",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_13"
+                }, {
+                    "key": "group.udf14",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_14"
+                }, {
+                    "key": "group.udf15",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_15"
+                }, {
+                    "key": "group.udf16",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_16"
+                }, {
+                    "key": "group.udf17",
+                    "required":true,
+                    "type":"checkbox",
+                    "schema":{
+                        "default":false
+                    },
+                    "title": "QUESTION_17"
+                }, {
+                    "key": "group.Cgtbutton",
+                    "title": "END_GRT",
+                    "type":"button",
+                    "onClick":"actions.endGRT(model,form)"   
+                },  {
+                    title: "GRT_REMARKS",
+                    key: "group.grtRemarks",
+                    type: "textarea",
+                    required: true
+                },]
+            }, {
+                "type": "box",
                 "title": "GROUP_MEMBERS",
                 "condition": "model.siteCode !== 'sambandh'",
                 "items": [{
@@ -542,6 +722,7 @@ define({
                     }, {
                         "key": "group.jlgGroupMembers[].isHouseVerificationDone",
                         "title": "IS_HOUSE_VERIFIED",
+                        "condition": "model.siteCode == 'KGFS'",
                         "type": "checkbox",
                          schema: { default:true }
                     }, {
@@ -562,6 +743,7 @@ define({
                     },{
                         "type": "button",
                         "key": "group.jlgGroupMembers[]",
+                        "condition": "model.siteCode == 'KGFS'",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
                             Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
@@ -906,9 +1088,12 @@ define({
                         }
                     }
                     var reqData = _.cloneDeep(model);
+                    if(model.siteCode == 'saija') {
+                        reqData.stage='LoanBooking';
+                    }
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Proceeded to Applications Pending', 5000);
+                        irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded.', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();

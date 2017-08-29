@@ -1,5 +1,5 @@
 define({
-    pageUID: "loans.group.GRT",
+    pageUID: "loans.group.GRT2",
     pageType: "Engine",
     dependencies: ["$log", "irfSimpleModal", "Groups","GroupProcess","Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
@@ -77,7 +77,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "GRT",
+            "title": "GRT2",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
@@ -96,7 +96,7 @@ define({
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
                         model.group.udfDate1 = model.group.udfDate1 || "";
-                        model.group.grtDoneBy = model.group.grtDoneBy || SessionStore.getUsername();
+                        model.group.cgt3DoneBy = model.group.cgt3DoneBy || SessionStore.getUsername();
                         model.group.groupRemarks = null;
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
@@ -128,7 +128,7 @@ define({
                 return [
                     "Group ID : " + item.group.id,
                     "Group Code : " + item.group.groupCode,
-                    "GRT Date : " + item.group.grtDate
+                    "GRT Date : " + item.group.cgtDate3
                 ]
             },
 
@@ -139,6 +139,16 @@ define({
                     "key": "group.groupName",
                     readonly: true,
                     "title": "GROUP_NAME",
+                }, {
+                    "key": "group.groupCode",
+                    "readonly":true,
+                    "title": "GROUP_CODE",
+                }, {
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "readonly":true,
+                    "type": "select",
+                    "enumCode": "partner"
                 }, {
                     "key": "group.branchId",
                     "title": "BRANCH_NAME",
@@ -156,11 +166,11 @@ define({
                     "parentEnumCode": "branch_id",
                     "parentValueExpr": "model.group.branchId",
                 }, {
-                    "key": "group.grtPhoto",
-                    "title": "GRT_PHOTO",
+                    "key": "group.cgt3Photo",
+                    "title": "GRT_2_PHOTO",
                     required: true,
                     "category": "Group",
-                    "subCategory": "GRTPHOTO",
+                    "subCategory": "CGT3PHOTO",
                     "type": "file",
                     "fileType": "image/*",
                 },{
@@ -173,105 +183,23 @@ define({
             }, {
                 "type": "box",
                 "title": "END_GRT",
-                "condition": "model.siteCode !== 'sambandh'",
                 "items": [{
-                    "key": "group.grtDoneBy",
+                    "key": "group.cgt3DoneBy",
                     "title": "GRT_DONE_BY",
                     "readonly": true
                 }, {
-                    "key": "group.grtLatitude",
+                    "key": "group.cgt3Latitude",
                     "title": "GRT_LOCATION",
                     "type": "geotag",
-                    "latitude": "group.grtLatitude",
-                    "longitude": "group.grtLongitude"
+                    "latitude": "group.cgt3Latitude",
+                    "longitude": "group.cgt3Longitude"
                 }, {
-                    "key": "group.grtEndPhoto",
+                    "key": "group.cgt3EndPhoto",
                     "type": "file",
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
-                    "subCategory": "GRTPHOTO",
-                    "fileType": "image/*",
-                }, {
-                    "key": "group.udf1",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_1"
-                }, {
-                    "key": "group.udf2",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_2"
-                }, {
-                    "key": "group.udf3",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_3"
-                }, {
-                    "key": "group.udf4",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_4"
-                }, {
-                    "key": "group.udf5",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_5"
-                }, {
-                    "key": "group.udf6",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_6"
-                }, {
-                    "key": "group.Cgtbutton",
-                    "title": "END_GRT",
-                    "type":"button",
-                    "onClick":"actions.endGRT(model,form)"   
-                }, {
-                    "key": "group.grtRemarks",
-                    "title": "GRT_REMARKS",
-                    "type": "textarea"
-                }]
-            }, {
-                "type": "box",
-                "title": "END_GRT",
-                "condition": "model.siteCode == 'sambandh'",
-                "items": [{
-                    "key": "group.grtDoneBy",
-                    "title": "GRT_DONE_BY",
-                    "readonly": true
-                }, {
-                    "key": "group.grtLatitude",
-                    "title": "GRT_LOCATION",
-                    required: true,
-                    "type": "geotag",
-                    "latitude": "group.grtLatitude",
-                    "longitude": "group.grtLongitude"
-                }, {
-                    "key": "group.grtEndPhoto",
-                    "type": "file",
-                    required: true,
-                    "title": "GRT_PHOTO",
-                    "category": "Group",
-                    "subCategory": "GRTPHOTO",
+                    "subCategory": "CGT3PHOTO",
                     "fileType": "image/*",
                 }, {
                     "key": "group.udf1",
@@ -410,60 +338,18 @@ define({
                     },
                     "title": "QUESTION_17"
                 }, {
-                    "key": "group.udf18",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_18"
-                }, {
-                    "key": "group.udf19",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_19"
-                }, {
-                    "key": "group.udf20",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_20"
-                }, {
-                    "key": "group.udf21",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_21"
-                }, {
-                    "key": "group.udf22",
-                    "required":true,
-                    "type":"checkbox",
-                    "schema":{
-                        "default":false
-                    },
-                    "title": "QUESTION_22"
-                }, {
                     "key": "group.Cgtbutton",
                     "title": "END_GRT",
                     "type":"button",
                     "onClick":"actions.endGRT(model,form)"   
-                },  {
-                    title: "GRT_REMARKS",
-                    key: "group.grtRemarks",
-                    type: "textarea",
-                    required: true
-                },]
+                }, {
+                    "key": "group.cgt3Remarks",
+                    "title": "GRT_REMARKS",
+                    "type": "textarea"
+                }]
             }, {
                 "type": "box",
                 "title": "GROUP_MEMBERS",
-                "condition": "model.siteCode !== 'sambandh'",
                 "items": [{
                     "key": "group.scheduledDisbursementDate",
                     "title": "SCHEDULED_DISBURSEMENT_DATE",
@@ -474,10 +360,6 @@ define({
                     "title": "FIRST_REPAYMENT_DATE",
                     "readonly":true,
                     "type": "date",
-                },{
-                    "key": "group.groupCode",
-                    "title": "GROUP_CODE",
-                    "readonly":true
                 },
                 {
                     "key": "group.jlgGroupMembers",
@@ -534,141 +416,7 @@ define({
                         "title": "RELATION",
                         "type": "select",
                         "enumCode": "relation"
-                    }, {
-                        "key": "group.jlgGroupMembers[].isHouseVerificationDone",
-                        "title": "IS_HOUSE_VERIFIED",
-                        "type": "checkbox",
-                         schema: { default:true }
-                    }, {
-                        "key": "group.jlgGroupMembers[].latitude",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
-                        "title": "HOUSE_LOCATION",
-                        "type": "geotag",
-                        "latitude": "group.jlgGroupMembers[].latitude",
-                        "longitude":"group.jlgGroupMembers[].longitude"
-                    }, {
-                        "key": "group.jlgGroupMembers[].photoImageId1",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
-                        "title": "HOUSE_PHOTO",
-                        "type": "file",
-                        "category": "Group",
-                        "subCategory": "GRTPHOTO",
-                        "fileType": "image/*",
-                    },{
-                        "type": "button",
-                        "key": "group.jlgGroupMembers[]",
-                        "title": "DOWNLOAD_APPLICATION_FORM",
-                        "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
-                        }
-                    }, {
-                        "type": "button",
-                        "key": "group.jlgGroupMembers[]",
-                        condition: "model.group.partnerCode === 'AXIS'",
-                        "title": "DOWNLOAD_AGREEMENT_FORM",
-                        "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=agmt_loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
-                        }
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "title": "GROUP_MEMBERS",
-                "condition": "model.siteCode == 'sambandh'",
-                "items": [{
-                    "key": "group.scheduledDisbursementDate",
-                    "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "required":true,
-                    "type": "date",
-                },{
-                    "key": "group.firstRepaymentDate",
-                    "title": "FIRST_REPAYMENT_DATE",
-                    "required":true,
-                    "type": "date",
-                },{
-                    "key": "group.groupCode",
-                    "title": "GROUP_CODE",
-                    "readonly":true
-                },
-                {
-                    "key": "group.jlgGroupMembers",
-                    "type": "array",
-                    "title": "GROUP_MEMBERS",
-                    "add": null,
-                    "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
-                    "items": [{
-                        "key": "group.jlgGroupMembers[].urnNo",
-                        "readonly": true,
-                        "title": "URN_NO",
-                    }, {
-                        "key": "group.jlgGroupMembers[].firstName",
-                        "type": "string",
-                        "readonly": true,
-                        "title": "GROUP_MEMBER_NAME"
-                    }, {
-                        "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                        "type": ["string", "null"],
-                        "readonly": true,
-                        "title": "HUSBAND_OR_FATHER_NAME",
-                        "schema": {
-                            "type": ["string", "null"],
-                        }
-                    }, {
-                        "key": "group.jlgGroupMembers[].relation",
-                        "readonly": true,
-                        "title": "RELATION",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanAmount",
-                        "readonly": true,
-                        "title": "LOAN_AMOUNT",
-                        "type": "amount",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose1",
-                        "readonly": true,
-                        "title": "LOAN_PURPOSE_1",
-                        "enumCode": "loan_purpose_1",
-                        "type": "select",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose2",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE_2",
-                    }, {
-                        "key": "group.jlgGroupMembers[].loanPurpose3",
-                        "readonly": true,
-                        "type": "string",
-                        "title": "LOAN_PURPOSE3",
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessFirstName",
-                        "readonly": true,
-                        "title": "WitnessLastName",
-                    }, {
-                        "key": "group.jlgGroupMembers[].witnessRelationship",
-                        "readonly": true,
-                        "title": "RELATION",
-                        "type": "select",
-                        "enumCode": "relation"
-                    }, {
-                        "key": "group.jlgGroupMembers[].isHouseVerificationDone",
-                        "title": "IS_HOUSE_VERIFIED",
-                        "type": "checkbox",
-                         schema: { default:true }
-                    }, {
-                        "key": "group.jlgGroupMembers[].latitude",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
-                        "title": "HOUSE_LOCATION",
-                        "type": "geotag",
-                        "latitude": "group.jlgGroupMembers[].latitude",
-                        "longitude":"group.jlgGroupMembers[].longitude"
-                    }, {
-                        "key": "group.jlgGroupMembers[].photoImageId1",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
-                        "title": "HOUSE_PHOTO",
-                        "type": "file",
-                        "category": "Group",
-                        "subCategory": "GRTPHOTO",
-                        "fileType": "image/*",
-                    }]
+                    },]
                 }]
             }, {
                 "title": "REMARKS_HISTORY",
@@ -825,8 +573,8 @@ define({
                 preSave: function(model, form, formName) {},
                 startGRT: function(model, form) {
                     PageHelper.showLoader();
-                    model.group.grtDate = new Date();
-                    model.group.grtDoneBy=SessionStore.getUsername();
+                    model.group.cgtDate3 = new Date();
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -852,13 +600,13 @@ define({
                     });
                 },
                 endGRT: function(model, form) {
-                    if(!model.group.grtDate) {
+                    if(!model.group.cgtDate3) {
                         irfProgressMessage.pop('GRT-End', 'GRT is not yet started.', 3000);
                         return;
                     }
                     PageHelper.showLoader();
-                    model.group.grtEndDate = new Date();
-                    model.group.grtDoneBy=SessionStore.getUsername();
+                    model.group.cgtEndDate3 = new Date();
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
                     reqData.groupAction = 'SAVE';
@@ -884,7 +632,7 @@ define({
                 },
                 submit: function(model, form, formName) {
 
-                    if(!model.group.grtEndDate) {
+                    if(!model.group.cgtEndDate3) {
                         irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
                         return;
                     }
@@ -893,7 +641,7 @@ define({
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
-                    model.group.grtDoneBy=SessionStore.getUsername();
+                    model.group.cgt3DoneBy=SessionStore.getUsername();
                     if (model.group.firstRepaymentDate || model.group.scheduledDisbursementDate) {
                         for (i = 0; i < model.group.jlgGroupMembers.length; i++) {
                             model.group.jlgGroupMembers[i].scheduledDisbursementDate = model.group.scheduledDisbursementDate;

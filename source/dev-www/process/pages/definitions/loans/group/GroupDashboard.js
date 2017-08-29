@@ -33,6 +33,25 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         ]
     };
 
+    if(siteCode == 'saija') {
+        fullDefinition.items = [
+            "Page/Engine/loans.group.CreateGroup",
+            "Page/Engine/loans.group.EditGroupQueue",
+            "Page/Engine/loans.group.DscQueue",
+            "Page/Engine/loans.group.DscOverrideQueue",
+            "Page/Engine/loans.group.Cgt1Queue",
+            "Page/Engine/loans.group.Cgt2Queue",
+            "Page/Engine/loans.group.GrtQueue",
+            "Page/Engine/loans.group.Grt2Queue",
+            "Page/Engine/loans.group.GroupLoanBookingQueue",
+            "Page/Engine/loans.group.ApplicationPendingQueue",
+            "Page/Engine/loans.group.JLGDisbursementQueue",
+            "Page/Engine/loans.group.CloseGroup",
+            "Page/Engine/loans.group.GroupLoanRepaymentQueue"
+        ]
+    }
+
+
     if(siteCode == 'sambandh') {
         fullDefinition.items = [
             "Page/Engine/loans.group.CreateGroup",
