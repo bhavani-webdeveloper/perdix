@@ -107,11 +107,7 @@ define({
                                     $log.info("printing loan account");
                                     $log.info(response);
                                     model.loanAccount=response;
-                                    if(model.loanAccount.daysPastDue>0){
-                                        model.loanMonitoringDetails.udf1="Overdue";
-                                    }else{
-                                        model.loanMonitoringDetails.udf1="Regular";
-                                    }
+                                    
                                     var totalSatisfiedDemands = 0;
                                     if (model.loanAccount.repaymentSchedule && model.loanAccount.repaymentSchedule.length) {
                                         for (i = 0; i < model.loanAccount.repaymentSchedule.length; i++) {
@@ -123,6 +119,11 @@ define({
                                     }
                                     $log.info(totalSatisfiedDemands);
                                     model.loanMonitoringDetails.numberOfInstallmentsDue = totalSatisfiedDemands;
+                                    if(model.loanMonitoringDetails.numberOfInstallmentsDue>0){
+                                        model.loanMonitoringDetails.udf1="Overdue";
+                                    }else{
+                                        model.loanMonitoringDetails.udf1="Regular";
+                                    }
                                 },
                                 function(httpRes) {
                                     PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
