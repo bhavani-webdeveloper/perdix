@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
-    function($log, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "formHelper","PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
+    function($log, formHelper ,PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -9,126 +9,112 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     irfNavigator.goBack();
                     return;
                 }
+                $stateParams.pageData = $stateParams.pageData || {};
+                if (typeof($stateParams.pageData.readonly) == 'undefined') {
+                    $stateParams.pageData.readonly = true;
+                }
+                var pageData = {
+                    "readonly": $stateParams.pageData.readonly
+                };
+                var auditId = Number($stateParams.pageId);
                 model.general_observations = model.general_observations || {};
                 model.auditObservation = model.auditObservation || {};
-                model.masters = Audit.offline.getAuditMaster() || {};
+                var masters = Audit.offline.getAuditMaster() || {};
                 var self = this;
                 self.form = [];
                 var init = function(response) {
+                    $log.info(response)                    
+                    model.masters = masters;
+                    $log.info(masters)
+                    $log.info("response")
+                    $log.info(response)
                     model.general_observations = response;
                     var tableDetails = [];
+                    // for (i in model.general_observations) {
+                    //     for (j in model.masters.general_observations) {
+
+                    //         if (model.general_observations[i].particular_id == model.masters.particular_id[j].id) {
+                    //             model.general_observations[i].particular_name = model.masters.particular_id[j].particular_name;
+                    //             model.general_observations[i].order_id = model.masters.particular_id[j].particular_order;
+                    //         }
+                    //         for (k in model.masters.particular_id[i].Particular_options) {
+                    //             if (model.general_observations[i].option_id == model.masters.particular_id[i].Particular_options[k].id) {
+                    //                 model.general_observations[i].option_name = model.masters.particular_id[i].Particular_options[k].name;
+                    //             }
+                    //         }
+                    //     }
+                    // };
                     for (i in model.general_observations) {
-                        for (j in model.masters.go_particulars) {
-                            if (model.general_observations[i].particular_id == model.masters.go_particulars[j].id) {
-                                model.general_observations[i].particular_name = model.masters.go_particulars[j].particular_name;
-                                model.general_observations[i].order_id = model.masters.go_particulars[j].particular_order;
+                        for (j in model.masters.general_observation) {
+                            for(k in model.masters.general_observation[j].particulars)
+                            if (model.general_observations[i].particular_id == model.masters.general_observation[j].particulars[k].particular_id) {
+                                $log.info(model.masters.general_observation[j].particulars[k].particular_id)
+                                $log.info("model.masters.general_observation[j].particulars[k].particular_id")
+                                $log.info(model.masters.general_observation)
+
+
                             }
-                            for (k in model.masters.go_particulars[i].Particular_options) {
-                                if (model.general_observations[i].option_id == model.masters.go_particulars[i].Particular_options[k].id) {
-                                    model.general_observations[i].option_name = model.masters.go_particulars[i].Particular_options[k].name;
-                                }
-                            }
+
                         }
-                    };
-                    for (i in model.general_observations) {
-                        tableDetails.push({
-                            "type": "section",
-                            "htmlClass": "row col-md-12",
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    key: "general_observations[" + i + "].order_id",
-                                    readonly: true,
-                                    type: "string",
-                                    notitle: true
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-2 col-xs-3",
-                                "items": [{
-                                    "key": "general_observations[" + i + "].particular_name",
-                                    "type": "text",
-                                    "notitle": true,
-                                    "readonly": true
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    "key": "general_observations[" + i + "].option_name",
-                                    type: "select"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    "key": "general_observations[" + i + "].comments",
-                                    "type": "text",
-                                    "notitle": true 
-                                }]
-                            }]
 
-                        })
-                    };
+                    }
+
+
                     self.form = [{
-                        "type": "box",
-                        "title": "GENERAL_OBSERVATION",
-                        "colClass": "col-md-12",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "row",
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    "type": "section",
-                                    "html": "{{'ORDER'|translate}}"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-2 col-xs-3",
-                                "items": [{
-                                    "type": "section",
-                                    "html": "{{'PARTICULAR'|translate}}"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    "type": "section",
-                                    "html": "{{'OPTION'|translate}}"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-3 col-xs-3",
-                                "items": [{
-                                    "type": "section",
-                                    "html": "{{'COMMENTS'|translate}}"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "row",
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "col-md-12",
-                                    "items": tableDetails
-                                }]
+                        type: "box",
+                        title: "GENERAL_OBSERVATION",
+                        items: [{
+                            key: "general_observations",
+                            type: "array",
+                            title: "GENERAL_OBSERVATION",
+                            startEmpty: true,
+                            items: [
+                                // {
+                                //     key: "general_observations[].order_id",
+                                //     type: "string",
+                                //     "titleMap": orderIdTitleMap,
+                                // },
+                                {
+                                    key: "general_observations[].particular_name",                                    
+                                    "type": "lov",
+                                    lovonly: true,
+                                    outputMap: {
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
 
-                            }]
+                                        if (model.group.productCode)
+                                            return Queries.getLoanPurpose1(model.group.productCode);
+                                        else
+                                            return Queries.getAllLoanPurpose1();
 
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.purpose1
+                                        ];
+                                    },
+                                    onSelect: function(result, model, context) {
+                                        model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = result.purpose1;
+                                        model.group.jlgGroupMembers[context.arrayIndex].loanPurpose2 = undefined;
+                                    }
+                                }, {
+                                    key: "general_observations[].option_name",
+                                    type: "select",
+                                }, {
+                                    key: "general_observations[].comments"
+                                }
+                            ]
                         }]
                     }, {
-                        "type": "actionbox",
-                        "items": [{
-                            "type": "submit",
-                            "title": "UPDATE",
-                            onClick: "actions.goBack(model, formCtrl, form, $event)"
+                        type: "actionbox",
+                        items: [{
+                            type: "submit",
+                            title: "ADD"
                         }]
                     }]
                 };
-                form: [],
-                    model.$isOffline = false;
+                model.$isOffline = false;
                 if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.general_observations) {
                     init($stateParams.pageData.auditData.general_observations);
                 } else {
@@ -140,20 +126,38 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     }).finally(function() {
                         PageHelper.hideLoader();
                     });
+
+
                 }
 
             },
+            form: [],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
                     "general_observations": {
-                        "type": "object",
-                        "title": "Address",
-                        "properties": {
-                            "comments": {
-                                "type": "string",
-                                "title": "COMMENTS"
+                        "type": "array",
+                        "title": "VERIFICATIONS",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "order_id": {
+                                    "type": ["string", "null"],
+                                    "title": "ORDER_ID"
+                                },
+                                "option_name": {
+                                    "type": ["string", "null"],
+                                    "title": "OPTION_NAME"
+                                },
+                                "particular_name": {
+                                    "type": ["string", "null"],
+                                    "title": "PARTICULAR_NAME"
+                                },
+                                "comments": {
+                                    "type": ["string", "null"],
+                                    "title": "COMMENTS"
+                                }
                             }
                         }
                     }

@@ -100,7 +100,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             updateAuditInfo: {
                 method: 'POST',
-                url: endpoint + '/updateAuditInfo'
+                url: endpoint + '/UpdateAuditInfo'
             },
             getAuditFull: {
                 method: 'GET',
@@ -320,6 +320,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
             Audit.online.getAuditMaster().$promise.then(function(response) {
+                $log.info(response)
                 var auditTypeObj = {};
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
@@ -424,7 +425,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.observation_classification = observation_classification;
 
-                $log.info(response);
+                
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
                 deferred.resolve();

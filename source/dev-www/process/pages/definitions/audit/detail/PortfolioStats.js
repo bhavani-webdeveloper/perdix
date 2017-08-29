@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "PageHelper", "Enrollment", "Audit", "SessionStore", "Files",
-    function($log, PageHelper, Enrollment, Audit, SessionStore, Files) {
+irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
+    function($log, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
 
         var branch = SessionStore.getBranch();
 
@@ -8,16 +8,26 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
             "title": "PORTFOLIO_STATS",
             // "subTitle": "Demo3 page Sub Title",
             initialize: function(model, form, formCtrl) {
-                // $log.info("Demo Customer Page got initialized");
+                if (!$stateParams.pageId) {
+                    irfNavigator.goBack();
+                    return;
+                }
+                $stateParams.pageData = $stateParams.pageData || {};
+                if (typeof($stateParams.pageData.readonly) == 'undefined') {
+                    $stateParams.pageData.readonly = true;
+                }
+                var pageData = {
+                    "readonly": $stateParams.pageData.readonly
+                };
+                model.auditId = Number($stateParams.pageId);             
+                var master = Audit.offline.getAuditMaster() || {};
                 model.portfolio_stats = model.portfolio_stats || {};
                 model.portfolio_stats.values_total = 0;
                 model.portfolio_stats.values_deviation = 0;
                 var self = this;
-                // $log.info("inside request");
                 Audit.offline.getPortfolioStats("1").then(function(res) {
                     self.form = [];
                     model.portfolio_stats = res;
-                    // $log.info(model.portfolio_stats);
                     var cashDetails = [];
                     for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
                         cashDetails.push({

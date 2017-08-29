@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
             "type": "schema-form",
             "title": "SCHEDULE_AUDIT",
             initialize: function(model, form, formCtrl) {
-                model.auditInfo = model.auditInfo || {};
+                model.auditInfo = model.auditInfo || {};                
                 model.branchName = SessionStore.getBranch();
                 model.roleUsers = model.roleUsers || {};
                 if ($stateParams.pageId) {
@@ -225,6 +225,8 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateDates(model)) return;
                         model.auditInfo.next_stage = nextStage;
+                        model.auditInfo.audit_type  = 1;
+                        model.auditInfo.status = "S";
                         PageHelper.showLoader();
                         Audit.online.updateAuditInfo(model.auditInfo).$promise.then(function(res) {
                             model.auditInfo = res;
