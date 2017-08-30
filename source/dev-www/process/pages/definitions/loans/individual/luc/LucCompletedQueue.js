@@ -136,7 +136,10 @@ define({
                             data: 'loanId'
                         },{
                             title: 'LUC_COMPLETED_DATE',
-                            data: 'lucDate'
+                            data: 'lastStageChangedAt',
+                            render: function(data, type, full, meta) {
+                                return (moment(data).format("DD-MM-YYYY"));
+                            }
                         }]
                     },
                     getActions: function() {

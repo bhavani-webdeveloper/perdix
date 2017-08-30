@@ -32,7 +32,7 @@ define({
 
             return {
                 "type": "schema-form",
-                "title": "LUC_DATA_CAPTURE",
+                "title": "LUC Details",
                 "subTitle": "LUC",
                 initialize: function(model, form, formCtrl) {
 
