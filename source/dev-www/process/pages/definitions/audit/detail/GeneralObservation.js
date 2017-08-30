@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "formHelper","PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
-    function($log, formHelper ,PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "$q", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore", "filterFilter",
+    function($log, $q, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore, filterFilter) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -16,23 +16,19 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
-                var auditId = Number($stateParams.pageId);
+                model.auditId = Number($stateParams.pageId);
                 model.general_observations = model.general_observations || {};
                 model.auditObservation = model.auditObservation || {};
                 var masters = Audit.offline.getAuditMaster() || {};
                 var self = this;
                 self.form = [];
                 var init = function(response) {
-                    $log.info(response)                    
-                    model.masters = masters;
-                    $log.info(masters)
-                    $log.info("response")
                     $log.info(response)
+                    model.masters = masters;
                     model.general_observations = response;
                     var tableDetails = [];
                     // for (i in model.general_observations) {
                     //     for (j in model.masters.general_observations) {
-
                     //         if (model.general_observations[i].particular_id == model.masters.particular_id[j].id) {
                     //             model.general_observations[i].particular_name = model.masters.particular_id[j].particular_name;
                     //             model.general_observations[i].order_id = model.masters.particular_id[j].particular_order;
@@ -44,22 +40,6 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     //         }
                     //     }
                     // };
-                    for (i in model.general_observations) {
-                        for (j in model.masters.general_observation) {
-                            for(k in model.masters.general_observation[j].particulars)
-                            if (model.general_observations[i].particular_id == model.masters.general_observation[j].particulars[k].particular_id) {
-                                $log.info(model.masters.general_observation[j].particulars[k].particular_id)
-                                $log.info("model.masters.general_observation[j].particulars[k].particular_id")
-                                $log.info(model.masters.general_observation)
-
-
-                            }
-
-                        }
-
-                    }
-
-
                     self.form = [{
                         type: "box",
                         title: "GENERAL_OBSERVATION",
@@ -68,43 +48,61 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             type: "array",
                             title: "GENERAL_OBSERVATION",
                             startEmpty: true,
-                            items: [
-                                // {
-                                //     key: "general_observations[].order_id",
-                                //     type: "string",
-                                //     "titleMap": orderIdTitleMap,
-                                // },
-                                {
-                                    key: "general_observations[].particular_name",                                    
-                                    "type": "lov",
-                                    lovonly: true,
-                                    outputMap: {
-                                    },
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model) {
-
-                                        if (model.group.productCode)
-                                            return Queries.getLoanPurpose1(model.group.productCode);
-                                        else
-                                            return Queries.getAllLoanPurpose1();
-
-                                    },
-                                    getListDisplayItem: function(item, index) {
-                                        return [
-                                            item.purpose1
-                                        ];
-                                    },
-                                    onSelect: function(result, model, context) {
-                                        model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = result.purpose1;
-                                        model.group.jlgGroupMembers[context.arrayIndex].loanPurpose2 = undefined;
-                                    }
-                                }, {
-                                    key: "general_observations[].option_name",
-                                    type: "select",
-                                }, {
-                                    key: "general_observations[].comments"
+                            items: [{
+                                key: "general_observations[].particular_id",
+                                "type": "lov",
+                                lovonly: true,
+                                outputMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": masters.general_observation.particulars.length
+                                        },
+                                        body: masters.general_observation.particulars
+                                    });
+                                },
+                                getListDisplayItem: function(item, index, context) {
+                                    return [
+                                        item.particular_id,
+                                        item.particular_name,
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.general_observations[context.arrayIndex].particular_id = result.particular_name;
+                                    model.general_observations[context.arrayIndex].particularId = result.particular_id;
+                                },
+                            }, {
+                                key: "general_observations[].option_id",
+                                "type": "lov",
+                                lovonly: true,
+                                outputMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var optionsToShow = filterFilter(masters.general_observation.particular_options, {
+                                        particular_id: model.general_observations[context.arrayIndex].particularId
+                                    }, true);
+                                    $log.info(optionsToShow)
+                                    $log.info("optionsToShow")
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": optionsToShow.length
+                                        },
+                                        body: optionsToShow
+                                    });
+                                },
+                                getListDisplayItem: function(item, index, context) {
+                                    $log.info(item)
+                                    return [
+                                        item.name
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.general_observations[context.arrayIndex].option_id = result.name;
                                 }
-                            ]
+                            }, {
+                                key: "general_observations[].comments"
+                            }]
                         }]
                     }, {
                         type: "actionbox",
@@ -126,8 +124,6 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     }).finally(function() {
                         PageHelper.hideLoader();
                     });
-
-
                 }
 
             },
@@ -146,11 +142,11 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     "type": ["string", "null"],
                                     "title": "ORDER_ID"
                                 },
-                                "option_name": {
+                                "option_id": {
                                     "type": ["string", "null"],
                                     "title": "OPTION_NAME"
                                 },
-                                "particular_name": {
+                                "particular_id": {
                                     "type": ["string", "null"],
                                     "title": "PARTICULAR_NAME"
                                 },
@@ -166,7 +162,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
             actions: {
                 submit: function(model, form, formName) {
                     if (model.$isOffline) {
-                        Audit.offline.setGeneralObservation(model.general_observations.audit_id, model.general_observations).then(function(res) {
+                        Audit.offline.setGeneralObservation(model.audit_id, model.general_observations).then(function(res) {
                             model.general_observations = res;
                             PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
                             irfNavigator.goBack();
