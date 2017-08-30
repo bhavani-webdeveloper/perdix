@@ -1,6 +1,16 @@
 irf.pageCollection.factory(irf.page("bank.Survey"),
- ["$log", "SessionStore", "$state","$stateParams","Utils", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation",
-    function($log, SessionStore, $state,$stateParams,Utils, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation) {
+ ["$log", "SessionStore","irfNavigator", "$state","$stateParams","Utils", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation",
+    function($log, SessionStore,irfNavigator, $state,$stateParams,Utils, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation) {
+        var fixData = function(model) {
+            $log.info("data fixed");
+            if (model.bank_survey.udf6) model.bank_survey.udf6 = Number(model.bank_survey.udf6);
+            if (model.bank_survey.udf7) model.bank_survey.udf7 = Number(model.bank_survey.udf7);
+            if (model.bank_survey.udf8) model.bank_survey.udf8 = Number(model.bank_survey.udf8);
+            if (model.bank_survey.udf9) model.bank_survey.udf9 = Number(model.bank_survey.udf9);
+            if (model.bank_survey.udf14) model.bank_survey.udf14 = Number(model.bank_survey.udf14);
+            return model;
+        }
+
         return {
             "type": "schema-form",
             "title": "SURVEY",
@@ -24,6 +34,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                                 _.assign(model.bank_survey, res);
                                 $log.info(model.bank_survey);
                                 model = Utils.removeNulls(model, true);
+                                model=fixData(model);
                                 PageHelper.hideLoader();
                             }
                         );
@@ -178,6 +189,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                 return $q.resolve(SurveyInformation.getSchema());
             },
             actions: {
+               
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
                     if (model.bank_survey.date) {
@@ -194,29 +206,31 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     PageHelper.showLoader();
                     PageHelper.showProgress("Survey Save", "Working...");
                     if (model.bank_survey.id) {
-                        //model.bank_survey.journalEntryProcessAction = "PROCEED",
                             SurveyInformation.update(model.bank_survey)
                             .$promise
                             .then(function(res) {
                                 PageHelper.showProgress("Survey Save", "Survey Updated with id" +" "+ res.id, 3000);
                                 $log.info(res);
                                 model.bank_survey = res;
-                                //$state.go('Page.JournalPostingDashboard', null);
+                                model=fixData(model);
+                                irfNavigator.goBack();
+                                
                             }, function(httpRes) {
                                 PageHelper.showProgress("Survey Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
                             }).finally(function() {
                                 PageHelper.hideLoader();
                             })
-                    } else {
-                        //model.journal.journalEntryProcessAction = "SAVE",   
+                    } else {  
                         SurveyInformation.save(model.bank_survey)
                             .$promise
                             .then(function(res) {
                                 PageHelper.showProgress("Survey Save", "Survey Updated with id"+" "+ res.id, 3000);
                                 $log.info(res);
                                 model.bank_survey = res;
-                                //$state.go('Page.JournalPostingDashboard', null);
+                                model=fixData(model);
+                                irfNavigator.goBack();
+                               
                             }, function(httpRes) {
                                 PageHelper.showProgress("Survey Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);

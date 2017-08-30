@@ -258,22 +258,32 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "irrigationAvailable": {
                         "type": ["string", "null"],
-                        "title": "IRRIGATION_AVAILABLE"
+                        "title": "IRRIGATION_AVAILABLE",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "noOfKiranaShop": {
-                        "type": ["string", "null"],
-                        "title": "KINARA_SHOP"
+                        "type": ["number", "null"],
+                        "title": "KINARA_SHOP",
                     },
                     "noOfTeaShops": {
-                        "type": ["string", "null"],
+                        "type": ["number", "null"],
                         "title": "TEA_SHOPS"
                     },
                     "noOfWell": {
-                        "type": ["string", "null"],
+                        "type": ["number", "null"],
                         "title": "WELL"
                     },
                     "noOfHandPumps": {
-                        "type": ["string", "null"],
+                        "type": ["number", "null"],
                         "title": "HAND_PUMPS"
                     },
                     "businessAtmosphere": {
@@ -419,19 +429,32 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "udf6": {
                         "type": ["number", "null"],
-                        "title": "MINIMUM_LOAN_SIZE"
+                        "title": "MINIMUM_LOAN_SIZE",
+                        "x-schema-form": {
+                            "type": "number",
+                        }
+
                     },
                     "udf7": {
                         "type": ["number", "null"],
-                        "title": "MAXIMUM_LOAN_SIZE"
+                        "title": "MAXIMUM_LOAN_SIZE",
+                        "x-schema-form": {
+                            "type": "number",
+                        }
                     },
                     "udf8": {
                         "type": ["number", "null"],
-                        "title": "INTEREST_RATES"
+                        "title": "INTEREST_RATES",
+                        "x-schema-form": {
+                            "type": "number",
+                        }
                     },
                     "udf9": {
                         "type": ["number", "null"],
-                        "title": "REPAYMENT_PERIOD(MONTHS)"
+                        "title": "REPAYMENT_PERIOD(MONTHS)",
+                        "x-schema-form": {
+                            "type": "number",
+                        }
                     },
                     "udf10": {
                         "type": ["string", "null"],
@@ -473,27 +496,80 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "udf14": {
                         "type": ["number", "null"],
-                        "title": "OPERATION_SINCE"
+                        "title": "OPERATION_SINCE",
+                        "x-schema-form": {
+                            "type": "number",
+                        }
                     },
                     "bankAvailable": {
                         "type": ["string", "null"],
-                        "title": "BANK"
+                        "title": "BANK",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "mfiAvailable": {
                         "type": ["string", "null"],
-                        "title": "MFI"
+                        "title": "MFI",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "moneylenderAvailable": {
                         "type": ["string", "null"],
-                        "title": "MONEY_LENDER"
+                        "title": "MONEY_LENDER",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "wholeSalerAvailable": {
                         "type": ["string", "null"],
-                        "title": "WHOLE_SALER"
+                        "title": "WHOLE_SALER",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "postOfficeAvailable": {
                         "type": ["string", "null"],
-                        "title": "POST_OFFICE"
+                        "title": "POST_OFFICE",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Yes",
+                                "value": "Yes"
+                            }, {
+                                "name": "No",
+                                "value": "No"
+                            }]
+                        }
                     },
                     "microfinanceRequired": {
                         "type": ["string", "null"],
@@ -510,7 +586,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         }
                     },
                     "noOfPotentialMember": {
-                        "type": ["string", "null"],
+                        "type": ["number", "null"],
                         "title": "POTENTIAL_#_MEMBER_IN_VILLAGE/SLUM"
                     },
                     "memberProfile": {
@@ -574,7 +650,9 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 },
                                 "mobileNo": {
                                     "type": ["string", "null"],
-                                    "title": "MOBILE_NUMBER"
+                                    "title": "MOBILE_NUMBER",
+                                    "maxLength": 10,
+                                    "minLength": 10,
                                 },
                             }
                         }
@@ -622,7 +700,10 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 },
                                 "facilityDistance": {
                                     "type": ["number", "null"],
-                                    "title": "DISTANCE"
+                                    "title": "DISTANCE",
+                                    "x-schema-form": {
+                                        "type":"number"
+                                    }
                                 },
                             }
                         }
