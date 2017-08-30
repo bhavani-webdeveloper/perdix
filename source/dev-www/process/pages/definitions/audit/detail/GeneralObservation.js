@@ -16,7 +16,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
-                model.auditId = Number($stateParams.pageId);
+                model.audit_id = Number($stateParams.pageId);
                 model.general_observations = model.general_observations || {};
                 model.auditObservation = model.auditObservation || {};
                 var masters = Audit.offline.getAuditMaster() || {};
@@ -26,20 +26,20 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     $log.info(response)
                     model.masters = masters;
                     model.general_observations = response;
-                    var tableDetails = [];
-                    // for (i in model.general_observations) {
-                    //     for (j in model.masters.general_observations) {
-                    //         if (model.general_observations[i].particular_id == model.masters.particular_id[j].id) {
-                    //             model.general_observations[i].particular_name = model.masters.particular_id[j].particular_name;
-                    //             model.general_observations[i].order_id = model.masters.particular_id[j].particular_order;
-                    //         }
-                    //         for (k in model.masters.particular_id[i].Particular_options) {
-                    //             if (model.general_observations[i].option_id == model.masters.particular_id[i].Particular_options[k].id) {
-                    //                 model.general_observations[i].option_name = model.masters.particular_id[i].Particular_options[k].name;
-                    //             }
-                    //         }
-                    //     }
-                    // };
+                    for(i in model.general_observations){
+                        for(j in model.masters.general_observation.particulars){
+                            var particulars = model.masters.general_observation.particulars[i];
+                            if(model.general_observations[i].particular_id = particulars.particular_id){
+                                model.general_observations[i].particular_id = particulars.particular_name;
+                            }
+                        }
+                        for(k in model.masters.general_observation.particular_options){
+                            var particularOption = model.masters.general_observation.particular_options[i];
+                            if(model.general_observations[i].option_id = particularOption.particular_id){
+                                model.general_observations[i].option_id = particularOption.name;
+                            }
+                        }
+                    }
                     self.form = [{
                         type: "box",
                         title: "GENERAL_OBSERVATION",
@@ -82,8 +82,6 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     var optionsToShow = filterFilter(masters.general_observation.particular_options, {
                                         particular_id: model.general_observations[context.arrayIndex].particularId
                                     }, true);
-                                    $log.info(optionsToShow)
-                                    $log.info("optionsToShow")
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": optionsToShow.length

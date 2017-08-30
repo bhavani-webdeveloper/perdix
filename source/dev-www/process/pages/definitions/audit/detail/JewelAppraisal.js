@@ -1,6 +1,17 @@
 irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
     function($log, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var branch = SessionStore.getBranch();
+            var validateFields = function(model) {
+               for(i in model.jewel_appraisal.jewel_details){
+                var net = model.jewel_appraisal.jewel_details[i].net;
+                var gross = model.jewel_appraisal.jewel_details[i].gross;
+                 if (net > gross) {
+                 PageHelper.setError({message: "Net weight should be less than Gross weight"});
+                 return false;
+            }
+            return true;
+           }
+        };
 
         return {
             "type": "schema-form",
@@ -17,7 +28,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
-                model.auditId = Number($stateParams.pageId);
+                model.audit_id = Number($stateParams.pageId);
                 model.jewel_appraisal = model.jewel_appraisal || {};
                 var master = Audit.offline.getAuditMaster() || {};
                 var self = this;
@@ -52,15 +63,12 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     title: "ADD_DETAILS",
                     items: [{
                         key: "jewel_appraisal.jewel_details[].account_number",
-                        type: "string",
                         required: true
                     }, {
                         key: "jewel_appraisal.jewel_details[].loan_amount",
-                        type: "string",
                         required: true
                     }, {
                         key: "jewel_appraisal.jewel_details[].description_of_jewel",
-                        type: "string",
                         required: true
                     }, {
                         key: "jewel_appraisal.jewel_details[].gross",
@@ -143,7 +151,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                             "title": "ACCOUNT_NUMBER"
                                         },
                                         "loan_amount": {
-                                            "type": ["string", "null"],
+                                            "type": ["number", "null"],
                                             "title": "LOAN_AMOUNT"
                                         },
                                         "description_of_jewel": {
@@ -151,19 +159,19 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                             "title": "DESCRIPTION"
                                         },
                                         "gross": {
-                                            "type": ["string", "null"],
+                                            "type": ["number", "null"],
                                             "title": "GROSS(IN_GRAMS)"
                                         },
                                         "net": {
-                                            "type": ["string", "null"],
+                                            "type": ["number", "null"],
                                             "title": "NET(IN_GRAMS)"
                                         },
                                         "reapp_gross": {
-                                            "type": ["string", "null"],
+                                            "type": ["number", "null"],
                                             "title": "RE_APP/GROSS(IN_GRAMS)"
                                         },
                                         "reapp_net": {
-                                            "type": ["string", "null"],
+                                            "type": ["number", "null"],
                                             "title": "RE_APP/NET(IN_GRAMS)"
                                         },
                                         "sticker_number": {
@@ -204,7 +212,6 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                             },
                         },
 
-
                     }
                 },
             },
@@ -214,9 +221,10 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateFields(model)) return;
                         if (model.$isOffline) {
-                            Audit.offline.setJewelAppraisal(model.auditId, model.jewel_appraisal).then(function(res) {
+                            Audit.offline.setJewelAppraisal(model.audit_id, model.jewel_appraisal).then(function(res) {
                                 model.jewel_appraisal.jewel_details = res;
                                 PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
+                                irfNavigator.goBack();
                             }, function(errRes) {
                                 PageHelper.showErrors(errRes);
                             }).finally(function() {
