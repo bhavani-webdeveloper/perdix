@@ -46,6 +46,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "type":["string","null"],
                             }
                         },
+                        "BusinessOccupationDetails.businessDetails.workPlaceBuildType" : {
+                            "titleMap": {
+                                "Concrete": "CONCRETE",
+                                "MUD": "MUD",
+                                "BRICK": "BRICK"
+                            }
+                        },
                         "BusinessOccupationDetails.businessDetails.businessPhone": {
                             title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
                             type: "select",
@@ -77,6 +84,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             "type": "string",
                             schema:{
                                 "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.landOwnership": {
+                             titleMap: {
+                                "Self":"Self",
+                                "Others":"Others",
                             }
                         },
                         // "BusinessOccupationDetails.agricultureDetails.landArea": {
@@ -211,7 +224,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "Liabilities1.liabilities.liabilityLoanPurpose" : {
                             required:false,
                         },
-
                 };
             } else if (model.siteCode == "saija"){
                 return {
@@ -231,24 +243,33 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             "enumCode": "years_of_business",
                             "title": "AGE_OF_ENTERPRISE"
                         },
+                        "BusinessOccupationDetails.businessDetails.workPeriod" : {
+                            enumCode: "bsns_in_current_addrss_since",
+                            title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                            type: "select",
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
                         "BusinessOccupationDetails.businessDetails.businessVillage": {
-                            title: "NO_OF_WORKERS_EMPLOYED"
+                            title: "BUSINESS_REGISTRATION_NUMBER"
                         },
                         "BusinessOccupationDetails.businessDetails.businessLandmark": {
-                            title: "KIND_OF_EMPLOYEES",
+                            title: "WORK_LOCATION",
                             type: "select",
                             titleMap: {
-                                "Female": "Female",
-                                "Male": "Male",
-                                "Both": "Both"
+                                "Shop": "Shop",
+                                "Homebased": "Homebased",
+                                "Market": "Market",
+                                "Others": "Others"
                             }
                         },
                         "BusinessOccupationDetails.businessDetails.businessPincode": {
-                            title: "INVOLVEMENT_MARKET_RELATED_TRANSACTIONS",
+                            title: "BUSINESS_GROWTH",
                             type: "select",
                             titleMap: {
-                                "YES": "Yes",
-                                "NO": "NO",
+                                "Normal": "Normal",
+                                "Poor": "Poor",
                             },
                             schema:{
                                 "type":["string","null"],
@@ -256,14 +277,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "BusinessOccupationDetails.businessDetails.businessPhone": {
                             title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
-                            type: "select",
-                            titleMap: {
-                                "Family Member": "Family Member",
-                                "Employee": "Employee",
-                                "Business Is Closed": "Business Is Closed"
-                            },
+                            type: "string",
                             schema:{
                                 "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.businessDetails.workPlaceType" : {
+                            title: "WORK_PLACE_OWNERSHIP",
+                        },
+                        "BusinessOccupationDetails.businessDetails.workPlaceBuildType" : {
+                            "titleMap": {
+                                "Concrete": "Concrete",
+                                "Semi-Concrete": "Semi-Concrete",
+                                "Kuccha": "Kuccha",
+                                "Handcart": "Handcart",
                             }
                         },
                         "BusinessOccupationDetails.agricultureDetails.cropName": {
@@ -281,26 +308,43 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             }
                         },
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth": {
-                            title: "TOTAL_LAND",
-                            "type": "string",
+                            title: "HARVEST_MONTH",
+                            "type": "select",
+                            "titleMap": {
+                                "Jan":"Jan",
+                                "Feb":"Feb",
+                                "Mar":"Mar",
+                                "Apr":"Apr",
+                                "May":"May",
+                                "Jun":"Jun",
+                                "Jul":"Jul",
+                                "Aug":"Aug",
+                                "Sep":"Sep",
+                                "Oct":"Oct",
+                                "Nov":"Nov",
+                                "Dec":"Dec"
+                            },
                             schema:{
                                 "type":["string","null"],
                             }
                         },
-                        // "BusinessOccupationDetails.agricultureDetails.landArea": {
-                        //     title: "DAIRY_ANIMALS",
-                        //     "type": "select",
-                        //     titleMap: {
-                        //         "One": "One",
-                        //         "Two": "Two",
-                        //         "Three": "Three",
-                        //         "Three": "Three",
-                        //         "More": "If more, specify",
-                        //     },
-                        //     schema:{
-                        //         "type":["string","null"],
-                        //     }
-                        // },
+                        "BusinessOccupationDetails.agricultureDetails.landOwnership": {
+                             titleMap: {
+                                "Rented/Leased":"Rented/Leased",
+                                "Owned":"Owned",
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.landArea": {
+                            title: "LAND_LOCATION",
+                            "type": "select",
+                            titleMap: {
+                                "Within Village": "Within Village",
+                                "Outside Village": "Outside Village",
+                            },
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
                         "HouseVerification.HouseDetails.HouseOwnership" : {
                             required:true,
                             enumCode: "house_ownership",
@@ -316,7 +360,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 }
                             }
                         },
+                        "familyDetails.familyMembers.healthStatus" : {
+                            titleMap: {
+                                "GOOD": "Healthy",
+                                "BAD": "UnHealthy"
+                            },
+                        },
                         "familyDetails.familyMembers.incomes.monthsPerYear" : {
+                            required:true,
+                        },
+                        "familyDetails.familyMembers.contributionToExpenditure" : {
                             required:true,
                         },
                         "familyDetails.additionalDetails.medicalCondition" : {
@@ -373,7 +426,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             }
                         },
                         "HouseVerification.HouseDetails.durationOfStay": {
-                            title: "TYPE_OF_TOILET_FACILITY",
+                            title: "TOILET_FACILITY",
                             required:true,
                             "type": "select",
                             order: 100,
@@ -600,7 +653,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "CustomerInformation.spouseFirstName",
                         "CustomerInformation.religion",
                         "CustomerInformation.caste",
-                        "CustomerInformation.dateOfBirth",                       
+                        "CustomerInformation.dateOfBirth",
+                        "CustomerInformation.udf1",
                         "KYC",
                         "KYC.IdentityProof1",
                         "KYC.IdentityProof1.identityProof",
@@ -624,7 +678,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "KYC.addressProof1.addressProofValidUptoDate",
                         "KYC.spouseIdProof",
                         "KYC.spouseIdProof.udf33",
-                        "KYC.spouseIdProof.udf35",
+                        "KYC.spouseIdProof.udf34",
                         "KYC.spouseIdProof.udf36",
                         "KYC.spouseIdProof.udf36_1",
                         "ContactInformation",
@@ -641,6 +695,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerResidentialAddress.landLineNo",
                         "ContactInformation.CustomerResidentialAddress.mobilePhone",
                         "ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
+                        "ContactInformation.CustomerResidentialAddress.landLordName",
                         "ContactInformation.CustomerPermanentAddress",
                         "ContactInformation.CustomerPermanentAddress.mailingDoorNo",
                         "ContactInformation.CustomerPermanentAddress.mailingStreet",
@@ -649,6 +704,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerPermanentAddress.mailingDistrict",
                         "ContactInformation.CustomerPermanentAddress.mailingPincode",
                         "ContactInformation.CustomerPermanentAddress.mailingState",
+                        "ContactInformation.CustomerPermanentAddress.landLordName",
                         "familyDetails",
                         "familyDetails.familyMembers",
                         "familyDetails.familyMembers.customerId",
@@ -661,6 +717,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "familyDetails.familyMembers.maritalStatus",
                         "familyDetails.familyMembers.mobilePhone",
                         "familyDetails.familyMembers.healthStatus",
+                        "familyDetails.familyMembers.contributionToExpenditure",
                         "familyDetails.familyMembers.incomes",
                         "familyDetails.familyMembers.incomes.incomeSource",
                         "familyDetails.familyMembers.incomes.incomeEarned",
@@ -726,9 +783,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.businessDetails.businessPincode",
                         "BusinessOccupationDetails.businessDetails.businessPhone",
                         "BusinessOccupationDetails.businessDetails.ageOfEnterprise",
-                        // "BusinessOccupationDetails.businessDetails.workPeriod",
+                        "BusinessOccupationDetails.businessDetails.workPeriod",
                         "BusinessOccupationDetails.businessDetails.workPlaceType",
-                        // "BusinessOccupationDetails.businessDetails.WorkPlace",
+                        "BusinessOccupationDetails.businessDetails.workPlaceBuildType",
                         // "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
                         "BusinessOccupationDetails.agricultureDetails",
                         "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
@@ -736,7 +793,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.cropName",
                         "BusinessOccupationDetails.agricultureDetails.irrigated",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
-                        //"BusinessOccupationDetails.agricultureDetails.landArea",
+                        "BusinessOccupationDetails.agricultureDetails.landArea",
                         "loanInformation",
                         "loanInformation.requestedLoanAmount",
                         "loanInformation.requestedLoanPurpose",
@@ -824,6 +881,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 Enrollment.getCustomerById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
+                    if (model.customer.udf && model.customer.udf.userDefinedFieldValues
+                        && model.customer.udf.userDefinedFieldValues.udf1) {
+                        model.customer.udf.userDefinedFieldValues.udf1 =
+                            model.customer.udf.userDefinedFieldValues.udf1 === true
+                            || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+                    }
                     deferred.resolve(model);
                     PageHelper.hideLoader();
                 },function(resp){

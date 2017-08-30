@@ -284,7 +284,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "mailSameAsResidence": {
                                 orderNo: 120,
                                 key: "customer.mailSameAsResidence"
-                            }
+                            },
+                            "landLordName": {
+                                "title": "IF_HOUSE_RENTED_NAME_OF_LANDLORD",
+                                orderNo: 111,
+                                key: "customer.udf.userDefinedFieldValues.udf2",
+                                "type": "string",
+                            },
                         }
                     },
                     "CustomerPermanentAddress": {
@@ -371,7 +377,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 readonly:true,
                                 key: "customer.mailingState",
                                 screenFilter: true
-                            }
+                            },
+                            "landLordName": {
+                                "title": "IF_HOUSE_RENTED_NAME_OF_LANDLORD",
+                                orderNo: 71,
+                                key: "customer.udf.userDefinedFieldValues.udf38",
+                                "type": "string",
+                            },
                         }
                     }
                 }
@@ -555,12 +567,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "udf34": {
                                 key: "customer.udf.userDefinedFieldValues.udf34",
                                 type: "file",
-                                fileType: "image/*",
+                                fileType:"application/pdf",
+                                using: "scanner",
                             },
                             "udf35": {
                                 key: "customer.udf.userDefinedFieldValues.udf35",
                                 type: "file",
-                                fileType: "image/*",
+                                fileType:"application/pdf",
+                                using: "scanner",
                             },
                             "udf36": {
                                 key: "customer.udf.userDefinedFieldValues.udf36",
@@ -822,6 +836,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "BAD": "BAD"
                                 },
                             },
+                            "contributionToExpenditure": {
+                                key: "customer.familyMembers[].contributionToExpenditure",
+                                type: "amount",
+                            },
                             "incomes": {
                                 key: "customer.familyMembers[].incomes",
                                 type: "array",
@@ -986,11 +1004,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.udf.userDefinedFieldValues.udf18",
                                 orderNo: 120,
                                 "type": "select",
-                                "titleMap": {
-                                    "CONCRETE": "CONCRETE",
-                                    "MUD": "MUD",
-                                    "BRICK": "BRICK"
-                                }
                             },
                             "workPlaceCondition": {
                                 key: "customer.udf.userDefinedFieldValues.udf19",
@@ -1028,10 +1041,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.udf.userDefinedFieldValues.udf25",
                                 orderNo: 20,
                                 type: "select",
-                                titleMap: {
-                                    "Self":"Self",
-                                    "Others":"Others",
-                                }
                             },
                             "cropName": {
                                 key: "customer.udf.userDefinedFieldValues.udf15",
@@ -1351,6 +1360,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         orderNo: 10,
                         key: "customer.requestedLoanAmount",
                         required: true,
+                        type: "amount",
                         title: "REQUESTED_LOAN_INFORMATION"
                     },
                     "requestedLoanPurpose": {
