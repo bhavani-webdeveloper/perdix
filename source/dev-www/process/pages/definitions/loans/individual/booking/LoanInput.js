@@ -123,7 +123,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if (value ==1){
                 model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
             }
-
         }
 
 
@@ -242,9 +241,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
-                        if(data.stateParams.showLoanBookingDetails != undefined && data.stateParams.showLoanBookingDetails !== null && data.stateParams.showLoanBookingDetails !=""){
-                            model.showLoanBookingDetails = data.stateParams.showLoanBookingDetails;
+                        $log.info(data);
+                        if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
+                            model.showLoanBookingDetails = data.showLoanBookingDetails;
+                            model.BackedDatedDisbursement=data.BackedDatedDisbursement;
                         }
+                        //stateParams
+                        console.log(model.BackedDatedDisbursement);
                         console.log(model.showLoanBookingDetails);
                     });
                     //model.loanAccount.guarantors = [];
@@ -2699,6 +2702,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
+
+                    if (model.siteCode != 'sambandh') {
+                        $log.info("inside sam");
+                        var cbsdate=SessionStore.getCBSDate();
+                        if(model._currentDisbursement.scheduledDisbursementDate)
+                        var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                        var cbsmonth = ((new Date(cbsdate)).getMonth());
+                        var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
+
+                        if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "ALL") {
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") < 0) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should be greater than CBS date", 5000);
+                                return false;
+                            }
+                        }
+                        if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "CURRENT_MONTH") {
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") < 0 && (cbsmonth !== dismonth)) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
+                                return false;
+                            }
+                        }
+                    }
+
+                    
 
                     var reqData = _.cloneDeep(model);
                     // if(reqData.loanAccount.frequency)

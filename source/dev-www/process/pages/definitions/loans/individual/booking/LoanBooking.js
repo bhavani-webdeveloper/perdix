@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
-    ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries", "$q",
-    function ($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils,Queries, $q) {
+    ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper","PagesDefinition", "Enrollment", "Utils","Queries", "$q",
+    function ($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper,PagesDefinition, Enrollment, Utils,Queries, $q) {
 
         var branch = SessionStore.getBranch();
         var pendingDisbursementDays;
@@ -59,6 +59,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 $log.info("Individual Loan Booking Page got initialized");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 PageHelper.showProgress('load-loan', 'Loading loan account...');
+                PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data) {
+                    $log.info(data);
+                    if (data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails != "") {
+                        model.showLoanBookingDetails = data.showLoanBookingDetails;
+                        model.BackedDatedDisbursement = data.BackedDatedDisbursement;
+                    }
+                    //stateParams
+                    console.log(model.BackedDatedDisbursement);
+                    console.log(model.showLoanBookingDetails);
+                });
                 IndividualLoan.get({id: $stateParams.pageId})
                     .$promise
                     .then(
@@ -434,9 +444,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             actions: {
                 submit: function (model, form, formName) {
                     $log.info("submitting");
-
+                    var cbsdate=SessionStore.getCBSDate();
                     if(model._currentDisbursement.scheduledDisbursementDate)
                         var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.scheduledDisbursementDate && cbsdate)
+                        var BackedDatedDiffDays = scheduledDisbursementDate.diff(cbsdate, "days");
+                        var BackedDatedDiffmonth = scheduledDisbursementDate.diff(cbsdate, "month");
                     if(model.loanAccount.sanctionDate)
                         var sanctionDate = moment(model.loanAccount.sanctionDate,SessionStore.getSystemDateFormat());
                     if(model._currentDisbursement.customerSignatureDate)
@@ -453,7 +466,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
 
+                    var cbsmonth = ((new Date(cbsdate)).getMonth());
+                    var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
+
+                    //$log.info(BackedDatedDiffmonth);
+
                     if(model.siteCode != 'sambandh'){
+
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="ALL"){
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") <0) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should be greater than CBS date", 5000);
+                                return false;
+                            }
+                        }
+
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH"){
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") <0 && (cbsmonth !== dismonth)) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
+                                return false;
+                            }
+                        }
                         if (diffDays > pendingDisbursementDays) {
                             PageHelper.showProgress("loan-create", "Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days", 5000);
                             return false;
