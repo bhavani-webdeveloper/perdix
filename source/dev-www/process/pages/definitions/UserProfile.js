@@ -4,9 +4,10 @@ irf.pageCollection.factory(irf.page("UserProfile"),
 function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 	irfStorageService, irfElementsConfig,PageHelper, formHelper, irfTranslateLoader, Account, PagesDefinition, translateFilter) {
 
-	var languageTitleMap = [];
+	var languageTitleMap = []; var systemAllowedLanguages = SessionStore.getSystemAllowedLanguages();
 	_.each(languages, function(v, k){
-		languageTitleMap.push({value:v.code, name:v.titleEnglish + ' - ' + v.titleLanguage});
+		if (systemAllowedLanguages.indexOf(k) !== -1)
+			languageTitleMap.push({value:v.code, name:v.titleEnglish + ' - ' + v.titleLanguage});
 	});
 
 	var dateTitleMap = [];
@@ -24,6 +25,9 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 		initialize: function (model, form, formCtrl) {
 			$log.info("I got initialized");
 			var m = irfStorageService.getJSON(formCtrl.$name, model.profile.login);
+			if(model.settings) {
+				model.settings.language = SessionStore.getLanguage();
+			}
 			if (m && m.profile && m.settings) {
 				model.profile = m.profile;
 				model.settings = m.settings;
@@ -271,7 +275,7 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 						language: {
 							"title": "PREFERRED_LANGUAGE",
 							"type": "string",
-							"default": "en",
+							//"default": "en",
 							"x-schema-form": {
 								"type": "select",
 								"titleMap": languageTitleMap

@@ -81,12 +81,23 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	};
 
 	self.getLanguage = function() {
-		return session.language ? session.language : (self.settings.language ? self.settings.language : 'en');
+		return session.language ? session.language : (self.settings.language ? self.settings.language : self.getSystemPreferredLanguage());
 	};
 
 	self.setLanguage = function(l) {
 		self.session.language = l;
 	};
+
+	self.getSystemAllowedLanguages = function () {
+		if(self.session.global && self.session.global['allowedLanguages']) {
+			return self.session.global['allowedLanguages'].split(",");
+		}
+		return [self.getSystemPreferredLanguage()];
+	};
+
+	self.getSystemPreferredLanguage = function () {
+		return self.session.global && self.session.global['preferredLanguage'] ? self.session.global['preferredLanguage'] : 'en';
+	}
 
 	self.getBranch = function() {
 		//return session.branchName;

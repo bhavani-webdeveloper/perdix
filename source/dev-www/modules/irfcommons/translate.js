@@ -8,8 +8,8 @@ irf.commons.config(function($translateProvider) {
 	//$translateProvider.useMissingTranslationHandlerLog();
 });
 irf.commons.factory('irfTranslateLoader',
-['languages', '$resource', '$q', 'irfStorageService', '$log',
-function(languages, $resource, $q, irfStorageService, $log){
+['languages', '$resource', '$q', 'irfStorageService', '$log', 'SessionStore',
+function(languages, $resource, $q, irfStorageService, $log, SessionStore){
 	var prepareTranslationJSON = function(arr, langCode) {
 		var result = {};
 		for (var i = arr.length - 1; i >= 0; i--) {
@@ -44,12 +44,14 @@ function(languages, $resource, $q, irfStorageService, $log){
 				}
 			}).downloadTranslations().$promise.then(function(translationResult) {
 				$log.info('Translations loading from server');
+				var systemAllowedLanguages = SessionStore.getSystemAllowedLanguages();
 				var langCodes = _.keys(languages);
 				translations = {
 					_timestamp: new Date().getTime()
 				};
 				for (var i = langCodes.length - 1; i >= 0; i--) {
-					translations[langCodes[i]] = getTranslationJSON(translationResult, langCodes[i]);
+					if (systemAllowedLanguages.indexOf(langCodes[i]) !== -1)
+						translations[langCodes[i]] = getTranslationJSON(translationResult, langCodes[i]);
 				};
 				irfStorageService.storeJSON('irfTranslations', translations);
 				deferred.resolve(translations[options.key]);
