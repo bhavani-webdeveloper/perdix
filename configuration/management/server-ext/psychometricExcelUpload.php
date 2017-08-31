@@ -106,10 +106,20 @@ function getImageTag($imageContents, $mime) {
 }
 
 function insertQuestionSQL($id, $category, $difficulty, $type, $paired, $linked, $link_order, $pictorial, $active) {
+	if (empty($paired)) {
+		$paired = 'NULL';
+	}
+	if (empty($linked)) {
+		$linked = 'NULL';
+	}
+	if (empty($link_order)) {
+		$link_order = 'NULL';
+	}
 	return "INSERT INTO `ps_question`(`id`, `category`, `difficulty`, `type`, `paired`, `linked`, `link_order`, `pictorial`, `active`) VALUES ($id, $category, '$difficulty', '$type', $paired, $linked, $link_order, $pictorial, $active);\n";
 }
 
 function insertQuestionLangSQL($id, $question_id, $lang_code, $question_text) {
+	$question_text = str_replace("'", "\\'", $question_text);
 	return "INSERT INTO `ps_question_lang`(`id`, `question_id`, `lang_code`, `question_text`) VALUES ($id, $question_id, '$lang_code', '$question_text');\n";
 }
 
@@ -118,7 +128,8 @@ function insertQuestionOptSQL($id, $question_id, $option_score, $linked_option_i
 }
 
 function insertQuestionLangOptSQL($id, $question_lang_id, $option_id, $option_text) {
-	return "INSERT INTO `ps_question_lang_options`(`id`, `question_lang_id`, `option_id`, `option_text`) VALUES ($id, $question_lang_id, $option_id, $option_text);\n";
+	$option_text = str_replace("'", "\\'", $option_text);
+	return "INSERT INTO `ps_question_lang_options`(`id`, `question_lang_id`, `option_id`, `option_text`) VALUES ($id, $question_lang_id, $option_id, '$option_text');\n";
 }
 
 function excelToSQL($file, $imageZipFile) {
@@ -245,7 +256,9 @@ function excelToSQL($file, $imageZipFile) {
 		$questionsLangOptionsSQL .= insertQuestionLangOptSQL($v[5], $v[6], $v[7], $v[3]);
 	}
 
-	return $questionSQL . $questionLangSQL . $questionOptionsSQL . $questionsLangOptionsSQL;
+	$sql = "DELETE FROM ps_question_lang_options;\nDELETE FROM ps_question_options;\nDELETE FROM ps_question_lang;\nDELETE FROM ps_question;\n\n\n";
+	$sql .= $questionSQL . $questionLangSQL . $questionOptionsSQL . $questionsLangOptionsSQL;
+	return $sql;
 }
 
 if (!isset($_FILES['excelFile']) || !file_exists($_FILES['excelFile']['tmp_name']) || !is_uploaded_file($_FILES['excelFile']['tmp_name'])) {
