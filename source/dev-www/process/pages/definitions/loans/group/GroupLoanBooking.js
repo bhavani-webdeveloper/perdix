@@ -169,18 +169,17 @@ define({
                     "key": "group.tenure",
                     "readonly": true,
                     "title": "TENURE",
-                },{
+                }, {
                     "key": "group.scheduledDisbursementDate",
                     "required":true,
-                    "readOnly": true,
                     "title": "SCHEDULED_DISBURSEMENT_DATE",
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "type": "date",
-                },{
+                }, {
                     "key": "group.firstRepaymentDate",
                     "title": "FIRST_REPAYMENT_DATE",
                     "required":true,
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "type": "date",
                 }]
             }, {
@@ -190,7 +189,7 @@ define({
                     "key": "group.jlgGroupMembers",
                     "type": "array",
                     "title": "GROUP_MEMBERS",
-                    "condition": "model.siteCode !== 'sambandh'",
+                    "condition": "model.siteCode == 'KGFS'",
                     "add": null,
                     "remove": null,
                     "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
@@ -248,7 +247,7 @@ define({
                     "type": "array",
                     "title": "GROUP_MEMBERS",
                     "add": null,
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                     "items": [{
                         "key": "group.jlgGroupMembers[].urnNo",
@@ -469,7 +468,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('proceed', 'Operation Succeeded. Proceeded to GRT', 5000);
+                        irfProgressMessage.pop('proceed', 'Operation Succeeded.Done.', 5000);
                         irfNavigator.goBack();
                     }, function(res) {
                         PageHelper.hideLoader();

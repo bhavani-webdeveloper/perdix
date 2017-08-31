@@ -32,7 +32,7 @@ define({
         var validateForm = function(formCtrl){
             formCtrl.scope.$broadcast('schemaFormValidate');
             if (formCtrl && formCtrl.$invalid) {
-                PageHelper.showProgress("Checker","Your form have errors. Please fix them.", 5000);
+                PageHelper.showProgress("Application","Your form have errors. Please fix them.", 5000);
                 return false;
             }
             return true;
@@ -215,11 +215,11 @@ define({
 
             form: [{
                     "type": "box",
-                    "readonly": true,
                     "title": "GROUP_DETAILS",
                     "items": [{
                         "key": "group.groupName",
                         "title": "GROUP_NAME",
+                        "readonly": true,
                     }, {
                         "key": "group.branchId",
                         "title": "BRANCH_NAME",
@@ -232,18 +232,21 @@ define({
                         "key": "group.centreCode",
                         "title": "CENTRE_CODE",
                         "type": "select",
+                        "readonly": true,
                         "enumCode": "centre_code",
                         "parentEnumCode": "branch_id",
                         "parentValueExpr": "model.group.branchId",
                     }, {
                         "key": "group.partnerCode",
                         "title": "PARTNER",
+                        "readonly": true,
                         "type": "select",
                         "enumCode": "partner"
                     }, {
                         "key": "group.productCode",
                         "title": "PRODUCT",
                         "type": "select",
+                        "readonly": true,
                         "enumCode": "loan_product",
                         "parentEnumCode": "partner",
                         "parentValueExpr": "model.group.partnerCode"
@@ -251,6 +254,7 @@ define({
                         "key": "group.frequency",
                         "title": "FREQUENCY",
                         "type": "select",
+                        "readonly": true,
                         "titleMap": {
                             "M": "Monthly",
                             "Q": "Quarterly"
@@ -258,6 +262,19 @@ define({
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
+                        "readonly": true,
+                    }, {
+                        "key": "group.scheduledDisbursementDate",
+                        "required":true,
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "type": "date",
+                    }, {
+                        "key": "group.firstRepaymentDate",
+                        "title": "FIRST_REPAYMENT_DATE",
+                        "required":true,
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "type": "date",
                     }]
                 }, {
                     "type": "box",
@@ -265,7 +282,7 @@ define({
                     "items": [{
                         "key": "group.jlgGroupMembers",
                         "type": "array",
-                        "condition": "model.siteCode !== 'sambandh'",
+                        "condition": "model.siteCode == 'KGFS'",
                         "title": "GROUP_MEMBERS",
                         "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                         "add": null,
@@ -372,7 +389,7 @@ define({
                         }]
                     }, {
                         "key": "group.jlgGroupMembers",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "array",
                         "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                         "title": "GROUP_MEMBERS",

@@ -148,7 +148,7 @@ return {
             }, 
             {
                 "type": "array",
-                "condition": "model.siteCode !== 'sambandh'",
+                "condition": "model.siteCode == 'KGFS'",
                 "key": "group.jlgGroupMembers",
                 "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
                 "add": null,
@@ -574,7 +574,7 @@ return {
                     }, {
                 "type": "array",
                 "key": "group.jlgGroupMembers",
-                "condition": "model.siteCode == 'sambandh'",
+                "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                 "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
                 "add": null,
                 "items": [{
@@ -942,7 +942,7 @@ return {
         },
 	    {
                 "type": "box",
-                "condition": "model.siteCode !== 'sambandh'",
+                "condition": "model.siteCode == 'KGFS'",
                 "title": "CGT And GRT Details",
                 "colClass": "col-sm-12",
                 "items": [{

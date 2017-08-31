@@ -36,7 +36,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
-                                var branches = formHelper.enum('branch').data;
+                                var branches = formHelper.enum('branch_id').data;
                                 for (var i = 0; i < branches.length; i++) {
                                     var branch = branches[i];
                                     if (branch.name == model.user.branchName) {
@@ -212,7 +212,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         .then(function(response){
                                             PageHelper.showProgress("user-update", 'Done', 5000);
                                             model.user = response;
-                                            var branches = formHelper.enum('branch').data;
+                                            var branches = formHelper.enum('branch_id').data;
                                             for (var i = 0; i < branches.length; i++) {
                                                 var branch = branches[i];
                                                 if (branch.name == model.user.branchName) {

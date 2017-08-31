@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CBCheckCapture"),
-	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter",
-	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter){
+	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter", "PageHelper", "Enrollment",
+	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter, PageHelper, Enrollment){
 	return {
 		"type": "schema-form",
 		"title": "CREDIT_BUREAU_CHECK",
@@ -10,6 +10,15 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 			if (model._request) {
 				model.customerName = model._request.firstName;
 				model.customerId = model._request.id;
+				PageHelper.showLoader();
+				Enrollment.getCustomerById({id:model.customerId},function(resp,header){
+					model.loanAmount = resp.requestedLoanAmount;
+					model.loanPurpose1 = resp.requestedLoanPurpose;
+					PageHelper.hideLoader();
+				}, function(resp){
+					PageHelper.showErrors(resp);
+                    PageHelper.hideLoader();
+                });
 
 				var creditBureauTypes = formHelper.enum('creditBureauTypes').data;
 				creditBureauTypes = $filter('filter')(creditBureauTypes, {field1: 'default'});

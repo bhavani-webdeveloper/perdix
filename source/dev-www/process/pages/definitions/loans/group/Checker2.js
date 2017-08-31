@@ -153,7 +153,7 @@ return {
             }, {
             "type": "array",
             "key": "group.jlgGroupMembers",
-            "condition": "model.siteCode !== 'sambandh'",
+            "condition": "model.siteCode == 'KGFS'",
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
             "add": null,
             "remove": null,
@@ -572,7 +572,7 @@ return {
         }, {
             "type": "array",
             "key": "group.jlgGroupMembers",
-            "condition": "model.siteCode == 'sambandh'",
+            "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
             "add": null,
             "items": [{

@@ -92,6 +92,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         var cgtthree = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt3Queue"];
         var book = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.GroupLoanBookingQueue"];
         var grt = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.GrtQueue"];
+        var grt2q = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Grt2Queue"];
         var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
         var checker1 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker1Queue"];
         var checker2 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker2Queue"];
@@ -187,6 +188,18 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'currentStage': "GRT"
             }, function(response) {
                 grt.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (grt2q) {
+            grt2q.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "GRT2"
+            }, function(response) {
+                grt2q.data = Number(response.headers['x-total-count']) || 0;
             });
         }
 

@@ -820,6 +820,8 @@ return {
             });
         },
         approve: function(model, formCtrl, form) {
+            if(!validateForm(formCtrl)) 
+                return;
             PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();

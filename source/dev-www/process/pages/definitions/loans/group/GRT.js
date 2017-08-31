@@ -648,7 +648,7 @@ define({
             }, {
                 "type": "box",
                 "title": "GROUP_MEMBERS",
-                "condition": "model.siteCode !== 'sambandh'",
+                "condition": "model.siteCode == 'KGFS'",
                 "items": [{
                     "key": "group.scheduledDisbursementDate",
                     "title": "SCHEDULED_DISBURSEMENT_DATE",
@@ -761,7 +761,7 @@ define({
             }, {
                 "type": "box",
                 "title": "GROUP_MEMBERS",
-                "condition": "model.siteCode == 'sambandh'",
+                "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                 "items": [{
                     "key": "group.scheduledDisbursementDate",
                     "title": "SCHEDULED_DISBURSEMENT_DATE",

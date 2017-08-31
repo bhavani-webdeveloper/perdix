@@ -174,7 +174,7 @@ define({
                 }, {
                     "type": "box",
                     "title": "GROUP_MEMBERS",
-                    "condition": "model.siteCode !== 'sambandh'",
+                    "condition": "model.siteCode == 'KGFS'",
                     "items": [{
                         "key": "group.jlgGroupMembers",
                         "type": "array",
@@ -364,7 +364,7 @@ define({
                 {
                     "type": "box",
                     "title": "GROUP_MEMBERS",
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "items": [{
                         "key": "group.jlgGroupMembers",
                         "type": "array",

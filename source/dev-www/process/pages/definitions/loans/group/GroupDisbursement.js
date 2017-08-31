@@ -15,6 +15,15 @@ define({
             model.group.tenure = parseInt(model.group.tenure);
         };
 
+        var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("Disbursement","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        }
+
         var fillNames = function(model) {
             var deferred = $q.defer();
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
@@ -96,13 +105,14 @@ define({
             offline: false,
             form: [{
                     "type": "box",
-                    "readonly": true,
                     "title": "GROUP_DETAILS",
                     "items": [{
                         "key": "group.groupName",
+                        "readonly": true,
                         "title": "GROUP_NAME",
                     }, {
                         "key": "group.branchId",
+                        "readonly": true,
                         "title": "BRANCH_NAME",
                         "enumCode": "branch_id",
                         "type":"select",
@@ -112,6 +122,7 @@ define({
                     }, {
                         "key": "group.centreCode",
                         "title": "CENTRE_CODE",
+                        "readonly": true,
                         "type": "select",
                         "enumCode": "centre_code",
                         "parentEnumCode": "branch_id",
@@ -119,11 +130,13 @@ define({
                     }, {
                         "key": "group.partnerCode",
                         "title": "PARTNER",
+                        "readonly": true,
                         "type": "select",
                         "enumCode": "partner"
                     }, {
                         "key": "group.productCode",
                         "title": "PRODUCT",
+                        "readonly": true,
                         "type": "select",
                         "enumCode": "loan_product",
                         "parentEnumCode": "partner",
@@ -131,6 +144,7 @@ define({
                     }, {
                         "key": "group.frequency",
                         "title": "FREQUENCY",
+                        "readonly": true,
                         "type": "select",
                         "titleMap": {
                             "M": "Monthly",
@@ -138,19 +152,35 @@ define({
                         }
                     }, {
                         "key": "group.tenure",
+                        "readonly": true,
                         "title": "TENURE",
                     }, {
+                        "key": "group.scheduledDisbursementDate",
+                        "required":true,
+                        "readonly": true,
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "type": "date",
+                    }, {
+                        "key": "group.firstRepaymentDate",
+                        "title": "FIRST_REPAYMENT_DATE",
+                        "required":true,
+                        "readonly": true,
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "type": "date",
+                    } {
                         "key": "group.groupPhotoFileId",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "required": true,
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title": "GROUP_PHOTO",
                         "category": "Group",
                         "subCategory": "GROUPPHOTO",
                         "type": "file",
                         "fileType": "image/*",
-                    }]
+                    },]
                 }, {
                     "type": "box",
-                    "condition": "model.siteCode !== 'sambandh'",
+                    "condition": "model.siteCode == 'KGFS'",
                     "title": "GROUP_MEMBERS",
                     "items": [{
                         "key": "group.jlgGroupMembers",
@@ -209,7 +239,7 @@ define({
                             "enumCode": "relation"
                         }, {
                             "key": "group.jlgGroupMembers[]",
-                            "condition": "model.siteCode == 'sambandh'",
+                            "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                             "title": "PRINT",
                             "type": "button",
                             "onClick": function(model, formCtrl, form, $event) {
@@ -248,7 +278,7 @@ define({
                 }, {
                     "type": "box",
                     "title": "GROUP_MEMBERS",
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "items": [{
                         "key": "group.jlgGroupMembers",
                         "type": "array",
@@ -480,6 +510,8 @@ define({
                                 condition:"model.action == 'PROCEED'",
                                 "title": "PROCEED",
                                 "onClick": function(model, formCtrl, form) {
+                                    if(!validateForm(formCtrl)) 
+                                        return;
                                     PageHelper.showLoader();
                                     irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                                     PageHelper.clearErrors();

@@ -57,6 +57,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				$log.error(err);
 			}).then(function(globalSettings) {
 				accountResponse.global = globalSettings;
+				accountResponse.global.siteCode = 'saija';
 			}, function(err) {
 				loginError = { 'statusText': 'Failed to load Global Settings' };
 				$log.error(err);

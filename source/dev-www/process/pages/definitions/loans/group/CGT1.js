@@ -172,14 +172,14 @@ define({
                 }, {
                     "key": "group.cgt1Latitude",
                     "title": "CGT_1_LOCATION",
-                    "condition": "model.siteCode !== 'sambandh'",
+                    "condition": "model.siteCode == 'KGFS'",
                     "type": "geotag",
                     "latitude": "group.cgt1Latitude",
                     "longitude": "group.cgt1Longitude"
                 }, {
                     "key": "group.cgt1Latitude",
                     required: true,
-                    "condition": "model.siteCode == 'sambandh'",
+                    "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     "title": "CGT_1_LOCATION",
                     "type": "geotag",
                     "latitude": "group.cgt1Latitude",
@@ -209,7 +209,7 @@ define({
                 "items": [
                     {
                         "key": "group.jlgGroupMembers",
-                        "condition": "model.siteCode !== 'sambandh'",
+                        "condition": "model.siteCode == 'KGFS'",
                         "type": "array",
                         "title": "GROUP_MEMBERS",
                         "add": null,
@@ -267,7 +267,7 @@ define({
                     },
                     {
                         "key": "group.jlgGroupMembers",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "array",
                         "title": "GROUP_MEMBERS",
                         "add": null,
