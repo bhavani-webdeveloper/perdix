@@ -537,7 +537,7 @@ define({
                     model.groupAction = "PROCEED";
                     model.group.cgt2DoneBy=SessionStore.getUsername();
                     var validPromiseArray = [];
-                    if(model.siteCode=='sambandh')
+                    if(model.siteCode=='sambandh' || model.siteCode=='saija')
                     {
                         var numOfMembers = model.group.jlgGroupMembers.length;
                         var oldCustomers =0;
