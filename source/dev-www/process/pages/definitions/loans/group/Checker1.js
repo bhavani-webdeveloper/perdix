@@ -782,14 +782,7 @@ return {
                                 "title": "LOAN_APPLICATION_DATE",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
                                 "type": "date"
-                            }, {
-                            "title": "APPLICATION_FILE_DOWNLOAD",
-                            "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
-                            "type": "file",
-                            "fileType": "*/*",
-                            "category": "Group",
-                            "subCategory": "APPLICATION"
-                        }]
+                            },]
                         }, {
                             "type": "section",
                             "htmlClass": "col-sm-6",

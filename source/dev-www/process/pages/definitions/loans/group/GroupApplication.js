@@ -480,20 +480,21 @@ define({
                         }, {
                             "type": "button",
                             "key": "group.jlgGroupMembers[]",
-                            "title": "DOWNLOAD_APPLICATION_FORM",
-                            "onClick": function(model, form, schemaForm, event) {
-                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
-                            }
-                        }, {
-                            "type": "button",
-                            "key": "group.jlgGroupMembers[]",
                             condition: "model.group.partnerCode === 'AXIS'",
                             "title": "DOWNLOAD_AGREEMENT_FORM",
                             "onClick": function(model, form, schemaForm, event) {
                                     Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
                         }]
-                    }]
+                    }, {
+                        "type": "button",
+                        "key": "group",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "title": "DOWNLOAD_APPLICATION_FORM",
+                        "onClick": function(model, form, schemaForm, event) {
+                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/GroupFormsDownload.php?record_id=" + model.group.id);
+                        }
+                    },]
                 },
                 {
                     type: "box",
