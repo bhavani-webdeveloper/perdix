@@ -222,14 +222,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
 	PageHelper, $translate, $injector, irfLazyLoader, $filter, formHelper){
 
-	var setProfilePreferences = function(userData) {
-		$log.info('set ProfilePreferences');
-		SessionStore.setSession(userData);
-		SessionStore.setCurrentBranch({
-                			branchCode: SessionStore.getBranchCode(),
-                			branchId : SessionStore.getBranchId(),
-                			branchName: SessionStore.getBranch()
-                			});
+	$rootScope.$on("irf-login-success", function() {
 		var userRole = SessionStore.getUserRole(); var fullAccess = false;
 		if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 			fullAccess = true;
@@ -250,6 +243,16 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 				SessionStore.setItem('UserAllowedBranches', branches);
 			}
 		}
+	});
+
+	var setProfilePreferences = function(userData) {
+		$log.info('set ProfilePreferences');
+		SessionStore.setSession(userData);
+		SessionStore.setCurrentBranch({
+                			branchCode: SessionStore.getBranchCode(),
+                			branchId : SessionStore.getBranchId(),
+                			branchName: SessionStore.getBranch()
+                			});
 		irfStorageService.storeJSON('UserData', userData);
 		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
 		var km = _.keys(m);
