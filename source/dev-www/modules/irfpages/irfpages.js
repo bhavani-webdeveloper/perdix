@@ -109,11 +109,7 @@ irf.pages.provider("irfNavigator", function() {
 			return !!callstack.length;
 		},
 		goBack: function() {
-			console.log("callstack");
-			console.log(callstack);
 			if (callstack.length < 1) {
-				console.log("STATE MOVE HOME: ");
-				console.log(callstack.length < 1)
 				$this.factory.goHome();
 				return;
 			}
@@ -125,7 +121,6 @@ irf.pages.provider("irfNavigator", function() {
 				"pageId": backParam.pageId,
 				"pageData": backParam.pageData
 			});
-			console.log("STATE MOVE BACK");
 		},
 		goHome: function() {
 			callstack.length = 0;
@@ -188,7 +183,11 @@ irf.pages.provider("irfNavigator", function() {
 					$this.current = callstack[i];
 					callstack.length = i;
 					$this.navigatorMode = false;
-					return;
+					if ($this.current.pageData && (!toParams || !toParams.pageData)) {
+						toParams = toParams || {};
+						toParams.pageData = $this.current.pageData; // set callstack pageData to stage-change pageData
+					}
+					return; // found navigator stack, exiting
 				}
 			}
 			if ($this.navigatorMode && $this.navigatorMode != "goHome") {
