@@ -2687,7 +2687,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     // BUG FIX DO-customer id going null
                     populateLoanCustomerRelations(model);
 
-                    if(model.loanAccount.portfolioInsuranceUrn != ''){
+                    if(model.loanAccount.portfolioInsuranceUrn){
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";
                     }
                     if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara' && model.loanAccount.productCode == null){
