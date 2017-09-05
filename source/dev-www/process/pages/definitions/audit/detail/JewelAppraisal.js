@@ -126,7 +126,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 "items": [{
                     title: "SAVE",
                     type: "button",
-                    "onClick": "actions.save(model, form, formCtrl, 'reassign')"
+                    "onClick": "actions.save(model, form, formCtrl)"
                 }]
             }],
             schema: {
