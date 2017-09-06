@@ -268,6 +268,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         fee_description: value.description,
                                                         invoice_type: "Fee Charge"
                                                     });
+                                                    if (m.length==0){
+                                                        m = $filter('filter')(model.feesFormMappingList, {fee_category:value.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
+                                                    }
                                                     if (m.length > 0) {
                                                         isapplicable = true;
                                                     }
