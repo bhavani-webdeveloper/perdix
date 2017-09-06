@@ -189,7 +189,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
                     PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data) {
-                        if (data.stateParams.showLoanBookingDetails != undefined && data.stateParams.showLoanBookingDetails !== null && data.stateParams.showLoanBookingDetails != "") {
+                        if (data && data.stateParams && data.stateParams.showLoanBookingDetails) {
                             model.showLoanBookingDetails = data.stateParams.showLoanBookingDetails;
                         }
                         console.log(model.showLoanBookingDetails);
@@ -311,7 +311,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                     "type": "fieldset",
                     "title": "ENTITY_DETAILS",
                     "items": [
-                        "loanAccount.applicant",
+                        {
+                            "key": "loanAccount.applicant",
+                            onSelect: function(result, model, context) {
+                                model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
+                                model.additional.portfolioUrnSelector = "applicant";
+                                model.loanAccount.portfolioInsuranceCustomerName = model.loanAccount.applicantName;
+                            }
+                        },
                         "loanAccount.applicantName"
                     ]
                 }, {
