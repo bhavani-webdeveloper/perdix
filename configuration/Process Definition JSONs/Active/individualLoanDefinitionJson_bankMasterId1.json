@@ -665,7 +665,7 @@
                   "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation"
+                     
                   ]
                },
                "otherFee":{
