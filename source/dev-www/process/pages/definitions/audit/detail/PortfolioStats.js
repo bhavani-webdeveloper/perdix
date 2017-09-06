@@ -61,6 +61,11 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     // var auditData_notes = [];
                     // var notes = [];
 
+                    var notesMap = model.master.portfolio_stats.cash_holding.notes.reduce(function(map, obj) {
+                        map[obj.currency_id] = obj;
+                        return map;
+                    }, {});
+
                     for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
                         auditData_notes = model.portfolio_stats.cash_holding.cash_on_hand[i];
                         $log.info(auditData_notes)
@@ -69,7 +74,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         // for (var j = 0; j < model.master.portfolio_stats.cash_holding.notes.length; j++) {
                             // var masterData_notes = model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id];
                             // $log.info(masterData_notes)
-                            if (model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].currency_type == "N") {
+                            if (notesMap[auditData_notes.currency_id].currency_type == "N") {
                                 portfolioSheetForm.push({
                                     "type": "section",
                                     "htmlClass": "row",
