@@ -6,6 +6,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
         "
 
+        var deriveRecordStr=function(format,data){
+            var Recordstr=format;
+            Recordstr=Recordstr.replace("<ACCOUNT>",data.accountId).replace("<FEE_SEQUENCE_NUMBER>",data.sequenceNum).replace("<DEMAND_SEQUENCE_NUMBER>",data.sequenceNum);
+            return Recordstr;
+        }
+
         return {
             "type": "schema-form",
             "title": "Loan Details",
@@ -167,7 +173,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "title": "Download Invoice",
                                                     "data": "downloadText",
                                                     "onClick": function(data){
-                                                        var recordStr = data.accountId + "~" + data.sequenceNum;
+                                                        var recordStr;
                                                         if (data.transactionName == 'Demand'){
                                                             if (data.status =="false"){
                                                                 // Penal Interest
@@ -176,6 +182,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
                                                             var m = $filter('filter')(model.feesFormMappingList, {invoice_type: "Demand", demand_type:"Scheduled"});
                                                             if (m && m.length > 0){
+                                                                recordStr = deriveRecordStr(m[0].record_id_format, data);
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name="+ m[0].form_name +"&record_id=" + recordStr);    
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
@@ -185,6 +192,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
 
                                                             if (m.length>0){
+                                                                 recordStr = deriveRecordStr(m[0].record_id_format, data);
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
                                                             }
                                                         }
@@ -241,10 +249,32 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "data": "transactionDateStr"
                                                 }
                                             ];
+                                            
+
                                             model.cbsLoan.orgTransactions.data = $filter('filter')(model.cbsLoan.transactions, {transactionName: '!Demand'});
                                             model.cbsLoan.invoiceTransactions.data = $filter('filter')(model.cbsLoan.transactions, function(value, index, array){
-                                                return value.transactionName =='Demand' || value.transactionName == 'Fee Charge';
+                                                var isapplicable = false;
+                                                if (value.transactionName == 'Demand') {
+                                                    var m = $filter('filter')(model.feesFormMappingList, {
+                                                        invoice_type: "Demand",
+                                                        demand_type: "Scheduled"
+                                                    });
+                                                    if (m && m.length > 0) {
+                                                        isapplicable = true;
+                                                    }
+                                                } else if (value.transactionName == 'Fee Charge') {
+                                                    var m = $filter('filter')(model.feesFormMappingList, {
+                                                        fee_category: value.param1,
+                                                        fee_description: value.description,
+                                                        invoice_type: "Fee Charge"
+                                                    });
+                                                    if (m.length > 0) {
+                                                        isapplicable = true;
+                                                    }
+                                                }
+                                                return isapplicable && (value.transactionName =='Demand' || value.transactionName == 'Fee Charge');
                                             });
+
                                             _.forEach(model.cbsLoan.invoiceTransactions.data, function(txn){
                                                 txn.downloadText = 'Download';
                                             });
