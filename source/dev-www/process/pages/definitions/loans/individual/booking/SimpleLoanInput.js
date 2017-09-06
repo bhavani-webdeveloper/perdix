@@ -162,9 +162,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.currentStage = 'LoanInitiation';
                 var init = function(model, form, formCtrl) {
-                    model.loanAccount = model.loanAccount || {
-                        branchId: branchId
-                    };
+                    model.loanAccount = model.loanAccount || {};
+                    model.loanAccount.branchId = branchId;
                     model.additional = model.additional || {};
                     model.additional.branchName = branchName;
                     model.loanAccount.bankId = bankId;
@@ -541,7 +540,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                     // BUG FIX DO-customer id going null
                     populateLoanCustomerRelations(model);
 
-                    if (model.loanAccount.portfolioInsuranceUrn != '') {
+                    if (model.loanAccount.portfolioInsuranceUrn) {
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";
                     }
                     if (model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara' && model.loanAccount.productCode == null) {
