@@ -39,56 +39,125 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         model.portfolio_stats.cash_holding.cash_on_hand = [];
                         for (i in model.master.portfolio_stats.cash_holding.notes) {
                             var notes = model.master.portfolio_stats.cash_holding.notes[i];
-                            if (notes.status == 1 && notes.currency_type == "N") {
+                            // if (notes.status == 1 && notes.currency_type == "N") {
                                 model.portfolio_stats.cash_holding.cash_on_hand.push({
                                     "currency_id": notes.currency_id,
                                     "units_on_hand": ""
                                 })
-                            }
+                            // }
+                            // if (notes.status == 0 && notes.currency_type == "C") {
+                                // model.portfolio_stats.cash_holding.cash_on_hand.push({
+                                //     "currency_id": notes.currency_id,
+                                //     "units_on_hand": ""
+                                // })
+                            // }
 
                         }
                     }
 
                     var cashDetails = [];
                     var portfolioSheetForm = [];
-                    var auditData_notes = [];
-                    var notes = [];
+                    var coinsSheetForm = [];
+                    // var auditData_notes = [];
+                    // var notes = [];
 
                     for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
                         auditData_notes = model.portfolio_stats.cash_holding.cash_on_hand[i];
                         $log.info(auditData_notes)
+                        $log.info(auditData_notes.currency_id)
+                        // for(j in model.master.portfolio_stats.cash_holding.notes){
+                        // for (var j = 0; j < model.master.portfolio_stats.cash_holding.notes.length; j++) {
+                            // var masterData_notes = model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id];
+                            // $log.info(masterData_notes)
+                            if (model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].currency_type == "N") {
+                                portfolioSheetForm.push({
+                                    "type": "section",
+                                    "htmlClass": "row",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "col-sm-3",
+                                        "items": [{
+                                            "html": model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].denomination + "X",
+                                            "type": "section"
+                                        }]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-4",
+                                        "items": [{
+                                            "key": "portfolio_stats.cash_holding.cash_on_hand[" + i + "].units_on_hand",
+                                            "type": "number"
+                                        }]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-3",
+                                        "items": [{
+                                            "html": "{{model.portfolio_stats.cash_holding.cash_on_hand[" + i + "].total}}",
+                                            "type": "section"
+                                        }]
+                                    }]
+                                });
 
-                        // if (model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].currency_type == "N") {
-                        portfolioSheetForm.push({
-                            "type": "section",
-                            "htmlClass": "row",
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "col-sm-3",
-                                "items": [{
-                                    "html": model.master.portfolio_stats.cash_holding.notes[i].denomination + "X",
-                                    "type": "section"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-4",
-                                "items": [{
-                                    "key": "portfolio_stats.cash_holding.cash_on_hand[" + i + "].units_on_hand",
-                                    "type": "number"
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-3",
-                                "items": [{
-                                    "html": "{{model.portfolio_stats.cash_holding.cash_on_hand[" + i + "].total}}",
-                                    "type": "section"
-                                }]
-                            }]
-                        });
+                            }
+                            if (model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].currency_type == "C") {
+                                coinsSheetForm.push({
+                                    "type": "section",
+                                    "htmlClass": "row",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "col-sm-3",
+                                        "items": [{
+                                            "html": model.master.portfolio_stats.cash_holding.notes[auditData_notes.currency_id].denomination + "X",
+                                            "type": "section"
+                                        }]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-4",
+                                        "items": [{
+                                            "key": "portfolio_stats.cash_holding.cash_on_hand[" + i + "].units_on_hand",
+                                            "type": "number"
+                                        }]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-3",
+                                        "items": [{
+                                            "html": "{{model.portfolio_stats.cash_holding.cash_on_hand[" + i + "].total}}",
+                                            "type": "section"
+                                        }]
+                                    }]
+                                });
+
+                            }
                         // }
+
 
                     }
                     var boxItems = [{
+                        "type": "section",
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-3",
+                            "items": [{
+                                "type": "section",
+                                "html": "{{'NOTES'|translate}}"
+                            }]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-4",
+                            "items": [{
+                                "type": "section",
+                                "html": "{{'VALUE'|translate}}"
+                            }]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-3",
+                            "items": [{
+                                "type": "section",
+                                "html": "{{'TOTAL'|translate}}"
+                            }]
+                        }]
+                    }];
+                    var boxItemsTwo = [{
                         "type": "section",
                         "htmlClass": "row",
                         "items": [{
@@ -203,12 +272,18 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     }];
                     boxItems.push.apply(boxItems, portfolioSheetForm);
                     boxItemsOne.push.apply(boxItemsOne, goldDetails);
+                    boxItemsTwo.push.apply(boxItemsTwo, coinsSheetForm);
 
                     self.form = [{
                         "type": "box",
+                        "title": "COINS",
+                        "colClass": "col-sm-6",
+                        "items": boxItemsTwo,
+                    }, {
+                        "type": "box",
                         "title": "CASH_HOLDING",
                         "colClass": "col-sm-6",
-                        "items": boxItems
+                        "items": boxItems,
                     }, {
                         "type": "box",
                         "title": "GOLD_COIN_TALLY",
