@@ -14,11 +14,14 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         "type": ["string", "null"],
                         "title": "DATE",
                         "format": "date",
-                        "readonly": true
+                        "readonly": true,
+                        "required": true,
                     },
                     "surveyOfficerName":{
                         "type": ["string", "null"],
-                        "title": "FSO_NAME"
+                        "title": "FSO_NAME",
+                        readonly: true,
+                        "required": true,
                     },
                     "branchId": {
                         "type": ["integer", "null"],
@@ -30,6 +33,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "surveyVillage": {
                         "type": ["string", "null"],
+                        "required": true,
                         "title": "VILLAGE/SLUM"
                     },
                     "surveyBlock": {
@@ -121,6 +125,98 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "value": "Other"
                             }]
                         }
+                    },
+                    "udf15": {
+                        "type": ["number", "null"],
+                        "title": "SC_PERCENTAGE",
+                        min: 0,
+                        max: 100,
+                        "x-schema-form": {
+                            "onChange": function(modelValue, form, model) {
+                                if (model.bank_survey.udf15 && model.bank_survey.udf16 && model.bank_survey.udf17)  {
+                                   model.bank_survey.udf18 = 100 - (model.bank_survey.udf15 + model.bank_survey.udf16 + model.bank_survey.udf17)
+                                }
+                            },
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
+                    },
+                    "udf16": {
+                        "type": ["number", "null"],
+                        "title": "ST_PERCENTAGE",
+                        min: 0,
+                        max: 100,
+                        "x-schema-form": {
+                            "onChange": function(modelValue, form, model) {
+                                if (model.bank_survey.udf15 && model.bank_survey.udf16 && model.bank_survey.udf17)  {
+                                   model.bank_survey.udf18 = 100 - (model.bank_survey.udf15 + model.bank_survey.udf16 + model.bank_survey.udf17)
+                                }
+                            },
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
+                    },
+                    "udf17": {
+                        "type": ["number", "null"],
+                        "title": "GENERAL_PERCENTAGE",
+                        min: 0,
+                        max: 100,
+                        "x-schema-form": {
+                            "onChange": function(modelValue, form, model) {
+                                if (model.bank_survey.udf15 && model.bank_survey.udf16 && model.bank_survey.udf17)  {
+                                   model.bank_survey.udf18 = 100 - (model.bank_survey.udf15 + model.bank_survey.udf16 + model.bank_survey.udf17)
+                                }
+                            },
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
+                    },
+                    "udf18": {
+                        "type": ["number", "null"],
+                        "title": "OTHER_PERCENTAGE",
+                        readonly: true,
+                        min: 0,
+                        max: 100,
+                        "x-schema-form": {
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                },
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
                     },
                     "unit": {
                         "type": ["string", "null"],
@@ -267,8 +363,15 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }, {
                                 "name": "No",
                                 "value": "No"
-                            }]
+                            }],
                         }
+                    },
+                    "udf19": {
+                        "type": ["integer", "null"],
+                        "title": "NUMBER_OF_MONTHS",
+                        "x-schema-form": {
+                            condition: "model.bank_survey.irrigationAvailable == 'Yes'",
+                        },
                     },
                     "noOfKiranaShop": {
                         "type": ["number", "null"],
@@ -309,7 +412,17 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "workDone": {
                         "type": ["string", "null"],
-                        "title": "WORK_DONE_BY_PANCHAYAT/MUNICIPALITY"
+                        "title": "WORK_DONE_BY_PANCHAYAT/MUNICIPALITY",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Panchayat",
+                                "value": "Panchayat"
+                            }, {
+                                "name": "Municipality",
+                                "value": "Municipality"
+                            }, ]
+                        }
                     },
                     "lawAndOrder": {
                         "type": ["string", "null"],
@@ -642,7 +755,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         "title": "DETAILS_OF_PERSONS_CONTACTED",
                         "items": {
                             "type": "object",
-                            "required": ["contactName"],
+                            "required": ["contactName", "mobileNo"],
                             "properties": {
                                 "contactName": {
                                     "type": ["string", "null"],
@@ -713,7 +826,30 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         "title": "GEO_TAG"
                     }
 
-                }
+                },
+                "required": [
+                    "surveyDate",
+                    "surveyOfficerName",
+                    "branchId",
+                    "surveyVillage",
+                    "areaType",
+                    "migration",
+                    "povertyLevel",
+                    "communities",
+                    "electricity",
+                    "drinkingWater",
+                    "irrigationSource",
+                    "roadQuality",
+                    "publicTransport",
+                    "lawAndOrder",
+                    "socialRelation",
+                    "politicalClimate",
+                    "microfinanceRequired",
+                    "noOfPotentialMember",
+                    "motivationRequired",
+                    "udf2",
+                    "latitude",
+                ]
             }
         },
         "required": [

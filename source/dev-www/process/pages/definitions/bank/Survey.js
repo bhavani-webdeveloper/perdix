@@ -8,6 +8,11 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             if (model.bank_survey.udf8) model.bank_survey.udf8 = Number(model.bank_survey.udf8);
             if (model.bank_survey.udf9) model.bank_survey.udf9 = Number(model.bank_survey.udf9);
             if (model.bank_survey.udf14) model.bank_survey.udf14 = Number(model.bank_survey.udf14);
+
+            if (model.bank_survey.udf15) model.bank_survey.udf15 = Number(model.bank_survey.udf15);
+            if (model.bank_survey.udf16) model.bank_survey.udf16 = Number(model.bank_survey.udf16);
+            if (model.bank_survey.udf17) model.bank_survey.udf17 = Number(model.bank_survey.udf17);
+            if (model.bank_survey.udf18) model.bank_survey.udf18 = Number(model.bank_survey.udf18);
             return model;
         }
 
@@ -63,7 +68,17 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.areaType",
                     "bank_survey.migration",
                     "bank_survey.povertyLevel",
-                    "bank_survey.communities"
+                    //"bank_survey.communities",
+                    {
+                        type: "fieldset",
+                        title: "COMMUNITIES",
+                        items: [
+                            "bank_survey.udf15",
+                            "bank_survey.udf16",
+                            "bank_survey.udf17",
+                            "bank_survey.udf18",
+                        ]
+                    },
                 ]
             }, /*{
                 "type": "box",
@@ -102,6 +117,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.roadQuality",
                     "bank_survey.publicTransport",
                     "bank_survey.irrigationAvailable",
+                    "bank_survey.udf19",
                     "bank_survey.noOfKiranaShop",
                     "bank_survey.noOfTeaShops",
                     "bank_survey.noOfWell",

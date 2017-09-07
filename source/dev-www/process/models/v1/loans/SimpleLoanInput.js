@@ -1,4 +1,4 @@
-irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, PagesDefinition, SessionStore, formHelper, Queries, BASE_URL, searchResource, IndividualLoan, Enrollment) {
+irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, PagesDefinition, SessionStore, formHelper, Queries, BASE_URL, searchResource, IndividualLoan, Enrollment, PageHelper) {
     var endpoint = BASE_URL + '/api/enrollments';
 
     var loanJson = {
@@ -103,9 +103,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     "productCode": {
                         "type": ["string", "null"],
                         "title": "PRODUCT",
-                        "lovonly": true,
                         "x-schema-form": {
                             "type": "lov",
+                            "lovonly": true,
                             "bindMap": {
                                 "Partner": "loanAccount.partnerCode",
                                 "ProductCategory": "loanAccount.productCategory",
@@ -212,7 +212,7 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     "loanAmount": {
                         "type": ["number", "null"],
                         "title": "LOAN_AMOUNT",
-                        "placeholderExpr": "model.additional.product.amountBracket"
+                        "placeholderExpr": "model.additional.product.amountBracket",
                     },
                     "processingFeePercentage": {
                         "type": ["number", "null"],
@@ -228,13 +228,16 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     "loanApplicationDate": {
                         "type": ["string", "null"],
                         "title": "LOAN_APPLICATION_DATE",
-                        "format": "date"
+                        "format": "date",
+                        "x-schema-form": {
+                            type: "date"
+                        },
                     },
                     "loanPurpose1": {
                         "type": ["string", "null"],
                         "title": "LOAN_PURPOSE_1",
-                        "lovonly": true,
                         "x-schema-form": {
+                            "lovonly": true,
                             "type": "lov",
                             bindMap: {},
                             outputMap: {
@@ -263,9 +266,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     "loanPurpose2": {
                         "type": ["string", "null"],
                         "title": "LOAN_PURPOSE_2",
-                        "lovonly": true,
                         "x-schema-form": {
                             "type": "lov",
+                            "lovonly": true,
                             bindMap: {},
                             outputMap: {
                                 "purpose2": "loanAccount.loanPurpose2"
@@ -297,7 +300,75 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                     "remarks": {
                         "type": ["string", "null"],
                         "title": "REMARKS"
-                    }
+                    },
+                    "sanctionDate": {
+                        "title": "SANCTION_DATE",
+                        "type": ["string", "null"],
+                        required: true,
+                        "format": "date",
+                        "x-schema-form": {
+                            type: "date",
+                            onChange:function(value,form,model){
+                                PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+                                model.loanAccount.disbursementSchedules=[];
+                                for(var i=0;i<model.loanAccount.numberOfDisbursements;i++){
+                                    model.loanAccount.disbursementSchedules.push({
+                                        trancheNumber:""+(i+1),
+                                        disbursementAmount:0
+                                    });
+                                }
+                                if (model.loanAccount.numberOfDisbursements ==1){
+                                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                                }  
+                            },
+                        },
+                    },
+                    "numberOfDisbursements": {
+                        "type": ["null", "integer"],
+                        title:"NUM_OF_DISBURSEMENTS",
+                        "default": 1,
+                        "readonly": true,
+                        "x-schema-form": {
+                            onChange:function(value,form,model){
+                                PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+                                model.loanAccount.disbursementSchedules=[];
+                                for(var i=0;i<value;i++){
+                                    model.loanAccount.disbursementSchedules.push({
+                                        trancheNumber:""+(i+1),
+                                        disbursementAmount:0
+                                    });
+                                }
+                                if (value ==1){
+                                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                                }  
+                            },
+                        }
+                    },
+                    "disbursementSchedules": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {                           
+                                "disbursementAmount": {
+                                    "type":  ["null","integer"],
+                                    "minimum":0,
+                                    title:"DISBURSEMENT_AMOUNT",
+                                    "x-schema-form": {
+                                        type:"amount"
+                                    },
+                                },                           
+                                "trancheNumber": {
+                                    "type": ["string", "null"],
+                                    title: "TRANCHE_NUMBER",
+                                    "readonly": true,
+                                },
+                            },
+                            "required": [
+                                "disbursementAmount",
+                                "trancheNumber"
+                            ]
+                        }
+                    },
                 },
                 "required": [
                     "branchName",
@@ -363,7 +434,6 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
 
                 }
             },
-
         }
     };
     var res = $resource(endpoint, null, {

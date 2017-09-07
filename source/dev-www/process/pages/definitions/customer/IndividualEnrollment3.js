@@ -211,6 +211,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "Liabilities1.liabilities.instituteName" : {
                             required:false,
+                            type: "select",
+                            enumCode: "loan_source_institutes",
                         },
                         "Liabilities1.liabilities.loanAmountInPaisa" : {
                             required:false,
@@ -462,6 +464,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "Liabilities1.liabilities.instituteName" : {
                             required:false,
+                            type: "select",
+                            enumCode: "loan_source_institutes",
                         },
                         "Liabilities1.liabilities.loanAmountInPaisa" : {
                             required:false,

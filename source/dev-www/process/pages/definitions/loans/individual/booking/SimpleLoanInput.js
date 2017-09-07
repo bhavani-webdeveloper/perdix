@@ -249,6 +249,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                         }
                         $log.info("resp");
                         model.loanAccount = resp;
+                        model.loanAccount.tenure = Number(resp.tenure);
                             var urns = [];                           
                             Queries.getCustomerBasicDetails({
                                 "urns": urns
@@ -345,6 +346,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                     ]
                 }, {
                     "type": "fieldset",
+                    "title": "DISBURSEMENT_DETAILS",
+                    "items": [
+                        "loanAccount.sanctionDate",
+                        "loanAccount.numberOfDisbursements",
+                        {
+                            type: "array",
+                            key: "loanAccount.disbursementSchedules",
+                            notitle: true,
+                                add:null,
+                                remove:null,
+                                view: "fixed",
+                        }
+                    ]
+                }, {
+                    "type": "fieldset",
                     "title": "REMARKS",
                     "items": [
                         "loanAccount.remarks"
@@ -401,6 +417,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                                 }
                                 reqData.loanAccount.status = '';
                                 reqData.loanProcessAction = "SAVE";
+                                reqData.remarks = model.loanAccount.remarks;
                                 //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                                 // reqData.remarks = model.review.remarks;
                                 reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
