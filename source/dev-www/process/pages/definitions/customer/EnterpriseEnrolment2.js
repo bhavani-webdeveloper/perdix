@@ -514,6 +514,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         "type": "email",
+                         required:true,
                         "key": "customer.enterprise.companyEmailId",
                         "pattern": "^\\S+@\\S+$",
                         "title": "COMPANY_EMAIL_ID"
@@ -904,7 +905,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "key": "customer.enterprise.companyEmailId",
                         "pattern": "^\\S+@\\S+$",
                         "title": "COMPANY_EMAIL_ID",
-                        required:true,
                     },
                     {
                         "key": "customer.latitude",
