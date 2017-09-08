@@ -30,6 +30,10 @@
                "type": ["string", "null"],
                "title": "CENTRE_CODE1"
             },
+            "centreId": {
+               "type": ["object", "null"],
+               "title": "CENTRE_CODE1"
+            },
             "centreGpsCaptureDate": {
                   "type": ["string", "null"],
                   "title": "GPS_CAPTURE_DATE"
@@ -54,6 +58,10 @@
                "type": ["string", "null"],
                "title": "EMPLOYEE_NAME"
             },
+            "firstName": {
+               "type": ["string", "null"],
+               "title": "FIRST_NAME"
+            },
             "monthlyMeeting": {
                "type": ["string", "null"],
                "title": "MONTHLY_MEETING"
@@ -71,7 +79,7 @@
                "title": "DAY"
             },
             "monthlyMeetingTime": {
-               "type": ["string", "null"],
+               "type": ["object", "null"],
                "title": "TIME"
             },
             "status": {
@@ -83,8 +91,30 @@
                "title": "WEEKLY_MEETING_DAY_"
             },
             "weeklyMeetingTime": {
-               "type": ["string", "null"],
+               "type": ["object", "null"],
                "title": "WEEEKLY_MEETING_TIME"
+            },
+            "pincode": {
+                "type": ["integer","null"]
+            },
+            "state": {
+              "type": ["string","null"],
+              "title": "STATE",
+              "enumCode":"state_master"
+            },
+            "district": {
+              "type": ["string","null"],
+              "title": "DISTRICT",
+              "enumCode":"district"
+            },
+            "villageName": {
+              "type": ["string","null"],
+              "title": "VILLAGE_NAME",
+              "enumCode":"village"
+            },
+            "locality": {
+              "type": ["string","null"],
+              "title": "LOCALITY"
             }
          }
    }

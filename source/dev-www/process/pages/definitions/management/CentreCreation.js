@@ -1,18 +1,18 @@
 define({
     pageUID: "management.CentreCreation",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages"],
+    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q"],
     $pageFn: 
-    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages){
+    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q){
     var branch = SessionStore.getBranch();
     return {
                 "type": "schema-form",
                 "title": "CENTRE_CREATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
-                    model.editMode = false;
+                    model.editMode = true;
                     if ($stateParams.pageId) {
-                        model.editMode = true;
+                        model.editMode = false;
                         var id = $stateParams.pageId;
                         PageHelper.showLoader();
                         
@@ -20,6 +20,20 @@ define({
                             centreid: id
                         }, function(response, headersGetter) {
                             model.centre = _.cloneDeep(response);
+                            model.centre.monthlyMeetingTime = moment(model.centre.monthlyMeetingTime).toDate();
+                            model.centre.weeklyMeetingTime = moment(model.centre.weeklyMeetingTime).toDate();
+                            var addressArr = model.centre.centreAddress.split("~#");
+                            if(addressArr && addressArr.length > 0) {
+                                model.centre.centreAddress = addressArr[0];
+
+                                if(addressArr.length >= 6) {
+                                    model.centre.locality = addressArr[1];
+                                    model.centre.villageName = addressArr[2];
+                                    model.centre.district = addressArr[3];
+                                    model.centre.state = addressArr[4];
+                                    model.centre.pincode = Number(addressArr[5]);                                    
+                                }
+                            }
                             PageHelper.hideLoader();
                         }, function(resp) {
                             PageHelper.hideLoader();
@@ -34,41 +48,107 @@ define({
                         {
                         "type": "box",
                         "title": "CENTRE_CREATION",
-                        "items": [
+                        "items": [  
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        title: "BRANCH_NAME",
+                                        enumCode: "branch_id",
+                                        condition:"model.editMode"
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        title: "BRANCH_NAME",
+                                        enumCode: "branch_id",
+                                        condition: "!model.editMode",
+                                        readonly: true
+                                    },
                                     {
                                         key: "centre.centreName",
-                                        condition:"model.editMode",
+                                        condition:"!model.editMode",
                                         readonly: true
                                     },
                                     {
                                         key: "centre.centreCode",
-                                        condition:"model.editMode",
+                                        condition:"!model.editMode",
                                         readonly: true
                                     },
                                     {
                                         key: "centre.centreName",
-                                        condition:"!model.editMode"
+                                        condition:"model.editMode"
                                     },
                                     {
                                         key: "centre.centreCode",
-                                        condition:"!model.editMode"
+                                        condition:"model.editMode"
                                     },
                                     {
                                         key: "centre.centreAddress",
                                         type: "textarea"     
                                     },
                                     {
-                                        key: "centre.branchId",
-                                        type: "select",
-                                        enumCode: "branch_id",
-                                        condition:"!model.editMode"
+                                        key: "centre.pincode",
+                                        type: "lov",
+                                        required: true,
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "pincode": "centre.pincode",
+                                            "district": {
+                                                key: "centre.district"
+                                            },
+                                            "state": {
+                                                key: "centre.state"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "division": "centre.locality",
+                                            "region": "centre.villageName",
+                                            "pincode": "centre.pincode",
+                                            "district": "centre.district",
+                                            "state": "centre.state",
+                                        },
+                                        searchHelper: formHelper,
+                                        initialize: function(inputModel) {
+                                            $log.warn('in pincode initialize');
+                                            $log.info(inputModel);
+                                        },
+                                        search: function(inputModel, form, model) {
+                                            if (!inputModel.pincode) {
+                                                return $q.reject();
+                                            }
+                                            return Queries.searchPincodes(
+                                                    inputModel.pincode,
+                                                    inputModel.district,
+                                                    inputModel.state
+                                            );
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.division + ', ' + item.region,
+                                                item.pincode,
+                                                item.district + ', ' + item.state,
+                                            ];
+                                        },
+                                        onSelect: function(result, model, context) {
+                                            $log.info(result);
+                                        }
                                     },
                                     {
-                                        key: "centre.branchId",
-                                        type: "select",
-                                        enumCode: "branch_id",
-                                        condition: "model.editMode",
+                                        key: "centre.locality",
                                         readonly: true
+                                    },
+                                    {
+                                        key: "centre.villageName",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "centre.district",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "centre.state",
+                                        readonly: true,
                                     },
                                     {
                                         key: "centre.status",
@@ -119,12 +199,85 @@ define({
                                                 item.userId + ': ' + item.userName,
                                                 item.roleId ? (item.roleId + ': ' + item.roleName) : ''
                                             ];
-                                        }
-                
+                                        }                
                                     },
                                     {
                                         key: "centre.centreLeaderUrn",
-                                        
+                                        type: "lov",
+                                        lovonly: true,
+                                        initialize: function(model, form, parentModel, context) {
+                                            model.branchId = parentModel.centre.branchId;
+                                            var centres = formHelper.enum('centre').data;
+
+                                            var centreName = $filter('filter')(centres, {field3: parentModel.centre.centreCode, parentCode: parentModel.centre.branchId});
+                                            if(centreName && centreName.length > 0) {
+                                                model.centreId = centreName[0].value;
+                                            }
+
+                                        },
+                                        inputMap: {
+                                            "branchId": {
+                                                "key": "centre.branchId",
+                                                "title": "BRANCH_NAME",
+                                                "type": "select",
+                                                required: true,
+                                                readonly: true,
+                                                "enumCode": "branch_id"
+                                            },
+                                            "centreId": {
+                                                "key": "centre.centreId",
+                                                "title": "CENTRE",
+                                                readonly: true,
+                                                "enumCode": "centre",
+                                                required: true,
+                                                "type": "select",
+                                                "parentEnumCode": "branch_id",
+                                                "parentValueExpr": "model.branchId",
+                                            },
+                                            "firstName": {
+                                                "key": "centre.firstName",
+                                                "title": "CUSTOMER_NAME",
+                                                "type": "string"
+                                            },
+                                            "urn": {
+                                                "key": "centre.centreLeaderUrn",
+                                                "title": "CUSTOMER_NAME",
+                                                "type": "string",
+                                                "title": "URN_NO",
+                                            }
+                                        },
+                                        bindMap: {"Branch": "centre.branchId", "CentreCode" : "centre.centreCode"},
+                                        "outputMap": {
+                                            "urnNo": "centre.centreLeaderUrn",
+                                        },
+                                        "searchHelper": formHelper,
+                                        "search": function(inputModel, form) {
+                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                            var branches = formHelper.enum('branch_id').data;
+                                            var branchName;
+                                            for (var i=0; i<branches.length;i++){
+                                                if(branches[i].code==inputModel.branchId)
+                                                    branchName = branches[i].name;
+                                            }
+                                            var promise = Enrollment.search({
+                                                'branchName': branchName,
+                                                'firstName': inputModel.firstName,
+                                                'centreId':inputModel.centreId,
+                                                'customerType':"individual",
+                                                'urnNo': inputModel.urn
+                                            }).$promise;
+                                            return promise;
+                                        },
+                                        getListDisplayItem: function(data, index) {
+                                            return [
+                                                [data.firstName, data.fatherFirstName].join(' | '),
+                                                data.id,
+                                                data.urnNo
+                                            ];
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            
+                                        }                                        
                                     },
                                     {
                                         key: "centre.monthlyMeeting",
@@ -200,7 +353,8 @@ define({
                                         
                                     },
                                     {
-                                        key: "centre.monthlyMeetingTime"
+                                        key: "centre.monthlyMeetingTime",
+                                        type: "time",
                                     },
                                     {
                                         key: "centre.weeklyMeetingDay",
@@ -216,7 +370,8 @@ define({
                                         }
                                     },
                                     {
-                                        key: "centre.weeklyMeetingTime"
+                                        key: "centre.weeklyMeetingTime",
+                                        type: "time",
                                     }
                                     
                                  ]
@@ -239,6 +394,7 @@ define({
                         PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
                         var tempModelData = _.clone(model.centre);
                         delete tempModelData['monthlyMeeting'];
+                        tempModelData.centreAddress = [tempModelData.centreAddress, tempModelData.locality, tempModelData.villageName, tempModelData.district, tempModelData.state, tempModelData.pincode].join("~#");
                         var deferred = {};
 
                         if((model.centre.id!="")&&(model.centre.id!=undefined)){
