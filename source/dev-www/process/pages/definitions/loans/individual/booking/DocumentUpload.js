@@ -102,7 +102,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                             }, function(data) {
                                                 $log.info("Inside success of activateLoan");
                                                 LoanProcess.generateScheduleForSpecifiedDate({
-                                                        "accountNumber": model._queue.accountNumber,
+                                                        // "accountNumber": model._queue.accountNumber,
+                                                        "loanId": model._queue.loanId,
+                                                        "tranchNumber": model.loanAccount.disbursementSchedules[0].trancheNumber,
                                                         "amount":model.loanAccount.disbursementSchedules[0].disbursementAmount,
                                                         "scheduledDisbursementDate":model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,
                                                         "firstRepaymentDate":model.loanAccount.firstRepaymentDate

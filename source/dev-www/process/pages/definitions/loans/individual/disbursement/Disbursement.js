@@ -162,7 +162,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
                         "condition":"model.siteCode !=='KGFS'",
-                        "title": "MODE_OF_DISBURSEMENT",   
+                        "title": "MODE_OF_DISBURSEMENT", 
+                        "required": true,  
                         "type": "select",
                         "titleMap": [{
                             value: "NEFT",

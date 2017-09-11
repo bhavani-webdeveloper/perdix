@@ -71,13 +71,22 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                 //model.authToken = AuthTokenHelper.getAuthData().access_token;
                 model.amand.amendmentType = "TENURE";
                 var loanAccountNo = ($stateParams.pageId.split("."))[0];
+                var promiseArray = [];
                 var promise = LoanAccount.get({
                     accountId: loanAccountNo
                 }).$promise;
 
+                promiseArray.push(promise);
+
+                var loanDetailsPromise = Queries.getLoanAccountByAccountNumber(loanAccountNo).then(function (resp) {
+                    if(resp) {
+                        model.amand._loanId = resp.id;
+                    }
+                });
+                promiseArray.push(loanDetailsPromise);
                 var totalSatisfiedDemands=0;
                 var pendingInstallment=0;
-
+                PageHelper.showLoader();
                 promise.then(function(data) {
                     $log.info(data);
                     if (data.repaymentSchedule && data.repaymentSchedule.length) {
@@ -101,12 +110,17 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     model.amand.normalInterestRate = data.normalInterestRate;
                     model.amand.totalDemandDue = data.totalDemandDue;
 
+                });
+
+                $q.all(promiseArray).then(function(){
                     irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                 }, function(resData) {
                     irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
                     PageHelper.showErrors(resData);
                     backToLoansList();
-                });
+                }).finally(function(){
+                    PageHelper.hideLoader();
+                })
 
             },
 
@@ -186,7 +200,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                                 PageHelper.showProgress("tenure-amendment", "Done", 5000);
                                 PageHelper.showBlockingLoader();
                                 LoanProcess.generatedefaultschedule({
-                                        accountNumber: model.amand.accountId
+                                        loanId: model.amand._loanId
                                     })
                                     .$promise
                                     .then(function(response) {
