@@ -1,15 +1,12 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
 
         function backToQueue() {
-            $state.go("Page.Engine", {
-                pageName: "loans.group.GroupLoanRepaymentQueue",
-                pageId: null
-            });
+            irfNavigator.goBack();
         }
 
         function deriveAmount(txnType, repaymentObj) {
@@ -73,6 +70,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                 model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
                 model.branchCode = SessionStore.getBranchCode();
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 var groupParams = $stateParams.pageId.toString().split(".");
                 var isLegacy = false;
                 try {
@@ -227,10 +225,22 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         }
                     }, {
                         "key": "_cashCollectionRemark",
-                        condition: "model._partnerCode!='AXIS'",
+                        condition: "model._partnerCode!='AXIS' && model.siteCode == 'KGFS'",
                         "title": "CASH_COLLECTION_REMARK",
                         "titleMap": cashCollectionRemarks,
                         "type": "select",
+                        "onChange": function(value, form, model) {
+                            for (var i = 0; i < model.repayments.length; i++) {
+                                var repayment = model.repayments[i];
+                                repayment.cashCollectionRemark = value;
+                            }
+                        }
+                    }, {
+                        "key": "_cashCollectionRemark",
+                        "title": "CASH_COLLECTION_REMARK",
+                        "condition": "model._partnerCode!='AXIS' && (model.siteCode == 'sambandh' || model.siteCode == 'saija')",
+                        "type": "select",
+                        "titleMap": {"Cash collected at field by WM": "Cash collected at field by WM"},
                         "onChange": function(value, form, model) {
                             for (var i = 0; i < model.repayments.length; i++) {
                                 var repayment = model.repayments[i];
@@ -277,12 +287,32 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
 
                             }, {
                                 key: "repayments[].transactionName",
+                                "condition": "model.siteCode == 'KGFS'",
                                 "type": "select",
                                 "titleMap": {
                                     "Advance Repayment": "Advance Repayment",
                                     "Scheduled Demand": "Scheduled Demand",
                                     "Fee Payment": "Fee Payment",
                                     "Pre-closure": "Pre-closure"
+                                },
+                                onChange: function(value, form, model) {
+                                    var ai = form.arrayIndex;
+                                    model.repayments[ai].amount = deriveAmount(value, model.repayments[ai]);
+                                    if(model.repayments[ai].transactionName== "Scheduled Demand"){
+                                       model.repayments[ai].amount = 0;
+                                    }
+                                    if(model.repayments[ai].transactionName=="Advance Repayment"){
+                                       model.repayments[ai].amount = model.repayments[ai].equatedInstallment;
+                                    }
+                                    
+                                    updateTotal(model);
+                                }
+                            }, {
+                                key: "repayments[].transactionName",
+                                "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                                "type": "select",
+                                "titleMap": {
+                                    "Scheduled Demand": "Scheduled Demand",
                                 },
                                 onChange: function(value, form, model) {
                                     var ai = form.arrayIndex;
@@ -308,7 +338,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                             }, {
                                 key: "repayments[].cashCollectionRemark",
                                 "type": "select",
+                                "condition": "model.siteCode == 'KGFS'",
                                 "titleMap": cashCollectionRemarks
+                            },
+                            {
+                                key: "repayments[].cashCollectionRemark",
+                                "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                                "type": "select",
+                                "titleMap": {"Cash collected at field by WM": "Cash collected at field by WM"},
                             },
                             {
                             key: "repayments[].receiptNumber",
@@ -412,6 +449,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                 }, {
                     "type": "button",
                     "style": "btn-theme",
+                    "condition": "model.siteCode == 'KGFS'",
                     "title": "PRINT",
                     "onClick": function(model, formCtrl, formName) {
                         function PrinterConstants() {
@@ -1049,6 +1087,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                         'accountId': repayment.accountId
                                     })
                                 })
+                                PageHelper.showProgress("group-repay", "Done.", 3000);
+                                if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                                    irfNavigator.goBack();
+                                }
                             } catch (err) {
                                 console.error(err);
                                 PageHelper.showProgress("group-repay", "Oops. An Error Occurred", 3000);

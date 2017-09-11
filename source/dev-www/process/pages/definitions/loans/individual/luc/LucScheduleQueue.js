@@ -70,7 +70,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					var centreId = [];
 					if (centres && centres.length) {
 						for (var i = 0; i < centres.length; i++) {
-							centreId.push(centres[i].centreId);
+							centreId.push(centres[i].id);
 						}
 					}
 					var promise = LUC.search({

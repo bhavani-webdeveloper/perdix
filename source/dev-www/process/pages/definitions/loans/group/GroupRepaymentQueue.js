@@ -2,8 +2,8 @@
  * Created by Sachin.M on 22-07-2016.
  */
 irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$log", "formHelper", "LoanAccount",
-    "$state","searchResource",
-    function($log, formHelper, LoanAccount,$state, searchResource){
+    "$state","searchResource", "irfNavigator",
+    function($log, formHelper, LoanAccount,$state, searchResource, irfNavigator){
         //isLegacy :: single loan prdt (true) or others (false)
 
         return {
@@ -77,9 +77,13 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
             actions:{
                 submit:function(model, formCtrl, formName){
                     console.log(model);
-                    $state.go("Page.Engine",{
-                        pageName:'loans.groups.GroupLoanRepay',
+                    irfNavigator.go({
+                        state: "Page.Engine",
+                        pageName: 'loans.groups.GroupLoanRepay',
                         pageId:[model.partner,model.groupCode,model.isLegacy].join(".")
+                    }, {
+                        state: "Page.Engine",
+                        pageName: "loans.group.GroupLoanRepaymentQueue",
                     });
                 }
             }
