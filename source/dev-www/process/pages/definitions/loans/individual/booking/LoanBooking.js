@@ -502,12 +502,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
                     
-
-                    if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
-                        PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
-                        return false;
+                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                        if (scheduledDisbursementDate.diff(customerSignatureDate,"days") < 0){
+                            PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than or equal to Customer sign date",5000);
+                            return false;
+                        }
                     }
-
+                    else  {
+                        if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
+                            PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
+                            return false;
+                        }
+                    }
+                    
                     var validatePromise = [];
                     if(model.siteCode == 'sambandh' && SessionStore.getGlobalSetting('individualLoan.cbCheck.required') == "true" && 
                         model.loanAccount.loanAmount >= Number(SessionStore.getGlobalSetting('individualLoan.cbCheck.thresholdAmount'))) {
