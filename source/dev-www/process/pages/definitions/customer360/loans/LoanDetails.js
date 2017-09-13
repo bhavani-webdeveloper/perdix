@@ -153,10 +153,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                         if (model.cbsLoan.transactions.length > 0) {
                                             model.cbsLoan.invoiceTransactions.columns = [
-                                                {
-                                                    "title": "Invoice #",
-                                                    "data": "entityId"
-                                                },
+                                                // {
+                                                //     "title": "Invoice #",
+                                                //     "data": "entityId"
+                                                // },
                                                 {
                                                     "title": "Date",
                                                     "data": "valueDateStr"
