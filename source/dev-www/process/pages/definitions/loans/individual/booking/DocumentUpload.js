@@ -146,7 +146,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                    {
                             "type": "fieldset",
                             "title": "View Loan Details",
-                            "condition":"model.loanAccount.id",
+                            "condition":"model.loanAccount.id && model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                             "items": [{
                                 key: "loanAccount.ViewLoan",
                                 type: "button",
@@ -375,6 +375,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                     }, {
                         "type": "fieldset",
                         "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
+                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "items": [{
                             "type": "array",
                             "notitle": true,
@@ -506,16 +507,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             {
                 "type": "box",
                 "title": "POST_REVIEW",
-                "condition": "model.loanAccount.id && model.siteCode != 'sambandh'",
+                "condition": "model.loanAccount.id",
                 "items": [
                     {
                         key: "review.action",
                         type: "radios",
+                        condition: "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         titleMap: {
                             "REJECT": "REJECT",
                             "SEND_BACK": "SEND_BACK",
                             "PROCEED": "PROCEED",
                             "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        type: "radios",
+                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        titleMap: {
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
                         }
                     },
                     {
@@ -675,6 +686,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             },          
             {
                 "type": "actionbox",
+                condition: "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                 "items": [{
                     "type": "button",
                     "title": "BACK",

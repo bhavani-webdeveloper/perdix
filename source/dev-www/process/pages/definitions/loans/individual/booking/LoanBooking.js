@@ -177,7 +177,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        condition : "model.siteCode != 'sambandh'",
+                        condition : "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         type: "string",
                         title: "EMI_PAYMENT_DATE_REQUESTED",
                         readonly: true
@@ -247,7 +247,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "loanAccount.loanPurpose2",
                         "readonly": true,
-                        "condition": "model.siteCode == 'sambandh'"
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     },
                     // {
                     //     "key": "loanAccount.loanPurpose3",
@@ -255,7 +255,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     // },
                      {
                         "key": "loanAccount.branch",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title": "BRANCH",
                         "type": "string",
                         "readonly": true,
@@ -276,48 +276,48 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         "key": "loanAccount.portfolioInsurancePremium",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "title": "INSURANCE",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.commercialCibilCharge",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.loanAmountRequested",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "title": "LOAN_AMOUNT_REQUESTED",
                         "type":"amount",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.securityEmiRequired",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.sanctionDate",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "readonly": true
                     },
                     {
                         "key":"additional.portfolioUrnSelector",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type":"string",
                         "readonly": true                     
                     },
                     {
                         key:"loanAccount.portfolioInsuranceUrn",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title":"URN_NO",
                         "readonly": true
                     },
                     {
                         key: "loanAccount.portfolioInsuranceCustomerName",
-                        "condition": "model.siteCode == 'sambandh'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         title: "NAME",
                         readonly: true
                     }
@@ -348,7 +348,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }*/,
                     {
                         "type": "fieldset",
-                        "condition": "model.siteCode != 'sambandh'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "notitle": true,
                         "items": [
                             {
