@@ -546,12 +546,15 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                 $log.info(resp);
                                 if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                     for (i = 0; i < resp.repaymentSchedule.length; i++) {
-                                        if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
-                                            totalSatisfiedDemands++;
-                                            $log.info("inc s");
-                                        } else if (resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') {
-                                            pendingInstallment++;
-                                            $log.info("inc p");
+                                        if(resp.repaymentSchedule[i].status == 'true') {
+                                            if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
+                                                totalSatisfiedDemands++;
+                                                $log.info("inc s");
+                                            } else if ((resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') 
+                                                && resp.repaymentSchedule[i].status == 'true') {
+                                                pendingInstallment++;
+                                                $log.info("inc p");
+                                            }
                                         }
                                     }
                                 }
