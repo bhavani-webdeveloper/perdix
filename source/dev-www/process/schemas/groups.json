@@ -289,6 +289,12 @@
                                 "title": "LiterateWitnessMiddleName"
                                 
                             },
+                            "outStandingLoanAmount": {
+                                "type": "integer",
+                                "title": "LOAN_AMOUNT",
+                                "minimum":0
+                                
+                            },
                             "loanAmount": {
                                 "type": "integer",
                                 "title": "LOAN_AMOUNT",
