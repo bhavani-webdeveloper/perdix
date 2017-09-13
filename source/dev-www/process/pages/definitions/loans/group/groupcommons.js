@@ -370,7 +370,8 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 var fatherName = "";
                                 var familyMembers = [];
                                 var maritalStatus = null;
-                                var spouseFirstName = null;;
+                                var spouseFirstName = null;
+                                var spouseDob = null;
                                 Enrollment.getCustomerById({id:value.customerId},function(resp,head){
 
                                     fatherName = resp.fatherFirstName;
@@ -401,7 +402,8 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                         relation:"Father",
                                         _familyMembers:familyMembers,
                                         maritalStatus: maritalStatus,
-                                        spouseFirstName:spouseFirstName
+                                        spouseFirstName:spouseFirstName,
+                                        spouseDob: spouseDob
                                     });
                                     console.log(key);
                                     if(key >= (items.length-1)){
