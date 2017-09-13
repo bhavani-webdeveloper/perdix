@@ -226,6 +226,13 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                     }
                                 },
                                 {
+                                    "key": "group.jlgGroupMembers[].outStandingLoanAmount",
+                                    "condition":"model.group.partnerCode=='AXIS'",
+                                    "required": true,
+                                    "type": "amount",
+                                    "title": "OUTSTANDING_LOAN_AMOUNT"
+                                },
+                                {
                                     "key":"group.jlgGroupMembers[].loanAmount",
                                     "type":"amount",
                                     readonly:readonly
@@ -370,6 +377,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                     familyMembers = resp.familyMembers;
                                     maritalStatus = resp.maritalStatus;
                                     spouseFirstName = resp.spouseFirstName;
+                                    spouseDob=resp.spouseDateOfBirth;
                                 },function(resp){}).$promise.finally(function(){
 
                                     var uname = value.firstName;
