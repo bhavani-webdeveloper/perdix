@@ -492,7 +492,7 @@ define({
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
-                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.group.id);
+                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/JLGAllFormsDownload.php?record_id=" + model.group.id);
                         }
                     },]
                 },
