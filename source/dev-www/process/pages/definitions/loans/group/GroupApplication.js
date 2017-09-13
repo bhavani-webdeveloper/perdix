@@ -66,6 +66,15 @@ define({
 
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            if(model.group.jlgGroupMembers && model.group.jlgGroupMembers.length)
+            {
+               if(model.group.jlgGroupMembers[0].scheduledDisbursementDate){
+                model.group.scheduledDisbursementDate=model.group.jlgGroupMembers[0].scheduledDisbursementDate;
+               }
+               if(model.group.jlgGroupMembers[0].firstRepaymentDate){
+                model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
+               }
+            }
         };
 
         var fillNames = function(model) {
