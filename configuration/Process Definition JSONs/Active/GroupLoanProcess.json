@@ -547,6 +547,46 @@
             "captureStage":"Stage01",
             "title":"Witness Last Name"
          },
+         "spouseFirstName":{
+            "mandatory":false,
+            "minLength":1,
+            "maxLength":100,
+            "captureStage":"Stage01",
+            "title":"Spouse First Name"
+         },
+         "spouseMiddleName":{
+            "mandatory":false,
+            "minLength":1,
+            "maxLength":100,
+            "captureStage":"Stage01",
+            "title":"Spouse Middle Name"
+         },
+         "spouseLastName":{
+            "mandatory":false,
+            "minLength":1,
+            "maxLength":100,
+            "captureStage":"Stage01",
+            "title":"Spouse Last Name"
+         },
+         "spouseDob":{
+            "mandatory":false,
+            "captureStage":"Stage01",
+            "title":"Spouse DOB"
+         },
+         "maritalStatus":{
+            "mandatory":false,
+            "minLength":1,
+            "maxLength":100,
+            "captureStage":"Stage01",
+            "title":"Marital Status"
+         },
+         "outstandingLoanAmount":{
+            "mandatory":false,
+            "minimum":0,
+            "maximum":100000000,
+            "captureStage":"Stage01",
+            "title":"Outstanding Loan Amount"
+         },
          "husbandOrFatherFirstName":{
             "mandatory":false,
             "minLength":1,
