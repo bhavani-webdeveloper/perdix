@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                 model.audit_info = model.audit_info || {};
                 model.branchName = SessionStore.getBranch();
                 model.audit_info.auditor_id = SessionStore.getLoginname();
-                model.audit_info.audit_type = "Regular";
+                // model.audit_info.audit_type = "Regular";
             },
             form: [{
                 "type": "box",
@@ -24,6 +24,16 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                     type: "date",
                     required: true,
                 }, {
+                    "key": "audit_info.audit_type",
+                    "type": "select",
+                    "titleMap": [{
+                        "name": "Regular",
+                        "value": "Regular"
+                    }, {
+                        "name": "Snap Audit",
+                        "value": "Snap Audit"
+                    }]
+                },{
                     key: "audit_info.start_date",
                     "condition": "model.audit_info.audit_id",
                     type: "date",
