@@ -58,6 +58,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                             return [];
                         },
                         getListItem: function(item){
+                            if (item)
                             return [
                                 item.accountNumber,
                                 'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode,
