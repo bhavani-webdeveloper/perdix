@@ -168,7 +168,7 @@ define({
                         "readonly": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
-                    } {
+                    } ,{
                         "key": "group.groupPhotoFileId",
                         "required": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
@@ -177,7 +177,7 @@ define({
                         "subCategory": "GROUPPHOTO",
                         "type": "file",
                         "fileType": "image/*",
-                    },]
+                    }]
                 }, {
                     "type": "box",
                     "condition": "model.siteCode == 'KGFS'",
