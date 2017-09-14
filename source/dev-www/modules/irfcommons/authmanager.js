@@ -43,6 +43,9 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
 				accountResponse.centres = resp;
 				return BankMaster.getCBSDate();
+			}, function(err){
+				loginError = { 'statusText': 'Centre not available for the user branch' };
+				$log.error(err);
 			}).then(function(cbsDate) {
 				accountResponse.cbsDate = cbsDate;
 				return Account.getUserRole({'userId':accountResponse.login}).$promise;
