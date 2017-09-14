@@ -175,7 +175,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-						"condition":"model.siteCode =='KGFS'
+						"condition":"model.siteCode =='KGFS',
                         "title": "MODE_OF_DISBURSEMENT",   
                         "type": "select",
                         "enumCode": "mode_of_disbursement",
