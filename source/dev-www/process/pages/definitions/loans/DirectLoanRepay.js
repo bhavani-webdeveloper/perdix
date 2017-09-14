@@ -467,7 +467,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                     .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {
                                         font: PrinterConstants.FONT_SMALL_BOLD
                                     })
-                                    .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount']) - parseFloat(repaymentInfo['amountPaid'])), {
+                                    .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount'])), {
                                         font: PrinterConstants.FONT_SMALL_BOLD
                                     })
                                     // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
