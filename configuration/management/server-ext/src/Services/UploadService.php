@@ -68,7 +68,16 @@ class UploadService {
 		    // echo "\n".$UploadTagMasterdata[0]['id']." Final Update : "."\n";
 		     //var_dump($UploadTagMasterdata->id);
 		     //var_dump($update);
-	  	}
+	  	} else {
+			$UploadTagMasterdata = $UploadTagMaster->select('id','funder_name','remarks','effective_date')
+						->where('funder_name', $rowData[1])
+						->where('remarks', $rowData[2])
+	      				->where('effective_date', $rowData[3])
+	                    ->first();
+			$UploadTagAccounts->account_number = $rowData[0];
+			$UploadTagAccounts->tag_id = $UploadTagMasterdata->id;
+			$UploadTagAccounts->save();
+		}
 	}
 
 	public static function handleParUpload($rowData, $row, $date ,$dateForDB){
