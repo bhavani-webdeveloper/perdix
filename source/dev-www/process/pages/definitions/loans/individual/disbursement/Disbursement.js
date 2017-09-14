@@ -161,7 +161,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode !=='KGFS'",
+                        "condition":"model.siteCode !=='KGFS' && model.siteCode !=='sambandh'",
                         "title": "MODE_OF_DISBURSEMENT", 
                         "required": true,  
                         "type": "select",
@@ -175,7 +175,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode =='KGFS'",
+                        "condition":"model.siteCode =='KGFS' || model.siteCode =='sambandh'",
                         "title": "MODE_OF_DISBURSEMENT",   
                         "type": "select",
                         "enumCode": "mode_of_disbursement",
