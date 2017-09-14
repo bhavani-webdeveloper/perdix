@@ -186,7 +186,7 @@ define({
                         "subCategory": "GROUPPHOTO",
                         "type": "file",
                         "fileType": "image/*",
-                    },]
+                    }]
                 }, {
                     "type": "box",
                     "condition": "model.siteCode == 'KGFS'",
