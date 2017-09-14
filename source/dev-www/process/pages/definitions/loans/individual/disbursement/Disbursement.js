@@ -161,7 +161,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode !=='KGFS' && model.siteCode !=='sambandh'",
+                        "condition":"!model.siteCode || model.siteCode == 'kinara'",
                         "title": "MODE_OF_DISBURSEMENT", 
                         "required": true,  
                         "type": "select",
@@ -175,7 +175,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"model.siteCode =='KGFS' || model.siteCode =='sambandh'",
+						"condition":"model.siteCode =='KGFS'
+                        "title": "MODE_OF_DISBURSEMENT",   
+                        "type": "select",
+                        "enumCode": "mode_of_disbursement",
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
+                        "condition":"model.siteCode =='sambandh' || model.siteCode =='saija'",
+                        "required": true,
                         "title": "MODE_OF_DISBURSEMENT",   
                         "type": "select",
                         "enumCode": "mode_of_disbursement",
@@ -183,6 +191,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         type: "lov",
+                        condition: "model.loanAccountDisbursementSchedule.modeOfDisbursement !== 'CASH'",
                         "schema":{
                             "type":["string","null"]
                         },
@@ -209,23 +218,39 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }
                     }, 
                     {
+                        "key":"customer.firstName",
+                        "title":"APPLICANT_NAME",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.productCode",
+                        "title": "PRODUCT",
+                        "type": "select",
+                        "enumCode": "loan_product",
+                        "readonly": true
+                    },
+                    {
                         key: "loanAccountDisbursementSchedule.customerNameInBank",
                         title: "CUSTOMER_NAME_IN_BANK",
+                        condition: "model.loanAccountDisbursementSchedule.modeOfDisbursement !== 'CASH'",
                         "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.customerAccountNumber",
                         "title": "CUSTOMER_BANK_ACC_NO",
+                        condition: "model.loanAccountDisbursementSchedule.modeOfDisbursement !== 'CASH'",
                         "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.ifscCode",
                         "title": "CUSTOMER_BANK_IFSC",
+                        condition: "model.loanAccountDisbursementSchedule.modeOfDisbursement !== 'CASH'",
                         "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.customerBankBranchName",
                         "title":"BRANCH_NAME",
+                        condition: "model.loanAccountDisbursementSchedule.modeOfDisbursement !== 'CASH'",
                         readonly:true
                     },
                     {
