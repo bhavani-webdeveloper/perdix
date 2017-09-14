@@ -2,31 +2,37 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
     function($log, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var master = null;
         var validateFields = function(model) {
-            for (i in model.fixed_assets.asset_details) {
-                var id = model.fixed_assets.asset_details[i];
-                var master_id = master.fixed_assets[id.asset_id]
-                var lostValue = model.fixed_assets.asset_details[i].lost_quantity;
-                    $log.info(lostValue)
-                    $log.info("lostValue")
-
-                // var transferValue = model.fixed_assets.asset_details[id.asset_id].transferred_quantity;
-                // var excessValue = model.fixed_assets.asset_details[id.asset_id].excess_quantity;
-                // var availableValue = model.fixed_assets.asset_details[id.asset_id].quantity_on_hand;
+            $log.info(model)
+            for (l in model.fixed_assets.asset_details) {
+                var transferValue = model.fixed_assets.asset_details[l].transferred_quantity;
+                if (model.fixed_assets.asset_details[l].quantity_on_hand > model.fixed_assets.asset_details[l].quantity_on_record) {
+                    model.fixed_assets.asset_details[l].quantity_on_record = model.fixed_assets.asset_details[l].quantity_on_hand - model.fixed_assets.asset_details[l].excess_quantity;
+                    if (!model.fixed_assets.asset_details[l].lost_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0) {
+                        PageHelper.setError({
+                            message: "Lost and Transfer Value should be zero"
+                        });
+                        return false;
+                    }
+                } else if (model.fixed_assets.asset_details[l].quantity_on_hand < model.fixed_assets.asset_details[l].quantity_on_record) {
+                    model.fixed_assets.asset_details[l].quantity_on_record = model.fixed_assets.asset_details[l].quantity_on_hand + (model.fixed_assets.asset_details[l].lost_quantity + model.fixed_assets.asset_details[l].transferred_quantity);
+                    if (!model.fixed_assets.asset_details[l].excess_quantity == 0) {
+                        PageHelper.setError({
+                            message: "Excess Value should be zero"
+                        });
+                        return false;
+                    }
+                } else if (model.fixed_assets.asset_details[l].quantity_on_hand == model.fixed_assets.asset_details[l].quantity_on_record) {
+                    return true;
+                    if (!model.fixed_assets.asset_details[l].excess_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0 && !model.fixed_assets.asset_details[l].lost_quantity == 0) {
+                        PageHelper.setError({
+                            message: "Excess, Transfer and lost Value should be zero"
+                        });
+                        return false;
+                    }
+                }
             }
-            // if (!lostValue == 0 || !transferValue == 0) {
-            //     PageHelper.setError({
-            //         message: "Value should be zero"
-            //     });
-            //     return false;
-            // }
-            // if (excessValue > availableValue) {
-            //     PageHelper.setError({
-            //         message: "Excess value should not be greater than ‘available’ value"
-            //     });
-            //     return false;
-            // }
-            
-            // return true;
+
+            return true;
         };
 
         return {
@@ -150,6 +156,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                     //     } else if (model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand < model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record) {
                                     //         model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record = model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand + (model.fixed_assets.asset_details[form.arrayIndex].lost_quantity + fixed_assets.asset_details[form.arrayIndex].transferred_quantity)
                                     //     }
+
 
                                     // }
 
