@@ -38,7 +38,7 @@ define({
 
   
                     model.lucCompleted = ($stateParams.pageData && $stateParams.pageData._lucCompleted) ? true : false;
-
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     model.loanMonitoringDetails = model.loanMonitoringDetails || {};
                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                         model.loanMonitoringDetails.socialImpactDetails = {};
@@ -652,8 +652,151 @@ define({
                                     title:"ESCALATED_REMARKS",
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
-                            },
+                            }, {
+                                type: "fieldset",
+                                title: "",
+                                condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                                items: [{
+                                    key: "loanMonitoringDetails.loanAmountUsed",
+                                    type: "amount",
+                                    required: true,
+                                    "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                        model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.loanAmountNotUsed = model.loanMonitoringDetails.loanAmount - model.loanMonitoringDetails.loanAmountUsed;
+                                    }
 
+                                }, {
+                                    key: "loanMonitoringDetails.loanAmountPurpose",
+                                    type: "select",
+                                    required: true,
+                                    enumCode: "loan_purpose_1"
+
+                                }, {
+                                    key: "loanMonitoringDetails.verifiedBy",
+                                    type: "select",
+                                    titleMap: {
+                                        "Bill ": "Bill ",
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.amountUsedPercentage",
+                                    "readonly": true,
+                                    title: "%OF_AMOUNT_UTILISED",
+                                    type: "integer"
+                                }, {
+                                    key: "loanMonitoringDetails.loanAmountNotUsed",
+                                    "readonly": true,
+                                    type: "amount"
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    type: "amount",
+                                    required: true,
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true,
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "amount",
+
+                                     "onChange": function(modelValue, form, model) {
+                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                         model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                                         model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.nonIntendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(b.toFixed());
+                                     }
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
+                                    required: true,
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                }, {
+                                    key: "loanMonitoringDetails.udf4",
+                                    required: true,
+                                    title: "BUSINESS_RUNNING_BY",
+                                }, {
+                                    key: "loanMonitoringDetails.udf5",
+                                    required: true,
+                                    title: "BUSINESS_CONDITION",
+                                }, {
+                                    key: "loanMonitoringDetails.udf6",
+                                    required: true,
+                                    title: "OBSERVATION",
+                                }, {
+                                    key: "loanMonitoringDetails.lucDone",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                            model.loanMonitoringDetails.lucRescheduled = "No";
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduled",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
+                                    }
+                                },{
+                                    key: "loanMonitoringDetails.udf2",
+                                    type: "select",
+                                    title:"RESCHEDULED_REMARKS",
+                                    titleMap: {
+                                        "Partially utilized ": "Partially utilized ",
+                                        "Not utilized ": "Not utilized ",
+                                        "Customer not available": "Customer not available",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduleReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduledDate",
+                                    type: "date",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalated",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalatedReason",
+                                    type: "select",
+                                    titleMap: {
+                                        "Mis utilized": "Mis utilized",
+                                        "Not utilized": "Not utilized",
+                                        "Partially utilized": "Partially utilized",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                },{
+                                    key: "loanMonitoringDetails.udf3",
+                                    title:"ESCALATED_REMARKS",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                }]
+                            },
                         ]
                     },
                     {
@@ -1071,8 +1214,151 @@ define({
                                     title:"ESCALATED_REMARKS",
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
-                            },
+                            }, {
+                                type: "fieldset",
+                                title: "",
+                                condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                                items: [{
+                                    key: "loanMonitoringDetails.loanAmountUsed",
+                                    type: "amount",
+                                    required: true,
+                                    "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                        model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.loanAmountNotUsed = model.loanMonitoringDetails.loanAmount - model.loanMonitoringDetails.loanAmountUsed;
+                                    }
 
+                                }, {
+                                    key: "loanMonitoringDetails.loanAmountPurpose",
+                                    type: "select",
+                                    required: true,
+                                    enumCode: "loan_purpose_1"
+
+                                }, {
+                                    key: "loanMonitoringDetails.verifiedBy",
+                                    type: "select",
+                                    titleMap: {
+                                        "Bill ": "Bill ",
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.amountUsedPercentage",
+                                    "readonly": true,
+                                    title: "%OF_AMOUNT_UTILISED",
+                                    type: "integer"
+                                }, {
+                                    key: "loanMonitoringDetails.loanAmountNotUsed",
+                                    "readonly": true,
+                                    type: "amount"
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    type: "amount",
+                                    required: true,
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true,
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "amount",
+
+                                     "onChange": function(modelValue, form, model) {
+                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                         model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                                         model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.nonIntendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(b.toFixed());
+                                     }
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
+                                    required: true,
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                }, {
+                                    key: "loanMonitoringDetails.udf4",
+                                    required: true,
+                                    title: "BUSINESS_RUNNING_BY",
+                                }, {
+                                    key: "loanMonitoringDetails.udf5",
+                                    required: true,
+                                    title: "BUSINESS_CONDITION",
+                                }, {
+                                    key: "loanMonitoringDetails.udf6",
+                                    required: true,
+                                    title: "OBSERVATION",
+                                }, {
+                                    key: "loanMonitoringDetails.lucDone",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                            model.loanMonitoringDetails.lucRescheduled = "No";
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduled",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
+                                    }
+                                },{
+                                    key: "loanMonitoringDetails.udf2",
+                                    type: "select",
+                                    title:"RESCHEDULED_REMARKS",
+                                    titleMap: {
+                                        "Partially utilized ": "Partially utilized ",
+                                        "Not utilized ": "Not utilized ",
+                                        "Customer not available": "Customer not available",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduleReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduledDate",
+                                    type: "date",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalated",
+                                    type: "radios",
+                                    enumCode: "decisionmaker1",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalatedReason",
+                                    type: "select",
+                                    titleMap: {
+                                        "Mis utilized": "Mis utilized",
+                                        "Not utilized": "Not utilized",
+                                        "Partially utilized": "Partially utilized",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                },{
+                                    key: "loanMonitoringDetails.udf3",
+                                    title:"ESCALATED_REMARKS",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                }]
+                            },
                         ]
                     },
                     {
@@ -1134,7 +1420,7 @@ define({
                     },
                     {
                         "type": "box",
-                        condition: "model.loanMonitoringDetails.lucDone== 'Yes' && model.lucCompleted",
+                        condition: "model.loanMonitoringDetails.lucDone== 'Yes' && model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
                         "title": "SOCIAL_IMPACT",
                         readonly: true,
                         "items": [{
@@ -1233,7 +1519,7 @@ define({
                     },
                     {
                         "type": "box",
-                        condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !model.lucCompleted",
+                        condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
                         "title": "SOCIAL_IMPACT",
                         "items": [{
                             type: "fieldset",

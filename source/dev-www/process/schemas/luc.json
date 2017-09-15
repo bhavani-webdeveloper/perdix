@@ -144,6 +144,18 @@
 					"title": "UDF1",
 					"type": "string"
 				},
+				"udf4": {
+					"title": "UDF4",
+					"type": ["string", "null"]
+				},
+				"udf5": {
+					"title": "UDF5",
+					"type": ["string", "null"]
+				},
+				"udf6": {
+					"title": "UDF6",
+					"type": ["string", "null"]
+				},
 				"udfDate1": {
 					"title": "UDF_DATE1",
 					"type": "string"
@@ -162,6 +174,10 @@
 				},
 				"loanAmountUsed": {
 					"title": "LOAN_AMOUNT_USED",
+					"type": "number"
+				},
+				"loanAmountNotUsed": {
+					"title": "LOAN_AMOUNT_NOT_USED",
 					"type": "number"
 				},
 				"loanAmountPurpose": {
