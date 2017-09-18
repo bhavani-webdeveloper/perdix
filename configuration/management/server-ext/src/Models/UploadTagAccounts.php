@@ -9,4 +9,6 @@ class UploadTagAccounts extends \Illuminate\Database\Eloquent\Model {
     protected $table = 'tag_accounts';
     const TABLE_NAME = 'tag_accounts';
     public $timestamps = false;
+
+    protected $connection = 'bi_db';
 }
