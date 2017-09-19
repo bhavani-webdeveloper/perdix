@@ -156,8 +156,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                     //     } else if (model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand < model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record) {
                                     //         model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record = model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand + (model.fixed_assets.asset_details[form.arrayIndex].lost_quantity + fixed_assets.asset_details[form.arrayIndex].transferred_quantity)
                                     //     }
-
-
                                     // }
 
                                 }]
@@ -229,26 +227,8 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                         }]
                     }];
 
-
                     boxItems.push.apply(boxItems, fixedAssetSheetForm);
-                    // boxItems.push.apply(boxItems, [{
-                    //     "key": "portfolio_stats.sum_total_cash",
-                    //     "type": "number",
-                    //     "title": "TOTAL_CASH_BALANCE_ON_HAND"
-                    // }, {
-                    //     "key": "portfolio_stats.cbs_balance",
-                    //     "type": "number",
-                    //     "title": "CBS_BALANCE",
-                    //     "onChange": function(modelValue, form, model) {
-                    //         model.portfolio_stats.deviation = model.portfolio_stats.sum_total_cash - model.portfolio_stats.cbs_balance;
-                    //     }
-                    // }, {
-                    //     "key": "portfolio_stats.deviation",
-                    //     "type": "number",
-                    //     "title": "DEVIATION"
-                    // }]);
-
-
+                    
                     self.form = [{
                         "type": "box",
                         "title": "FIXED_ASSET",
@@ -259,7 +239,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                         "title": "COMMENTS",
                         "colClass": "col-sm-6",
                         "items": [{
-                            key: "model.portfolio_stats.comments",
+                            key: "model.fixed_assets.comments",
                             title: "COMMENTS"
                         }]
                     }, {
@@ -292,7 +272,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "getFixedAssets": {
+                    "fixed_assets": {
                         "type": "object",
                         "title": "",
                         "properties": {
@@ -326,10 +306,10 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
             actions: {
                 submit: function(model, form, formName) {
                     if (model.$isOffline) {
-                        Audit.offline.setPortfolioStats(model.audit_id, model.portfolio_stats).then(function(res) {
+                        Audit.offline.setFixedAssets(model.audit_id, model.fixed_assets).then(function(res) {
                             if (!validateFields(model)) return;
-                            model.portfolio_stats = res;
-                            PageHelper.showProgress("auditId", "Portfolio Audit Updated Successfully.", 3000);
+                            model.fixed_assets = res;
+                            PageHelper.showProgress("auditId", "Fixed Asset Audit Updated Successfully.", 3000);
                             irfNavigator.goBack();
                         }, function(errRes) {
                             PageHelper.showErrors(errRes);
@@ -337,7 +317,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             PageHelper.hideLoader();
                         })
                     } else {
-                        $stateParams.pageData.auditData.portfolio_stats = model.portfolio_stats;
+                        $stateParams.pageData.auditData.fixed_assets = model.fixed_assets;
                         irfNavigator.goBack();
                     }
                 },

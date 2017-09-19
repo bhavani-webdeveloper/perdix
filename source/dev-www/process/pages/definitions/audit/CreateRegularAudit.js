@@ -8,60 +8,67 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                 model.audit_info = model.audit_info || {};
                 model.branchName = SessionStore.getBranch();
                 model.audit_info.auditor_id = SessionStore.getLoginname();
-                // model.audit_info.audit_type = "Regular";
-            },
-            form: [{
-                "type": "box",
-                "htmlClass": "col-sm-12 col-xs-12",
-                "title": "CREATE_AUDIT",
-                "items": [{
-                    key: "audit_info.auditor_id",
-                }, {
-                    key: "audit_info.branch_id",
-                    type: "select",
-                }, {
-                    key: "audit_info.report_date",
-                    type: "date",
-                    required: true,
-                }, {
-                    "key": "audit_info.audit_type",
-                    "type": "select",
-                    "titleMap": [{
-                        "name": "Regular",
-                        "value": "Regular"
+                var master = Audit.offline.getAuditMaster() || {};
+                self.form = [];
+                var auditTypeValue = [];
+                _.forOwn(master.audit_type, function(v, k) {
+                    if (k == 0 || k == 1) {
+                        $log.info("klhjoi")
+                        auditTypeValue.push({
+                            "name": v.audit_type,
+                            "value": v.audit_type_id
+                        });
+                    }
+                });
+                self.form = [{
+                    "type": "box",
+                    "htmlClass": "col-sm-12 col-xs-12",
+                    "title": "CREATE_AUDIT",
+                    "items": [{
+                        "key": "audit_info.auditor_id",
+                        "title": "AUDITOR_ID"
                     }, {
-                        "name": "Snap Audit",
-                        "value": "Snap Audit"
-                    }]
-                },{
-                    key: "audit_info.start_date",
-                    "condition": "model.audit_info.audit_id",
-                    type: "date",
-                    required: true,
-                    readonly: true
+                        "key": "audit_info.branch_id",
+                        "type": "select",
+                    }, {
+                        "key": "audit_info.report_date",
+                        "type": "date",
+                        "required": true,
+                    }, {
+                        "key": "audit_info.audit_type",
+                        "type": "select",
+                        "titleMap": auditTypeValue
+                    }, {
+                        "key": "audit_info.start_date",
+                        "condition": "model.audit_info.audit_id",
+                        "type": "date",
+                        "required": true,
+                        "readonly": true
+                    }, {
+                        "key": "audit_info.end_date",
+                        "condition": "model.audit_info.audit_id",
+                        "type": "date",
+                        "required": true
+                    }],
                 }, {
-                    key: "audit_info.end_date",
+                    "type": "actionbox",
+                    "condition": "!model.audit_info.audit_id",
+                    "items": [{
+                        "type": "button",
+                        "title": "CREATE",
+                        "style": "text-right",
+                        "onClick": "actions.createAudit(model, formCtrl, form, $event)"
+                    }]
+                }, {
+                    "type": "actionbox",
                     "condition": "model.audit_info.audit_id",
-                    type: "date",
-                    required: true
-                }],
-            }, {
-                "type": "actionbox",
-                "condition": "!model.audit_info.audit_id",
-                "items": [{
-                    "type": "button",
-                    "title": "CREATE",
-                    "style": "text-right",
-                    onClick: "actions.createAudit(model, formCtrl, form, $event)"
+                    "items": [{
+                        "type": "submit",
+                        "title": "START_AUDIT"
+                    }]
                 }]
-            }, {
-                "type": "actionbox",
-                "condition": "model.audit_info.audit_id",
-                "items": [{
-                    "type": "submit",
-                    "title": "START_AUDIT"
-                }]
-            }],
+            },
+            form: [],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
@@ -111,21 +118,44 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                 submit: function(model, form, formName) {
                     var auditId = $stateParams.pageId;
                     PageHelper.showLoader();
-                    if (model.audit_info.start_date && model.audit_info.end_date) {
-                         model.audit_info.next_stage = "start";
-                        Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
-                            model.audit_info = res;
-                            PageHelper.showProgress("page-init", "successfully Created.", 5000);
-                            irfNavigator.goBack();
-                        }, function(errRes) {
-                            PageHelper.showErrors(errRes);
-                        }).finally(function() {
+                    if (model.audit_type == "Regular") {
+                        if (model.audit_info.start_date && model.audit_info.end_date) {
+                            model.audit_info.next_stage = "start";
+                            Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
+                                model.audit_info = res;
+                                PageHelper.showProgress("page-init", "successfully Created.", 5000);
+                                irfNavigator.goBack();
+                            }, function(errRes) {
+                                PageHelper.showErrors(errRes);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            });
+                        } else {
+                            PageHelper.showProgress("page-init", "No Empty Column.", 5000);
                             PageHelper.hideLoader();
-                        });
+                        }
                     } else {
-                        PageHelper.showProgress("page-init", "No Empty Column.", 5000);
-                        PageHelper.hideLoader();
+                        if (model.audit_type == "Snap Audit") {
+                            if (model.audit_info.start_date && model.audit_info.end_date) {
+                                model.audit_info.status = "O";
+                                Audit.online.updateSnapAudit(model.audit_info).$promise.then(function(res) {
+                                    model.audit_info = res;
+                                    PageHelper.showProgress("page-init", "successfully Created.", 5000);
+                                    irfNavigator.goBack();
+                                }, function(errRes) {
+                                    PageHelper.showErrors(errRes);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                });
+                            } else {
+                                PageHelper.showProgress("page-init", "No Empty Column.", 5000);
+                                PageHelper.hideLoader();
+                            }
+                        }
+
+
                     }
+
 
                 },
                 createAudit: function(model, formCtrl, form, $event) {

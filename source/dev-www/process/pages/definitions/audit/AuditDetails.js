@@ -32,14 +32,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             $scope.model.auditData = auditData;
             $scope.model.ai = auditData.audit_info;
             $scope.model._isOnline = $scope.$isOnline;
-            var pageData = {};
+
             var v = $scope.dashboardDefinition_AuditScoreDetails;
-            // if (v && _.includes(["L1-approve", "approve", "close"], auditData.audit_info.current_stage)) {
-                //readonly check
-               if (pageData.readonly) {
-                  $scope.dashboardDefinition.items.push(v);
-                  elementsUtils.reloadDashboardBox();
-                v.onClick = function(event, menu) {                   
+            if ($stateParams.pageData.readonly) {
+                $scope.dashboardDefinition.items.push(v);
+                elementsUtils.reloadDashboardBox();
+                v.onClick = function(event, menu) {
+                    var pageData = {};
                     pageData.readonly = $stateParams.pageData.readonly;
                     if (!pageData.auditScoresheet) {
                         Audit.online.getAuditScores({
@@ -128,10 +127,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             "iconClass": "fa fa-cube",
             "items": [
                 "Page/Engine/audit.detail.GeneralObservation",
-                "Page/Adhoc/audit.detail.ProcessCompliance",                
-                "Page/Engine/audit.detail.PortfolioStats",
-                "Page/Engine/audit.detail.FixedAsset",
-                "eaPage/Engine/audit.detail.AuditSummary"
+                "Page/Adhoc/audit.detail.ProcessCompliance",
+                "Page/Engine/audit.detail.AuditSummary",
                 // "Page/Engine/audit.detail.ScoreSheet", // kinara specific commented
             ]
         });
@@ -144,28 +141,25 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }).then(function(resp) {
             $scope.dashboardDefinition_AuditScoreDetails = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
         });
-        var sadpdp = PagesDefinition.getUserAllowedDefinition({
-            "title": "Audit Details",
+        var assdpdp = PagesDefinition.getUserAllowedDefinition({
+            "title": "Score Sheet Details",
             "iconClass": "fa fa-cube",
             "items": [
                 "Page/Engine/audit.detail.ScoreSheet"
             ]
         }).then(function(resp) {
-            $scope.dashboardDefinition_AuditScoreDetails = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
+            $scope.dashboardDefinition_AuditScoreDetails = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.ScoreSheet"]);
         });
         pdp.then(function(resp) {
             $scope.dashboardDefinition = _.cloneDeep(resp);
         });
-        $q.all([deferred.promise, pdp, asdpdp, sadpdp]).then(function() {
+        $q.all([deferred.promise, pdp, asdpdp, assdpdp]).then(function() {
             var requestMenu = [
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
                 $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
-                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.FieldVerification"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.ScoreSheet"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"]
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.ScoreSheet"]
             ];
             _.each(requestMenu, function(v, k) {
                 if (v) {

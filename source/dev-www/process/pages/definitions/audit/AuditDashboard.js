@@ -11,6 +11,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.ScheduledAuditsViewQueue",
                 "Page/Engine/audit.DeferredAuditsQueue",
                 "Page/Engine/audit.OpenRegularAuditsQueue",
+                "Page/Engine/audit.OpenSnapAuditsQueue",
                 "Page/Engine/audit.PublishedAuditsViewQueue",
                 "Page/Engine/audit.PublishedAuditsQueue",
                 "Page/Engine/audit.ReviewedAuditsQueue",
@@ -36,6 +37,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var savqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ScheduledAuditsViewQueue"];
                 var daq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DeferredAuditsQueue"];
                 var oraq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenRegularAuditsQueue"];
+                var osaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenSnapAuditsQueue"];
                 var pavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsViewQueue"];
                 var paq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsQueue"];
                 var raq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ReviewedAuditsQueue"];
@@ -56,6 +58,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (savqMenu) savqMenu.data = '-';
                 if (daq) daq.data = '-';
                 if (oraq) oraq.data = '-';
+                if (osaq) osaq.data = '-';
                 if (pavq) pavq.data = '-';
                 if (paq) paq.data = '-';
                 if (raq) raq.data = '-';
@@ -112,13 +115,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         daq.data = data[0].body.length + data[1].body.length;
                     });
                 }
-
                 if (oraq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'current_stage': 'start'
                     }).$promise.then(function(data) {
                         oraq.data = data.body.length;
+                    });
+                }
+
+                if (osaq) {
+                    Audit.online.getSnapAuditAll({
+                        'auditor_id': auditor_id,
+                        'current_stage': 'O'
+                    }).$promise.then(function(data) {
+                        osaq.data = data.body.length;
                     });
                 }
 

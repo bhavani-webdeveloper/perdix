@@ -134,7 +134,31 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             getAvailableAuditorList: searchResource({
                 method: 'GET',
                 url: endpoint + '/findAvailableAuditors'
-            })
+            }),
+            getSnapAuditMaster: {
+                method: 'GET',
+                url: endpoint + '/getSnapAuditMaster'
+            },
+            getSnapAuditAll: searchResource({
+                method: 'GET',
+                url: endpoint + '/getAllSnapAudit'
+            }),
+            createSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/createSnapAudit'
+            },
+            updateSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/updateSnapAudit'
+            },
+            publishSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/publishSnapAudit'
+            },
+            getSnapAuditData: {
+                method: 'GET',
+                url: endpoint + '/getSnapAudit'
+            },
         });
 
         ret.offline = {
