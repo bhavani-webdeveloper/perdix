@@ -71,7 +71,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                 model.pdc.existingPDCCheque = model.pdc.existingPDCCheque || [];
                 model.pdc.existingSecurityCheque = model.pdc.existingSecurityCheque || [];
                 model.pdc.totalCheques = model.pdc.totalCheques || [];
-
+                model.pdc.InitialtotalCheques = _.clone(model.pdc.totalCheques);
                 //model to store pdc cheque types from PDC.getPDCCheque api
                 model.pdcGetPDCType = model.pdcGetPDCType || {};
                 model.pdcGetPDCType.pdcSummaryDTO = model.pdcGetPDCType.pdcSummaryDTO || [];
@@ -189,8 +189,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                             }
                                         }
                                     }
-                                    if (model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
+                                    if (model.pdcGetPDCType.body.pdcSummaryDTO.length > 0){
                                         model.flag = true;
+                                    }
 
                                 },
                                 function(resError) {
@@ -200,6 +201,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                 PageHelper.hideLoader();
 
                             });
+
+                            model.Initialpdc =  _.clone(model.pdc);
                         },
                         function(httpRes) {
                             PageHelper.hideLoader();
@@ -656,6 +659,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                 }, function(errorResponse) {
                                     PageHelper.hideLoader();
                                     model.pdc.pdcFormMax = 0;
+                                    model.pdc = _.clone(model.Initialpdc);
+                                    model.pdc.totalCheques = _.clone(model.pdc.InitialtotalCheques);
                                     PageHelper.showErrors(errorResponse);
                                 });
 
