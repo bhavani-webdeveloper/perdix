@@ -536,26 +536,6 @@ define({
                     }]
                 },
                 {
-                    "title": "REMARKS_HISTORY",
-                    "type": "box",
-                    condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
-                    "items": [{
-                        "key": "group.remarksHistory",
-                        "type": "array",
-                        "view": "fixed",
-                        add: null,
-                        remove: null,
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "",
-                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
-                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
-                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
-                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
-                        }]
-                    }]
-                },
-                {
                     "type": "box",
                     "title": "POST_REVIEW",
                     "items": [
@@ -678,7 +658,27 @@ define({
                             }]
                         }
                     ]
-                }
+                },
+                {
+                    "title": "REMARKS_HISTORY",
+                    "type": "box",
+                    condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
+                    "items": [{
+                        "key": "group.remarksHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        add: null,
+                        remove: null,
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
+                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
+                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
+                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
+                        }]
+                    }]
+                },
             ],
 
             schema: {

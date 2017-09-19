@@ -655,6 +655,16 @@
               "Completed"
             ]
           },
+          "area": {
+            "title": "Area",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "ownership": {
             "title": "Ownershop",
             "type": "string",

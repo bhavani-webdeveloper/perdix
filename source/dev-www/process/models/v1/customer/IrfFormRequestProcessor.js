@@ -20,7 +20,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "customer.photoImageId",
                         type: "file",
                         fileType: "image/*",
-                        "offline": true
+                        // "offline": true
                     },
                     "customerBranchId": {
                         orderNo: 30,

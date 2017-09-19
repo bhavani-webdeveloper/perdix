@@ -382,6 +382,7 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
+                                 model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {

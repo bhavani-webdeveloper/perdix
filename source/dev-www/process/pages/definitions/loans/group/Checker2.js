@@ -616,18 +616,21 @@ return {
                     "items": [{
                         "title": "IDENTITY_PROOF_DOCUMENT",
                         "key": "group.jlgGroupMembers[].customer.identityProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
+                        type: "file",
+                        fileType:"application/pdf",
+                        using: "scanner",
                         "category": "CustomerEnrollment",
                         "subCategory": "IDENTITYPROOF"
-                    }, {
-                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }]
+                    }, 
+                    // {
+                    //     "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                    //     "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
+                    //     "type": "file",
+                    //     "fileType": "image/*",
+                    //     "category": "CustomerEnrollment",
+                    //     "subCategory": "IDENTITYPROOF"
+                    // }
+                    ]
                 }]
             }, {
                 "type": "section",
@@ -682,18 +685,21 @@ return {
                     "items": [{
                         "title": "ADDRESS_PROOF_IMAGE_ID",
                         "key": "group.jlgGroupMembers[].customer.addressProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
+                        type: "file",
+                        fileType:"application/pdf",
+                        using: "scanner",
                         "category": "CustomerEnrollment",
                         "subCategory": "ADDRESSPROOF"
-                    }, {
-                        "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }]
+                    }, 
+                    // {
+                    //     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                    //     "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
+                    //     "type": "file",
+                    //     "fileType": "image/*",
+                    //     "category": "CustomerEnrollment",
+                    //     "subCategory": "ADDRESSPROOF"
+                    // }
+                    ]
                 }]
             }, {
                 "type": "section",

@@ -493,6 +493,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         //"CustomerInformation.groupName",
                         //"CustomerInformation.loanCycle",
                         "CustomerInformation.firstName",
+                        "CustomerInformation.photoImageId",
                         "CustomerInformation.gender",
                         "CustomerInformation.age",
                         "CustomerInformation.dateOfBirth",
@@ -885,6 +886,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 Enrollment.getCustomerById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
+                    if (model.customer.dateOfBirth) {
+                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                    }
                     if (model.customer.udf && model.customer.udf.userDefinedFieldValues
                         && model.customer.udf.userDefinedFieldValues.udf1) {
                         model.customer.udf.userDefinedFieldValues.udf1 =
