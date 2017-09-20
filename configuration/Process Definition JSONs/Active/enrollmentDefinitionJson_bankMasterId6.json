@@ -3540,6 +3540,16 @@
                 "Completed"
               ]
             },
+"bankStatementPhoto": {
+              "title": "bankStatementPhoto",
+             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "totalWihdrawals": {
               "title": "Total Wihdrawals",
               "type": "number",

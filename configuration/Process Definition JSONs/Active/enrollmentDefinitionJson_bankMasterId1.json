@@ -3571,6 +3571,16 @@
                 "Completed"
               ]
             },
+			 "bankStatementPhoto": {
+              "title": "bankStatementPhoto",
+             "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "noOfEmiChequeBounced": {
               "title": "No Of EMI Cheques Bounced",
               "type": "integer",
