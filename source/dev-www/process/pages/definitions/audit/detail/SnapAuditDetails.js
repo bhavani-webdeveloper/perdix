@@ -118,7 +118,7 @@ irf.pageCollection.factory(irf.page("audit.detail.SnapAuditDetails"), ["$log", "
                             },
                             "auditor_id": {
                                 "type": ["string", "null"],
-                                "title": "AUDIT_NAME"
+                                "title": "AUDITOR_NAME"
                             },
                             "start_date": {
                                 "type": "string",

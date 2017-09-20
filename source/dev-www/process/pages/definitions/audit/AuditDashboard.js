@@ -118,7 +118,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (oraq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
-                        'current_stage': 'start'
+                        'current_stage': 'start',
+                        'audit_type':'Regular'
                     }).$promise.then(function(data) {
                         oraq.data = data.body.length;
                     });
@@ -127,7 +128,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (osaq) {
                     Audit.online.getSnapAuditAll({
                         'auditor_id': auditor_id,
-                        'current_stage': 'O'
+                        'status': 'O',                        
+                        'current_stage': 'start',
+                        'audit_type':'SNAP'
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
                     });
