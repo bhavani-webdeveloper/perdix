@@ -594,10 +594,12 @@ return {
                                 "title": "DATE_OF_BIRTH",
                                 "key": "group.jlgGroupMembers[].customer.dateOfBirth",
                                 "type": "date"
-                            }, {
-                                "title": "AADHAAR_NO",
-                                "key": "group.jlgGroupMembers[].customer.aadhaarNo"
-                            }, {
+                            }, 
+                            // {
+                            //     "title": "AADHAAR_NO",
+                            //     "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                            // }, 
+                            {
                                 "title": "IDENTITY_PROOF",
                                 "key": "group.jlgGroupMembers[].customer.identityProof",
                                 "type": "select",
@@ -611,11 +613,7 @@ return {
                             }, {
                                 "title": "SPOUSE_FULL_NAME",
                                 "key": "group.jlgGroupMembers[].customer.spouseFullName"
-                            }]
-                        }, {
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
+                            }, {
                                 "title": "IDENTITY_PROOF_DOCUMENT",
                                 "key": "group.jlgGroupMembers[].customer.identityProofImageId",
                                 type: "file",
@@ -623,68 +621,7 @@ return {
                                 using: "scanner",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF"
-                            }, 
-                            // {
-                            //     "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                            //     "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                            //     "type": "file",
-                            //     "fileType": "image/*",
-                            //     "category": "CustomerEnrollment",
-                            //     "subCategory": "IDENTITYPROOF"
-                            // }
-                            ]
-                        }]
-                    }, {
-                        "type": "section",
-                        "html": '<hr>'
-                    }, {
-                        "type": "section",
-                        "readonly": true,
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
-                                "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
-                                "key": "group.jlgGroupMembers[].customer.addressHtml",
-                                "type": "html"
                             }, {
-                                "title": "VILLAGE_NAME",
-                                "key": "group.jlgGroupMembers[].customer.villageName"
-                            },{
-                                "title": "POST_OFFICE",
-                                "key": "group.jlgGroupMembers[].customer.postOffice"
-                            },{
-                                "title": "DISTRICT",
-                                "key": "group.jlgGroupMembers[].customer.district"
-                            },{
-                                "title": "PIN_CODE",
-                                "key": "group.jlgGroupMembers[].customer.pincode"
-                            }, {
-                                "title": "MOBILE_PHONE",
-                                "key": "group.jlgGroupMembers[].customer.mobilePhone"
-                            }, {
-                                "title": "LANDLINE_NO",
-                                "key": "group.jlgGroupMembers[].customer.landLineNo"
-                            }, {
-                                "title": "HOUSE_LOCATION",
-                                "key": "group.jlgGroupMembers[].customer.latitude",
-                                "type": "geotag",
-                                "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
-                                "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
-                            }, {
-                                "title": "ADDRESS_PROOF",
-                                "key": "group.jlgGroupMembers[].customer.addressProof",
-                                "type": "select",
-                                "enumCode": "address_proof"
-                            }, {
-                                "title": "ADDRESS_PROOF_NO",
-                                "key": "group.jlgGroupMembers[].customer.addressProofNo"
-                            }]
-                        }, {
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
                                 "title": "ADDRESS_PROOF_IMAGE_ID",
                                 "key": "group.jlgGroupMembers[].customer.addressProofImageId",
                                 type: "file",
@@ -692,21 +629,53 @@ return {
                                 using: "scanner",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "ADDRESSPROOF"
-                            }, 
-                            // {
-                            //     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-                            //     "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
-                            //     "type": "file",
-                            //     "fileType": "image/*",
-                            //     "category": "CustomerEnrollment",
-                            //     "subCategory": "ADDRESSPROOF"
-                            // }
-                            ]
-                        }]
+                            },
+                        ]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                        "key": "group.jlgGroupMembers[].customer.addressHtml",
+                        "type": "html"
+                    },  {
+                        "title": "VILLAGE_NAME",
+                        "key": "group.jlgGroupMembers[].customer.villageName"
+                    },{
+                        "title": "POST_OFFICE",
+                        "key": "group.jlgGroupMembers[].customer.postOffice"
+                    },{
+                        "title": "DISTRICT",
+                        "key": "group.jlgGroupMembers[].customer.district"
+                    },{
+                        "title": "PIN_CODE",
+                        "key": "group.jlgGroupMembers[].customer.pincode"
                     }, {
-                        "type": "section",
-                        "html": '<hr>'
+                        "title": "MOBILE_PHONE",
+                        "key": "group.jlgGroupMembers[].customer.mobilePhone"
                     }, {
+                        "title": "LANDLINE_NO",
+                        "key": "group.jlgGroupMembers[].customer.landLineNo"
+                    }, {
+                        "title": "HOUSE_LOCATION",
+                        "key": "group.jlgGroupMembers[].customer.latitude",
+                        "type": "geotag",
+                        "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
+                        "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                    }, {
+                        "title": "ADDRESS_PROOF",
+                        "key": "group.jlgGroupMembers[].customer.addressProof",
+                        "type": "select",
+                        "enumCode": "address_proof"
+                    }, {
+                        "title": "ADDRESS_PROOF_NO",
+                        "key": "group.jlgGroupMembers[].customer.addressProofNo"
+                    }]
+                },]
+            }, {
+                "type": "section",
+                "html": '<hr>'
+            }, {
                         "key": "group.jlgGroupMembers[].customer.additionalKYCs",
                         condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
                         "type": "array",
@@ -771,6 +740,7 @@ return {
                             "htmlClass": "col-sm-6",
                             "items": [{
                                 "title": "ACCOUNT_NUMBER",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                                 "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
                                 "type": "string"
                             }, {
@@ -778,14 +748,26 @@ return {
                                 "key": "group.productCode" // TODO: this should be product name
                             }, {
                                 "title": "LOAN_AMOUNT",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
                                 "type": "amount"
                             }, {
                                 "title": "TENURE",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                                 "key": "group.jlgGroupMembers[].loanAccount.tenure",
-                                "type": "date"
                             }, {
+                                "title": "LOAN_AMOUNT",
+                                condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                                "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                                "type": "amount"
+                            }, {
+                                "title": "TENURE",
+                                condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                                "key": "group.tenure",
+                            }, 
+                            {
                                 "title": "LOAN_APPLICATION_DATE",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
                                 "type": "date"
                             },]

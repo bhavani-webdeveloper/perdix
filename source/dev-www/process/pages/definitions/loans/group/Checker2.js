@@ -390,7 +390,8 @@ return {
                     }, {
                         "title": "TENURE",
                         "key": "group.jlgGroupMembers[].loanAccount.tenure"
-                    }, {
+                    }, 
+                    {
                         "title": "LOAN_APPLICATION_DATE",
                         "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
                         "type": "date"
@@ -592,10 +593,12 @@ return {
                         "title": "DATE_OF_BIRTH",
                         "key": "group.jlgGroupMembers[].customer.dateOfBirth",
                         "type": "date"
-                    }, {
-                        "title": "AADHAAR_NO",
-                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
-                    }, {
+                    }, 
+                    // {
+                    //     "title": "AADHAAR_NO",
+                    //     "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                    // }, 
+                    {
                         "title": "IDENTITY_PROOF",
                         "key": "group.jlgGroupMembers[].customer.identityProof",
                         "type": "select",
@@ -609,11 +612,7 @@ return {
                     }, {
                         "title": "SPOUSE_FULL_NAME",
                         "key": "group.jlgGroupMembers[].customer.spouseFullName"
-                    }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
+                    }, {
                         "title": "IDENTITY_PROOF_DOCUMENT",
                         "key": "group.jlgGroupMembers[].customer.identityProofImageId",
                         type: "file",
@@ -621,25 +620,16 @@ return {
                         using: "scanner",
                         "category": "CustomerEnrollment",
                         "subCategory": "IDENTITYPROOF"
-                    }, 
-                    // {
-                    //     "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                    //     "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                    //     "type": "file",
-                    //     "fileType": "image/*",
-                    //     "category": "CustomerEnrollment",
-                    //     "subCategory": "IDENTITYPROOF"
-                    // }
-                    ]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "type": "section",
-                "readonly": true,
-                "htmlClass": "row",
-                "items": [{
+                    }, {
+                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
+                        type: "file",
+                        fileType:"application/pdf",
+                        using: "scanner",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "ADDRESSPROOF"
+                    },]
+                }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
@@ -679,28 +669,7 @@ return {
                         "title": "ADDRESS_PROOF_NO",
                         "key": "group.jlgGroupMembers[].customer.addressProofNo"
                     }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "ADDRESS_PROOF_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
-                        type: "file",
-                        fileType:"application/pdf",
-                        using: "scanner",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }, 
-                    // {
-                    //     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-                    //     "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
-                    //     "type": "file",
-                    //     "fileType": "image/*",
-                    //     "category": "CustomerEnrollment",
-                    //     "subCategory": "ADDRESSPROOF"
-                    // }
-                    ]
-                }]
+                },]
             }, {
                 "type": "section",
                 "html": '<hr>'
@@ -769,24 +738,37 @@ return {
                     "htmlClass": "col-sm-6",
                     "items": [{
                         "title": "ACCOUNT_NUMBER",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                         "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
                         "type": "string"
                     }, {
                         "title": "PRODUCT",
                         "key": "group.productCode" // TODO: this should be product name
                     }, {
-                        "title": "LOAN_AMOUNT",
-                        "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                        "type": "amount"
-                    }, {
-                        "title": "TENURE",
-                        "key": "group.jlgGroupMembers[].loanAccount.tenure",
-                        "type": "date"
-                    }, {
-                        "title": "LOAN_APPLICATION_DATE",
-                        "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
-                        "type": "date"
-                    },]
+                                "title": "LOAN_AMOUNT",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
+                                "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                                "type": "amount"
+                            }, {
+                                "title": "TENURE",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
+                                "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                            }, {
+                                "title": "LOAN_AMOUNT",
+                                condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                                "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                                "type": "amount"
+                            }, {
+                                "title": "TENURE",
+                                condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                                "key": "group.tenure",
+                            }, 
+                            {
+                                "title": "LOAN_APPLICATION_DATE",
+                                condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
+                                "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+                                "type": "date"
+                            },]
                 }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
