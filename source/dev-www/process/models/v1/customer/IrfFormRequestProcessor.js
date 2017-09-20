@@ -617,23 +617,61 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "remove": null,
                         "title": "ADDITIONAL_KYC",
                         "items": {
+                            "kyc1ProofType": {
+                                key: "customer.additionalKYCs[].kyc1ProofType",
+                                type: "select",
+                                enumCode: "identity_proof",
+                            },
+                            "kyc1ImagePath": {
+                                key: "customer.additionalKYCs[].kyc1ImagePath",
+                                type: "file",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            },
                             "kyc1ProofNumber": {
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
                                 type: "barcode",
+                                condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Aadhar Card'",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
                                 }
                             },
-                            "kyc1ProofType": {
-                                key: "customer.additionalKYCs[].kyc1ProofType",
-                                type: "select"
+                            "kyc1ProofNumber1": {
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Pan Card'",
+                                 schema: {
+                                    "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
                             },
-                            "kyc1ImagePath": {
-                                key: "customer.additionalKYCs[].kyc1ImagePath",
-                                type: "file",
-                                fileType: "image/*",
-                                "offline": true
+                            "kyc1ProofNumber2": {
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Passport'",
+                                schema: {
+                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$", 
+                                },
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
+                            },
+                            "kyc1ProofNumber3": {
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Aadhar Card' && model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Pan Card' && model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Passport'",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
                             },
                             "kyc1IssueDate": {
                                 key: "customer.additionalKYCs[].kyc1IssueDate",

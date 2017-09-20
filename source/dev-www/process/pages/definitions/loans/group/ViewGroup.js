@@ -136,11 +136,11 @@ define({
 					"type": "box",
 					"readonly": true,
 					"title": "GROUP_MEMBERS",
-					"titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
 					"items": [{
 						"key": "group.jlgGroupMembers",
 						"type": "array",
 						"title": "GROUP_MEMBERS",
+						"titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
 						"add": null,
 						"remove": null,
 						"items": [{

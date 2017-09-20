@@ -7,8 +7,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
 
             if (model.siteCode == "sambandh") {
                 return {
-                        "KYC.additionalKYCs.kyc1ProofType": {
-                            title: "MY CUSTOM TITLE"
+                        "AdditionalKYC.additionalKYCs": {
+                            add: true,
+                            remove: true,
                         },
                         "CustomerInformation.centreId" : {
                             "title": "CENTRE",
@@ -524,6 +525,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "KYC.addressProof1.addressProofNo2",
                         "KYC.addressProof1.addressProofIssueDate",
                         "KYC.addressProof1.addressProofValidUptoDate",
+                        "AdditionalKYC",
+                        "AdditionalKYC.additionalKYCs",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber1",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber2",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber3",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofType",
+                        "AdditionalKYC.additionalKYCs.kyc1ImagePath",
+                        "AdditionalKYC.additionalKYCs.kyc1IssueDate",
+                        "AdditionalKYC.additionalKYCs.kyc1ValidUptoDate",
                         "ContactInformation",
                         "ContactInformation.CustomerResidentialAddress",
                         "ContactInformation.CustomerResidentialAddress.doorNo",
