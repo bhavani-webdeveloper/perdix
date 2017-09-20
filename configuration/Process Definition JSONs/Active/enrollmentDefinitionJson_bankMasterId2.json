@@ -282,6 +282,16 @@
                 "Completed"
               ]
             },
+			"billDocId": {
+            "title": "billDocId",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
             "annualExpenses": {
               "title": "Annual Expenses",
               "type": "integer",
@@ -549,6 +559,16 @@
                 "Completed"
               ]
             },
+			"proofDocuments": {
+            "title": "proofDocuments",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
             "outstandingAmountInPaisa": {
               "title": "outstandingAmountInPaisa",
               "type": "number",
@@ -908,6 +928,16 @@
           },
 		   "requestedLoanPurpose": {
             "title": "requestedLoanPurpose",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		   "businessSignboardImage": {
+            "title": "businessSignboardImage",
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
@@ -3574,6 +3604,16 @@
                 "Completed"
               ]
             },
+			"invoiceDocId": {
+            "title": "invoiceDocId",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
             "incomeType": {
               "title": "Income Type",
               "type": "string",
@@ -3701,7 +3741,18 @@
                 "BasicEnrolment",
                 "Completed"
               ]
-            }
+            },
+			"invoiceDocId": {
+            "title": "invoiceDocId",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+			
           }
         }
       },
@@ -3723,6 +3774,16 @@
                 "Completed"
               ]
             },
+			"machineImage": {
+            "title": "machineImage",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
             "manufacturerName": {
               "title": "Manufacturer Name",
               "type": "string",
