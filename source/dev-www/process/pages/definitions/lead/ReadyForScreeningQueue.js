@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 */
 		return {
 			"type": "search-list",
-			"title": siteCode == 'sambandh' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
+			"title": siteCode == 'sambandh' || siteCode == 'saija' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return siteCode !== 'sambandh' ? true : false;
+								return siteCode !== 'sambandh' && siteCode !== 'saija' ? true : false;
 							}
 						},
 						{
@@ -241,7 +241,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return siteCode == 'sambandh' ? true : false;
+								return siteCode == 'sambandh' || siteCode == 'saija' ? true : false;
 							}
 						},
 						{

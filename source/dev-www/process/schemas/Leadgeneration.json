@@ -260,6 +260,12 @@
          },
          "customerType": {
             "type": ["string", "null"],
+            "default": "Individual",
+            "title": "ENTITY_TYPE"
+         },
+         "customerTypeString": {
+            "type": ["string", "null"],
+            "default": "Individual",
             "title": "ENTITY_TYPE"
          },
          "mobileNo": {

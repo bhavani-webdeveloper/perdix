@@ -11,9 +11,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
-                   model.lead.siteCode = SessionStore.getGlobalSetting('siteCode');
-
-                   
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                                   
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
                     model.lead.leadStatus = "Incomplete";
@@ -25,13 +24,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     model.lead.branchId = SessionStore.getBranchId();
                     model.lead.branchName = SessionStore.getBranch();
                 }
-
-
                 model = Utils.removeNulls(model, true);
-                if(model.lead.siteCode == 'sambandh'){
-                    model.lead.customerType = "Individual";
-                   }
-                if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
+
+                if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
 
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
@@ -44,6 +39,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                                model.lead.customerTypeString = model.lead.customerType;
+                            }
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
@@ -141,7 +139,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
                         {
                             type: "fieldset",
-                            condition: "model.lead.siteCode !== 'sambandh'",
+                            condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
@@ -359,13 +357,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         {
                             type: "fieldset",
-                            condition: "model.lead.siteCode == 'sambandh'",
+                            condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
                                     title: "APPLICANT_NAME"
                                 }, {
-                                    key: "lead.customerType",
+                                    key: "lead.customerTypeString",
                                     type: "select",
                                     titleMap: {
                                         "Individual": "Individual",
@@ -376,7 +374,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.customerType === 'Enterprise'",
+                                    condition: "model.lead.customerTypeString === 'Enterprise'",
                                     items: [{
                                         key: "lead.businessName",
                                         required: false,
@@ -467,7 +465,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 {
                                     type: "fieldset",
                                     title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'",
+                                    condition: "model.lead.customerTypeString === 'Individual'",
                                     items: [{
                                         key: "lead.gender",
                                         type: "radios"
@@ -519,7 +517,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 {
                                     type: "fieldset",
                                     title: "CONTACT_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
+                                    condition: "model.lead.customerTypeString === 'Individual'||model.lead.customerTypeString === 'Enterprise'",
                                     items: [{
                                         key: "lead.mobileNo",
                                     }, {
@@ -585,7 +583,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 {
                     type: "box",
                     title: "PRODUCT_DETAILS",
-                    condition: "model.lead.siteCode !== 'sambandh'",
+                    condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
                     items: [{
                             key: "lead.interestedInProduct",
                             title: "INTERESTED_IN_LOAN_PRODUCT",
@@ -729,7 +727,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 {
                     type: "box",
                     title: "PRODUCT_DETAILS",
-                    condition: "model.lead.siteCode == 'sambandh'",
+                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     items: [{
                             key: "lead.interestedInProduct",
                             title: "INTERESTED_IN_LOAN_PRODUCT",
@@ -1007,6 +1005,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         });
                         return out;
                     };
+                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                        model.lead.customerType = model.lead.customerTypeString;
+                    }
                     var reqData = _.cloneDeep(model);
                     var centres = formHelper.enum('centre').data;
                     for (var i = 0; i < centres.length; i++) {
@@ -1024,8 +1025,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             LeadHelper.proceedData(reqData).then(function(resp) {
                                 $state.go('Page.LeadDashboard', null);
                             }, function(err) {
-                                Utils.removeNulls(resp.lead, true);
-                                model.lead = resp.lead;
+                                PageHelper.showErrors(err);
+                                // Utils.removeNulls(resp.lead, true);
+                                // model.lead = resp.lead;
                             });
                         }
                     } else {
@@ -1033,8 +1035,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             LeadHelper.proceedData(res).then(function(resp) {
                                 $state.go('Page.LeadDashboard', null);
                             }, function(err) {
-                                Utils.removeNulls(resp.lead, true);
-                                model.lead = resp.lead;
+                                PageHelper.showErrors(err);
+                                // Utils.removeNulls(resp.lead, true);
+                                // model.lead = resp.lead;
                             });
                         });
                     }
