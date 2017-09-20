@@ -22,6 +22,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             $log.info("Individual Loan Booking Page got initialized");
             model.loggedInUser = SessionStore.getLoginname();
             PageHelper.showLoader();
+            model.creditValidation={};
 
             var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
@@ -90,7 +91,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 "title": "SELECT_ALL",
                 "schema":{
                         "default": false
-                    },
+                },
                 "onChange": function(modelValue, form, model){
 
                     if (modelValue)
@@ -243,6 +244,29 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             {
                 "key":"bankDepositSummary.bankBranchDetails",
                 "title":"DEPOSITED_BANK_BRANCH"
+            },
+            {
+                key: "creditValidation.notPaid",
+                title: "NOT_PAID",
+                type: "checkbox",
+                "schema": {
+                    "default": false
+                },
+            }, {
+                key: "creditValidation.reject_reason",
+                title: "REJECT_REASON",
+                type: "select",
+                titleMap: [{
+                    "name": "Amount not credited in account",
+                    "value": "1"
+                }],
+                condition: "model.creditValidation.notPaid"
+            }, {
+                key: "creditValidation.reject_remarks",
+                title: "REJECT_REMARKS",
+                readonly: false,
+                type: "textarea",
+                condition: "model.creditValidation.notPaid"
             }
             ]
         },{
@@ -304,7 +328,11 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 if (!model.amountDeposited || model.amountDeposited <=0){
                     PageHelper.showProgress("deposit-cash","Amount deposited cannot be zero",5000);
                     return false;
+                }else{
+                    model.bankDepositSummary.totalAmount=model.amountDeposited;
                 }
+
+                $log.info(model.bankDepositSummary);
                 var loanCollectionIds = [];
                 for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
                     if(model.pendingCashDeposits[i].check){
@@ -323,7 +351,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 LoanCollection.processCashDeposite(reqData, function(response){
                     PageHelper.hideLoader();
                     $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
-
                 }, function(errorResponse){
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);

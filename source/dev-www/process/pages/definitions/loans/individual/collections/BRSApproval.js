@@ -1,18 +1,18 @@
-irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage',
+irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage',
     'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries",
     function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, PageHelper, formHelper, irfProgressMessage,
               SessionStore, $state, $stateParams, Masters, authService, Utils, Queries) {
 
         return {
             "type": "schema-form",
-            "title": "PAYMENT_DETAILS_FOR_LOAN",
+            "title": "BRS_APPROVAL",
             initialize: function (model, form, formCtrl) {
-                $log.info("Credit Validation Page got initialized");
+                $log.info("BRS Approval Page got initialized");
 
                 if (!model._credit) {
                     $log.info("Screen directly launched hence redirecting to queue screen");
                     $state.go('Page.Engine', {
-                        pageName: 'loans.individual.collections.CreditValidationQueue',
+                        pageName: 'loans.individual.collections.BRSApprovalQueue',
                         pageId: null
                     });
                     return;
@@ -33,7 +33,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 model.workingDate = SessionStore.getCBSDate();
 
                 //PageHelper.showLoader();
-                irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
+                irfProgressMessage.pop('loading-BRS validation-details', 'Loading BRS validation Details');
                 //PageHelper
                 var loanAccountNo;
                 var collectionId =$stateParams.pageId;
@@ -103,13 +103,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
 
                 $q.all([p2])
                     .finally(function(){
-
                         if (Utils.compareDates(model.workingDate, model._credit.repaymentDate) == 1) {
                             model.pageRules.forceToTransAuth = true;
                             model.pageRules.forceToTransAuthMessage = "Backdated transaction";
                             model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";
                         }
-
                         if  (model.creditValidation.amountDue > model.creditValidation.amountCollected) {
                             model.creditValidation.status = "Partially Paid";
                             model.creditValidation.statusValue = 2;
@@ -147,6 +145,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     title: "TRANSACTION_NAME",
                     readonly: true,
                     //type:"amount"
+                },
+                {
+                    "key": "Collection.depositsummary.id",
+                    "type": "string",
+                    "title": "BANK_DEPOSIT_SUMMARY_ID",
+                    "readonly": true
                 },
                 {
                     type: "fieldset",
@@ -254,43 +258,29 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     key: "creditValidation.status",
                     title: "STATUS",
                     readonly: true
-                },
-                    // {
-                    //     key:"creditValidation.status",
-                    //     title:"",
-                    //     notitle:true,
-                    //     type:"radios",
-                    //     titleMap:{
-                    //         "1":"Fully Paid",
-                    //         "2":"Partially Paid",
-                    //         "3":"Not Paid"
-                    //         //"4":"Incorrect Information"
-                    //                               }
-                    // },
-
-                    {
-                        key: "creditValidation.notPaid",
-                        title: "NOT_PAID",
-                        type: "checkbox",
-                        "schema": {
-                            "default": false
-                        },
-                    }, {
-                        key: "creditValidation.reject_reason",
-                        title: "REJECT_REASON",
-                        type: "select",
-                        titleMap: [{
-                            "name": "Amount not credited in account",
-                            "value": "1"
-                        }],
-                        condition: "model.creditValidation.notPaid"
-                    }, {
-                        key: "creditValidation.reject_remarks",
-                        title: "REJECT_REMARKS",
-                        readonly: false,
-                        type: "textarea",
-                        condition: "model.creditValidation.notPaid"
-                    }
+                }, {
+                    key: "creditValidation.notPaid",
+                    title: "NOT_PAID",
+                    type: "checkbox",
+                    "schema": {
+                        "default": false
+                    },
+                }, {
+                    key: "creditValidation.reject_reason",
+                    title: "REJECT_REASON",
+                    type: "select",
+                    titleMap: [{
+                        "name": "Amount not credited in account",
+                        "value": "1"
+                    }],
+                    condition: "model.creditValidation.notPaid"
+                }, {
+                    key: "creditValidation.reject_remarks",
+                    title: "REJECT_REMARKS",
+                    readonly: false,
+                    type: "textarea",
+                    condition: "model.creditValidation.notPaid"
+                }
                 ]
             }, {
                 "type": "box",
@@ -330,6 +320,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     },
                     ]
             },
+
             {
                 type: "box",
                 title: "LOAN_COLLECTIONS",
@@ -364,7 +355,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     }]
                 }]
             },
-             {
+
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
@@ -381,10 +373,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     Utils.confirm("Are You Sure?")
                         .then(function () {
                             PageHelper.showLoader();
+
                             var loanCollection = _.cloneDeep(model._credit);
                             var reqParams = {};
                             reqParams.loanCollection = loanCollection;
-                            reqParams.repaymentProcessAction = "PROCEED";
                             if (model.creditValidation.notPaid) {
                                if(model._credit.instrumentType=='CASH'){
                                    reqParams.stage = "Deposit";  
@@ -392,81 +384,20 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                                 reqParams.stage = "Rejected"; 
                                }
                                 $log.info("Inside NoPayment()");     
-                            } else if (model.creditValidation.statusValue == 1 && model.pageRules.forceToTransAuth==false) {
-                                $log.info("Inside FullPayment()");
-                                reqParams.stage = "Completed";
-                                reqParams.loanCollection.feeWaiverAmount = 0;
-                                reqParams.loanCollection.penalInterestWaiverAmount = 0;
-                                reqParams.loanCollection.feeAmount = model._credit.feeDue;
-                                reqParams.loanCollection.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
-                                reqParams.loanCollection.scheduleDemandAmount=math.round(model._credit.repaymentAmount - reqParams.loanCollection.feeAmount - reqParams.loanCollection.securityEmiAmount,2);
-
-                            } else if (model.creditValidation.statusValue == 2 || model.pageRules.forceToTransAuth == true) {
-                                $log.info("Inside PartialPayment()");
-                                reqParams.stage = "PartialPayment";
                             }
+                            reqParams.repaymentProcessAction = "PROCEED";
                             LoanCollection.update(reqParams,function(resp, header){
                                 PageHelper.hideLoader();
                                 $state.go('Page.Engine', {
-                                    pageName: 'loans.individual.collections.CreditValidationQueue',
+                                    pageName: 'loans.individual.collections.BRSApprovalQueue',
                                     pageId: null
                                 });
                             },function(resp){
                                 PageHelper.showErrors(resp);
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
-                            });
-                            /*
-                            if (model.creditValidation.notPaid) {
-                                $log.info("Inside NoPayment()");
-                                var reqParams = {
-                                    "loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId,
-                                    "remarks": model.creditValidation.reject_remarks,
-                                    "rejectReason": model.creditValidation.reject_reason
-                                };
-                                LoanProcess.reject(reqParams, null, function (response) {
-                                    PageHelper.hideLoader();
-                                    $state.go('Page.Engine', {
-                                        pageName: 'loans.individual.collections.CreditValidationQueue',
-                                        pageId: null
-                                    });
-
-                                }, function (errorResponse) {
-                                    PageHelper.hideLoader();
-                                    PageHelper.showErrors(errorResponse);
-                                });
-                            } else if (model.creditValidation.statusValue == 1) {
-                                $log.info("Inside FullPayment()");
-                                LoanProcess.approve({
-                                    "loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId
-                                }, null, function (response) {
-                                    PageHelper.hideLoader();
-                                    PageHelper.navigateGoBack();
-                                }, function (errorResponse) {
-                                    PageHelper.hideLoader();
-                                    PageHelper.showErrors(errorResponse);
-                                });
-
-                            } else if (model.creditValidation.statusValue == 2) {
-                                $log.info("Inside PartialPayment()");
-                                var reqParams = {
-                                    "id": model.creditValidation.loanRepaymentDetailsId
-                                };
-                                LoanProcess.partialPayment(reqParams, null, function (response) {
-                                    PageHelper.hideLoader();
-                                    $state.go('Page.Engine', {
-                                        pageName: 'loans.individual.collections.CreditValidationQueue',
-                                        pageId: null
-                                    });
-
-                                }, function (errorResponse) {
-                                    PageHelper.hideLoader();
-                                    PageHelper.showErrors(errorResponse);
-                                });
-                            }
-                            */
+                            });   
                         })
-
                 }
             }
         };

@@ -1,9 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidationQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApprovalQueue"),
 ["$log", "formHelper", "LoanCollection", "$state", "SessionStore", "$q", "entityManager",
 function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManager){
     return {
         "type": "search-list",
-        "title": "CREDIT_VALIDATION_QUEUE",
+        "title": "BRS_APPROVAL_QUEUE",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
@@ -52,7 +52,7 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanCollection.query({
-                    'currentStage':"CreditValidation",
+                    'currentStage':"BRSValidation",
                     'accountCentreId': searchOptions.centre,
                     'accountBranchId': searchOptions.branch_id,
                     'accountNumber': searchOptions.accountNumber
@@ -89,11 +89,14 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                 getActions: function(){
                     return [
                         {
-                            name: "Credit Validation",
+                            name: "BRS Approval",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.id});
+                                entityManager.setModel('loans.individual.collections.BRSApproval', {_credit:item});
+                                    $state.go('Page.Engine', {
+                                        pageName: 'loans.individual.collections.BRSApproval',
+                                        pageId: item.id,
+                                    });
                             },
                             isApplicable: function(item, index){
                                 return true;

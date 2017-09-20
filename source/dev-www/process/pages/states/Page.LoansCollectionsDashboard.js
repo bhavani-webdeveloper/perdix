@@ -12,6 +12,7 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
             "Page/Engine/loans.individual.collections.BounceQueue",
             "Page/Engine/loans.individual.collections.BouncePromiseQueue",
             "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
+            "Page/Engine/loans.individual.collections.BRSApprovalQueue",
             "Page/Engine/loans.individual.collections.CreditValidationQueue",
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
             "Page/Engine/loans.individual.collections.DepositStage",
@@ -60,6 +61,15 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
                     'currentStage':"CreditValidation"
                 }).$promise.then(function(response, headerGetter){
                     cvqMenu.data = response.headers['x-total-count'];
+                })
+        }
+
+        var brsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BRSApprovalQueue"];
+        if (brsMenu) {
+            LoanCollection.query({
+                    'currentStage':"BRSValidation"
+                }).$promise.then(function(response, headerGetter){
+                    brsMenu.data = response.headers['x-total-count'];
                 })
         }
 

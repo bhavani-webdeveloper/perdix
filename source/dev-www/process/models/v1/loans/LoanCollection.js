@@ -56,8 +56,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
                 }
                 return response;
             }
-
         }),
+        getDepositSummary:{
+            method:'GET',
+            url:endpoint+'/depositSummary'
+        },
         save:{ 
             method:'POST',
             url:endpoint+'/',

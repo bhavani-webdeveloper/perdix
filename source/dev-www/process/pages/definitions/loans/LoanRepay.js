@@ -697,7 +697,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 if(postData.loanCollection.instrument == 'CASH')
                                     postData.stage="Deposit";
                                 else
-                                    postData.stage="CreditValidation";
+                                    postData.stage="BRSValidation";
                                 postData.repaymentProcessAction = "PROCEED";
                                 postData.loanCollection.id = model.repayment.id;
                                 LoanCollection.update(postData,function(resp,header){
@@ -721,7 +721,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         if(postData.loanCollection.instrumentType == 'CASH')
                                             resp.stage="Deposit";
                                         else
-                                            resp.stage="CreditValidation";
+                                            resp.stage="BRSValidation";
                                         resp.repaymentProcessAction = "PROCEED";
 
                                         LoanCollection.update(resp).$promise

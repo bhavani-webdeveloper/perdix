@@ -24,6 +24,16 @@
       },
       {
          "order":3,
+         "code":"BRSValidation",
+         "name":"BRSValidation",
+         "stageType":"CAPTURE",
+         "brsStage":"yes",
+         "allowedRoles":[
+            "APPROVER"
+         ]
+      },
+      {
+         "order":4,
          "code":"CreditValidation",
          "name":"Credit Validation",
          "stageType":"CAPTURE",
@@ -33,7 +43,7 @@
          ]
       },
       {
-         "order":4,
+         "order":5,
          "code":"PartialPayment",
          "name":"PartialPayment",
          "stageType":"CAPTURE",
