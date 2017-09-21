@@ -621,7 +621,6 @@
           "gender",
           "dateOfBirth",
           "religion",
-          "mobilePhone",
           "maritalStatus"
         ],
         "properties": {
