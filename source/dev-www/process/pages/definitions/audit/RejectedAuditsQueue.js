@@ -225,20 +225,38 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                             name: "DO_AUDIT",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Adhoc',
-                                    'pageName': 'audit.AuditDetails',
-                                    'pageId': item.audit_id,
-                                    'pageData': {
-                                        "readonly": item.current_stage !== 'start'
-                                    }
-                                }, {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.RejectedAuditsQueue',
-                                    'pageData': {
-                                        "page": returnObj.definition.listOptions.tableConfig.page
-                                    }
-                                });
+                                if (item.audit_type = "Regular") {
+                                    irfNavigator.go({
+                                        'state': 'Page.Adhoc',
+                                        'pageName': 'audit.AuditDetails',
+                                        'pageId': item.audit_id,
+                                        'pageData': {
+                                            "readonly": item.current_stage !== 'start'
+                                        }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.RejectedAuditsQueue',
+                                        'pageData': {
+                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                        }
+                                    });
+                                } else if (item.audit_type = "SNAP") {
+                                    irfNavigator.go({
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.detail.SnapAuditDetails',
+                                        'pageId': item.audit_id,
+                                        // 'pageData': {
+                                        //     "readonly": item.current_stage !== 'start'
+                                        // }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.RejectedAuditsQueue',
+                                        'pageData': {
+                                            "page": returnObj.definition.listOptions.tableConfig.page
+                                        }
+                                    });
+                                }
+
                             },
                             isApplicable: function(item, index) {
                                 return true;

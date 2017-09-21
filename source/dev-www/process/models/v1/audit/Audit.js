@@ -34,14 +34,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                     }
                 });
                 return rating;
-            },  
-            getAuditType: function(master, type) {
-                var audit_type;
-                _.forOwn(master.audit_type, function(v, k) {                  
-                        audit_type = master.audit_type[k].audit_type;                    
-                });
-                return audit_type;
-            },
+            },            
             processDisplayRecords: function(onlineAudits) {
                 var deferred = $q.defer();
                 var displayAudits = {

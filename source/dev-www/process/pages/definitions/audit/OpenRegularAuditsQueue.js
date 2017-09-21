@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log","Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log,Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
+    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
         var localFormController;
         var returnObj = {
             "type": "search-list",
