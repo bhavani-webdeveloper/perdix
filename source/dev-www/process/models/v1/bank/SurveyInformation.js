@@ -759,7 +759,9 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             "properties": {
                                 "contactName": {
                                     "type": ["string", "null"],
-                                    "title": "NAME"
+                                    "title": "NAME",
+                                    pattern: "^[a-zA-Z\. ]+$",
+                                    validationMessage: {202 : "Only alphabets and space are allowed."}
                                 },
                                 "mobileNo": {
                                     "type": ["string", "null"],
