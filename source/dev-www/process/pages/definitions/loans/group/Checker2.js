@@ -1294,7 +1294,7 @@ return {
             model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
             model.groupAction = "PROCEED";
             var reqData = _.cloneDeep(model);
-            if(model.group.partnerCode !== "AXIS")
+            if(model.siteCode == 'KGFS' && model.group.partnerCode !== "AXIS")
                 reqData.stage = 'LoanDisbursement';
             GroupProcess.updateGroup(reqData, function(res) {
                 PageHelper.hideLoader();
