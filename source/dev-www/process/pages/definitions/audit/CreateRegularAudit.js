@@ -15,11 +15,11 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                 self.form = [];
                 var init = function() {
                     _.forOwn(master.audit_type, function(v, k) {
-                        if (k == 4 || k == 1) {
+                        if (k == 0 || k == 1) {
                             $log.info(v)
                             auditTypeValue.push({
                                 "name": v.audit_type,
-                                "value": v.audit_type
+                                "value": v.audit_type_id
                             });
                         }
                     });
@@ -158,7 +158,7 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                         }
                     } else {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id) {
-                            model.audit_info.next_stage = "start";
+                            model.audit_info.status = "O";
                             Audit.online.updateSnapAudit(model.audit_info).$promise.then(function(res) {
                                 model.audit_info = res;
                                 PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);

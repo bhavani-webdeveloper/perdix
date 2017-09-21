@@ -128,9 +128,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (osaq) {
                     Audit.online.getSnapAuditAll({
                         'auditor_id': auditor_id,
-                        'status': 'O',                        
-                        'current_stage': 'start',
-                        'audit_type':'SNAP'
+                        'status': 'O',
+                        'audit_type':0
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
                     });
