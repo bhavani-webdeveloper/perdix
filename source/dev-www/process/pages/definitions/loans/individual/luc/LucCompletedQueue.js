@@ -144,7 +144,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "Capture LUC Data",
+                            name: "View LUC Data",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
