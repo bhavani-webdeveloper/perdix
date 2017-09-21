@@ -48,7 +48,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
                 irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
-
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.bankName = SessionStore.getBankName();
                 model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
@@ -273,15 +273,18 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             type: "date",
                             condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
                         },
-                        "additional.override_fp", 
+                        {
+                            key: "additional.override_fp", 
+                            condition: "model.siteCode == 'KGFS'",
+                        },
                         {
                             "key": "repayment.authorizationRemark",
-                            "condition": "model.additional.override_fp==true"
+                            "condition": "model.siteCode == 'KGFS' && model.additional.override_fp==true"
                         },
                          
                         {
                             type: "fieldset",
-                            condition: "!model.additional.override_fp",
+                            condition: "model.siteCode == 'KGFS' && !model.additional.override_fp",
                             title: "VALIDATE_BIOMETRIC",
                             items: [{
                                 key: "customer.isBiometricValidated",
@@ -314,14 +317,22 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
 
                 {
                     "type": "actionbox",
-                    "condition": "model.customer.isBiometricValidated ||model.additional.override_fp",
+                    "condition": "model.siteCode == 'KGFS' && (model.customer.isBiometricValidated ||model.additional.override_fp)",
                     "items": [{
                         "type": "submit",
                         "style": "btn-theme",
                         "title": "SUBMIT"
                     }]
                 },
-
+                {
+                    "type": "actionbox",
+                    "condition": "model.siteCode !== 'KGFS'",
+                    "items": [{
+                        "type": "submit",
+                        "style": "btn-theme",
+                        "title": "SUBMIT"
+                    }]
+                },
                 {
                     "type": "actionbox",
                     "condition": "model.repay.submissionDone",
@@ -722,7 +733,9 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                 alert(resp.response);
                                 $log.info(resp);
                                 model.repay = resp;
-                                model.repay.submissionDone = "yes";
+                                if(model.siteCode == 'KGFS') {
+                                    model.repay.submissionDone = "yes";
+                                }
                                 model.repay.accountNumber=model.repayment.tempencoreId;
                                 model.repay.accountId=model.repayment.tempencoreId;
                             } catch (err) {

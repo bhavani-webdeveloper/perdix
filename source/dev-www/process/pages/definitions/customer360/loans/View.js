@@ -95,7 +95,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'KGFS' || siteCode == 'sambandh' || siteCode == 'saija')
+                                        {
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }
                                     }
                                 },
                                 {
