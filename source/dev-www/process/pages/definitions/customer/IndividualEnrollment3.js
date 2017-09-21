@@ -7,6 +7,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
 
             if (model.siteCode == "sambandh") {
                 return {
+                        "CustomerInformation.firstName" : {
+                            schema: {
+                                pattern: "^[a-zA-Z\. ]+$",
+                            },
+                            validationMessage: {202 : "Only alphabets and space are allowed."},
+                        },
                         "AdditionalKYC.additionalKYCs": {
                             add: true,
                             remove: true,
@@ -15,7 +21,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             "title": "CENTRE",
                         },
                         "CustomerInformation.spouseFirstName" : {
-                            "required": true
+                            "required": true,
+                            schema: {
+                                pattern: "^[a-zA-Z\. ]+$",
+                            },
+                            validationMessage: {202 : "Only alphabets and space are allowed."},
+                        },
+                        "CustomerInformation.fatherFirstName" : {
+                            schema: {
+                                pattern: "^[a-zA-Z\. ]+$",
+                            },
+                            validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
                         "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
                             "required": false
@@ -121,6 +137,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                     model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
                                 }
                             }
+                        },
+                        "familyDetails.familyMembers.familyMemberFirstName": {
+                            schema: {
+                                pattern: "^[a-zA-Z\. ]+$",
+                            },
+                            validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
                         "familyDetails.familyMembers.incomes.monthsPerYear" : {
                             required:true,

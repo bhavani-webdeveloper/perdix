@@ -361,7 +361,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
-                                    title: "APPLICANT_NAME"
+                                    title: "APPLICANT_NAME",
+                                    schema: {
+                                        pattern: "^[a-zA-Z\. ]+$",
+                                    },
+                                    validationMessage: {202 : "Only alphabets and space are allowed."},
                                 }, {
                                     key: "lead.customerTypeString",
                                     type: "select",
