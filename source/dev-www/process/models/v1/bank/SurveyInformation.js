@@ -86,6 +86,24 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             }]
                         }
                     },
+                    "udf20": {
+                        "type": ["number", "null"],
+                        "title": "MIGRATED_POPULATION_PERCENT",
+                        "x-schema-form": {
+                            condition: "model.bank_survey.migration == 'Yes'",
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
+                    },
                     "povertyLevel": {
                         "type": ["string", "null"],
                         "title": "POVERTY_LEVEL",

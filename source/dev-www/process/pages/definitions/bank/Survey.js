@@ -67,6 +67,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.household",
                     "bank_survey.areaType",
                     "bank_survey.migration",
+                    "bank_survey.udf20",
                     "bank_survey.povertyLevel",
                     //"bank_survey.communities",
                     {
