@@ -23,6 +23,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.AuditScoresQueue",
                 "Page/Engine/audit.AuditsViewQueue",
                 "Page/Engine/audit.AssignedIssuesQueue",
+                "Page/Engine/audit.AssignedIssuesViewQueue",
                 "Page/Engine/audit.OutstandingIssuesQueue",
                 "Page/Engine/audit.OutstandingIssuesViewQueue",
                 "Page/Engine/audit.ConfirmedIssuesQueue",
@@ -49,6 +50,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var asq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditScoresQueue"];
                 var avq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditsViewQueue"];
                 var aiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesQueue"];
+                var aivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesViewQueue"];
                 var oiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesQueue"];
                 var oivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesViewQueue"];
                 var ciq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ConfirmedIssuesQueue"];
@@ -70,6 +72,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (asq) asq.data = '-';
                 if (avq) avq.data = '-';
                 if (aiq) aiq.data = '-';
+                if (aivq) aivq.data = '-';
                 if (oiq) oiq.data = '-';
                 if (oivq) oivq.data = '-';
                 if (ciq) ciq.data = '-';
@@ -127,9 +130,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (osaq) {
                     Audit.online.getSnapAuditAll({
-                        'auditor_id': auditor_id,
-                        'status': 'O',
-                        'audit_type':0
+                        'auditor_id': auditor_id
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
                     });
@@ -236,6 +237,23 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         }).$promise
                     ]).then(function(data) {
                         aiq.data = data[0].body.length + data[1].body.length;
+                    });
+                }
+                
+                if (aivq) {
+                    $q.all([
+                        Audit.online.getIssuesList({
+                            'issue_status': "A",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise,
+                        Audit.online.getIssuesList({
+                            'issue_status': "P",
+                            'page': 1,
+                            'per_page': 100
+                        }).$promise
+                    ]).then(function(data) {
+                        aivq.data = data[0].body.length + data[1].body.length;
                     });
                 }
 

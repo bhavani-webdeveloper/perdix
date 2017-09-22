@@ -158,7 +158,6 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                         }
                     } else {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id) {
-                            model.audit_info.status = "O";
                             Audit.online.updateSnapAudit(model.audit_info).$promise.then(function(res) {
                                 model.audit_info = res;
                                 PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);
