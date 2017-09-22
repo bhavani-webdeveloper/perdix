@@ -119,6 +119,17 @@
       ]
    }, {
       "order": 12,
+      "code": "Completed",
+      "name": "Completed",
+      "isAccountOpening": false,
+      "stageType": "AFTERDISBURSE",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 13,
       "code": "Rejected",
       "name": "Rejected",
       "isAccountOpening": false,

@@ -129,7 +129,13 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                                     condition: "model.fullAccess"
                                 },
                                 {
-                                    key: "branchId", 
+                                    key: "branchId",
+                                    readonly: true, 
+                                    condition: "!model.fullAccess"
+                                },
+                                {
+                                    key: "branchId",
+                                    condition: "model.fullAccess"
                                 },
                                 {
                                     key: "partner",
@@ -213,22 +219,29 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                             }
 
                         },
-                        "required":["partner"]
+                        "required":["branchId","partner"]
                     },
 
                     getSearchFormHelper: function() {
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts) {
+                        var centres = SessionStore.getCentres();
+                        var currentCentre = null;
+                        if(centres && centres.length > 0){
+                            currentCentre = centres[0].id;
+                        }
                         return GroupProcess.search({
                             'bankId': searchOptions.bankId,
                             'branchId': searchOptions.branchId,
                             'partner': searchOptions.partner,
+                            //'centre': currentCentre,
                             "product": searchOptions.product,
                             "groupCode": searchOptions.groupCode,
                             "groupName": searchOptions.groupName,
                             'groupStatus': true,
-                            'currentStage': "LoanDisbursement",
+                            'currentStage': "Completed",
+                            // 'currentStage': "Rejected",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise;
