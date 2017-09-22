@@ -498,10 +498,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                             "key": "pdc.pdcChequeDetails[].status",
                             "type": "select",
                             "title": "STATUS",
-                            "titleMap": {
-                                "CANCELLED": "CANCELLED",
-                                "LOST": "LOST"
-                            }
+                            "titleMap": [{value: "DELETE", name: "CANCELLED"
+                            },{value: "DELETE", name: "LOST"
+                            }]
                         }, {
                             "key": "pdc.pdcChequeDetails[].pdcDeleteBtn",
                             "title": "DELETE_PDC",
