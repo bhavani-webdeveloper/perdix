@@ -168,19 +168,21 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                                 },
                                 "branch": {
                                     "key": "customer.branch",
-                                    "type": "select",
-                                    "screenFilter": true
+                                    "type": "select"
                                 },
                                 "centreId": {
                                     "key": "customer.centreId",
-                                    "type": "select",
-                                    "screenFilter": true
+                                    "type": "select"
                                 }
                             },
                             "outputMap": {
                                 "id": "loanAccount.customerId",
                                 "urnNo": "loanAccount.applicant",
                                 "firstName": "loanAccount.applicantName",
+                            },
+                            "initialize": function(inputModel, form, model, context) {
+                                inputModel.branch = model.loanAccount.branchId || SessionStore.getBranch();
+                                inputModel.centreId = model.loanAccount.loanCentre.centreId;
                             },
                             "searchHelper": formHelper,
                             "search": function(inputModel, form) {
