@@ -102,6 +102,13 @@ define({
 						"key": "group.groupName",
 						"title": "GROUP_NAME",
 					}, {
+						"key": "group.currentStage",
+						"title": "CURRENT_STAGE",
+					}, {
+	                    "key": "group.groupCode",
+	                    "readonly":true,
+	                    "title": "GROUP_CODE",
+	                }, {
 						"key": "group.partnerCode",
 						"title": "PARTNER",
 						"type": "select",
@@ -187,6 +194,7 @@ define({
 
 				{
 					"type": "actionbox",
+					condition: "model.group.currentStage != 'Completed'",
 					"items": [{
 						"style": "btn-theme",
 						"title": "CLOSE_GROUP",
@@ -211,6 +219,9 @@ define({
 							"branchName": {
 								"title": "BRANCH_NAME",
 								"type": "integer"
+							},
+							"currentStage": {
+								"type": ["string", "null"],
 							},
 							"centreId": {
 								"title": "CENTRE_CODE",

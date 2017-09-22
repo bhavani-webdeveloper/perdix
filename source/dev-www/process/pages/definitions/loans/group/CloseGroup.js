@@ -103,6 +103,9 @@ define({
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
+						}, {
+							"data": "currentStage",
+							"title": "CURRENT_STAGE"
 						}]
 					},
 					getActions: function() {
