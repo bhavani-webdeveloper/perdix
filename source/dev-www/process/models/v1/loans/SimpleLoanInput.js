@@ -181,7 +181,15 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                                 "firstName": "loanAccount.applicantName",
                             },
                             "initialize": function(inputModel, form, model, context) {
-                                inputModel.branch = model.loanAccount.branchId || SessionStore.getBranch();
+                                var branches = formHelper.enum('branch').data;
+                                var branchName = null;
+                                for (var i=0;i<branches.length; i++){
+                                     if ( branches[i].code == model.loanAccount.branchId){
+                                        branchName = branches[i].name;
+                                        break;
+                                     }
+                                }
+                                inputModel.branch = branchName || SessionStore.getBranch();
                                 inputModel.centreId = model.loanAccount.loanCentre.centreId;
                             },
                             "searchHelper": formHelper,
