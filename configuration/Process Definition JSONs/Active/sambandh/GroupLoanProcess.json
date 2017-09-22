@@ -122,7 +122,7 @@
       "code": "Completed",
       "name": "Completed",
       "isAccountOpening": false,
-      "stageType": "AFTERDISBURSE",
+      "stageType": "COMPLETED",
       "allowedRoles": [
          "A",
          "ARM",
