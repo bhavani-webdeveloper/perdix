@@ -10,6 +10,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "CustomerInformation.firstName" : {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
+                                type: ["string", "null"],
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
@@ -24,12 +25,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             "required": true,
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
+                                type: ["string", "null"],
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
                         "CustomerInformation.fatherFirstName" : {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
+                                type: ["string", "null"],
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
@@ -141,6 +144,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "familyDetails.familyMembers.familyMemberFirstName": {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
+                                type: ["string", "null"],
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
@@ -994,6 +998,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         $log.warn("Invalid Data, returning false");
                         return false;
                     }
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 

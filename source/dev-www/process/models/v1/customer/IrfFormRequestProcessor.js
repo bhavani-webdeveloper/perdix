@@ -427,6 +427,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.identityProof == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -439,6 +440,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.identityProof == 'Pan Card'",
                                 schema: {
                                     "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -450,7 +452,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type:"qrcode",
                                 condition: "model.customer.identityProof == 'Passport'",
                                 schema: {
-                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$", 
+                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -510,7 +513,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "barcode",
                                 condition: "model.customer.addressProof == 'Aadhar Card'",
                                 schema: {
-                                    "pattern": "^[2-9]{1}[0-9]{11}$", 
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string","null"], 
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -523,6 +527,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.addressProof == 'Passport'",
                                 schema: {
                                     "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -534,7 +539,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "barcode",
                                 condition: "model.customer.addressProof !== 'Aadhar Card' && model.customer.addressProof !== 'Passport'",
                                 schema: {
-                                    "pattern": ".*", 
+                                    "pattern": ".*",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -634,6 +640,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -646,6 +653,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Pan Card'",
                                  schema: {
                                     "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -657,7 +665,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "barcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Passport'",
                                 schema: {
-                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$", 
+                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);

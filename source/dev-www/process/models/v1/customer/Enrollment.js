@@ -224,6 +224,12 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }
 
         Utils.removeNulls(model,true);
+
+        if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+            if(model.customer.mobilePhone == '') {
+                delete model.customer.mobilePhone;
+            }
+        }
         return model;
     };
 
