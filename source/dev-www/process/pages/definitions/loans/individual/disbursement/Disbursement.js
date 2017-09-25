@@ -78,6 +78,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
 
+                        if(model.siteCode == 'sambandh') {
+                            model.additional.netDisbursementAmount = Number(resp[0].amount);
+                            model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
+                        }
+
 
                         Enrollment.getCustomerById({
                                 id: model.additional.customerId
@@ -399,9 +404,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 },function(resp){
                                     PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
                                     PageHelper.showErrors(resp);
-
-                                }).$promise.finally(function(){
                                     PageHelper.hideLoader();
+                                }).$promise.finally(function(){
                                 });
                             },
                             function(res){
