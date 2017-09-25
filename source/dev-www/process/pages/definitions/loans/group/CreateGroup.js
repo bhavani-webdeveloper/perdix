@@ -478,15 +478,22 @@ define({
                     },{
                         "key": "group.jlgGroupMembers[].witnessFirstName",
                         "required": true,
-                        "title": "WitnessLastName",
+                        "title": "WITNESS_NAME",
                         "type": "lov",
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
+                            var familyMembers = [];
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
+                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                    familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
+                                }
+                            }
                             return $q.resolve({
                                 headers: {
-                                    "x-total-count": model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length
+                                    "x-total-count": familyMembers.length
                                 },
-                                body: model.group.jlgGroupMembers[context.arrayIndex].familyMembers
+                                body: familyMembers
                             });
                         },
                         getListDisplayItem: function(data, index) {

@@ -229,7 +229,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -286,7 +286,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,

@@ -182,7 +182,7 @@ define({
 							"title": "LOAN_PURPOSE3",
 						}, {
 							"key": "group.jlgGroupMembers[].witnessFirstName",
-							"title": "WitnessLastName",
+							"title": "WITNESS_NAME",
 						}, {
 							"key": "group.jlgGroupMembers[].witnessRelationship",
 							"title": "RELATION",
