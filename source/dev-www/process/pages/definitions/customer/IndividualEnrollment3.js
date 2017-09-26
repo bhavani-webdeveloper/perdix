@@ -17,6 +17,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "AdditionalKYC.additionalKYCs": {
                             add: true,
                             remove: true,
+                            startEmpty: true,
                         },
                         "CustomerInformation.centreId" : {
                             "title": "CENTRE",
