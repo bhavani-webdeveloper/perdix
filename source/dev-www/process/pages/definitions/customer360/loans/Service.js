@@ -80,7 +80,11 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         //if (index%2==0){
                                         //	return false;
                                         //}
-                                        return true;
+                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode !== 'sambandh' && siteCode !== 'saija')
+                                            return true;
+                                        else 
+                                            return false
                                     }
                                 },
                                 {
