@@ -504,7 +504,7 @@ define({
                                     PageHelper.showLoader();
                                     irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                                     PageHelper.clearErrors();
-                                    model.groupAction = "PROCEED";
+                                    model.groupAction = "SAVE";
                                     for(i=0;i<model.group.jlgGroupMembers.length;i++)
                                     {
                                        model.group.jlgGroupMembers[i].modeOfDisbursement='CASH';
@@ -512,9 +512,16 @@ define({
                                     var reqData = _.cloneDeep(model);
 
                                     GroupProcess.updateGroup(reqData, function(res) {
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
-                                        irfNavigator.goBack();
+                                        res.groupAction = "PROCEED";
+                                        GroupProcess.groupDisbursement(res, function(resp) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
+                                            irfNavigator.goBack();
+                                        }, function(err) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
+                                            PageHelper.showErrors(err);
+                                        });
                                     }, function(res) {
                                         PageHelper.hideLoader();
                                         irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
