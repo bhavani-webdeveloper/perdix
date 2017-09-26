@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator','SessionStore',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator,SessionStore) {
 
         function backToQueue() {
             irfNavigator.goBack();
@@ -710,7 +710,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                             'payOffAmount': r.payOffAmount,
                                             'accountName': r.accountName,
                                             'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                            'productCode': r.productCode,
+                                            'productCode': r.productCode
                                         };
                                         $log.info(repaymentInfo);
                                         var pData = getPrintReceipt(repaymentInfo, opts);
@@ -1035,7 +1035,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                     }
                     if (reqData.loanDemandScheduleDto && reqData.loanDemandScheduleDto.length) {
                         for (var i = 0; i < reqData.loanDemandScheduleDto.length; i++) {
-                            reqData.loanDemandScheduleDto[i].accountNumber=reqData.loanDemandScheduleDto[i].accountId;
+                            reqData.loanDemandScheduleDto[i].repaymentDate=SessionStore.getCBSDate();
                             if (reqData.loanDemandScheduleDto[i].amount != 0) {
                                 loanDemandScheduleDtoData.push(reqData.loanDemandScheduleDto[i]);
                             }
