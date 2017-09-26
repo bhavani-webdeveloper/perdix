@@ -1,15 +1,12 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
 
         function backToQueue() {
-            $state.go("Page.Engine", {
-                pageName: "loans.group.GroupLoanRepaymentQueue",
-                pageId: null
-            });
+            irfNavigator.goBack();
         }
 
         function deriveAmount(txnType, repaymentObj) {
@@ -672,7 +669,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                             'payOffAmount': r.payOffAmount,
                                             'accountName': r.accountName,
                                             'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                            'productCode': r.productCode,
+                                            'productCode': r.productCode
                                         };
                                         $log.info(repaymentInfo);
                                         var pData = getPrintReceipt(repaymentInfo, opts);
@@ -987,10 +984,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
 
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
-                            if(model._partnerCode == 'AXIS')
-                                reqData.repayments[i].accountNumber=reqData.repayments[i].encoreAccountNo;
-                            else
-                                reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
+                            reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
 
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
@@ -1000,8 +994,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                     }
                     if (reqData.loanDemandScheduleDto && reqData.loanDemandScheduleDto.length) {
                         for (var i = 0; i < reqData.loanDemandScheduleDto.length; i++) {
-                            if(model._partnerCode != 'AXIS')
-                                reqData.loanDemandScheduleDto[i].accountNumber=reqData.loanDemandScheduleDto[i].accountId;
+                            reqData.loanDemandScheduleDto[i].repaymentDate=SessionStore.getCBSDate();
                             if (reqData.loanDemandScheduleDto[i].amount != 0) {
                                 loanDemandScheduleDtoData.push(reqData.loanDemandScheduleDto[i]);
                             }
