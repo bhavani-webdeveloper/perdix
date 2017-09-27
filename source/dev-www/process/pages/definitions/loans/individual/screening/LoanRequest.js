@@ -151,6 +151,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
     var preLoanSaveOrProceed = function(model){
         var loanAccount = model.loanAccount;
 
+        if (_.hasIn(loanAccount, 'status') && loanAccount.status == 'HOLD'){
+            loanAccount.status = null;
+        }
+
         if (_.hasIn(loanAccount, 'guarantors') && _.isArray(loanAccount.guarantors)){
             for (var i=0;i<loanAccount.guarantors.length; i++){
                 var guarantor = loanAccount.guarantors[i];
@@ -2402,7 +2406,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanAccount.status = '';
+                    reqData.loanAccount.status = null;
                     //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
@@ -2447,7 +2451,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         function(){
 
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                            reqData.loanAccount.status = '';
                             reqData.loanProcessAction = "SAVE";
                             //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             // reqData.remarks = model.review.remarks;
@@ -2542,7 +2545,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 Utils.confirm("Are You Sure?").then(function(){
                     
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanAccount.status = '';
+                    reqData.loanAccount.status = null;
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     reqData.stage = model.review.targetStage;
@@ -2728,7 +2731,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanAccount.status = '';
                     //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                     if (nextStage!=null){
                         reqData.stage = nextStage;
@@ -2886,7 +2888,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     .then(
                         function(){
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)}
-                            reqData.loanAccount.status = '';
+                            reqData.loanAccount.status = null;
                             reqData.loanProcessAction = 'PROCEED';
                             PageHelper.showLoader();
                             var targetStage = null;
