@@ -543,6 +543,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 },
                                 "instituteName": {
                                     "type": ["string", "null"],
+                                    "required": true,
                                     "title": "INSTITUTE_NAME"
                                 },
                                 "sourcingDifficulty": {
@@ -565,6 +566,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                  "minimumLoanSize": {
                                     "type": ["number", "null"],
                                     "title": "MINIMUM_LOAN_SIZE",
+                                    "required": true,
                                     "x-schema-form": {
                                         "type": "number",
                                     }
@@ -573,6 +575,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "maximumLoanSize": {
                                     "type": ["number", "null"],
                                     "title": "MAXIMUM_LOAN_SIZE",
+                                    "required": true,
                                     "x-schema-form": {
                                         "type": "number",
                                     }
@@ -580,6 +583,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "interestRate": {
                                     "type": ["number", "null"],
                                     "title": "INTEREST_RATES",
+                                    "required": true,
                                     "x-schema-form": {
                                         "type": "number",
                                     }
@@ -587,6 +591,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "repaymentPeriod": {
                                     "type": ["number", "null"],
                                     "title": "REPAYMENT_PERIOD(MONTHS)",
+                                    "required": true,
                                     "x-schema-form": {
                                         "type": "number",
                                     }
@@ -973,6 +978,8 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "facilityDistance": {
                                     "type": ["number", "null"],
                                     "title": "DISTANCE",
+                                    "maximum": 50,
+                                    "minimum": 0,
                                     "x-schema-form": {
                                         "type":"number"
                                     }
