@@ -1838,7 +1838,16 @@
                      "captureStages":[
                         "Application"
                      ]
+                  },
+
+                  "collateral1FilePath":{
+                     "title":"collateral1FilePath",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
                   }
+
                }
             }
          },

@@ -37,6 +37,7 @@
          "code":"CreditValidation",
          "name":"Credit Validation",
          "stageType":"CAPTURE",
+         "brsStage":"yes",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "WM"

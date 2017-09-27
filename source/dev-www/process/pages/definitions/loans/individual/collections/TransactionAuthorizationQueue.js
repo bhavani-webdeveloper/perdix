@@ -127,7 +127,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.TransactionAuthorization', {_transAuth:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.accountNumber});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.id});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){

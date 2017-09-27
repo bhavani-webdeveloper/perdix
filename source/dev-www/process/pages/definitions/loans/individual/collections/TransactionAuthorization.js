@@ -33,71 +33,91 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     //PageHelper.showLoader();
                     irfProgressMessage.pop('loading-Transaction Authorization-details', 'Loading Transaction Authorization Details');
                     //PageHelper
-                    var loanAccountNo = $stateParams.pageId;
-                    var p2 = LoanAccount.get({accountId: loanAccountNo}).$promise;
-                    p2.then(function (data) { /* SUCCESS */
-                        model.loanAccount = data;
-                        model.transAuth = model.transAuth || {};
-                        model.transAuth.customer_name = data.customer1FirstName;
-                        model.transAuth.productCode = data.productCode;
-                        model.transAuth.urnNo = data.customerId1;
-                        //model.transAuth.instrument = 'CASH_IN';
-                        //model.transAuth.authorizationUsing = 'Testing-Swapnil';
-                        //model.transAuth.remarks = 'collections';
-                        model.transAuth.accountNumber = data.accountId;
-                        model.transAuth.amountDue = data.totalDemandDue;
-                        model.transAuth.principal = data.totalPrincipalDue;
-                        model.transAuth.interest = data.totalNormalInterestDue;
-                        model.transAuth.applicant_name = data.applicant;
-                        model.transAuth.applicant_name = data.coapplicant;
-                        model.transAuth.penal_interest = data.totalPenalInterestDue;
-                        model.transAuth.accountOpenDate = data.lastDemandRunDate;
-                        if(model._transAuth)
-                            model.transAuth.id = model._transAuth.id;
-                        model.transAuth.archiveDate = data.lastArchiveDate;
-                        model.transAuth.fromDate = data.lastArchiveDate;
-                        model.transAuth.fee = data.totalFeeDue;
-                        model.transAuth.amountCollected = model._transAuth.repaymentAmount;
-                        model.loanCollection = _.cloneDeep(model._transAuth);
+                    var loanAccountNo;
+                    var collectionId = $stateParams.pageId;
 
-                        model._transAuth.penalInterestWaiverAmount = 0;
-                        model._transAuth.feeWaiverAmount = 0;
-                        model._transAuth.feeAmount = 0;
-                        model._transAuth.scheduleDemandAmount = 0;
-                        model._transAuth.securityEmiAmount = 0;
-
-                        /* Amount Allocation */
-                        if (model._transAuth.transactionName == 'Scheduled Demand'){
-                            var amountAvailable = model._transAuth.repaymentAmount;
-
-                            /* Allocating Security EMI Demand */
-                            model._transAuth.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
-                            amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
-                            
-                            /* Allocating Demand */
-                            if (amountAvailable>0){
-                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((model._transAuth.principalDue + model._transAuth.interestAmount + model._transAuth.penalInterestDue), amountAvailable));
-                                amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.scheduleDemandAmount);
-                                model._transAuth.penalInterestWaiverAmount = 0;
+                    var p2 = LoanCollection.get({
+                        id: collectionId
+                    }).$promise.then(
+                        function(resp) {
+                            model.Collection = resp;
+                            loanAccountNo = model.Collection.accountNumber;
+                            if (model.Collection.instrumentType == 'CASH') {
+                                LoanCollection.getDepositSummary({
+                                    depositSummaryId: model.Collection.bankDepositSummaryId
+                                }).$promise.then(function(info) {
+                                    model.Collection.depositsummary = info;
+                                    $log.info(model.Collection);
+                                })
                             }
-                            /* Allocating Fee */
-                            if (amountAvailable > 0){
-                                model._transAuth.feeAmount = Utils.roundToDecimal(Math.min(amountAvailable, model._transAuth.feeDue));
-                                amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.feeAmount);
-                            }
-                            /* Allocating Future Principal */
-                            if (amountAvailable > 0){
-                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(model._transAuth.scheduleDemandAmount + amountAvailable);
-                            }
-                        }
+                            LoanAccount.get({
+                                accountId: loanAccountNo
+                            }).$promise.then(
+                                function(data) {
+                                    model.loanAccount = data;
+                                    model.transAuth = model.transAuth || {};
+                                    model.transAuth.customer_name = data.customer1FirstName;
+                                    model.transAuth.productCode = data.productCode;
+                                    model.transAuth.urnNo = data.customerId1;
+                                    //model.transAuth.instrument = 'CASH_IN';
+                                    //model.transAuth.authorizationUsing = 'Testing-Swapnil';
+                                    //model.transAuth.remarks = 'collections';
+                                    model.transAuth.accountNumber = data.accountId;
+                                    model.transAuth.amountDue = data.totalDemandDue;
+                                    model.transAuth.principal = data.totalPrincipalDue;
+                                    model.transAuth.interest = data.totalNormalInterestDue;
+                                    model.transAuth.applicant_name = data.applicant;
+                                    model.transAuth.applicant_name = data.coapplicant;
+                                    model.transAuth.penal_interest = data.totalPenalInterestDue;
+                                    model.transAuth.accountOpenDate = data.lastDemandRunDate;
+                                    if (model._transAuth)
+                                        model.transAuth.id = model._transAuth.id;
+                                    model.transAuth.archiveDate = data.lastArchiveDate;
+                                    model.transAuth.fromDate = data.lastArchiveDate;
+                                    model.transAuth.fee = data.totalFeeDue;
+                                    model.transAuth.amountCollected = model._transAuth.repaymentAmount;
+                                    model.loanCollection = _.cloneDeep(model._transAuth);
 
-                        irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
-                        PageHelper.hideLoader();
-                    }, function (resData) {
-                        irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
-                        PageHelper.showErrors(resData);
-                        backToLoansList();
-                    })
+                                    model._transAuth.penalInterestWaiverAmount = 0;
+                                    model._transAuth.feeWaiverAmount = 0;
+                                    model._transAuth.feeAmount = 0;
+                                    model._transAuth.scheduleDemandAmount = 0;
+                                    model._transAuth.securityEmiAmount = 0;
+
+                                    /* Amount Allocation */
+                                    if (model._transAuth.transactionName == 'Scheduled Demand') {
+                                        var amountAvailable = model._transAuth.repaymentAmount;
+
+                                        /* Allocating Security EMI Demand */
+                                        model._transAuth.securityEmiAmount = model.loanAccount.totalSecurityDepositDue;
+                                        amountAvailable = amountAvailable - model._transAuth.securityEmiAmount;
+
+                                        /* Allocating Demand */
+                                        if (amountAvailable > 0) {
+                                            model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(Math.min((model._transAuth.principalDue + model._transAuth.interestAmount + model._transAuth.penalInterestDue), amountAvailable));
+                                            amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.scheduleDemandAmount);
+                                            model._transAuth.penalInterestWaiverAmount = 0;
+                                        }
+                                        /* Allocating Fee */
+                                        if (amountAvailable > 0) {
+                                            model._transAuth.feeAmount = Utils.roundToDecimal(Math.min(amountAvailable, model._transAuth.feeDue));
+                                            amountAvailable = Utils.roundToDecimal(amountAvailable - model._transAuth.feeAmount);
+                                        }
+                                        /* Allocating Future Principal */
+                                        if (amountAvailable > 0) {
+                                            model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(model._transAuth.scheduleDemandAmount + amountAvailable);
+                                        }
+                                    }
+
+                                    irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                                    PageHelper.hideLoader();
+                                },
+                                function(resData) {
+                                    irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                                    PageHelper.showErrors(resData);
+                                    backToLoansList();
+                                })
+                        })
 
                     $q.all([p2])
                         .finally(function(){
@@ -344,6 +364,41 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 ]
                             }
                         ]
+                    },
+
+                    {
+                        type: "box",
+                        title: "LOAN_COLLECTIONS",
+                        condition: "model._credit.instrumentType=='CASH'",
+                        items: [{
+                            key: "Collection.depositsummary.loanCollections",
+                            type: "array",
+                            "titleExpr": "model.Collection.depositsummary.loanCollections[arrayIndex].customerName",
+                            add: null,
+                            remove: null,
+                            items: [{
+                                key: "Collection.depositsummary.loanCollections[].accountNumber",
+                                title: "LOAN_ACCOUNT_NUMBER",
+                                readonly: true,
+                            }, {
+                                key: "Collection.depositsummary.loanCollections[].customerName",
+                                title: "ENTERPRISE_NAME",
+                                readonly: true,
+                            }, {
+                                key: "Collection.depositsummary.loanCollections[].repaymentAmount",
+                                title: "AMOUNT_COLLECTED",
+                                readonly: true,
+                            }, {
+                                key: "Collection.depositsummary.loanCollections[].transactionName",
+                                "title": "TRANSACTION_NAME",
+                                readonly: true,
+                            }, {
+                                key: "Collection.depositsummary.loanCollections[].repaymentDate",
+                                type: "date",
+                                "title": "REPAYMENT_DATE",
+                                readonly: true,
+                            }]
+                        }]
                     },
                     // {
                     //     "type": "box",

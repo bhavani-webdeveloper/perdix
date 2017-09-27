@@ -1061,6 +1061,17 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                                     required:true,
                                                     title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                                 },
+                                                {
+                                                    key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                                    type: "file",
+                                                    required: true,
+                                                    title: "BANK_STATEMENT_UPLOAD",
+                                                    fileType: "application/pdf",
+                                                    "category": "CustomerEnrollment",
+                                                    "subCategory": "IDENTITYPROOF",
+                                                    using: "scanner"
+                                                }
+
                                             ]
                                         },
                                         {
@@ -1347,6 +1358,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     enumCode:"status_scale"
                                     //enumCode: "status_scale"
                                 },
+                                {
+                                    key: "customer.businessSignboardImage",
+                                    title: "SIGN_BOARD",
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    type: "file",
+                                    fileType: "application/pdf",
+                                    using: "scanner"
+                                }
 
                             ]
                         },

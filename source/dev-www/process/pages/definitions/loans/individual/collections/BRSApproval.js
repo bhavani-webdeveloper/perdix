@@ -44,12 +44,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 function(resp){
                     model.Collection=resp;
                     loanAccountNo=model.Collection.accountNumber;
-                    LoanCollection.getDepositSummary({
-                        depositSummaryId:model.Collection.bankDepositSummaryId
-                    }).$promise.then(function(info){
-                        model.Collection.depositsummary=info;
-                        $log.info(model.Collection);
-                    })
+                    if (model.Collection.instrumentType == 'CASH') {
+                        LoanCollection.getDepositSummary({
+                            depositSummaryId: model.Collection.bankDepositSummaryId
+                        }).$promise.then(function(info) {
+                            model.Collection.depositsummary = info;
+                            $log.info(model.Collection);
+                        })
+                    }
                     LoanAccount.get({
                     accountId: loanAccountNo
                     }).$promise.then(
@@ -324,6 +326,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
             {
                 type: "box",
                 title: "LOAN_COLLECTIONS",
+                condition:"model._credit.instrumentType=='CASH'",
                 items: [
                 {
                     key: "Collection.depositsummary.loanCollections",

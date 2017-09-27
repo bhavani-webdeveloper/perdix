@@ -84,6 +84,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.customerName = data.customer1FirstName;
 
                         model.repayment.productCode = data.productCode;
+                        model.repayment.visitedDate=SessionStore.getCBSDate();
                         model.repayment.urnNo = data.customerId1;
                         model.repayment.payOffAndDueAmount = Utils.ceil(data.payOffAndDueAmount);
                         model.repayment.totalFeeDue = Utils.roundToDecimal(data.totalFeeDue);
@@ -385,8 +386,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     {
                                         "name":"RTGS",
                                         "value":"RTGS"
+                                    },
+                                    {
+                                        "name":"ACH",
+                                        "value":"ACH"
+                                    },
+                                    {
+                                        "name":"Suspense",
+                                        "value":"Suspense"
                                     }
-
                                 ]
                             },
                             {
@@ -452,7 +460,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 autolov: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
@@ -478,6 +486,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"DATE",
                                 type:"date",
                                 condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key:"repayment.visitedDate",
+                                title:"VISITED_DATE",
+                                readonly:true,
+                                type:"date"
                             }
                         ]
                     },
@@ -677,6 +691,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                             postData.loanCollection.demandDate = "";
                             postData.loanCollection.feeDue = model.repayment.totalFeeDue;
+                            postData.loanCollection.visitedDate = model.repayment.visitedDate;
                             postData.loanCollection.installmentAmount = model.cbsLoanData.equatedInstallment;
                             postData.loanCollection.instrumentDate = model.repayment.instrumentDate;
                             postData.loanCollection.instrumentType = model.repayment.instrument;
@@ -694,10 +709,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
 
                             if(model.repayment.id){
-                                if(postData.loanCollection.instrument == 'CASH')
-                                    postData.stage="Deposit";
-                                else
-                                    postData.stage="BRSValidation";
+                                if (postData.loanCollection.instrumentType == 'CASH') {
+                                    resp.stage = "Deposit";
+                                } else if (postData.loanCollection.instrumentType == 'ACH') {
+                                    resp.loanCollection.instrumentType = "NEFT";
+                                    resp.stage = "Completed";
+                                } else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                    resp.stage = "CreditValidation";
+                                } else {
+                                    resp.stage = "BRSValidation";
+                                }
                                 postData.repaymentProcessAction = "PROCEED";
                                 postData.loanCollection.id = model.repayment.id;
                                 LoanCollection.update(postData,function(resp,header){
@@ -718,10 +739,18 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 LoanCollection.save(postData,function(resp,header){
                                     $log.info(resp);
                                     try{
-                                        if(postData.loanCollection.instrumentType == 'CASH')
+                                        if(postData.loanCollection.instrumentType == 'CASH'){
                                             resp.stage="Deposit";
-                                        else
+                                        }else if (postData.loanCollection.instrumentType == 'ACH'){
+                                           resp.loanCollection.instrumentType ="NEFT";
+                                           resp.stage = "Completed";
+                                        }
+                                        else if (postData.loanCollection.instrumentType == 'Suspense'){
+                                           resp.stage="CreditValidation";
+                                        }
+                                        else{
                                             resp.stage="BRSValidation";
+                                        }
                                         resp.repaymentProcessAction = "PROCEED";
 
                                         LoanCollection.update(resp).$promise

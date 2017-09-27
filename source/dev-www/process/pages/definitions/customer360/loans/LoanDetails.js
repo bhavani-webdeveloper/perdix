@@ -187,11 +187,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
                                                             var m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: data.description, invoice_type: "Fee Charge"});
-                                                            if (m.length==0){
+                                                            if (m && m.length==0){
                                                                 m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
                                                             }
 
-                                                            if (m.length>0){
+                                                            if (m && m.length>0){
                                                                  recordStr = deriveRecordStr(m[0].record_id_format, data);
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
                                                             }
@@ -268,10 +268,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         fee_description: value.description,
                                                         invoice_type: "Fee Charge"
                                                     });
-                                                    if (m.length==0){
+                                                    if (m && m.length==0){
                                                         m = $filter('filter')(model.feesFormMappingList, {fee_category:value.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
                                                     }
-                                                    if (m.length > 0) {
+                                                    if (m && m.length > 0) {
                                                         isapplicable = true;
                                                     }
                                                 }

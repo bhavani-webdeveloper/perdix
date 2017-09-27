@@ -1481,6 +1481,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                              type: "select",
                              enumCode: "decisionmaker",
                              required: true
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateral1FilePath",
+                                title: "MACHINE_QUOTATION",
+                                "category": "Loan",
+                                "required":true,
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
                             }
 
                          ]
@@ -1570,6 +1580,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                              title: "SPACE_AVAILABLE",
                              type: "string",
                             
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateral1FilePath",
+                                title: "MACHINE_QUOTATION",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
                             }
                          ]
                      }

@@ -32,6 +32,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 var currDate = moment(new Date()).format("YYYY-MM-DD");
                 model.promise.repaymentDate = currDate;
                 model.promise.transactionDate = currDate;
+                model.promise.visitedDate=SessionStore.getCBSDate();
                 
                 LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, 
                     function(response){
@@ -187,12 +188,25 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly:true
                     },
                     {
+                        key:"promise.visitedDate",
+                        title:"VISITED_DATE",
+                        type:"date",
+                        //type:"amount",
+                        readonly:true
+                    },
+                    {
                         key: "promise.customerAvailable",
                         title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
                             default: false
                         }
+                    },
+                    {
+                        key:"promise.contactable",
+                        title:"CONTACTABLE",
+                        "type":"select",
+                        "enumCode":"decisionmaker"
                     },
                     {
                      "type": "fieldset",

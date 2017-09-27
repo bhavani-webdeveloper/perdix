@@ -1,7 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q",
-function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q){
-
+["$log", "SessionStore","$state","Utils", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q",
+function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q){
     // var branch = SessionStore.getBranch();
     var branch = SessionStore.getCurrentBranch().branchName;
 
@@ -58,7 +57,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
                     	model.bankDepositSummary.bankAccountNumber = defaultBank[0].account_number;
                 }
-
             });
 
             var promiseArray = [depositListPromise, accountDetailPromise];
@@ -73,7 +71,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 PageHelper.showErrors(httpRes);
                 PageHelper.hideLoader();
             });
-
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -147,12 +144,22 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-4 col-md-4",
+                        "htmlClass": "col-xs-2 col-md-2",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
                             "readonly":true,
                             "type":"amount",
                             "title": " "
+                        }]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "col-xs-2 col-md-2",
+                        "items": [{
+                            "key": "pendingCashDeposits[].button",
+                            "type":"button",
+                            "title": "Reject",
+                            onClick:"actions.reject(model, form, formName)"
                         }]
                     }]
                 }]
@@ -325,36 +332,66 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         },
         actions: {
             submit: function(model, form, formName){
-                if (!model.amountDeposited || model.amountDeposited <=0){
-                    PageHelper.showProgress("deposit-cash","Amount deposited cannot be zero",5000);
-                    return false;
-                }else{
-                    model.bankDepositSummary.totalAmount=model.amountDeposited;
-                }
-
-                $log.info(model.bankDepositSummary);
-                var loanCollectionIds = [];
-                for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-                    if(model.pendingCashDeposits[i].check){
-                        loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
+                    if (!model.amountDeposited || model.amountDeposited <= 0) {
+                        PageHelper.showProgress("deposit-cash", "Amount deposited cannot be zero", 5000);
+                        return false;
+                    } else {
+                        model.bankDepositSummary.totalAmount = model.amountDeposited;
                     }
-                }
-                var reqData = {
-                    'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
-                    'loanCollectionIds':_.cloneDeep(loanCollectionIds)
-                };
 
-                PageHelper.showProgress('deposit-cash', 'Working...');
-                PageHelper.showLoader();
-                $log.info(reqData);
-                console.log(JSON.stringify(reqData));
-                LoanCollection.processCashDeposite(reqData, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
-                }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                });
+                    $log.info(model.bankDepositSummary);
+                    var loanCollectionIds = [];
+                    for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
+                        if (model.pendingCashDeposits[i].check) {
+                            loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
+                        }
+                    }
+
+                    var reqData = {
+                        'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
+                        'loanCollectionIds': _.cloneDeep(loanCollectionIds)
+                    };
+
+                    PageHelper.showProgress('deposit-cash', 'Working...');
+                    PageHelper.showLoader();
+                    $log.info(reqData);
+                    console.log(JSON.stringify(reqData));
+                    LoanCollection.processCashDeposite(reqData, function(response) {
+                        PageHelper.hideLoader();
+                        $state.go('Page.Engine', {
+                            pageName: 'loans.individual.collections.BounceQueue',
+                            pageId: null
+                        });
+                    }, function(errorResponse) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(errorResponse);
+                    });      
+            },
+            reject: function(model, form, formName) {
+                $log.info(model.pendingCashDeposits[form.arrayIndex]);
+                $log.info("Inside reject()");
+                Utils.confirm("Are You Sure?")
+                    .then(function() {
+                        PageHelper.showLoader();
+                        LoanCollection.get({
+                            id: model.pendingCashDeposits[form.arrayIndex].repaymentId
+                        }).$promise.then(
+                            function(resp) {
+                                var loanCollection = _.cloneDeep(resp);
+                                var reqParams = {};
+                                reqParams.loanCollection = loanCollection;
+                                reqParams.stage = "Rejected";
+                                reqParams.repaymentProcessAction = "PROCEED";
+                                LoanCollection.update(reqParams, function(resp, header) {
+                                    PageHelper.hideLoader();
+                                    PageHelper.navigateGoBack();
+                                }, function(resp) {
+                                    PageHelper.showErrors(resp);
+                                }).$promise.finally(function() {
+                                    PageHelper.hideLoader();
+                                });
+                            })
+                    })
             }
         }
     };

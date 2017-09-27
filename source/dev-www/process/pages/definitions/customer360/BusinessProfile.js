@@ -740,6 +740,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         //maximum:99,                                     
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                        type: "file",
+                                        required: true,
+                                        title: "BANK_STATEMENT_UPLOAD",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
+                                    }
                                 ]
                             },
                             {
@@ -823,6 +833,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                type:"number",
                                title:"RATE_OF_INTEREST"
                            },
+                           {
+                                key: "customer.liabilities[].proofDocuments",
+                                title: "DOCUMENTS",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
+                            }
                            
                            /*{
                                key:"customer.liabilities[].interestExpense",
@@ -1057,6 +1076,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         key: "customer.incomeThroughSales[].incomeSalesDate",
                                         title: "DATE",
                                         type: "date"
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].invoiceDocId",
+                                        type: "file",
+                                        title: "INVOICE_DOCUMENT",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
                                     }
                                 ]
                             },
@@ -1086,6 +1114,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         title: "FREQUENCY",
                                         type: "select",
                                         enumCode: "frequency"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].billDocId",
+                                        type: "file",
+                                        title: "BILLS",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
                                     }
                                 ]
                             },
@@ -1154,8 +1191,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         key: "customer.rawMaterialExpenses[].rawMaterialDate",
                                         title: "DATE",
                                         type: "date"
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
+                                        title: "PURCHASE_BILLS",
+                                        "category": "Loan",
+                                        "subCategory": "DOC1",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        using: "scanner"
                                     }
-
                                 ]
                             },
                             ]
@@ -1350,6 +1395,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 fileType:"application/pdf",
                                 using: "scanner"
                             },
+                            {
+                                key: "customer.fixedAssetsMachinaries[].machineImage",
+                                title:"MACHINE_IMAGE",
+                                "category":"Loan",
+                                "subCategory":"DOC1",
+                                type: "file",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            }
                          ]
                      }
                  ]
