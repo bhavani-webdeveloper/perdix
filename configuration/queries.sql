@@ -6,7 +6,7 @@ customersLimit.list=select * from customer
 userRole.get=SELECT * FROM roles r, user_roles u WHERE u.role_id = r.id AND u.user_id = :userId
 userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, rpa.page_config pageConfig from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
 account.list=select * from loan_accounts
-pincode.list=SELECT p.pincode, p.division, p.region, p.taluk, p.district, p.state FROM pincode_master p WHERE p.pincode like concat(:pincode,'%') AND LOWER(p.district) LIKE concat(LOWER(:district), '%') AND LOWER(p.state) like concat(LOWER(:state),'%')
+pincode.list=SELECT p.pincode, p.division, p.region, p.taluk, p.district, p.state FROM pincode_master p WHERE p.pincode like concat(:pincode,'%') AND LOWER(p.division) LIKE concat(LOWER(:division), '%') AND LOWER(p.region) LIKE concat(LOWER(:region), '%') AND LOWER(p.district) LIKE concat(LOWER(:district), '%') AND LOWER(p.state) like concat(LOWER(:state),'%')
 loan_products.list=SELECT * from loan_account_documents where product_code = :product_code and process = :process and stage = :stage
 globalSettings.one=SELECT * from global_settings where name = :name
 globalSettings.list=SELECT * from global_settings

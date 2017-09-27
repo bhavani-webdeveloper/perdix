@@ -214,6 +214,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 autolov: true,
                                 inputMap: {
                                     "pincode": "customer.pincode",
+                                    "division": "customer.locality",
+                                    "region": "customer.villageName",
                                     "district": {
                                         key: "customer.district"
                                     },
@@ -240,7 +242,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     return Queries.searchPincodes(
                                         inputModel.pincode,
                                         inputModel.district,
-                                        inputModel.state
+                                        inputModel.state,
+                                        inputModel.division,
+                                        inputModel.region
                                     );
                                 },
                                 getListDisplayItem: function(item, index) {
@@ -314,6 +318,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 autolov: true,
                                 inputMap: {
                                     "mailingPincode": "customer.mailingPincode",
+                                    "mailingDivision": "customer.mailingLocality",
+                                    "region": "customer.villageName",
                                     "mailingDistrict": {
                                         key: "customer.mailingDistrict"
                                     },
@@ -325,12 +331,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "mailingDivision": "customer.mailingLocality",
                                     "mailingPincode": "customer.mailingPincode",
                                     "mailingDistrict": "customer.mailingDistrict",
-                                    "mailingState": "customer.mailingState"
+                                    "mailingState": "customer.mailingDivision"
                                 },
                                 searchHelper: formHelper,
                                 initialize: function(inputModel) {
                                     $log.warn('in pincode initialize');
                                     $log.info(inputModel);
+                                    inputModel.region = undefined;
                                 },
                                 search: function(inputModel, form, model) {
                                     if (!inputModel.mailingPincode) {
@@ -339,7 +346,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     return Queries.searchPincodes(
                                         inputModel.mailingPincode,
                                         inputModel.mailingDistrict,
-                                        inputModel.mailingState
+                                        inputModel.mailingState,
+                                        inputModel.mailingDivision,
+                                        inputModel.region
                                     );
                                 },
                                 getListDisplayItem: function(item, index) {
