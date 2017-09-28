@@ -68,7 +68,6 @@ define({
                 model.review = model.review || {};
                 var branch1 = formHelper.enum('branch_id').data;
                 var centres = SessionStore.getCentres();
-                model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                 for (var i = 0; i < branch1.length; i++) {
                     if ((branch1[i].value) == model.group.branchId) {
                         model.group.branchName = branch1[i].name;

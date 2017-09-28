@@ -129,6 +129,15 @@
             "items": null,
             "required": [],
             "properties": {
+               "branchId": {
+                  "title": "Branch Id",
+                  "type": "number",
+                  "minLength": 1,
+                  "maxLength": 15,
+                  "captureStages": [
+                     "GroupCreation"
+                  ]
+               },
                "partnerCode": {
                   "title": "Partner Code",
                   "type": "string",
