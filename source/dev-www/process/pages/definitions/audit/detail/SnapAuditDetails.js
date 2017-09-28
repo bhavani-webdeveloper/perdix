@@ -24,35 +24,15 @@ irf.pageCollection.factory(irf.page("audit.detail.SnapAuditDetails"), ["$log", "
                         var saaid = model.snap_audit_data[i].snap_audit_area_id;
                         var snap_audit_data = model.snap_audit_data[i];
                         snapAuditDetails.push({
-                            "type": "section",
-                            "htmlClass": "row",
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "col-sm-6",
-                                "items": [{
-                                    "key": "snap_audit_data[" + i + "].description",
-                                    "type": "string",
-                                    "readonly": true
-                                }]
-                            }, {
-                                "type": "section",
-                                "htmlClass": "col-sm-6",
-                                "items": [{
-                                    "key": "snap_audit_data[" + i + "].observations",
-                                    "type": "string"
-                                }]
-                            }]
+                           "key": "snap_audit_data[" + i + "].observations",
+                           "title": model.snap_audit_data[i].description,
+                           "type":"textarea"
                         });
-
                     };
 
                     self.form = [{
                         "type": "box",
-                        "title": "SNAP_AUDIT_DATA",
-                        "items": snapAuditDetails
-                    }, {
-                        "type": "box",
-                        "title": "SNAP_AUDIT_INFORMATION",
+                        "title": "AUDIT_INFO",
                         "items": [{
                             "key": "snap_audit_info.audit_id",
                             "type": "string",
@@ -74,6 +54,10 @@ irf.pageCollection.factory(irf.page("audit.detail.SnapAuditDetails"), ["$log", "
                             "type": "date",
                             "readonly": true,
                         }]
+                    }, {
+                        "type": "box",
+                        "title": "SNAP_AUDIT_DATA",
+                        "items": snapAuditDetails
                     }, {
                         type: "actionbox",
                         items: [{

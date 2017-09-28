@@ -10,7 +10,6 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                 model.branchName = SessionStore.getBranch();
                 model.audit_info.auditor_id = SessionStore.getLoginname();
                 var master = Audit.offline.getAuditMaster();
-                // model.audit_info.audit_type = "Regular";
                 var auditTypeValue = [];
                 self.form = [];
                 var init = function() {
@@ -29,46 +28,32 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                         "title": "CREATE_AUDIT",
                         "items": [{
                             "key": "audit_info.auditor_id",
-                            "title": "AUDITOR_ID"
+                            "title": "AUDITOR_ID",
+                            "readonly":true
                         }, {
                             "key": "audit_info.branch_id",
                             "type": "select",
-                        }, {
-                            "key": "audit_info.report_date",
-                            "type": "date",
-                            "required": true,
-                        }, {
+                        },{
                             "key": "audit_info.audit_type",
                             "type": "select",
                             "title": "AUDIT_TYPE",
                             "titleMap": auditTypeValue
                         }, {
                             "key": "audit_info.start_date",
-                            "condition": "model.audit_info.audit_id",
                             "type": "date",
-                            "required": true,
-                            "readonly": true
+                            "required": true
                         }, {
                             "key": "audit_info.end_date",
-                            "condition": "model.audit_info.audit_id",
                             "type": "date",
                             "required": true
                         }],
                     }, {
                         "type": "actionbox",
-                        "condition": "!model.audit_info.audit_id",
                         "items": [{
                             "type": "button",
                             "title": "CREATE",
                             "style": "text-right",
                             "onClick": "actions.createAudit(model, formCtrl, form, $event)"
-                        }]
-                    }, {
-                        "type": "actionbox",
-                        "condition": "model.audit_info.audit_id",
-                        "items": [{
-                            "type": "submit",
-                            "title": "START_AUDIT"
                         }]
                     }]
                 }
@@ -91,13 +76,9 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                             },
                             "branch_id": {
                                 "title": "BRANCH_NAME",
-                                "type": "integer",
+                                "type": "string",
                                 "enumCode": "branch_id",
                                 "required": true
-                            },
-                            "report_date": {
-                                "type": "string",
-                                "title": "AUDIT_REPORT_CREATE_DATE"
                             },
                             "start_date": {
                                 "type": "string",
@@ -112,33 +93,12 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                     "required": [
                         "branch_id",
                         "audit_type",
-                        "report_date",
                         "start_date",
                         "end_date"
                     ]
                 }
             },
-            actions: {
-                submit: function(model, form, formName) {
-                    var auditId = $stateParams.pageId;
-                    PageHelper.showLoader();
-                    if (model.audit_info.start_date && model.audit_info.end_date) {
-                        model.audit_info.next_stage = "start";
-                        Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
-                            model.audit_info = res;
-                            PageHelper.showProgress("page-init", "successfully Created.", 5000);
-                            irfNavigator.goBack();
-                        }, function(errRes) {
-                            PageHelper.showErrors(errRes);
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        });
-                    } else {
-                        PageHelper.showProgress("page-init", "No Empty Column.", 5000);
-                        PageHelper.hideLoader();
-                    }
-
-                },
+            actions: {           
              createAudit: function(model, formCtrl, form, $event) {
                     PageHelper.showLoader();
                     if (model.audit_info.audit_type == 1) {
@@ -158,7 +118,9 @@ irf.pageCollection.factory(irf.page("audit.CreateRegularAudit"), ["$log", "PageH
                         }
                     } else {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id) {
-                            Audit.online.updateSnapAudit(model.audit_info).$promise.then(function(res) {
+                            model.audit_info.status = "O";
+                            model.audit_info.audit_type = 0;
+                            Audit.online.createSnapAudit(model.audit_info).$promise.then(function(res) {
                                 model.audit_info = res;
                                 PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);
                             }, function(errRes) {

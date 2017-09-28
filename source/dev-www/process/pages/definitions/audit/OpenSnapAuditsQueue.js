@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Utils", "User", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
+    function($log, Utils, User , PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
         var localFormController;
         var returnObj = {
             "type": "search-list",
@@ -20,14 +20,55 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
             },
             definition: {
                 title: "SEARCH_AUDITS",
-                searchForm: [
-                    "*"
+                searchForm: [{
+                        key: "auditor_id",
+                        title: "AUDITOR_USERID",
+                        type: "lov",
+                        inputMap: {
+                            "userName": {
+                                "key": "user_name"
+                            },
+                            "login": {
+                                "key": "login"
+                            },
+                            "branch_id": {
+                                "key": "branch_id"
+                            }
+                        },
+                        outputMap: {
+                            "login": "auditor_id",
+                            "userName": "user_name",
+                            "branch_id": "branch_id"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return User.query({
+                                'login': inputModel.login,
+                                'userName': inputModel.userName,
+                                'roleId': model.auditor_role_id,
+                                'branchName': inputModel.branch_id,
+                            }).$promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.login + ': ' + item.userName,
+                                item.branchName
+                            ];
+                        }
+                    },
+                    "branch_id",
+                    "start_date",
+                    "end_date"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "auditor_id": {
+                            "title": "AUDITOR_ID",
+                            "type": "string"
+                        },
                         "branch_id": {
                             "title": "BRANCH_ID",
                             "type": "number",
@@ -56,6 +97,14 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                             "x-schema-form": {
                                 "type": "date"
                             }
+                        },
+                        "user_name": {
+                            "title": "USER_NAME",
+                            "type": "string"
+                        },
+                        "login": {
+                            "title": "LOGIN",
+                            "type": "string"
                         }
                     }
                 },
@@ -69,12 +118,12 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                     var deferred = $q.defer();
                     Audit.online.getSnapAuditAll({
                         'audit_id': searchOptions.audit_id,
-                        'auditor_id': SessionStore.getLoginname(),
+                        'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
-                        'current_stage': 'O',
-                        'audit_type': 0,
+                        'audit_type':0,
+                        'status': 'O',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
@@ -114,6 +163,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                     },
 
                     getColumns: function() {
+                        var masterJson = Audit.offline.getAuditMaster();
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
@@ -121,11 +171,17 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                                 return Audit.utils.auditStatusHtml(full, false) + data;
                             }
                         }, {
+                            title: 'AUDITOR_ID',
+                            data: 'auditor_id'
+                        }, {
+                            title: 'AUDIT_TYPE',
+                            data: 'audit_type',
+                            render: function(data, type, full, meta) {
+                                return masterJson.audit_type[data].audit_type;
+                            }
+                        }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
-                        }, {
-                            title: 'REPORT_DATE',
-                            data: 'report_date'
                         }, {
                             title: 'START_DATE',
                             data: 'start_date'

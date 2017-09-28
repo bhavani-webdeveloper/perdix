@@ -5,7 +5,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
         PagesDefinition.getUserAllowedDefinition({
             "title": "AUDIT_DASHBOARD",
             "items": [
-                "Page/Engine/audit.CreateRegularAudit",
+                "Page/Engine/audit.CreateAudit",
                 "Page/Engine/audit.ScheduleAudit",
                 "Page/Engine/audit.ScheduledAuditsQueue",
                 "Page/Engine/audit.ScheduledAuditsViewQueue",
@@ -130,7 +130,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (osaq) {
                     Audit.online.getSnapAuditAll({
-                        'auditor_id': auditor_id
+                        'auditor_id': auditor_id,
+                        'audit_type': 0,
+                        'status' : 'O'
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
                     });
