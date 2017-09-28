@@ -216,6 +216,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "pincode": "customer.pincode",
                                     "division": "customer.locality",
                                     "region": "customer.villageName",
+                                    "taluk" : "customer.taluk",
                                     "district": {
                                         key: "customer.district"
                                     },
@@ -244,7 +245,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         inputModel.district,
                                         inputModel.state,
                                         inputModel.division,
-                                        inputModel.region
+                                        inputModel.region,
+                                        inputModel.taluk
                                     );
                                 },
                                 getListDisplayItem: function(item, index) {
@@ -319,6 +321,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 inputMap: {
                                     "mailingPincode": "customer.mailingPincode",
                                     "mailingDivision": "customer.mailingLocality",
+                                    "mailingtaluk" : "customer.mailingtaluk",
                                     "region": "customer.villageName",
                                     "mailingDistrict": {
                                         key: "customer.mailingDistrict"
@@ -348,7 +351,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         inputModel.mailingDistrict,
                                         inputModel.mailingState,
                                         inputModel.mailingDivision,
-                                        inputModel.region
+                                        inputModel.region,
+                                        inputModel.mailingtaluk
                                     );
                                 },
                                 getListDisplayItem: function(item, index) {

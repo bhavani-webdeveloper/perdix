@@ -21,14 +21,15 @@ irf.models.factory('Queries', [
             }).$promise;
         };
 
-        resource.searchPincodes = function(pincode, district, state, division, region) {
+        resource.searchPincodes = function(pincode, district, state, division, region, taluk) {
             var deferred = $q.defer();
             var request = {
                 "pincode": pincode || '',
                 "district": district || '',
                 "state": state || '',
                 "division": division || '',
-                "region": region || ''
+                "region": region || '',
+                "taluk": taluk || '',
             };
             resource.getResult("pincode.list", request, 10).then(function(records) {
                 if (records && records.results) {

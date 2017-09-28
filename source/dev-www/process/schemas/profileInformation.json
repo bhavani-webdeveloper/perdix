@@ -935,6 +935,10 @@
                     "type": ["string","null"],
                     "title": "LOCALITY"
                 },
+                "taluk": {
+                    "type": ["string","null"],
+                    "title": "TALUK"
+                },
                 "landmark": {
                     "type": ["string","null"],
                     "title": "LANDMARK"
@@ -983,6 +987,10 @@
                 "mailingLocality": {
                     "type": ["string","null"],
                     "title": "LOCALITY"
+                },
+                "mailingtaluk": {
+                    "type": ["string","null"],
+                    "title": "TALUK"
                 },
                 "mailingPincode": {
                     "type": ["string","null"],
