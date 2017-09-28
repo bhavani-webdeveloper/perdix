@@ -2734,6 +2734,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         PageHelper.showLoader();
                         if (!$stateParams.pageId && !model.loanAccount.id) {
                             reqData.loanProcessAction="SAVE";
+                            reqData.remarks = model.review.remarks;
                             IndividualLoan.create(reqData,function(resp,headers){
                                 delete resp.$promise;
                                 delete resp.$resolved;
@@ -2777,6 +2778,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             });
                         }else{
                             reqData.loanProcessAction="PROCEED";
+                            reqData.remarks = model.review.remarks;
                             if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
                                 reqData.stage = 'LoanBooking';
                             
