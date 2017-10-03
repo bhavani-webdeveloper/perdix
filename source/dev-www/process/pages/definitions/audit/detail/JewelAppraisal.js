@@ -1,16 +1,18 @@
 irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
     function($log, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var branch = SessionStore.getBranch();
-            var validateFields = function(model) {
-               for(i in model.jewel_appraisal.jewel_details){
+        var validateFields = function(model) {
+            for (i in model.jewel_appraisal.jewel_details) {
                 var net = model.jewel_appraisal.jewel_details[i].net;
                 var gross = model.jewel_appraisal.jewel_details[i].gross;
-                 if (net > gross) {
-                 PageHelper.setError({message: "Net weight should be less than Gross weight"});
-                 return false;
+                if (net > gross) {
+                    PageHelper.setError({
+                        message: "Net weight should be less than Gross weight"
+                    });
+                    return false;
+                }
+                return true;
             }
-            return true;
-           }
         };
 
         return {
@@ -91,11 +93,6 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     }, {
                         key: "jewel_appraisal.jewel_details[].comments",
                         required: true
-                    }, {
-                        key: "jewel_appraisal.jewel_details[].button1",
-                        type: "button",
-                        title: "ADD_DETAILS",
-                        "onClick": "actions.add(model, formCtrl, form, $event)"
                     }]
 
                 }]
@@ -122,11 +119,10 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     }]
                 }]
             }, {
-                "type": "actionbox",
-                "items": [{
-                    title: "SAVE",
-                    type: "button",
-                    "onClick": "actions.save(model, form, formCtrl)"
+                type: "actionbox",
+                items: [{
+                    type: "submit",
+                    title: "UPDATE"
                 }]
             }],
             schema: {
@@ -216,13 +212,14 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 },
             },
             actions: {
-                add: function(model, formCtrl, form, $event) {
+                submit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateFields(model)) return;
+                        var reqData = model.jewel_appraisal;
                         if (model.$isOffline) {
-                            Audit.offline.setJewelAppraisal(model.audit_id, model.jewel_appraisal).then(function(res) {
-                                model.jewel_appraisal.jewel_details = res;
+                            Audit.offline.setJewelAppraisal(model.audit_id, reqData).then(function(res) {
+                                model.jewel_appraisal = res;
                                 PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
                                 irfNavigator.goBack();
                             }, function(errRes) {
@@ -236,7 +233,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                         }
                     })
                 },
-                // save: function(model, formCtrl, form, $event) {
+                // submit: function(model, formCtrl, form, $event) {
                 //     PageHelper.clearErrors();
                 //     formHelper.validate(formCtrl).then(function() {
                 //         if (model.$isOffline) {

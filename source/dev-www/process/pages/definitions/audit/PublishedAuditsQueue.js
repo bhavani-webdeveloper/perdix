@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","utils", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
-    function($log, utils, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Utils", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
+    function($log, Utils, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
         var returnObj = {
             "type": "search-list",
             "title": "PUBLISHED_AUDITS",

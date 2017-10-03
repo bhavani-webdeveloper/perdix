@@ -29,15 +29,20 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                         "items": [{
                             "key": "audit_info.auditor_id",
                             "title": "AUDITOR_ID",
-                            "readonly":true
+                            "readonly": true
                         }, {
                             "key": "audit_info.branch_id",
                             "type": "select",
-                        },{
+                        }, {
                             "key": "audit_info.audit_type",
                             "type": "select",
                             "title": "AUDIT_TYPE",
                             "titleMap": auditTypeValue
+                        }, {
+                            "key": "audit_info.report_date",
+                            "condition": "model.audit_info.audit_type == 'Regular'",
+                            "type": "date",
+                            "required": true,
                         }, {
                             "key": "audit_info.start_date",
                             "type": "date",
@@ -75,9 +80,13 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             },
                             "branch_id": {
                                 "title": "BRANCH_NAME",
-                                "type": "string",
+                                "type": "integer",
                                 "enumCode": "branch_id",
                                 "required": true
+                            },
+                            "report_date": {
+                                "type": "string",
+                                "title": "AUDIT_REPORT_CREATE_DATE"
                             },
                             "start_date": {
                                 "type": "string",
@@ -93,12 +102,13 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                         "branch_id",
                         "audit_type",
                         "start_date",
+                        "report_date",
                         "end_date"
                     ]
                 }
             },
-            actions: {           
-             createAudit: function(model, formCtrl, form, $event) {
+            actions: {
+                createAudit: function(model, formCtrl, form, $event) {
                     PageHelper.showLoader();
                     if (model.audit_info.audit_type == 1) {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id && model.audit_info.report_date) {

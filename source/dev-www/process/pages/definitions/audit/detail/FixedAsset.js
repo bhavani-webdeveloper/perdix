@@ -246,7 +246,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                         type: "actionbox",
                         items: [{
                             type: "submit",
-                            title: "SAVE"
+                            title: "UPDATE"
                         }]
                     }];
 

@@ -86,8 +86,8 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                                         "key": "portfolio_stats.cash_holding.cash_on_hand[" + i + "].units_on_hand",
                                         "type": "number",
                                         "onChange": function(modelValue, form, model) {
-                                            model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash = model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].units_on_hand * model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].denomination;                                         
-                                            
+                                            model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash = model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].units_on_hand * model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].denomination;
+
                                             model.total = model.total + model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash;
                                             model.portfolio_stats.sum_total_cash = model.total;
                                         }
@@ -98,8 +98,8 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                                     "items": [{
                                         "key": "portfolio_stats.cash_holding.cash_on_hand[" + i + "].total_cash",
                                         "type": "number",
-                                        "readonly": true                                    
-                                        
+                                        "readonly": true
+
                                     }]
                                 }]
                             });
@@ -349,7 +349,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         type: "actionbox",
                         items: [{
                             type: "submit",
-                            title: "SAVE"
+                            title: "UPDATE"
                         }]
                     }];
 

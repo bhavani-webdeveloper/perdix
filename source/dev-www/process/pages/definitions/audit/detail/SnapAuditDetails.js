@@ -62,7 +62,7 @@ irf.pageCollection.factory(irf.page("audit.detail.SnapAuditDetails"), ["$log", "
                         type: "actionbox",
                         items: [{
                             type: "submit",
-                            title: "SAVE"
+                            title: "UPDATE"
                         }]
                     }];
                 };
@@ -121,8 +121,8 @@ irf.pageCollection.factory(irf.page("audit.detail.SnapAuditDetails"), ["$log", "
                     PageHelper.clearErrors();
                     PageHelper.showLoader();
                     var reqData = model.snap_audit;                    
-                    Audit.online.updateSnapAudit(reqData.snap_audit_data).$promise.then(function(res) {
-                        model.snap_audit_data = res.snap_audit_data;
+                    Audit.online.updateSnapAudit(reqData).$promise.then(function(res) {
+                        model.snap_audit = res;
                         PageHelper.showProgress("auditId", "Snap Audit Updated Successfully.", 3000);
                         irfNavigator.goBack();
                     }, function(errRes) {
