@@ -434,12 +434,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                                     .$promise
                                     .then(function(res) {
                                         model.loanAccount = res.loanAccount;
-                                        $state.go("Page.Engine", {
-                                            pageName: "loans.individual.booking.SimpleLoanInput",
-                                            pageId: model.loanAccount.id
-                                        }, {
-                                            reload: true
-                                        });
+                                        PageHelper.showProgress("loan-create", "Loan Created", 5000);
                                     }, function(httpRes) {
                                         PageHelper.showErrors(httpRes);
                                     })
