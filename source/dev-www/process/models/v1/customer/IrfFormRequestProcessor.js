@@ -126,7 +126,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         orderNo: 160,
                         key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
-                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER'",
                         type: "qrcode",
                         onCapture: function(result, model, form) {
                             $log.info(result); // spouse id proof
