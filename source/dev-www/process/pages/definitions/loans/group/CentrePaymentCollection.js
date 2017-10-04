@@ -45,7 +45,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				model._offlineKey = formCtrl.$name+"Download" + "__" + SessionStore.getBranch();
 				var collectionData = StorageService.retrieveJSON(model._offlineKey);
 				model._storedData  = $stateParams.pageData;
-				model.collectionDemandSummary.centre = null;
+				model.collectionDemandSummary.centreId = 0;
 				var branch1 = formHelper.enum('branch_id').data;
 	            for (var i = 0; i < branch1.length; i++) {
 	                if ((branch1[i].name) == SessionStore.getBranch()) {
@@ -78,7 +78,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		offline: true,
 		getOfflineDisplayItem: function(item, index){
 			return [
-				'Centre: '+item["collectionDemandSummary"]["centre"] + ' - ' + item["collectionDemandSummary"]["demandDate"],
+				'Centre: '+item["collectionDemandSummary"]["centreId"] + ' - ' + item["collectionDemandSummary"]["demandDate"],
 				'Total: '+item["totalToBeCollected"],
 				'Collected: '+item["collected"]
 			]
@@ -108,26 +108,22 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"readonly": false
 						},
 						{
-							"key":"collectionDemandSummary.centre",
+							"key":"collectionDemandSummary.centreId",
 							"type":"select",
 							"title": "CENTRE",
 							"enumCode": "centre",
 							filter: {
-                         				"parentCode": "branch_id"
-                         			},
-                        	parentEnumCode:"branch_id",
-                        	parentValueExpr:"model.customerBranchId",
-
-
+								"parentCode": "branch_id"
+							},
+							parentEnumCode:"branch_id",
+							parentValueExpr:"model.customerBranchId",
 							"condition": "model._mode!=='VIEW'",
 							"onChange": function(modelValue, form, model) {
 								model.totalToBeCollected = 0;
 								model.collected = 0;
 								model.groupCollectionDemand = [];
 								var collectionDemands = model._storedData.collectionDemands;
-								var centreName = $filter('filter')(form.titleMap, {value:modelValue}, true)[0].name;
-								model._centreName = centreName;
-								var centreDemands = $filter('filter')(collectionDemands, {centre:centreName}, true);
+								var centreDemands = $filter('filter')(collectionDemands, {centreId:modelValue}, true);
 								var totalToBeCollected = 0;
 								var groups = {};
 								_.each(centreDemands, function(v,k){
@@ -172,7 +168,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centre",
+			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centreId",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
 				"fullwidth": true,
@@ -308,7 +304,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},{
 			"type": "box",
 			"title": "COLLECTION",
-			"condition": "model._storedData && !model._storedData.expired && model.collectionDemandSummary.centre",
+			"condition": "model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId",
 			"items": [
 				{
 					"key": "totalToBeCollected",
@@ -629,7 +625,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 					return;
 				}*/
-				if (!(model._storedData && !model._storedData.expired && model.collectionDemandSummary.centre)) {
+				if (!(model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId)) {
 					PM.pop('collection-demand', 'Demand not avilable / Centre is mandatory', 5000);
 					return;
 				}
@@ -648,14 +644,14 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 
 				var deferred = $q.defer();
 				var fdate = moment(model.collectionDemandSummary.demandDate).format('YYYY-MM-DD');
-				var skey = model.collectionDemandSummary.centre + fdate;
+				var skey = model.collectionDemandSummary.centreId + fdate;
 				var off = StorageService.getJSON('CentrePaymentCollection', skey);
 				if (!model.$$STORAGE_KEY$$ && _.isObject(off) && !_.isEmpty(off)) {
 					PM.pop('collection-demand', 'Collection already saved. Cannot process again.', 5000);
 					return;
 				}
 				if (_.isObject(off) && !_.isEmpty(off)) {
-					Utils.confirm(model.collectionDemandSummary.centre+' Demand for '+fdate+' already saved. Do you want to overwrite?', 'Demand overwrite!').then(function(){
+					Utils.confirm(model.collectionDemandSummary.centreId+' Demand for '+fdate+' already saved. Do you want to overwrite?', 'Demand overwrite!').then(function(){
 						model._storedData = null;
 						model.$$STORAGE_KEY$$ = skey;
 						deferred.resolve();
@@ -702,7 +698,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						
 						//var collectionDemandSummary = _.clone(cds);
 						var collectionDemandSummary = {};
-						collectionDemandSummary.centre = cds.centre;
+						collectionDemandSummary.centreId = cds.centreId;
 						collectionDemandSummary.demandDate = cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD');
 						collectionDemandSummary.latitude = cds.latitude;
 						collectionDemandSummary.longitude = cds.longitude;
@@ -729,7 +725,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							collectionDemandSummary: collectionDemandSummary,
 							collectionDemands: _.clone(cd)
 						};
-						//requestObj.collectionDemandSummary.centre = model._centreName;
 						$log.info(requestObj);
 						PM.pop('collection-demand', 'Submitting...');
 						LoanProcess.collectionDemandUpdate(requestObj,
@@ -753,11 +748,11 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			"properties": {
 				"collectionDemandSummary": {
 					"type": "object",
-					"required": ["centre", "latitude", "longitude", "photoOfCentre"],
+					"required": ["centreId", "latitude", "longitude", "photoOfCentre"],
 					"properties": {
-						"centre": {
+						"centreId": {
 							"title": "CENTRE",
-							"type": ["string", "number"]
+							"type": "number"
 						},
 						"allAttendance": {
 							"title": "ALL_ATTENDANCE",
@@ -880,8 +875,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 											"type": "string",
 											"title": "PAYMENT_MODE"
 										},
-										"centre": {
-											"type": "string",
+										"centreId": {
+											"type": "number",
 											"title": "CENTRE"
 										}
 									}
