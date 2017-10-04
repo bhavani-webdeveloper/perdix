@@ -1053,7 +1053,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "htmlClass": "col-sm-2",
                                                     "items": [
                                                         {
-                                                            "html": "{{ model.cbsLoan.transactions[arrayIndex].transactionId }} / <strong>{{ model.cbsLoan.transactions[arrayIndex].transactionName }}</strong>",
+                                                            "html": "{{ model.cbsLoan.transactions[arrayIndex].transactionId }} / <strong>{{ model.cbsLoan.transactions[arrayIndex].transactionName == 'Fee Charge' ? (model.cbsLoan.transactions[arrayIndex].description ? model.cbsLoan.transactions[arrayIndex].description : model.cbsLoan.transactions[arrayIndex].transactionName ) : model.cbsLoan.transactions[arrayIndex].transactionName}}</strong>",
                                                             "type": "section"
                                                         }
                                                     ]
