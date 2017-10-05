@@ -754,24 +754,86 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                 saveACH: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     Utils.confirm("Are You Sure?")
-                        .then(
-                            function(){
-                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                                reqData.loanProcessAction = "SAVE";
-                                PageHelper.showLoader();
-                                PageHelper.showProgress("update-loan", "Working...");
-                                IndividualLoan.update(reqData)
-                                    .$promise
-                                    .then(function(res){
-                                        PageHelper.showProgress("update-loan", "ACH Details saved...");
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(httpRes){
-                                        PageHelper.hideLoader();
-                                    })
-                            }
-                        );
+                    .then(
+                        function() {
+                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                            var dummy = null;
+                            reqData.loanProcessAction = "SAVE";
+                            PageHelper.showLoader();
+                            PageHelper.showProgress("update-loan", "Working...");
+                            IndividualLoan.update(reqData)
+                                .$promise
+                                .then(
+                                function(res) {
+                                    model.loanAccount = _.cloneDeep(res.loanAccount);
+                                    Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
+                                    .then(
+                                        function(docs) {
+                                            console.log(dummy);
+                                            var docsForProduct = [];
+                                            for (var i = 0; i < docs.length; i++) {
+                                                var doc = docs[i];
+                                                docsForProduct.push({
+                                                    docTitle: doc.document_name,
+                                                    docCode: doc.document_code,
+                                                    formsKey: doc.forms_key,
+                                                    downloadRequired: doc.download_required
+                                                })
+                                            }
+                                            var loanDocuments = model.loanAccount.loanDocuments;
+                                            var availableDocCodes = [];
+
+                                            for (var i = 0; i < loanDocuments.length; i++) {
+                                                loanDocuments[i].documentId = res.loanAccount.loanDocuments[i].documentId;
+                                                availableDocCodes.push(loanDocuments[i].document);
+                                                var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
+                                                /* To add flag whether to show or not */
+                                                loanDocuments[i].isHidden = false;
+                                                if (loanDocuments[i].documentStatus == 'APPROVED'){
+                                                    loanDocuments[i].isHidden = true;
+                                                }
+
+                                                if (documentObj != null) {
+                                                    loanDocuments[i].$title = documentObj.docTitle;
+                                                    loanDocuments[i].$key = documentObj.formsKey;
+                                                    loanDocuments[i].$formsKey = documentObj.formsKey;
+                                                    loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
+                                                } else {
+                                                    if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
+                                                        loanDocuments[i].$title = loanDocuments[i].document;
+                                                    } else {
+                                                        loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
+                                                    }
+                                                }
+                                            }
+                                            for (var i = 0; i < docsForProduct.length; i++) {
+                                                if (_.indexOf(availableDocCodes, docsForProduct[i].docCode) == -1) {
+                                                    loanDocuments.push({
+                                                        document: docsForProduct[i].docCode,
+                                                        $downloadRequired: docsForProduct[i].downloadRequired,
+                                                        $title: docsForProduct[i].docTitle,
+                                                        $formsKey: docsForProduct[i].formsKey,
+                                                        disbursementId: model.loanAccount.disbursementSchedules[0].id,
+                                                        isHidden: false
+                                                    })
+                                                }
+                                            }
+                                            PageHelper.hideLoader();
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showErrors(httpRes);
+                                        }
+                                    );
+                                    PageHelper.showProgress("update-loan", "ACH Details saved...", 3000);
+                                }, 
+                                function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                    PageHelper.hideLoader();
+                                }
+                            );
+                        }
+                    );
                 },
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
