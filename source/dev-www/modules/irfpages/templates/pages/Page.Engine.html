@@ -3,12 +3,10 @@
         <h1>
             <span>{{ page.title | translate }}</span> <small>{{ page.subTitle | translate }}</small>
             <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'OFFLINE_SAVED_RECORDS'|translate}}</a></small></span>
+            <span class="button-holder pull-right">
+                <button ng-show="page.newOffline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i> {{ (model.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
+            </span>
         </h1>
-<!--         <ol ng-if="breadcrumb" class="breadcrumb">
-            <li ng-repeat="bc in breadcrumb" ng-class="{active:$last}">
-                <a ng-if="!$last" href="#"><i ng-if="$first" class="fa fa-map-signs"></i>{{ bc }}</a>{{ $last ? bc : '' }}
-            </li>
-        </ol> -->
     </section>
 
     <section ng-show="showHeads" class="content">
@@ -30,7 +28,7 @@
     <section ng-hide="error" class="content">
         <div ng-switch="page.type" class="row page-row">
             <irf-sf ng-switch-when="schema-form"
-                initialize="page.initialize(model, form, formCtrl)"
+                initialize="initialize(model, form, formCtrl)"
                 irf-schema="schema"
                 irf-form="page.form"
                 irf-actions="page.actions"

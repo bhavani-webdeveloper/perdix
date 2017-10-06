@@ -82,12 +82,11 @@ define({
                                 model = m;
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                     for (i = 0; i < resp.length; i++) {
-                                        $log.info("hi");
                                         resp[i].updatedOn = moment(resp[i].updatedOn).format("DD-MM-YYYY");
-                                        $log.info(resp[i].updatedOn);
                                     }
                                     model.group.remarksHistory = resp;
                                 }).finally(function(){
+                                    irfProgressMessage.pop("cgt1-init", "Loading, Please Wait...", 10);
                                     PageHelper.hideLoader();
                                 });
                             }, function(m) {
@@ -105,15 +104,7 @@ define({
                     irfNavigator.goBack();
                 }
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    "Group ID : " + item.group.id,
-                    "Group Code : " + item.group.groupCode,
-                    "CGT Date : " + item.group.cgtDate1
-                ]
-            },
-
+            newOffline: true,
             form: [{
                 "type":"box",
                 "title":"START_CGT1",
@@ -473,12 +464,6 @@ define({
                         }]
                     }
                 ]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },]
             }],
 
             schema: {
@@ -507,7 +492,7 @@ define({
             },
 
             actions: {
-               preSave: function(model, form, formName) {},
+                // preSave: function(model, form, formName) {},
                 startCGT1: function(model, form) {
                     model.group.cgtDate1 = new Date();
                     PageHelper.showLoader();

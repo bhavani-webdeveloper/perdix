@@ -216,10 +216,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 
 irf.commons.factory("formHelper",
 ["$log", "$state", "irfStorageService", "SessionStore", "entityManager", "irfProgressMessage",
-"$filter", "Files", "$q", "elementsUtils", "$timeout",
+"$filter", "Files", "$q", "elementsUtils", "$timeout", "Utils",
 function($log, $state, irfStorageService, SessionStore, entityManager, irfProgressMessage,
-	$filter, Files, $q, elementsUtils, $timeout){
-	return {
+	$filter, Files, $q, elementsUtils, $timeout, Utils){
+	var helperObj = {
 		enum: function(key) {
 			// console.warn(key);
 			var r = irfStorageService.getMaster(key);
@@ -304,22 +304,51 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			}
 			return deferred.promise;
 		},
-    	getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
-	        var deferred = $q.defer();
-	        Files.getBase64DataFromFileId(fileId, params,stripDescriptors).then(function(fpData){
-				deferred.resolve(fpData);
-	        }, function(err){
-				deferred.reject(err);
-			});
-	        return deferred.promise;
-	    },
-	    
-        resetFormValidityState: function(formCtrl){
-
-            formCtrl.$setPristine();
-        }
-
+		getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
+			return Files.getBase64DataFromFileId(fileId, params,stripDescriptors);
+		},
+		resetFormValidityState: function(formCtrl){
+			formCtrl.$setPristine();
+		},
+		isOffline: function() {
+			return SessionStore.session.offline;
+		},
+		newOffline: {
+			getKey: function(pageName) {
+				return "NewOffline_" + pageName.replace(/\./g, '$');
+			},
+			saveOffline: function(pageName, item) {
+				irfStorageService.putJSON(this.getKey(pageName), item);
+			},
+			getOfflineRecords: function(pageName) {
+				var items = irfStorageService.getMasterJSON(this.getKey(pageName));
+				var offlineItems = [], idx = 0;
+				_.forOwn(items, function(value, key) {
+					offlineItems[idx] = value;
+					idx++;
+				});
+				$log.info(offlineItems);
+				return offlineItems;
+			},
+			openOfflineRecord: function(pageName, item) {
+				entityManager.setModel(pageName, item.model);
+				$state.go('Page.Engine', {
+					pageName: pageName,
+					pageId: item.pageId,
+					pageData: item.pageData
+				});
+			},
+			deleteOfflineRecord: function(pageName, item) {
+				var deferred = $q.defer();
+				Utils.confirm("Are You Sure?").then(function() {
+					irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), item.$$STORAGE_KEY$$);
+					deferred.resolve();
+				}, deferred.reject);
+				return deferred.promise;
+			}
+		}
 	};
+	return helperObj;
 }]);
 
 

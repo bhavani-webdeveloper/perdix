@@ -119,6 +119,21 @@ define({
 							}
 						}];
 					}
+				},
+				offlineListOptions: {
+					pageName: "loans.group.CGT1",
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'model.group.id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'model.group.partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'model.group.groupName'
+						}]
+					}
 				}
 			}
 		};

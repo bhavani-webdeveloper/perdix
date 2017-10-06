@@ -49,7 +49,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
     pDef.getRoleAllowedPageList = function() {
         var deferred = $q.defer();
         var localPages = SessionStore.getItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname());
-        pDef.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length)).then(function(response){
+        pDef.getPagesDefinition(SessionStore.getLoginname(), localPages? "yes": "").then(function(response){
             delete response.$promise;
             delete response.$resolved;
             userAllowedPages = response;
@@ -57,7 +57,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
             deferred.resolve(response);
         }, function(error) {
             $log.error(error);
-            if (localPages && localPages.length) {
+            if (localPages) {
                 $log.info("old menu in use");
                 userAllowedPages = localPages;
                 deferred.resolve(localPages);
