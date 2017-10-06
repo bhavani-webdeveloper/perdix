@@ -30,6 +30,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
+                        "CustomerInformation.spouseDateOfBirth": {
+                            "required": true,
+                        },
                         "CustomerInformation.fatherFirstName" : {
                             schema: {
                                 pattern: "^[a-zA-Z\. ]+$",
@@ -265,6 +268,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "CustomerInformation.spouseFirstName" : {
                             "required": true
+                        },
+                        "CustomerInformation.spouseDateOfBirth": {
+                            "required": true,
                         },
                         "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
                             "required": false
@@ -528,6 +534,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "CustomerInformation.maritalStatus",
                         "CustomerInformation.fatherFirstName",
                         "CustomerInformation.spouseFirstName",
+                        "CustomerInformation.spouseDateOfBirth",
                         "CustomerInformation.religion",
                         "CustomerInformation.caste",
                         "CustomerInformation.dateOfBirth",                       
@@ -694,6 +701,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "CustomerInformation.maritalStatus",
                         "CustomerInformation.fatherFirstName",
                         "CustomerInformation.spouseFirstName",
+                        "CustomerInformation.spouseDateOfBirth",
                         "CustomerInformation.religion",
                         "CustomerInformation.caste",
                         "CustomerInformation.dateOfBirth",

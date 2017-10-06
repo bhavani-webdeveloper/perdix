@@ -479,6 +479,41 @@ define({
                         "key": "group.jlgGroupMembers[].witnessFirstName",
                         "required": true,
                         "title": "WITNESS_NAME",
+                        "condition" : "model.siteCode != 'KGFS'",
+                        "bindMap": {"URN": "group.jlgGroupMembers[arrayIndex].urnNo"},
+                        "lovonly": true,
+                        "type": "lov",
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form, model, context) {
+                            var familyMembers = [];
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
+                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                    familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": familyMembers.length
+                                },
+                                body: familyMembers
+                            });
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.name,
+                                data.relationShip,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName=valueObj.name;
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship=valueObj.relationShip;
+                        }       
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessFirstName",
+                        "required": true,
+                        "title": "WITNESS_NAME",
+                        "condition" : "model.siteCode == 'KGFS'",
                         "type": "lov",
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
