@@ -1390,6 +1390,15 @@
                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                      ]
                   },
+                  "relationshipWithApplicant":{
+                     "title":"relationShipWithApplicant",
+                     "type":"string",
+                     "minLength":0,
+                     "maxLength":100,
+                     "captureStages":[
+                        "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
+                     ]
+                  },
                   "psychometricRequired":{
                      "title":"psychometricRequired",
                      "type":"string",

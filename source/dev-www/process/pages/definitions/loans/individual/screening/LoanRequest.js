@@ -1027,6 +1027,75 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 ]
             },
             {
+                type: "box",
+                title: "LOAN_CUSTOMER_RELATIONS",
+                 "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                items: [{
+                    key: "loanAccount.loanCustomerRelations",
+                    type: "array",
+                    add: null,
+                    remove: null,
+                    title: "LOAN_CUSTOMER_RELATIONS",
+                    items: [{
+                        key: "loanAccount.loanCustomerRelations[].customerId",
+                        title: "CUSTOMER_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].urn",
+                        title: "URN_NO",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].loanId",
+                        title: "LOAN_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relation",
+                        readonly: true,
+                        title: "RELATIONSHIP"
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                        title: "RELATIONSHIP_WITH_APPLICATION",
+                        type:"select",
+                        enumCode:"relation"
+                    }]
+                }]
+            },
+            {
+                type: "box",
+                title: "LOAN_CUSTOMER_RELATIONS",
+                "readonly":true,
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                items: [{
+                    key: "loanAccount.loanCustomerRelations",
+                    type: "array",
+                    add: null,
+                    remove: null,
+                    title: "LOAN_CUSTOMER_RELATIONS",
+                    items: [{
+                        key: "loanAccount.loanCustomerRelations[].customerId",
+                        title: "CUSTOMER_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].urn",
+                        title: "URN_NO",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].loanId",
+                        title: "LOAN_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relation",
+                        readonly: true,
+                        title: "RELATIONSHIP"
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                        title: "RELATIONSHIP_WITH_APPLICATION",
+                        type:"select",
+                        enumCode:"relation"
+                    }]
+                }]
+            },
+            {
                 "type": "box",
                 "title": "DEDUCTIONS_FROM_LOANAMOUNT",
                 "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",

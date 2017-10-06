@@ -652,7 +652,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             //     PageHelper.showProgress("loan-repay","Back dated cheques are not accepted.",5000);
                             //     return;
                             // }
-
                         }
                         
                         // if (model._screen && model._screen =='BounceQueue'){
@@ -710,14 +709,19 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                             if(model.repayment.id){
                                 if (postData.loanCollection.instrumentType == 'CASH') {
-                                    resp.stage = "Deposit";
+                                    postData.stage = "Deposit";
                                 } else if (postData.loanCollection.instrumentType == 'ACH') {
-                                    resp.loanCollection.instrumentType = "NEFT";
-                                    resp.stage = "Completed";
+                                    postData.loanCollection.instrumentType = "NEFT";
+                                    postData.loanCollection.scheduleDemandAmount=model.repayment.amount;
+                                    postData.loanCollection.feeWaiverAmount = 0;
+                                    postData.loanCollection.penalInterestWaiverAmount = 0;
+                                    postData.loanCollection.feeAmount = 0;
+                                    postData.loanCollection.securityEmiAmount = 0;
+                                    postData.stage = "Completed";
                                 } else if (postData.loanCollection.instrumentType == 'Suspense') {
-                                    resp.stage = "CreditValidation";
+                                    postData.stage = "CreditValidation";
                                 } else {
-                                    resp.stage = "BRSValidation";
+                                    postData.stage = "BRSValidation";
                                 }
                                 postData.repaymentProcessAction = "PROCEED";
                                 postData.loanCollection.id = model.repayment.id;
@@ -743,6 +747,11 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             resp.stage="Deposit";
                                         }else if (postData.loanCollection.instrumentType == 'ACH'){
                                            resp.loanCollection.instrumentType ="NEFT";
+                                           resp.loanCollection.scheduleDemandAmount=resp.loanCollection.repaymentAmount;
+                                           resp.loanCollection.feeWaiverAmount = 0;
+                                           resp.loanCollection.penalInterestWaiverAmount = 0;
+                                           resp.loanCollection.feeAmount = 0;
+                                           resp.loanCollection.securityEmiAmount = 0;
                                            resp.stage = "Completed";
                                         }
                                         else if (postData.loanCollection.instrumentType == 'Suspense'){

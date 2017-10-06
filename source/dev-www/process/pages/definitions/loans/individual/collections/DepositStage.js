@@ -117,7 +117,7 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                     "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "col-xs-2 col-md-2",
+                        "htmlClass": "col-xs-1 col-md-1",
                         "items": [{
                             "key":"pendingCashDeposits[].check",
                             "title":" ",
@@ -134,7 +134,7 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-6 col-md-6",
+                        "htmlClass": "col-xs-5 col-md-5",
                         "items": [{
                             "key":"pendingCashDeposits[].customer_name",
                             "readonly":true,
@@ -144,7 +144,7 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-2 col-md-2",
+                        "htmlClass": "col-xs-4 col-md-4",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
                             "readonly":true,
