@@ -92,6 +92,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         selectable: false,
                         paginate: false,
                         searching: false,
+                        "tableConfig": {
+                            "responsive": {
+                                "details": {
+                                    "display": $.fn.dataTable.Responsive.display.childRowImmediate
+                                }
+                            }
+                        },
                         getColumns: function() {
                             return [{
                                 title: 'ACTION',
