@@ -9,7 +9,6 @@
             "branchId",
             "centreAddress",
             "centreAltitude",
-            "centreCode",
             "centreName"
          ],
          "properties": 
@@ -115,6 +114,10 @@
             "locality": {
               "type": ["string","null"],
               "title": "LOCALITY"
+            },
+            "taluk": {
+              "type": ["string","null"],
+              "title": "TALUK"
             }
          }
    }

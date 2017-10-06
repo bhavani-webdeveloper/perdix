@@ -35,10 +35,6 @@ define({
          					"centreName": {
            					 "type": ["string", "null"],
                              "title": "CENTRE_NAME_"
-         					},
-         					"centreCode": {
-           					 "type": ["string", "null"],
-                             "title": "CODE"
          					}
 
       					},

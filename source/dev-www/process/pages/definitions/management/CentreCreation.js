@@ -79,10 +79,6 @@ define({
                                         condition:"model.editMode"
                                     },
                                     {
-                                        key: "centre.centreCode",
-                                        condition:"model.editMode"
-                                    },
-                                    {
                                         key: "centre.centreAddress",
                                         type: "textarea"     
                                     },
@@ -94,6 +90,9 @@ define({
                                         autolov: true,
                                         inputMap: {
                                             "pincode": "centre.pincode",
+                                            "division": "centre.locality",
+                                            "region": "centre.villageName",
+                                            "taluk" : "centre.taluk",
                                             "district": {
                                                 key: "centre.district"
                                             },
@@ -120,7 +119,10 @@ define({
                                             return Queries.searchPincodes(
                                                     inputModel.pincode,
                                                     inputModel.district,
-                                                    inputModel.state
+                                                    inputModel.state,
+                                                    inputModel.division,
+                                                    inputModel.region,
+                                                    inputModel.taluk
                                             );
                                         },
                                         getListDisplayItem: function(item, index) {
