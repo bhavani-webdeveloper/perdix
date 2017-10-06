@@ -1407,6 +1407,15 @@
                      "captureStages":[
                         "Application", "Screening", "LoanInitiation"
                      ]
+                  },
+                  "relationshipWithApplicant":{
+                     "title":"relationshipWithApplicant",
+                     "type":"string",
+                     "minLength":0,
+                     "maxLength":3,
+                     "captureStages":[
+                        "Application", "Screening", "LoanInitiation"
+                     ]
                   }
                }
             }
@@ -1824,6 +1833,42 @@
                   },
                   "spaceAvailable": {
                       "title": "spaceAvailable",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100,
+                      "captureStages": [
+                          "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                      ]
+                  },
+				   "collateral1FilePath": {
+                      "title": "collateral1FilePath",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100,
+                      "captureStages": [
+                          "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                      ]
+                  },
+				   "collateral2FilePath": {
+                      "title": "collateral2FilePath",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100,
+                      "captureStages": [
+                          "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                      ]
+                  },
+				   "collateral3FilePath": {
+                      "title": "collateral3FilePath",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100,
+                      "captureStages": [
+                          "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                      ]
+                  },
+				   "photoFilePath": {
+                      "title": "photoFilePath",
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 100,

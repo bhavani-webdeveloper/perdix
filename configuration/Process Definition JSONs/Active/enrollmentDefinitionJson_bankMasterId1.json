@@ -2358,6 +2358,16 @@
               "Completed"
             ]
           },
+		    "photoImageId": {
+            "title": "photoImageId",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "landLineNo": {
             "title": "landLineNo",
             "type": "string",
