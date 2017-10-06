@@ -34,7 +34,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                     }
                 });
                 return rating;
-            },            
+            },
             processDisplayRecords: function(onlineAudits) {
                 var deferred = $q.defer();
                 var displayAudits = {
@@ -339,7 +339,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
 ]);
 irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "Audit", "PageHelper", "$q", "$log",
     function(irfStorageService, OfflineManager, SessionStore, Audit, PageHelper, $q, $log) {
-        if(!irf.appConfig.AMS_ENABLED) return;
+        if (!irf.appConfig.AMS_ENABLED) return;
 
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
@@ -449,7 +449,19 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.observation_classification = observation_classification;
 
-                
+                var field_verification = {};
+                for (i in response.field_verification) {
+                    field_verification[response.field_verification[i].loan_type_id] = response.field_verification[i];
+                }
+                response.field_verification = field_verification;
+
+                var book_entity = {};
+                for (i in response.book_entity) {
+                    book_entity[response.book_entity[i].entity_id] = response.book_entity[i];
+                }
+                response.book_entity = book_entity;
+
+
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
                 deferred.resolve();
