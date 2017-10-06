@@ -254,10 +254,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //     "readonly": true
                     // },
                      {
-                        "key": "loanAccount.branch",
+                        "key": "loanAccount.branchId",
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title": "BRANCH",
-                        "type": "string",
+                        "type": "select",
+                        "enumCode": "branch_id",
                         "readonly": true,
                     },
                     {

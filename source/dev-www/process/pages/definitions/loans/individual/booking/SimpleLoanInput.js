@@ -251,17 +251,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                         model.loanAccount = resp;
                         model.loanAccount.tenure = Number(resp.tenure);
                             var urns = [];                           
-                            Queries.getCustomerBasicDetails({
-                                "urns": urns
-                            }).then(
-                                function(resQuery) {
-                                    if (!_.isNull(model.loanAccount.applicant)) {
-                                        model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name
-                                    }
-                                   
-                                },
-                                function(errQuery) {}
-                            );
+                            
                         model.currentStage = resp.currentStage;
                         model.additional = model.additional || {};
 
@@ -434,6 +424,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                                     .$promise
                                     .then(function(res) {
                                         model.loanAccount = res.loanAccount;
+                                        model.loanAccount.tenure = Number(model.loanAccount.tenure);
+                                        LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
                                         PageHelper.showProgress("loan-create", "Loan Created", 5000);
                                     }, function(httpRes) {
                                         PageHelper.showErrors(httpRes);
