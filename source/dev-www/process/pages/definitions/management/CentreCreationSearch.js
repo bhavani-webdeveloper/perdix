@@ -47,6 +47,7 @@ define({
 
 				var promise = CentreCreationResource.centreSearch({
 					'branchId': searchOptions.branchId,
+					'centreName': searchOptions.centreName,
 					'per_page': pageOpts.itemsPerPage,
 					'page': pageOpts.pageNo
 				}).$promise;
