@@ -137,7 +137,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                                 model.customer.addressProofNo = aadhaarData.uid;
                                             },
                                             type:"qrcode"
-                                            
+
                                         },
                                     ]
                                 },
@@ -149,7 +149,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     startEmpty: true,
                                     "items": [
                                         {
-                                            
+
                                             key:"customer.additionalKYCs[].kyc1ProofType",
                                             type:"select",
                                             "enumCode": "identity_proof"
@@ -176,7 +176,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         {
                                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
                                             type:"date"
-                                        }   
+                                        }
                                     ]
                                 },
 
@@ -416,7 +416,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                       key:"customer.careOf",
                                       //required:true,
-                                      title:"C/O",  
+                                      title:"C/O",
                                     },
                                         "customer.doorNo",
                                         "customer.street",
@@ -573,7 +573,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                      "add": null,
                                      "remove": null,
                                     "items": [
-                                        
+
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
@@ -600,7 +600,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         }
                                      ]
                                 }
-                              
+
                             ]
             },
             {
@@ -1010,7 +1010,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         {
                                             key:"customer.customerBankAccounts[].bankStatementDocId",
                                             type:"file",
-                                            required: true,
+                                            // required: false,
                                             title:"BANK_STATEMENT_UPLOAD",
                                             fileType:"application/pdf",
                                             "category": "CustomerEnrollment",
@@ -1096,7 +1096,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].referenceFirstName",
@@ -1160,7 +1160,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },

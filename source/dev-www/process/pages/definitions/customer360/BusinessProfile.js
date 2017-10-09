@@ -25,7 +25,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                      model.customer.enterprise.isGSTAvailable = "No";
                          }
                          if(model.customer.enterprise.isGSTAvailable == "Yes"){
-                             model.customer.enterprise.companyRegistered = "YES";    
+                             model.customer.enterprise.companyRegistered = "YES";
                              model.customer.enterprise.isGSTAvailable = "YES";
                          }
                         deferred.resolve();
@@ -333,7 +333,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             var businessSectors = formHelper.enum('businessSector').data;
 
                             var selectedBusinessSector  = null;
-                            
+
                             for (var i=0;i<businessSectors.length;i++){
                                 if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
                                     selectedBusinessSector = businessSectors[i];
@@ -347,7 +347,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     out.push({
                                         name: businessSubsectors[i].name,
                                         value: businessSubsectors[i].value
-                                    })    
+                                    })
                                 }
                             }
                             return $q.resolve({
@@ -462,7 +462,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
-                            
+
                             {
                                 key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                                 title: "PARTNER_OF_ANY_OTHER_COMPANY",
@@ -498,7 +498,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         "key": "customer.landLineNo",
                         "inputmode": "number",
-                        "numberType": "tel"  
+                        "numberType": "tel"
                     },
                     "customer.doorNo",
                     "customer.street",
@@ -687,7 +687,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key:"customer.customerBankAccounts[].bankStatementDocId",
                                 type:"file",
-                                required: true,
+                                // required: true,
                                 title:"BANK_STATEMENT_UPLOAD",
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
@@ -736,8 +736,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true, 
-                                        //maximum:99,                                     
+                                        required:true,
+                                        //maximum:99,
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                     {
@@ -780,7 +780,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                            {
                                key:"customer.liabilities[].loanType",
                                type:"select",
-                               enumCode:"liability_loan_type" 
+                               enumCode:"liability_loan_type"
                            },
                            {
                                key:"customer.liabilities[].loanSource",
@@ -842,7 +842,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 fileType: "application/pdf",
                                 using: "scanner"
                             }
-                           
+
                            /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
@@ -869,7 +869,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.buyerDetails[].buyerName",
                                 title: "BUYER_NAME",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
@@ -898,7 +898,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.buyerDetails[].product",
                                 title:"PRODUCT",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
@@ -928,7 +928,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.supplierDetails",
                         title:"SUPPLIERS_DEATILS",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.supplierDetails[].supplierName",
@@ -953,9 +953,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title:"PAYABLE_OUTSTANDING",
                                 type:"amount"
                             },
-                         ] 
-                     }     
-                ] 
+                         ]
+                     }
+                ]
             },
             {
                type:"box",
@@ -1259,7 +1259,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     },
                                 ]
                             },
-                               
+
                 ]
             },
             {
@@ -1415,7 +1415,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].relationship",
@@ -1438,7 +1438,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key:"customer.verifications[].mobileNo",
                                 title:"CONTACT_NUMBER",
                                 type:"string",
-                                
+
                             },
                             {
                                 key:"customer.verifications[].address",
@@ -1499,7 +1499,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -1542,7 +1542,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         var count = 0;
                         for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != ""
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != null
                                 ) {

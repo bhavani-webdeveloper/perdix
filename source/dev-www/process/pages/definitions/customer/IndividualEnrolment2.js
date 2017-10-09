@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
             function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter){
 
-                var pageParams = { 
+                var pageParams = {
                     readonly: true
                 }
 
@@ -20,7 +20,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         }
                         if (selfExist == false){
                             PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory",5000);
-                            return false;        
+                            return false;
                         }
                     } else {
                         PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory",5000);
@@ -52,22 +52,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         var allowedCentres = [];
                         var centres = SessionStore.getCentres();
                         var centreName = [];
-                         
+
                         if(centres && centres.length)
                         {
                             for (var i = 0; i < centres.length; i++) {
                              centreName.push(centres[i].id);
                              allowedCentres.push(centres[i]);
-                            } 
+                            }
                         }
-       
+
                         model.currentStage = bundleModel.currentStage;
-                       
+
                         if (_.hasIn(model, 'loanRelation')){
                             console.log(model.loanRelation);
                             if(model.loanRelation){
                             var custId = model.loanRelation.customerId;
-                                Enrollment.getCustomerById({id:custId}) 
+                                Enrollment.getCustomerById({id:custId})
                                         .$promise
                                         .then(function(res){
                                             model.customer = res;
@@ -86,7 +86,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         })
 
                             }
-                        } 
+                        }
                         // else {
 
                             model.customer = model.customer || {};
@@ -126,7 +126,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 ]
                             }
                         // }
-                        
+
 
                         if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                                 model.customer.enterprise = {};
@@ -138,10 +138,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 if(model.loanRelation.enterpriseId)
                                 {
                                     var busId = model.loanRelation.enterpriseId;
-                                    Enrollment.getCustomerById({id:busId}) 
+                                    Enrollment.getCustomerById({id:busId})
                                         .$promise
                                         .then(function(res){
-                                            model.customer.enterprise = res.enterprise; 
+                                            model.customer.enterprise = res.enterprise;
                                         }, function(httpRes){
                                             PageHelper.showErrors(httpRes);
                                         })
@@ -199,7 +199,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     model.customer.familyMembers[i].educationStatus=obj.educationStatus;
                                     break;
                                 }*/
-                            }      
+                            }
                         },
                         "origination-stage": function(bundleModel, model, obj){
                             model.currentStage = obj
@@ -256,7 +256,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "title":"CENTRE_NAME",
                                             "type": "string",
                                             "readonly": true,
-                                            
+
                                         },
                                         "centreId":{
                                             key: "customer.centreId",
@@ -342,7 +342,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         };
 
                                         if (_.hasIn(model, 'customer.id')){
-                                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)    
+                                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
                                         }
 
                                         Enrollment.getCustomerById({id: valueObj.id})
@@ -422,7 +422,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 model.customer.addressProofNo = aadhaarData.uid;
                                             },
                                             type:"qrcode"
-                                            
+
                                         },
                                     ]
                                 },
@@ -434,7 +434,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     startEmpty: true,
                                     "items": [
                                         {
-                                            
+
                                             key:"customer.additionalKYCs[].kyc1ProofType",
                                             type:"select",
                                             "enumCode": "identity_proof"
@@ -461,7 +461,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
                                             type:"date"
-                                        }   
+                                        }
                                     ]
                                 },
                             /*    {
@@ -617,7 +617,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     //"view": "fixed",
                                     "items": [
                                         {
-                                            
+
                                             key:"customer.additionalKYCs[].kyc1ProofType",
                                             type:"select",
                                             "enumCode": "identity_proof"
@@ -649,7 +649,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
                                             type:"date"
                                         }
-                                        
+
                                     ]
                                 },
                                /* {
@@ -1140,7 +1140,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     {
                                       key:"customer.careOf",
                                       //required:true,
-                                      title:"C/O",  
+                                      title:"C/O",
                                     },
                                         "customer.doorNo",
                                         "customer.street",
@@ -1372,7 +1372,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                      "add": null,
                                      "remove": null,
                                     "items": [
-                                        
+
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
@@ -1392,7 +1392,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }
                                      ]
                                 }
-                              
+
                             ]
                         },
                         {
@@ -2184,7 +2184,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.customerBankAccounts[].bankStatementDocId",
                                             type:"file",
-                                            required: true,
                                             title:"BANK_STATEMENT_UPLOAD",
                                             fileType:"application/pdf",
                                             "category": "CustomerEnrollment",
@@ -2396,7 +2395,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             /*{
                                 key:"customer.verifications[].relationship",
@@ -2483,7 +2482,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -2496,7 +2495,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             /*{
                                 key:"customer.verifications[].relationship",
@@ -2569,8 +2568,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             ]
                             }
-                            
-                         ] 
+
+                         ]
                     },
                 ]
             },
@@ -3124,16 +3123,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                     case 'Fornightly': incomes[i].monthsPerYear=26; break;
                                                     case 'Fortnightly': incomes[i].monthsPerYear=26; break;
                                                 }
-                                            }    
+                                            }
                                         }
-                                        
+
                                     }
                                 }catch(err){
                                     console.error(err);
                                 }
 
                                 EnrollmentHelper.fixData(reqData);
-                                if (reqData.customer.addressProof == 'Aadhar Card' && 
+                                if (reqData.customer.addressProof == 'Aadhar Card' &&
                                     !_.isNull(reqData.customer.addressProofNo)){
                                     reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
                                 }
@@ -3242,9 +3241,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                     case 'Fornightly': incomes[i].monthsPerYear=26; break;
                                                     case 'Fortnightly': incomes[i].monthsPerYear=26; break;
                                                 }
-                                            }    
+                                            }
                                         }
-                                        
+
                                     }
                                 }catch(err){
                                     console.error(err);
