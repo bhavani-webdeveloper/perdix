@@ -2377,6 +2377,16 @@
               "Completed"
             ]
           },
+		  "panNo": {
+            "title": "Pan Number",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "mobilePhone": {
             "title": "mobilePhone",
             "type": "string",
