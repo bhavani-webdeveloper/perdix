@@ -555,9 +555,6 @@ define({
                 "items": [{
                     "type": "submit",
                     "title": "CREATE_GROUP"
-                }, {
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
                 }]
             }, {
                 "type": "actionbox",
@@ -565,9 +562,6 @@ define({
                 "items": [{
                     "type": "submit",
                     "title": "EDIT_GROUP"
-                }, {
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
                 }]
             }],
 

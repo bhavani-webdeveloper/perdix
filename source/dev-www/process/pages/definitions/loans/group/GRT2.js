@@ -123,15 +123,8 @@ define({
                                    irfNavigator.goBack();
                                }*/
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    "Group ID : " + item.group.id,
-                    "Group Code : " + item.group.groupCode,
-                    "GRT Date : " + item.group.cgtDate3
-                ]
-            },
-
+            newOffline: true,
+            // offlineInitialize: function(model, form, formCtrl) {}, // optional offline only initialize
             form: [{
                 "type":"box",
                 "title":"START_GRT",
@@ -557,12 +550,6 @@ define({
                         }]
                     }
                 ]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                }]
             }],
 
             schema: function() {
@@ -570,7 +557,7 @@ define({
             },
 
             actions: {
-                preSave: function(model, form, formName) {},
+                // preSave: function(model, form, formName) {},
                 startGRT: function(model, form) {
                     PageHelper.showLoader();
                     model.group.cgtDate3 = new Date();
@@ -650,6 +637,7 @@ define({
                     }
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Proceeded to Applications Pending', 5000);
                         irfNavigator.goBack();
@@ -675,6 +663,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
@@ -700,6 +689,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.rejectStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();

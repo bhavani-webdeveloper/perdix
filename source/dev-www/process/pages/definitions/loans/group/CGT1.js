@@ -564,6 +564,7 @@ define({
                     }
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded. Proceeded to CGT 2.', 5000);
                         irfNavigator.goBack();
@@ -589,6 +590,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Send back', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
@@ -614,6 +616,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.rejectStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();

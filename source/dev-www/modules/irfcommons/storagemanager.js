@@ -345,6 +345,9 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 					deferred.resolve();
 				}, deferred.reject);
 				return deferred.promise;
+			},
+			deleteOffline: function(pageName, model) {
+				model.$$STORAGE_KEY$$ && irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), model.$$STORAGE_KEY$$);
 			}
 		}
 	};

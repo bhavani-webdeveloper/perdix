@@ -439,13 +439,7 @@ define({
                             <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
                         }]
                     }]
-                }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                }]
-            }],
+                },],
 
             schema: function() {
                 return Groups.getSchema().$promise;
