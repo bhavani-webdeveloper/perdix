@@ -935,6 +935,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
+
+                    for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
+                        if (model.customer.familyMembers[idx].dateOfBirth) {
+                            model.customer.familyMembers[idx].age = moment().diff(moment(model.customer.familyMembers[idx].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    }
                     if (model.customer.udf && model.customer.udf.userDefinedFieldValues
                         && model.customer.udf.userDefinedFieldValues.udf1) {
                         model.customer.udf.userDefinedFieldValues.udf1 =
