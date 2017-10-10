@@ -85,7 +85,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             },
                             "report_date": {
                                 "type": "string",
-                                "title": "AUDIT_REPORT_CREATE_DATE"
+                                "title": "REPORT_DATE"
                             },
                             "start_date": {
                                 "type": "string",
