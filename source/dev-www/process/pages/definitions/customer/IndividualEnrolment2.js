@@ -2976,7 +2976,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     "type": "button",
                                     "icon": "fa fa-circle-o",
-                                    "title": "",
+                                    "title": "SUBMIT",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
                                 }]
                         },
