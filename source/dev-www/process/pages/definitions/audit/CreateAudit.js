@@ -40,9 +40,9 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "titleMap": auditTypeValue
                         }, {
                             "key": "audit_info.report_date",
-                            "condition": "model.audit_info.audit_type == 'Regular'",
+                            "condition": "model.audit_info.audit_type == 1", // Regular
                             "type": "date",
-                            "required": true,
+                            "required": true
                         }, {
                             "key": "audit_info.start_date",
                             "type": "date",
@@ -81,8 +81,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "branch_id": {
                                 "title": "BRANCH_NAME",
                                 "type": "integer",
-                                "enumCode": "branch_id",
-                                "required": true
+                                "enumCode": "branch_id"
                             },
                             "report_date": {
                                 "type": "string",
