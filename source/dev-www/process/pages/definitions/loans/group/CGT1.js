@@ -105,6 +105,7 @@ define({
                 }
             },
             newOffline: true,
+            // offlineInitialize: function(model, form, formCtrl) {}, // optional offline only initialize
             form: [{
                 "type":"box",
                 "title":"START_CGT1",
