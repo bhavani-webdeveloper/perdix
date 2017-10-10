@@ -1395,7 +1395,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.customerBankAccounts[].bankStatementDocId",
                                 type:"file",
-                                //required: true,
                                 title:"BANK_STATEMENT_UPLOAD",
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
