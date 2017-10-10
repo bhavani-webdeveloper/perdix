@@ -2968,25 +2968,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             ]
                         },
                         */
-                        {
-                            "type": "actionbox",
-                            "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
-                            "items": [{
-                                "type": "button",
-                                "icon": "fa fa-circle-o",
-                                "title": "SUBMIT",
-                                "onClick": "actions.save(model, formCtrl, form, $event)"
-                            }]
-                        }, {
-                            "type": "actionbox",
-                            "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
-                            "items": [{
-                                "type": "submit",
-                                "title": "COMPLETE_ENROLMENT"
-                            }]
-                        }
 
-                        /*{
+                        {
                             "type": "actionbox",
                             "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage=='LoanView')",
                             "items": [
@@ -3013,7 +2996,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "title": "FINISH_ENROLMENT"
                                 }
                             ]
-                        }*/
+                        }
                     ],
                     schema: function() {
                         return Enrollment.getSchema().$promise;
