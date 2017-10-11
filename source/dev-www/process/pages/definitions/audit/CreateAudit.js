@@ -13,15 +13,15 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                 var auditTypeValue = [];
                 self.form = [];
                 var init = function() {
-                    _.forOwn(master.audit_type, function(v, k) {
-                        if (k == 0 || k == 1) {
-                            $log.info(v)
-                            auditTypeValue.push({
-                                "name": v.audit_type,
-                                "value": v.audit_type_id
-                            });
-                        }
-                    });
+                    // _.forOwn(master.audit_type, function(v, k) {
+                    //     if (k == 0 || k == 1) {
+                    //         $log.info(v)
+                    //         auditTypeValue.push({
+                    //             "name": v.audit_type,
+                    //             "value": v.audit_type_id
+                    //         });
+                    //     }
+                    // });
                     self.form = [{
                         "type": "box",
                         "htmlClass": "col-sm-12 col-xs-12",
@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "key": "audit_info.audit_type",
                             "type": "select",
                             "title": "AUDIT_TYPE",
-                            "titleMap": auditTypeValue
+                            "enumCode": "audit_type"
                         }, {
                             "key": "audit_info.report_date",
                             "condition": "model.audit_info.audit_type == 1", // Regular
@@ -112,6 +112,8 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                     if (model.audit_info.audit_type == 1) {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id && model.audit_info.report_date) {
                             model.audit_info.next_stage = "create";
+                            model.audit_info.next_stage = "create";
+                            model.audit_info.status = "S";
                             Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
                                 model.audit_info = res;
                                 PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);
@@ -121,7 +123,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                                 PageHelper.hideLoader();
                             })
                         } else {
-                            PageHelper.showProgress("page-init", "No Empty Column.", 5000);
+                            PageHelper.showProgress("page-init", "All fields are mandatory.", 5000);
                             PageHelper.hideLoader();
                         }
                     } else {
@@ -137,7 +139,7 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                                 PageHelper.hideLoader();
                             })
                         } else {
-                            PageHelper.showProgress("page-init", "No Empty Column.", 5000);
+                            PageHelper.showProgress("page-init", "All fields are mandatory.", 5000);
                             PageHelper.hideLoader();
                         }
                     }

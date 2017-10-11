@@ -48,7 +48,8 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             items: [{
                                 key: "general_observations",
                                 type: "array",
-                                title: "GENERAL_OBSERVATION",
+                                title: "",
+                                view: "fixed",
                                 startEmpty: true,
                                 items: [{
                                     key: "general_observations[].particular_id",

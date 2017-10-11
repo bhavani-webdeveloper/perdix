@@ -17,7 +17,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
 
         return {
             "type": "schema-form",
-            "title": "JEWEL_APPRAISALS",
+            "title": "JEWEL_APPRAISAL",
             initialize: function(model, form, formCtrl) {
                 if (!$stateParams.pageId) {
                     irfNavigator.goBack();

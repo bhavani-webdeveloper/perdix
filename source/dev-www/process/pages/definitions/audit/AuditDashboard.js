@@ -83,13 +83,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         Audit.online.getAuditList({
                             'auditor_id': auditor_id,
                             'current_stage': 'scheduled',
-                        }).$promise,
-                        Audit.online.getAuditList({
-                            'auditor_id': auditor_id,
-                            'current_stage': 'reassign',
                         }).$promise
+                        // Audit.online.getAuditList({
+                        //     'auditor_id': auditor_id,
+                        //     'current_stage': 'reassign',
+                        // }).$promise
                     ]).then(function(data) {
-                        saqMenu.data = data[0].body.length + data[1].body.length;
+                        saqMenu.data = data[0].body.length;
                     });
                 }
 
@@ -97,12 +97,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.getAuditList({
                             'current_stage': 'scheduled'
-                        }).$promise,
-                        Audit.online.getAuditList({
-                            'current_stage': 'reassign'
                         }).$promise
+                        // Audit.online.getAuditList({
+                        //     'current_stage': 'reassign'
+                        // }).$promise
                     ]).then(function(data) {
-                        savqMenu.data = data[0].body.length + data[1].body.length;
+                        savqMenu.data = data[0].body.length;
                     });
                 }
 

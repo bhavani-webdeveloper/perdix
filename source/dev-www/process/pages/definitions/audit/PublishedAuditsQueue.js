@@ -1,17 +1,31 @@
-irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Utils", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
+irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Utils", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
     function($log, Utils, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
         var returnObj = {
             "type": "search-list",
             "title": "PUBLISHED_AUDITS",
             initialize: function(model, form, formCtrl) {
                 model.branch = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++){
+                    if(banks[i].name == bankName){
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
                 localFormController = formCtrl;
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
-                }               
+                }
+
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
+
                 Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
                     model.auditor_role_id = Number(value);
                 }, PageHelper.showErrors);
@@ -19,6 +33,13 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Util
             definition: {
                 title: "SEARCH_AUDITS",
                 searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    }, {
                         key: "auditor_id",
                         title: "AUDITOR_USERID",
                         type: "lov",
@@ -64,6 +85,16 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Util
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
                         "auditor_id": {
                             "title": "AUDITOR_ID",
                             "type": "string"
@@ -116,6 +147,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Util
                     }
                     var deferred = $q.defer();
                     Audit.online.getAuditList({
+                        'bankId': searchOptions.bankId,
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
@@ -202,7 +234,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Util
                             name: "VIEW_AUDIT",
                             icon: "fa fa-eye",
                             fn: function(item, index, model) {
-                                if (item.audit_type = "Regular") {
+                                if (item.audit_type = 1) {
                                     irfNavigator.go({
                                         'state': 'Page.Adhoc',
                                         'pageName': 'audit.AuditDetails',
@@ -217,7 +249,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log","Util
                                             "page": returnObj.definition.listOptions.tableConfig.page
                                         }
                                     });
-                                } else if(item.audit_type = "SNAP") {
+                                } else if (item.audit_type = 2) {
                                     irfNavigator.go({
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',

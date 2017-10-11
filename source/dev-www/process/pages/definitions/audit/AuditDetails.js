@@ -131,7 +131,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "Page/Engine/audit.detail.JewelAppraisal",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
-                "Page/Engine/audit.detail.AuditSummary"              
+                "Page/Engine/audit.detail.AuditSummary",              
+                "Page/Engine/audit.detail.FixedAsset",              
                
                 // "Page/Engine/audit.detail.ScoreSheet", // kinara specific commented
             ]
@@ -167,6 +168,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
             ];
             _.each(requestMenu, function(v, k) {
                 if (v) {

@@ -1,17 +1,29 @@
-irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log","Utils", "formHelper", "Queries", "User", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
-    function($log, Utils,formHelper, Queries, User, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", "Utils", "formHelper", "Queries", "User", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
+    function($log, Utils, formHelper, Queries, User, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
         var returnObj = {
             "type": "search-list",
             "title": "PUBLISHED_AUDITS_VIEW",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 model.branch = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
                 localFormController = formCtrl;
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
                 }
                 Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
                     model.auditor_role_id = Number(value);
@@ -20,6 +32,13 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log","
             definition: {
                 title: "SEARCH_AUDITS",
                 searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    }, {
                         key: "auditor_id",
                         title: "AUDITOR_USERID",
                         type: "lov",
@@ -65,6 +84,16 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log","
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
                         "auditor_id": {
                             "title": "AUDITOR_ID",
                             "type": "string"
@@ -229,7 +258,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log","
                                         }
                                     };
                                     irfNavigator.go(goparam, backparam);
-                                 
+
                                 }
 
                             },

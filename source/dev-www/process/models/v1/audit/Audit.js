@@ -352,7 +352,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                     audit_type_enum.data.push({
                         code: rec.audit_type,
                         name: rec.audit_type,
-                        value: rec.audit_id
+                        value: rec.audit_type_id
                     });
                     auditTypeObj[rec.audit_type_id] = rec;
                 }
