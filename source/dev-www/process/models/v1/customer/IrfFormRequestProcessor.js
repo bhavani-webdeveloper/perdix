@@ -764,9 +764,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         }
                                         else if(model.customer.familyMembers[form.arrayIndex].relationShip == "Husband" || model.customer.familyMembers[form.arrayIndex].relationShip == "Wife") {
                                             model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
                                         }
                                         else {
                                             model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = undefined;
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
                                         }
                                     }
                                 }
