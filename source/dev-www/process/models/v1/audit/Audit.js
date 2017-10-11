@@ -346,11 +346,18 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
             Audit.online.getAuditMaster().$promise.then(function(response) {
                 $log.info(response)
                 var auditTypeObj = {};
+                var audit_type_enum = {data:[]};
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
+                    audit_type_enum.data.push({
+                        code: rec.audit_type,
+                        name: rec.audit_type,
+                        value: rec.audit_id
+                    });
                     auditTypeObj[rec.audit_type_id] = rec;
                 }
                 response.audit_type = auditTypeObj;
+                irfStorageService.setMaster("audit_type", audit_type_enum);
 
                 var process = {};
                 for (i in response.process) {
@@ -460,7 +467,6 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                     book_entity[response.book_entity[i].entity_id] = response.book_entity[i];
                 }
                 response.book_entity = book_entity;
-
 
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
