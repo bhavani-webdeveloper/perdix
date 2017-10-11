@@ -403,6 +403,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.currentStage = bundleModel.currentStage;
             model.customer=model.customer || {};
             model.review = model.review|| {};
+            model.temp=model.temp||{}
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);   
@@ -551,7 +552,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                            model.loanAccount.loanCustomerRelations[i].firstName =params.customer.name;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.name;
                         break;
                     }
                 }
@@ -595,7 +596,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                            model.loanAccount.loanCustomerRelations[i].firstName =params.customer.firstName;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                         break;
                     }
                 }
@@ -1076,7 +1077,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly: true,
                     }, {
                         key: "loanAccount.loanCustomerRelations[].name",
-                        "title": "CUSTOMER_NAME",
+                        "title": "NAME",
                         readonly: true,
                     }, {
                         key: "loanAccount.loanCustomerRelations[].relation",
@@ -1111,7 +1112,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly: true,
                     }, {
                         key: "loanAccount.loanCustomerRelations[].name",
-                        "title": "CUSTOMER_NAME",
+                        "title": "NAME",
                         readonly: true,
                     }, {
                         key: "loanAccount.loanCustomerRelations[].relation",
@@ -2567,7 +2568,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
-
+                            model.temp.loanCustomerRelations = model.loanAccount.loanCustomerRelations;
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
                             //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
@@ -2584,7 +2585,18 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
+
                                     model.loanAccount = res.loanAccount;
+                                    if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
+                                        for(i in model.temp.loanCustomerRelations){
+                                            for(j in model.loanAccount.loanCustomerRelations){
+                                                if(model.temp.loanCustomerRelations[i].id == model.loanAccount.loanCustomerRelations[i].id ){
+                                                    model.loanAccount.loanCustomerRelations[i].name = model.temp.loanCustomerRelations[i].name;
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
                                     if (completeLead===true && _.hasIn(model, "lead.id")){
                                         var reqData = {
@@ -2637,6 +2649,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
+
                                     BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
                                     return navigateToQueue(model);
                                 }, function(httpRes){
