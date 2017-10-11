@@ -13,15 +13,6 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                 var auditTypeValue = [];
                 self.form = [];
                 var init = function() {
-                    // _.forOwn(master.audit_type, function(v, k) {
-                    //     if (k == 0 || k == 1) {
-                    //         $log.info(v)
-                    //         auditTypeValue.push({
-                    //             "name": v.audit_type,
-                    //             "value": v.audit_type_id
-                    //         });
-                    //     }
-                    // });
                     self.form = [{
                         "type": "box",
                         "htmlClass": "col-sm-12 col-xs-12",

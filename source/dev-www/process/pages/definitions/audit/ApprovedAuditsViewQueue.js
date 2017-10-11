@@ -78,6 +78,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                         }
                     },
                     "branch_id",
+                    "audit_type",
                     "report_date",
                     "start_date",
                     "end_date"
@@ -104,6 +105,14 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                             "title": "BRANCH_ID",
                             "type": "number",
                             "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select",
+                            }
+                        },
+                        "audit_type": {
+                            "title": "AUDIT_TYPE",
+                            "type": "number",
+                            "enumCode": "audit_type",
                             "x-schema-form": {
                                 "type": "select",
                             }
@@ -147,6 +156,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                     var promise = Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
@@ -220,7 +230,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                             name: "VIEW_AUDIT",
                             icon: "fa fa-eye",
                             fn: function(item, index) {
-                                if (item.audit_type = "Regular") {
+                                if (item.audit_type = 1) {
                                     var goparam = {
                                         'state': 'Page.Adhoc',
                                         'pageName': 'audit.AuditDetails',
@@ -239,7 +249,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                                         }
                                     };
                                     irfNavigator.go(goparam, backparam);
-                                } else if (item.audit_type = "SNAP") {
+                                } else if (item.audit_type = 0) {
                                     var goparam = {
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',

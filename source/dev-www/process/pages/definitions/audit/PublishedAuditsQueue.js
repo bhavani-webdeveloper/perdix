@@ -7,8 +7,8 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                 model.branch = SessionStore.getCurrentBranch().branchId;
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
-                for (var i = 0; i < banks.length; i++){
-                    if(banks[i].name == bankName){
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
                         model.bankId = banks[i].value;
                         model.bankName = banks[i].name;
                     }
@@ -76,6 +76,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         }
                     },
                     "branch_id",
+                    "audit_type",
                     "report_date",
                     "start_date",
                     "end_date"
@@ -103,6 +104,14 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                             "title": "BRANCH_ID",
                             "type": "number",
                             "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
+                        },
+                        "audit_type": {
+                            "title": "AUDIT_TYPE",
+                            "type": "number",
+                            "enumCode": "audit_type",
                             "x-schema-form": {
                                 "type": "select"
                             }
@@ -150,6 +159,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         'bankId': searchOptions.bankId,
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
