@@ -477,6 +477,27 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     });
             }
 
+            if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                model.loanAccount.loanCustomerRelations!=null &&
+                model.loanAccount.loanCustomerRelations.length > 0) {
+                var lcr = model.loanAccount.loanCustomerRelations;
+                var idArr = [];
+                for (var i=0;i<lcr.length;i++){
+                    idArr.push(lcr[i].customerId);
+                }
+                Queries.getCustomerBasicDetails({'ids': idArr})
+                    .then(function(result){
+                        if (result && result.ids){
+                            for (var i = 0; i < lcr.length; i++) {
+                                var cust = result.ids[lcr[i].customerId];
+                                if (cust) {
+                                    lcr[i].name = cust.first_name;
+                                }
+                            }
+                        }
+                    });
+            }
+
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
         offline: false,
@@ -499,7 +520,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                            model.loanAccount.loanCustomerRelations[i].firstName =params.customer.firstName;
+                            model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                         break;
                     }
                 }
@@ -530,7 +551,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         addToRelation = false;
                         if (params.customer.urnNo)
                             model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                            model.loanAccount.loanCustomerRelations[i].firstName =params.customer.firstName;
+                            model.loanAccount.loanCustomerRelations[i].firstName =params.customer.name;
                         break;
                     }
                 }
@@ -1054,7 +1075,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "URN_NO",
                         readonly: true,
                     }, {
-                        key: "loanAccount.loanCustomerRelations[].firstName",
+                        key: "loanAccount.loanCustomerRelations[].name",
                         "title": "CUSTOMER_NAME",
                         readonly: true,
                     }, {
@@ -1089,7 +1110,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "URN_NO",
                         readonly: true,
                     }, {
-                        key: "loanAccount.loanCustomerRelations[].firstName",
+                        key: "loanAccount.loanCustomerRelations[].name",
                         "title": "CUSTOMER_NAME",
                         readonly: true,
                     }, {
