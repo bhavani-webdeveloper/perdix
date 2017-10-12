@@ -1,9 +1,22 @@
 irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", "Utils", "elementsUtils", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
     function($log, Utils, elementsUtils, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var branch = SessionStore.getBranch();
-        var validateFields = function(model) {
-
-        };
+        // var validateFields = function(model) {
+        //     for (i in model.field_verification) {
+        //         var filedVerifyDate = model.field_verification[i].field_verify_date;
+        //         var date = moment(new Date()).format("YYYY-MM-DD");
+        //         $log.info(date)
+        //         $log.info(filedVerifyDate)
+        //         $log.info("filedVerifyDate")
+        //         if ((filedVerifyDate - date) >= 0) {
+        //             PageHelper.setError({
+        //                 message: "Field verification date should not be Future date"
+        //             });
+        //             return false;
+        //         }
+        //         return true;
+        //     }
+        // };
 
         return {
             "type": "schema-form",
@@ -56,7 +69,15 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                         }
                     }, {
                         "title": "DATE",
-                        "data": "field_verify_date"
+                        "data": "field_verify_date",
+                        // "onSelect": function(model, form, schemaForm, event) {
+                        //     var date = moment(new Date()).format("YYYY-MM-DD");
+
+                        //     if (true) {
+
+                        //     }
+
+                        // }
                     }, {
                         "title": "AMOUNT",
                         "data": "amount"
@@ -234,12 +255,14 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "field_verification": {
+                    "add_fv": {
                         "type": "object",
                         "properties": {
                             "urn": {
                                 "type": ["string", "null"],
-                                "title": "URN"
+                                "title": "URN",
+                                "maxLength": 16,
+                                "minLength": 16
                             },
                             "field_verify_date": {
                                 "type": ["string", "null"],
@@ -267,7 +290,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                 edit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
-                        // if (!validateFields(model)) return;
+                        if (!validateFields(model)) return;
                         if (!model.add_fv.fv_newgen_uid) {
                             model.add_fv.fv_newgen_uid = elementsUtils.generateUUID();
                             model.field_verification.push(model.add_fv);
