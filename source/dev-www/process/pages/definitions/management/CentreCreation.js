@@ -348,7 +348,7 @@ define({
                                         "MONDAY":"MONDAY",
                                         "TUESDAY":"TUESDAY",
                                         "WEDNESDAY":"WEDNESDAY",
-                                        "THRUSDAY":"THRUSDAY",
+                                        "THURSDAY":"THURSDAY",
                                         "FRIDAY":"FRIDAY",
                                         "SATURDAY":"SATURDAY"
                                         }
@@ -366,7 +366,7 @@ define({
                                         "MONDAY":"MONDAY",
                                         "TUESDAY":"TUESDAY",
                                         "WEDNESDAY":"WEDNESDAY",
-                                        "THRUSDAY":"THRUSDAY",
+                                        "THURSDAY":"THURSDAY",
                                         "FRIDAY":"FRIDAY",
                                         "SATURDAY":"SATURDAY"
                                         }
