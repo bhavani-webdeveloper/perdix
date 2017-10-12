@@ -28,7 +28,6 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
-				}
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 			},
