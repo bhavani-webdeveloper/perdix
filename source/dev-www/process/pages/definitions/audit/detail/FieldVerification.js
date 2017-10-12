@@ -19,22 +19,29 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-                model.readonly =  $stateParams.pageData.readonly;
+                model.readonly = $stateParams.pageData.readonly;
                 model.audit_id = Number($stateParams.pageId);
                 model.field_verification = model.field_verification || [];
                 var master = Audit.offline.getAuditMaster() || {};
-                var self = this;
-                form = [];
 
                 var init = function(response) {
+                    model.add_fv = {
+                        loan_type_id: null,
+                        urn: null,
+                        book_entity_id: null,
+                        field_verify_date: null,
+                        amount: null,
+                        comments: null
+                    };
                     model.master = master;
-                    model.field_verification = response;
+                    model.field_verification = response || [];
+                    for (i in model.field_verification) {
+                        model.field_verification[i].fv_newgen_uid = elementsUtils.generateUUID();
+                    }
                     var tableColumnsConfig = [{
                         "title": "LOAN_TYPE",
                         "data": "loan_type_id",
                         render: function(data, type, full, meta) {
-                            $log.info(data)
-                            $log.info("data")
                             return master.field_verification[data].loan_type;
                         }
 
@@ -86,7 +93,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             "tableConfig": {
                                 "searching": true,
                                 "paginate": true,
-                                "pageLength": 10
+                                "pageLength": 10,
                             },
                             getColumns: function() {
                                 return tableColumnsConfig; //its coming from after adding fieldverification
@@ -164,13 +171,20 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             "items": [{
                                 "title": "UPDATE",
                                 "type": "button",
-                                "onClick": "actions.update(model, formCtrl, form, $event)"
+                                "onClick": "actions.edit(model, formCtrl, form, $event)"
                             }, {
                                 "title": "RESET",
                                 "type": "button",
                                 "style": "btn-default",
                                 onClick: function(model) {
-                                    model.add_fv = {};
+                                    model.add_fv = {
+                                        loan_type_id: null,
+                                        urn: null,
+                                        book_entity_id: null,
+                                        field_verify_date: null,
+                                        amount: null,
+                                        comments: null
+                                    };
                                 }
                             }]
 
@@ -180,13 +194,20 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             "items": [{
                                 "title": "ADD",
                                 "type": "button",
-                                "onClick": "actions.add(model, formCtrl, form, $event)"
+                                "onClick": "actions.edit(model, formCtrl, form, $event)"
                             }, {
                                 "title": "RESET",
                                 "type": "button",
                                 "style": "btn-default",
                                 onClick: function(model) {
-                                    model.add_fv = {};
+                                    model.add_fv = {
+                                        loan_type_id: null,
+                                        urn: null,
+                                        book_entity_id: null,
+                                        field_verify_date: null,
+                                        amount: null,
+                                        comments: null
+                                    };
                                 }
                             }]
 
@@ -194,7 +215,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                     }]
                 }
                 model.$isOffline = false;
-                if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.field_verification) {
+                if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.field_verification && $stateParams.pageData.auditData.field_verification.length) {
                     init($stateParams.pageData.auditData.field_verification);
                 } else {
                     Audit.offline.getFieldVerification($stateParams.pageId).then(function(res) {
@@ -243,7 +264,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                 },
             },
             actions: {
-                add: function(model, formCtrl, form, $event) {
+                edit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
                         // if (!validateFields(model)) return;
@@ -252,42 +273,30 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             model.field_verification.push(model.add_fv);
                         }
                         if (model.$isOffline) {
-                            Audit.offline.setFieldVerification(model.audit_id, model.field_verification).then(function(res) {
-                                model.field_verification = res;
+                            Audit.offline.setFieldVerification(model.audit_id, model.field_verification).then(function() {
                                 PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
-                            }, function(errRes) {
-                                PageHelper.showErrors(errRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
+                                model.add_fv = {
+                                    loan_type_id: null,
+                                    urn: null,
+                                    book_entity_id: null,
+                                    field_verify_date: null,
+                                    amount: null,
+                                    comments: null
+                                };
+                            }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                         } else {
                             $stateParams.pageData.auditData.field_verification = model.field_verification;
+                            model.add_fv = {
+                                loan_type_id: null,
+                                urn: null,
+                                book_entity_id: null,
+                                field_verify_date: null,
+                                amount: null,
+                                comments: null
+                            };
                         }
                     })
                 },
-                update: function(model, formCtrl, form, $event) {
-                    PageHelper.clearErrors();
-                    formHelper.validate(formCtrl).then(function() {
-                        // if (!validateFields(model)) return;
-                        if (!model.add_fv.fv_newgen_uid) {
-                            model.add_fv.fv_newgen_uid = elementsUtils.generateUUID();
-                            model.field_verification.push(model.add_fv);
-                        }
-                        if (model.$isOffline) {
-                            Audit.offline.setFieldVerification(model.audit_id, model.field_verification).then(function(res) {
-                                model.field_verification = res;
-                                PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
-                            }, function(errRes) {
-                                PageHelper.showErrors(errRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                        } else {
-                            $stateParams.pageData.auditData.field_verification = model.field_verification;
-                        }
-                    })
-                },
-
                 goBack: function(model, form, formName) {
                     irfNavigator.goBack();
                 },
