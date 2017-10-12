@@ -116,7 +116,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].quantity_on_hand",
                                     "type": "number",
-                                    "required": true,
+                                    // "required": true,
 
                                 }]
                             }, {
@@ -125,7 +125,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].lost_quantity",
                                     "type": "number",
-                                    "required": true
+                                    // "required": true
 
                                 }]
                             }, {
@@ -134,7 +134,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].transferred_quantity",
                                     "type": "number",
-                                    "required": true
+                                    // "required": true
 
                                 }]
                             }, {
@@ -143,7 +143,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].excess_quantity",
                                     "type": "number",
-                                    "required": true,
+                                    // "required": true,
                                     // "onChange": function(modelValue, form, model) {
                                     //     if (model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand > model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record) {
                                     //         model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record = model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand - model.fixed_assets.asset_details[form.arrayIndex].excess_quantity;
@@ -165,7 +165,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].description",
                                     "type": "string",
-                                    "required": true
+                                    // "required": true
                                 }]
                             }]
                         });

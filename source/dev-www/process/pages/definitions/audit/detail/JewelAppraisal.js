@@ -5,9 +5,17 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
             for (i in model.jewel_appraisal.jewel_details) {
                 var net = model.jewel_appraisal.jewel_details[i].net;
                 var gross = model.jewel_appraisal.jewel_details[i].gross;
+                var reappNet = model.jewel_appraisal.jewel_details[i].reapp_gross;
+                var reapp_gross = model.jewel_appraisal.jewel_details[i].reapp_net;
                 if (net > gross) {
                     PageHelper.setError({
                         message: "Net weight should be less than Gross weight"
+                    });
+                    return false;
+                }
+                if (reappNet > reapp_gross) {
+                    PageHelper.setError({
+                        message: "ReAppNet weight Should be less than the ReAppGross Weight"
                     });
                     return false;
                 }
@@ -144,7 +152,9 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                     "properties": {
                                         "account_number": {
                                             "type": ["string", "null"],
-                                            "title": "ACCOUNT_NUMBER"
+                                            "title": "ACCOUNT_NUMBER",
+                                            "maxLength":16,
+                                            "minLength":16,
                                         },
                                         "loan_amount": {
                                             "type": ["number", "null"],
