@@ -16,6 +16,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
+                model.readonly = $stateParams.pageData.readonly;
                 model.audit_id = Number($stateParams.pageId);
                 model.general_observations = model.general_observations || {};
                 model.auditObservation = model.auditObservation || {};
@@ -30,153 +31,92 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                         for (j in model.masters.general_observation.particulars) {
                             var particulars = model.masters.general_observation.particulars[i];
                             if (model.general_observations[i].particular_id = particulars.particular_id) {
-                                model.general_observations[i].particular_id = particulars.particular_name;
-                            }
-                        }
-                        for (k in model.masters.general_observation.particular_options) {
-                            var particularOption = model.masters.general_observation.particular_options[i];
-                            if (model.general_observations[i].option_id = particularOption.particular_id) {
-                                model.general_observations[i].option_id = particularOption.name;
+                                model.general_observations[i].particular_name = particulars.particular_name;
                             }
                         }
                     }
-                    if ($stateParams.pageData.readonly) {
-                        self.form = [{
-                            type: "box",
-                            "readonly": pageData.readonly,
+                    self.form = [{
+                        type: "box",
+                        "readonly": pageData.readonly,
+                        "colClass": "col-sm-12",
+                        title: "GENERAL_OBSERVATION",
+                        items: [{
+                            key: "general_observations",
+                            type: "array",
                             title: "GENERAL_OBSERVATION",
+                            titleExpr: " ",
+                            view: "fixed",
+                            startEmpty: true,
                             items: [{
-                                key: "general_observations",
-                                type: "array",
-                                title: "",
-                                view: "fixed",
-                                startEmpty: true,
-                                items: [{
-                                    key: "general_observations[].particular_id",
-                                    "type": "lov",
-                                    lovonly: true,
-                                    outputMap: {},
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model, context) {
-                                        return $q.resolve({
-                                            headers: {
-                                                "x-total-count": masters.general_observation.particulars.length
-                                            },
-                                            body: masters.general_observation.particulars
-                                        });
-                                    },
-                                    getListDisplayItem: function(item, index, context) {
-                                        return [
-                                            item.particular_id,
-                                            item.particular_name,
-                                        ];
-                                    },
-                                    onSelect: function(result, model, context) {
-                                        model.general_observations[context.arrayIndex].particular_id = result.particular_name;
-                                        model.general_observations[context.arrayIndex].particularId = result.particular_id;
-                                    },
-                                }, {
-                                    key: "general_observations[].option_id",
-                                    "type": "lov",
-                                    lovonly: true,
-                                    outputMap: {},
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model, context) {
-                                        var optionsToShow = filterFilter(masters.general_observation.particular_options, {
-                                            particular_id: model.general_observations[context.arrayIndex].particularId
-                                        }, true);
-                                        return $q.resolve({
-                                            headers: {
-                                                "x-total-count": optionsToShow.length
-                                            },
-                                            body: optionsToShow
-                                        });
-                                    },
-                                    getListDisplayItem: function(item, index, context) {
-                                        $log.info(item)
-                                        return [
-                                            item.name
-                                        ];
-                                    },
-                                    onSelect: function(result, model, context) {
-                                        model.general_observations[context.arrayIndex].option_id = result.name;
-                                    }
-                                }, {
-                                    key: "general_observations[].comments"
-                                }]
+                                key: "general_observations[].particular_name",
+                                "type": "lov",
+                                lovonly: true,
+                                outputMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var particularsList = masters.general_observation.particulars.filter(function(item) {
+                                        for (i in model.general_observations) {
+                                            if (model.general_observations[i].particular_id == item.particular_id) {
+                                                return false;
+                                            }
+                                        }
+                                        return true;
+                                    });
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": particularsList.length
+                                        },
+                                        body: particularsList
+                                    });
+                                },
+                                getListDisplayItem: function(item, index, context) {
+                                    return [
+                                        item.particular_id,
+                                        item.particular_name,
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.general_observations[context.arrayIndex].particular_name = result.particular_name;
+                                    model.general_observations[context.arrayIndex].particular_id = result.particular_id;
+                                },
+                            }, {
+                                key: "general_observations[].option_id",
+                                "type": "lov",
+                                lovonly: true,
+                                outputMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var optionsToShow = filterFilter(masters.general_observation.particular_options, {
+                                        particular_id: model.general_observations[context.arrayIndex].particular_id
+                                    }, true);
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": optionsToShow.length
+                                        },
+                                        body: optionsToShow
+                                    });
+                                },
+                                getListDisplayItem: function(item, index, context) {
+                                    $log.info(item)
+                                    return [
+                                        item.name
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.general_observations[context.arrayIndex].option_id = result.name;
+                                }
+                            }, {
+                                key: "general_observations[].comments"
                             }]
                         }]
-                    } else {
-                        self.form = [{
-                            type: "box",
-                            title: "GENERAL_OBSERVATION",
-                            items: [{
-                                key: "general_observations",
-                                type: "array",
-                                title: "GENERAL_OBSERVATION",
-                                startEmpty: true,
-                                items: [{
-                                    key: "general_observations[].particular_id",
-                                    "type": "lov",
-                                    lovonly: true,
-                                    outputMap: {},
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model, context) {
-                                        return $q.resolve({
-                                            headers: {
-                                                "x-total-count": masters.general_observation.particulars.length
-                                            },
-                                            body: masters.general_observation.particulars
-                                        });
-                                    },
-                                    getListDisplayItem: function(item, index, context) {
-                                        return [
-                                            item.particular_id,
-                                            item.particular_name,
-                                        ];
-                                    },
-                                    onSelect: function(result, model, context) {
-                                        model.general_observations[context.arrayIndex].particular_id = result.particular_name;
-                                        model.general_observations[context.arrayIndex].particularId = result.particular_id;
-                                    },
-                                }, {
-                                    key: "general_observations[].option_id",
-                                    "type": "lov",
-                                    lovonly: true,
-                                    outputMap: {},
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model, context) {
-                                        var optionsToShow = filterFilter(masters.general_observation.particular_options, {
-                                            particular_id: model.general_observations[context.arrayIndex].particularId
-                                        }, true);
-                                        return $q.resolve({
-                                            headers: {
-                                                "x-total-count": optionsToShow.length
-                                            },
-                                            body: optionsToShow
-                                        });
-                                    },
-                                    getListDisplayItem: function(item, index, context) {
-                                        $log.info(item)
-                                        return [
-                                            item.name
-                                        ];
-                                    },
-                                    onSelect: function(result, model, context) {
-                                        model.general_observations[context.arrayIndex].option_id = result.name;
-                                    }
-                                }, {
-                                    key: "general_observations[].comments"
-                                }]
-                            }]
-                        }, {
-                            type: "actionbox",
-                            items: [{
-                                type: "submit",
-                                title: "UPDATE"
-                            }]
+                    }, {
+                        type: "actionbox",
+                        condition: "!model.readonly",
+                        items: [{
+                            type: "submit",
+                            title: "UPDATE"
                         }]
-                    }
+                    }];
                 };
                 model.$isOffline = false;
                 if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.general_observations) {
@@ -212,7 +152,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     "type": ["string", "null"],
                                     "title": "OPTION_NAME"
                                 },
-                                "particular_id": {
+                                "particular_name": {
                                     "type": ["string", "null"],
                                     "title": "PARTICULAR_NAME"
                                 },

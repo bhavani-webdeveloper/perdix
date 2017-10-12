@@ -18,7 +18,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         $scope.formHelper = formHelper;
 
         var configurableActionBoxHtml =
-            '<div class="col-xs-12 action-box-col"><div class="box no-border"><div class="box-body" style="padding-right:0">\
+'<div class="col-xs-12 action-box-col"><div class="box no-border"><div class="box-body" style="padding-right:0">\
     <button ng-repeat="item in form.items"\
             class="btn {{item.fieldHtmlClass}}" ng-class="item.style? item.style: \'btn-theme\'" type="button" style="margin-right:10px"\
             ng-click="evalExpr(\'buttonClick(event,form)\', {event:$event,form:item})"\
@@ -32,53 +32,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             $scope.model.auditData = auditData;
             $scope.model.ai = auditData.audit_info;
             $scope.model._isOnline = $scope.$isOnline;
-
-            var v = $scope.dashboardDefinition_AuditScoreDetails;
-            if ($stateParams.pageData.readonly) {
-                $scope.dashboardDefinition.items.push(v);
-                elementsUtils.reloadDashboardBox();
-                v.onClick = function(event, menu) {
-                    var pageData = {};
-                    pageData.readonly = $stateParams.pageData.readonly;
-                    if (!pageData.auditScoresheet) {
-                        Audit.online.getAuditScores({
-                            "audit_id": $this.auditId
-                        }).$promise.then(function(response) {
-                            if (response.body.length && response.body.length == 1) {
-                                pageData.auditScoresheet = response.body[0];
-                                irfNavigator.go({
-                                    "state": "Page.Engine",
-                                    "pageName": "audit.AuditScoreDetails",
-                                    "pageId": $this.auditId,
-                                    "pageData": pageData
-                                }, {
-                                    "state": "Page.Adhoc",
-                                    "pageName": "audit.AuditDetails",
-                                    "pageId": $this.auditId,
-                                    "pageData": pageData
-                                });
-                            } else {
-                                PageHelper.setError({
-                                    message: "More than one score sheets received for audit id: " + $this.auditId
-                                });
-                            }
-                        }, PageHelper.showErrors);
-                    } else {
-                        irfNavigator.go({
-                            "state": "Page.Engine",
-                            "pageName": "audit.AuditScoreDetails",
-                            "pageId": $this.auditId,
-                            "pageData": pageData
-                        }, {
-                            "state": "Page.Adhoc",
-                            "pageName": "audit.AuditDetails",
-                            "pageId": $this.auditId,
-                            "pageData": pageData
-                        });
-                    }
-                    return false;
-                };
-            }
         };
         var deferred = $q.defer();
         PageHelper.showLoader();
@@ -131,34 +84,86 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "Page/Engine/audit.detail.JewelAppraisal",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
-                "Page/Engine/audit.detail.AuditSummary",              
-                "Page/Engine/audit.detail.FixedAsset",              
-               
-                // "Page/Engine/audit.detail.ScoreSheet", // kinara specific commented
+                "Page/Engine/audit.detail.AuditSummary",
+                "Page/Engine/audit.detail.FixedAsset"
             ]
         });
-        var asdpdp = PagesDefinition.getUserAllowedDefinition({
-            "title": "Audit Details",
-            "iconClass": "fa fa-cube",
-            "items": [
-                "Page/Engine/audit.AuditScoreDetails"
-            ]
-        }).then(function(resp) {
-            $scope.dashboardDefinition_AuditScoreDetails = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
-        });
-        var assdpdp = PagesDefinition.getUserAllowedDefinition({
-            "title": "Score Sheet Details",
-            "iconClass": "fa fa-cube",
-            "items": [
-                "Page/Engine/audit.detail.ScoreSheet"
-            ]
-        }).then(function(resp) {
-            $scope.dashboardDefinition_AuditScoreDetails = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.ScoreSheet"]);
-        });
+
+        var scoreMenuPromise = null;
+        if ($stateParams.pageData.readonly) {
+            scoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
+                "title": "Audit Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    "Page/Engine/audit.AuditScoreDetails"
+                ]
+            }).then(function(resp) {
+                $scope.dashboardDefinition_Score = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
+                $scope.dashboardDefinition_Score.onClick = function(event, menu) {
+                    var pageData = {};
+                    pageData.readonly = $stateParams.pageData.readonly;
+                    if (!pageData.auditScoresheet) {
+                        Audit.online.getAuditScores({
+                            "audit_id": $this.auditId
+                        }).$promise.then(function(response) {
+                            if (response.body && response.body.length == 1) {
+                                pageData.auditScoresheet = response.body[0];
+                                irfNavigator.go({
+                                    "state": "Page.Engine",
+                                    "pageName": "audit.AuditScoreDetails",
+                                    "pageId": $this.auditId,
+                                    "pageData": pageData
+                                }, {
+                                    "state": "Page.Adhoc",
+                                    "pageName": "audit.AuditDetails",
+                                    "pageId": $this.auditId,
+                                    "pageData": $scope.model.auditData
+                                });
+                            } else {
+                                var prefix = null;
+                                if (response.body && response.body.length === 0) {
+                                    prefix = "No";
+                                } else {
+                                    prefix = "More than one score";
+                                }
+                                PageHelper.setError({
+                                    message: prefix + " sheets received for audit id: " + $this.auditId
+                                });
+                            }
+                        }, PageHelper.showErrors);
+                    } else {
+                        irfNavigator.go({
+                            "state": "Page.Engine",
+                            "pageName": "audit.AuditScoreDetails",
+                            "pageId": $this.auditId,
+                            "pageData": pageData
+                        }, {
+                            "state": "Page.Adhoc",
+                            "pageName": "audit.AuditDetails",
+                            "pageId": $this.auditId,
+                            "pageData": $scope.model.auditData
+                        });
+                    }
+                    return false;
+                };
+            });
+        } else {
+            scoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
+                "title": "Score Sheet Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    "Page/Engine/audit.detail.ScoreSheet"
+                ]
+            }).then(function(resp) {
+                $scope.dashboardDefinition_Score = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.ScoreSheet"]);
+            });
+        }
         pdp.then(function(resp) {
             $scope.dashboardDefinition = _.cloneDeep(resp);
         });
-        $q.all([deferred.promise, pdp, asdpdp, assdpdp]).then(function() {
+        $q.all([deferred.promise, pdp, scoreMenuPromise]).then(function() {
+            $scope.dashboardDefinition.items.push($scope.dashboardDefinition_Score);
+            elementsUtils.reloadDashboardBox && elementsUtils.reloadDashboardBox();
             var requestMenu = [
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
@@ -170,6 +175,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
             ];
+            if ($scope.dashboardDefinition_Score.uri === "Page/Engine/audit.detail.ScoreSheet") {
+                requestMenu.push($scope.dashboardDefinition_Score);
+            }
             _.each(requestMenu, function(v, k) {
                 if (v) {
                     v.onClick = function(event, menu) {
