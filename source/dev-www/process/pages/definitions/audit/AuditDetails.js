@@ -82,10 +82,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "Page/Engine/audit.detail.GeneralObservation",
                 "Page/Engine/audit.detail.PortfolioStats",
                 "Page/Engine/audit.detail.JewelAppraisal",
+                "Page/Engine/audit.detail.FixedAsset",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
-                "Page/Engine/audit.detail.AuditSummary",
-                "Page/Engine/audit.detail.FixedAsset"
+                "Page/Engine/audit.detail.AuditSummary"
             ]
         });
 
