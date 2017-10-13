@@ -6,21 +6,35 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
             for (l in model.fixed_assets.asset_details) {
                 var transferValue = model.fixed_assets.asset_details[l].transferred_quantity;
                 if (model.fixed_assets.asset_details[l].quantity_on_hand > model.fixed_assets.asset_details[l].quantity_on_record) {
-                    model.fixed_assets.asset_details[l].quantity_on_record = model.fixed_assets.asset_details[l].quantity_on_hand - model.fixed_assets.asset_details[l].excess_quantity;
-                    if (!model.fixed_assets.asset_details[l].lost_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0) {
-                        PageHelper.setError({
-                            message: "Lost and Transfer Value should be zero"
-                        });
-                        return false;
+                    model.comOfQE = model.fixed_assets.asset_details[l].quantity_on_hand - model.fixed_assets.asset_details[l].excess_quantity;
+                    if (model.fixed_assets.asset_details[l].quantity_on_record == model.comOfQE) {
+                        if (!model.fixed_assets.asset_details[l].lost_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0) {
+                            PageHelper.setError({
+                                message: "Lost and Transfer Value should be zero"
+                            });
+                            return false;
+                        }
+                    } else {
+                        if (model.fixed_assets.asset_details[l].excess_quantity > model.fixed_assets.asset_details[l].quantity_on_record) {
+                            PageHelper.setError({
+                                message: "Excess value should not be greater than ‘available’ value"
+                            });
+                            return false;
+                        }
                     }
+
+
                 } else if (model.fixed_assets.asset_details[l].quantity_on_hand < model.fixed_assets.asset_details[l].quantity_on_record) {
-                    model.fixed_assets.asset_details[l].quantity_on_record = model.fixed_assets.asset_details[l].quantity_on_hand + (model.fixed_assets.asset_details[l].lost_quantity + model.fixed_assets.asset_details[l].transferred_quantity);
-                    if (!model.fixed_assets.asset_details[l].excess_quantity == 0) {
-                        PageHelper.setError({
-                            message: "Excess Value should be zero"
-                        });
-                        return false;
+                    model.comOfQLT = model.fixed_assets.asset_details[l].quantity_on_hand + (model.fixed_assets.asset_details[l].lost_quantity + model.fixed_assets.asset_details[l].transferred_quantity);
+                    if (model.fixed_assets.asset_details[l].quantity_on_hand == model.comOfQLT) {
+                        if (!model.fixed_assets.asset_details[l].excess_quantity == 0) {
+                            PageHelper.setError({
+                                message: "Excess Value should be zero"
+                            });
+                            return false;
+                        }
                     }
+
                 } else if (model.fixed_assets.asset_details[l].quantity_on_hand == model.fixed_assets.asset_details[l].quantity_on_record) {
                     return true;
                     if (!model.fixed_assets.asset_details[l].excess_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0 && !model.fixed_assets.asset_details[l].lost_quantity == 0) {
@@ -70,13 +84,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             if (asset_details.status == 1) {
                                 model.fixed_assets.asset_details.push({
                                     "asset_id": asset_details.asset_type_id,
-                                    "asset_description": asset_details.asset_description,
-                                    "quantity_on_record": "",
-                                    "quantity_on_hand": "",
-                                    "lost_quantity": "",
-                                    "transferred_quantity": "",
-                                    "excess_quantity": "",
-                                    "description": "",
+                                    "asset_description": asset_details.asset_description
                                 })
                             }
                         }
@@ -91,6 +99,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
 
                     for (i in model.fixed_assets.asset_details) {
                         auditData_fixedAsset = model.fixed_assets.asset_details[i];
+                        $log.info(auditData_fixedAsset)
                         fixedAssetSheetForm.push({
                             "type": "section",
                             "htmlClass": "row",
@@ -228,7 +237,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                     }];
 
                     boxItems.push.apply(boxItems, fixedAssetSheetForm);
-                    
+
                     self.form = [{
                         "type": "box",
                         "title": "FIXED_ASSET",
