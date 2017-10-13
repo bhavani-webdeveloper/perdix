@@ -138,6 +138,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 }, 
                 {
                     key: "_credit.reference",
+                    condition:"model._credit.instrumentType !=='CASH'",
                     title: "REFERENCE_NUMBER",
                     readonly: true,
                     //type:"amount"
@@ -150,6 +151,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 },
                 {
                     "key": "Collection.depositsummary.id",
+                    condition:"model._credit.instrumentType =='CASH'",
                     "type": "string",
                     "title": "BANK_DEPOSIT_SUMMARY_ID",
                     "readonly": true
@@ -256,6 +258,15 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                     title: "AMOUNT_COLLECTED",
                     readonly: true,
                     type: "amount"
+                },{
+                    key: "Collection.repaymentDate",
+                    "title":"REPAYMENT_DATE",
+                    readonly: true,
+                    type: "date"
+                },{
+                    key: "Collection.bankAccountNumber",
+                    title:"REPAYMENT_TO_ACCOUNT",
+                    readonly: true,
                 }, {
                     key: "creditValidation.status",
                     title: "STATUS",
