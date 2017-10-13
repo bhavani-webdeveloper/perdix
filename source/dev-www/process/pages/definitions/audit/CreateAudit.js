@@ -103,7 +103,6 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                     if (model.audit_info.audit_type == 1) {
                         if (model.audit_info.auditor_id && model.audit_info.branch_id && model.audit_info.report_date) {
                             model.audit_info.next_stage = "create";
-                            model.audit_info.next_stage = "create";
                             model.audit_info.status = "S";
                             Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
                                 model.audit_info = res;
