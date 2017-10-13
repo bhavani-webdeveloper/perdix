@@ -156,21 +156,13 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             "key": "add_fv.field_verify_date",
                             "title": "FIELD_VERIFY_DATE",
                             "type": "date",
-                            "onChange": function(modelValue, form, model) {
-                                $log.info(modelValue)
-                                $log.info("modelValue")
-
-                                if (modelValue) {
-
-                                    var date = moment(new Date()).format("YYYY-MM-DD");
-                                    if ((Date.parse(date) < Date.parse(modelValue))) {
-                                        PageHelper.setError({
-                                            message: "Field verification date should not be Future date"
-                                        });
-                                        return false;
-                                    }
-                                    return true;
-                                }
+                            "ngModel": function(ngModel) {
+                                ngModel.$validators.futureDate = function(value) {
+                                    return !moment(value, SessionStore.getSystemDateFormat()).isAfter(moment());
+                                };
+                            },
+                            "validationMessage": {
+                                'futureDate': "No future dates"
                             }
                         }, {
                             "key": "add_fv.amount",
