@@ -5,8 +5,8 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
             for (i in model.jewel_appraisal.jewel_details) {
                 var net = model.jewel_appraisal.jewel_details[i].net;
                 var gross = model.jewel_appraisal.jewel_details[i].gross;
-                var reappNet = model.jewel_appraisal.jewel_details[i].reapp_gross;
-                var reapp_gross = model.jewel_appraisal.jewel_details[i].reapp_net;
+                var reappNet = model.jewel_appraisal.jewel_details[i].reapp_net;
+                var reapp_gross = model.jewel_appraisal.jewel_details[i].reapp_gross;
                 if (net > gross) {
                     PageHelper.setError({
                         message: "Net weight should be less than Gross weight"
