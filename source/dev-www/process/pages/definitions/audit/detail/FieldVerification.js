@@ -1,23 +1,6 @@
 irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", "Utils", "elementsUtils", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
     function($log, Utils, elementsUtils, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
-        var branch = SessionStore.getBranch();
-        // var validateFields = function(model) {
-        //     for (i in model.field_verification) {
-        //         var filedVerifyDate = model.field_verification[i].field_verify_date;
-        //         var date = moment(new Date()).format("YYYY-MM-DD");
-        //         $log.info(date)
-        //         $log.info(filedVerifyDate)
-        //         $log.info("filedVerifyDate")
-        //         if ((filedVerifyDate - date) >= 0) {
-        //             PageHelper.setError({
-        //                 message: "Field verification date should not be Future date"
-        //             });
-        //             return false;
-        //         }
-        //         return true;
-        //     }
-        // };
-
+        var branch = SessionStore.getBranch();     
         return {
             "type": "schema-form",
             "title": "FIELD_VERIFICATION",
@@ -70,14 +53,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                     }, {
                         "title": "DATE",
                         "data": "field_verify_date",
-                        // "onSelect": function(model, form, schemaForm, event) {
-                        //     var date = moment(new Date()).format("YYYY-MM-DD");
 
-                        //     if (true) {
-
-                        //     }
-
-                        // }
                     }, {
                         "title": "AMOUNT",
                         "data": "amount"
@@ -179,7 +155,23 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                         }, {
                             "key": "add_fv.field_verify_date",
                             "title": "FIELD_VERIFY_DATE",
-                            "type": "date"
+                            "type": "date",
+                            "onChange": function(modelValue, form, model) {
+                                $log.info(modelValue)
+                                $log.info("modelValue")
+
+                                if (modelValue) {
+
+                                    var date = moment(new Date()).format("YYYY-MM-DD");
+                                    if ((Date.parse(date) < Date.parse(modelValue))) {
+                                        PageHelper.setError({
+                                            message: "Field verification date should not be Future date"
+                                        });
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            }
                         }, {
                             "key": "add_fv.amount",
                             "title": "AMOUNT",
@@ -236,7 +228,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                     }]
                 }
                 model.$isOffline = false;
-                if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.field_verification && $stateParams.pageData.auditData.field_verification.length) {
+                if ($stateParams.pageData && $stateParams.pageData.auditData && _.isArray($stateParams.pageData.auditData.field_verification)) {
                     init($stateParams.pageData.auditData.field_verification);
                 } else {
                     Audit.offline.getFieldVerification($stateParams.pageId).then(function(res) {
@@ -269,7 +261,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                 "title": "FIELD_VERIFY_DATE"
                             },
                             "AMOUNT": {
-                                "type": ["string", "null"],
+                                "type": ["number", "null"],
                                 "title": "AMOUNT"
                             },
                             "loan_type": {
@@ -290,7 +282,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                 edit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
-                        if (!validateFields(model)) return;
                         if (!model.add_fv.fv_newgen_uid) {
                             model.add_fv.fv_newgen_uid = elementsUtils.generateUUID();
                             model.field_verification.push(model.add_fv);

@@ -262,8 +262,8 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                 };
 
                 model.$isOffline = false;
-                if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.getFixedAssets) {
-                    init($stateParams.pageData.auditData.getFixedAssets);
+                if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.fixed_assets) {
+                    init($stateParams.pageData.auditData.fixed_assets);
                 } else {
                     Audit.offline.getFixedAssets($stateParams.pageId).then(function(res) {
                         init(res);
