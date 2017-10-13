@@ -681,7 +681,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             title:"Expected Interest Rate",
                             "required":false,
                             "type":"number",
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -779,12 +779,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "title": "ENTITY_NAME",
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }, {
                             "key": "loanAccount.applicant",
                             "required":false,
                             "title": "APPLICANT_URN_NO",
-                            "condition": "!model.loanAccount.loanType == 'JLG'",
+                            "condition": "model.loanAccount.loanType != 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -836,12 +836,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "title": "APPLICANT_NAME",
                             "required":false,
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }, {
                             "key": "loanAccount.coBorrowerUrnNo",
                             "required":false,
                             "title": "CO_APPLICANT_URN_NO",
-                            "condition": "!model.loanAccount.loanType == 'JLG'",
+                            "condition": "model.loanAccount.loanType != 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -893,7 +893,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "title": "COAPPLICANT_NAME",
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -1577,10 +1577,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 }, {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
+                    "condition": 'model.loanAccount.loanType != "JLG"',
                     "items": [{
                         "type": "fieldset",
                         "title": "EXISTING_LOAN_DOCUMENTS",
-                        "condition": "!model.loanAccount.loanType == 'JLG'",
                         "items": [{
                             "type": "array",
                             "required":false,
@@ -1608,7 +1608,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }, {
                         "type": "fieldset",
                         "title": "ADD_LOAN_DOCUMENTS",
-                        "condition": "!model.loanAccount.loanType == 'JLG'",
+                        "condition": "model.loanAccount.loanType != 'JLG'",
                         "items": [{
                             "type": "array",
                             "required":false,
@@ -1672,7 +1672,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }]
                 }, {
                     "type": "actionbox",
-                    "condition": "!model.loanAccount.loanType == 'JLG'",
+                    "condition": "model.loanAccount.loanType != 'JLG'",
                     "items": [{
                         "type": "button",
                         "title": "DOWNLOAD_ALL_DOCS",
