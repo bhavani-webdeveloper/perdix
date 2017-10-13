@@ -10,14 +10,14 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                     if (model.fixed_assets.asset_details[l].quantity_on_record == model.comOfQE) {
                         if (!model.fixed_assets.asset_details[l].lost_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0) {
                             PageHelper.setError({
-                                message: "Lost and Transfer Value should be zero"
+                                message: "Lost and Transfer Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + ""
                             });
                             return false;
                         }
                     } else {
                         if (model.fixed_assets.asset_details[l].excess_quantity > model.fixed_assets.asset_details[l].quantity_on_record) {
                             PageHelper.setError({
-                                message: "Excess value should not be greater than ‘available’ value"
+                                message: "Excess value should not be greater than ‘available’ value in " + model.fixed_assets.asset_details[l].asset_description + ""
                             });
                             return false;
                         }
@@ -29,7 +29,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                     if (model.fixed_assets.asset_details[l].quantity_on_hand == model.comOfQLT) {
                         if (!model.fixed_assets.asset_details[l].excess_quantity == 0) {
                             PageHelper.setError({
-                                message: "Excess Value should be zero"
+                                message: "Excess Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + ""
                             });
                             return false;
                         }
@@ -39,7 +39,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                     return true;
                     if (!model.fixed_assets.asset_details[l].excess_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0 && !model.fixed_assets.asset_details[l].lost_quantity == 0) {
                         PageHelper.setError({
-                            message: "Excess, Transfer and lost Value should be zero"
+                            message: "Excess, Transfer and lost Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + " "
                         });
                         return false;
                     }
@@ -151,22 +151,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "htmlClass": "col-sm-2",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].excess_quantity",
-                                    "type": "number",
-                                    // "required": true,
-                                    // "onChange": function(modelValue, form, model) {
-                                    //     if (model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand > model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record) {
-                                    //         model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record = model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand - model.fixed_assets.asset_details[form.arrayIndex].excess_quantity;
-                                    //         if (!model.fixed_assets.asset_details[form.arrayIndex].lost_quantity == 0 && !model.fixed_assets.asset_details[form.arrayIndex].transferred_quantity) {
-                                    //             PageHelper.setError({
-                                    //                 message: "Value should be zero"
-                                    //             });
-                                    //             return false;
-                                    //         }
-                                    //     } else if (model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand < model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record) {
-                                    //         model.fixed_assets.asset_details[form.arrayIndex].quantity_on_record = model.fixed_assets.asset_details[form.arrayIndex].quantity_on_hand + (model.fixed_assets.asset_details[form.arrayIndex].lost_quantity + fixed_assets.asset_details[form.arrayIndex].transferred_quantity)
-                                    //     }
-                                    // }
-
+                                    "type": "number",                                   
                                 }]
                             }, {
                                 "type": "section",
