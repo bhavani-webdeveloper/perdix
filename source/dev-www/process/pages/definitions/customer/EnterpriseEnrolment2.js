@@ -528,6 +528,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         "key": "customer.photoImageId",
+                        "required":true,
                         "title": "BUSINESS_LOCATION_PHOTO",
                         type: "file",
                         fileType: "image/*",
