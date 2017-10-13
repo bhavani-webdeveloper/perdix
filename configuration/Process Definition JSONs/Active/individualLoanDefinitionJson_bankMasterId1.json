@@ -650,6 +650,24 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
                },
+			   "loanCycle":{
+                  "title":"loanCycle",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+			   "gstNumber":{
+                  "title":"gstNumber",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
                "expectedCommercialCibilCharge":{
                   "title":"Expected Commercial Cibil Charge",
                   "type":"number",
