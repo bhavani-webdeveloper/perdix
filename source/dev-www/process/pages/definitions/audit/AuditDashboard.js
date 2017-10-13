@@ -121,7 +121,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (oraq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
-                        'current_stage': 'start',
+                        'status': 'O',
                         'audit_type': 1
                     }).$promise.then(function(data) {
                         oraq.data = data.body.length;

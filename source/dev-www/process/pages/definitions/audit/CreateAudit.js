@@ -46,15 +46,12 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                     }, {
                         "type": "actionbox",
                         "items": [{
-                            "type": "button",
+                            "type": "submit",
                             "title": "CREATE",
-                            "onClick": "actions.createAudit(model, formCtrl, form, $event)"
                         }]
                     }]
                 }
                 init();
-
-
             },
             form: [],
             schema: {
@@ -98,45 +95,23 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                 }
             },
             actions: {
-                createAudit: function(model, formCtrl, form, $event) {
+                submit: function(model, formCtrl, form, $event) {
                     PageHelper.showLoader();
+                    model.audit_info.status = "O";
+                    model.audit_info.next_stage = "create";
+                    var p = null;
                     if (model.audit_info.audit_type == 1) {
-                        if (model.audit_info.auditor_id && model.audit_info.branch_id && model.audit_info.report_date) {
-                            model.audit_info.next_stage = "create";
-                            model.audit_info.status = "S";
-                            Audit.online.updateAuditInfo(model.audit_info).$promise.then(function(res) {
-                                model.audit_info = res;
-                                PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);
-                            }, function(errRes) {
-                                PageHelper.showErrors(errRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                        } else {
-                            PageHelper.showProgress("page-init", "All fields are mandatory.", 5000);
-                            PageHelper.hideLoader();
-                        }
+                        p = Audit.online.updateAuditInfo(model.audit_info).$promise;
                     } else {
-                        if (model.audit_info.auditor_id && model.audit_info.branch_id) {
-                            model.audit_info.status = "O";
-                            model.audit_info.audit_type = 0;
-                            Audit.online.createSnapAudit(model.audit_info).$promise.then(function(res) {
-                                model.audit_info = res;
-                                PageHelper.showProgress("page-init", "Audit Updated Successfully.", 5000);
-                            }, function(errRes) {
-                                PageHelper.showErrors(errRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                        } else {
-                            PageHelper.showProgress("page-init", "All fields are mandatory.", 5000);
-                            PageHelper.hideLoader();
-                        }
+                        p = Audit.online.createSnapAudit(model.audit_info).$promise;
                     }
-
-                },
-            },
-
+                    p.then(function(res) {
+                        model.audit_info = res;
+                        PageHelper.showProgress("page-init", "Audit " + res.audit_id + " created Successfully.", 5000);
+                        irfNavigator.goBack();
+                    }, PageHelper.showErrors).finally(PageHelper.hideLoader);
+                }
+            }
         };
     }
 ]);
