@@ -1086,6 +1086,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }, {
                         key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
                         title: "RELATIONSHIP_WITH_APPLICATION",
+                        required:true,
                         type:"select",
                         enumCode:"relation"
                     }]

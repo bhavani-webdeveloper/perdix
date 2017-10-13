@@ -2418,7 +2418,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 type:"string",
                                 required:true,
                                 inputmode: "number",
-                                numberType: "tel"
+                                numberType: "tel",
+                                /*"schema":{
+                                    "pattern":"/[1-9]{1}[0-9]{9}$/"
+                                }*/
                             },
                             {
                                 key:"customer.verifications[].occupation",

@@ -251,29 +251,6 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
             {
                 "key":"bankDepositSummary.bankBranchDetails",
                 "title":"DEPOSITED_BANK_BRANCH"
-            },
-            {
-                key: "creditValidation.notPaid",
-                title: "NOT_PAID",
-                type: "checkbox",
-                "schema": {
-                    "default": false
-                },
-            }, {
-                key: "creditValidation.reject_reason",
-                title: "REJECT_REASON",
-                type: "select",
-                titleMap: [{
-                    "name": "Amount not credited in account",
-                    "value": "1"
-                }],
-                condition: "model.creditValidation.notPaid"
-            }, {
-                key: "creditValidation.reject_remarks",
-                title: "REJECT_REMARKS",
-                readonly: false,
-                type: "textarea",
-                condition: "model.creditValidation.notPaid"
             }
             ]
         },{

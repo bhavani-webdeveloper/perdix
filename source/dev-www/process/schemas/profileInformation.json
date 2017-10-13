@@ -1572,6 +1572,11 @@
                                 "type": ["number","null"],
                                 "title": "OUTSTANDING_PAYABLE"
                             },
+                            "mobileNo": {
+                                "type": ["string", "null"],
+                                "maxLength": 10,
+                                "minLength": 10
+                            },
                             "outstandingReceivable": {
                                 "type": ["number","null"],
                                 "title": "OUTSTANDING_RECEIVABLE"
