@@ -129,7 +129,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (osaq) {
-                    Audit.online.getSnapAuditAll({
+                    Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
                         'status' : 'O'

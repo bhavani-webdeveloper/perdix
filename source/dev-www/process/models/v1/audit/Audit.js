@@ -139,10 +139,6 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'GET',
                 url: endpoint + '/getSnapAuditMaster'
             },
-            getSnapAuditAll: searchResource({
-                method: 'GET',
-                url: endpoint + '/getAllSnapAudit'
-            }),
             createSnapAudit: {
                 method: 'POST',
                 url: endpoint + '/createSnapAudit'
