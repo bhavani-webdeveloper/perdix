@@ -49,6 +49,8 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     model.jewel_appraisal.jewel_details = response.jewel_details;
                     model.jewel_appraisal.jewel_assets = response.jewel_assets;
                     var tableDetails = [];
+                    model.total = 0;
+                    
                 };
                 model.$isOffline = false;
                 if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.jewel_appraisal) {
@@ -110,15 +112,20 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 title: "JEWEL_ASSETS",
                 items: [{
                     key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hand",
-                    type: "string"
+                    type: "number"
                 }, {
                     key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hq",
-                    type: "string",
+                    type: "number",
                 }, {
                     key: "jewel_appraisal.jewel_assets.total_on_hand",
-                    type: "string",
+                    type: "number",
+                    "onChange": function(modelValue, form, model) {
+                        model.addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
+                        model.jewel_appraisal.jewel_assets.CMS_difference = String(model.addedVal);
+                    }
                 }, {
-                    key: "jewel_appraisal.jewel_assets.comments"
+                    key: "jewel_appraisal.jewel_assets.CMS_difference",
+                    readonly:true
                 }, {
                     type: "fieldset",
                     title: "COMMENTS",
@@ -142,7 +149,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                         "properties": {
                             "comments": {
                                 "type": ["string", "null"],
-                                "title": "COMMENTS"
+                                "title": "JEWEL_APPRAISAL_COMMENTS"
                             },
                             "jewel_details": {
                                 "type": "array",
@@ -153,8 +160,8 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                         "account_number": {
                                             "type": ["string", "null"],
                                             "title": "ACCOUNT_NUMBER",
-                                            "maxLength":16,
-                                            "minLength":16,
+                                            "maxLength": 16,
+                                            "minLength": 16,
                                         },
                                         "loan_amount": {
                                             "type": ["number", "null"],
@@ -199,21 +206,22 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                 "type": "object",
                                 "properties": {
                                     "number_of_pouches_in_hand": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "POUNCHES_IN_THE_BRANCH"
                                     },
                                     "number_of_pouches_in_hq": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "POUNCHES_IN_THE_HUB"
                                     },
                                     "total_on_hand": {
-                                        "type": ["string", "null"],
+                                        "type": ["integer", "null"],
                                         "title": "TOTAL_BY_CMS"
                                     },
-                                    "comments": {
-                                        "type": ["string", "null"],
-                                        "title": "COMMENTS"
-                                    }
+                                    "CMS_difference": {
+                                        "type": "string",
+                                        "title": "DIFFERENCE"
+                                    },
+                                    
                                 }
                             },
                         },
