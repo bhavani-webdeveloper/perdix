@@ -41,8 +41,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                             var notes = model.master.portfolio_stats.cash_holding.notes[i];
                             // if (notes.status == 1 && notes.currency_type == "N") {
                             model.portfolio_stats.cash_holding.cash_on_hand.push({
-                                "currency_id": notes.currency_id,
-                                "units_on_hand": ""
+                                "currency_id": notes.currency_id
                             })
                         }
                     }
@@ -82,9 +81,10 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                                                 model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash = null;
                                             } else {
                                                 model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash = model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].units_on_hand * model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].denomination;
+                                                model.total = model.total + model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash;
+                                                model.portfolio_stats.sum_total_cash = model.total;
                                             }
-                                            model.total = model.total + model.portfolio_stats.cash_holding.cash_on_hand[form.arrayIndex].total_cash;
-                                            model.portfolio_stats.sum_total_cash = model.total;
+
                                         }
                                     }]
                                 }, {
@@ -290,18 +290,21 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     boxItems.push.apply(boxItems, [{
                         "key": "portfolio_stats.sum_total_cash",
                         "type": "number",
-                        "title": "TOTAL_CASH_BALANCE_ON_HAND"                        
+                        "title": "TOTAL_CASH_BALANCE_ON_HAND",
+                        "readonly": true
                     }, {
-                        "key": "portfolio_stats.cbs_balance",
+                        "key": "portfolio_stats.cash_holding.cbs_balance",
                         "type": "number",
                         "title": "CBS_BALANCE",
                         "onChange": function(modelValue, form, model) {
-                            model.portfolio_stats.deviation = model.portfolio_stats.sum_total_cash - model.portfolio_stats.cbs_balance;
+                            model.portfolio_stats.cash_holding.deviation = model.portfolio_stats.sum_total_cash - model.portfolio_stats.cash_holding.cbs_balance;
+
                         }
                     }, {
-                        "key": "portfolio_stats.deviation",
+                        "key": "portfolio_stats.cash_holding.deviation",
                         "type": "number",
-                        "title": "DEVIATION"
+                        "title": "Deviation",
+                        "readonly":true
                     }]);
                     boxItemsOne.push.apply(boxItemsOne, goldDetails);
                     boxItemsTwo.push.apply(boxItemsTwo, coinsSheetForm);
@@ -310,11 +313,11 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         "title": "CASH_HOLDING",
                         "colClass": "col-sm-6",
                         "items": [{
-                            "key": "portfolio_stats.coin_balance",
+                            "key": "portfolio_stats.cash_holding.coin_balance",
                             "type": "number",
                             "title": "COIN_BALANCE",
                             "onChange": function(modelValue, form, model) {
-                                model.total = model.total + model.portfolio_stats.coin_balance;
+                                model.total = model.total + model.portfolio_stats.cash_holding.coin_balance;
                                 model.portfolio_stats.sum_total_cash = model.total;
                             }
                         }, {
@@ -383,7 +386,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                                 "type": "number",
                                 "title": "CBS_BALANCE"
                             },
-                            "values_deviation": {
+                            "deviation": {
                                 "type": "number",
                                 "title": "DEVIATION"
                             },
