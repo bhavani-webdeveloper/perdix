@@ -208,13 +208,18 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                         item.ifsc_code + ', ' + item.bank_name,
                         item.branch_name
                     ];
-                }
+                },
+                onSelect:function(results,model,context) {
+                    model.bankDepositSummary.ifscCode = results.ifsc_code;
+                    model.bankDepositSummary.bankBranchDetails = results.bank_name + '   ' + results.branch_name;
+                },
             },
             {
                 key: "bankDepositSummary.ifscCode",
                 type: "lov",
+                readonly:true,
                 "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
-                lovonly: true,
+                //lovonly: true,
                 inputMap: {
                     "ifscCode": {
                         "key": "bankDepositSummary.ifscCode"
@@ -234,9 +239,9 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                 search: function(inputModel, form) {
                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                     var promise = CustomerBankBranch.search({
-                        'bankName': inputModel.depositBank,
+                        'bankName': inputModel.bankName,
                         'ifscCode': inputModel.ifscCode,
-                        'branchName': inputModel.depositBranch
+                        'branchName': inputModel.branchName
                     }).$promise;
                     return promise;
                 },
@@ -250,6 +255,7 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
             },
             {
                 "key":"bankDepositSummary.bankBranchDetails",
+                readonly:true,
                 "title":"DEPOSITED_BANK_BRANCH"
             }
             ]
@@ -354,12 +360,14 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                             id: model.pendingCashDeposits[form.arrayIndex].repaymentId
                         }).$promise.then(
                             function(resp) {
+                                
                                 var loanCollection = _.cloneDeep(resp);
                                 var reqParams = {};
                                 reqParams.loanCollection = loanCollection;
                                 reqParams.stage = "Rejected";
                                 reqParams.repaymentProcessAction = "PROCEED";
                                 LoanCollection.update(reqParams, function(resp, header) {
+                                    PageHelper.showProgress('loan collection with id' +resp.id + 'is rejected', 'Working...');
                                     PageHelper.hideLoader();
                                     PageHelper.navigateGoBack();
                                 }, function(resp) {

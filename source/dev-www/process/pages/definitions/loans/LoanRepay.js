@@ -663,7 +663,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                         $log.info("Inside submit");
                         if(window.confirm("Are you Sure?")){
-                            PageHelper.showLoader();
+                            PageHelper.showBlockingLoader("Processing...");
                             /*var postData = _.cloneDeep(model.repayment);
                             postData.amount = parseInt(Number(postData.amount))+"";
                             postData.instrument = model.repayment.instrument;
@@ -735,7 +735,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             },function(resp){
                                 PageHelper.showErrors(resp);
                             }).$promise.finally(function(){
-                                PageHelper.hideLoader();
+                                PageHelper.hideBlockingLoader();
                             });
                             }
                             else{
@@ -775,7 +775,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },function(resp){
                                     PageHelper.showErrors(resp);
                                 }).$promise.finally(function(){
-                                    PageHelper.hideLoader();
+                                   PageHelper.hideBlockingLoader();
                                 });
                             }
 

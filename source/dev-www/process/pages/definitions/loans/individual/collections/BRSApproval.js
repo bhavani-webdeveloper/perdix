@@ -52,6 +52,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                             $log.info(model.Collection);
                         })
                     }
+
+                    Queries.getBankAccounts().then(
+                        function(response) {                             
+                            for(i in response){
+                                if(response[i].account_number == model.Collection.bankAccountNumber){
+                                    model.Collection.bankbranch = response[i].branch_name;
+                                }
+                            }
+                        }
+                    )
+
                     LoanAccount.get({
                     accountId: loanAccountNo
                     }).$promise.then(
@@ -266,6 +277,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 },{
                     key: "Collection.bankAccountNumber",
                     title:"REPAYMENT_TO_ACCOUNT",
+                    readonly: true,
+                },{
+                    key: "Collection.bankbranch",
+                    title:"Bank Branch",
                     readonly: true,
                 }, {
                     key: "creditValidation.status",
