@@ -2,7 +2,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
     function($log, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var master = null;
         var validateFields = function(model) {
-            $log.info(model)
             for (l in model.fixed_assets.asset_details) {
                 var transferValue = model.fixed_assets.asset_details[l].transferred_quantity;
                 if (model.fixed_assets.asset_details[l].quantity_on_hand > model.fixed_assets.asset_details[l].quantity_on_record) {
@@ -70,7 +69,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                 var self = this;
                 self.form = [];
                 var init = function(response) {
-                    $log.info(response)
                     model.master = master;
                     model.fixed_assets = response;
 
@@ -99,17 +97,15 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
 
                     for (i in model.fixed_assets.asset_details) {
                         auditData_fixedAsset = model.fixed_assets.asset_details[i];
-                        $log.info(auditData_fixedAsset)
                         fixedAssetSheetForm.push({
                             "type": "section",
                             "htmlClass": "row",
                             "items": [{
                                 "type": "section",
-                                "htmlClass": "col-sm-2",
+                                "htmlClass": "col-sm-5",
                                 "items": [{
-                                    "key": "fixed_assets.asset_details[" + i + "].asset_description",
-                                    "type": "string",
-                                    "readonly": true
+                                    "type": "section",
+                                    "html": "{{model.fixed_assets.asset_details[" + i + "].asset_description}}"
                                 }]
                             }, {
                                 "type": "section",
@@ -117,16 +113,15 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].quantity_on_record",
                                     "readonly": true,
-                                    "type": "string"
+                                    "notitle": true
                                 }]
                             }, {
                                 "type": "section",
-                                "htmlClass": "col-sm-2",
+                                "htmlClass": "col-sm-1",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].quantity_on_hand",
                                     "type": "number",
-                                    // "required": true,
-
+                                    "notitle": true
                                 }]
                             }, {
                                 "type": "section",
@@ -134,32 +129,30 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].lost_quantity",
                                     "type": "number",
-                                    // "required": true
-
+                                    "notitle": true
                                 }]
                             }, {
                                 "type": "section",
-                                "htmlClass": "col-sm-2",
+                                "htmlClass": "col-sm-1",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].transferred_quantity",
                                     "type": "number",
-                                    // "required": true
-
+                                    "notitle": true
                                 }]
                             }, {
                                 "type": "section",
-                                "htmlClass": "col-sm-2",
+                                "htmlClass": "col-sm-1",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].excess_quantity",
-                                    "type": "number",                                   
+                                    "type": "number",
+                                    "notitle": true
                                 }]
                             }, {
                                 "type": "section",
                                 "htmlClass": "col-sm-2",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].description",
-                                    "type": "string",
-                                    // "required": true
+                                    "notitle": true
                                 }]
                             }]
                         });
@@ -169,12 +162,10 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                         "htmlClass": "row",
                         "items": [{
                             "type": "section",
-                            "htmlClass": "col-sm-2",
+                            "htmlClass": "col-sm-5",
                             "items": [{
                                 "type": "section",
-                                "html": "{{'ASSET'|translate}}",
-                                "required": true
-
+                                "html": "{{'ASSET'|translate}}"
                             }]
                         }, {
                             "type": "section",
@@ -185,7 +176,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             }]
                         }, {
                             "type": "section",
-                            "htmlClass": "col-sm-2",
+                            "htmlClass": "col-sm-1",
                             "items": [{
                                 "type": "section",
                                 "html": "{{'AVAILABLE'|translate}}"
@@ -199,14 +190,14 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             }]
                         }, {
                             "type": "section",
-                            "htmlClass": "col-sm-2",
+                            "htmlClass": "col-sm-1",
                             "items": [{
                                 "type": "section",
                                 "html": "{{'TRANFERRED'|translate}}"
                             }]
                         }, {
                             "type": "section",
-                            "htmlClass": "col-sm-2",
+                            "htmlClass": "col-sm-1",
                             "items": [{
                                 "type": "section",
                                 "html": "{{'EXCESS'|translate}}"
@@ -243,7 +234,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             title: "UPDATE"
                         }]
                     }];
-
                 };
 
                 model.$isOffline = false;
