@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "$q", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore", "filterFilter",
-    function($log, $q, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore, filterFilter) {
+irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log", "$q", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore", "filterFilter", "User",
+    function($log, $q, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore, filterFilter, User) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -24,15 +24,29 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                 var self = this;
                 self.form = [];
                 var init = function(response) {
-                    $log.info(response)
-                    model.masters = masters;
                     model.general_observations = response;
-                    for (i in model.general_observations) {
-                        for (j in model.masters.general_observation.particulars) {
-                            var particulars = model.masters.general_observation.particulars[i];
-                            if (model.general_observations[i].particular_id = particulars.particular_id) {
-                                model.general_observations[i].particular_name = particulars.particular_name;
+                    if (!model.general_observations || model.general_observations.length == 0) {
+                        // populate fresh
+                        model.general_observations = [];
+                        _.forOwn(masters.general_observation.particulars, function(v, k) {
+                            if (v.status == 1) {
+                                var go = {
+                                    "particular_id": v.particular_id,
+                                    "comments": "",
+                                    "option_id": "",
+                                    "particular_name": v.particular_name
+                                };
+                                if (v.particular_type == 2) {
+                                    go.option_id = [];
+                                    go.option_type = 'user';
+                                }
+                                model.general_observations.push(go);
                             }
+                        });
+                    } else {
+                        // fill particular name
+                        for (i in model.general_observations) {
+                            model.general_observations[i].particular_name = masters.general_observation.particulars[model.general_observations[i].particular_id].particular_name;
                         }
                     }
                     self.form = [{
@@ -44,43 +58,14 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             key: "general_observations",
                             type: "array",
                             title: "GENERAL_OBSERVATION",
-                            titleExpr: " ",
+                            titleExpr: "model.general_observations[arrayIndex].particular_name",
                             view: "fixed",
+                            add: null,
+                            remove: null,
                             startEmpty: true,
                             items: [{
-                                key: "general_observations[].particular_name",
-                                "type": "lov",
-                                lovonly: true,
-                                outputMap: {},
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model, context) {
-                                    var particularsList = masters.general_observation.particulars.filter(function(item) {
-                                        for (i in model.general_observations) {
-                                            if (model.general_observations[i].particular_id == item.particular_id) {
-                                                return false;
-                                            }
-                                        }
-                                        return true;
-                                    });
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": particularsList.length
-                                        },
-                                        body: particularsList
-                                    });
-                                },
-                                getListDisplayItem: function(item, index, context) {
-                                    return [
-                                        item.particular_id,
-                                        item.particular_name,
-                                    ];
-                                },
-                                onSelect: function(result, model, context) {
-                                    model.general_observations[context.arrayIndex].particular_name = result.particular_name;
-                                    model.general_observations[context.arrayIndex].particular_id = result.particular_id;
-                                },
-                            }, {
                                 key: "general_observations[].option_id",
+                                "condition": "model.general_observations[arrayIndex].option_type != 'user'",
                                 "type": "lov",
                                 lovonly: true,
                                 outputMap: {},
@@ -97,7 +82,6 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     });
                                 },
                                 getListDisplayItem: function(item, index, context) {
-                                    $log.info(item)
                                     return [
                                         item.name
                                     ];
@@ -105,6 +89,65 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                 onSelect: function(result, model, context) {
                                     model.general_observations[context.arrayIndex].option_id = result.name;
                                 }
+                            }, {
+                                "type": "section",
+                                "htmlClass": "row",
+                                "condition": "model.general_observations[arrayIndex].option_type == 'user'",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "items": [{
+                                        "type": "section",
+                                        "html": "<br><span class='pull-right'>{{'EMPLOYEE'|translate}}</span>"
+                                    }]
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "items": [{
+                                        "type": "array",
+                                        "key": "general_observations[].option_id",
+                                        "title": "EMPLOYEE",
+                                        "titleExpr": "model.general_observations[arrayIndexes[0]].option_id[arrayIndexes[1]]",
+                                        "startEmpty": true,
+                                        "items": [{
+                                            key: "general_observations[].option_id[]",
+                                            "type": "lov",
+                                            lovonly: true,
+                                            inputMap: {
+                                                "branch_id": {
+                                                    "key": "branch_id"
+                                                },
+                                                "role_id": {
+                                                    "key": "role_id"
+                                                },
+                                                "login": {
+                                                    "key": "login"
+                                                },
+                                                "userName": {
+                                                    "key": "user_name"
+                                                }
+                                            },
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model, context) {
+                                                return User.query({
+                                                    'login': inputModel.login,
+                                                    'userName': inputModel.userName,
+                                                    'roleId': inputModel.role_id,
+                                                    'branchName': inputModel.branch_id,
+                                                }).$promise;
+                                            },
+                                            getListDisplayItem: function(item, index, context) {
+                                                return [
+                                                    item.login + ': ' + item.userName,
+                                                    item.branchName
+                                                ];
+                                            },
+                                            onSelect: function(result, model, context) {
+                                                model.general_observations[context.arrayIndexes[0]].option_id[context.arrayIndexes[1]] = result.login;
+                                            }
+                                        }]
+                                    }]
+                                }]
                             }, {
                                 key: "general_observations[].comments"
                             }]
@@ -162,14 +205,37 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                 }
                             }
                         }
+                    },
+                    "branch_id": {
+                        "title": "BRANCH",
+                        "type": "string",
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "user_name": {
+                        "title": "USER_NAME",
+                        "type": "string"
+                    },
+                    "login": {
+                        "title": "LOGIN",
+                        "type": "string"
+                    },
+                    "role_id": {
+                        "title": "ROlE_ID",
+                        "type": "number",
+                        "enumCode": "roles",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
                     }
                 },
             },
             actions: {
                 submit: function(model, form, formName) {
                     if (model.$isOffline) {
-                        Audit.offline.setGeneralObservation(model.audit_id, model.general_observations).then(function(res) {
-                            model.general_observations = res;
+                        Audit.offline.setGeneralObservation(model.audit_id, model.general_observations).then(function() {
                             PageHelper.showProgress("auditId", "Audit Updated Successfully.", 3000);
                             irfNavigator.goBack();
                         }, function(errRes) {
