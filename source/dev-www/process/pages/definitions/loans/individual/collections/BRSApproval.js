@@ -387,6 +387,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                         type:"date",
                         "title":"REPAYMENT_DATE",
                         readonly: true,
+                    },{
+                        key: "Collection.depositsummary.loanCollections[].lastEditedBy",
+                        "title":"Deposited By",
+                        readonly: true,
                     }]
                 }]
             },

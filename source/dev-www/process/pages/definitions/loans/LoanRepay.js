@@ -57,6 +57,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         unapprovedTransactionsCount: 0
                     };
 
+                    model.additional.suspenseCode = SessionStore.getGlobalSetting("loan.individual.collection.suspenseCollectionAccount");
+
+                    
+
                     model.$pageConfig = config;
                     model._pageGlobals = _pageGlobals;
                     model.repayment = {};
@@ -724,9 +728,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             postData.stage = "Completed";
                                         } else if (postData.loanCollection.instrumentType == 'Suspense') {
                                             postData.stage = "CreditValidation";
+                                            postData.loanCollection.bankAccountNumber = model.additional.suspenseCode;
                                         } else {
                                             postData.stage = "BRSValidation";
                                         }
+
+                                        
                                         postData.repaymentProcessAction = "PROCEED";
                                         postData.loanCollection.id = model.repayment.id;
                                         LoanCollection.update(postData, function(resp, header) {
@@ -758,6 +765,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                     resp.stage = "Completed";
                                                 } else if (postData.loanCollection.instrumentType == 'Suspense') {
                                                     resp.stage = "CreditValidation";
+                                                    resp.loanCollection.bankAccountNumber = model.additional.suspenseCode;
                                                 } else {
                                                     resp.stage = "BRSValidation";
                                                 }
