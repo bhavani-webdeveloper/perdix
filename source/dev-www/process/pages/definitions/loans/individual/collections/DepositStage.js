@@ -56,6 +56,8 @@ function($log,SessionStore,$state,Utils,$stateParams,irfElementsConfig,Queries,f
                     model.bankDepositSummary = {};
                     if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
                     	model.bankDepositSummary.bankAccountNumber = defaultBank[0].account_number;
+                        model.bankDepositSummary.ifscCode = defaultBank[0].ifsc_code;
+                        model.bankDepositSummary.bankBranchDetails = defaultBank[0].bank_name + '   ' + defaultBank[0].branch_name;
                 }
             });
 

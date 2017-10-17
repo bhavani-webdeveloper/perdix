@@ -662,124 +662,124 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         // }
 
                         $log.info("Inside submit");
-                        if(window.confirm("Are you Sure?")){
-                            PageHelper.showBlockingLoader("Processing...");
-                            /*var postData = _.cloneDeep(model.repayment);
-                            postData.amount = parseInt(Number(postData.amount))+"";
-                            postData.instrument = model.repayment.instrument;
-                            LoanAccount.repay(postData,function(resp,header){
-                                $log.info(resp);
-                                try{
-                                    alert(resp.response);
-                                    PageHelper.navigateGoBack();
-                                }catch(err){
+                        Utils.confirm("Are you sure?")
+                            .then(
+                                function() {
+                                    PageHelper.showBlockingLoader("Processing...");
+                                    /*var postData = _.cloneDeep(model.repayment);
+                                    postData.amount = parseInt(Number(postData.amount))+"";
+                                    postData.instrument = model.repayment.instrument;
+                                    LoanAccount.repay(postData,function(resp,header){
+                                        $log.info(resp);
+                                        try{
+                                            alert(resp.response);
+                                            PageHelper.navigateGoBack();
+                                        }catch(err){
 
-                                }
-                            */
-                            var postData = {"loanCollection":{}};
-                            postData.loanCollection.accountNumber = model.repayment.accountNumber;
-                            postData.loanCollection.bankAccountNumber = model.repayment.bankAccountNumber;
-                            
-                            if (model.repayment.transactionName == 'Scheduled Demand'){
-                                postData.loanCollection.demandAmount = model.repayment.totalDue;    
-                            } else if (model.repayment.transactionName == 'Pre-closure') {
-                                postData.loanCollection.demandAmount = model.repayment.totalPayoffAmountToBePaid;    
-                            } else if (model.repayment.transactionName == 'Fee Payment'){
-                                postData.loanCollection.demandAmount = model.repayment.totalFeeDue;    
-                            }
-
-                            postData.loanCollection.demandDate = "";
-                            postData.loanCollection.feeDue = model.repayment.totalFeeDue;
-                            postData.loanCollection.visitedDate = model.repayment.visitedDate;
-                            postData.loanCollection.installmentAmount = model.cbsLoanData.equatedInstallment;
-                            postData.loanCollection.instrumentDate = model.repayment.instrumentDate;
-                            postData.loanCollection.instrumentType = model.repayment.instrument;
-                            postData.loanCollection.interestAmount = model.repayment.totalNormalInterestDue;
-                            postData.loanCollection.overdueAmount = model.repayment.totalDemandDue;
-                            postData.loanCollection.penalInterestDue = model.cbsLoanData.totalPenalInterestDue;
-                            postData.loanCollection.principalDue = model.cbsLoanData.totalPrincipalDue;
-                            postData.loanCollection.reference = model.repayment.reference;
-                            postData.loanCollection.remarks = model.repayment.remarks;
-                            postData.loanCollection.repaymentAmount = model.repayment.amount;
-                            postData.loanCollection.repaymentDate = model.repayment.repaymentDate;
-                            postData.loanCollection.repaymentType = model.repayment.transactionName;
-                            postData.loanCollection.transactionName = model.repayment.transactionName;
-                            postData.loanCollection.agentTrxn = false;
-                            postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
-
-                            if(model.repayment.id){
-                                if (postData.loanCollection.instrumentType == 'CASH') {
-                                    postData.stage = "Deposit";
-                                } else if (postData.loanCollection.instrumentType == 'ACH') {
-                                    postData.loanCollection.instrumentType = "NEFT";
-                                    postData.loanCollection.scheduleDemandAmount=model.repayment.amount;
-                                    postData.loanCollection.feeWaiverAmount = 0;
-                                    postData.loanCollection.penalInterestWaiverAmount = 0;
-                                    postData.loanCollection.feeAmount = 0;
-                                    postData.loanCollection.securityEmiAmount = 0;
-                                    postData.stage = "Completed";
-                                } else if (postData.loanCollection.instrumentType == 'Suspense') {
-                                    postData.stage = "CreditValidation";
-                                } else {
-                                    postData.stage = "BRSValidation";
-                                }
-                                postData.repaymentProcessAction = "PROCEED";
-                                postData.loanCollection.id = model.repayment.id;
-                                LoanCollection.update(postData,function(resp,header){
-                                $log.info(resp);
-                                try{
-                                    PageHelper.navigateGoBack();
-                                }catch(err){
-
-                                }
-                            },function(resp){
-                                PageHelper.showErrors(resp);
-                            }).$promise.finally(function(){
-                                PageHelper.hideBlockingLoader();
-                            });
-                            }
-                            else{
-                                postData.repaymentProcessAction = "SAVE";
-                                LoanCollection.save(postData,function(resp,header){
-                                    $log.info(resp);
-                                    try{
-                                        if(postData.loanCollection.instrumentType == 'CASH'){
-                                            resp.stage="Deposit";
-                                        }else if (postData.loanCollection.instrumentType == 'ACH'){
-                                           resp.loanCollection.instrumentType ="NEFT";
-                                           resp.loanCollection.scheduleDemandAmount=resp.loanCollection.repaymentAmount;
-                                           resp.loanCollection.feeWaiverAmount = 0;
-                                           resp.loanCollection.penalInterestWaiverAmount = 0;
-                                           resp.loanCollection.feeAmount = 0;
-                                           resp.loanCollection.securityEmiAmount = 0;
-                                           resp.stage = "Completed";
                                         }
-                                        else if (postData.loanCollection.instrumentType == 'Suspense'){
-                                           resp.stage="CreditValidation";
-                                        }
-                                        else{
-                                            resp.stage="BRSValidation";
-                                        }
-                                        resp.repaymentProcessAction = "PROCEED";
+                                    */
+                                    var postData = {
+                                        "loanCollection": {}
+                                    };
+                                    postData.loanCollection.accountNumber = model.repayment.accountNumber;
+                                    postData.loanCollection.bankAccountNumber = model.repayment.bankAccountNumber;
 
-                                        LoanCollection.update(resp).$promise
-                                            .then(function(res,head){
-                                                PageHelper.showProgress('action-succes', 'Repayment done succesfully.', 5000);
-                                                PageHelper.navigateGoBack();
-                                            },function(httpres){
-
-                                            })
-                                    }catch(err){
-
+                                    if (model.repayment.transactionName == 'Scheduled Demand') {
+                                        postData.loanCollection.demandAmount = model.repayment.totalDue;
+                                    } else if (model.repayment.transactionName == 'Pre-closure') {
+                                        postData.loanCollection.demandAmount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (model.repayment.transactionName == 'Fee Payment') {
+                                        postData.loanCollection.demandAmount = model.repayment.totalFeeDue;
                                     }
-                                },function(resp){
-                                    PageHelper.showErrors(resp);
-                                }).$promise.finally(function(){
-                                   PageHelper.hideBlockingLoader();
-                                });
-                            }
 
-                        }
+                                    postData.loanCollection.demandDate = "";
+                                    postData.loanCollection.feeDue = model.repayment.totalFeeDue;
+                                    postData.loanCollection.visitedDate = model.repayment.visitedDate;
+                                    postData.loanCollection.installmentAmount = model.cbsLoanData.equatedInstallment;
+                                    postData.loanCollection.instrumentDate = model.repayment.instrumentDate;
+                                    postData.loanCollection.instrumentType = model.repayment.instrument;
+                                    postData.loanCollection.interestAmount = model.repayment.totalNormalInterestDue;
+                                    postData.loanCollection.overdueAmount = model.repayment.totalDemandDue;
+                                    postData.loanCollection.penalInterestDue = model.cbsLoanData.totalPenalInterestDue;
+                                    postData.loanCollection.principalDue = model.cbsLoanData.totalPrincipalDue;
+                                    postData.loanCollection.reference = model.repayment.reference;
+                                    postData.loanCollection.remarks = model.repayment.remarks;
+                                    postData.loanCollection.repaymentAmount = model.repayment.amount;
+                                    postData.loanCollection.repaymentDate = model.repayment.repaymentDate;
+                                    postData.loanCollection.repaymentType = model.repayment.transactionName;
+                                    postData.loanCollection.transactionName = model.repayment.transactionName;
+                                    postData.loanCollection.agentTrxn = false;
+                                    postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
+
+                                    if (model.repayment.id) {
+                                        if (postData.loanCollection.instrumentType == 'CASH') {
+                                            postData.stage = "Deposit";
+                                        } else if (postData.loanCollection.instrumentType == 'ACH') {
+                                            postData.loanCollection.instrumentType = "NEFT";
+                                            postData.loanCollection.scheduleDemandAmount = model.repayment.amount;
+                                            postData.loanCollection.feeWaiverAmount = 0;
+                                            postData.loanCollection.penalInterestWaiverAmount = 0;
+                                            postData.loanCollection.feeAmount = 0;
+                                            postData.loanCollection.securityEmiAmount = 0;
+                                            postData.stage = "Completed";
+                                        } else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                            postData.stage = "CreditValidation";
+                                        } else {
+                                            postData.stage = "BRSValidation";
+                                        }
+                                        postData.repaymentProcessAction = "PROCEED";
+                                        postData.loanCollection.id = model.repayment.id;
+                                        LoanCollection.update(postData, function(resp, header) {
+                                            $log.info(resp);
+                                            try {
+                                                PageHelper.navigateGoBack();
+                                            } catch (err) {
+
+                                            }
+                                        }, function(resp) {
+                                            PageHelper.showErrors(resp);
+                                        }).$promise.finally(function() {
+                                            PageHelper.hideBlockingLoader();
+                                        });
+                                    } else {
+                                        postData.repaymentProcessAction = "SAVE";
+                                        LoanCollection.save(postData, function(resp, header) {
+                                            $log.info(resp);
+                                            try {
+                                                if (postData.loanCollection.instrumentType == 'CASH') {
+                                                    resp.stage = "Deposit";
+                                                } else if (postData.loanCollection.instrumentType == 'ACH') {
+                                                    resp.loanCollection.instrumentType = "NEFT";
+                                                    resp.loanCollection.scheduleDemandAmount = resp.loanCollection.repaymentAmount;
+                                                    resp.loanCollection.feeWaiverAmount = 0;
+                                                    resp.loanCollection.penalInterestWaiverAmount = 0;
+                                                    resp.loanCollection.feeAmount = 0;
+                                                    resp.loanCollection.securityEmiAmount = 0;
+                                                    resp.stage = "Completed";
+                                                } else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                                    resp.stage = "CreditValidation";
+                                                } else {
+                                                    resp.stage = "BRSValidation";
+                                                }
+                                                resp.repaymentProcessAction = "PROCEED";
+
+                                                LoanCollection.update(resp).$promise
+                                                    .then(function(res, head) {
+                                                        PageHelper.showProgress('action-succes', 'Repayment done succesfully.', 5000);
+                                                        PageHelper.navigateGoBack();
+                                                    }, function(httpres) {
+
+                                                    })
+                                            } catch (err) {
+
+                                            }
+                                        }, function(resp) {
+                                            PageHelper.showErrors(resp);
+                                        }).$promise.finally(function() {
+                                            PageHelper.hideBlockingLoader();
+                                        });
+                                    }
+                                })
                     }
                 }
             }

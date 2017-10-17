@@ -53,11 +53,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                         })
                     }
 
+                    $log.info(model.Collection.bankAccountNumber);
+
                     Queries.getBankAccounts().then(
-                        function(response) {                             
-                            for(i in response){
-                                if(response[i].account_number == model.Collection.bankAccountNumber){
-                                    model.Collection.bankbranch = response[i].branch_name;
+                        function(response1) {  
+                        $log.info(response1);                        
+                            for(i in response1.body){
+
+                                if(response1.body[i].account_number == model.Collection.bankAccountNumber){
+                                    model.Collection.bankbranch = response1.body[i].branch_name;
+                                   
+                                    $log.info(model.Collection.bankbranch);
                                 }
                             }
                         }
