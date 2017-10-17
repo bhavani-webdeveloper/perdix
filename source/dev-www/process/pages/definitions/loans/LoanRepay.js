@@ -714,15 +714,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     if (model.repayment.id) {
                                         if (postData.loanCollection.instrumentType == 'CASH') {
                                             postData.stage = "Deposit";
-                                        } /*else if (postData.loanCollection.instrumentType == 'ACH') {
-                                            postData.loanCollection.instrumentType = "NEFT";
+                                        } else if (postData.loanCollection.instrumentType == 'ACH') {
+                                            //postData.loanCollection.instrumentType = "NEFT";
                                             postData.loanCollection.scheduleDemandAmount = model.repayment.amount;
                                             postData.loanCollection.feeWaiverAmount = 0;
                                             postData.loanCollection.penalInterestWaiverAmount = 0;
                                             postData.loanCollection.feeAmount = 0;
                                             postData.loanCollection.securityEmiAmount = 0;
                                             postData.stage = "Completed";
-                                        } */else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                        } else if (postData.loanCollection.instrumentType == 'Suspense') {
                                             postData.stage = "CreditValidation";
                                         } else {
                                             postData.stage = "BRSValidation";
@@ -748,15 +748,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             try {
                                                 if (postData.loanCollection.instrumentType == 'CASH') {
                                                     resp.stage = "Deposit";
-                                                } /*else if (postData.loanCollection.instrumentType == 'ACH') {
-                                                    resp.loanCollection.instrumentType = "NEFT";
+                                                } else if (postData.loanCollection.instrumentType == 'ACH') {
+                                                    //resp.loanCollection.instrumentType = "NEFT";
                                                     resp.loanCollection.scheduleDemandAmount = resp.loanCollection.repaymentAmount;
                                                     resp.loanCollection.feeWaiverAmount = 0;
                                                     resp.loanCollection.penalInterestWaiverAmount = 0;
                                                     resp.loanCollection.feeAmount = 0;
                                                     resp.loanCollection.securityEmiAmount = 0;
                                                     resp.stage = "Completed";
-                                                }*/ else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                                } else if (postData.loanCollection.instrumentType == 'Suspense') {
                                                     resp.stage = "CreditValidation";
                                                 } else {
                                                     resp.stage = "BRSValidation";
