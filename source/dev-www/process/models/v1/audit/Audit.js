@@ -35,7 +35,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
-            processDisplayRecords: function(onlineAudits) {
+            processDisplayRecords: function(onlineAudits, audit_type) {
                 var deferred = $q.defer();
                 var displayAudits = {
                     headers: {
@@ -63,7 +63,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         }
                     }
                     angular.forEach(offlineAudits, function(v, k) {
-                        if (!v.$picked) {
+                        if (!v.$picked && (_.isNil(audit_type) || audit_type == v.audit_type)) {
                             displayAudits.body.push(v);
                             displayAudits.headers['x-total-count']++;
                         }
@@ -345,11 +345,13 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 var audit_type_enum = {data:[]};
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
-                    audit_type_enum.data.push({
-                        code: rec.audit_type,
-                        name: rec.audit_type,
-                        value: rec.audit_type_id
-                    });
+                    if (rec.status == 1) {
+                        audit_type_enum.data.push({
+                            code: rec.audit_type,
+                            name: rec.audit_type,
+                            value: rec.audit_type_id
+                        });
+                    }
                     auditTypeObj[rec.audit_type_id] = rec;
                 }
                 response.audit_type = auditTypeObj;
@@ -463,6 +465,12 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                     book_entity[response.book_entity[i].entity_id] = response.book_entity[i];
                 }
                 response.book_entity = book_entity;
+
+                var particulars = {};
+                for (i in response.general_observation.particulars) {
+                    particulars[response.general_observation.particulars[i].particular_id] = response.general_observation.particulars[i];
+                }
+                response.general_observation.particulars = particulars;
 
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
