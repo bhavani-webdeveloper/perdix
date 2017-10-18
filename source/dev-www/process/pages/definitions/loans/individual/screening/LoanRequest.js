@@ -81,12 +81,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         res.data.error = res.data.errorMsg;
                     }
                     PageHelper.showErrors(res);
-                    deferred.reject();  
+                    deferred.reject();
                 });
             }
         }, function(res, status){
             PageHelper.showErrors(res);
-            deferred.reject();            
+            deferred.reject();
         });
         return deferred.promise;
     }
@@ -212,7 +212,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 loanAccount.psychometricCompleted = 'N';
             }
         }
-        
+
         return true;
     }
 
@@ -273,7 +273,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
             if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenureRequested == '')
                 return;
-            
+
             var principal = model.loanAccount.loanAmountRequested;
             var interest = model.loanAccount.expectedInterestRate / 100 / 12;
             var payments;
@@ -287,7 +287,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             var monthly = (principal*x*interest)/(x-1);
 
             // Check that the result is a finite number. If so, display the results.
-            if (!isNaN(monthly) && 
+            if (!isNaN(monthly) &&
                 (monthly != Number.POSITIVE_INFINITY) &&
                 (monthly != Number.NEGATIVE_INFINITY)) {
 
@@ -314,7 +314,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
             if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
                 return;
-            
+
             var principal = model.loanAccount.loanAmount;
             var interest = model.loanAccount.interestRate / 100 / 12;
             var payments;
@@ -328,7 +328,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             var monthly = (principal*x*interest)/(x-1);
 
             // Check that the result is a finite number. If so, display the results.
-            if (!isNaN(monthly) && 
+            if (!isNaN(monthly) &&
                 (monthly != Number.POSITIVE_INFINITY) &&
                 (monthly != Number.NEGATIVE_INFINITY)) {
 
@@ -406,7 +406,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.temp=model.temp||{}
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
-                $log.info(model.loanAccount);   
+                $log.info(model.loanAccount);
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -435,7 +435,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanMitigantsByParameter = [];
                 _.forOwn(loanMitigantsGrouped, function(mitigants, key){
                     var chosenMitigants = "<ul>";
-                    
+
                     for (var i=0; i<mitigants.length; i++){
                         chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
                     }
@@ -533,7 +533,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         'urn':params.customer.urnNo,
                         'name':params.customer.firstName
                     });
-                    model.loanAccount.applicant = params.customer.urnNo;              
+                    model.loanAccount.applicant = params.customer.urnNo;
                 }
                 model.applicant.id = params.customer.id;
             },
@@ -628,7 +628,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 }
 
-                
+
             },
             "cibil-highmark-mandatory-settings": function(bundleModel, model, settings){
                 $log.info("Inside cibil-highmark-mandatory-settings");
@@ -638,7 +638,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside enrolment-removed");
                 /**
                  * Following should happen
-                 * 
+                 *
                  * 1. Remove customer from Loan Customer Relations
                  * 2. Remove custoemr from the placeholders. If Applicant, remove from applicant. If Guarantor, remove from guarantors.
                  */
@@ -647,7 +647,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 _.remove(model.loanAccount.loanCustomerRelations, function(customer){
                     return (customer.customerId==enrolmentDetails.customerId && customer.relation == getRelationFromClass(enrolmentDetails.customerClass)) ;
                 })
-                
+
                 // 2.
                 switch(enrolmentDetails.customerClass){
                     case 'guarantor':
@@ -656,10 +656,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         })
                         break;
                     case 'applicant':
-                        
+
                         break;
                     case 'co-applicant':
-                        
+
                         break;
 
                 }
@@ -686,7 +686,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 }
 
                 // if(model.deviations.deviationParameter && model.deviations.deviationParameter.length==0)
-                //    delete model.loanAccount.loanMitigants; 
+                //    delete model.loanAccount.loanMitigants;
                 // else
                 // {
                 //     if(model.loanAccount.loanMitigants && model.loanAccount.loanMitigants.length > 0){
@@ -723,7 +723,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'", 
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
@@ -750,7 +750,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         onSelect: function(valueObj, model, context) {
                             model.loanAccount.npa = valueObj.npa;
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
-                        } 
+                        }
                     },
                     {
                         key: "loanAccount.npa",
@@ -880,7 +880,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "ACH":"ACH",
                             "PDC":"PDC",
                             "Others":"Others"
-                        } 
+                        }
                     },
                     {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
@@ -899,7 +899,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
                 "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal'|| model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                
+
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
@@ -927,7 +927,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             model.loanAccount.npa = valueObj.npa;
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
                         }
-                        
+
                     },
                     {
                         key: "loanAccount.npa",
@@ -1042,7 +1042,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "ACH":"ACH",
                             "PDC":"PDC",
                             "Others":"Others"
-                        } 
+                        }
                     },
                     {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
@@ -1188,7 +1188,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 items: [{
                     key: "loanAccount.loanMitigants[].parameter",
                     title:"PARAMETER_NAME"
-                }, 
+                },
                 {
                     key: "loanAccount.loanMitigants[].mitigant",
                     title:"MITIGANT"
@@ -1318,7 +1318,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     ]
                 }
             ]
-            
+
         },
         {
             "type": "box",
@@ -1358,7 +1358,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     ]
                 }
             ]
-            
+
         },
         {
                 "type": "box",
@@ -1575,7 +1575,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                              type: "select",
                              enumCode: "decisionmaker",
                              required: true
-                            }, 
+                            },
                             {
                              key: "loanAccount.collateral[].spaceAvailable",
                              title: "SPACE_AVAILABLE",
@@ -1613,7 +1613,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key: "loanAccount.collateral[].collateralDescription",
                                 title:"MACHINE",
-                               
+
                                 type: "string"
                             },
                             {
@@ -1629,26 +1629,26 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",
-                               
+
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.collateral[].collateralType",
                                 title:"MACHINE_TYPE",
-                                
+
                                 type: "select",
                                 enumCode: "collateral_type"
                             },
                             {
                                 key: "loanAccount.collateral[].manufacturer",
                                 title:"MANFACTURE_NAME",
-                             
+
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.collateral[].modelNo",
                                 title:"MACHINE_MODEL",
-                               
+
                                 type: "string",
                             },
                             {
@@ -1675,12 +1675,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                              key: "loanAccount.collateral[].electricityAvailable",
                              title: "ELECTRICITY_AVAIALBLE",
                              type: "string",
-                            }, 
+                            },
                             {
                              key: "loanAccount.collateral[].spaceAvailable",
                              title: "SPACE_AVAILABLE",
                              type: "string",
-                            
+
                             },
                             {
                                 key: "loanAccount.collateral[].collateral1FilePath",
@@ -1766,7 +1766,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 type: "lov",
                                 "title":"PIN_CODE",
                                 fieldType: "text",
-                                "inputmode": "number",                               
+                                "inputmode": "number",
                                 required: true,
                                 autolov: true,
                                 inputMap: {
@@ -2110,7 +2110,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "title": "LOAN_SANCTION",
                 "condition": "model.currentStage == 'Sanction'",
                 "items": [
-                    
+
                     // {
                     //     "key": "loanAccount.loanAmount",
                     //     "type": "amount",
@@ -2536,8 +2536,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                     PageHelper.showProgress("update-loan", "Working...");
 
-                    // 
-                   
+                    //
+
                     IndividualLoan.update(reqData)
                         .$promise
                         .then(function(res){
@@ -2576,7 +2576,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
-                            
+
                             PageHelper.showLoader();
 
                             var completeLead = false;
@@ -2634,12 +2634,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     PageHelper.showProgress("update-loan", "Remarks is mandatory");
                     return false;
                 }
-                
+
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
 
-                            
+
 
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
@@ -2665,7 +2665,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             sendBack: function(model, formCtrl, form, $event){
                 $log.info("Inside sendBack()");
                 PageHelper.clearErrors();
-                
+
                 if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
                     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
                     return false;
@@ -2675,7 +2675,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     return;
                 }
                 Utils.confirm("Are You Sure?").then(function(){
-                    
+
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = null;
                     reqData.loanProcessAction = "PROCEED";
@@ -2737,7 +2737,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         pageName: 'loans.individual.booking.LoanInput',
                         pageId: model.loanAccount.id
                     });
-                } 
+                }
                 if(model.loanAccount.currentStage =="DocumentVerification")
                 {
                     $state.go("Page.Engine", {
@@ -2751,14 +2751,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         pageName: 'loans.individual.booking.IFMRDO',
                         pageId: model.loanAccount.id
                     });
-                } 
+                }
                 if(model.loanAccount.currentStage =="DocumentUpload")
                 {
                     $state.go("Page.Engine", {
                         pageName: 'loans.individual.booking.DocumentUpload',
                         pageId: model.loanAccount.id
                     });
-                }          
+                }
             },
 
             proceed: function(model, formCtrl, form, $event){
@@ -2794,8 +2794,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     /**
                      * Move to Rejected if some proxy indicators are set as YES
                      */
-                    if (_.hasIn(model.enterprise, "bribeOffered") && 
-                        _.hasIn(model.enterprise, "challengingChequeBounce") && 
+                    if (_.hasIn(model.enterprise, "bribeOffered") &&
+                        _.hasIn(model.enterprise, "challengingChequeBounce") &&
                         _.hasIn(model.enterprise, "politicalOrPoliceConnections") &&
                         _.isString(model.enterprise.bribeOffered) &&
                         _.isString(model.enterprise.challengingChequeBounce) &&
@@ -2807,7 +2807,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         )){
                         nextStage = 'Rejected';
                         autoRejected = true;
-                        
+
                     }
                 }
 
@@ -2817,10 +2817,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         for (var i = model.enterprise.enterpriseBureauDetails.length - 1; i >= 0; i--) {
                             if(!model.enterprise.enterpriseBureauDetails[i].fileId
                                 || !model.enterprise.enterpriseBureauDetails[i].bureau
-                                || model.enterprise.enterpriseBureauDetails[i].doubtful==null 
-                                || model.enterprise.enterpriseBureauDetails[i].loss==null 
-                                || model.enterprise.enterpriseBureauDetails[i].specialMentionAccount==null 
-                                || model.enterprise.enterpriseBureauDetails[i].standard==null 
+                                || model.enterprise.enterpriseBureauDetails[i].doubtful==null
+                                || model.enterprise.enterpriseBureauDetails[i].loss==null
+                                || model.enterprise.enterpriseBureauDetails[i].specialMentionAccount==null
+                                || model.enterprise.enterpriseBureauDetails[i].standard==null
                                 || model.enterprise.enterpriseBureauDetails[i].subStandard==null){
                                 commercialCheckFailed = true;
                                 break;
@@ -2829,7 +2829,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                     else
                         commercialCheckFailed = true;
-                    
+
                     if (commercialCheckFailed){
                         if(model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
                             for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
@@ -2847,7 +2847,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         if(model.enterprise.enterpriseCustomerRelations && model.enterprise.enterpriseCustomerRelations.length > 0){
                             for (var i = model.enterprise.enterpriseCustomerRelations.length - 1; i >= 0; i--) {
                                 if(((model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany !=null && model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany != undefined)
-                                    &&model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany == 'YES') 
+                                    &&model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany == 'YES')
                                     && model.enterprise.enterpriseCustomerRelations[i].linkedToCustomerId ==model.applicant.id){
                                     PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
                                     return false;
@@ -2855,6 +2855,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             }
                         }
                     }
+                }
+
+                if (model.currentStage == 'CreditCommitteeReview') {
+                    model.loanAccount.status = 'APPROVED';
                 }
 
                 if (!preLoanSaveOrProceed(model)){
@@ -2889,7 +2893,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         reqData.loanAccount.literateWitnessFirstName = result.cbScore;
                                         reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
                                     }, function(response){
-                                            
+
                                     })
                                     .finally(function(){
                                         IndividualLoan.update(reqData)
@@ -2930,13 +2934,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 loanToValue: machine.presentValue,
                                                 machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
                                                 quantity: machine.quantity || 1
-                                            }; 
+                                            };
                                             c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)
                                         }
-                                    }    
+                                    }
                                 }
-                                
+
                             }, function(httpResponse){
 
                             });
@@ -2979,7 +2983,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         PageHelper.showErrors(res);
                         PageHelper.hideLoader();
                     });
-                   
+
                 })
             },
             reject: function(model, formCtrl, form, $event){
