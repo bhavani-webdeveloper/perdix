@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 if (model._credit.unapprovedAmount!=null && model._credit.unapprovedAmount > 0){
                     model.pageRules.forceToTransAuth = true;
                     model.pageRules.forceToTransAuthMessage = "Unapproved payments found!";
-                    model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";  
+                    model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";
                 }
 
                 model.workingDate = SessionStore.getCBSDate();
@@ -137,7 +137,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     title: "REPAYMENT_MODE",
                     readonly: true,
                     //type:"amount"
-                }, 
+                },
                 {
                     key: "_credit.reference",
                     title: "REFERENCE_NUMBER",
@@ -246,7 +246,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             type: "amount"
                         }
                     ]
-                }, 
+                },
                 {
                     key: "creditValidation.amountCollected",
                     title: "AMOUNT_COLLECTED",
@@ -390,7 +390,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             reqParams.repaymentProcessAction = "PROCEED";
                             if (model.creditValidation.notPaid) {
                                 reqParams.stage = "Rejected";
-                                $log.info("Inside NoPayment()");     
+                                $log.info("Inside NoPayment()");
                             } else if (model.creditValidation.statusValue == 1 && model.pageRules.forceToTransAuth==false) {
                                 $log.info("Inside FullPayment()");
                                 reqParams.stage = "Completed";
@@ -404,6 +404,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                                 $log.info("Inside PartialPayment()");
                                 reqParams.stage = "PartialPayment";
                             }
+
+                            if (reqParams.loanCollection.instrumentType == 'SUSPENSE') {
+                                reqParams.loanCollection.instrumentType = 'NEFT';
+                            }
+
                             LoanCollection.update(reqParams,function(resp, header){
                                 PageHelper.hideLoader();
                                 $state.go('Page.Engine', {

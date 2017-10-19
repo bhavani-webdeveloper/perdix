@@ -59,7 +59,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                     model.additional.suspenseCode = SessionStore.getGlobalSetting("loan.individual.collection.suspenseCollectionAccount");
 
-                    
+
 
                     model.$pageConfig = config;
                     model._pageGlobals = _pageGlobals;
@@ -107,7 +107,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
 
                         //_pageGlobals.totalDemandDue = data.totalDemandDue;
-                    
+
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                     }, function (resData) {
                         irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
@@ -143,6 +143,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
                             if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
                             model.repayment.bankAccountNumber = defaultBank[0].account_number;
+
+                            var suspenseRow = $filter('filter')(records, {account_code: model.additional.suspenseCode}, true);
+
+                            if (suspenseRow && _.isArray(suspenseRow) && suspenseRow.length > 0){
+                                model.additional.suspenseBankAccount = suspenseRow[0].account_number;
+                            }
+
                         }
                     });
 
@@ -657,7 +664,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             //     return;
                             // }
                         }
-                        
+
                         // if (model._screen && model._screen =='BounceQueue'){
                         //     if (model.repayment.amount > model.repayment.totalDue){
                         //         PageHelper.showProgress("loan-repay","Amount paid cannot be more than the Total due",5000);
@@ -728,12 +735,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             postData.stage = "Completed";
                                         } else if (postData.loanCollection.instrumentType == 'Suspense') {
                                             postData.stage = "CreditValidation";
-                                            postData.loanCollection.bankAccountNumber = model.additional.suspenseCode;
+                                            postData.loanCollection.bankAccountNumber = model.additional.suspenseBankAccount;
                                         } else {
                                             postData.stage = "BRSValidation";
                                         }
 
-                                        
+
                                         postData.repaymentProcessAction = "PROCEED";
                                         postData.loanCollection.id = model.repayment.id;
                                         LoanCollection.update(postData, function(resp, header) {
