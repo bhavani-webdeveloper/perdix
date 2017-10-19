@@ -449,6 +449,126 @@
                      "Incomplete",
                      "Inprocess"
                   ]
+               },
+               "leadCategory": {
+                  "title": "leadCategory",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "leadSource": {
+                  "title": "leadSource",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "referredBy": {
+                  "title": "referredBy",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "agentName": {
+                  "title": "agentName",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "dealerName": {
+                  "title": "dealerName",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "occupation1": {
+                  "title": "occupation1",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "licenseType": {
+                  "title": "licenseType",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "latitude": {
+                  "title": "latitude",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "longitude": {
+                  "title": "longitude",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+               "altitude": {
+                  "title": "altitude",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
                }
             }
          },
@@ -533,6 +653,58 @@
                   },
                   "picture": {
                      "title": "Picture",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "Assignment Pending",
+                        "Incomplete",
+                        "Inprocess",
+                        "ReadyForScreening"
+                     ]
+                  }
+				  ,
+                  "latitude": {
+                     "title": "latitude",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "Assignment Pending",
+                        "Incomplete",
+                        "Inprocess",
+                        "ReadyForScreening"
+                     ]
+                  }
+				  ,
+                  "longitude": {
+                     "title": "longitude",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "Assignment Pending",
+                        "Incomplete",
+                        "Inprocess",
+                        "ReadyForScreening"
+                     ]
+                  }
+				  ,
+                  "altitude": {
+                     "title": "altitude",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "Assignment Pending",
+                        "Incomplete",
+                        "Inprocess",
+                        "ReadyForScreening"
+                     ]
+                  }
+				  ,
+                  "photo1Id": {
+                     "title": "photo1Id",
                      "type": "string",
                      "minLength": 1,
                      "maxLength": 100,
