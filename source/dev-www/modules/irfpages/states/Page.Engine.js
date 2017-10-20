@@ -1,6 +1,6 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper",
-function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper) {
+["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils",
+function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils) {
 	var self = this;
 
 	$scope.boxHeads = [];
@@ -151,7 +151,11 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		$scope.page = $injector.get(irf.page($scope.pageName));
 		setupPage();
 	} catch (e) {
-		$log.error(e);
+		if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page($scope.pageName)+"Provider")) {
+			$log.error("Loading Dynamic page...");
+		} else {
+			$log.error(e);
+		}
 		try {
 			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
 			PageHelper.showLoader();
@@ -179,6 +183,16 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
+	$scope.initialize = function(model, form, formCtrl) {
+		if (model.$$STORAGE_KEY$$) {
+			if (angular.isFunction($scope.page.offlineInitialize)) {
+				$scope.page.offlineInitialize(model, form, formCtrl);
+			}
+		} else {
+			$scope.page.initialize(model, form, formCtrl);
+		}
+	};
+
 	$scope.callAction = function(actionId) {
 		if (self.actionsFactory && self.actionsFactory.StageActions && 
 					self.actionsFactory.StageActions[stage.stageName] && 
@@ -197,6 +211,21 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		event.preventDefault();
 		$state.go('Page.EngineOffline', {pageName: $scope.pageName});
 		updateAppTitle("Offline | " + $scope.page.title);
+	};
+
+	$scope.saveOffline = function() {
+		var deferred = $q.defer();
+		$scope.model = $scope.model || {};
+		$scope.model.$$STORAGE_KEY$$ = $scope.pageId || elementsUtils.generateUUID();
+		formHelper.newOffline.saveOffline($scope.pageName, {
+			pageName: $scope.pageName,
+			pageId: $scope.pageId,
+			// pageData: $stateParams.pageData, // data may have infinite loop to fail stream, do we really need this?
+			model: $scope.model,
+			$$STORAGE_KEY$$: $scope.model.$$STORAGE_KEY$$
+		});
+		deferred.resolve();
+		return deferred.promise;
 	};
 
 }]);

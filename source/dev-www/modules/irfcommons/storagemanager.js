@@ -216,134 +216,42 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 
 irf.commons.factory("formHelper",
 ["$log", "$state", "irfStorageService", "SessionStore", "entityManager", "irfProgressMessage",
-"$filter", "Files", "$q", "elementsUtils", "$timeout",
+"$filter", "Files", "$q", "elementsUtils", "$timeout", "Utils",
 function($log, $state, irfStorageService, SessionStore, entityManager, irfProgressMessage,
-	$filter, Files, $q, elementsUtils, $timeout){
-	return {
+	$filter, Files, $q, elementsUtils, $timeout, Utils){
+	var helperObj = {
 		enum: function(key) {
 			// console.warn(key);
 			var r = irfStorageService.getMaster(key);
-			var branchId = ""+SessionStore.getBranchId();
+			
 
 			/* Special Handling for custom (derived) enum Codes */
-			if (r==null){
-				switch(key){
-					case "branch_code":
-						var r= irfStorageService.getMaster('branch');
-						break;
-					case "centre_code":
-						var r= irfStorageService.getMaster('centre');
-						break;			
-					case "loan_product_frequency":
-						var r= irfStorageService.getMaster('frequency');
-						break;
-					case "branch_id":
-						var r= irfStorageService.getMaster('branch');
-						break;
-					case "jlg_loan_product":
-						var r= irfStorageService.getMaster('loan_product');
-						break;
-					case "groupLoanStages":
-					var r= irfStorageService.getMaster('groupLoanBackStages');
-					break;		
-				}
-			}
+			// if (r==null){
+			// 	switch(key){
+			// 		case "branch_code":
+			// 			var r= irfStorageService.getMaster('branch');
+			// 			break;
+			// 		case "centre_code":
+			// 			var r= irfStorageService.getMaster('centre');
+			// 			break;			
+			// 		case "loan_product_frequency":
+			// 			var r= irfStorageService.getMaster('frequency');
+			// 			break;
+			// 		// case "branch_id":
+			// 		// 	var r= irfStorageService.getMaster('branch');
+			// 		// 	break;
+			// 		case "jlg_loan_product":
+			// 			var r= irfStorageService.getMaster('loan_product');
+			// 			break;
+			// 		case "groupLoanStages":
+			// 			var r= irfStorageService.getMaster('groupLoanBackStages');
+			// 		break;		
+			// 	}
+			// }
 
 			if (r && _.isArray(r.data)) {
 				var ret = {parentClassifier:r.parentClassifier,data:[]};
-				switch (key.toString().trim()) {
-					//Write custom cases for (name,value) pairs in enumCodes
-					case 'bank':
-						ret.data = _.clone(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-							ret.data[i].value = Number(ret.data[i].code);
-						}
-						break;
-					case 'loan_product':
-						$log.debug(key);
-						ret.data = _.clone(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-							ret.data[i].value = ret.data[i].field1.toString().trim();
-						}
-						break;
-					case 'centre':
-						ret.data = _.clone(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-                            ret.data[i].value = Number(ret.data[i].code);
-						}
-                        // console.warn(ret);
-						break;
-					case 'centre_code':
-						ret.data = _.cloneDeep(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-                            ret.data[i].value = ret.data[i].field3;
-						}
-                        // console.warn(ret);
-						break;		
-                    case 'village':
-                        console.log("branchid:"+branchId);
-						ret.data = r.data = $filter('filter')(r.data, {parentCode:branchId}, true);
-						$log.warn('village:'+ret.data.length);
-						break;
-                    case 'branch_id':
-                        ret.data = _.clone(r.data);
-                        for (var i=0 ;i<ret.data.length; i++){
-                            ret.data[i].value = Number(ret.data[i].code);
-                        }
-                        break;
-					case 'branch_code':
-						ret.data = _.clone(r.data);
-						for (var i=0; i<ret.data.length; i++){
-							ret.data[i].value = ret.data[i].field1;
-						}
-						break;
-					case 'loan_product_frequency':
-						ret.data = _.cloneDeep(r.data);
-						for (var i=0; i<ret.data.length; i++){
-							ret.data[i].value = ret.data[i].field1;
-						}
-						break;	
-					case 'partner':
-						ret.data = _.clone(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-								ret.data[i].value = ret.data[i].code;
-						}
-						// console.warn(ret);
-						break;
-					case 'p2p_customer_category':
-			            ret.data = _.clone(r.data);
-			            for (var i = 0; i< ret.data.length; i++){
-			              ret.data[i].value = ret.data[i].code;
-			            }
-			            break;
-			        case "jlg_loan_product":
-			        	ret.data = $filter('filter')(r.data, {field2:'JLG'}, true);
-			            for (var i = 0; i< ret.data.length; i++){
-			              ret.data[i].value = ret.data[i].field1.toString().trim();
-			            }
-			            break;
-			        case 'creditBureauTypes':
-						ret.data = _.clone(r.data);
-						for(var i = 0; i < ret.data.length; i++) {
-								ret.data[i].value = ret.data[i].code;
-						}
-						break;
-					case "groupLoanStages":
-						ret.data = _.cloneDeep(r.data);
-						var filterData = [] , names = [];
-						for(var i = 0; i < ret.data.length; i++) {
-							if(names.indexOf(ret.data[i].code) > -1)
-								continue;
-							ret.data[i].value = ret.data[i].code;
-							filterData.push(ret.data[i]);
-							names.push(ret.data[i].code);
-							
-						}
-						ret.data = filterData;
-						break;
-					default:
-						ret.data = r.data; // value <-- name
-				}
+				ret.data = r.data;
 				return ret;
 			}
 			$log.error('No record found for enum key: ' + key);
@@ -396,20 +304,223 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			}
 			return deferred.promise;
 		},
-    	getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
-	        var deferred = $q.defer();
-	        Files.getBase64DataFromFileId(fileId, params,stripDescriptors).then(function(fpData){
-				deferred.resolve(fpData);
-	        }, function(err){
-				deferred.reject(err);
-			});
-	        return deferred.promise;
-	    },
-	    
-        resetFormValidityState: function(formCtrl){
-
-            formCtrl.$setPristine();
-        }
-
+		getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
+			return Files.getBase64DataFromFileId(fileId, params,stripDescriptors);
+		},
+		resetFormValidityState: function(formCtrl){
+			formCtrl.$setPristine();
+		},
+		isOffline: function() {
+			return SessionStore.session.offline;
+		},
+		newOffline: {
+			getKey: function(pageName) {
+				return "NewOffline_" + pageName.replace(/\./g, '$');
+			},
+			saveOffline: function(pageName, item) {
+				irfStorageService.putJSON(this.getKey(pageName), item);
+			},
+			getOfflineRecords: function(pageName) {
+				var items = irfStorageService.getMasterJSON(this.getKey(pageName));
+				var offlineItems = [], idx = 0;
+				_.forOwn(items, function(value, key) {
+					offlineItems[idx] = value;
+					idx++;
+				});
+				$log.info(offlineItems);
+				return offlineItems;
+			},
+			openOfflineRecord: function(pageName, item) {
+				entityManager.setModel(pageName, item.model);
+				$state.go('Page.Engine', {
+					pageName: pageName,
+					pageId: item.pageId,
+					pageData: item.pageData
+				});
+			},
+			deleteOfflineRecord: function(pageName, item) {
+				var deferred = $q.defer();
+				Utils.confirm("Are You Sure?").then(function() {
+					irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), item.$$STORAGE_KEY$$);
+					deferred.resolve();
+				}, deferred.reject);
+				return deferred.promise;
+			},
+			deleteOffline: function(pageName, model) {
+				model.$$STORAGE_KEY$$ && irfStorageService.deleteJSON(helperObj.newOffline.getKey(pageName), model.$$STORAGE_KEY$$);
+			}
+		}
 	};
+	return helperObj;
 }]);
+
+
+irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "$filter",
+    function(irfStorageService, SessionStore, $q, $log, $filter) {
+    	/* Special Handling for custom (derived) enum Codes */
+        irfStorageService.onMasterUpdate(function() {
+        	var specialHandleEnumCodes = [
+        	'bank', 
+        	'loan_product', 
+        	'centre',  
+        	'village',
+        	"branch_id",
+        	"branch_code", 
+        	"centre_code", 
+        	"loan_product_frequency", 
+        	"jlg_loan_product", 
+        	"groupLoanStages", 
+        	'partner', 
+        	'p2p_customer_category', 
+        	'creditBureauTypes', 
+        	"groupLoanStages"
+        	]
+        	var r;
+            var ret;
+            var branchId = ""+SessionStore.getBranchId();
+        	for (var itr = 0; itr < specialHandleEnumCodes.length; itr++) {
+	            switch (specialHandleEnumCodes[itr]) {
+		            case 'branch_id':
+			            r = irfStorageService.getMaster("branch");
+			            break;
+		            case 'bank':
+		            	r = irfStorageService.getMaster("bank");
+						break;
+					case 'loan_product':
+						r = irfStorageService.getMaster("loan_product");
+						break;
+					case 'centre':
+						r = irfStorageService.getMaster("centre");
+						break;
+					case 'centre_code':
+						r = irfStorageService.getMaster("centre");
+						break;		
+		            case 'village':
+		                console.log("branchid:"+branchId);
+		                r = irfStorageService.getMaster("village");
+		                break;
+					case 'branch_code':
+						r = irfStorageService.getMaster("branch");
+						break;
+					case 'loan_product_frequency':
+						r = irfStorageService.getMaster("frequency");
+						break;	
+					case 'partner':
+						r = irfStorageService.getMaster("partner");
+						break;
+					case 'p2p_customer_category':
+						r = irfStorageService.getMaster("p2p_customer_category");
+			            break;
+			        case "jlg_loan_product":
+				        r = irfStorageService.getMaster("loan_product");
+			            break;
+			        case 'creditBureauTypes':
+			        	r = irfStorageService.getMaster("creditBureauTypes");
+						break;
+					case "groupLoanStages":
+						r = irfStorageService.getMaster("groupLoanBackStages");
+						break;
+					default:
+						break;
+				}
+				if (r && _.isArray(r.data)) {
+					ret = {parentClassifier:r.parentClassifier,data:[]};
+					switch (specialHandleEnumCodes[itr]) {
+			            case 'branch_id':
+				            ret.data = _.cloneDeep(r.data);
+				            for (var i=0 ;i<ret.data.length; i++){
+				                ret.data[i].value = Number(ret.data[i].code);
+				            }
+				            break;
+			            case 'bank':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+								ret.data[i].value = Number(ret.data[i].code);
+							}
+							break;
+						case 'loan_product':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+								ret.data[i].value = ret.data[i].field1.toString().trim();
+							}
+							break;
+						case 'centre':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+			                    ret.data[i].value = Number(ret.data[i].code);
+							}
+			                // console.warn(ret);
+							break;
+						case 'centre_code':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+			                    ret.data[i].value = ret.data[i].field3;
+							}
+			                // console.warn(ret);
+							break;		
+			            case 'village':
+			                console.log("branchid:"+branchId);
+							ret.data = r.data = $filter('filter')(r.data, {parentCode:branchId}, true);
+							$log.warn('village:'+ret.data.length);
+							break;
+						case 'branch_code':
+							ret.data = _.cloneDeep(r.data);
+							for (var i=0; i<ret.data.length; i++){
+								ret.data[i].value = ret.data[i].field1;
+							}
+							break;
+						case 'loan_product_frequency':
+							ret.data = _.cloneDeep(r.data);
+							for (var i=0; i<ret.data.length; i++){
+								ret.data[i].value = ret.data[i].field1;
+							}
+							break;	
+						case 'partner':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+								ret.data[i].value = ret.data[i].code;
+							}
+							// console.warn(ret);
+							break;
+						case 'p2p_customer_category':
+				            ret.data = _.cloneDeep(r.data);
+				            for (var i = 0; i< ret.data.length; i++){
+				              ret.data[i].value = ret.data[i].code;
+				            }
+				            break;
+				        case "jlg_loan_product":
+				        	ret.data = $filter('filter')(r.data, {field2:'JLG'}, true);
+				            for (var i = 0; i< ret.data.length; i++){
+				              ret.data[i].value = ret.data[i].field1.toString().trim();
+				            }
+				            break;
+				        case 'creditBureauTypes':
+							ret.data = _.cloneDeep(r.data);
+							for(var i = 0; i < ret.data.length; i++) {
+								ret.data[i].value = ret.data[i].code;
+							}
+							break;
+						case "groupLoanStages":
+							ret.data = _.cloneDeep(r.data);
+							var filterData = [] , names = [];
+							for(var i = 0; i < ret.data.length; i++) {
+								if(names.indexOf(ret.data[i].code) > -1)
+									continue;
+								ret.data[i].value = ret.data[i].code;
+								filterData.push(ret.data[i]);
+								names.push(ret.data[i].code);
+								
+							}
+							ret.data = filterData;
+							break;
+						default:
+							ret.data = r.data;
+							break;
+					}
+				irfStorageService.setMaster(specialHandleEnumCodes[itr], ret);
+				}
+			}
+            return $q.resolve();
+        });
+    }
+]);

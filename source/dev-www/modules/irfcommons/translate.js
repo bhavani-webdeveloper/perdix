@@ -13,7 +13,8 @@ function(languages, $resource, $q, irfStorageService, $log, SessionStore){
 	var prepareTranslationJSON = function(arr, langCode) {
 		var result = {};
 		for (var i = arr.length - 1; i >= 0; i--) {
-			result[arr[i].code] = arr[i][langCode];
+			if (arr[i][langCode])
+				result[arr[i].code] = arr[i][langCode];
 		}
 		return result;
 	};
