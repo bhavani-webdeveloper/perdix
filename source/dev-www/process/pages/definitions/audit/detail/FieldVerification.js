@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                         urn: null,
                         book_entity_id: null,
                         field_verify_date: null,
-                        amount: null,
+                        amount: 0,
                         comments: null
                     };
                     model.master = master;
@@ -211,7 +211,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                         urn: null,
                                         book_entity_id: null,
                                         field_verify_date: null,
-                                        amount: null,
+                                        amount: 0,
                                         comments: null
                                     };
                                 }
@@ -254,7 +254,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                 "title": "FIELD_VERIFY_DATE"
                             },
                             "amount": {
-                                "type": ["number", "null"],
+                                "type": "number",
                                 "title": "AMOUNT"
                             },
                             "loan_type": {
@@ -287,7 +287,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                     urn: null,
                                     book_entity_id: null,
                                     field_verify_date: null,
-                                    amount: null,
+                                    amount: 0,
                                     comments: null
                                 };
                             }, PageHelper.showErrors).finally(PageHelper.hideLoader);
@@ -298,7 +298,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                 urn: null,
                                 book_entity_id: null,
                                 field_verify_date: null,
-                                amount: null,
+                                amount: 0,
                                 comments: null
                             };
                         }
