@@ -382,6 +382,7 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
+                                 model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
@@ -477,15 +478,57 @@ define({
                     },{
                         "key": "group.jlgGroupMembers[].witnessFirstName",
                         "required": true,
-                        "title": "WitnessLastName",
+                        "title": "WITNESS_NAME",
+                        "condition" : "model.siteCode != 'KGFS'",
+                        "bindMap": {"URN": "group.jlgGroupMembers[arrayIndex].urnNo"},
+                        "lovonly": true,
                         "type": "lov",
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
+                            var familyMembers = [];
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
+                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                    familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
+                                }
+                            }
                             return $q.resolve({
                                 headers: {
-                                    "x-total-count": model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length
+                                    "x-total-count": familyMembers.length
                                 },
-                                body: model.group.jlgGroupMembers[context.arrayIndex].familyMembers
+                                body: familyMembers
+                            });
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.name,
+                                data.relationShip,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName=valueObj.name;
+                            model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship=valueObj.relationShip;
+                        }       
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessFirstName",
+                        "required": true,
+                        "title": "WITNESS_NAME",
+                        "condition" : "model.siteCode == 'KGFS'",
+                        "type": "lov",
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form, model, context) {
+                            var familyMembers = [];
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
+                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                                if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].relationShip != 'self') {
+                                    familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": familyMembers.length
+                                },
+                                body: familyMembers
                             });
                         },
                         getListDisplayItem: function(data, index) {
@@ -512,9 +555,6 @@ define({
                 "items": [{
                     "type": "submit",
                     "title": "CREATE_GROUP"
-                }, {
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
                 }]
             }, {
                 "type": "actionbox",
@@ -522,9 +562,6 @@ define({
                 "items": [{
                     "type": "submit",
                     "title": "EDIT_GROUP"
-                }, {
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
                 }]
             }],
 

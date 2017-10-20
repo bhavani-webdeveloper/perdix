@@ -79,15 +79,8 @@ define({
                     irfNavigator.goBack();
                 }
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    "Group ID : " + item.group.id,
-                    "Group Code : " + item.group.groupCode,
-                    "CGT Date : " + item.group.cgtDate3
-                ]
-            },
-
+            newOffline: true,
+            // offlineInitialize: function(model, form, formCtrl) {}, // optional offline only initialize
             form: [{
                 "type":"box",
                 "title":"START_CGT3",
@@ -229,7 +222,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -286,7 +279,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -447,13 +440,7 @@ define({
                         }]
                     }
                 ]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },]
-            }],
+            },],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -481,7 +468,7 @@ define({
             },
 
             actions: {
-                preSave: function(model, form, formName) {},
+                // preSave: function(model, form, formName) {},
                 startCGT3: function(model, form) {
                     PageHelper.showLoader();
                     model.group.cgtDate3 = new Date();
@@ -543,6 +530,7 @@ define({
                     validPromiseArray.push(cbPromise);
                     $q.all(validPromiseArray).then(function(){
                         GroupProcess.updateGroup(reqData, function(res) {
+                            formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to GRT.', 5000);
                             irfNavigator.goBack();
@@ -573,6 +561,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Send back', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
@@ -598,6 +587,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.rejectStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();

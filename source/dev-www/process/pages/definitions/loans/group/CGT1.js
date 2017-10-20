@@ -82,12 +82,11 @@ define({
                                 model = m;
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                     for (i = 0; i < resp.length; i++) {
-                                        $log.info("hi");
                                         resp[i].updatedOn = moment(resp[i].updatedOn).format("DD-MM-YYYY");
-                                        $log.info(resp[i].updatedOn);
                                     }
                                     model.group.remarksHistory = resp;
                                 }).finally(function(){
+                                    irfProgressMessage.pop("cgt1-init", "Loading, Please Wait...", 10);
                                     PageHelper.hideLoader();
                                 });
                             }, function(m) {
@@ -105,15 +104,8 @@ define({
                     irfNavigator.goBack();
                 }
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    "Group ID : " + item.group.id,
-                    "Group Code : " + item.group.groupCode,
-                    "CGT Date : " + item.group.cgtDate1
-                ]
-            },
-
+            newOffline: true,
+            // offlineInitialize: function(model, form, formCtrl) {}, // optional offline only initialize
             form: [{
                 "type":"box",
                 "title":"START_CGT1",
@@ -256,7 +248,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -313,7 +305,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
                             "readonly": true,
@@ -473,12 +465,6 @@ define({
                         }]
                     }
                 ]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },]
             }],
 
             schema: {
@@ -507,7 +493,7 @@ define({
             },
 
             actions: {
-               preSave: function(model, form, formName) {},
+                // preSave: function(model, form, formName) {},
                 startCGT1: function(model, form) {
                     model.group.cgtDate1 = new Date();
                     PageHelper.showLoader();
@@ -578,6 +564,7 @@ define({
                     }
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded. Proceeded to CGT 2.', 5000);
                         irfNavigator.goBack();
@@ -603,6 +590,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.targetStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Send back', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
@@ -628,6 +616,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     reqData.stage = model.review.rejectStage;
                     GroupProcess.updateGroup(reqData, function(res) {
+                        formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', 'Operation Succeeded. Done', 5000);
                         irfNavigator.goBack();
