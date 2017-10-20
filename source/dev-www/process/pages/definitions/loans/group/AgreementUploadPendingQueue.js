@@ -207,6 +207,32 @@ define({
 							}
 						}];
 					}
+				},
+				offlineListOptions: {
+					pageName: "loans.group.AgreementUploadPending",
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'model.group.id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'model.group.partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'model.group.groupName'
+						}, {
+							title: 'TRANSACTION_DATE',
+							data: 'model.group.endTime',
+							render: function(data, type, full, meta) {
+                                if(data){
+                                    return (moment(data).format("DD-MM-YYYY"));
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
+						}]
+					}
 				}
 			}
 		};

@@ -107,15 +107,6 @@ define({
                                    irfNavigator.goBack();
                                }*/
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    "Group ID : " + item.group.id,
-                    "Group Code : " + item.group.groupCode,
-                    "GRT Date : " + item.group.grtDate
-                ]
-            },
-
             form: [{
                 "type": "box",
                 "title": "GROUP_DETAILS",
