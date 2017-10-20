@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 if (model._credit.unapprovedAmount!=null && model._credit.unapprovedAmount > 0){
                     model.pageRules.forceToTransAuth = true;
                     model.pageRules.forceToTransAuthMessage = "Unapproved payments found!";
-                    model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";  
+                    model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";
                 }
 
                 model.workingDate = SessionStore.getCBSDate();
@@ -56,13 +56,13 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                     $log.info(model.Collection.bankAccountNumber);
 
                     Queries.getBankAccounts().then(
-                        function(response1) {  
-                        $log.info(response1);                        
+                        function(response1) {
+                        $log.info(response1);
                             for(i in response1.body){
 
                                 if(response1.body[i].account_number == model.Collection.bankAccountNumber){
                                     model.Collection.bankbranch = response1.body[i].branch_name;
-                                   
+
                                     $log.info(model.Collection.bankbranch);
                                 }
                             }
@@ -152,7 +152,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                     title: "REPAYMENT_MODE",
                     readonly: true,
                     //type:"amount"
-                }, 
+                },
                 {
                     key: "_credit.reference",
                     condition:"model._credit.instrumentType !=='CASH'",
@@ -171,6 +171,34 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                     condition:"model._credit.instrumentType =='CASH'",
                     "type": "string",
                     "title": "BANK_DEPOSIT_SUMMARY_ID",
+                    "readonly": true
+                },
+                {
+                    "key": "Collection.depositsummary.createdBy",
+                    condition:"model._credit.instrumentType =='CASH'",
+                    "type": "string",
+                    "title": "DEPOSITED_BY",
+                    "readonly": true
+                },
+                {
+                    "key": "Collection.depositsummary.bankAccountNumber",
+                    condition:"model._credit.instrumentType =='CASH'",
+                    "type": "string",
+                    "title": "DEPOSITED_TO_ACCOUNT",
+                    "readonly": true
+                },
+                {
+                    "key": "Collection.depositsummary.bankBranchDetails",
+                    condition:"model._credit.instrumentType =='CASH'",
+                    "type": "string",
+                    "title": "DEPOSITED_BANK_BRANCH",
+                    "readonly": true
+                },
+                {
+                    "key": "Collection.depositsummary.ifscCode",
+                    condition:"model._credit.instrumentType =='CASH'",
+                    "type": "string",
+                    "title": "IFSC_CODE",
                     "readonly": true
                 },
                 {
@@ -269,7 +297,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                             type: "amount"
                         }
                     ]
-                }, 
+                },
                 {
                     key: "creditValidation.amountCollected",
                     title: "AMOUNT_COLLECTED",
@@ -283,10 +311,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                 },{
                     key: "Collection.bankAccountNumber",
                     title:"REPAYMENT_TO_ACCOUNT",
-                    readonly: true,
-                },{
-                    key: "Collection.bankbranch",
-                    title:"Bank Branch",
+                    condition: "model._credit.instrumentType!='CASH'",
                     readonly: true,
                 }, {
                     key: "creditValidation.status",
@@ -387,10 +412,6 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                         type:"date",
                         "title":"REPAYMENT_DATE",
                         readonly: true,
-                    },{
-                        key: "Collection.depositsummary.loanCollections[].lastEditedBy",
-                        "title":"Deposited By",
-                        readonly: true,
                     }]
                 }]
             },
@@ -418,11 +439,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                             reqParams.loanCollection = loanCollection;
                             if (model.creditValidation.notPaid) {
                                if(model._credit.instrumentType=='CASH'){
-                                   reqParams.stage = "Deposit";  
+                                   reqParams.stage = "Deposit";
                                }else{
-                                reqParams.stage = "Rejected"; 
+                                reqParams.stage = "Rejected";
                                }
-                                $log.info("Inside NoPayment()");     
+                                $log.info("Inside NoPayment()");
                             }
                             reqParams.repaymentProcessAction = "PROCEED";
                             LoanCollection.update(reqParams,function(resp, header){
@@ -435,7 +456,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.BRSApproval"),
                                 PageHelper.showErrors(resp);
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
-                            });   
+                            });
                         })
                 }
             }
