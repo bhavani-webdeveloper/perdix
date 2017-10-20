@@ -4,12 +4,12 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
         var branch = SessionStore.getBranch();
 
         var recomputeCashTotals = function(model) {
-            var total = model.portfolio_stats.coin_balance;
+            var total = model.portfolio_stats.cash_holding.coin_balance;
             for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
                 total += model.portfolio_stats.cash_holding.cash_on_hand[i].total_cash;
             }
-            model.portfolio_stats.sum_total_cash = total;
-            model.portfolio_stats.deviation = total - model.portfolio_stats.cbs_balance;
+            model.portfolio_stats.cash_holding.sum_total_cash = total;
+            model.portfolio_stats.cash_holding.deviation = total - model.portfolio_stats.cash_holding.cbs_balance;
         }
 
         return {
@@ -28,12 +28,10 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                 model.audit_id = Number($stateParams.pageId);
                 var master = Audit.offline.getAuditMaster() || {};
                 model.portfolio_stats = model.portfolio_stats || {};
-                model.portfolio_stats.values_total = 0;
-                model.portfolio_stats.values_deviation = 0;
                 var self = this;
                 self.form = [];
 
-                model.cashDeviationHTML = '<div style="text-align:right;margin-right:11px;color:tomato;font-weight:bold">{{model.portfolio_stats.deviation}}</div>';
+                model.cashDeviationHTML = '<div style="text-align:right;margin-right:11px;color:tomato;font-weight:bold">{{model.portfolio_stats.cash_holding.deviation}}</div>';
                 
                 var init = function(response) {
                     model.master = master;
@@ -55,11 +53,11 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                             })
                         }
                     }
-                    if (!model.portfolio_stats.coin_balance) {
-                        model.portfolio_stats.coin_balance = 0;
+                    if (!model.portfolio_stats.cash_holding.coin_balance) {
+                        model.portfolio_stats.cash_holding.coin_balance = 0;
                     }
-                    if (!model.portfolio_stats.cbs_balance) {
-                        model.portfolio_stats.cbs_balance = 0;
+                    if (!model.portfolio_stats.cash_holding.cbs_balance) {
+                        model.portfolio_stats.cash_holding.cbs_balance = 0;
                     }
 
                     var cashDetails = [];
@@ -259,19 +257,19 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     }];
                     cashHoldingBoxItems.push.apply(cashHoldingBoxItems, notesForm);
                     cashHoldingBoxItems.push.apply(cashHoldingBoxItems, [{
-                        "key": "portfolio_stats.sum_total_cash",
+                        "key": "portfolio_stats.cash_holding.sum_total_cash",
                         "type": "number",
                         "fieldHtmlClass": "text-right",
                         "title": "TOTAL_CASH_BALANCE_ON_HAND",
                         "readonly": true
                     }, {
-                        "key": "portfolio_stats.cbs_balance",
+                        "key": "portfolio_stats.cash_holding.cbs_balance",
                         "type": "number",
                         "fieldHtmlClass": "text-right",
                         "title": "CBS_BALANCE",
                         "onChange": function(modelValue, form, model) {
                             if (!modelValue) {
-                                model.portfolio_stats.cbs_balance = 0;
+                                model.portfolio_stats.cash_holding.cbs_balance = 0;
                             }
                             recomputeCashTotals(model);
                         }
@@ -357,13 +355,13 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         "title": "CASH_HOLDING",
                         "readonly": model.readonly,
                         "items": [{
-                            "key": "portfolio_stats.coin_balance",
+                            "key": "portfolio_stats.cash_holding.coin_balance",
                             "type": "number",
                             "fieldHtmlClass": "text-right",
                             "title": "COIN_BALANCE",
                             "onChange": function(modelValue, form, model) {
                                 if (!modelValue) {
-                                    model.portfolio_stats.coin_balance = 0;
+                                    model.portfolio_stats.cash_holding.coin_balance = 0;
                                 }
                                 recomputeCashTotals(model);
                             }
@@ -422,21 +420,18 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         "type": "object",
                         "title": "",
                         "properties": {
-                            "coin_balance": {
-                                "type": "number",
-                                "title": "COIN_BALANCE"
-                            },
-                            "values_total": {
-                                "type": "number",
-                                "title": "TOTAL_CASH_BALANCE_ON_HAND"
-                            },
-                            "cbs_balance": {
-                                "type": "number",
-                                "title": "CBS_BALANCE"
-                            },
-                            "values_deviation": {
-                                "type": "number",
-                                "title": "DEVIATION"
+                            "cash_holding": {
+                                "type": "object",
+                                "properties": {
+                                    "coin_balance": {
+                                        "type": "number",
+                                        "title": "COIN_BALANCE"
+                                    },
+                                    "cbs_balance": {
+                                        "type": "number",
+                                        "title": "CBS_BALANCE"
+                                    }
+                                }
                             },
                             "comments": {
                                 "type": "string",
