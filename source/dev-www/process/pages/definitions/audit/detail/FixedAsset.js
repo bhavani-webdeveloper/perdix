@@ -77,23 +77,16 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                     }
                     if (!model.fixed_assets.asset_details || !model.fixed_assets.asset_details.length) {
                         model.fixed_assets.asset_details = [];
-                        for (i in model.master.fixed_assets) {
-                            var asset_details = model.master.fixed_assets[i];
-                            if (asset_details.status == 1) {
+                        _.forOwn(model.master.fixed_assets, function(v,k) {
+                            if (v.status == 1) {
                                 model.fixed_assets.asset_details.push({
-                                    "asset_id": asset_details.asset_type_id,
-                                    "asset_description": asset_details.asset_description
+                                    "asset_id": v.asset_type_id
                                 })
                             }
-                        }
+                        });
                     }
                     var fixedAssetSheetForm = [];
                     var auditData_fixedAsset = [];
-
-                    var assetMap = model.master.fixed_assets.reduce(function(map, obj) {
-                        map[obj.asset_type_id] = obj;
-                        return map;
-                    }, {});
 
                     for (i in model.fixed_assets.asset_details) {
                         auditData_fixedAsset = model.fixed_assets.asset_details[i];
@@ -105,7 +98,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                                 "htmlClass": "col-sm-5",
                                 "items": [{
                                     "type": "section",
-                                    "html": "{{model.fixed_assets.asset_details[" + i + "].asset_description}}"
+                                    "html": "{{model.master.fixed_assets[model.fixed_assets.asset_details[" + i + "].asset_id].asset_description}}"
                                 }]
                             }, {
                                 "type": "section",

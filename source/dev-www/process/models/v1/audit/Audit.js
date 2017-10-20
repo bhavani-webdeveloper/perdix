@@ -472,6 +472,12 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.general_observation.particulars = particulars;
 
+                var fixed_assets = {};
+                for (i in response.fixed_assets) {
+                    fixed_assets[response.fixed_assets[i].asset_type_id] = response.fixed_assets[i];
+                }
+                response.fixed_assets = fixed_assets;
+
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
                 deferred.resolve();
