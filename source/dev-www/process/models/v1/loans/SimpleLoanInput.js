@@ -44,9 +44,10 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                             "type": ["integer", "null"],
                             "title": "CENTER",
                             "enumCode": "centre",
-                            "parentEnumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.loanAccount.branchId",
                              }
                           },
                         }
@@ -64,8 +65,11 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "CENTER",
                         "enumCode": "centre",
                         "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.loanAccount.branchId",
                         "x-schema-form": {
                             "type": "select",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.loanAccount.branchId",
                         }
                     },
                     "created_by": {
