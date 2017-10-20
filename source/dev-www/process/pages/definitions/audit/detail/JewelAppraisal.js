@@ -150,8 +150,8 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                                         "account_number": {
                                             "type": ["string", "null"],
                                             "title": "ACCOUNT_NUMBER",
-                                            "maxLength": 16,
-                                            "minLength": 16,
+                                            "maxLength": 14,
+                                            "minLength": 14,
                                         },
                                         "loan_amount": {
                                             "type": ["number", "null"],
