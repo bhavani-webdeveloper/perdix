@@ -107,42 +107,50 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         model.cbsLoan.repaymentScheduleTblFormat = {columns:[], data :[]};
                                         if(model.cbsLoan.repaymentSchedule.length > 0){
                                             var keys = Object.keys(model.cbsLoan.repaymentSchedule[0]);
-                                            var title, format;
+                                            var title, format, orderNo;
                                             for(var itr = 0; itr < keys.length; itr++){
                                                 format, title = '';
                                                 switch(keys[itr]){
                                                     case 'valueDate' : 
                                                         title = "DEMAND_DATE";
+                                                        orderNo = 0;
                                                         break;
                                                     case 'description':
                                                         title = "TYPE";
-                                                        model.cbsLoan.repaymentScheduleTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr]});
+                                                        orderNo = 1;
+                                                        model.cbsLoan.repaymentScheduleTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr], "orderNo": orderNo});
                                                         continue;
                                                     case 'amount1':
                                                         title = "AMOUNT";
                                                         format = "currency";
+                                                        orderNo = 2;
                                                         break;
                                                     case 'amount3':
                                                         title = "DUE";
                                                         format = "currency";
+                                                        orderNo = 6;
                                                         break;
                                                     case 'part1':
                                                         title = "NORMAL_INTEREST";
                                                         format = "currency";
+                                                        orderNo = 5;
                                                         break;
                                                     case 'part2':
                                                         title = "PRINCIPAL";
                                                         format = "currency";
+                                                        orderNo = 4;
                                                         break;
                                                     case 'amount2':
                                                         title = "BALANCE";
                                                         format = "currency";
+                                                        orderNo = 3;
                                                         break;
                                                     default:
                                                         continue;
                                                 }
-                                                model.cbsLoan.repaymentScheduleTblFormat.columns.push({"title": title, "data": keys[itr], format: format});
+                                                model.cbsLoan.repaymentScheduleTblFormat.columns.push({"title": title, "data": keys[itr], format: format, "orderNo": orderNo});
                                             }
+                                            model.cbsLoan.repaymentScheduleTblFormat.columns = model.cbsLoan.repaymentScheduleTblFormat.columns.sort(function(a, b){return a.orderNo - b.orderNo});
                                             model.cbsLoan.repaymentScheduleTblFormat.data = model.cbsLoan.repaymentSchedule;
                                             model.cbsLoan.orgRepaymentScheduleTblFormat = {columns: model.cbsLoan.repaymentScheduleTblFormat.columns};
                                             model.cbsLoan.orgRepaymentScheduleTblFormat.data = $filter('filter')(model.cbsLoan.repaymentSchedule, {status: 'true'});
@@ -222,22 +230,27 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 },
                                                 {
                                                     "title": "Amount",
+                                                    "format" : "currency",
                                                     "data": "amount1"
                                                 },
                                                 {
                                                     "title": "Balance",
+                                                    "format" : "currency",
                                                     "data": "amount2"
                                                 },
                                                 {
                                                     "title": "Principal",
-                                                    "data": "part1"
-                                                },
-                                                {
-                                                    "title": "Interest",
+                                                    "format" : "currency",
                                                     "data": "part2"
                                                 },
                                                 {
+                                                    "title": "Interest",
+                                                    "format" : "currency",
+                                                    "data": "part1"
+                                                },
+                                                {
                                                     "title": "Penal",
+                                                    "format" : "currency",
                                                     "data": "part3"
                                                 },
                                                 {
