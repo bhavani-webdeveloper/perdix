@@ -167,6 +167,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                         }, {
                             "key": "add_fv.amount",
                             "title": "AMOUNT",
+                            "type":"amount"
                         }, {
                             "key": "add_fv.comments",
                             "title": "COMMENTS",
@@ -252,7 +253,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                 "type": ["string", "null"],
                                 "title": "FIELD_VERIFY_DATE"
                             },
-                            "AMOUNT": {
+                            "amount": {
                                 "type": ["number", "null"],
                                 "title": "AMOUNT"
                             },
