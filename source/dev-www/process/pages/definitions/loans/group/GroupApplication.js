@@ -206,13 +206,8 @@ define({
                     });
                 }
             },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    item.journal.transactionName
-                ]
-            },
-
+            newOffline: true,
+            // offlineInitialize: function(model, form, formCtrl) {}, // optional offline only initialize
             form: [{
                     "type": "box",
                     "title": "GROUP_DETAILS",

@@ -87,13 +87,6 @@ define({
 					});
 				}
 			},
-			offline: true,
-			getOfflineDisplayItem: function(item, index) {
-				return [
-					item.journal.transactionName
-				]
-			},
-
 			form: [{
 					"type": "box",
 					"readonly": true,
