@@ -44,6 +44,13 @@ define({
 				}, function(res) {
 					deferred.reject(res);
 				});
+				if (model.group.jlgGroupMembers[key].loanAccount) {
+                    if (model.group.jlgGroupMembers[key].loanAccount.closed == true) {
+                        model.group.jlgGroupMembers[key].closed1 = "Inactive";
+                    } else {
+                        model.group.jlgGroupMembers[key].closed1 = "Active";
+                    }
+                }
 			});
 			return deferred.promise;
 		};
@@ -168,6 +175,14 @@ define({
 							"title": "LOAN_AMOUNT",
 							"type": "amount",
 						}, {
+                            "title": "ACCOUNT_NUMBER",
+                            "key": "group.jlgGroupMembers[].loanAccount.accountNumber",
+                            "type": "string"
+                        }, {
+                            "title": "LOAN_STATUS",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].closed1",
+                        }, {
 							"key": "group.jlgGroupMembers[].loanPurpose1",
 							"title": "LOAN_PURPOSE_1",
 							"enumCode": "loan_purpose_1",
@@ -194,7 +209,7 @@ define({
 
 				{
 					"type": "actionbox",
-					condition: "model.group.currentStage != 'Completed'",
+					// condition: "model.group.currentStage != 'Completed'",
 					"items": [{
 						"style": "btn-theme",
 						"title": "CLOSE_GROUP",
@@ -242,7 +257,7 @@ define({
                     model.groupAction = "SAVE";
                     model.group.groupStatus=false;
                     var reqData = _.cloneDeep(model);
-                    GroupProcess.updateGroup(reqData, function(res) {
+                    GroupProcess.closeGroup(reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('Close-proceed', 'Operation Succeeded.', 5000);
                         irfNavigator.goBack();

@@ -32,6 +32,10 @@ irf.models.factory('GroupProcess',
             method: 'PUT',
             url: endpoint + '/groupBatchDisburse',
         },
+        closeGroup: {
+            method: 'PUT',
+            url: endpoint + '/close',
+        },
     });
 
     function PrinterConstants() {

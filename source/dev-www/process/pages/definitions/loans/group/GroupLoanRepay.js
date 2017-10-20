@@ -17,7 +17,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     amount = parseFloat(repaymentObj.payOffAndDueAmount);
                     break;
                 case 'Scheduled Demand':
-                    amount = parseFloat(repaymentObj.demandAmount);
+                    amount = parseFloat(repaymentObj.totalDemandDue);
                     break;
                 case 'Advance Repayment':
                     amount = parseFloat(repaymentObj.equatedInstallment);
@@ -104,10 +104,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             for (var i = 0; i < data.length; i++) {
 
+                                if (data[i].status == 'ACCOUNT_NOT_FOUND') continue;
+
                                 var repData = data[i];
 
                                 var totalDemandDue = Number(repData.totalDemandDue);
                                 var txName = (totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
+
+                                if( (model.siteCode == 'sambandh' || model.siteCode == 'saija') && txName != "Scheduled Demand") continue;
 
                                 var aRepayment = {
 
@@ -140,9 +144,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         aRepayment.amount = Number(repData.equatedInstallment);
                                     }
 
-                                if (typeof repData.customerName !== "undefined" && repData.customerName.length > 0) {
+                                if (typeof repData.customerName !== "undefined" && repData.customerName && repData.customerName.length > 0) {
                                     aRepayment.additional.name = repData.customerName;
-                                } else {
+                                } else if (repData.firstName){
                                     aRepayment.additional.name = repData.firstName;
                                 }
                                 aRepayment.amount = deriveAmount(txName, aRepayment);
@@ -151,7 +155,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 model.total += aRepayment.amount; //parseInt(Number(repData.equatedInstallment));
                             }
                             if (model.repayments.length < 1) {
-                                PageHelper.showProgress("group-repayment", "No Records", 3000);
+                                PageHelper.showProgress("group-repayment", "No Records", 5000);
                                 backToQueue();
                             }
                         } else {
@@ -174,7 +178,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
 
                     }, function(resData) {
-                        PageHelper.showProgress("group-repayment", "No Records", 3000);
+                        PageHelper.showProgress("group-repayment", "No Records", 5000);
                         backToQueue();
                     })
                     .finally(function() {
