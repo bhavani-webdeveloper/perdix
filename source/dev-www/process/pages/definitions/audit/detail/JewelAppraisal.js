@@ -126,12 +126,6 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 }, {
                     key: "jewel_appraisal.jewel_assets.CMS_difference",
                     readonly:true
-                }, {
-                    type: "fieldset",
-                    title: "COMMENTS",
-                    items: [{
-                        key: "jewel_appraisal.comments"
-                    }]
                 }]
             }, {
                 type: "actionbox",
@@ -146,11 +140,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 "properties": {
                     "jewel_appraisal": {
                         "type": "object",
-                        "properties": {
-                            "comments": {
-                                "type": ["string", "null"],
-                                "title": "JEWEL_APPRAISAL_COMMENTS"
-                            },
+                        "properties": {                           
                             "jewel_details": {
                                 "type": "array",
                                 "title": "CUSTOMER_BANK_ACCOUNT",
