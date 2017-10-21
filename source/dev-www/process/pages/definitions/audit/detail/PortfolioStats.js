@@ -13,6 +13,12 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
             model.portfolio_stats.cash_holding.sum_total_cash = total;
             model.portfolio_stats.cash_holding.deviation = total - model.portfolio_stats.cash_holding.cbs_balance;
         }
+        var recomputeGoldDifferences = function(model) {
+            for (i in model.portfolio_stats.gold_coin_tally) {
+                var g = model.portfolio_stats.gold_coin_tally[i];
+                g.differnce = g.coins_in_vault - g.coins_as_per_cms;
+            }
+        }
 
         return {
             "type": "schema-form",
@@ -159,6 +165,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                         }*/
                     }
                     recomputeCashTotals(model, true);
+                    recomputeGoldDifferences(model);
 
                     var goldDetails = [];
                     if (!model.portfolio_stats.gold_coin_tally || !model.portfolio_stats.gold_coin_tally.length) {

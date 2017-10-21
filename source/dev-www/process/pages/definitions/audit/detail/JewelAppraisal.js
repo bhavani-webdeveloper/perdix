@@ -40,17 +40,16 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                 };
                 model.audit_id = Number($stateParams.pageId);
                 model.jewel_appraisal = model.jewel_appraisal || {};
-                var master = Audit.offline.getAuditMaster() || {};
+                // var master = Audit.offline.getAuditMaster() || {};
                 var self = this;
                 form = [];
                 var init = function(response) {
-                    $log.info(response)
-                    model.master = master;
-                    model.jewel_appraisal.jewel_details = response.jewel_details;
-                    model.jewel_appraisal.jewel_assets = response.jewel_assets;
-                    var tableDetails = [];
-                    model.total = 0;
+                    model.jewel_appraisal = response;
                     
+                    if (_.isObject(model.jewel_appraisal.jewel_assets)) {
+                        var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
+                        model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
+                    }
                 };
                 model.$isOffline = false;
                 if ($stateParams.pageData && $stateParams.pageData.auditData && $stateParams.pageData.auditData.jewel_appraisal) {
@@ -120,8 +119,8 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"), ["$log", "fo
                     key: "jewel_appraisal.jewel_assets.total_on_hand",
                     type: "number",
                     "onChange": function(modelValue, form, model) {
-                        model.addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
-                        model.jewel_appraisal.jewel_assets.CMS_difference = String(model.addedVal);
+                        var addedVal = model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand + model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq - model.jewel_appraisal.jewel_assets.total_on_hand;
+                        model.jewel_appraisal.jewel_assets.CMS_difference = String(addedVal);
                     }
                 }, {
                     key: "jewel_appraisal.jewel_assets.CMS_difference",
