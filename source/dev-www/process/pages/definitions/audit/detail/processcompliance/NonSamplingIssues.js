@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingIssues"),
-["$log", "irfNavigator", "$stateParams", "Audit", "PageHelper",
-function($log, irfNavigator, $stateParams, Audit, PageHelper) {
+["$log", "irfNavigator", "$stateParams", "Audit", "PageHelper", "Utils", "SessionStore",
+function($log, irfNavigator, $stateParams, Audit, PageHelper, Utils, SessionStore) {
     var returnObj = {
         "type": "schema-form",
         "title": "NON_SAMPLING_ISSUES",
@@ -21,6 +21,7 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper) {
             model.manual_sampling = model.manual_sampling || {};
             var auditId = $stateParams.pageId;
             var master = Audit.offline.getAuditMaster();
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
 
             self.form = [];
             var processNonSamplingIssues = function(response) {
@@ -47,7 +48,7 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper) {
                             "pageLength": 10
                         },
                         getColumns: function() {
-                            return [{
+                            var columns = [{
                                 title: 'ISSUE_ID',
                                 data: 'issue_id',
                                 render: function(data, type, full, meta) {
@@ -71,25 +72,30 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper) {
                                 render: function(data, type, full, meta) {
                                     return master.typeofissues[data].description;
                                 }
-                            }, {
-                                title: 'OPTION',
-                                data: 'option_id',
-                                render: function(data, type, full, meta) {
-                                    var options = master.non_mapped_typeofissue_sets[full.type_of_issue_id].options;
-                                    for (i in options.type_of_issue_options) {
-                                        if (options.type_of_issue_options[i].option_id == data) {
-                                            return options.type_of_issue_options[i].option_label;
+                            }];
+                            if (model.siteCode != 'KGFS') {
+                                columns.push({
+                                    title: 'OPTION',
+                                    data: 'option_id',
+                                    render: function(data, type, full, meta) {
+                                        var options = master.non_mapped_typeofissue_sets[full.type_of_issue_id].options;
+                                        for (i in options.type_of_issue_options) {
+                                            if (options.type_of_issue_options[i].option_id == data) {
+                                                return options.type_of_issue_options[i].option_label;
+                                            }
                                         }
+                                        return '-';
                                     }
-                                    return '-';
-                                }
-                            }, {
+                                });
+                            }
+                            columns.push.apply(columns, [{
                                 title: 'COMMENT',
                                 data: 'deviation'
                             }, {
                                 title: 'RESPONSIBILITY',
                                 data: 'assignee_det.0.assignee_id'
-                            }];
+                            }]);
+                            return columns;
                         },
                         getActions: function() {
                             return [{
@@ -109,6 +115,16 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper) {
                                 },
                                 isApplicable: function(item, index) {
                                     return !$stateParams.pageData.readonly
+                                }
+                            }, {
+                                name: "DELETE_ISSUE",
+                                fn: function(item, index) {
+                                    Utils.confirm("Are you sure to delete?").then(function() {
+                                        model.manual_sampling.splice(model.manual_sampling.indexOf(item), 1)
+                                    })
+                                },
+                                isApplicable: function(item, index) {
+                                    return !$stateParams.pageData.readonly && !item.issue_id
                                 }
                             }, {
                                 name: "VIEW_ISSUE",
