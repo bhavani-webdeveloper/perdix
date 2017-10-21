@@ -120,7 +120,10 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper, Utils, SessionStor
                                 name: "DELETE_ISSUE",
                                 fn: function(item, index) {
                                     Utils.confirm("Are you sure to delete?").then(function() {
-                                        model.manual_sampling.splice(model.manual_sampling.indexOf(item), 1)
+                                        model.manual_sampling.splice(model.manual_sampling.indexOf(item), 1);
+                                        Audit.offline.setProcessCompliance(auditId, model.process_compliance).then(function() {
+                                            PageHelper.showProgress('audit', 'Issue deleted successfully', 3000);
+                                        }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                                     })
                                 },
                                 isApplicable: function(item, index) {
