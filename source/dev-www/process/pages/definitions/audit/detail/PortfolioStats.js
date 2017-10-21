@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
             var total = model.portfolio_stats.cash_holding.coin_balance;
             for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
                 var c = model.portfolio_stats.cash_holding.cash_on_hand[i];
-                initialize && c.total_cash = c.units_on_hand * c.denomination;
+                initialize && (c.total_cash = c.units_on_hand * c.denomination);
                 total += c.total_cash;
             }
             model.portfolio_stats.cash_holding.sum_total_cash = total;
