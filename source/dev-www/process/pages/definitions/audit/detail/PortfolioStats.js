@@ -3,10 +3,12 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
 
         var branch = SessionStore.getBranch();
 
-        var recomputeCashTotals = function(model) {
+        var recomputeCashTotals = function(model, initialize) {
             var total = model.portfolio_stats.cash_holding.coin_balance;
             for (i in model.portfolio_stats.cash_holding.cash_on_hand) {
-                total += model.portfolio_stats.cash_holding.cash_on_hand[i].total_cash;
+                var c = model.portfolio_stats.cash_holding.cash_on_hand[i];
+                initialize && c.total_cash = c.units_on_hand * c.denomination;
+                total += c.total_cash;
             }
             model.portfolio_stats.cash_holding.sum_total_cash = total;
             model.portfolio_stats.cash_holding.deviation = total - model.portfolio_stats.cash_holding.cbs_balance;
@@ -156,7 +158,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                             });
                         }*/
                     }
-                    recomputeCashTotals(model);
+                    recomputeCashTotals(model, true);
 
                     var goldDetails = [];
                     if (!model.portfolio_stats.gold_coin_tally || !model.portfolio_stats.gold_coin_tally.length) {
