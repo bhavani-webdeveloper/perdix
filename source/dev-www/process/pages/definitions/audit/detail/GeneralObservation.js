@@ -33,11 +33,10 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                 var go = {
                                     "particular_id": v.particular_id,
                                     "comments": "",
-                                    "option_id": "",
+                                    "option_id": [],
                                     "particular_name": v.particular_name
                                 };
                                 if (v.particular_type == 2) {
-                                    go.option_id = [];
                                     go.option_type = 'user';
                                 }
                                 model.general_observations.push(go);
@@ -46,7 +45,15 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     } else {
                         // fill particular name
                         for (i in model.general_observations) {
-                            model.general_observations[i].particular_name = masters.general_observation.particulars[model.general_observations[i].particular_id].particular_name;
+                            var go = model.general_observations[i];
+                            var mgo = masters.general_observation.particulars[go.particular_id];
+                            go.particular_name = mgo.particular_name;
+                            if (mgo.particular_type != 2 && go.option_id && go.option_id[0]) {
+                                var gopos = filterFilter(masters.general_observation.particular_options[go.particular_id], {option_id: go.option_id[0]}, true);
+                                if (gopos && gopos.length) {
+                                    go.option_name = gopos[0].name;
+                                }
+                            }
                         }
                     }
                     self.form = [{
@@ -64,16 +71,14 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             remove: null,
                             startEmpty: true,
                             items: [{
-                                key: "general_observations[].option_id",
+                                key: "general_observations[].option_name",
                                 "condition": "model.general_observations[arrayIndex].option_type != 'user'",
                                 "type": "lov",
                                 lovonly: true,
                                 outputMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var optionsToShow = filterFilter(masters.general_observation.particular_options, {
-                                        particular_id: model.general_observations[context.arrayIndex].particular_id
-                                    }, true);
+                                    var optionsToShow = masters.general_observation.particular_options[model.general_observations[context.arrayIndex].particular_id];
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": optionsToShow.length
@@ -87,7 +92,8 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     ];
                                 },
                                 onSelect: function(result, model, context) {
-                                    model.general_observations[context.arrayIndex].option_id = result.name;
+                                    model.general_observations[context.arrayIndex].option_id[0] = result.option_id;
+                                    model.general_observations[context.arrayIndex].option_name = result.name;
                                 }
                             }, {
                                 "type": "section",
@@ -191,7 +197,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     "type": ["string", "null"],
                                     "title": "ORDER_ID"
                                 },
-                                "option_id": {
+                                "option_name": {
                                     "type": ["string", "null"],
                                     "title": "OPTION_NAME"
                                 },

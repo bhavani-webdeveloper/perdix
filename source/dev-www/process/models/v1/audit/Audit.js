@@ -472,6 +472,14 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.general_observation.particulars = particulars;
 
+                var particular_options = {};
+                for (i in response.general_observation.particular_options) {
+                    var gopo = response.general_observation.particular_options[i];
+                    particular_options[gopo.particular_id] = particular_options[gopo.particular_id] || [];
+                    particular_options[gopo.particular_id].push(gopo);
+                }
+                response.general_observation.particular_options = particular_options;
+
                 var fixed_assets = {};
                 for (i in response.fixed_assets) {
                     fixed_assets[response.fixed_assets[i].asset_type_id] = response.fixed_assets[i];
