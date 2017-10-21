@@ -270,7 +270,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "onClick": "actions.uploadAuditData(model)"
             }, {
                 "type": "button",
-                "condition": "!model.ai._dirty && model.ai.current_stage == 'start'",
+                "condition": "!model.ai._dirty && (model.ai.current_stage == 'start' || model.ai.current_stage == 'create')",
                 "title": "PUBLISH",
                 "onClick": "actions.moveStage(model, 'publish')"
             }, {
