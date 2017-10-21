@@ -75,7 +75,7 @@ function($log, irfNavigator, $stateParams, Audit, PageHelper) {
                                 title: 'OPTION',
                                 data: 'option_id',
                                 render: function(data, type, full, meta) {
-                                    var options = master.non_autosampling_typeofissue_sets[full.type_of_issue_id].options;
+                                    var options = master.non_mapped_typeofissue_sets[full.type_of_issue_id].options;
                                     for (i in options.type_of_issue_options) {
                                         if (options.type_of_issue_options[i].option_id == data) {
                                             return options.type_of_issue_options[i].option_label;

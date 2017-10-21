@@ -114,17 +114,16 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     "readonly": true
                 }];
 
-                if (master.book_entity.length) {
+                if (master.book_entity) {
                     var bookEntityTitleMap = [];
-                    for (i in master.book_entity) {
-                        var v = master.book_entity[i];
-                        if (v.status == "1") {
+                    _.forOwn(master.book_entity, function(v, k) {
+                        if (v.status == 1) {
                             bookEntityTitleMap.push({
                                 "name": v.entity_name,
                                 "value": v.entity_id
                             });
                         }
-                    }
+                    });
                     if (bookEntityTitleMap.length == 1) {
                         model.manual_issue.entity_id = bookEntityTitleMap[0].value;
                     } else {
