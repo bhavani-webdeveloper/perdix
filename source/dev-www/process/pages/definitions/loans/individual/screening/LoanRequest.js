@@ -1060,7 +1060,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             {
                 type: "box",
                 title: "LOAN_CUSTOMER_RELATIONS",
-                 "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
                 items: [{
                     key: "loanAccount.loanCustomerRelations",
                     type: "array",
@@ -1086,6 +1086,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }, {
                         key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
                         title: "RELATIONSHIP_WITH_APPLICATION",
+                        condition:"model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                         required:true,
                         type:"select",
                         enumCode:"relation"
@@ -1122,6 +1123,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }, {
                         key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
                         title: "RELATIONSHIP_WITH_APPLICATION",
+                        condition:"model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                         type:"select",
                         enumCode:"relation"
                     }]
