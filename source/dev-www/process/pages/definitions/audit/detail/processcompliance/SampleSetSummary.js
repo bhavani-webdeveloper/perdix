@@ -152,6 +152,20 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                     isApplicable: function(item, index) {
                                         return !$stateParams.pageData.readonly && item.status != "0";
                                     }
+                                },{
+                                    name: "NO_ISSUES",
+                                    icon: "",
+                                    fn: function(item, index) {
+                                        item.status = "1";
+                                        delete item.issue_details;
+                                        for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++) if (model.sampleSet[i].status == "1") model.sampleSetSummary.push(model.sampleSet[i]);
+                                        if (model.$isOffline) {
+                                            Audit.offline.setProcessCompliance(auditId, model.processCompliance);
+                                        }
+                                    },
+                                    isApplicable: function(item, index) {
+                                        return !$stateParams.pageData.readonly && item.status != "1";
+                                    }
                                 }, {
                                     name: "DO_AUDIT",
                                     icon: "",

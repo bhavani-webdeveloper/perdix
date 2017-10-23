@@ -92,6 +92,18 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                     isApplicable: function(item, index) {
                                         return !$stateParams.pageData.readonly && item.status != "2";
                                     }
+                                },{
+                                    name: "NO_ISSUES",
+                                    fn: function(item, index) {
+                                        item.status = "1";
+                                        delete item.issue_details;
+                                        if (model.$isOffline) {
+                                            Audit.offline.setProcessCompliance(auditId, model.processCompliance);
+                                        }
+                                    },
+                                    isApplicable: function(item, index) {
+                                        return !$stateParams.pageData.readonly && item.status != "1";
+                                    }
                                 }, {
                                     name: "DO_AUDIT",
                                     fn: function(item, index) {
