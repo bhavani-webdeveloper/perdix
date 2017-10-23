@@ -667,6 +667,38 @@
                   "captureStages":[
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
+               },"loanToValue":{
+                  "title":"loanToValue",
+                 "type":"number",
+                  "minimum":0,
+                  "maximum":100000000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },"dsaPayout":{
+                  "title":"dsaPayout",
+                 "type":"number",
+                  "minimum":0,
+                  "maximum":100000000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },"dealIrr":{
+                  "title":"dealIrr",
+                 "type":"number",
+                  "minimum":0,
+                  "maximum":100000000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },"valuator":{
+                  "title":"valuator",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
                },
                "expectedCommercialCibilCharge":{
                   "title":"Expected Commercial Cibil Charge",
@@ -1609,6 +1641,1261 @@
                }
             }
          },
+		 "vehicleLoanDetails":{
+            "title":"Vehicle Loan Details",
+            "type":"object",
+            "maxItems":null,
+            "items":null,
+            "required":[
+
+            ],
+            "properties":{
+               "registrationNumber":{
+                  "title":"registrationNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "valuationPurpose":{
+                  "title":"valuationPurpose",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "valuationDate":{
+                  "title":"valuationDate",
+                  "type":"date",              
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "valuationPlace":{
+                  "title":"valuationPlace",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "registeredOwnerName":{
+                  "title":"registeredOwnerName",
+               "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "proposedOwnerName":{
+                  "title":"proposedOwnerName",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "bankReferenceNumber":{
+                  "title":"bankReferenceNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "inspectionDate":{
+                  "title":"inspectionDate",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "inspectedBy":{
+                  "title":"inspectedBy",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "vehicleMoved":{
+                  "title":"vehicleMoved",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "inspectionLatitude":{
+                  "title":"inspectionLatitude",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "inspectionLongitude":{
+                  "title":"inspectionLongitude",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "inspectionAltitude":{
+                  "title":"inspectionAltitude",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "engineStarted":{
+                  "title":"engineStarted",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "make":{
+                  "title":"make",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "variant":{
+                  "title":"variant",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "colour":{
+                  "title":"colour",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "trailer":{
+                  "title":"trailer",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "chasisNo":{
+                  "title":"chasisNo",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "engineNo":{
+                  "title":"engineNo",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "odometerReading":{
+                  "title":"odometerReading",
+                  "type":"number",				
+                     "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "estimatedReading":{
+                  "title":"estimatedReading",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "transmission":{
+                  "title":"transmission",
+                "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "odometer":{
+                  "title":"odometer",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "usedFor":{
+                  "title":"usedFor",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "reRegistered":{
+                  "title":"reRegistered",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "previousRegistrationNumber":{
+                  "title":"previousRegistrationNumber",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "registrationAsPerRcbook":{
+                  "title":"registrationAsPerRcbook",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "registrationAsPerActual":{
+                  "title":"registrationAsPerActual",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "numberPlateCOlour":{
+                  "title":"numberPlateCOlour",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "registeredAddress":{
+                  "title":"registeredAddress",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "ownerSerialNo":{
+                  "title":"ownerSerialNo",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "registrationDate":{
+                  "title":"registrationDate",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "vehicleClass":{
+                  "title":"vehicleClass",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "bodyType":{
+                  "title":"bodyType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "fuelUsed":{
+                  "title":"fuelUsed",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "cubicCapacity":{
+                  "title":"cubicCapacity",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":999999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "makersClassification":{
+                  "title":"makersClassification",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "seatingCapacity":{
+                  "title":"seatingCapacity",
+               "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "unladenWeight":{
+                  "title":"unladenWeight",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "hypothecatedTo":{
+                  "title":"hypothecatedTo",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "fitnesscertifiedUpto":{
+                  "title":"date",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "permitStatus":{
+                  "title":"permitStatus",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "permitValidUpto":{
+                  "title":"permitValidUpto",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "operationroute":{
+                  "title":"operationroute",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "taxPaid":{
+                  "title":"taxPaid",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "taxValidUpto":{
+                  "title":"taxValidUpto",
+                 "type":"date",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "insuranceCompany":{
+                  "title":"insuranceCompany",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "insurancePolicyNumber":{
+                  "title":"insurancePolicyNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "insuranceIdv":{
+                  "title":"insuranceIdv",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "insuranceValidTo":{
+                  "title":"insuranceValidTo",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "insurancePolicyType":{
+                  "title":"insurancePolicyType",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "modelUnderProduction":{
+                  "title":"modelUnderProduction",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "accident":{
+                  "title":"accident",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "accidentRemarks":{
+                  "title":"accidentRemarks",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "originalInvoiceValue":{
+                  "title":"originalInvoiceValue",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "majorRepair":{
+                  "title":"majorRepair",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "currentInvoiceValue":{
+                  "title":"currentInvoiceValue",
+                  "type":"number",
+				  "minimum":1,
+                     "maximum":99999999,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "rcbookStatus":{
+                  "title":"rcbookStatus",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "recommendationStatus":{
+                  "title":"recommendationStatus",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "recommendationRemarks":{
+                  "title":"recommendationRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "recommendationDate":{
+                  "title":"recommendationDate",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "engineCondition":{
+                  "title":"engineCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "engineRemarks":{
+                  "title":"engineRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "batteryCondition":{
+                  "title":"batteryCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "batteryRemarks":{
+                  "title":"batteryRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "chasisCondition":{
+                  "title":"chasisCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "chasisRemarks":{
+                  "title":"chasisRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "paintCondition":{
+                  "title":"paintCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "paintRemarks":{
+                  "title":"paintRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "upholsteryCondition":{
+                  "title":"upholsteryCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "upholsteryRemarks":{
+                  "title":"upholsteryRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "transimissionCondition":{
+                  "title":"transimissionCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "transmissionRemarks":{
+                  "title":"transmissionRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "electricalPartsCondition":{
+                  "title":"electricalPartsCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "electricalPartsRemarks":{
+                  "title":"electricalPartsRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "bodyCondition":{
+                  "title":"bodyCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "bodyRemarks":{
+                  "title":"bodyRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "suspensionCondition":{
+                  "title":"suspensionCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "suspensionRemarks":{
+                  "title":"suspensionRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "tyreType":{
+                  "title":"tyreType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lhFrontMake":{
+                  "title":"lhFrontMake",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lhFrontCondition":{
+                  "title":"lhFrontCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "rhFrontMake":{
+                  "title":"rhFrontMake",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "rhFrontCondition":{
+                  "title":"rhFrontCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lhRearMake":{
+                  "title":"lhRearMake",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lhRearCondition":{
+                  "title":"lhRearCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "rhRearMake":{
+                  "title":"rhRearMake",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "rhrearCondition":{
+                  "title":"rhrearCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "tyreRemarks":{
+                  "title":"tyreRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "fogLampCondition":{
+                  "title":"fogLampCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "fogLampRemarks":{
+                  "title":"fogLampRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "gearBoxCondition":{
+                  "title":"gearBoxCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "gearBoxremarks":{
+                  "title":"gearBoxremarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "steeringCondiiton":{
+                  "title":"steeringCondiiton",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "steeringRemarks":{
+                  "title":"steeringRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lightWiringCondition":{
+                  "title":"lightWiringCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "lightWiringRemarks":{
+                  "title":"lightWiringRemarks",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "powerWindowFont":{
+                  "title":"powerWindowFont",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "powerWindowRear":{
+                  "title":"powerWindowRear",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "powerSteering":{
+                  "title":"powerSteering",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "airbag":{
+                  "title":"airbag",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "accessories":{
+                  "title":"accessories",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "accessoriesStatus":{
+                  "title":"accessoriesStatus",
+                  "type":"boolean",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "valuationRating":{
+                  "title":"valuationRating",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "futureLife":{
+                  "title":"futureLife",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":1000000,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "currentMarketValue":{
+                  "title":"currentMarketValue",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "distressValue":{
+                  "title":"distressValue",
+                  "type":"number",
+                  "minimum":0,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"                  ]
+               },
+               "photoType1":{
+                  "title":"photoType1",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId1":{
+                  "title":"photoFileId1",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks1":{
+                  "title":"photoRemarks1",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType2":{
+                  "title":"photoType2",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId2":{
+                  "title":"photoFileId2",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks2":{
+                  "title":"photoRemarks2",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType3":{
+                  "title":"photoType3",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId3":{
+                  "title":"photoFileId3",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks3":{
+                  "title":"photoRemarks3",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType4":{
+                  "title":"photoType4",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId4":{
+                  "title":"photoFileId4",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks4":{
+                  "title":"photoRemarks4",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType5":{
+                  "title":"photoType5",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId5":{
+                  "title":"photoFileId5",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks5":{
+                  "title":"photoRemarks5",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType6":{
+                  "title":"photoType6",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId6":{
+                  "title":"photoFileId6",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks6":{
+                  "title":"photoRemarks6",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType7":{
+                  "title":"photoType7",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId7":{
+                  "title":"photoFileId7",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks7":{
+                  "title":"photoRemarks7",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType8":{
+                  "title":"photoType8",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId8":{
+                  "title":"photoFileId8",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks8":{
+                  "title":"photoRemarks8",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType9":{
+                  "title":"photoType9",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId9":{
+                  "title":"photoFileId9",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks9":{
+                  "title":"photoRemarks9",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoType10":{
+                  "title":"photoType10",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoFileId10":{
+                  "title":"photoFileId10",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+               "photoRemarks10":{
+                  "title":"photoRemarks10",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               }
+            }
+         },
+         "vehiclePastValuations":{
+             "title":"vehiclePastValuations",
+            "type":"array",
+            "maxItems":null,
+            "items":{
+               "type":"object",
+               "required":[
+
+               ],
+               "properties":{
+                  "financier":{
+                     "title":"financier",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "Screening", "LoanInitiation"
+                     ]
+                  },
+                  "valuationDate":{
+                     "title":"valuationDate",
+                     "type":"date",
+                     "captureStages":[
+                        "Screening", "LoanInitiation"
+                     ]
+                  },
+                  "valuation":{
+                     "title":"valuation",
+                     "type":"number",
+                     "minimum":1,
+                     "maximum":100000,
+                     "captureStages":[
+                        "Screening", "LoanInitiation"
+                     ]
+                  }
+               }
+            }
+         },
+
          "ornaments":{
             "title":"Ornaments",
             "type":"array",

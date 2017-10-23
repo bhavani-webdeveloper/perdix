@@ -512,6 +512,14 @@
                 "Completed"
               ]
             },
+			 "loanSourceCategory": {
+              "title": "loanSourceCategory",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "instituteName": {
               "title": "Institute Name",
               "type": "string",
@@ -932,6 +940,58 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"weddingDate": {
+            "title": "weddingDate",
+            "type": "date",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"monthlyRent": {
+            "title": "monthlyRent",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"previousRentDetails": {
+            "title": "previousRentDetails",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"vehiclesOwned": {
+            "title": "vehiclesOwned",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"vehiclesFinanced": {
+            "title": "vehiclesFinanced",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"vehiclesFree": {
+            "title": "vehiclesFree",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3996,6 +4056,84 @@
               "type": "number",
               "minimum": 0,
               "maximum": 10000000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "endUse": {
+              "title": "endUse",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "natureOfUse": {
+              "title": "natureOfUse",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "manufacturer": {
+              "title": "manufacturer",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "make": {
+              "title": "make",
+             "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetCategory": {
+              "title": "assetCategory",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "manufactureDate": {
+              "title": "manufactureDate",
+              "type": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "subDetails": {
+              "title": "subDetails",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetregistrationNumber": {
+              "title": "assetregistrationNumber",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
