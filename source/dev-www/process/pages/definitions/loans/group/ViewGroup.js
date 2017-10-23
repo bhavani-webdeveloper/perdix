@@ -114,6 +114,14 @@ define({
 						"type": "select",
 						"enumCode": "partner"
 					}, {
+	                    "key": "group.branchId",
+	                    "title": "BRANCH_NAME",
+	                    readonly: true,
+	                    "type": "select",
+	                    "enumCode": "branch_id",
+	                    "parentEnumCode": "bank",
+	                    "parentValueExpr": "model.group.bankId",
+	                }, {
 						"key": "group.centreCode",
 						"title": "CENTRE_CODE",
 						"type": "select",
