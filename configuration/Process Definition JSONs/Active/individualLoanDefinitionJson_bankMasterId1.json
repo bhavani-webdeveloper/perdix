@@ -1647,9 +1647,9 @@
             "maxItems":null,
             "items":null,
             "required":[
-				"model_under_production",
-				"insurance_policy_type",
-				"insurance_policy_number",
+				"modelUnderProduction",
+				"insurancePolicyType",
+				"insurancePolicyNumber",
 				"variant"
             ],
             "properties":{
