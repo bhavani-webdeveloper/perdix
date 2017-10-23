@@ -13,7 +13,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                 }
                 if (jd.reapp_net > jd.reapp_gross) {
                     PageHelper.setError({
-                        message: translateFilter("RE_APP/NET(IN_GRAMS)")+" weight Should be less than the " + translateFilter("RE_APP/GROSS(IN_GRAMS)") + " Weight"
+                        message: translateFilter("RE_APP/NET(IN_GRAMS)") + " should be less than " + translateFilter("RE_APP/GROSS(IN_GRAMS)")
                     });
                     return false;
                 }
