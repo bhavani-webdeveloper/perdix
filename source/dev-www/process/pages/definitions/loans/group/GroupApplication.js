@@ -370,6 +370,7 @@ define({
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             required: true,
                             "title": "APPLICATION_UPLOAD",
+                            "offline": true,
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
@@ -477,6 +478,7 @@ define({
                             
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             "title": "APPLICATION_UPLOAD",
+                            "offline": true,
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
@@ -645,11 +647,10 @@ define({
                                 title: "REJECT",
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }, {
-                                "type": "button",
+                                "type": "submit",
                                 "icon": "fa fa-arrow-right",
                                 condition:"model.action == 'PROCEED'",
                                 "title": "PROCEED",
-                                "onClick": "actions.proceedAction(model, formCtrl, form)"
                             }]
                         }
                     ]
@@ -703,9 +704,9 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
-                proceedAction: function(model, formCtrl, form) {
-                    if(!validateForm(formCtrl)) 
-                        return;
+                submit: function(model, formCtrl, form) {
+                    // if(!validateForm(formCtrl)) 
+                    //     return;
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();
@@ -727,6 +728,10 @@ define({
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Send Back', "Remarks is mandatory", 2000);
+                        return false;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
@@ -746,6 +751,10 @@ define({
                 reject: function(model, form, formName) {
                     if (!model.review.rejectStage){
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
                     PageHelper.showLoader();

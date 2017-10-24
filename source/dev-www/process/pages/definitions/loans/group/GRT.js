@@ -170,6 +170,7 @@ define({
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
                     "type": "file",
+                    "offline": true,
                     "fileType": "image/*",
                 },{
                     "key": "group.Cgtbutton",
@@ -195,6 +196,7 @@ define({
                 }, {
                     "key": "group.grtEndPhoto",
                     "type": "file",
+                    "offline": true,
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
@@ -276,6 +278,7 @@ define({
                 }, {
                     "key": "group.grtEndPhoto",
                     "type": "file",
+                    "offline": true,
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
@@ -486,6 +489,7 @@ define({
                 }, {
                     "key": "group.grtEndPhoto",
                     "type": "file",
+                    "offline": true,
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
@@ -730,6 +734,7 @@ define({
                         "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_PHOTO",
                         "type": "file",
+                        "offline": true,
                         "category": "Group",
                         "subCategory": "GRTPHOTO",
                         "fileType": "image/*",
@@ -845,6 +850,7 @@ define({
                         "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_PHOTO",
                         "type": "file",
+                        "offline": true,
                         "category": "Group",
                         "subCategory": "GRTPHOTO",
                         "fileType": "image/*",

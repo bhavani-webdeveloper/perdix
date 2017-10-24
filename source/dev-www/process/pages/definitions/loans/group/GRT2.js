@@ -165,6 +165,7 @@ define({
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
+                    "offline": true,
                     "fileType": "image/*",
                 },{
                     "key": "group.Cgtbutton",
@@ -189,6 +190,7 @@ define({
                 }, {
                     "key": "group.cgt3EndPhoto",
                     "type": "file",
+                    "offline": true,
                     required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",

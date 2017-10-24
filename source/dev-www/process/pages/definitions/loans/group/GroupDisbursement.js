@@ -185,6 +185,7 @@ define({
                         "category": "Group",
                         "subCategory": "GROUPPHOTO",
                         "type": "file",
+                        "offline": true,
                         "fileType": "image/*",
                     }]
                 }, {
@@ -495,39 +496,9 @@ define({
                                 title: "REJECT",
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }, {
-                                "type": "button",
+                                "type": "submit",
                                 condition:"model.action == 'PROCEED'",
                                 "title": "PROCEED",
-                                "onClick": function(model, formCtrl, form) {
-                                    if(!validateForm(formCtrl)) 
-                                        return;
-                                    PageHelper.showLoader();
-                                    irfProgressMessage.pop('Disbursement-proceed', 'Working...');
-                                    PageHelper.clearErrors();
-                                    model.groupAction = "SAVE";
-                                    for(i=0;i<model.group.jlgGroupMembers.length;i++)
-                                    {
-                                       model.group.jlgGroupMembers[i].modeOfDisbursement='CASH';
-                                    }
-                                    var reqData = _.cloneDeep(model);
-
-                                    GroupProcess.updateGroup(reqData, function(res) {
-                                        res.groupAction = "PROCEED";
-                                        GroupProcess.groupDisbursement(res, function(resp) {
-                                            PageHelper.hideLoader();
-                                            irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
-                                            irfNavigator.goBack();
-                                        }, function(err) {
-                                            PageHelper.hideLoader();
-                                            irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
-                                            PageHelper.showErrors(err);
-                                        });
-                                    }, function(res) {
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
-                                        PageHelper.showErrors(res);
-                                    });
-                                }
                             }]
                         }
                     ]
@@ -624,42 +595,43 @@ define({
                     return deferred.promise;
                 },
 
-                submit: function(model, form, formName) {
-                    model.enrollmentAction = 'PROCEED';
-                    if (form.$invalid) {
-                        irfProgressMessage.pop('cgt1-submit', 'Please fix your form', 5000);
+                submit: function(model, formCtrl, form) {
+                    if(!validateForm(formCtrl)) 
                         return;
-                    }
                     PageHelper.showLoader();
-                    irfProgressMessage.pop('cgt1-submit', 'Working...');
+                    irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    var reqData = {
-                        "cgtDate": model.group.cgtDate1,
-                        "cgtDoneBy": SessionStore.getLoginname() + '-' + model.group.cgt1DoneBy,
-                        "groupCode": model.group.groupCode,
-                        "latitude": model.group.cgt1Latitude,
-                        "longitude": model.group.cgt1Longitude,
-                        "partnerCode": model.group.partnerCode,
-                        "photoId": model.group.cgt1Photo,
-                        "productCode": model.group.productCode,
-                        "remarks": model.group.cgt1Remarks
-                    };
-                    var promise = Groups.post({
-                        service: 'process',
-                        action: 'cgt'
-                    }, reqData, function(res) {
-                        console.debug(res);
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt1-submit', 'CGT 1 Updated. Proceed to CGT 2', 5000);
+                    model.groupAction = "SAVE";
+                    for(i=0;i<model.group.jlgGroupMembers.length;i++)
+                    {
+                       model.group.jlgGroupMembers[i].modeOfDisbursement='CASH';
+                    }
+                    var reqData = _.cloneDeep(model);
+
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        res.groupAction = "PROCEED";
+                        GroupProcess.groupDisbursement(res, function(resp) {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
+                            irfNavigator.goBack();
+                        }, function(err) {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
+                            PageHelper.showErrors(err);
+                        });
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt1-submit', 'Oops. Some error.', 2000);
+                        irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
                 },
                 sendBack: function(model, form, formName) {
                     if (!model.review.targetStage){
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Send Back', "Remarks is mandatory", 2000);
                         return false;
                     }
                     PageHelper.showLoader();
@@ -681,6 +653,10 @@ define({
                 reject: function(model, form, formName) {
                     if (!model.review.rejectStage){
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
                     PageHelper.showLoader();
