@@ -146,6 +146,7 @@ define({
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
                     "type": "file",
+                    "offline": true,
                     "fileType": "image/*",
                 },{
                     "key": "group.Cgtbutton",
@@ -183,6 +184,7 @@ define({
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
                     "type": "file",
+                    "offline": true,
                     "fileType": "image/*",
                 }, {
                     "key": "group.Cgtbutton",

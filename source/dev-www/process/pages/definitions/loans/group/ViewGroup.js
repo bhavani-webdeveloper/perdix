@@ -44,6 +44,13 @@ define({
 				}, function(res) {
 					deferred.reject(res);
 				});
+				if (model.group.jlgGroupMembers[key].loanAccount) {
+                    if (model.group.jlgGroupMembers[key].loanAccount.closed == true) {
+                        model.group.jlgGroupMembers[key].closed1 = "Inactive";
+                    } else {
+                        model.group.jlgGroupMembers[key].closed1 = "Active";
+                    }
+                }
 			});
 			return deferred.promise;
 		};
@@ -95,11 +102,26 @@ define({
 						"key": "group.groupName",
 						"title": "GROUP_NAME",
 					}, {
+						"key": "group.currentStage",
+						"title": "CURRENT_STAGE",
+					}, {
+	                    "key": "group.groupCode",
+	                    "readonly":true,
+	                    "title": "GROUP_CODE",
+	                }, {
 						"key": "group.partnerCode",
 						"title": "PARTNER",
 						"type": "select",
 						"enumCode": "partner"
 					}, {
+	                    "key": "group.branchId",
+	                    "title": "BRANCH_NAME",
+	                    readonly: true,
+	                    "type": "select",
+	                    "enumCode": "branch_id",
+	                    "parentEnumCode": "bank",
+	                    "parentValueExpr": "model.group.bankId",
+	                }, {
 						"key": "group.centreCode",
 						"title": "CENTRE_CODE",
 						"type": "select",

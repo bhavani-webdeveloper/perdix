@@ -66,6 +66,15 @@ define({
 
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            if(model.group.jlgGroupMembers && model.group.jlgGroupMembers.length)
+            {
+               if(model.group.jlgGroupMembers[0].scheduledDisbursementDate){
+                model.group.scheduledDisbursementDate=model.group.jlgGroupMembers[0].scheduledDisbursementDate;
+               }
+               if(model.group.jlgGroupMembers[0].firstRepaymentDate){
+                model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
+               }
+            }
         };
 
         var fillNames = function(model) {
@@ -325,7 +334,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
 
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
@@ -361,6 +370,7 @@ define({
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             required: true,
                             "title": "APPLICATION_UPLOAD",
+                            "offline": true,
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
@@ -432,7 +442,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
                             "readonly": true,
-                            "title": "WitnessLastName",
+                            "title": "WITNESS_NAME",
 
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
@@ -468,6 +478,7 @@ define({
                             
                             "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
                             "title": "APPLICATION_UPLOAD",
+                            "offline": true,
                             "category": "Group",
                             "subCategory": "APPLICATION",
                             "type": "file",
@@ -487,7 +498,7 @@ define({
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
-                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/GroupFormsDownload.php?record_id=" + model.group.id);
+                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/JLGAllFormsDownload.php?record_id=" + model.group.id);
                         }
                     },]
                 },
@@ -518,26 +529,6 @@ define({
                         },{
                            key: "group.checkerTransactionHistory[].statusUpDatedAt",
                            title: "APPROVED_AT",
-                        }]
-                    }]
-                },
-                {
-                    "title": "REMARKS_HISTORY",
-                    "type": "box",
-                    condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
-                    "items": [{
-                        "key": "group.remarksHistory",
-                        "type": "array",
-                        "view": "fixed",
-                        add: null,
-                        remove: null,
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "",
-                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
-                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
-                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
-                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
                         }]
                     }]
                 },
@@ -656,15 +647,34 @@ define({
                                 title: "REJECT",
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }, {
-                                "type": "button",
+                                "type": "submit",
                                 "icon": "fa fa-arrow-right",
                                 condition:"model.action == 'PROCEED'",
                                 "title": "PROCEED",
-                                "onClick": "actions.proceedAction(model, formCtrl, form)"
                             }]
                         }
                     ]
-                }
+                },
+                {
+                    "title": "REMARKS_HISTORY",
+                    "type": "box",
+                    condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
+                    "items": [{
+                        "key": "group.remarksHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        add: null,
+                        remove: null,
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
+                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
+                            <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
+                            <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
+                        }]
+                    }]
+                },
             ],
 
             schema: {
@@ -694,9 +704,9 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
-                proceedAction: function(model, formCtrl, form) {
-                    if(!validateForm(formCtrl)) 
-                        return;
+                submit: function(model, formCtrl, form) {
+                    // if(!validateForm(formCtrl)) 
+                    //     return;
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();
@@ -718,6 +728,10 @@ define({
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Send Back', "Remarks is mandatory", 2000);
+                        return false;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
@@ -737,6 +751,10 @@ define({
                 reject: function(model, form, formName) {
                     if (!model.review.rejectStage){
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
                     PageHelper.showLoader();
