@@ -35,7 +35,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     "data": "status",
                     render: function(data, type, full, meta) {
                         return full.status == "0" ? "Audited" : (full.status == "1" ? "No Issues" : (full.status == "2" ? "Not Audited" : ""));
-                        //return full.status == "0" ? "Audited" : (full.status == "2" ? "Not Audited" : "");
                     }
                 }];
                 for (i in master.sampling_columns_config) {
@@ -102,8 +101,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                             Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                         }
                                     },
-                                    isApplicable: function(item, index) {
-                                        return !$stateParams.pageData.readonly && item.status != "1";
+                                     isApplicable: function(item, index) {
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if (siteCode == 'KGFS') {
+                                            return !$stateParams.pageData.readonly && item.status != "1";
+                                        }
                                     }
                                 }, {
                                     name: "DO_AUDIT",
