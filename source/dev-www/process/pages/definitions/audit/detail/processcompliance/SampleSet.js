@@ -34,7 +34,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     "title": "STATUS",
                     "data": "status",
                     render: function(data, type, full, meta) {
-                        return full.status == "0" ? "Audited" : (full.status == "2" ? "Not Audited" : "");
+                        return full.status == "0" ? "Audited" : (full.status == "1" ? "No Issues" : (full.status == "2" ? "Not Audited" : ""));
+                        //return full.status == "0" ? "Audited" : (full.status == "2" ? "Not Audited" : "");
                     }
                 }];
                 for (i in master.sampling_columns_config) {
