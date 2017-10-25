@@ -580,7 +580,7 @@
             "captureStage":"Stage01",
             "title":"Marital Status"
          },
-         "outstandingLoanAmount":{
+         "outStandingLoanAmount":{
             "mandatory":false,
             "minimum":0,
             "maximum":100000000,
