@@ -2680,6 +2680,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = null;
+                    if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
+                        reqData.loanAccount.status = 'REJECTED'
+                    }
+
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     reqData.stage = model.review.targetStage;
