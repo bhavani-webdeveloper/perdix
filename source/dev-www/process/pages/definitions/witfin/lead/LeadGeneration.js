@@ -15,7 +15,7 @@ define({
                 },
                 "leadProfile.leadDetails.individualDetails.dob": {
                     "required": true
-                },
+                }
 
             }
         }
@@ -56,6 +56,16 @@ define({
                 "productDetails.loanPurpose1",
                 "productDetails.loanPurpose2",
                 "productDetails.productRequiredBy",
+                "productDetails.followUpDate",
+                "productDetails.screeningDate",
+                "productDetails.productEligibility",
+                "productDetails.productEligibility.eligibleForProduct",
+                "productDetails.productRejectionReason",
+                "productDetails.productRejectionReason.productRejectReason",
+                "productDetails.productRejectionReason.productRejectReason",
+                "productDetails.productRejectionReason.additionalRemarks",
+                "productDetails.leadStatus",
+                "productDetails.leadStatus.leadStatus",
                 "previousInteractions",
                 "previousInteractions.leadInteractions1",
                 "previousInteractions.leadInteractions1.interactionDate",

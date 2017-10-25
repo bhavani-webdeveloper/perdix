@@ -1525,260 +1525,260 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             readonly: true
                         },
 
+                        // "leadDetails":{
+                        //     type: "fieldset",
+                        //     // condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
+                        //     title: "LEAD_DETAILS",
+                        //     items: {
+                        //         "leadName":{
+                        //             key: "lead.leadName",
+                        //             title: "APPLICANT_NAME"
+                        //         }, 
+                        //         "customerType":{
+                        //             key: "lead.customerType",
+                        //             type: "select",
+                        //             titleMap: {
+                        //                 "Individual": "Individual",
+                        //                 "Enterprise": "Individual and Enterprise"
+                        //             }
+
+                        //         }, 
+                        //         "enterpriseDetails":{
+                        //             type: "fieldset",
+                        //             title: "ENTERPRISE_DETAILS",
+                        //             condition: "model.lead.customerType === 'Enterprise'",
+                        //             items: {
+                        //                 "businessName":{
+                        //                     key: "lead.businessName"
+                        //                 }, 
+                        //                 "companyRegistered":{
+                        //                     key: "lead.companyRegistered",
+                        //                     type: "radios",
+                        //                     enumCode: "decisionmaker"
+                        //                 }, 
+                        //                 "businessType":{
+                        //                     key: "lead.businessType",
+                        //                     type: "select",
+                        //                     enumCode: "businessType"
+                        //                 }, 
+                        //                 "businessActivity":{
+                        //                     key: "lead.businessActivity",
+                        //                     //title:"BUSINESS_LINE",
+                        //                     type: "select",
+                        //                     enumCode: "businessActivity",
+                        //                     parentEnumCode: "businessType"
+                        //                 }, 
+                        //                 "companyOperatingSince":{
+                        //                     key: "lead.companyOperatingSince",
+                        //                     type: "date"
+                        //                 }, 
+                        //                 "ownership":{
+                        //                     key: "lead.ownership",
+                        //                     type: "select",
+                        //                     enumCode: "ownership",
+
+                        //                 /*titleMap: {
+                        //                     "Owned": "Owned",
+                        //                     "Own house without registration": "Own house without registration",
+                        //                     "Family Property": "Family Property",
+                        //                     "Leased": "Leased",
+                        //                     "Rental": "Rental",
+                        //                 }*/
+
+                        //                 }, 
+                        //                 "individalDetails":{
+                        //                     type: "fieldset",
+                        //                     title: "INDIVIDUAL_DETAILS",
+                        //                     items: {
+                        //                         "gender": {
+                        //                             key: "lead.gender",
+                        //                             type: "radios"
+                        //                         }, 
+                        //                         "dob":{
+                        //                             key: "lead.dob",
+                        //                             type: "date",
+                        //                             "onChange": function(modelValue, form, model) {
+                        //                                 if (model.lead.dob) {
+                        //                                     model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                        //                                 }
+                        //                             }
+                        //                         }, 
+                        //                         "age":{
+                        //                             key: "lead.age",
+                        //                             type: "number",
+                        //                             "onChange": function(modelValue, form, model) {
+                        //                                 if (model.lead.age > 0) {
+                        //                                     if (model.lead.dob) {
+                        //                                         model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                        //                                     } else {
+                        //                                         model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                        //                                     }
+                        //                                 }
+                        //                             }
+                        //                         }, 
+                        //                         "maritalStatus": {
+                        //                             key: "lead.maritalStatus",
+                        //                             type: "select",
+                        //                             enumCode: "marital_status",
+                        //                             /*titleMap: {
+                        //                                 "MARRIED": "MARRIED",
+                        //                                 "UNMARRIED": "UNMARRIED",
+                        //                                 "DIVORCED": "DIVORCED",
+                        //                                 "SEPARATED": "SEPARATED",
+                        //                                 "WIDOW(ER)": "WIDOW(ER)",
+                        //                             }*/
+                        //                         }, 
+                        //                         "educationStatus":{
+                        //                             key: "lead.educationStatus",
+                        //                             type: "select",
+                        //                             enumCode: "education",
+                        //                                 /* titleMap: {
+                        //                              "Below SSLC": "Below SSLC",
+                        //                              "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                        //                              "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                        //                              "Post graduate&equivalent": "PostGraduate & Equivalent",
+                        //                              "More than post graduation": "MoreThanPostGraduation",
+                        //                             }*/
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             }
+                        //         },
+
+                        //         "individualDetails": {
+                        //             type: "fieldset",
+                        //             title: "INDIVIDUAL_DETAILS",
+                        //             condition: "model.lead.customerType === 'Individual'",
+                        //             items: {
+                        //                 "gender": {
+                        //                     key: "lead.gender",
+                        //                     type: "radios"
+                        //                 }, 
+                        //                 "dob": {
+                        //                     key: "lead.dob",
+                        //                     type: "date",
+                        //                     "onChange": function(modelValue, form, model) {
+                        //                         if (model.lead.dob) {
+                        //                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                        //                         }
+                        //                     }
+                        //                 }, 
+                        //                 "age": {
+                        //                     key: "lead.age",
+                        //                     type: "number",
+                        //                     "onChange": function(modelValue, form, model) {
+                        //                         if (model.lead.age > 0) {
+                        //                             if (model.lead.dob) {
+                        //                                 model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                        //                             } else {
+                        //                                 model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                        //                             }
+                        //                         }
+                        //                     }
+                        //                 }, 
+                        //                 "maritalStatus":{
+                        //                     key: "lead.maritalStatus",
+                        //                     type: "select",
+                        //                     enumCode: "marital_status",
+                        //                 /*titleMap: {
+                        //                     "MARRIED": "MARRIED",
+                        //                     "UNMARRIED": "UNMARRIED",
+                        //                     "DIVORCED": "DIVORCED",
+                        //                     "SEPARATED": "SEPARATED",
+                        //                     "WIDOW(ER)": "WIDOW(ER)",
+                        //                 }*/
+                        //                 }, 
+                        //                 "educationStatus":{
+                        //                     key: "lead.educationStatus",
+                        //                     type: "select",
+                        //                     enumCode: "education",
+                        //                     /* titleMap: {
+                        //                          "Below SSLC": "Below SSLC",
+                        //                          "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                        //                          "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                        //                          "Post graduate&equivalent": "PostGraduate & Equivalent",
+                        //                          "More than post graduation": "MoreThanPostGraduation",
+                        //                      }*/
+                        //                 }
+                        //             }
+                        //         },
+
+                        //         "contactDetails":{
+                        //             type: "fieldset",
+                        //             title: "CONTACT_DETAILS",
+                        //             condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
+                        //             items: {
+                        //                 "mobileNo":{
+                        //                     key: "lead.mobileNo",
+                        //                 }, 
+                        //                 "alternateMobileNo":{
+                        //                     key: "lead.alternateMobileNo",
+                        //                 }, 
+                        //                 "addressLine1":{
+                        //                     key: "lead.addressLine1",
+                        //                     "title": "DOOR_NO"
+                        //                 }, 
+                        //                 "addressLine2":{
+                        //                     key: "lead.addressLine2",
+                        //                     "title": "STREET"
+                        //                 }, 
+                        //                 "pincode":{
+                        //                     key: "lead.pincode",
+                        //                     type: "lov",
+                        //                     fieldType: "number",
+                        //                     autolov: true,
+                        //                     inputMap: {
+                        //                         "pincode": "lead.pincode",
+                        //                         "district": {
+                        //                             key: "lead.district"
+                        //                         },
+                        //                         "state": {
+                        //                             key: "lead.state"
+                        //                         }
+                        //                     },
+                        //                     outputMap: {
+                        //                         "division": "lead.area",
+                        //                         "region": "lead.cityTownVillage",
+                        //                         "pincode": "lead.pincode",
+                        //                         "district": "lead.district",
+                        //                         "state": "lead.state"
+
+                        //                     },
+                        //                     searchHelper: formHelper,
+                        //                     search: function(inputModel, form, model) {
+                        //                         return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                        //                     },
+                        //                     getListDisplayItem: function(item, index) {
+                        //                         return [
+                        //                             item.division + ', ' + item.region,
+                        //                             item.pincode,
+                        //                             item.district + ', ' + item.state
+                        //                         ];
+                        //                     }
+                        //                 }, 
+                        //                 "area":{
+                        //                     "key": "lead.area",
+                        //                     "readonly": true
+                        //                 }, 
+                        //                 "cityTownVillage":{
+                        //                     "key": "lead.cityTownVillage",
+                        //                     "readonly": true
+                        //                 }, 
+                        //                 "district":{
+                        //                     "key": "lead.district",
+                        //                     "readonly": true
+                        //                 }, 
+                        //                 "state":{
+                        //                     "key": "lead.state",
+                        //                     "readonly": true
+                        //                 }
+                        //             }
+                        //         },
+                        //     }
+                        // },
                         "leadDetails":{
                             type: "fieldset",
-                            // condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
-                            title: "LEAD_DETAILS",
-                            items: {
-                                "leadName":{
-                                    key: "lead.leadName",
-                                    title: "APPLICANT_NAME"
-                                }, 
-                                "customerType":{
-                                    key: "lead.customerType",
-                                    type: "select",
-                                    titleMap: {
-                                        "Individual": "Individual",
-                                        "Enterprise": "Individual and Enterprise"
-                                    }
-
-                                }, 
-                                "enterpriseDetails":{
-                                    type: "fieldset",
-                                    title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.customerType === 'Enterprise'",
-                                    items: {
-                                        "businessName":{
-                                            key: "lead.businessName"
-                                        }, 
-                                        "companyRegistered":{
-                                            key: "lead.companyRegistered",
-                                            type: "radios",
-                                            enumCode: "decisionmaker"
-                                        }, 
-                                        "businessType":{
-                                            key: "lead.businessType",
-                                            type: "select",
-                                            enumCode: "businessType"
-                                        }, 
-                                        "businessActivity":{
-                                            key: "lead.businessActivity",
-                                            //title:"BUSINESS_LINE",
-                                            type: "select",
-                                            enumCode: "businessActivity",
-                                            parentEnumCode: "businessType"
-                                        }, 
-                                        "companyOperatingSince":{
-                                            key: "lead.companyOperatingSince",
-                                            type: "date"
-                                        }, 
-                                        "ownership":{
-                                            key: "lead.ownership",
-                                            type: "select",
-                                            enumCode: "ownership",
-
-                                        /*titleMap: {
-                                            "Owned": "Owned",
-                                            "Own house without registration": "Own house without registration",
-                                            "Family Property": "Family Property",
-                                            "Leased": "Leased",
-                                            "Rental": "Rental",
-                                        }*/
-
-                                        }, 
-                                        "individalDetails":{
-                                            type: "fieldset",
-                                            title: "INDIVIDUAL_DETAILS",
-                                            items: {
-                                                "gender": {
-                                                    key: "lead.gender",
-                                                    type: "radios"
-                                                }, 
-                                                "dob":{
-                                                    key: "lead.dob",
-                                                    type: "date",
-                                                    "onChange": function(modelValue, form, model) {
-                                                        if (model.lead.dob) {
-                                                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                        }
-                                                    }
-                                                }, 
-                                                "age":{
-                                                    key: "lead.age",
-                                                    type: "number",
-                                                    "onChange": function(modelValue, form, model) {
-                                                        if (model.lead.age > 0) {
-                                                            if (model.lead.dob) {
-                                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                            } else {
-                                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                            }
-                                                        }
-                                                    }
-                                                }, 
-                                                "maritalStatus": {
-                                                    key: "lead.maritalStatus",
-                                                    type: "select",
-                                                    enumCode: "marital_status",
-                                                    /*titleMap: {
-                                                        "MARRIED": "MARRIED",
-                                                        "UNMARRIED": "UNMARRIED",
-                                                        "DIVORCED": "DIVORCED",
-                                                        "SEPARATED": "SEPARATED",
-                                                        "WIDOW(ER)": "WIDOW(ER)",
-                                                    }*/
-                                                }, 
-                                                "educationStatus":{
-                                                    key: "lead.educationStatus",
-                                                    type: "select",
-                                                    enumCode: "education",
-                                                        /* titleMap: {
-                                                     "Below SSLC": "Below SSLC",
-                                                     "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                                     "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                                     "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                                     "More than post graduation": "MoreThanPostGraduation",
-                                                    }*/
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-
-                                "individualDetails": {
-                                    type: "fieldset",
-                                    title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'",
-                                    items: {
-                                        "gender": {
-                                            key: "lead.gender",
-                                            type: "radios"
-                                        }, 
-                                        "dob": {
-                                            key: "lead.dob",
-                                            type: "date",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dob) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                }
-                                            }
-                                        }, 
-                                        "age": {
-                                            key: "lead.age",
-                                            type: "number",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.age > 0) {
-                                                    if (model.lead.dob) {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                    } else {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                    }
-                                                }
-                                            }
-                                        }, 
-                                        "maritalStatus":{
-                                            key: "lead.maritalStatus",
-                                            type: "select",
-                                            enumCode: "marital_status",
-                                        /*titleMap: {
-                                            "MARRIED": "MARRIED",
-                                            "UNMARRIED": "UNMARRIED",
-                                            "DIVORCED": "DIVORCED",
-                                            "SEPARATED": "SEPARATED",
-                                            "WIDOW(ER)": "WIDOW(ER)",
-                                        }*/
-                                        }, 
-                                        "educationStatus":{
-                                            key: "lead.educationStatus",
-                                            type: "select",
-                                            enumCode: "education",
-                                            /* titleMap: {
-                                                 "Below SSLC": "Below SSLC",
-                                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                                 "More than post graduation": "MoreThanPostGraduation",
-                                             }*/
-                                        }
-                                    }
-                                },
-
-                                "contactDetails":{
-                                    type: "fieldset",
-                                    title: "CONTACT_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
-                                    items: {
-                                        "mobileNo":{
-                                            key: "lead.mobileNo",
-                                        }, 
-                                        "alternateMobileNo":{
-                                            key: "lead.alternateMobileNo",
-                                        }, 
-                                        "addressLine1":{
-                                            key: "lead.addressLine1",
-                                            "title": "DOOR_NO"
-                                        }, 
-                                        "addressLine2":{
-                                            key: "lead.addressLine2",
-                                            "title": "STREET"
-                                        }, 
-                                        "pincode":{
-                                            key: "lead.pincode",
-                                            type: "lov",
-                                            fieldType: "number",
-                                            autolov: true,
-                                            inputMap: {
-                                                "pincode": "lead.pincode",
-                                                "district": {
-                                                    key: "lead.district"
-                                                },
-                                                "state": {
-                                                    key: "lead.state"
-                                                }
-                                            },
-                                            outputMap: {
-                                                "division": "lead.area",
-                                                "region": "lead.cityTownVillage",
-                                                "pincode": "lead.pincode",
-                                                "district": "lead.district",
-                                                "state": "lead.state"
-
-                                            },
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form, model) {
-                                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.division + ', ' + item.region,
-                                                    item.pincode,
-                                                    item.district + ', ' + item.state
-                                                ];
-                                            }
-                                        }, 
-                                        "area":{
-                                            "key": "lead.area",
-                                            "readonly": true
-                                        }, 
-                                        "cityTownVillage":{
-                                            "key": "lead.cityTownVillage",
-                                            "readonly": true
-                                        }, 
-                                        "district":{
-                                            "key": "lead.district",
-                                            "readonly": true
-                                        }, 
-                                        "state":{
-                                            "key": "lead.state",
-                                            "readonly": true
-                                        }
-                                    }
-                                },
-                            }
-                        },
-                        "leadDetails":{
-                            type: "fieldset",
-                            condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                            // condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                             title: "LEAD_DETAILS",
                             items: {
                                 "leadName":{
@@ -2072,16 +2072,132 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "enumCode": "lead_source",
                         },
                         "referredBy": {
-                            "key":"lead.referredBy"
+                            "key":"lead.referredBy",
+                            "condition":"model.lead.leadSource=='Existing Customer Referral'",
+                            "type": "lov",
+                            "autolov": true,
+                            "lovonly": true,
+                            // initialize: function(model, form, parentModel, context) {
+
+                            //     model.lead.branchId = parentModel.lead.branchId;
+                            //     model.lead.centreId = parentModel.lead.centreId;
+                            //     var centreCode = formHelper.enum('centre').data;
+
+                            //     var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                            //     if(centreName && centreName.length > 0) {
+                            //         model.lead.centreName = centreName[0].name;
+                            //     }
+
+                            // },
+                            "inputMap": {
+                                "firstName": {
+                                    "key": "lead.customerFirstName"
+                                    
+                                },
+                                "urnNo": {
+                                    "key": "lead.urnNo",
+                                    
+                                },
+                                "branchId": {
+                                    "key": "lead.branchId",
+                                    "type": "select",
+                                    "screenFilter": true,
+                                    "readonly": true
+                                },
+                                "centreName": {
+                                    "key": "lead.centreName",
+                                   
+                                    "type": "string",
+                                    "readonly": true,
+
+                                },
+                                "centreId":{
+                                    key: "lead.centreId",
+                                    type: "lov",
+                                    autolov: true,
+                                    lovonly: true,
+                                    bindMap: {},
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model, context) {
+                                        var centres = SessionStore.getCentres();
+                                        // $log.info("hi");
+                                        // $log.info(centres);
+
+                                        var centreCode = formHelper.enum('centre').data;
+                                        var out = [];
+                                        if (centres && centres.length) {
+                                            for (var i = 0; i < centreCode.length; i++) {
+                                                for (var j = 0; j < centres.length; j++) {
+                                                    if (centreCode[i].value == centres[j].id) {
+
+                                                        out.push({
+                                                            name: centreCode[i].name,
+                                                            id:centreCode[i].value
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function(valueObj, model, context) {
+                                        model.lead.centreId = valueObj.id;
+                                        model.lead.centreName = valueObj.name;
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+                                },
+                            },
+                            "outputMap": {
+                                
+                                "firstName":"lead.referredBy"
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var branches = formHelper.enum('branch_id').data;
+                                var branchName;
+                                for (var i=0; i<branches.length;i++){
+                                    if(branches[i].code==inputModel.customerBranchId)
+                                        branchName = branches[i].name;
+                                }
+                                var promise = Enrollment.search({
+                                    'branchName': branchName ||SessionStore.getBranch(),
+                                    'firstName': inputModel.firstName,
+                                    'centreId':inputModel.centreId,
+                                    'customerType':"individual",
+                                    'urnNo': inputModel.urnNo
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' | '),
+                                    data.id,
+                                    data.urnNo
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context){
+                              
+                            }
 
                         },
                         "agentName": {
-                            "key":"lead.agentName"
+                            "key":"lead.agentName",
+                            "condition":"model.lead.leadSource=='Buying/Selling Agent'"
 
                         },
                         "dealerName": {
-                            "key":"lead.dealerName"
-
+                            "key":"lead.dealerName",
+                            "condition":"model.lead.leadSource=='Dealer'"
                         }
 
                     }
@@ -2137,9 +2253,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                            },*/
                         "loanAmountRequested":{
                             key: "lead.loanAmountRequested",
-                            type: "select",
+                            
                             condition: "model.lead.interestedInProduct==='YES'",
-                            enumCode: "vehicle_loan_amount_requested"
+                            
                         }, 
                         "loanPurpose1":{
                             key: "lead.loanPurpose1",
@@ -2246,7 +2362,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "Incomplete": "Incomplete",
                                         "Reject": "Reject"
                                     },*/
-                                    onChange: "actions.changeStatus(modelValue, form, model)"
+                                    onChange: "actions.changeStatus(modelValue, form, model)",
                                 }
                             }
                         }
@@ -2405,7 +2521,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 "previousInteractions":{
                     type: "box",
                     title: "PREVIOUS_INTERACTIONS",
-                    // condition: "model.lead.id && model.lead.currentStage == 'Inprocess'",
+                    condition: "model.lead.id && model.lead.currentStage == 'Inprocess'",
                     items: {
                         "leadInteractions1":{
                             key: "lead.leadInteractions1",
