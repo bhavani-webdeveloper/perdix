@@ -16,7 +16,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
-			(siteCode == 'sambandh') ? "Page/Engine/customer.IndividualEnrollment3" : "Page/Engine/customer360.CustomerProfile",
+			(siteCode == 'sambandh' || siteCode == 'saija') ? "Page/Engine/customer.IndividualEnrollment3" : "Page/Engine/customer360.CustomerProfile",
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
