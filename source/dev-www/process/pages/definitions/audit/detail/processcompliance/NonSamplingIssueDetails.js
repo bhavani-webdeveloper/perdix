@@ -151,11 +151,11 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     getListDisplayItem: function(i) { return [i.name] },
                     search: function(i, fm, m) {
                         var f = processIdTitleMap;
-                        return $q.resolve({ "headers": {"x-total-count": f.length}, "body": f });                       
-                    }
-                    "onSelect": function(valueObj, model, context) {
-                        model.manual_issue.sub_process_name ='';
-                        model.manual_issue.type_of_issue_desc ='';
+                        return $q.resolve({ "headers": {"x-total-count": f.length}, "body": f });
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        model.manual_issue.sub_process_name = '';
+                        model.manual_issue.type_of_issue_desc = '';
                     }
                 }, {
                     "key": "manual_issue.sub_process_name",
@@ -172,9 +172,9 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     search: function(i, fm, m) {
                         var f = $f("filter")(subProcessIdTitleMap, { "group": m.manual_issue.process_id }, true);
                         return $q.resolve({ "headers": {"x-total-count": f.length}, "body": f });
-                    }
-                    "onSelect": function(valueObj, model, context) {
-                        model.manual_issue.type_of_issue_desc ='';                        
+                    },
+                    onSelect: function(valueObj, model, context) {
+                        model.manual_issue.type_of_issue_desc = '';
                     }
                 }, {
                     "key": "manual_issue.type_of_issue_desc",
