@@ -1,6 +1,7 @@
 irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSummary"), ["$log", "$state", "irfNavigator", "$stateParams", "$http", "Enrollment", "Audit", "SessionStore", "Files", "PageHelper", "$q",
     function($log, $state, irfNavigator, $stateParams, $http, Enrollment, Audit, SessionStore, Files, PageHelper, $q) {
         var branch = SessionStore.getBranch();
+        model.siteCode = SessionStore.getGlobalSetting('siteCode');
         var returnObj = {
             "type": "schema-form",
             "title": "SAMPLE_SET_SUMMARY",
@@ -163,11 +164,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                             Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                         }
                                     },
-                                   isApplicable: function(item, index) {
-                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if (siteCode == 'KGFS') {
-                                            return !$stateParams.pageData.readonly && item.status != "1";
-                                        }
+                                    isApplicable: function(item, index) {
+                                         return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";                                       
                                     }
                                 }, {
                                     name: "DO_AUDIT",

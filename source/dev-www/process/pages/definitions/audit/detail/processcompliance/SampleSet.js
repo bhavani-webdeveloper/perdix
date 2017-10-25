@@ -2,6 +2,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
 ["$log", "$state", "irfNavigator", "$stateParams", "$http", "Audit", "SessionStore", "PageHelper", "$q", "Utils",
     function($log, $state, irfNavigator, $stateParams, $http, Audit, SessionStore, PageHelper, $q, Utils) {
         var branch = SessionStore.getBranch();
+        model.siteCode = SessionStore.getGlobalSetting('siteCode');
         var returnObj = {
             "type": "schema-form",
             "title": "SAMPLE_SET",
@@ -102,10 +103,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                         }
                                     },
                                      isApplicable: function(item, index) {
-                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if (siteCode == 'KGFS') {
-                                            return !$stateParams.pageData.readonly && item.status != "1";
-                                        }
+                                         return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";                                       
                                     }
                                 }, {
                                     name: "DO_AUDIT",
