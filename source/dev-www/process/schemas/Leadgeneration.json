@@ -114,7 +114,26 @@
                }
             }
          },
-
+         "leadSource": {
+            "type":["string", "null"],
+            "title":"LEAD_SOURCE"
+         },
+         "referredBy": {
+            "type":["string", "null"],
+            "title":"REFERRED_BY"
+         },
+         "agentName": {
+            "type":["string", "null"],
+            "title":"AGENT_NAME"
+         },
+         "dealerName": {
+            "type":["string", "null"],
+            "title":"DEALER_NAME"
+         },
+         "loanPurpose2": {
+            "type":["string", "null"],
+            "title":"LOAN_SUB_PROCESS"
+         },
          "currentDate": {
             "type": ["string", "null"],
             "title": "CURRENT_DATE"
@@ -150,6 +169,18 @@
          "leadId": {
             "type": "integer",
             "title": "LEAD_ID"
+         },
+         "occupation1": {
+            "type": ["string", "null"],
+            "title":"PRIMARY_OCCUPATION"
+         },
+         "licenseType": {
+            "type": ["string", "null"],
+            "title":"LICENCE_TYPE"
+         },
+         "leadCategory": {
+            "type": ["string", "null"],
+            "title":"CUSTOMER_CATEGORY"
          },
          "leadName": {
             "type": ["string", "null"],
