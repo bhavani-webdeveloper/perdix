@@ -286,6 +286,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             type:"date",
+                            "required":true,
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {

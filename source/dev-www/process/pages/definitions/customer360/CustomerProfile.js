@@ -602,6 +602,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
+                        "required":true,
                         title: "T_DATEOFBIRTH",
                         //readonly: true
                     },

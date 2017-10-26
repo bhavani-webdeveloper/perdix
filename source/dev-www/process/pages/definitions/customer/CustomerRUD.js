@@ -319,6 +319,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 },
                                 {
                                     key: "customer.familyMembers[].dateOfBirth",
+                                    "required":true,
                                     title: "T_DATEOFBIRTH"
                                 },
                                 {
