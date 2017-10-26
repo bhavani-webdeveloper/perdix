@@ -671,7 +671,7 @@
                         "GroupCreation"
                      ]
                   },
-                  "outstandingLoanAmount": {
+                  "outStandingLoanAmount": {
                      "title": "Outstanding Loan Amount",
                      "type": "number",
                      "captureStages": [
