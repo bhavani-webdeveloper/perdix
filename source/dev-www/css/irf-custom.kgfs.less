@@ -6,28 +6,37 @@
 
 @base-bg: #e76526;
 @base-border: darken(@base-bg, 10%);
-.main-header li.user-header {
-	background-color: @base-bg;
+.skin-green-light {
+	.main-header {
+		li.user-header {
+			background-color: @base-bg;
+		}
+		.navbar {
+			background-color: @base-bg !important;
+			.nav>li>a:hover,
+			.nav>li>a:focus,
+			.nav>li>a:active,
+			.nav>li>a.active {
+				background-color: @base-border !important;
+			}
+			.sidebar-toggle:hover {
+				background-color: @base-border !important;
+			}
+		}
+		.logo {
+			background-color: @base-bg !important;
+		}
+		.logo:hover {
+			background-color: lighten(@base-bg, 10%) !important;
+		}
+	}
+	.login-box .widget-user-header.bg-theme {
+		background-color: @base-bg !important;
+	}
+	.navbar-custom-menu>.navbar-nav>li.user-menu>ul>li.user-header {
+		background-color: @base-bg !important;
+	}
 }
-.skin-green-light .main-header .navbar {
-	background-color: @base-bg !important;
-}
-.skin-green-light .main-header .logo {
-	background-color: @base-bg !important;
-}
-.skin-green-light .main-header .logo:hover {
-	background-color: lighten(@base-bg, 10%) !important;
-}
-.skin-green-light .main-header .navbar .nav>li>a:hover,
-.skin-green-light .main-header .navbar .nav>li>a:focus,
-.skin-green-light .main-header .navbar .nav>li>a:active,
-.skin-green-light .main-header .navbar .nav>li>a.active {
-	background-color: @base-border !important;
-}
-.skin-green-light .main-header .navbar .sidebar-toggle:hover {
-	background-color: @base-border !important;
-}
-
 
 .cantina-loader {
     &:after {
