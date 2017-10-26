@@ -155,7 +155,9 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     },
                     onSelect: function(valueObj, model, context) {
                         model.manual_issue.sub_process_name = '';
+                        model.manual_issue.sub_process_id = 0;
                         model.manual_issue.type_of_issue_desc = '';
+                        model.manual_issue.type_of_issue_id = 0;
                     }
                 }, {
                     "key": "manual_issue.sub_process_name",
@@ -175,6 +177,7 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     },
                     onSelect: function(valueObj, model, context) {
                         model.manual_issue.type_of_issue_desc = '';
+                        model.manual_issue.type_of_issue_id = 0;
                     }
                 }, {
                     "key": "manual_issue.type_of_issue_desc",
@@ -319,7 +322,7 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     }
                 } else {
                     model.manual_issue = {
-                        "issue_id": 0,
+                        "issue_id": null,
                         "issue_newgen_uid": issueId,
                         "entity_id": 0,
                         "process_id": 0,
