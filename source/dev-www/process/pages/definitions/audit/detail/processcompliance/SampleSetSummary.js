@@ -1,7 +1,6 @@
 irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSummary"), ["$log", "$state", "irfNavigator", "$stateParams", "$http", "Enrollment", "Audit", "SessionStore", "Files", "PageHelper", "$q",
     function($log, $state, irfNavigator, $stateParams, $http, Enrollment, Audit, SessionStore, Files, PageHelper, $q) {
         var branch = SessionStore.getBranch();
-        model.siteCode = SessionStore.getGlobalSetting('siteCode');
         var returnObj = {
             "type": "schema-form",
             "title": "SAMPLE_SET_SUMMARY",
@@ -19,6 +18,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                     "readonly": $stateParams.pageData.readonly
                 };
 
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 self.form = [];
                 var auditId = $stateParams.pageId.split(':')[0];
                 var sampleTypeId = $stateParams.pageId.split(':')[1];
