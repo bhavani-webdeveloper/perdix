@@ -1,50 +1,35 @@
-irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
-    function($log, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
-        var master = null;
-        var validateFields = function(model) {
-            for (l in model.fixed_assets.asset_details) {
-                var transferValue = model.fixed_assets.asset_details[l].transferred_quantity;
-                if (model.fixed_assets.asset_details[l].quantity_on_hand > model.fixed_assets.asset_details[l].quantity_on_record) {
-                    model.comOfQE = model.fixed_assets.asset_details[l].quantity_on_hand - model.fixed_assets.asset_details[l].excess_quantity;
-                    if (model.fixed_assets.asset_details[l].quantity_on_record == model.comOfQE) {
-                        if (!model.fixed_assets.asset_details[l].lost_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0) {
-                            PageHelper.setError({
-                                message: "Lost and Transfer Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + ""
-                            });
-                            return false;
-                        }
-                    } else {
-                        if (model.fixed_assets.asset_details[l].excess_quantity > model.fixed_assets.asset_details[l].quantity_on_record) {
-                            PageHelper.setError({
-                                message: "Excess value should not be greater than ‘available’ value in " + model.fixed_assets.asset_details[l].asset_description + ""
-                            });
-                            return false;
-                        }
-                    }
-
-
-                } else if (model.fixed_assets.asset_details[l].quantity_on_hand < model.fixed_assets.asset_details[l].quantity_on_record) {
-                    model.comOfQLT = model.fixed_assets.asset_details[l].quantity_on_hand + (model.fixed_assets.asset_details[l].lost_quantity + model.fixed_assets.asset_details[l].transferred_quantity);
-                    if (model.fixed_assets.asset_details[l].quantity_on_hand == model.comOfQLT) {
-                        if (!model.fixed_assets.asset_details[l].excess_quantity == 0) {
-                            PageHelper.setError({
-                                message: "Excess Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + ""
-                            });
-                            return false;
-                        }
-                    }
-
-                } else if (model.fixed_assets.asset_details[l].quantity_on_hand == model.fixed_assets.asset_details[l].quantity_on_record) {
-                    return true;
-                    if (!model.fixed_assets.asset_details[l].excess_quantity == 0 && !model.fixed_assets.asset_details[l].transferred_quantity == 0 && !model.fixed_assets.asset_details[l].lost_quantity == 0) {
-                        PageHelper.setError({
-                            message: "Excess, Transfer and lost Value should be zero in " + model.fixed_assets.asset_details[l].asset_description + " "
-                        });
-                        return false;
-                    }
+irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
+["$log", "PageHelper", "irfNavigator", "$stateParams", "Audit",
+    function($log, PageHelper, irfNavigator, $stateParams, Audit) {
+        var validateAsset = function(asset) {
+            if (asset.quantity_on_record < asset.quantity_on_hand) {
+                if (asset.quantity_on_record != asset.quantity_on_hand - asset.excess_quantity) {
+                    throw "Available & excess should add up to quantity on record";
+                } else if (asset.lost_quantity !== 0 || asset.transferred_quantity !== 0) {
+                    throw "Lost & transfer should be zero";
+                }
+            } else if (asset.quantity_on_record > asset.quantity_on_hand) {
+                if (asset.quantity_on_record == asset.quantity_on_hand + asset.lost_quantity + asset.transferred_quantity) {
+                    throw "Available, lost & transferred should add up to quantity on record";
+                } else if (asset.excess_quantity !== 0) {
+                    throw "Excess should be zero";
+                }
+            } else if (asset.quantity_on_record == asset.quantity_on_hand) {
+                if (asset.excess_quantity !== 0 || asset.transferred_quantity !== 0 || asset.lost_quantity !== 0) {
+                    throw "Excess, transfer & lost should be zero";
                 }
             }
-
+        };
+        var validateFixedAssets = function(model) {
+            var i = 0;
+            try {
+                for (;i < model.fixed_assets.asset_details.length; i++) {
+                    validateAsset(model.fixed_assets.asset_details[i]);
+                }
+            } catch (e) {
+                PageHelper.setError({message: e + " for " + model.master.fixed_assets[model.fixed_assets.asset_details[i].asset_id].asset_description});
+                return false;
+            }
             return true;
         };
 
@@ -60,9 +45,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-                var pageData = {
-                    "readonly": $stateParams.pageData.readonly
-                };
+                model.readonly = $stateParams.pageData.readonly;
                 model.audit_id = Number($stateParams.pageId);
                 master = Audit.offline.getAuditMaster() || {};
                 model.fixed_assets = model.fixed_assets || {};
@@ -209,22 +192,26 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
 
                     self.form = [{
                         "type": "box",
+                        "readonly": model.readonly,
                         "title": "FIXED_ASSET",
                         "colClass": "col-sm-12",
                         "items": boxItems
                     }, {
                         "type": "box",
+                        "condition": "!model.readonly",
                         "title": "COMMENTS",
                         "colClass": "col-sm-6",
                         "items": [{
-                            key: "model.fixed_assets.comments",
-                            title: "COMMENTS"
+                            "key": "model.fixed_assets.comments",
+                            "type": "textarea",
+                            "title": "COMMENTS"
                         }]
                     }, {
-                        type: "actionbox",
-                        items: [{
-                            type: "submit",
-                            title: "UPDATE"
+                        "type": "actionbox",
+                        "condition": "!model.readonly",
+                        "items": [{
+                            "type": "submit",
+                            "title": "UPDATE"
                         }]
                     }];
                 };
@@ -242,7 +229,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                         PageHelper.hideLoader();
                     });
                 }
-
             },
             form: [],
             schema: {
@@ -272,35 +258,24 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"), ["$log", "PageHe
                             "comments": {
                                 "type": "string",
                                 "title": "COMMENTS"
-                            },
-
-                        },
-
-
+                            }
+                        }
                     }
-                },
+                }
             },
             actions: {
                 submit: function(model, form, formName) {
+                    if (!validateFixedAssets(model)) return;
                     if (model.$isOffline) {
-                        Audit.offline.setFixedAssets(model.audit_id, model.fixed_assets).then(function(res) {
-                            if (!validateFields(model)) return;
-                            model.fixed_assets = res;
+                        Audit.offline.setFixedAssets(model.audit_id, model.fixed_assets).then(function() {
                             PageHelper.showProgress("auditId", "Fixed Asset Audit Updated Successfully.", 3000);
                             irfNavigator.goBack();
-                        }, function(errRes) {
-                            PageHelper.showErrors(errRes);
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        })
+                        }, PageHelper.showErrors).finally(PageHelper.hideLoader)
                     } else {
                         $stateParams.pageData.auditData.fixed_assets = model.fixed_assets;
                         irfNavigator.goBack();
                     }
-                },
-                goBack: function(model, form, formName) {
-                    irfNavigator.goBack();
-                },
+                }
             }
         };
     }

@@ -327,7 +327,9 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 irfStorageService.setMaster("auditMaster", auditMaster);
             },
             getAuditMaster: function() {
-                return irfStorageService.getMaster("auditMaster");
+                var auditMaster = irfStorageService.getMaster("auditMaster");
+                if (!auditMaster) PageHelper.setError({message:"Audit master unavailable. Refresh cache & retry"});
+                return auditMaster;
             }
         };
         return ret;
