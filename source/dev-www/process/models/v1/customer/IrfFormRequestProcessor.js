@@ -2645,7 +2645,954 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         }
                     }
                 },
-        }
+        };
+
+        formRepository['LoanRequest'] = {
+            "PreliminaryInformation": {
+                "type": "box",
+                "title": "PRELIMINARY_INFORMATION",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                "items": {
+                    "linkedAccountNumber": {
+                        key: "loanAccount.linkedAccountNumber",
+                        title: "LINKED_ACCOUNT_NUMBER",
+                        type: "lov",
+                        autolov: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var promise = LoanProcess.viewLoanaccount({
+                                urn: model.enterprise.urnNo
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            $log.info(item);
+                            return [
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                        }
+                    },
+                    "npa": {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
+                    },
+                    "loan": {
+                        key: "loanAccount.loanPurpose1",
+                        type: "lov",
+                        autolov: true,
+                        title: "LOAN_PURPOSE_1",
+                        bindMap: {},
+                        outputMap: {
+                            "purpose1": "loanAccount.loanPurpose1"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose1();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose1
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            $log.info(result);
+                            model.loanAccount.loanPurpose2 = '';
+                        }
+                    },
+                    "loanPurpose2": {
+                        key: "loanAccount.loanPurpose2",
+                        type: "lov",
+                        autolov: true,
+                        title: "LOAN_PURPOSE_2",
+                        bindMap: {},
+                        outputMap: {
+                            "purpose2": "loanAccount.loanPurpose2"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose2
+                            ];
+                        }
+                    },
+                    // {
+                    //     key: "loanAccount.assetAvailableForHypothecation",
+                    //     type: "select",
+                    //     required:true,
+                    //     enumCode: "decisionmaker",
+                    //     title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
+                    // },
+                    // {
+                    //     key: "loanAccount.estimatedValueOfAssets",
+                    //     type: "amount",
+                    //     required:true,
+                    //     condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
+                    //     title: "ESTIMATED_VALUE_OF_ASSETS"
+                    // },
+                    "loanAmountRequested": {
+                        key: "loanAccount.loanAmountRequested",
+                        type: "amount",
+                        required: true,
+                        title: "REQUESTED_LOAN_AMOUNT",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "frequencyRequested": {
+                        key: "loanAccount.frequencyRequested",
+                        type: "select",
+                        title: "FREQUENCY_REQUESTED",
+                        enumCode: "frequency",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "tenureRequested": {
+                        key: "loanAccount.tenureRequested",
+                        required: true,
+                        type: "number",
+                        title: "TENURE_REQUESETED",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "expectedInterestRate": {
+                        key: "loanAccount.expectedInterestRate",
+                        type: "number",
+                        title: "EXPECTED_INTEREST_RATE",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "expectedEmi": {
+                        key: "loanAccount.expectedEmi",
+                        type: "amount",
+                        title: "ESTIMATED_KINARA_EMI",
+                        readonly: true
+                    },
+                    "emiRequested": {
+                        key: "loanAccount.emiRequested",
+                        required: true,
+                        type: "amount",
+                        title: "EMI_REQUESTED"
+                    },
+                    "emiPaymentDateRequested": {
+                        key: "loanAccount.emiPaymentDateRequested",
+                        type: "select",
+                        titleMap: {
+                            "5th": "5th",
+                            "10th": "10th",
+                            "15th": "15th",
+                        },
+                        title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    "collectionPaymentType": {
+                        key: "loanAccount.collectionPaymentType",
+                        required: true,
+                        title: "MODE_OF_REPAYMENT",
+                        type: "select",
+                        titleMap: {
+                            "ACH": "ACH",
+                            "PDC": "PDC",
+                            "Others": "Others"
+                        }
+                    },
+                    "expectedPortfolioInsurancePremium": {
+                        key: "loanAccount.expectedPortfolioInsurancePremium",
+                        title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
+                        readonly: true
+                    },
+                    "section1": {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "!model.loanAccount.customerId",
+                        "html": "<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                    }
+                }
+            },
+
+            "loanCustomerRelations": {
+                type: "box",
+                title: "LOAN_CUSTOMER_RELATIONS",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                items: {
+                    "loanCustomerRelations": {
+                        key: "loanAccount.loanCustomerRelations",
+                        type: "array",
+                        add: null,
+                        remove: null,
+                        title: "LOAN_CUSTOMER_RELATIONS",
+                        items: {
+                            "customerId": {
+                                key: "loanAccount.loanCustomerRelations[].customerId",
+                                title: "CUSTOMER_ID",
+                                readonly: true,
+                            },
+                            "urn": {
+                                key: "loanAccount.loanCustomerRelations[].urn",
+                                title: "URN_NO",
+                                readonly: true,
+                            },
+                            "name": {
+                                key: "loanAccount.loanCustomerRelations[].name",
+                                "title": "NAME",
+                                readonly: true,
+                            },
+                            "relation": {
+                                key: "loanAccount.loanCustomerRelations[].relation",
+                                readonly: true,
+                                title: "RELATIONSHIP"
+                            },
+                            "relationshipWithApplicant": {
+                                key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                                title: "RELATIONSHIP_WITH_APPLICATION",
+                                condition: "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                required: true,
+                                type: "select",
+                                enumCode: "relation"
+                            }
+                        }
+                    }
+                }
+            },
+
+            "DeductionsFromLoanamount": {
+                "type": "box",
+                "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                "items": {
+                    "expectedProcessingFeePercentage": {
+                        key: "loanAccount.expectedProcessingFeePercentage",
+                        "type": "number",
+                        "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE"
+                    },
+                    "expectedCommercialCibilCharge": {
+                        key: "loanAccount.expectedCommercialCibilCharge",
+                        "type": "amount",
+                        "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE"
+                    },
+                    "estimatedEmi": {
+                        key: "loanAccount.estimatedEmi",
+                        "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly: true
+                    }
+                }
+            },
+            "LoanMitigants": {
+                "type": "box",
+                "title": "LOAN_MITIGANTS",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
+                "items": {
+                    "deviationParameter": {
+                        key: "deviations.deviationParameter",
+                        type: "array",
+                        startEmpty: true,
+                        add: null,
+                        remove: null,
+                        "view": "fixed",
+                        "titleExpr": "model.deviations.deviationParameter[arrayIndex].Parameter",
+                        items: {
+                            "mitigants": {
+                                key: "deviations.deviationParameter[].mitigants",
+                                type: "array",
+                                startEmpty: true,
+                                add: null,
+                                remove: null,
+                                notitle: true,
+                                "view": "fixed",
+                                items: {
+                                    "mitigationSection": {
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": {
+                                            "selectedSection": {
+                                                "type": "section",
+                                                "htmlClass": "col-xs-2 col-md-2",
+                                                "items": {
+                                                    "selected": {
+                                                        key: "deviations.deviationParameter[].mitigants[].selected",
+                                                        type: "checkbox",
+                                                        schema: {
+                                                            default: false
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "mitigantNameSection": {
+                                                "type": "section",
+                                                "htmlClass": "col-xs-10 col-md-10",
+                                                "items": {
+                                                    "mitigantName": {
+                                                        key: "deviations.deviationParameter[].mitigants[].mitigantName",
+                                                        type: "textarea",
+                                                        readonly: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "LoanDocuments": {
+                "type": "box",
+                "title": "LOAN_DOCUMENTS",
+                "condition": "model.currentStage !== 'loanView'",
+                "items": {
+                    "loanDocuments": {
+                        "type": "array",
+                        "key": "loanAccount.loanDocuments",
+                        "view": "fixed",
+                        "startEmpty": true,
+                        "title": "LOAN_DOCUMENT",
+                        "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
+                        "items": {
+                            "document": {
+                                "key": "loanAccount.loanDocuments[].document",
+                                "title": "DOCUMENT_NAME",
+                                "type": "string",
+                                "required": true
+                            },
+                            "documentId": {
+                                title: "Upload",
+                                key: "loanAccount.loanDocuments[].documentId",
+                                "required": true,
+                                type: "file",
+                                fileType: "application/pdf",
+                                category: "Loan",
+                                subCategory: "DOC1",
+                                using: "scanner"
+                            }
+                            // ,
+                            // {
+                            //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
+                            //     "type": "string"
+                            // }
+                        }
+                    }
+                }
+            },
+
+            "NewAssetDetails": {
+                "type": "box",
+                "title": "NEW_ASSET_DETAILS",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
+                "items": {
+                    "assetDetails": {
+                        key: "loanAccount.collateral",
+                        type: "array",
+                        startEmpty: true,
+                        title: "ASSET_DETAILS",
+                        items: {
+                            "collateralDescription": {
+                                key: "loanAccount.collateral[].collateralDescription",
+                                title: "MACHINE",
+                                required: true,
+                                type: "string"
+                            },
+                            "collateralValue": {
+                                key: "loanAccount.collateral[].collateralValue",
+                                title: "PURCHASE_PRICE",
+                                required: true,
+                                type: "number",
+                            },
+                            // {
+                            //     key: "loanAccount.collateral[].quantity",
+                            //     title:"QUANTITY",
+                            //     required:true,
+                            //     readonly: true,
+                            //     type: "number",
+                            // },
+                            "expectedIncome": {
+                                key: "loanAccount.collateral[].expectedIncome",
+                                title: "EXPECTED_INCOME",
+                                required: true,
+                                type: "number",
+                            },
+                            "collateralType": {
+                                key: "loanAccount.collateral[].collateralType",
+                                title: "MACHINE_TYPE",
+                                required: true,
+                                type: "select",
+                                enumCode: "collateral_type"
+                            },
+                            "manufacturer": {
+                                key: "loanAccount.collateral[].manufacturer",
+                                title: "MANFACTURE_NAME",
+                                required: true,
+                                type: "string",
+                            },
+                            "modelNo": {
+                                key: "loanAccount.collateral[].modelNo",
+                                title: "MACHINE_MODEL",
+                                required: true,
+                                type: "string",
+                            },
+                            "serialNo": {
+                                key: "loanAccount.collateral[].serialNo",
+                                title: "SERIAL_NO",
+                                type: "string",
+                            },
+                            "expectedPurchaseDate": {
+                                key: "loanAccount.collateral[].expectedPurchaseDate",
+                                title: "EXPECTED_PURCHASE_DATE",
+                                required: true,
+                                "type": "date",
+                                //"format": 'dd-mm-yyyy',
+                                "minDate": SessionStore.getCBSDate(),
+                            },
+                            "machineAttachedToBuilding": {
+                                key: "loanAccount.collateral[].machineAttachedToBuilding",
+                                title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                type: "select",
+                                required: true,
+                                enumCode: "decisionmaker"
+                            },
+                            "hypothecatedToBank": {
+                                key: "loanAccount.collateral[].hypothecatedToBank",
+                                title: "HYPOTHECATED_TO_KINARA",
+                                required: true,
+                                enumCode: "decisionmaker",
+                                type: "select",
+                            },
+                            "electricityAvailable": {
+                                key: "loanAccount.collateral[].electricityAvailable",
+                                title: "ELECTRICITY_AVAIALBLE",
+                                type: "select",
+                                enumCode: "decisionmaker",
+                                required: true
+                            },
+                            "spaceAvailable": {
+                                key: "loanAccount.collateral[].spaceAvailable",
+                                title: "SPACE_AVAILABLE",
+                                type: "select",
+                                enumCode: "decisionmaker",
+                                required: true
+                            },
+                            "collateral1FilePath": {
+                                key: "loanAccount.collateral[].collateral1FilePath",
+                                title: "MACHINE_QUOTATION",
+                                "category": "Loan",
+                                "required": true,
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
+                            }
+                        }
+                    }
+                }
+            },
+
+
+            "LoanRecomendation": {
+                "type": "box",
+                "title": "LOAN_RECOMMENDATION",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'",
+                "items": {
+                    "loanAmount": {
+                        "key": "loanAccount.loanAmount",
+                        "type": "amount",
+                        required: true,
+                        "title": "LOAN_AMOUNT",
+                        onChange: function(value, form, model) {
+                            computeEMI(model);
+                        }
+                    },
+                    "tenure": {
+                        "key": "loanAccount.tenure",
+                        "title": "DURATION_IN_MONTHS",
+                        required: true,
+                        onChange: function(value, form, model) {
+                            computeEMI(model);
+                        }
+                    },
+                    "interestRate": {
+                        "key": "loanAccount.interestRate",
+                        "type": "number",
+                        required: true,
+                        "title": "INTEREST_RATE",
+                        onChange: function(value, form, model) {
+                            computeEMI(model);
+                        }
+                    },
+                    "estimatedEmi": {
+                        key: "loanAccount.estimatedEmi",
+                        type: "amount",
+                        title: "ESTIMATED_KINARA_EMI",
+                        readonly: true
+                    },
+                    "processingFeePercentage": {
+                        "key": "loanAccount.processingFeePercentage",
+                        "type": "number",
+                        required: true,
+                        "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                    },
+                    "estimatedEmi": {
+                        key: "loanAccount.estimatedEmi",
+                        "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly: true
+                    },
+                    "securityEmiRequired": {
+                        "key": "loanAccount.securityEmiRequired",
+                        "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                        'enumCode': "decisionmaker",
+                        'type': "select",
+                        "title": "SECURITY_EMI_REQUIRED",
+                        // readonly:true,
+                        required: true
+                    },
+                    "commercialCibilCharge": {
+                        "key": "loanAccount.commercialCibilCharge",
+                        "type": "amount",
+                        "title": "COMMERCIAL_CIBIL_CHARGE"
+                    }
+                }
+            },
+
+            "LoanSanction": {
+                "type": "box",
+                "title": "LOAN_SANCTION",
+                "condition": "model.currentStage == 'Sanction'",
+                "items": {
+
+                    // {
+                    //     "key": "loanAccount.loanAmount",
+                    //     "type": "amount",
+                    //     "title": "LOAN_AMOUNT",
+                    //     readonly:true
+                    // },
+                    // {
+                    //     "key": "loanAccount.processingFeePercentage",
+                    //     "type": "number",
+                    //     "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    //     readonly:true
+                    // },
+                    // {
+                    //     "key": "loanAccount.commercialCibilCharge",
+                    //     "type": "amount",
+                    //     "title": "COMMERCIAL_CIBIL_CHARGE",
+                    //     readonly:true
+                    // },
+                    // {
+                    //     "key": "loanAccount.portfolioInsuranceUrn",
+                    //     "title": "INSURANCE_URN",
+                    //     "type": "lov",
+                    //     "lovonly": true,
+                    //     "outputMap": {
+                    //         "urnNo": "customer.urnNo",
+                    //         "firstName":"customer.firstName"
+                    //     },
+                    //     "searchHelper": formHelper,
+                    //     search: function(inputModel, form, model, context) {
+                    //         var out = [];
+                    //         for (var i=0; i<model.customersForInsurance.length; i++){
+                    //             out.push({
+                    //                 name: model.customersForInsurance[i].name,
+                    //                 value: model.customersForInsurance[i].urnNo
+                    //             })
+                    //         }
+                    //         return $q.resolve({
+                    //             headers: {
+                    //                 "x-total-count": out.length
+                    //             },
+                    //             body: out
+                    //         });
+                    //     },
+                    //     getListDisplayItem: function(data, index) {
+                    //         return [
+                    //             data.name,
+                    //             data.urnNo
+                    //         ];
+                    //     },
+                    //     onSelect: function(valueObj, model, context){
+                    //         model.loanAccount.portfolioInsuranceUrn = valueObj.urnNo;
+                    //     }
+                    // },
+                    // {
+                    //     "key": "loanAccount.tenure",
+                    //     "title":"DURATION_IN_MONTHS",
+                    //     readonly:true
+                    // },
+                    "DisbursementDetails": {
+                        "type": "fieldset",
+                        "title": "DISBURSEMENT_DETAILS",
+                        "items": {
+                            "sanctionDate": {
+                                key: "loanAccount.sanctionDate",
+                                type: "date",
+                                title: "SANCTION_DATE"
+                            },
+                            "numberOfDisbursements": {
+                                key: "loanAccount.numberOfDisbursements",
+                                title: "NUM_OF_DISBURSEMENTS",
+                                onChange: function(value, form, model) {
+                                    populateDisbursementSchedule(value, form, model);
+                                }
+                            },
+                            "disbursementSchedules": {
+                                key: "loanAccount.disbursementSchedules",
+                                title: "DISBURSEMENT_SCHEDULES",
+                                add: null,
+                                remove: null,
+                                items: {
+                                    "trancheNumber": {
+                                        key: "loanAccount.disbursementSchedules[].trancheNumber",
+                                        title: "TRANCHE_NUMBER",
+                                        readonly: true
+                                    },
+                                    "disbursementAmount": {
+                                        key: "loanAccount.disbursementSchedules[].disbursementAmount",
+                                        title: "DISBURSEMENT_AMOUNT",
+                                        type: "amount"
+                                    },
+                                    "tranchCondition": {
+                                        key: "loanAccount.disbursementSchedules[].tranchCondition",
+                                        type: "lov",
+                                        autolov: true,
+                                        title: "TRANCHE_CONDITION",
+                                        bindMap: {},
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+
+                                            var trancheConditions = formHelper.enum('tranche_conditions').data;
+                                            var out = [];
+                                            for (var i = 0; i < trancheConditions.length; i++) {
+                                                var t = trancheConditions[i];
+                                                var min = _.hasIn(t, "field1") ? parseInt(t.field1) - 1 : 0;
+                                                var max = _.hasIn(t, "field2") ? parseInt(t.field2) - 1 : 100;
+
+                                                if (context.arrayIndex >= min && context.arrayIndex <= max) {
+                                                    out.push({
+                                                        name: trancheConditions[i].name,
+                                                        value: trancheConditions[i].value
+                                                    })
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context) {
+                                            model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "postReview": {
+                "type": "box",
+                "title": "POST_REVIEW",
+                "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView'",
+                "items": {
+                    "commonAction": {
+                        key: "review.action",
+                        condition: "model.currentStage !== 'Screening'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    "screeningAction": {
+                        key: "review.action",
+                        condition: "model.currentStage == 'Screening'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    "rejectsection": {
+                        type: "section",
+                        condition: "model.review.action=='REJECT'",
+                        items: {
+                            "remarks": {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            "rejectReason": {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                required: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
+
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                            out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+
+                            "rejectButton": {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        }
+                    },
+                    "holdsection": {
+                        type: "section",
+                        condition: "model.review.action=='HOLD'",
+                        items: {
+                            "remarks": {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            "holdButton": {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.holdButton(model, formCtrl, form, $event)"
+                            }
+                        }
+                    },
+
+                    "sendbackSection": {
+                        type: "section",
+                        condition: "model.review.action=='SEND_BACK'",
+                        items: {
+                            "remarks": {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            "targetStage": {
+                                key: "review.targetStage",
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                title: "SEND_BACK_TO_STAGE",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+                                    var targetstage = formHelper.enum('targetstage').data;
+                                    var out = [];
+                                    for (var i = 0; i < targetstage.length; i++) {
+                                        var t = targetstage[i];
+                                        if (t.field1 == stage1) {
+                                            out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.review.targetStage = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                            "sendBackButton": {
+                                key: "review.sendBackButton",
+                                type: "button",
+                                title: "SEND_BACK",
+                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                            }
+                        }
+                    },
+
+                    "proceedsection": {
+                        type: "section",
+                        condition: "model.review.action=='PROCEED'",
+                        items: {
+                            "REMARKS": {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            "proceedButton": {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "PROCEED",
+                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }
+                        }
+                    }
+                }
+            },
+
+
+
+            "rejectReason": {
+                "type": "box",
+                "title": "REJECT_REASON",
+                "condition": "model.currentStage=='loanView'",
+                "items": {
+                    "rejectSection": {
+                        type: "section",
+                        items: {
+                            "rejectReason": {
+                                title: "Reject Reason",
+                                key: "loanAccount.rejectReason",
+                                readonly: true,
+                                type: "textarea",
+                            }
+                        }
+                    }
+                }
+            },
+
+            "revertReject": {
+                "type": "box",
+                "title": "REVERT_REJECT",
+                "condition": "model.currentStage=='Rejected'",
+                "items": {
+                    "remarks": {
+                        title: "REMARKS",
+                        key: "review.remarks",
+                        type: "textarea",
+                        required: true
+                    },
+                    "rejectReason": {
+                        title: "Reject Reason",
+                        key: "loanAccount.rejectReason",
+                        readonly: true,
+                        type: "textarea",
+                    },
+                    "targetStage": {
+                        key: "review.targetStage",
+                        title: "SEND_BACK_TO_STAGE",
+                        type: "lov",
+                        lovonly: true,
+                        autolov: true,
+                        required: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var stage1 = model.review.preStage;
+                            var targetstage = formHelper.enum('targetstage').data;
+                            var out = [{
+                                'name': stage1,
+                                'value': stage1
+                            }];
+                            for (var i = 0; i < targetstage.length; i++) {
+                                var t = targetstage[i];
+                                if (t.field1 == stage1) {
+                                    out.push({
+                                        name: t.name,
+                                    })
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.review.targetStage = valueObj.name;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ]
+                        }
+                    },
+                    "sendBackButton": {
+                        "key": "review.sendBackButton",
+                        "type": "button",
+                        "title": "SEND_BACK",
+                        "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                    }
+                }
+            },
+
+            "actionBox": {
+                "type": "actionbox",
+                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView'",
+                "items": {
+                    "saveButton": {
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    }
+                }
+            }
+        };
 
         return {
             getFormDefinition: function(formName, formRequest, configFile, model) {
