@@ -371,6 +371,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         default:
                             return;
                     }
+                    if (!model.ai.message) {
+                        PageHelper.setError({message: 'Audit reject message is required'});
+                        return;
+                    }
                 } else {
                     switch (model.ai.current_stage) {
                         case 'start':
@@ -388,6 +392,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             break;
                         default:
                             return;
+                    }
+                    if (!model.ai.message) {
+                        PageHelper.setError({message: 'Audit '+nextStage+' message is required'});
+                        return;
                     }
                 }
                 PageHelper.clearErrors();
