@@ -48,8 +48,8 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             var go = model.general_observations[i];
                             var mgo = masters.general_observation.particulars[go.particular_id];
                             go.particular_name = mgo.particular_name;
-                            if (mgo.particular_type != 2 && go.option_id && go.option_id[0]) {
-                                var gopos = filterFilter(masters.general_observation.particular_options[go.particular_id], {option_id: go.option_id[0]}, true);
+                            if (mgo.particular_type != 2 && go.option_id && Number(go.option_id[0])) {
+                                var gopos = filterFilter(masters.general_observation.particular_options[go.particular_id], {option_id: Number(go.option_id[0])}, true);
                                 if (gopos && gopos.length) {
                                     go.option_name = gopos[0].name;
                                 }
