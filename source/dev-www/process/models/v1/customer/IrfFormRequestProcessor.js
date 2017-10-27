@@ -1,6 +1,6 @@
 irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-    function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath",
+    function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath) {
         var formRepository = {}
         formRepository['IndividualEnrollment'] = { 
             "CustomerInformation": {
@@ -2648,7 +2648,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
         }
 
         return {
-            getFormDefinition: function(formName, formRequest) {
+            getFormDefinition: function(formName, formRequest, configFile, model) {
+                
+
                 var form = [],
                     keys;
                 if (Object.keys(formRepository).indexOf(formName) === -1)
@@ -2663,6 +2665,47 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 var includes = formRequest.includes || [];
                 var excludes = formRequest.excludes || [];
                 var overrides = formRequest.overrides || {};
+
+                if(_.isObject(configFile)) {
+                    var configKeys = Object.keys(configFile)
+                    for(var i=0; i<configKeys.length;i++) {
+                       var _k = jsonPath(model, configKeys[i])[0];
+                       var configObject = jsonPath(configFile[configKeys[i]], _k)[0];
+                      
+                       if(_.hasIn(configObject, "excludes")) {
+                        configObject.excludes.map(function(v) {
+                            excludes.push(v);
+                        });
+                        
+                       }
+                       if(_.hasIn(configObject, "overrides")) {
+                        overrides = _.merge(overrides, configObject.overrides);
+                       }
+                       
+                    }
+                }
+
+               
+                // for(var i=0; i< requestParam.length; i++) {
+                    
+
+                //      if(_.hasIn(configFile[requestParam[i]], "excludes")) {
+                        
+                //         // configFile[requestParam[i]].excludes.map(function(v) {
+                //         //     excludes.push(v);
+                //         // });
+
+                //         configFile[requestParam[i]].excludes.reduce(function(acc, curval) {
+                //             excludes.push(curval);
+                //         })
+
+                //      }
+                //      if(_.hasIn(configFile[requestParam[i]], "overrides")) {
+                //          overrides = _.merge(overrides, configFile[requestParam[i]].overrides);
+                //      }
+                    
+                // }
+                
                 var getKeyString = function(parentKey, key) {
                     if (!parentKey || parentKey === "") {
                         return key;
@@ -2680,12 +2723,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     var _defn, _key, _items;
                     var _parentKey = parent ? parent : "";
                     for (var itr = 0; itr < keylist.length; itr++) {
-                        _key = getKeyString(_parentKey, keylist[itr]);
+                        _key = getKeyString(_parentKey, keylist[itr]);                       
                         if ((main && includes.indexOf(_key) === -1) || excludes.indexOf(_key) > -1) {
                             //if this is the outermost level of form definition, then include is mandatory
                             //All the excludes are not processed.
                             continue;
                         }
+
                         if (overrides[_key]) {
                             _defn = _.merge({}, repo[keylist[itr]], overrides[_key]);
                         } else {

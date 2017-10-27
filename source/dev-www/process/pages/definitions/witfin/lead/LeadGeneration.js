@@ -8,6 +8,7 @@ define({
         PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor) {
 
     	var branch = SessionStore.getBranch();
+        
         var getOverrides = function (model) {
             return {
                 "leadProfile.leadDetails.individualDetails.gender": {
@@ -155,13 +156,25 @@ define({
                                 }];
                             }
                             model = Utils.removeNulls(model, true);
-                            PageHelper.hideLoader();
+                            var p1 = new Promise(function(resolve, reject) {
+                                resolve(Lead.getConfigFile());
+                            })
+
+                            p1.then(function(resp) {
+                                self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                                PageHelper.hideLoader();
+                            })
+                            
+                            
                         }
                     );
                 }
-                this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                else {
+                 this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                 console.log(this.form);
+                }
                 //this.form.push(actionbox);
-                console.log(this.form);
+                
             },
             offline: true,
             getOfflineDisplayItem: function(item, index) {

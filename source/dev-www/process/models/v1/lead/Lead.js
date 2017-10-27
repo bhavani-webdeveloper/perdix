@@ -48,6 +48,40 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			}, progress);
 			return deferred.promise;
 		};
+
+		resource.getConfigFile = function() {
+			return {
+				"lead.currentStage": {
+					"Inprocess": {
+						"excludes": [
+						"productDetails",
+						"leadInteractions"
+						],
+						"overrides": {
+							"leadProfile": {
+								"readonly": true
+							}
+						}
+					},
+					"BulkUpload": {
+						"excludes": [
+						"productDetails"
+						]
+					},  
+				},
+				"siteCode": {
+					"sambandh": {
+						"excludes": [
+						"previousInteractions"
+						]
+					}
+				}
+				
+				
+			}
+		}
 		return resource;
 	}
-]);
+
+
+	]);

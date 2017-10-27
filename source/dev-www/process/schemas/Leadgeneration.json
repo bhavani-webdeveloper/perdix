@@ -155,8 +155,12 @@
          },
          "centreId": {
             "type": ["null", "number"],
-            "title": "SPOKE_NAME",
+            "title": "SPOKE",
             "enumCode": "centre"
+         },
+         "customerFirstName": {
+            "type":["string", "null"],
+            "title": "CUSTOMER_NAME"
          },
          "urnNo": {
             "type": ["string", "null"],

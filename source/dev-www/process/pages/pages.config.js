@@ -17,6 +17,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "JournalPostingDashboardCtrl"
 	},{
+		name: "Page.JournalMultiPostingDashboard",
+		url: "/JournalMultiPostingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "JournalMultiPostingDashboardCtrl"
+	},{
 		name: "Page.ReferenceCodeDashboard",
 		url: "/ReferenceCodeDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",

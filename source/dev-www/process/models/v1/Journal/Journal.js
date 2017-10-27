@@ -2,12 +2,16 @@ irf.models.factory('Journal', ["$resource", "$httpParamSerializer", "BASE_URL", 
 	function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
 
 		var endpoint = BASE_URL + '/api/maintenance';
-		//var endpoint2 = BASE_URL + '/api/journalPosting';
+		var endpoint2 = BASE_URL + '/api/journal';
 
 		var resource = $resource(endpoint, null, {
 			createJournal: {
 				method: 'POST',
 				url: endpoint + '/journalMaintenance'
+			},
+			createMultiJournal: {
+				method: 'POST',
+				url: endpoint2 + '/create'
 			},
 			updateJournal: {
 				method: 'PUT',
@@ -33,6 +37,10 @@ irf.models.factory('Journal', ["$resource", "$httpParamSerializer", "BASE_URL", 
 				method: 'GET',
 				url: BASE_URL + '/api/maintenance/doubleEntry/find'
 			}),
+			journalMultiEntrySearch: searchResource({
+				method: 'GET',
+				url: BASE_URL + '/api/journal/find'
+			}),
 			get: {
 				method: 'GET',
 				url: endpoint + '/journalMaintenance/:id'
@@ -40,6 +48,14 @@ irf.models.factory('Journal', ["$resource", "$httpParamSerializer", "BASE_URL", 
 			getJournalEntry: {
 				method: 'GET',
 				url: BASE_URL + '/api/journalPosting/doubleEntry/:id'
+			},
+			getMultiJournalEntry: {
+				method: 'GET',
+				url: endpoint2 + '/:id'
+			},
+			updateJournaMultilEntry: {
+				method: 'PUT',
+				url: endpoint2 + '/update'
 			},
 		});
 
