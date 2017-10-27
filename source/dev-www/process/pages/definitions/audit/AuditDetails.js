@@ -56,19 +56,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         Audit.offline.setAudit($this.auditId, _auditData).then(function() {
                             $scope.$isOnline = false;
                             processAuditData(_auditData);
+                            deferred.resolve();
                         }, function(errRes) {
                             PageHelper.showErrors(errRes);
                             $log.info("=====FALLBACK TO ONLINE=====");
                             Utils.confirm("You may not be able to edit Audit. Do you want to continue?").then(function() {
                                 processAuditData(_auditData);
+                                deferred.resolve();
                             }, function() {
                                 irfNavigator.goBack();
                             });
                         });
                     } else {
                         processAuditData(_auditData);
+                        deferred.resolve();
                     }
-                    deferred.resolve();
                 }, function(errorResponse) {
                     PageHelper.showErrors(errorResponse);
                     deferred.reject();
