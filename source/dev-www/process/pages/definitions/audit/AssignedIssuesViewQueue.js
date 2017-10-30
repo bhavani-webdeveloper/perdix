@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","PageHelper", "Queries", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log,PageHelper, Queries, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
@@ -12,11 +12,6 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
-                // Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
-                //     model.auditor_role_id = Number(value);
-                // }, function(err) {
-                //     PageHelper.showErrors(err);
-                // });
             },
             definition: {
                 title: "SEARCH_ISSUES",
@@ -55,14 +50,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                     $q.all([
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'userId': searchOptions.userId,
+                            'user_id': searchOptions.userId,
                             'issue_status': "A",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'userId': searchOptions.userId,
+                            'user_id': searchOptions.userId,
                             'issue_status': "P",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage

@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageHelper", "Queries", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log,PageHelper, Queries, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES",
@@ -12,11 +12,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
-                Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
-                    model.auditor_role_id = Number(value);
-                }, function(err) {
-                    PageHelper.showErrors(err);
-                });
+                model.role_id = SessionStore.getUserRole().id;
             },
             definition: {
                 title: "SEARCH_ISSUES",
@@ -35,15 +31,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                             "x-schema-form": {
                                 "type": "select"
                             }
-                        },
-                        "user_name": {
-                            "title": "USER_NAME",
-                            "type": "string"
-                        },
-                        "login": {
-                            "title": "LOGIN",
-                            "type": "string"
-                        },
+                        }
                     },
                     "required": []
                 },
@@ -55,15 +43,15 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                     $q.all([
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'userId': searchOptions.userId,
                             'issue_status': "A",
+                            'role_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
-                            'userId': searchOptions.userId,
                             'issue_status': "P",
+                            'role_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise
