@@ -407,7 +407,8 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 for (i in branches) {
                     branch_name[branches[i].id] = {
                         "node_code": branches[i].value,
-                        "node_id": branches[i].id,
+                        "node_id": branches[i].code,
+                        "id": branches[i].id,
                         "parent_code": branches[i].parentCode,
                         "status": 1
                     };
