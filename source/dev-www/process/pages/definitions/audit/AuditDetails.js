@@ -250,7 +250,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             }, {
                 key: "ai.message",
                 type: "textarea",
-                "condition": "(model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly"
+                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly"
             }]
         }, {
             "type": "box",
