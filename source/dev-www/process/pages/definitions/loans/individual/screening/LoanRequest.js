@@ -2691,6 +2691,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     PageHelper.showLoader();
                     PageHelper.showProgress("update-loan", "Working...");
                     if (model.loanAccount.currentStage == "Rejected") {
+                        model.loanAccount.status = null;
                         model.customer.properAndMatchingSignboard = null;
                         model.customer.bribeOffered = null;
                         model.customer.shopOrganized = null;
