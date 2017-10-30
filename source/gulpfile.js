@@ -106,7 +106,7 @@ gulp.task('androidManifestUpgrade', function(){
 
 gulp.task('updateLegacyURLInIndex', function(){
     var legacySystemUrl = argv.legacySystemUrl;
-    return gulp.src(['./dev-www/index.html'])
+    return gulp.src(['./dev-www/integration.html'])
         .pipe($.cheerio({
             run: function($, file){
                 console.log(file);
