@@ -1,13 +1,70 @@
-define({
-    pageUID: "witfin.customer.IndividualEnrollment2",
-    pageType: "Engine",
-    dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor"],
+irf.pageCollection.factory(irf.page("witfin.customer.IndividualEnrollment2"),
+["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor",
+      function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+                     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor) {      
 
-    $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor) {
-
+        var self;
         var branch = SessionStore.getBranch();
+        var pageParams = {
+            readonly: true
+        }
+
+        var preSaveOrProceed = function(reqData){
+            if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)){
+                var selfExist = false
+                for (var i=0;i<reqData.customer.familyMembers.length; i++){
+                    var f = reqData.customer.familyMembers[i];
+                    if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                        selfExist = true;
+                        break;
+                    }
+                }
+                if (selfExist == false){
+                    PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory",5000);
+                    return false;
+                }
+            } else {
+                PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory",5000);
+                return false;
+            }
+            return true;
+        }
+
+        var configFile = function() {
+            return {
+                "currentStage": {
+                    "ScreeningReview": {
+                        
+                        "overrides": {
+                            "KYC": {
+                                "readonly": true
+                            },
+                            "personalInformation": {
+                                "readonly": true
+                            },
+                            "ContactInformation": {
+                                "readonly": true
+                            },
+                            "householdeDetails": {
+                                "readonly": true
+                            },
+                             "householdLiablities": {
+                                "readonly": true
+                            },
+                            "householdVerification": {
+                                "readonly": true
+                            },
+                            "trackDetails": {
+                                "readonly": true
+                            }
+                        }
+                    }
+                }
+                
+                
+            }
+        }
         var getIncludes = function (model) {
             
             return [
@@ -66,6 +123,7 @@ define({
                     "personalInformation.centerId",
                     "personalInformation.centerId1",
                     "personalInformation.centerId2",
+                    "personalInformation.photoImageId",
                     "personalInformation.title",
                     "personalInformation.firstName",
                     // "personalInformation.enrolledAs",
@@ -108,9 +166,11 @@ define({
                     "ContactInformation.permanentResidentAddress.mailingState",
                     "householdeDetails",
                     "householdeDetails.relationShip",
+                    "householdeDetails.primaryOccupation",
                     "householdeDetails.educationStatus",
                     "householdLiablities",
                     "householdLiablities.liabilities",
+                    "householdLiablities.liabilities.loanSourceCategory",
                     "householdLiablities.liabilities.loanSource",
                     "householdLiablities.liabilities.loanAmountInPaisa",
                     "householdLiablities.liabilities.installmentAmountInPaisa",
@@ -122,10 +182,19 @@ define({
                     "householdLiablities.liabilities.liabilityLoanPurpose",
                     "householdLiablities.liabilities.interestOnly",
                     "householdLiablities.liabilities.interestRate",
+                    "householdLiablities.liabilities.uploadReceipts",
                     "householdVerification",
                     "householdVerification.householdDetails",
                     "householdVerification.householdDetails.ownership",
                     "householdVerification.householdDetails.udf29",
+                    "householdVerification.householdDetails.distanceFromBranch",
+                    "householdVerification.householdDetails.monthlyRent",
+                    "householdVerification.householdDetails.previousRentDetails",
+                    "trackDetails",
+                    "trackDetails.vehiclesOwned",
+                    "trackDetails.vehicleFinanced",
+                    "trackDetails.vehiclesFree",
+
                     // "ContactInformation.CustomerResidentialAddress",
                     // "ContactInformation.CustomerResidentialAddress.doorNo",
                     // "ContactInformation.CustomerResidentialAddress.street",
@@ -249,20 +318,35 @@ define({
             "type": "schema-form",
             "title": "INDIVIDUAL_ENROLLMENT_2",
             "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                model.customer = model.customer || {};
-                model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
-                model.customer.date = model.customer.date || Utils.getCurrentDate();
-                model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-                model = Utils.removeNulls(model, true);
-                model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
-                model.customer.customerType = model.customer.customerType || 'Individual';
-                var centres = SessionStore.getCentres();
-                if(centres && centres.length > 0){
-                    model.customer.centreId = model.customer.centreId || centres[0].id;
+             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+
+                if (bundlePageObj){
+                    model._bundlePageObj = _.cloneDeep(bundlePageObj);
                 }
-                var self = this;
+
+                var branch1 = formHelper.enum('branch_id').data;
+                var allowedBranch = [];
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].name) == SessionStore.getBranch()) {
+                        allowedBranch.push(branch1[i]);
+                        break;
+                    }
+                }
+                var allowedCentres = [];
+                var centres = SessionStore.getCentres();
+                var centreName = [];
+
+                if(centres && centres.length)
+                {
+                    for (var i = 0; i < centres.length; i++) {
+                     centreName.push(centres[i].id);
+                     allowedCentres.push(centres[i]);
+                    }
+                }
+
+                model.currentStage = bundleModel.currentStage;
+                 self = this;
                 var formRequest = {
                     "overrides": "",
                     "includes": getIncludes (model),
@@ -270,225 +354,426 @@ define({
                         "KYC.addressProofSameAsIdProof",
                     ]
                 };
+                if (_.hasIn(model, 'loanRelation')){
+                    console.log(model.loanRelation);
+                    if(model.loanRelation){
+                    var custId = model.loanRelation.customerId;
+                        Enrollment.getCustomerById({id:custId})
+                                .$promise
+                                .then(function(res){
+                                    model.customer = res;
+                                    var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
+                                    model.customer.centreName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centreName;
+                                    BundleManager.pushEvent('customer-loaded', model._bundlePageObj, {customer: res})
+                                    if (model.customer.stockMaterialManagement) {
+                                        model.proxyIndicatorsHasValue = true;
+                                        $log.debug('PROXY_INDICATORS already has value');
+                                    }
+                                    
+                                    self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest, configFile(), model);
+                                }, function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
+                    }
+                }
+                else {
+                    self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
+                }
+                // else {
 
-                if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
-                    PageHelper.showLoader();
-                    PageHelper.showProgress("Enrollment-input", 'Loading lead details');
-                    var _leadId = $stateParams.pageData['lead_id'];
-                    Lead.get({id: _leadId})
-                        .$promise
-                        .then(function(res){
-                            PageHelper.showProgress('Enrollment-input', 'Done.', 5000);
-                            model.customer.mobilePhone = res.mobileNo;
-                            model.customer.gender = res.gender;
-                            model.customer.firstName = res.leadName;
-                            model.customer.maritalStatus=res.maritalStatus;
-                            model.customer.customerBranchId=res.branchId;
-                            model.customer.centreId=res.centreId;
-                            model.customer.centreName=res.centreName;
-                            model.customer.street=res.addressLine2;
-                            model.customer.doorNo=res.addressLine1;
-                            model.customer.pincode=res.pincode;
-                            model.customer.district=res.district;
-                            model.customer.state=res.state;
-                            model.customer.locality=res.area;
-                            model.customer.villageName=res.cityTownVillage;
-                            model.customer.landLineNo=res.alternateMobileNo;
-                            model.customer.dateOfBirth=res.dob;
-                            model.customer.age=res.age;
-                            model.customer.gender=res.gender;
-                            model.customer.landLineNo = res.alternateMobileNo;
+                    model.customer = model.customer || {};
+                    if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                        model.customer.enterprise = {};
+                    }
+
+                    model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
+
+                    model.customer.centreId = centreName[0];
+                    model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
+
+                    //model.branchId = SessionStore.getBranchId() + '';
+                    model.customer.date = model.customer.date || Utils.getCurrentDate();
+                    model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+                    model = Utils.removeNulls(model,true);
+                    //model.customer.kgfsName = SessionStore.getBranch();
+                    model.customer.identityProof = model.customer.identityProof || "Pan Card";
+                    model.customer.addressProof= model.customer.addressProof || "Aadhar Card";
+                    model.customer.customerType = 'Individual';
+                    BundleManager.pushEvent("on-customer-load", {name: "11"})
+
+                    if(!model.customer.expenditures){
+                        model.customer.expenditures = [];
+                        model.customer.expenditures.push({
+                            "expenditureSource": "Monthly Declared Household expenses",
+                            "frequency": "Monthly"
+                        });
+                    }
+
+
+                    if(!model.customer.familyMembers){
+                        model.customer.familyMembers = [
+                            {
+                                'relationShip': 'self'
+                            }
+                        ]
+                    }
+                // }
+
+
+                if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                        model.customer.enterprise = {};
+                    }
+
+                if (_.hasIn(model, 'loanRelation')){
+                    console.log(model.loanRelation);
+                    if(model.loanRelation){
+                        if(model.loanRelation.enterpriseId)
+                        {
+                            var busId = model.loanRelation.enterpriseId;
+                            Enrollment.getCustomerById({id:busId})
+                                .$promise
+                                .then(function(res){
+                                    model.customer.enterprise = res.enterprise;
+                                }, function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
+                        }
+                    }
+                }
+
+                
+
+            },
+           
+            preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                        // console.log("Inside preDestroy");
+                        // console.log(arguments);
+                        if (bundlePageObj){
+                            var enrolmentDetails = {
+                                'customerId': model.customer.id,
+                                'customerClass': bundlePageObj.pageClass,
+                                'firstName': model.customer.firstName
+                            }
+                            // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
+                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                        }
+                        return $q.resolve();
+                    },
+                    eventListeners: {
+                        "test-listener": function(bundleModel, model, obj){
+
+                        },
+                        "lead-loaded": function(bundleModel, model, obj){
+                            model.customer.mobilePhone = obj.mobileNo;
+                            model.customer.gender = obj.gender;
+                            model.customer.firstName = obj.leadName;
+                            model.customer.maritalStatus=obj.maritalStatus;
+                            model.customer.customerBranchId=obj.branchId;
+                            model.customer.centreId=obj.centreId;
+                            model.customer.centreName=obj.centreName;
+                            model.customer.street=obj.addressLine2;
+                            model.customer.doorNo=obj.addressLine1;
+                            model.customer.pincode=obj.pincode;
+                            model.customer.district=obj.district;
+                            model.customer.state=obj.state;
+                            model.customer.locality=obj.area;
+                            model.customer.villageName=obj.cityTownVillage;
+                            model.customer.landLineNo=obj.alternateMobileNo;
+                            model.customer.dateOfBirth=obj.dob;
+                            model.customer.age=obj.age;
+                            model.customer.gender=obj.gender;
+                            model.customer.landLineNo = obj.alternateMobileNo;
 
 
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                 $log.info(model.customer.familyMembers[i].relationShip);
                                 model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                            } 
-                        }, function(httpRes){
-                            PageHelper.showErrors(httpRes);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
-                }
-
-                this.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
-                //this.form.push(actionbox);
-                console.log(this.form);
-            },
-            modelPromise: function(pageId, _model) {
-                var deferred = $q.defer();
-                PageHelper.showLoader();
-                irfProgressMessage.pop("enrollment","Loading Customer Data...");
-                Enrollment.getCustomerById({id:pageId},function(resp,header){
-                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                    model.customer = resp;
-                    if (model.customer.dateOfBirth) {
-                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                    }
-
-                    for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                        if (model.customer.familyMembers[idx].dateOfBirth) {
-                            model.customer.familyMembers[idx].age = moment().diff(moment(model.customer.familyMembers[idx].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                /*if (model.customer.familyMembers[i].relationShip == "self") {
+                                    model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                    break;
+                                }*/
+                            }
+                        },
+                        "origination-stage": function(bundleModel, model, obj){
+                            model.currentStage = obj
                         }
-                    }
-                    if (model.customer.udf && model.customer.udf.userDefinedFieldValues
-                        && model.customer.udf.userDefinedFieldValues.udf1) {
-                        model.customer.udf.userDefinedFieldValues.udf1 =
-                            model.customer.udf.userDefinedFieldValues.udf1 === true
-                            || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
-                    }
-                    deferred.resolve(model);
-                    PageHelper.hideLoader();
-                },function(resp){
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop("enrollment","An Error Occurred. Failed to fetch Data",5000);
-                    $stateParams.confirmExit = false;
-                    $state.go("Page.Engine",{
-                        pageName:"CustomerSearch",
-                        pageId:null
-                    });
-                    deferred.reject();
-                });
-                return deferred.promise;
-            },
-            offline: true,
-            getOfflineDisplayItem: function(item, index) {
-                return [
-                    item.customer.urnNo,
-                    Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                    item.customer.villageName
-                ]
-            },
+                    },
+                    offline: false,
+                    getOfflineDisplayItem: function(item, index){
+                        return [
+                            item.customer.urnNo,
+                            Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
+                            item.customer.villageName
+                        ]
+                    },
             form: [],
 
             schema: function() {
-                return Enrollment.getSchema().$promise;
-            },
-            actions: {
-                setProofs: function(model) {
-                    model.customer.addressProofNo = model.customer.aadhaarNo;
-                    model.customer.identityProofNo = model.customer.aadhaarNo;
-                    model.customer.identityProof = 'Aadhar card';
-                    model.customer.addressProof = 'Aadhar card';
-                    model.customer.addressProofSameAsIdProof = true;
-                    if (model.customer.yearOfBirth) {
-                        model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                    }
-                },
-                preSave: function(model, form, formName) {
-                    var deferred = $q.defer();
-                    if (model.customer.firstName) {
-                        deferred.resolve();
-                    } else {
-                        irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
-                        deferred.reject();
-                    }
-                    return deferred.promise;
-                },
-                reload: function(model, formCtrl, form, $event) {
-                    $state.go("Page.Engine", {
-                        pageName: 'customer.IndividualEnrollment3',
-                        pageId: model.customer.id
-                    }, {
-                        reload: true,
-                        inherit: false,
-                        notify: true
-                    });
-                },
-                submit: function(model, form, formName) {
-                    var actions = this.actions;
-                    $log.info("Inside submit()");
-                    $log.warn(model);
-                    if (!EnrollmentHelper.validateData(model)) {
-                        $log.warn("Invalid Data, returning false");
-                        return false;
-                    }
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                    var reqData = _.cloneDeep(model);
-                    EnrollmentHelper.fixData(reqData);
-
-                    try {
-                        var liabilities = reqData['customer']['liabilities'];
-                        if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
-                            for (var i = 0; i < liabilities.length; i++) {
-                                var l = liabilities[i];
-                                l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                        return Enrollment.getSchema().$promise;
+                    },
+                    actions: {
+                        setProofs:function(model){
+                            model.customer.addressProofNo=model.customer.aadhaarNo;
+                            model.customer.identityProofNo=model.customer.aadhaarNo;
+                            model.customer.identityProof='Aadhar card';
+                            model.customer.addressProof='Aadhar card';
+                            model.customer.addressProofSameAsIdProof = true;
+                            if (model.customer.yearOfBirth) {
+                                model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
                             }
-                        }
-                        var financialAssets = reqData['customer']['financialAssets'];
-                        if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
-                            for (var i = 0; i < financialAssets.length; i++) {
-                                var f = financialAssets[i];
-                                f.amountInPaisa = f.amountInPaisa * 100;
+                        },
+                        preSave: function(model, form, formName) {
+                            var deferred = $q.defer();
+                            if (model.customer.firstName) {
+                                deferred.resolve();
+                            } else {
+                                PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
+                                deferred.reject();
                             }
-                        }
-                    } catch (e) {
-                        $log.info("Error trying to change amount info.");
-                    }
+                            return deferred.promise;
+                        },
+                        reload: function(model, formCtrl, form, $event) {
+                            $state.go("Page.Engine", {
+                                pageName: 'customer.IndividualEnrollment',
+                                pageId: model.customer.id
+                            },{
+                                reload: true,
+                                inherit: false,
+                                notify: true
+                            });
+                        },
+                        save: function(model, formCtrl, form, $event){
 
-                    reqData['enrollmentAction'] = 'PROCEED';
+                            formCtrl.scope.$broadcast('schemaFormValidate');
 
-                    irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
-                    reqData.customer.verified = true;
-                    try {
-                        for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
-                            var incomes = reqData.customer.familyMembers[i].incomes;
-                            for (var j = 0; j < incomes.length; j++) {
-                                switch (incomes[i].frequency) {
-                                    case 'M':
-                                        incomes[i].monthsPerYear = 12;
-                                        break;
-                                    case 'Monthly':
-                                        incomes[i].monthsPerYear = 12;
-                                        break;
-                                    case 'D':
-                                        incomes[i].monthsPerYear = 365;
-                                        break;
-                                    case 'Daily':
-                                        incomes[i].monthsPerYear = 365;
-                                        break;
-                                    case 'W':
-                                        incomes[i].monthsPerYear = 52;
-                                        break;
-                                    case 'Weekly':
-                                        incomes[i].monthsPerYear = 52;
-                                        break;
-                                    case 'F':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
-                                    case 'Fornightly':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
-                                    case 'Fortnightly':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
+                            if (formCtrl && formCtrl.$invalid) {
+                                PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                                return false;
+                            }
+
+                            if (!EnrollmentHelper.validateData(model)) {
+                                $log.warn("Invalid Data, returning false");
+                                return false;
+                            }
+                            var reqData = _.cloneDeep(model);
+                            EnrollmentHelper.fixData(reqData);
+                            var out = reqData.customer.$fingerprint;
+                            var fpPromisesArr = [];
+                            for (var key in out) {
+                                if (out.hasOwnProperty(key) && out[key].data!=null) {
+                                    (function(obj){
+                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
+                                        promise.then(function(data){
+                                            reqData.customer[obj.table_field] = data.fileId;
+                                            delete reqData.customer.$fingerprint[obj.fingerId];
+                                        });
+                                        fpPromisesArr.push(promise);
+                                    })(out[key]);
+                                } else {
+                                    if (out[key].data == null){
+                                        delete out[key];
+                                    }
                                 }
                             }
-                        }
-                    } catch (err) {
-                        console.error(err);
-                    }
-                    EnrollmentHelper.fixData(reqData);
-                    if (reqData.customer.id) {
-                        EnrollmentHelper.proceedData(reqData).then(function(resp) {
-                            PageHelper.showProgress('enrolment', 'Done.', 5000);
-                            $state.go('Page.Landing', null);
-                        });
-                    } else {
-                        EnrollmentHelper.saveData(reqData).then(function(res) {
-                            EnrollmentHelper.proceedData(res).then(function(resp) {
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                $state.go('Page.Landing', null);
-                            }, function(err) {
-                                Utils.removeNulls(res.customer, true);
-                                model.customer = res.customer;
+
+                            // $q.all start
+                            $q.all(fpPromisesArr).then(function(){
+                                try{
+                                    // var liabilities = reqData['customer']['liabilities'];
+                                    // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
+                                    //     for (var i=0; i<liabilities.length;i++){
+                                    //         var l = liabilities[i];
+                                    //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                    //     }
+                                    // }
+
+                                    // var financialAssets = reqData['customer']['financialAssets'];
+                                    // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
+                                    //     for (var i=0; i<financialAssets.length;i++){
+                                    //         var f = financialAssets[i];
+                                    //         f.amountInPaisa = f.amountInPaisa * 100;
+                                    //     }
+                                    // }
+                                } catch(e){
+                                    $log.info("Error trying to change amount info.");
+                                }
+
+                                reqData.customer.verified = true;
+                                if (reqData.customer.hasOwnProperty('verifications')){
+                                    var verifications = reqData.customer['verifications'];
+                                    for (var i=0; i<verifications.length; i++){
+                                        if (verifications[i].houseNoIsVerified){
+                                            verifications[i].houseNoIsVerified=1;
+                                        }
+                                        else{
+                                            verifications[i].houseNoIsVerified=0;
+                                        }
+                                    }
+                                }
+                                try{
+                                    for(var i=0;i<reqData.customer.familyMembers.length;i++){
+                                        var incomes = reqData.customer.familyMembers[i].incomes;
+                                        if (incomes){
+                                            for(var j=0;j<incomes.length;j++){
+                                                switch(incomes[i].frequency){
+                                                    case 'M': incomes[i].monthsPerYear=12; break;
+                                                    case 'Monthly': incomes[i].monthsPerYear=12; break;
+                                                    case 'D': incomes[i].monthsPerYear=365; break;
+                                                    case 'Daily': incomes[i].monthsPerYear=365; break;
+                                                    case 'W': incomes[i].monthsPerYear=52; break;
+                                                    case 'Weekly': incomes[i].monthsPerYear=52; break;
+                                                    case 'F': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fortnightly': incomes[i].monthsPerYear=26; break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }catch(err){
+                                    console.error(err);
+                                }
+
+                                EnrollmentHelper.fixData(reqData);
+                                if (reqData.customer.addressProof == 'Aadhar Card' &&
+                                    !_.isNull(reqData.customer.addressProofNo)){
+                                    reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                                }
+
+                                if (preSaveOrProceed(reqData) == false){
+                                    return;
+                                }
+                                EnrollmentHelper.saveData(reqData)
+                                        .then(
+                                                function(res){
+                                                    formHelper.resetFormValidityState(formCtrl);
+                                                    PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                                    Utils.removeNulls(res.customer, true);
+                                                    model.customer = res.customer;
+                                                    if (model._bundlePageObj){
+                                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                                    }
+                                                },
+                                                function(httpRes){
+                                                    PageHelper.showProgress('enrolment', 'Oops. Some error', 5000);
+                                                    PageHelper.showErrors(httpRes);
+                                                }
+                                        );
                             });
-                        });
+                        },
+                        submit: function(model, form, formName){
+                            var actions = this.actions;
+                            $log.info("Inside submit()");
+                            $log.warn(model);
+                            if (!EnrollmentHelper.validateData(model)) {
+                                $log.warn("Invalid Data, returning false");
+                                return false;
+                            }
+                            var reqData = _.cloneDeep(model);
+                            EnrollmentHelper.fixData(reqData);
+
+                            var out = reqData.customer.$fingerprint;
+                            var fpPromisesArr = [];
+                            for (var key in out) {
+                                if (out.hasOwnProperty(key) && out[key].data!=null) {
+                                    (function(obj){
+                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
+                                        promise.then(function(data){
+                                            reqData.customer[obj.table_field] = data.fileId;
+                                            delete reqData.customer.$fingerprint[obj.fingerId];
+                                        });
+                                        fpPromisesArr.push(promise);
+                                    })(out[key]);
+                                } else {
+                                    if (out[key].data == null){
+                                        delete out[key];
+                                    }
+                                }
+                            }
+
+                            // $q.all start
+                            $q.all(fpPromisesArr).then(function(){
+                                try{
+                                    // var liabilities = reqData['customer']['liabilities'];
+                                    // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
+                                    //     for (var i=0; i<liabilities.length;i++){
+                                    //         var l = liabilities[i];
+                                    //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                    //     }
+                                    // }
+
+                                    // var financialAssets = reqData['customer']['financialAssets'];
+                                    // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
+                                    //     for (var i=0; i<financialAssets.length;i++){
+                                    //         var f = financialAssets[i];
+                                    //         f.amountInPaisa = f.amountInPaisa * 100;
+                                    //     }
+                                    // }
+                                } catch(e){
+                                    $log.info("Error trying to change amount info.");
+                                }
+
+                                reqData['enrollmentAction'] = 'PROCEED';
+
+                                reqData.customer.verified = true;
+                                if (reqData.customer.hasOwnProperty('verifications')){
+                                    var verifications = reqData.customer['verifications'];
+                                    for (var i=0; i<verifications.length; i++){
+                                        if (verifications[i].houseNoIsVerified){
+                                            verifications[i].houseNoIsVerified=1;
+                                        }
+                                        else{
+                                            verifications[i].houseNoIsVerified=0;
+                                        }
+                                    }
+                                }
+                                try{
+                                    for(var i=0;i<reqData.customer.familyMembers.length;i++){
+                                        var incomes = reqData.customer.familyMembers[i].incomes;
+                                        if (incomes){
+                                            for(var j=0;j<incomes.length;j++){
+                                                switch(incomes[i].frequency){
+                                                    case 'M': incomes[i].monthsPerYear=12; break;
+                                                    case 'Monthly': incomes[i].monthsPerYear=12; break;
+                                                    case 'D': incomes[i].monthsPerYear=365; break;
+                                                    case 'Daily': incomes[i].monthsPerYear=365; break;
+                                                    case 'W': incomes[i].monthsPerYear=52; break;
+                                                    case 'Weekly': incomes[i].monthsPerYear=52; break;
+                                                    case 'F': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fortnightly': incomes[i].monthsPerYear=26; break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }catch(err){
+                                    console.error(err);
+                                }
+                                if (preSaveOrProceed(reqData) == false){
+                                    return;
+                                }
+                                EnrollmentHelper.fixData(reqData);
+                                PageHelper.showProgress('enrolment', 'Updating Customer');
+                                EnrollmentHelper.proceedData(reqData).then(function(resp){
+                                    formHelper.resetFormValidityState(form);
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    Utils.removeNulls(resp.customer,true);
+                                    model.customer = resp.customer;
+                                }, function(err) {
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                });
+                            });
+                            // $q.all end
+                        }
                     }
-                }
-            }
         };
-    }
-});
+}]);

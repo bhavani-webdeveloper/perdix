@@ -4191,18 +4191,19 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type:"select"
                     },
                     "spouseFirstName":{
-                        key: "customer.spouseFirstName",
+                        key: "customer.spouse_first_name",
                         title: "SPOUSE_FULL_NAME",
                         condition:"model.customer.maritalStatus==='MARRIED'",
                         type:"qrcode"
                     },
                     "spouseDateOfBirth":{
-                        key:"customer.spouseDateOfBirth",
+                        key:"customer.spouse_date_of_birth",
+                        title:"SPOUSE_DOB",
                         type:"date",
                         condition:"model.customer.maritalStatus==='MARRIED'"
                     },
                     "weddingAnniversery":{
-                        key:"customer.weddingAnniversery",
+                        key:"customer.wedding_date",
                         type:"date",
                         title:"WEDDING_ANNIVERSERY",
                         condition:"model.customer.maritalStatus==='MARRIED'"
@@ -4456,6 +4457,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "key": "customer.educationStatus",
                         "title": "EDUCATION_LEVEL",
                         "type": "select"
+                    },
+                    "primaryOccupation": {
+                        "key": "customer.occupation1",
+                        "title": "PRIMARY_OCCUPATION",
+                        "type": "select"
                     }
                             
                 }
@@ -4470,6 +4476,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         startEmpty: true,
                         title:"HOUSEHOLD_LIABILITIES",
                         items: {
+                            "loanSourceCategory": {
+                                key:"customer.liabilities[].loan_source_category",
+                                type: "select",
+                                title:"LOAN_SOURCE_CATEGORY",
+                                enumCode:"loan_source_category"
+                            },
                             "loanSource": {
                                 key:"customer.liabilities[].loanSource",
                                 type:"select",
@@ -4519,6 +4531,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.liabilities[].interestRate",
                                 type: "number",
                                 title: "RATE_OF_INTEREST"
+                            },
+                            "uploadReceipts": {
+                                key: "customer.liabilities[].proof_documents",
+                                type: "file",
+                                "title":"UPLOAD_RECEIPTS",
+                                fileType:"application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "LIABILITIES"
                             }
                         }
                     }
@@ -4541,11 +4561,48 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
                                 type: "select",
                                 title: "IN_CURRENT_ADDRESS_SINCE"
+                            },
+                            "distanceFromBranch": {
+                                key: "customer.distance_from_branch",
+                                type: "select",
+                                title: "DISTANCE_FROM_BRANCH",
+                                enumCode: "loan_distance_from_branch"
+                            },
+                            "monthlyRent": {
+                                key: "customer.monthly_rent",
+                                type: "number",
+                                title: "MONTHLY_RENT"
+                            },
+                            "previousRentDetails": {
+                                key:"customer.previous_rent_details",
+                                title: "PREVIOUS_RENT_DEATLS",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"                                
                             }
                         }
                     }
                 }
                
+            },
+            "trackDetails": {
+                type: "box",
+                title: "TRACK_DETAILS",
+                items: {
+                    "vehiclesOwned": {
+                        key:"customer.vehicles_owned",
+                        type:"number",
+                        title:"No of Vehicles owned by customer"
+                    },
+                    "vehicleFinanced": {
+                        key:"customer.vehicles_financed",
+                        type:"number",
+                        title:"No of Vehicles financed"
+                    },
+                    "vehiclesFree": {
+                        key:"customer.vehicles_free",
+                        type:"number",
+                        title:"No of Vehicles Free"
+                    }
+                }
             }
 
         };

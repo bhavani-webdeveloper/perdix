@@ -198,6 +198,10 @@
                     "enumCode": "enrolledAs",
                     "default":"CUSTOMER"
                 },
+                "weddingAnniversery": {
+                    "type":["string", "null"],
+                    "title":"WEDDING_ANNIVERSERY"
+                },
                 "enterprise": {
                     "type": "object",
                     "properties": {
@@ -603,6 +607,10 @@
                                 "enumCode": "relation"
 
                             },
+                            "primaryOccupation": {
+                                "type": ["string", "null"],
+                                "title": "PRIMARY_OCCUPATION"
+                            },
                             "contributionToExpenditure":{
                                 "type": ["number","null"],
                                 "title":"CONTRIBUTION_TO_EXPENDITURE",
@@ -900,6 +908,11 @@
                                 "type": ["integer","null"],
                                 "title": "LOAN_AMOUNT_IN_PAISA"
                             },
+                            "loanSourceCategory": {
+                                "type": ["string","null"],
+                                "title": "LOAN_SOURCE_CATEGORY",
+                                "enumCode": "loan_source_category"
+                            },
                             "loanSource": {
                                 "type": ["string","null"],
                                 "title": "LOAN_SOURCE",
@@ -919,6 +932,12 @@
                                 "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
+                            },
+                            "uploadReceipts": {
+                                "type": ["string","null"],
+                                "title":"UPLOAD_RECEIPTS",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "LIABILITIES"
                             }
                         },
                         "required": [
