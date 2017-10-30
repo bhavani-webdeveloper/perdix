@@ -402,9 +402,15 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 response.typeofissues = typeofissues;
                 var typeofissues = {};
 
+                var branches = irfStorageService.getMaster("branch").data;
                 var branch_name = {};
-                for (i in response.branch_name) {
-                    branch_name[response.branch_name[i].node_id] = response.branch_name[i];
+                for (i in branches) {
+                    branch_name[branches[i].id] = {
+                        "node_code": branches[i].value,
+                        "node_id": branches[i].id,
+                        "parent_code": branches[i].parentCode,
+                        "status": 1
+                    };
                 }
                 response.branch_name = branch_name;
 
