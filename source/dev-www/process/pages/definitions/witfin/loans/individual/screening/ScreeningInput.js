@@ -63,61 +63,61 @@ function (
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'witfin.customer.IndividualEnrollment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
                             maximum: 1
-                        },
-                        {
-                            pageName: 'customer.IndividualEnrolment2',
-                            title: 'CO_APPLICANT',
-                            pageClass: 'co-applicant',
-                            minimum: 0,
-                            maximum: 4
-                        },
-                        {
-                            pageName: 'customer.IndividualEnrolment2',
-                            title: 'GUARANTOR',
-                            pageClass: 'guarantor',
-                            minimum: 0,
-                            maximum: 3
-                        },
-                        {
-                            pageName: 'customer.EnterpriseEnrolment2',
-                            title: 'BUSINESS',
-                            pageClass: 'business',
-                            minimum: 1,
-                            maximum: 1
-                        },
-                        {
-                            pageName: 'loans.individual.screening.LoanRequest',
-                            title: 'LOAN_REQUEST',
-                            pageClass: 'loan-request',
-                            minimum: 1,
-                            maximum: 1
-                        },
-                        {
-                            pageName: 'loans.individual.screening.CBCheck',
-                            title: 'CB_CHECK',
-                            pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1
-                        },
-                        {
-                            pageName: 'loans.individual.screening.CreditBureauView',
-                            title: 'CREDIT_BUREAU',
-                            pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1
-                        },
-                        {
-                            pageName: 'loans.individual.screening.Review',
-                            title: 'REVIEW',
-                            pageClass: 'loan-review',
-                            minimum: 1,
-                            maximum: 1
-                        }   
+                        }
+                        // {
+                        //     pageName: 'customer.IndividualEnrolment2',
+                        //     title: 'CO_APPLICANT',
+                        //     pageClass: 'co-applicant',
+                        //     minimum: 0,
+                        //     maximum: 4
+                        // },
+                        // {
+                        //     pageName: 'customer.IndividualEnrolment2',
+                        //     title: 'GUARANTOR',
+                        //     pageClass: 'guarantor',
+                        //     minimum: 0,
+                        //     maximum: 3
+                        // },
+                        // {
+                        //     pageName: 'customer.EnterpriseEnrolment2',
+                        //     title: 'BUSINESS',
+                        //     pageClass: 'business',
+                        //     minimum: 1,
+                        //     maximum: 1
+                        // },
+                        // {
+                        //     pageName: 'loans.individual.screening.LoanRequest',
+                        //     title: 'LOAN_REQUEST',
+                        //     pageClass: 'loan-request',
+                        //     minimum: 1,
+                        //     maximum: 1
+                        // },
+                        // {
+                        //     pageName: 'loans.individual.screening.CBCheck',
+                        //     title: 'CB_CHECK',
+                        //     pageClass: 'cb-check',
+                        //     minimum: 1,
+                        //     maximum: 1
+                        // },
+                        // {
+                        //     pageName: 'loans.individual.screening.CreditBureauView',
+                        //     title: 'CREDIT_BUREAU',
+                        //     pageClass: 'cbview',
+                        //     minimum: 1,
+                        //     maximum: 1
+                        // },
+                        // {
+                        //     pageName: 'loans.individual.screening.Review',
+                        //     title: 'REVIEW',
+                        //     pageClass: 'loan-review',
+                        //     minimum: 1,
+                        //     maximum: 1
+                        // }   
                     ]);
                 },
         		"bundlePages": [],
