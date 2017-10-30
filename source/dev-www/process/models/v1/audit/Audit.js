@@ -405,7 +405,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 var branches = irfStorageService.getMaster("branch").data;
                 var branch_name = {};
                 for (i in branches) {
-                    branch_name[branches[i].id] = {
+                    branch_name[branches[i].code] = {
                         "node_code": branches[i].value,
                         "node_id": branches[i].code,
                         "id": branches[i].id,
