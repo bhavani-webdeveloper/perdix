@@ -569,6 +569,18 @@
                      "Inprocess",
                      "ReadyForScreening"
                   ]
+               },
+               "applicantCustomerId": {
+                  "title": "applicantCustomerId",
+                  "type": "number",
+                   "minimum": 0,
+                  "maximum": 1000000000,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
                }
             }
          },
