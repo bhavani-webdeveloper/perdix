@@ -138,22 +138,24 @@
                             <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
                             <p>{{ ss.getUsername() }} - {{ ss.getRole() | translate }}</p>
                             <p>
-                                <small> &nbsp;
+                                <small ng-if="!branchSwitch.showBranchSelect">
                                     <span class="pull-left">
-                                        <span ng-if="!branchSwitch.showBranchSelect">
+                                        <span ng-click="c.toggleSwitchBranch($event)" style="cursor:pointer">
                                             <i class="fa fa-building"></i> 
                                             {{ branchSwitch.currentBranch.branchName }}
-                                            <a href="" ng-click="c.toggleSwitchBranch($event)" class="change-branch-shortcut"> (Change)</a>
+                                            <span class="change-branch-shortcut"> (Change)</span>
                                         </span>
-                                        <span ng-if="branchSwitch.showBranchSelect">
-                                            <select style="background: transparent; color:black;" ng-options="item as item.branchName for item in branchSwitch.allowedBranches track by item.branchId" ng-model="branchSwitch.selectedBranch" ng-change="c.updateNewBranch($event, branchSwitch.selectedBranch)"></select>
-                                            <!--&nbsp;&nbsp;<i class="fa fa-check" aria-hidden="true" ng-click="c.updateNewBranch($event, branchSwitch.selectedBranch)"></i> -->
-                                            &nbsp;&nbsp;<i class="fa fa-times" aria-hidden="true" ng-click="c.toggleSwitchBranch($event)"></i>
-                                        </span>
-                                        
                                     </span>
                                     <span class="pull-right"><i class="fa fa-clock-o"></i> {{ ss.getFormatedCBSDate() }}</span>
                                 </small>
+                                <div ng-if="branchSwitch.showBranchSelect" style="height:20px;margin-top:-10px">
+                                    <div style="width:230px">
+                                        <select class="bg-theme form-control pull-left" ng-options="item as item.branchName for item in branchSwitch.allowedBranches track by item.branchId" ng-model="branchSwitch.selectedBranch" ng-change="c.updateNewBranch($event, branchSwitch.selectedBranch)"></select>
+                                    </div>
+                                    <div class="bg-theme pull-right" style="width:25px;height:34px;padding:8px;cursor:pointer">
+                                        <i class="fa fa-times" ng-click="c.toggleSwitchBranch($event)"></i>
+                                    </div>
+                                </div>
                             </p>
                         </li>
                         <!-- Menu Body -->
