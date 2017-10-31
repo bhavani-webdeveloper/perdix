@@ -44,14 +44,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
                             'issue_status': "A",
-                            'role_id': searchOptions.role_id,
+                            'assignee_designation_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
                             'issue_status': "P",
-                            'role_id': searchOptions.role_id,
+                            'assignee_designation_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise
