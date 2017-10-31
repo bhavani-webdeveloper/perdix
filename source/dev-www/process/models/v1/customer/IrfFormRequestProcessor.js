@@ -1,6 +1,6 @@
 irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath",
-    function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath) {
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager",
+    function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager) {
         var formRepository = {}
         formRepository['IndividualEnrollment'] = { 
             "CustomerInformation": {
@@ -4202,8 +4202,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type:"date",
                         condition:"model.customer.maritalStatus==='MARRIED'"
                     },
-                    "weddingAnniversery":{
-                        key:"customer.wedding_date",
+                    "weddingDate":{
+                        key:"customer.weddingDate",
                         type:"date",
                         title:"WEDDING_ANNIVERSERY",
                         condition:"model.customer.maritalStatus==='MARRIED'"
@@ -4477,7 +4477,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title:"HOUSEHOLD_LIABILITIES",
                         items: {
                             "loanSourceCategory": {
-                                key:"customer.liabilities[].loan_source_category",
+                                key:"customer.liabilities[].loanSourceCategory",
                                 type: "select",
                                 title:"LOAN_SOURCE_CATEGORY",
                                 enumCode:"loan_source_category"
@@ -4532,8 +4532,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "number",
                                 title: "RATE_OF_INTEREST"
                             },
-                            "uploadReceipts": {
-                                key: "customer.liabilities[].proof_documents",
+                            "proofDocuments": {
+                                key: "customer.liabilities[].proofDocuments",
                                 type: "file",
                                 "title":"UPLOAD_RECEIPTS",
                                 fileType:"application/pdf",
@@ -4563,18 +4563,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 title: "IN_CURRENT_ADDRESS_SINCE"
                             },
                             "distanceFromBranch": {
-                                key: "customer.distance_from_branch",
+                                key: "customer.distanceFromBranch",
                                 type: "select",
                                 title: "DISTANCE_FROM_BRANCH",
                                 enumCode: "loan_distance_from_branch"
                             },
                             "monthlyRent": {
-                                key: "customer.monthly_rent",
+                                key: "customer.monthlyRent",
                                 type: "number",
                                 title: "MONTHLY_RENT"
                             },
                             "previousRentDetails": {
-                                key:"customer.previous_rent_details",
+                                key:"customer.previousRentDetails",
                                 title: "PREVIOUS_RENT_DEATLS",
                                 condition: "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"                                
                             }
@@ -4588,19 +4588,32 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 title: "TRACK_DETAILS",
                 items: {
                     "vehiclesOwned": {
-                        key:"customer.vehicles_owned",
+                        key:"customer.vehiclesOwned",
                         type:"number",
                         title:"No of Vehicles owned by customer"
                     },
-                    "vehicleFinanced": {
-                        key:"customer.vehicles_financed",
+                    "vehiclesFinanced": {
+                        key:"customer.vehiclesFinanced",
                         type:"number",
                         title:"No of Vehicles financed"
                     },
                     "vehiclesFree": {
-                        key:"customer.vehicles_free",
+                        key:"customer.vehiclesFree",
                         type:"number",
                         title:"No of Vehicles Free"
+                    }
+                }
+            },
+            "actionbox":{
+                "type": "actionbox",
+                "items": {
+                    "save":{
+                        "type": "save",
+                        "title": "Offline Save"
+                    }, 
+                    "submit":{
+                        "type": "submit",
+                        "title": "Submit"
                     }
                 }
             }
