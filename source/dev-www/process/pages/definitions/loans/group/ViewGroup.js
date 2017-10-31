@@ -139,10 +139,7 @@ define({
 						"key": "group.frequency",
 						"title": "FREQUENCY",
 						"type": "select",
-						"titleMap": {
-							"M": "Monthly",
-							"Q": "Quarterly"
-						}
+						"enumCode": "loan_product_frequency",
 					}, {
 						"key": "group.tenure",
 						"title": "TENURE",

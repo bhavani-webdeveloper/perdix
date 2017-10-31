@@ -155,10 +155,7 @@ define({
                         "title": "FREQUENCY",
                         "readonly": true,
                         "type": "select",
-                        "titleMap": {
-                            "M": "Monthly",
-                            "Q": "Quarterly"
-                        }
+                        "enumCode": "loan_product_frequency",
                     }, {
                         "key": "group.tenure",
                         "readonly": true,
