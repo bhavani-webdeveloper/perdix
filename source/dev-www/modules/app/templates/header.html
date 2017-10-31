@@ -137,7 +137,7 @@
                         <li class="user-header bg-theme">
                             <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
                             <p>{{ ss.getUsername() }} - {{ ss.getRole() | translate }}</p>
-                            <p>
+                            <p style="min-height:7px">
                                 <small ng-if="!branchSwitch.showBranchSelect">
                                     <span class="pull-left">
                                         <span ng-click="c.toggleSwitchBranch($event)" style="cursor:pointer">

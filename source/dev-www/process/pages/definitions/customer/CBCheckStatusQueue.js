@@ -131,7 +131,7 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 							$log.info(item.id);
 							PM.pop('cbcheck-submit', 'Reinitiating CB Check...');
 							CreditBureau.reinitiateCBCheck(
-								{creditBureauId:item.id},
+								{/*creditBureauId:item.id,*/inqUnqRefNo:item.inqUnqRefNo},
 								function(response){
 									$log.info(response);
 									PM.pop('cbcheck-submit', 'CB Check reinitiated ...', 3000);
