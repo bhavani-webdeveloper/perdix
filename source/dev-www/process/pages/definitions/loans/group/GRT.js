@@ -898,7 +898,7 @@ define({
                                 var t = targetstage[i];
                                 if (t.name == stage1 && 'default' == t.field2) {
                                     model.review.targetStage = t.field1;
-                                    model.review.rejectStage = "Rejected";
+                                    model.review.rejectStage = model.siteCode =='saija' ? "GRT2" : "Rejected";
                                     break;
                                 }
                             }
@@ -966,7 +966,22 @@ define({
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var out = [{name: "Rejected"}];
+                                    var out = [];
+                                    if(model.siteCode == 'saija') {
+                                        var stage1 = model.group.currentStage;
+                                        var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                        for (var i = 0; i < targetstage.length; i++) {
+                                            var t = targetstage[i];
+                                            if (t.name == stage1 && 'reject' == t.field2) {
+                                                out.push({
+                                                    name: t.field1,
+                                                })
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        {name: "Rejected"}
+                                    }
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": out.length
