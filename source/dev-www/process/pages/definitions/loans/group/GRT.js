@@ -20,7 +20,7 @@ define({
             if (model.group.udf5 == "true") model.group.udf5 = true;
             if (model.group.udf6 == "true") model.group.udf6 = true;
 
-            if(model.siteCode == 'sambandh') {
+            if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
                 if (model.group.udf7 == "true") model.group.udf7 = true;
                 if (model.group.udf8 == "true") model.group.udf8 = true;
                 if (model.group.udf9 == "true") model.group.udf9 = true;

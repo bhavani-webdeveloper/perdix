@@ -273,7 +273,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             "required": true,
                         },
                         "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
-                            "required": false
+                            "required": true,
                         },
                         "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
                             "enumCode": "years_of_business",
@@ -393,6 +393,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                     model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
                                     model.customer.familyMembers[0].age = model.customer.age;
                                     model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
+                                    model.customer.familyMembers[0].mobilePhone = model.customer.mobilePhone;
                                 }
                             }
                         },
@@ -404,6 +405,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "familyDetails.familyMembers.incomes.monthsPerYear" : {
                             required:true,
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 1 || value > 12) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 1 to 12"
+                            }
                         },
                         "familyDetails.familyMembers.contributionToExpenditure" : {
                             required:true,
@@ -474,6 +486,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             schema:{
                                 "type":["string","null"],
                             }
+                        },
+                        "Expenditures1.expenditures.expendituresSection.expenditureSource" : {
+                            required: true,
                         },
                         "assets.financialAssets.instrumentType" : {
                             required:false,
@@ -1012,6 +1027,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     if (!EnrollmentHelper.validateData(model)) {
                         $log.warn("Invalid Data, returning false");
                         return false;
+                    }
+                    if(model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
+                        var spouseInfoReq = true;
+                        for (var idx = 0; idx < model.customer.familyMembers.length; idx++ ) {
+                             if (model.customer.familyMembers[idx].relationShip == "Husband" || 
+                                model.customer.familyMembers[idx].relationShip == "Wife")
+                            {
+                                spouseInfoReq = false;
+                                break;
+                            }
+                        }
+
+                        if(spouseInfoReq) {
+                            irfProgressMessage.pop('enrollment-submit', 'Please add customer Spouse information in Family Details section also to proceed.', 5000);
+                            return false;
+                        }
                     }
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var reqData = _.cloneDeep(model);

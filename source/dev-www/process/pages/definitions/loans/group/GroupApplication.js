@@ -492,10 +492,18 @@ define({
                     }, {
                         "type": "button",
                         "key": "group",
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh'",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
                                 Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/JLGAllFormsDownload.php?record_id=" + model.group.id);
+                        }
+                    }, {
+                        "type": "button",
+                        "key": "group",
+                        "condition": "model.siteCode == 'saija'",
+                        "title": "DOWNLOAD_APPLICATION_FORM",
+                        "onClick": function(model, form, schemaForm, event) {
+                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?type=JLG&record_id=" + model.group.id);
                         }
                     },]
                 },
