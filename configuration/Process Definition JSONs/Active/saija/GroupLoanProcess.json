@@ -104,6 +104,17 @@
       ]
    }, {
       "order": 10,
+      "code": "Completed",
+      "name": "Completed",
+      "isAccountOpening": false,
+      "stageType": "COMPLETED",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 11,
       "code": "Rejected",
       "name": "Rejected",
       "isAccountOpening": false,
@@ -259,7 +270,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf2": {
@@ -268,7 +279,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf3": {
@@ -277,7 +288,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf4": {
@@ -286,7 +297,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf5": {
@@ -295,7 +306,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf6": {
@@ -304,7 +315,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf7": {
@@ -313,7 +324,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf8": {
@@ -322,7 +333,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf9": {
@@ -331,7 +342,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf10": {
@@ -340,7 +351,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf11": {
@@ -349,7 +360,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf12": {
@@ -358,7 +369,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf13": {
@@ -367,7 +378,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf14": {
@@ -376,7 +387,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf15": {
@@ -385,7 +396,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf16": {
@@ -394,7 +405,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf17": {
@@ -403,7 +414,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf18": {
@@ -412,7 +423,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf19": {
@@ -421,7 +432,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf20": {
@@ -430,7 +441,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf21": {
@@ -439,7 +450,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udf22": {
@@ -448,7 +459,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udfDate1": {
@@ -456,7 +467,7 @@
                   "type": "string",
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udfDate2": {
@@ -464,7 +475,7 @@
                   "type": "string",
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udfDate3": {
@@ -472,7 +483,7 @@
                   "type": "string",
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udfDate4": {
@@ -480,7 +491,7 @@
                   "type": "string",
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "udfDate5": {
@@ -488,7 +499,7 @@
                   "type": "string",
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                },
                "groupRemarks": {
@@ -498,7 +509,7 @@
                   "maxLength": 250,
                   "captureStages": [
                      "GroupCreation",
-                     "GRT",
+                     "GRT", "GRT2",
                      "DSC",
                      "CGT1", "CGT2", "CGT3", "Checker1", "Checker2", "LoanBooking", "LoanDisbursement"
                   ]
@@ -510,7 +521,7 @@
                   "maxLength": 200,
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT", "GRT2"
                   ]
                }
             }
@@ -713,7 +724,7 @@
                      "maxLength": 100,
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "longitude": {
@@ -723,7 +734,7 @@
                      "maxLength": 100,
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "photoImageId1": {
@@ -731,7 +742,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "photoImageId2": {
@@ -739,7 +750,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "photoImageId3": {
@@ -747,7 +758,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
 
@@ -756,7 +767,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "photoImageId5": {
@@ -764,7 +775,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "isHouseVerificationDone": {
@@ -772,7 +783,7 @@
                      "type": "boolean",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "firstRepaymentDate": {
@@ -781,7 +792,7 @@
                      "captureStages": [
                         "GroupCreation",
                         "LoanBooking",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "scheduledDisbursementDate": {
@@ -790,7 +801,7 @@
                      "captureStages": [
                         "GroupCreation",
                         "LoanBooking",
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "modeOfDisbursement": {
@@ -798,7 +809,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
 
                      ]
@@ -808,7 +819,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
                   },
@@ -817,7 +828,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
                   },
@@ -826,7 +837,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
                   },
@@ -835,7 +846,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
                   },
@@ -844,7 +855,7 @@
                      "type": "string",
                      "captureStages": [
                         "GroupCreation",
-                        "GRT",
+                        "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
                   }
@@ -1164,7 +1175,7 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtLatitude": {
@@ -1173,7 +1184,7 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtLongitude": {
@@ -1182,7 +1193,7 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtPhoto": {
@@ -1191,7 +1202,7 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtEndPhoto": {
@@ -1200,7 +1211,7 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtRemarks": {
@@ -1209,21 +1220,21 @@
                      "minimum": 1,
                      "maximum": 100,
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtDate": {
                      "title": "GRT Date",
                      "type": "String",
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   },
                   "grtEndDate": {
                      "title": "GRT End Date",
                      "type": "String",
                      "captureStages": [
-                        "GRT"
+                        "GRT", "GRT2"
                      ]
                   }
 
