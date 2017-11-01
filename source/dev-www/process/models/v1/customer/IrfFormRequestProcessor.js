@@ -444,12 +444,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
-                                    model.customer.identityProofNo = result.text;
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.identityProofNo = aadhaarData.uid;
                                 }
                             },
                             "identityProofNo1": {
                                 key: "customer.identityProofNo",
-                                type:"qrcode",
+                                type:"barcode",
                                 condition: "model.customer.identityProof == 'Pan Card'",
                                 schema: {
                                     "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
@@ -462,7 +463,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "identityProofNo2": {
                                 key: "customer.identityProofNo",
-                                type:"qrcode",
+                                type:"barcode",
                                 condition: "model.customer.identityProof == 'Passport'",
                                 schema: {
                                     "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
@@ -475,7 +476,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "identityProofNo3": {
                                 key: "customer.identityProofNo",
-                                type:"qrcode",
+                                type:"barcode",
                                 condition: "model.customer.identityProof !== 'Aadhar Card' && model.customer.identityProof !== 'Pan Card' && model.customer.identityProof !== 'Passport'",
                                 // "pattern": ".*", 
                                 onCapture: function(result, model, form) {
