@@ -188,10 +188,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "mobilePhone": {
                                 orderNo: 10,
                                 key: "customer.mobilePhone",
+                                inputmode: "number",
+                                numberType: "tel"
                             },
                             "landLineNo": {
                                 orderNo: 20,
                                 key: "customer.landLineNo",
+                                inputmode: "number",
+                                numberType: "tel"
                             },
                             "doorNo": {
                                 orderNo: 30,
@@ -575,7 +579,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "fieldset",
                         orderNo: 40,
                         title: "SPOUSE_IDENTITY_PROOF",
-                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        condition: "model.customer.maritalStatus=='MARRIED' || model.customer.maritalStatus=='married'",
                         items: {
                             "udf33": {
                                 key: "customer.udf.userDefinedFieldValues.udf33",
@@ -746,6 +750,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         items: {
                             "relationShip": {
                                 key: "customer.familyMembers[].relationShip",
+                                orderNo: 10,
                                 type: "select",
                                 title: "T_RELATIONSHIP",
                                 "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -754,12 +759,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
                                         model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
                                         model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
                                     } 
                                     else {
+                                        if (model.customer.familyMembers[form.arrayIndex].customerId) 
+                                            return;
+
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
                                         model.customer.familyMembers[form.arrayIndex].age = undefined;
                                         model.customer.familyMembers[form.arrayIndex].maritalStatus = undefined;
                                         model.customer.familyMembers[form.arrayIndex].gender = undefined;
+                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = undefined;
                                         if(model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
                                             model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
                                         }
@@ -778,6 +788,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "customerId": {
                                 key: "customer.familyMembers[].customerId",
+                                orderNo: 20,
                                 condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
                                 type: "lov",
                                 "inputMap": {
@@ -847,17 +858,20 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "familyMemberFirstName": {
+                                orderNo: 30,
                                 key: "customer.familyMembers[].familyMemberFirstName",
                                 condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
                                 title: "FAMILY_MEMBER_FULL_NAME"                             
                             },
                             "gender": {
                                 key: "customer.familyMembers[].gender",
+                                orderNo: 40,
                                 type: "radios",
                                 title: "T_GENDER"
                             },
                             "age": {
                                 key: "customer.familyMembers[].age",
+                                orderNo: 50,
                                 title: "AGE",
                                 type: "number",
                                 "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -872,6 +886,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "dateOfBirth": {
                                 key: "customer.familyMembers[].dateOfBirth",
+                                orderNo: 60,
                                 type: "date",
                                 title: "T_DATEOFBIRTH",
                                 "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -882,18 +897,22 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "educationStatus": {
                                 key: "customer.familyMembers[].educationStatus",
+                                orderNo: 70,
                                 type: "select",
                                 title: "T_EDUCATION_STATUS"
                             },
                             "maritalStatus": {
+                                orderNo: 80,
                                 key: "customer.familyMembers[].maritalStatus",
                                 type: "select",
                                 title: "T_MARITAL_STATUS"
                             },
                             "mobilePhone": {
+                                orderNo: 90,
                                 key: "customer.familyMembers[].mobilePhone",
                             },
                             "healthStatus": {
+                                orderNo: 100,
                                 key: "customer.familyMembers[].healthStatus",
                                 type: "radios",
                                 titleMap: {
@@ -902,11 +921,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                             },
                             "contributionToExpenditure": {
+                                orderNo: 110,
                                 key: "customer.familyMembers[].contributionToExpenditure",
                                 type: "amount",
                             },
                             "incomes": {
                                 key: "customer.familyMembers[].incomes",
+                                orderNo: 120,
                                 type: "array",
                                 startEmpty: false,
                                 items: {
