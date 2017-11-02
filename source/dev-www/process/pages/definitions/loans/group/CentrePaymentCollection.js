@@ -680,7 +680,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD') + "T00:00:00Z";
 						_.each(gcd, function(group, gk){
 							_.each(group.collectiondemand, function(v,k){
-								cd.push(v);
+								if (v.amountPaid) {
+									cd.push(v);
+								}
 							});
 						});
 
