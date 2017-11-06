@@ -39,7 +39,7 @@ irf.pageCollection.factory(irf.page('witfin.loans.individual.screening.Applicati
                         maximum: 1
                     },
                     {
-                        pageName: 'loans.individual.screening.LoanRequest',
+                        pageName: 'witfin.loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,

@@ -47,8 +47,39 @@ function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHel
                     "enterpriseAssets.enterpriseAssets.manufactureDate",
                     "enterpriseAssets.enterpriseAssets.subDetails",
                     "enterpriseAssets.enterpriseAssets.assetregistrationNumber",
-                    "enterpriseAssets.enterpriseAssets.valueOfAsset"
+                    "enterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "bankAccounts",
+                    "bankAccounts.customerBankAccounts",
+                    "bankAccounts.customerBankAccounts.bankStatements",
+                    "bankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "bankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "bankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                    "bankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto"
+
             ];    
+    }
+
+    var configFile = function() {
+        return {
+                "currentStage": {
+                    "Screening": {
+                        "excludes": [
+                            "bankAccounts"
+                        ]
+                    },
+                    "ScreeningReview": {
+                        "excludes": [
+                            "bankAccounts"
+                        ]
+                    }
+                    
+                }
+                
+                
+            }
     }
 
     return {
@@ -93,10 +124,10 @@ function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHel
                         
                         bundleModel.business = model.customer;
 
-                         if(model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined){
+                         if((model.customer.enterprise && _.hasIn(model.customer.enterprise, "isGSTAvailable")) && (model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined)){
                                      model.customer.enterprise.isGSTAvailable = "No";
                          }
-                         if(model.customer.enterprise.isGSTAvailable == "Yes"){
+                         if(model.customer.enterprise && model.customer.enterprise.isGSTAvailable && model.customer.enterprise.isGSTAvailable == "Yes"){
                              model.customer.enterprise.companyRegistered = "YES";    
                          }
 
@@ -155,7 +186,7 @@ function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHel
             if (bundlePageObj){
                 model._bundlePageObj = bundlePageObj;
             }
-            this.form = IrfFormRequestProcessor.getFormDefinition('EnterpriseEnrollment2', formRequest);
+            this.form = IrfFormRequestProcessor.getFormDefinition('EnterpriseEnrollment2', formRequest, configFile(), model);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
