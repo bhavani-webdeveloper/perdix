@@ -1,4 +1,4 @@
-irf.pages.controller("JournalMultiPostingDashboardCtrl", 
+irf.pages.controller("JournalMultiPostingDashboardCtrl",
     ['$log', '$scope', 'PagesDefinition', 'SessionStore', 'Lead','Journal',
     function($log, $scope, PagesDefinition, SessionStore, Lead,Journal) {
         $log.info("Page.JournalMultiPostingDashboardCtrl.html loaded");
@@ -9,8 +9,7 @@ irf.pages.controller("JournalMultiPostingDashboardCtrl",
             "items": [
                 "Page/Engine/Journal.JournalMultiPosting",
                 "Page/Engine/Journal.JournalMultiEntryQueue",
-                "Page/Engine/Journal.JournalMultiPostingQueue",
-                
+                "Page/Engine/Journal.JournalMultiPostingQueue"
             ]
         };
 
@@ -21,10 +20,10 @@ irf.pages.controller("JournalMultiPostingDashboardCtrl",
 
             if (jqMenu) {
                 var promise = Journal.journalMultiEntrySearch({
-                        
+
                         'page': 1,
                         'per_page': 1,
-                        
+
                         'currentStage': "multiJournalPosting"
                     }).$promise.then(function(response, headerGetter) {
                     jqMenu.data = Number(response.headers['x-total-count']);
@@ -37,10 +36,10 @@ irf.pages.controller("JournalMultiPostingDashboardCtrl",
 
             if (jeMenu) {
                 var promise = Journal.journalMultiEntrySearch({
-                        
+
                         'page': 1,
                         'per_page': 1,
-                        
+
                         'currentStage': "multiJournalEntry"
                     }).$promise.then(function(response, headerGetter) {
                     jeMenu.data = Number(response.headers['x-total-count']);
