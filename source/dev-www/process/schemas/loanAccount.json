@@ -118,6 +118,18 @@
                     "title": "STATUS",
                     "type": ["string", "null"]
                 },
+                "dsaPayout": {
+                    "title": "DSA_LAYOUT",
+                    "type": ["string", "null"]
+                },
+                "dealIrr": {
+                    "title": "DSA_LAYOUT",
+                    "type": ["string", "null"]
+                },
+                "valuator": {
+                    "title": "VALUATOR",
+                    "type": ["string", "null"]
+                },
                 "applicationStatusUpdatedBy": {
                     "type": ["string", "null"]
                 },

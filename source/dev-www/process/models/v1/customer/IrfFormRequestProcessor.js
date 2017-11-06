@@ -2834,6 +2834,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
                         readonly: true
                     },
+                    "loanToValue": {
+                        key: "loanAccount.loanToValue",
+                        type:"number",
+                        title: "LOAN_TO_VALUE"
+                    },
                     "section1": {
                         "type": "section",
                         "htmlClass": "alert alert-warning",
@@ -3512,6 +3517,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 onClick: "actions.proceed(model, formCtrl, form, $event)"
                             }
                         }
+                    },
+                    "valuator": {
+                        key:"loanAccount.valuator",
+                        title:"VALUATOR",
+                        type: "select"
                     }
                 }
             },
@@ -3598,6 +3608,41 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "type": "button",
                         "title": "SEND_BACK",
                         "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                    }
+                }
+            },
+            "IRR": {
+                "type":"box",
+                title:"IRR",
+                items: {
+                     "frequencyRequested": {
+                        key: "loanAccount.frequencyRequested",
+                        type: "select",
+                        title: "FREQUENCY_REQUESTED",
+                        enumCode: "frequency",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "tenureRequested": {
+                        key: "loanAccount.tenureRequested",
+                        required: true,
+                        type: "number",
+                        title: "TENURE_REQUESETED",
+                        onChange: function(value, form, model) {
+                            computeEstimatedEMI(model);
+                        }
+                    },
+                    "dsaPayout": {
+                        key: "loanAccount.dsaPayout",
+                        type: "number",
+                        title: "DSA_LAYOUYT"
+                    },
+                    "estimatedEmi": {
+                        key: "loanAccount.estimatedEmi",
+                        "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly: true
                     }
                 }
             },
