@@ -128,7 +128,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								var groups = {};
 								_.each(centreDemands, function(v,k){
 									v.amountPaid = v.installmentAmount;
-									totalToBeCollected += v.installmentAmount;
+									if (v.totalToBeCollected > v.installmentAmount) {
+										v.amountPaid = v.totalToBeCollected;
+										v.overdue = true;
+									}
+									totalToBeCollected += v.amountPaid;
+									if (!v.groupCode) v.groupCode = 'Individual Loans';
 									if (!groups[v.groupCode]) groups[v.groupCode] = [];
 									groups[v.groupCode].push(v);
 								});
@@ -253,6 +258,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"items": [
 					{
 						"key": "groupCollectionDemand[].collectiondemand",
+						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName + model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue? ' ('+('OVERDUE'|translate)+')':''",
 						"add": null,
 						"remove": null,
 						"view": "fixed",
