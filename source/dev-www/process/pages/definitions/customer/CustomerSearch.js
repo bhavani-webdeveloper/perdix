@@ -227,11 +227,18 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							name: "Enroll Customer",
 							desc: "",
 							icon: "fa fa-user-plus",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"ProfileInformation",
-									pageId:item.id
-								});
+							fn: function(item, model){
+								if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+									$state.go("Page.Engine",{
+										pageName:"customer.IndividualEnrollment3",
+										pageId:item.id
+									});
+								} else {
+									$state.go("Page.Engine",{
+										pageName:"ProfileInformation",
+										pageId:item.id
+									});
+								}
 							},
 							isApplicable: function(item, model){
 								if (item.currentStage==='BasicEnrolment' )

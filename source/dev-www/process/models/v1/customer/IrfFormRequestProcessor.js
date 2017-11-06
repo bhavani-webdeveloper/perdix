@@ -910,6 +910,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "mobilePhone": {
                                 orderNo: 90,
                                 key: "customer.familyMembers[].mobilePhone",
+                                inputmode: "number",
+                                numberType: "tel",
                             },
                             "healthStatus": {
                                 orderNo: 100,

@@ -125,8 +125,10 @@ define({
                     }, {
                         "key": "group.branchId",
                         "title": "BRANCH_NAME",
+                        "type": "select",
                         "required": true,
                         readonly: true,
+                        "enumCode": "branch_id",
                         "parentEnumCode": "bank",
                         "parentValueExpr": "model.group.bankId",
                     }, {

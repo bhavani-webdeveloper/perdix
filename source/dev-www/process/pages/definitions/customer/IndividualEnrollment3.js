@@ -92,6 +92,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.cropName": {
                             title: "NON_IRRIGATED_LAND",
                             "type": "string",
+                            inputmode: "number",
+                            numberType: "tel",
                             schema:{
                                 "type":["string","null"],
                             }
@@ -99,12 +101,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.irrigated": {
                             title: "IRRIGATED_LAND",
                             "type": "string",
+                            inputmode: "number",
+                            numberType: "tel",
                             schema:{
                                 "type":["string","null"],
                             }
                         },
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth": {
                             title: "TOTAL_LAND",
+                            inputmode: "number",
+                            numberType: "tel",
                             "type": "string",
                             schema:{
                                 "type":["string","null"],
@@ -331,6 +337,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "BusinessOccupationDetails.agricultureDetails.cropName": {
                             title: "NON_IRRIGATED_LAND",
+                            inputmode: "number",
+                            numberType: "tel",
                             "type": "string",
                             schema:{
                                 "type":["string","null"],
@@ -338,6 +346,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         },
                         "BusinessOccupationDetails.agricultureDetails.irrigated": {
                             title: "IRRIGATED_LAND",
+                            inputmode: "number",
+                            numberType: "tel",
                             "type": "string",
                             schema:{
                                 "type":["string","null"],
