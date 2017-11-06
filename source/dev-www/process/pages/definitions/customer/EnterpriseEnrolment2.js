@@ -162,6 +162,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             model.customer.age=obj.age;
                             model.customer.mobilePhone = obj.mobileNo;
                             model.customer.latitude =obj.location;
+                            model.customer.id =obj.customerId;
                             if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                                 model.customer.enterprise = {};
                             }

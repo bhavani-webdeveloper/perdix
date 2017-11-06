@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
 
         	return {
         		"type": "page-bundle",
-        		"title": "RISK_REVIEW1",
+        		"title": "REGIONAL_RISK_REVIEW",
         		"subTitle": "",
                 "readonly": true,
                 "bundleDefinition": [
@@ -162,7 +162,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                             loanRelation: applicant
                                         }
                                     });
-
                                     for (var i=0;i<coApplicants.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',

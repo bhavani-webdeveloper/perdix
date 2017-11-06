@@ -16,6 +16,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 "Page/Engine/loans.individual.screening.ApplicationReviewQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalReviewQueue",
+                "Page/Engine/loans.individual.screening.ZonalRiskReviewQueue",
                 "Page/Engine/loans.individual.screening.CentralRiskReviewQueue",
                 "Page/Engine/loans.individual.screening.CreditCommitteeReviewQueue",
                 "Page/Engine/loans.individual.screening.LoanSanctionQueue",
@@ -169,6 +170,25 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     farqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     farqMenu.data = '-';
+                });
+            }
+
+            var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ZonalRiskReviewQueue"];
+            if (zrrqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ZonalRiskReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    zrrqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    zrrqMenu.data = '-';
                 });
             }
 

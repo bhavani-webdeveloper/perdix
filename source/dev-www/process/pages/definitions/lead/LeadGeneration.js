@@ -1,7 +1,7 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
+    function($log, Enrollment, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
         PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -12,7 +12,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                                   
+
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
                     model.lead.leadStatus = "Incomplete";
@@ -39,7 +39,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
-                            if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                            if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
                                 model.lead.customerTypeString = model.lead.customerType;
                             }
                             if (model.lead.currentStage == 'Incomplete') {
@@ -142,21 +142,218 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
                             title: "LEAD_DETAILS",
                             items: [{
-                                    key: "lead.leadName",
-                                    title: "APPLICANT_NAME"
-                                }, {
                                     key: "lead.customerType",
                                     type: "select",
                                     titleMap: {
                                         "Individual": "Individual",
                                         "Enterprise": "Individual and Enterprise"
                                     }
+                                }, {
+                                    "key": "lead.applicantCustomerId",
+                                    "title": "CHOOSE_EXISTING_APPLICANT",
+                                    "type": "lov",
+                                    // "autolov": true,
+                                    "lovonly": true,
+                                    "inputMap": {
+                                        "firstName": {
+                                            "key": "lead.customerFirstName"
+                                        },
+                                        "urnNo": {
+                                            "key": "lead.urnNo",
+                                        },
+                                        "branchId": {
+                                            "key": "lead.branchId",
+                                            "type": "select",
+                                            "screenFilter": true,
+                                            "readonly": true
+                                        },
+                                        "centreName": {
+                                            "key": "lead.centreName",
+                                            "type": "string",
+                                            "readonly": true,
 
+                                        },
+                                        "centreId": {
+                                            key: "lead.centreId",
+                                            type: "lov",
+                                            autolov: true,
+                                            lovonly: true,
+                                            bindMap: {},
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model, context) {
+                                                var centres = SessionStore.getCentres();
+                                                var centreCode = formHelper.enum('centre').data;
+                                                var out = [];
+                                                if (centres && centres.length) {
+                                                    for (var i = 0; i < centreCode.length; i++) {
+                                                        for (var j = 0; j < centres.length; j++) {
+                                                            if (centreCode[i].value == centres[j].id) {
+
+                                                                out.push({
+                                                                    name: centreCode[i].name,
+                                                                    id: centreCode[i].value
+                                                                })
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function(valueObj, model, context) {
+                                                model.lead.centreId = valueObj.id;
+                                                model.lead.centreName = valueObj.name;
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        },
+                                    },
+                                    "outputMap": {
+                                        "id": "lead.applicantCustomerId"
+                                    },
+                                    "searchHelper": formHelper,
+                                    "search": function(inputModel, form) {
+                                        $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                        var branches = formHelper.enum('branch_id').data;
+                                        var branchName;
+                                        for (var i = 0; i < branches.length; i++) {
+                                            if (branches[i].code == inputModel.customerBranchId)
+                                                branchName = branches[i].name;
+                                        }
+                                        var promise = Enrollment.search({
+                                            'branchName': branchName || SessionStore.getBranch(),
+                                            'firstName': inputModel.firstName,
+                                            'centreId': inputModel.centreId,
+                                            'customerType': "individual",
+                                            'urnNo': inputModel.urnNo
+                                        }).$promise;
+                                        return promise;
+                                    },
+                                    getListDisplayItem: function(data, index) {
+                                        return [
+                                            [data.firstName, data.fatherFirstName].join(' | '),
+                                            data.id,
+                                            data.urnNo
+                                        ];
+                                    },
+                                    onSelect: function(valueObj, model, context) {
+
+                                    }
+
+                                }, {
+                                    key: "lead.leadName",
+                                    title: "APPLICANT_NAME"
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
                                     condition: "model.lead.customerType === 'Enterprise'",
                                     items: [{
+                                        "key": "lead.customerId",
+                                        "title": "CHOOSE_EXISTING_BUSINESS",
+                                        "type": "lov",
+                                        // "autolov": true,
+                                        "lovonly": true,
+                                        "inputMap": {
+                                            "firstName": {
+                                                "key": "lead.customerFirstName"
+                                            },
+                                            "urnNo": {
+                                                "key": "lead.urnNo",
+                                            },
+                                            "branchId": {
+                                                "key": "lead.branchId",
+                                                "type": "select",
+                                                "screenFilter": true,
+                                                "readonly": true
+                                            },
+                                            "centreName": {
+                                                "key": "lead.centreName",
+                                                "type": "string",
+                                                "readonly": true,
+
+                                            },
+                                            "centreId": {
+                                                key: "lead.centreId",
+                                                type: "lov",
+                                                autolov: true,
+                                                lovonly: true,
+                                                bindMap: {},
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model, context) {
+                                                    var centres = SessionStore.getCentres();
+                                                    var centreCode = formHelper.enum('centre').data;
+                                                    var out = [];
+                                                    if (centres && centres.length) {
+                                                        for (var i = 0; i < centreCode.length; i++) {
+                                                            for (var j = 0; j < centres.length; j++) {
+                                                                if (centreCode[i].value == centres[j].id) {
+
+                                                                    out.push({
+                                                                        name: centreCode[i].name,
+                                                                        id: centreCode[i].value
+                                                                    })
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function(valueObj, model, context) {
+                                                    model.lead.centreId = valueObj.id;
+                                                    model.lead.centreName = valueObj.name;
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            },
+                                        },
+                                        "outputMap": {
+                                            "id": "lead.customerId"
+                                        },
+                                        "searchHelper": formHelper,
+                                        "search": function(inputModel, form) {
+                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                            var branches = formHelper.enum('branch_id').data;
+                                            var branchName;
+                                            for (var i = 0; i < branches.length; i++) {
+                                                if (branches[i].code == inputModel.customerBranchId)
+                                                    branchName = branches[i].name;
+                                            }
+                                            var promise = Enrollment.search({
+                                                'branchName': branchName || SessionStore.getBranch(),
+                                                'firstName': inputModel.firstName,
+                                                'centreId': inputModel.centreId,
+                                                'customerType': "enterprise",
+                                                'urnNo': inputModel.urnNo
+                                            }).$promise;
+                                            return promise;
+                                        },
+                                        getListDisplayItem: function(data, index) {
+                                            return [
+                                                [data.firstName, data.fatherFirstName].join(' | '),
+                                                data.id,
+                                                data.urnNo
+                                            ];
+                                        },
+                                        onSelect: function(valueObj, model, context) {
+
+                                        }
+
+                                    }, {
                                         key: "lead.businessName"
                                     }, {
                                         key: "lead.companyRegistered",
@@ -354,8 +551,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     }]
                                 },
                             ]
-                        },
-                        {
+                        }, {
                             type: "fieldset",
                             condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                             title: "LEAD_DETAILS",
@@ -365,7 +561,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     schema: {
                                         pattern: "^[a-zA-Z\. ]+$",
                                     },
-                                    validationMessage: {202 : "Only alphabets and space are allowed."},
+                                    validationMessage: {
+                                        202: "Only alphabets and space are allowed."
+                                    },
                                 }, {
                                     key: "lead.customerTypeString",
                                     type: "select",
@@ -373,7 +571,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         "Individual": "Individual",
                                         "Enterprise": "Individual and Enterprise"
                                     },
-                                   readonly:true
+                                    readonly: true
 
                                 }, {
                                     type: "fieldset",
@@ -727,8 +925,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             }]
                         }
                     ]
-                },
-                {
+                }, {
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
@@ -1009,7 +1206,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         });
                         return out;
                     };
-                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                    if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
                         model.lead.customerType = model.lead.customerTypeString;
                     }
                     var reqData = _.cloneDeep(model);

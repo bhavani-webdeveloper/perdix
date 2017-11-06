@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 		
 		return {
 			"type": "search-list",
-			"title": "RISK_REVIEW1",
+			"title": "REGIONAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;
@@ -137,6 +137,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getColumns: function() {
 						return [{
+							title: 'ID',
+							data: 'id'
+						},{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
@@ -161,7 +164,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getActions: function() {
 						return [{
-							name: "RISK_REVIEW1",
+							name: "REGIONAL_RISK_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

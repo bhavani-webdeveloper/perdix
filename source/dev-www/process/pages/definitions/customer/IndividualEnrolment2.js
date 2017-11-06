@@ -189,6 +189,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.age=obj.age;
                             model.customer.gender=obj.gender;
                             model.customer.landLineNo = obj.alternateMobileNo;
+                            model.customer.id = obj.applicantCustomerId; 
 
 
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {

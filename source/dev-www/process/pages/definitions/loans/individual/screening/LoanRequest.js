@@ -374,6 +374,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.CreditCommitteeReviewQueue', pageId:null});
         if (model.currentStage == 'CentralRiskReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.CentralRiskReviewQueue', pageId:null});
+        if (model.currentStage == 'ZonalRiskReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ZonalRiskReviewQueue', pageId:null});
         if (model.currentStage == 'Sanction')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.LoanSanctionQueue', pageId:null});
         if (model.currentStage == 'Rejected')
@@ -542,6 +544,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                 model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                 model.loanAccount.screeningDate = obj.screeningDate;
+                model.loanAccount.leadId  = obj.id;
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");

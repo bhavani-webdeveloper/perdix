@@ -1,13 +1,14 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskReview'),
+irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
         	$log.info("Inside LoanBookingBundle");
 
+
         	return {
         		"type": "page-bundle",
-        		"title": "VP_CREDIT_RISK_REVIEW",
+        		"title": "ZONAL_RISK_REVIEW",
         		"subTitle": "",
                 "readonly": true,
                 "bundleDefinition": [
@@ -104,7 +105,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
 
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "CentralRiskReview";
+                    bundleModel.currentStage = "FieldAppraisalReview";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -120,6 +121,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                     var guarantors = [];
                                     var business;
                                     var urnNos = [];
+                                    res.mscore="RiskScore3";
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
@@ -214,7 +216,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'CentralRiskReview');
+                    BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
                     
                 },
         		eventListeners: {
