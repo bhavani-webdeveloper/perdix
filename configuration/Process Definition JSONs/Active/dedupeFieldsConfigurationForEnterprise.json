@@ -1,4 +1,6 @@
-[
+{
+"dedupeCutoffPercentage":60,
+"dedupeFieldsConfigurationDTOs" : [
 	{
 		"dedupeType":"Enterprise",
 		"fieldName":"firstName",
@@ -6,7 +8,7 @@
 		"matchType":"phonetic",
 		"toleranceInDays":"",
 		"primarySearch":"true",
-		"weightage":16
+		"weightage":40
 	},
 	{
 		"dedupeType":"Enterprise",
@@ -52,5 +54,62 @@
 		"toleranceInDays":"365",
 		"primarySearch":"true",
 		"weightage":8
+	},
+	{
+		"dedupeType":"Enterprise",
+		"fieldName":"address",
+		"required":"true",
+		"matchType":"phonetic",
+		"toleranceInDays":"",
+		"primarySearch":"false",
+		"weightage":4
 	}
-]
+	],
+		"addressFields" : [
+		{
+			"dedupeType":"Individual",
+			"fieldName":"doorNo",
+			"matchType":"exact"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"street",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"postOffice",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"locality",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"district",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"state",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"pincode",
+			"matchType":"exact"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"villageName",
+			"matchType":"phonetic"
+		},
+		{
+			"dedupeType":"Individual",
+			"fieldName":"landmark",
+			"matchType":"phonetic"
+		}
+	]
+}
