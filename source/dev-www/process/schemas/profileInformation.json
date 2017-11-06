@@ -462,6 +462,38 @@
                             "vehicleMakeModel": {
                                 "type": "string",
                                 "title": "VEHICLE_MAKE_MODEL"
+                            },
+                            "endUse": {
+                                "type": ["string","null"],
+                                "title": "END_USE_OF_VEHICLE"
+                            },
+                            "natureOfUse": {
+                                "type": ["string","null"],
+                                "title": "NATURE_OF_USE"
+                            },
+                            "manufacturer": {
+                                "type": ["string","null"],
+                                "title": "MANUFACTURER"
+                            },
+                            "make": {
+                                "type": ["string","null"],
+                                "title": "MAKE"
+                            },
+                            "assetCategory": {
+                                "type": ["string","null"],
+                                "title": "CATEGORY"
+                            },
+                            "manufactureDate": {
+                                "type": "string",
+                                "title": "YEAR_AND_MONTH_OF_MANUFACTURE"
+                            },
+                            "subDetails": {
+                                "type": "string",
+                                "title": "SUB_DESCRIPTION"
+                            },
+                            "assetregistrationNumber": {
+                                "type": "string",
+                                "title": "REGISTRATION_NUMBER"
                             }
                         }
                     }

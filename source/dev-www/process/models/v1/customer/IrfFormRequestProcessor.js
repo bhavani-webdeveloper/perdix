@@ -1865,7 +1865,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                 "Leased": "Leased",
                                                 "Rental": "Rental",
                                             }*/
-
                                         }, 
                                         "individualDetails": {
                                             type: "fieldset",
@@ -4510,29 +4509,163 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 }
             },
             "householdeDetails": {
-                type: "box",
-                title:"HOUSEHOLD_DEATILS",
-                items:{
+                "type": "box",
+                "title": "FAMILY_SELF_DETAILS",
+                //"condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                "items": {
+                    "familyMembers": {
+                        key: "customer.familyMembers",
+                        type: "array",
+                        startEmpty: true,
+                        items: {
+                            "relationShipself": {
+                                key: "customer.familyMembers[].relationShip",
+                                readonly: true,
+                                condition: "(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
+                                type: "select",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    if (modelValue && modelValue.toLowerCase() === 'self') {
+                                        if (model.customer.id)
+                                            model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                        if (model.customer.firstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                        if (model.customer.dateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                        if (model.customer.mobilePhone)
+                                            model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                    } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                        if (model.customer.spouseFirstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                            (model.customer.gender == 'FEMALE' ? 'FEMALE' : model.customer.gender);
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                        if (model.customer.spouseDateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    }
+                                },
+                                title: "T_RELATIONSHIP"
+                            },
+                            "relationShip": {
+                                key: "customer.familyMembers[].relationShip",
+                                type: "select",
+                                condition: "(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    if (modelValue && modelValue.toLowerCase() === 'self') {
+                                        if (model.customer.id)
+                                            model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                        if (model.customer.firstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                        if (model.customer.dateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                        if (model.customer.mobilePhone)
+                                            model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                    } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                        if (model.customer.spouseFirstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                            (model.customer.gender == 'FEMALE' ? 'FEMALE' : model.customer.gender);
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                        if (model.customer.spouseDateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    }
+                                },
+                                title: "T_RELATIONSHIP"
+                            },
 
-                    "relationShip":{
-                        "key": "customer.relationShip",
-                        "title": "T_RELATIONSHIP",
-                        "type": "select",
-                        "readonly": true
+                            "familyMemberFirstName": {
+                                key: "customer.familyMembers[].familyMemberFirstName",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                title: "FAMILY_MEMBER_FULL_NAME"
+                            },
+                            "primaryOccupation": {
+                                "key": "customer.occupation1",
+                                "title": "PRIMARY_OCCUPATION",
+                                "type": "select"
+                            },
+
+                            "educationStatus": {
+                                key: "customer.familyMembers[].educationStatus",
+                                type: "select",
+                                required: true,
+                                title: "T_EDUCATION_STATUS"
+                            },
+                            "anualEducationFee": {
+                                key: "customer.familyMembers[].anualEducationFee",
+                                type: "amount",
+                                title: "ANNUAL_EDUCATION_FEE"
+                            },
+                            "salary": {
+                                key: "customer.familyMembers[].salary",
+                                type: "amount",
+                                title: "SALARY"
+                            },
+                            "incomes": {
+                                key: "customer.familyMembers[].incomes",
+                                type: "array",
+                                startEmpty: true,
+                                items: {
+                                    "incomeSource": {
+                                        key: "customer.familyMembers[].incomes[].incomeSource",
+                                        type: "select"
+                                    },
+                                    "incomeEarned": {
+                                        key: "customer.familyMembers[].incomes[].incomeEarned",
+                                    },
+                                    "frequency": {
+                                        key: "customer.familyMembers[].incomes[].frequency",
+                                        type: "select"
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "educationStatus":{
-                        "key": "customer.educationStatus",
-                        "title": "EDUCATION_LEVEL",
-                        "type": "select"
-                    },
-                    "primaryOccupation": {
-                        "key": "customer.occupation1",
-                        "title": "PRIMARY_OCCUPATION",
-                        "type": "select"
+                    "expenditures":{
+                        "key": "customer.expenditures",
+                        "type": "array",
+                        "title": "EXPENDITURES",
+                        "view": "fixed",
+                        "add": null,
+                        "remove": null,
+                        "items": {
+                            "expenditureSource":{
+                                "key": "customer.expenditures[].expenditureSource",
+                                "type": "select",
+                                required: true,
+                                "title": "EXPENSE_TYPE"
+                            }, 
+                            "annualExpenses":{
+                                "key": "customer.expenditures[].annualExpenses",
+                                "type": "amount",
+                                "title": "AMOUNT"
+                            }, 
+                            "frequency":{
+                                "key": "customer.expenditures[].frequency",
+                                "type": "select",
+                                readonly: true,
+                                "title": "FREQUENCY"
+                            }
+                        }
                     }
-                            
                 }
             },
+
+            
             "householdLiablities": {
                 type:"box",
                 title:"HOUSEHOLD_LIABILITIES",
@@ -4671,6 +4804,95 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
+            "reference": {
+                "type": "box",
+                "title": "REFERENCES",
+                "items": {
+                    "verifications": {
+                        key: "customer.verifications",
+                        title: "REFERENCES",
+                        type: "array",
+                        items: {
+                            /*{
+                                key:"customer.verifications[].relationship",
+                                title:"REFERENCE_TYPE",
+                                type:"select",
+                                required:"true",
+                               titleMap: {
+                                        "Neighbour": "Neighbour",
+                                        "Relative/friend": "Relative/friend"
+                                    }
+                            },*/
+                            "referenceFirstName": {
+                                key: "customer.verifications[].referenceFirstName",
+                                title: "CONTACT_PERSON_NAME",
+                                type: "string",
+                                required: true
+                            },
+                            "mobileNo": {
+                                key: "customer.verifications[].mobileNo",
+                                title: "CONTACT_NUMBER",
+                                type: "string",
+                                required: true,
+                                inputmode: "number",
+                                numberType: "tel",
+                                /*"schema":{
+                                    "pattern":"/[1-9]{1}[0-9]{9}$/"
+                                }*/
+                            },
+                            "occupation": {
+                                key: "customer.verifications[].occupation",
+                                title: "OCCUPATION",
+                                type: "select",
+                                "enumCode": "occupation",
+                            },
+                            "address": {
+                                key: "customer.verifications[].address",
+                                type: "textarea"
+                            },
+                            "referenceCheck": {
+                                type: "fieldset",
+                                title: "REFERENCE_CHECK",
+                                items: {
+                                    "knownSince": {
+                                        key: "customer.verifications[].knownSince",
+                                        required: true
+                                    },
+                                    "relationship": {
+                                        key: "customer.verifications[].relationship",
+                                        title: "REFERENCE_TYPE1",
+                                        type: "select",
+                                        required: true,
+                                        titleMap: {
+                                            "Neighbour": "Neighbour",
+                                            "Relative/friend": "Relative/friend"
+                                        }
+                                    },
+                                    "opinion": {
+                                        key: "customer.verifications[].opinion"
+                                    },
+                                    "financialStatus": {
+                                        key: "customer.verifications[].financialStatus"
+                                    },
+                                    "customerResponse": {
+                                        key: "customer.verifications[].customerResponse",
+                                        title: "CUSTOMER_RESPONSE",
+                                        required: true,
+                                        type: "select",
+                                        titleMap: [{
+                                            value: "positive",
+                                            name: "positive"
+                                        }, {
+                                            value: "Negative",
+                                            name: "Negative"
+                                        }]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "actionbox":{
                 "type": "actionbox",
                 "items": {
@@ -4684,8 +4906,166 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             }
-
         };
+
+        formRepository['EnterpriseEnrollment2'] = {
+            "BusinessLiabilities": {
+                type: "box",
+                title: "BUSINESS_LIABILITIES",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                items: {
+                    "liabilities": {
+                        key: "customer.liabilities",
+                        type: "array",
+                        startEmpty: true,
+                        title: "LIABILITIES",
+                        items: {
+                            "loanType": {
+                                key: "customer.liabilities[].loanType",
+                                type: "select",
+                                enumCode: "liability_loan_type"
+                            },
+                            "loanSource": {
+                                key: "customer.liabilities[].loanSource",
+                                type: "select",
+                                enumCode: "loan_source"
+                            },
+                            //"customer.liabilities[].instituteName",
+                            "loanAmountInPaisa": {
+                                key: "customer.liabilities[].loanAmountInPaisa",
+                                type: "amount"
+                            },
+                            "installmentAmountInPaisa": {
+                                key: "customer.liabilities[].installmentAmountInPaisa",
+                                type: "amount"
+                            },
+                            "outstandingAmountInPaisa": {
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                            },
+                            "startDate": {
+                                key: "customer.liabilities[].startDate",
+                                type: "date"
+                            },
+                            "maturityDate": {
+                                key: "customer.liabilities[].maturityDate",
+                                type: "date"
+                            },
+                            "noOfInstalmentPaid": {
+                                key: "customer.liabilities[].noOfInstalmentPaid",
+                                type: "number",
+                                title: "NO_OF_INSTALLMENT_PAID"
+                            },
+                            "frequencyOfInstallment": {
+                                key: "customer.liabilities[].frequencyOfInstallment",
+                                type: "select"
+                            },
+                            "liabilityLoanPurpose": {
+                                key: "customer.liabilities[].liabilityLoanPurpose",
+                                /*type:"select",
+                                enumCode: "loan_purpose_1"*/
+                            },
+                            "interestOnly": {
+                                key: "customer.liabilities[].interestOnly",
+                                type: "radios",
+                                title: "INTEREST_ONLY",
+                                enumCode: "decisionmaker"
+                            },
+                            "interestRate": {
+                                key: "customer.liabilities[].interestRate",
+                                type: "number",
+                                title: "RATE_OF_INTEREST"
+                            },
+                            "proofDocuments": {
+                                key: "customer.liabilities[].proofDocuments",
+                                title: "DOCUMENTS",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
+                            }
+
+                            /*{
+                                key:"customer.liabilities[].interestExpense",
+                                title:"INTEREST_EXPENSE"
+                            },
+                            {
+                                key:"customer.liabilities[].principalExpense",
+                                title:"PRINCIPAL_EXPENSE"
+                            }*/
+                        }
+                    }
+                }
+            },
+
+            "enterpriseAssets": {
+                type: "box",
+                title: "ASSET_DETAILS",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                items: {
+                    "enterpriseAssets": {
+                        key: "customer.enterpriseAssets",
+                        type: "array",
+                        startEmpty: true,
+                        title: "VEHICLE_INFORMATION",
+                        items: {
+                            "assetType": {
+                                key: "customer.enterpriseAssets[].assetType",
+                                orderNo: 10,
+                                type: "select"
+                            },
+                            "endUse": {
+                                key: "customer.enterpriseAssets[].endUse",
+                                orderNo: 20,
+                            },
+                            //"customer.liabilities[].instituteName",
+                            "natureOfUse": {
+                                key: "customer.enterpriseAssets[].natureOfUse",
+                                orderNo: 30,
+                            },
+                            "manufacturer": {
+                                key: "customer.enterpriseAssets[].manufacturer",
+                                orderNo: 40,
+                            },
+                            "make": {
+                                key: "customer.enterpriseAssets[].make",
+                                orderNo: 50,
+                            },
+                            "assetCategory": {
+                                key: "customer.enterpriseAssets[].assetCategory",
+                                orderNo: 60,
+                            },
+                            "vehicleMakeModel": {
+                                key: "customer.enterpriseAssets[].vehicleMakeModel",
+                                orderNo: 70,
+                            },
+                            "manufactureDate": {
+                                key: "customer.enterpriseAssets[].manufactureDate",
+                                orderNo: 80,
+                                type:"date"
+                            },
+                            "subDetails": {
+                                key: "customer.enterpriseAssets[].subDetails",
+                                orderNo: 90,
+                                type: "select"
+                            },
+                            "assetregistrationNumber": {
+                                key: "customer.enterpriseAssets[].assetregistrationNumber",
+                                orderNo: 100,
+                            },
+                            "valueOfAsset": {
+                                key: "customer.enterpriseAssets[].valueOfAsset",
+                                orderNo: 110,
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+
 
         return {
             getFormDefinition: function(formName, formRequest, configFile, model) {

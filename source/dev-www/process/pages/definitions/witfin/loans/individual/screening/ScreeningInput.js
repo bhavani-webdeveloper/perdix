@@ -84,7 +84,7 @@ function (
                             maximum: 3
                         },
                         {
-                            pageName: 'customer.EnterpriseEnrolment2',
+                            pageName: 'witfin.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
