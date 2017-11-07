@@ -2,6 +2,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager",
     function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager) {
         var formRepository = {}
+        
         formRepository['IndividualEnrollment'] = { 
             "CustomerInformation": {
                 "type": "box",
@@ -5553,7 +5554,478 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                 },   
             }
-        }
+        };
+
+        formRepository['VehicleValuation'] = {
+            "primaryInfo": {
+                "type": "box",
+                "title": "PRIMARY_INFORMATION",
+                "items": {
+                    "registrationNumber": {
+                        key: "loanAccount.vehicleLoanDetails.registrationNumber",
+                        title: "REGISTRATION_NUMBER"
+                    }
+                }
+            },
+
+            "valuationPriliminaryInformation": {
+                "type": "box",
+                "title": "VALUATION_PRILIMINARY_INFORMATION",
+                "items": {
+                    "valuationPurpose": {
+                        key: "loanAccount.vehicleLoanDetails.valuationPurpose",
+                        title: "PURPOSE_OF_VALUATION"
+                    },
+                    "valuationDate": {
+                        key: "loanAccount.vehicleLoanDetails.valuationDate",
+                        title: "DATE_OF_VALUATION",
+                    },
+                    "valuationPlace": {
+                        key: "loanAccount.vehicleLoanDetails.valuationPlace",
+                        title: "PLACE_OF_VALUATION",
+                    },
+                    "registeredOwnerName": {
+                        key: "loanAccount.vehicleLoanDetails.registeredOwnerName",
+                        title: "REGISTERED_OWNER_NAME",
+                    },
+                    "proposedOwnerName": {
+                        key: "loanAccount.vehicleLoanDetails.proposedOwnerName",
+                        title: "PROPOSED_OWNER_NAME",
+                    },
+                    "bankReferenceNumber": {
+                        key: "loanAccount.vehicleLoanDetails.bankReferenceNumber",
+                        title: "BANK_REFERENCE_NUMBER",
+                    }
+                }
+            },
+
+            "InspectionDetails": {
+                "type": "box",
+                "title": "INSPECTION_DETAILS",
+                "items": {
+                    "inspectionDate": {
+                        key: "loanAccount.vehicleLoanDetails.inspectionDate",
+                        title: "INSPECTION_DATE",
+                    },
+                    "inspectedBy": {
+                        key: "loanAccount.vehicleLoanDetails.inspectedBy",
+                        title: "INSPECTED_BY",
+                    },
+                    "vehicleMoved": {
+                        key: "loanAccount.vehicleLoanDetails.vehicleMoved",
+                        title: "VECHICLE_MOVED",
+                    },
+                    "inspectionLatitude": {
+                        key: "loanAccount.vehicleLoanDetails.inspectionLatitude",
+                        title: "PLACE_OF_INSPECTION",
+                    },
+                    "inspectionAltitude": {
+                        key: "loanAccount.vehicleLoanDetails.inspectionAltitude",
+                        title: "TIME_OF_INSPECTION",
+                    },
+                    "engineStarted": {
+                        key: "loanAccount.vehicleLoanDetails.engineStarted",
+                        title: "ENGINE_STARTED",
+                    },
+                }
+            },
+
+            "VehicleIdentityDetails": {
+                "type": "box",
+                "title": "VEHICLE_IDENTITY_DETAILS",
+                "items": {
+                    "make": {
+                        key: "loanAccount.vehicleLoanDetails.make",
+                        title: "MAKE"
+                    },
+                    "variant": {
+                        key: "loanAccount.vehicleLoanDetails.variant",
+                        title: "VARIANT",
+                    },
+                    "colour": {
+                        key: "loanAccount.vehicleLoanDetails.colour",
+                        title: "COLOUR",
+                    },
+                    "trailer": {
+                        key: "loanAccount.vehicleLoanDetails.trailer",
+                        title: "TRAILER",
+                    },
+                    "chasisNo": {
+                        key: "loanAccount.vehicleLoanDetails.chasisNo",
+                        title: "CHASIS_NO",
+                    },
+                    "engineNo": {
+                        key: "loanAccount.vehicleLoanDetails.engineNo",
+                        title: "ENGINE_NO",
+                    },
+                    "odometerReading": {
+                        key: "loanAccount.vehicleLoanDetails.odometerReading",
+                        title: "ODOMETER_READING",
+                    },
+                    "estimatedReading": {
+                        key: "loanAccount.vehicleLoanDetails.estimatedReading",
+                        title: "BANK_REFERENCE_NUMBER",
+                    },
+                    "transmission": {
+                        key: "loanAccount.vehicleLoanDetails.transmission",
+                        title: "TRANSMISSION",
+                    },
+                    "odometer": {
+                        key: "loanAccount.vehicleLoanDetails.odometer",
+                        title: "ODOMETER",
+                    },
+                    "usedFor": {
+                        key: "loanAccount.vehicleLoanDetails.usedFor",
+                        title: "USED_FOR",
+                    },
+                }
+            },
+
+            "RegistrationDetails": {
+                "type": "box",
+                "title": "REGISTRATION_DETAILS",
+                "items": {
+                    "reRegistered": {
+                        key: "loanAccount.vehicleLoanDetails.reRegistered",
+                        title: "RE_REGISTERED"
+                    },
+                    "previousRegistrationNumber": {
+                        key: "loanAccount.vehicleLoanDetails.previousRegistrationNumber",
+                        title: "PREVIOUS_REGISTRATION_NUMBER",
+                    },
+                    "registrationAsPerRcbook": {
+                        key: "loanAccount.vehicleLoanDetails.registrationAsPerRcbook",
+                        title: "REGISTRATION_AS_PER_RCBOOK",
+                    },
+                    "registrationAsPerActual": {
+                        key: "loanAccount.vehicleLoanDetails.registrationAsPerActual",
+                        title: "REGISTRATION_AS_PER_ACTUAL",
+                    },
+                    "numberPlateCOlour": {
+                        key: "loanAccount.vehicleLoanDetails.numberPlateCOlour",
+                        title: "NUMBER_PLATE_COLOUR",
+                    },
+                    "engineNo": {
+                        key: "loanAccount.vehicleLoanDetails.engineNo",
+                        title: "ENGINE_NO",
+                    },
+                    "registeredAddress": {
+                        key: "loanAccount.vehicleLoanDetails.registeredAddress",
+                        title: "REGISTERED_ADDRESS",
+                    },
+                    "ownerSerialNo": {
+                        key: "loanAccount.vehicleLoanDetails.ownerSerialNo",
+                        title: "OWNER_SERIAL_NO",
+                    },
+                    "registrationDate": {
+                        key: "loanAccount.vehicleLoanDetails.registrationDate",
+                        title: "REGISTRATION_DATE",
+                    },
+                    "vehicleClass": {
+                        key: "loanAccount.vehicleLoanDetails.vehicleClass",
+                        title: "VEHICLE_CLASS",
+                    },
+                    "bodyType": {
+                        key: "loanAccount.vehicleLoanDetails.bodyType",
+                        title: "BODY_TYPE",
+                    },
+                    "requestedLoanPurpose": {
+                        key: "loanAccount.vehicleLoanDetails.fuelUsed",
+                        title: "REQUESTED_LOAN_PURPOSE",
+                    },
+                    "fuelUsed": {
+                        key: "loanAccount.vehicleLoanDetails.cubicCapacity",
+                        title: "FUEL_USED",
+                    },
+                    "makersClassification": {
+                        key: "loanAccount.vehicleLoanDetails.makersClassification",
+                        title: "MAKER_CLASSIFICATION",
+                    },
+                    "seatingCapacity": {
+                        key: "loanAccount.vehicleLoanDetails.seatingCapacity",
+                        title: "SEATING_CAPACITY",
+                    },
+                    "unladenWeight": {
+                        key: "loanAccount.vehicleLoanDetails.unladenWeight",
+                        title: "UNLADEN_WEIGHT",
+                    },
+                    "hypothecatedTo": {
+                        key: "loanAccount.vehicleLoanDetails.hypothecatedTo",
+                        title: "HYPOTHECATED_TO",
+                    },
+                    "fitnesscertifiedUpto": {
+                        key: "loanAccount.vehicleLoanDetails.fitnesscertifiedUpto",
+                        title: "FITNESS_CERTIFIED_UP_TO",
+                    }
+                }
+            },
+
+            "permitAndTaxDetails": {
+                "type": "box",
+                "title": "PERMIT_AND_TAX_DETAILS",
+                "items": {
+                    "permitStatus": {
+                        key: "loanAccount.vehicleLoanDetails.permitStatus",
+                        title: "PERMIT_STATUS"
+                    },
+                    "permitValidUpto": {
+                        key: "loanAccount.vehicleLoanDetails.permitValidUpto",
+                        title: "PERMIT_VALID_UP_TO",
+                    },
+                    "operationroute": {
+                        key: "loanAccount.vehicleLoanDetails.operationroute",
+                        title: "OPERATION_ROUTE",
+                    },
+                    "taxPaid": {
+                        key: "loanAccount.vehicleLoanDetails.taxPaid",
+                        title: "TAX_PAID",
+                    },
+                    "taxValidUpto": {
+                        key: "loanAccount.vehicleLoanDetails.taxValidUpto",
+                        title: "TAX_VALID_UP_TO",
+                    }
+                }
+            },
+
+            "InsurenceDetails": {
+                "type": "box",
+                "title": "INSURENCE_DETAILS",
+                "items": {
+                    "insuranceCompany": {
+                        key: "loanAccount.vehicleLoanDetails.insuranceCompany",
+                        title: "INSURANCE_COMPANY"
+                    },
+                    "insurancePolicyNumber": {
+                        key: "loanAccount.vehicleLoanDetails.insurancePolicyNumber",
+                        title: "INSURANCE_POLICY_NUMBER",
+                    },
+                    "insuranceIdv": {
+                        key: "loanAccount.vehicleLoanDetails.insuranceIdv",
+                        title: "INSURANCE_IDV",
+                    },
+                    "taxPaid": {
+                        key: "loanAccount.vehicleLoanDetails.taxPaid",
+                        title: "TAX_PAID",
+                    },
+                    "insuranceValidTo": {
+                        key: "loanAccount.vehicleLoanDetails.insuranceValidTo",
+                        title: "INSURANCE_VALID_TO",
+                    },
+                    "insurancePolicyType": {
+                        key: "loanAccount.vehicleLoanDetails.insurancePolicyType",
+                        title: "INSURANCE_POLICY_TYPE",
+                    }
+                }
+            },
+
+            "otherRemarks": {
+                "type": "box",
+                "title": "Other_Remarks",
+                "items": {
+                    "modelUnderProduction": {
+                        key: "loanAccount.vehicleLoanDetails.modelUnderProduction",
+                        title: "MODEL_UNDER_PRODUCTION"
+                    },
+                    "accident": {
+                        key: "loanAccount.vehicleLoanDetails.accident",
+                        title: "ACCIDENT",
+                    },
+                    "accidentRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.accidentRemarks",
+                        title: "ACCIDENT_REMARKS",
+                    },
+                    "originalInvoiceValue": {
+                        key: "loanAccount.vehicleLoanDetails.originalInvoiceValue",
+                        title: "ORIGINAL_INVOICE_VALUE",
+                    },
+                    "majorRepair": {
+                        key: "loanAccount.vehicleLoanDetails.majorRepair",
+                        title: "MAJOR_REPAIR",
+                    },
+                    "currentInvoiceValue": {
+                        key: "loanAccount.vehicleLoanDetails.currentInvoiceValue",
+                        title: "CURRENT_INVOICE_VALUE",
+                    },
+                    "rcbookStatus": {
+                        key: "loanAccount.vehicleLoanDetails.rcbookStatus",
+                        title: "RC_BOOK_STATUS",
+                    }
+                }
+            },
+
+
+            "pastValuations": {
+                "type": "box",
+                "title": "PAST_VALUATIONS",
+                "items": {
+                    "financier": {
+                        key: "loanAccount.vehicleLoanDetails.financier",
+                        title: "FINANCIER"
+                    },
+                    "valuationDate": {
+                        key: "loanAccount.vehicleLoanDetails.valuationDate",
+                        title: "VALUATION_DATE",
+                    },
+                    "valuation": {
+                        key: "loanAccount.vehicleLoanDetails.valuation",
+                        title: "VALUATION",
+                    }
+                }
+            },
+
+            "conditionOfAsset": {
+                "type": "box",
+                "title": "CONDITION_OF_ASSETS",
+                "items": {
+                    "engineCondition": {
+                        key: "loanAccount.vehicleLoanDetails.engineCondition",
+                        title: "ENGINE_CONDITION"
+                    },
+                    "engineRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.engineRemarks",
+                        title: "ENGINE_REMARKS",
+                    },
+                    "batteryCondition": {
+                        key: "loanAccount.vehicleLoanDetails.batteryCondition",
+                        title: "BATTERY_CONDITION",
+                    },
+                    "batteryRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.batteryRemarks",
+                        title: "BATTERY_REMARKS",
+                    },
+                    "chasisCondition": {
+                        key: "loanAccount.vehicleLoanDetails.chasisCondition",
+                        title: "CHASIS_CONDITION",
+                    },
+                    "chasisRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.chasisRemarks",
+                        title: "CHASIS_REMARKS",
+                    },
+                    "paintCondition": {
+                        key: "loanAccount.vehicleLoanDetails.paintCondition",
+                        title: "PAINT_CONDITION",
+                    },
+                    "paintRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.paintRemarks",
+                        title: "PAINT_REMARKS",
+                    },
+                    "upholsteryCondition": {
+                        key: "loanAccount.vehicleLoanDetails.upholsteryCondition",
+                        title: "UPHOLSTERY_CONDITION",
+                    },
+                    "upholsteryRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.upholsteryRemarks",
+                        title: "UPHOLSTERY_REMARKS",
+                    },
+                    "transimissionCondition": {
+                        key: "loanAccount.vehicleLoanDetails.transimissionCondition",
+                        title: "TRANSMISSION_CONDITION",
+                    },
+                    "transmissionRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.transmissionRemarks",
+                        title: "TRANSMISSION_REMARKS",
+                    },
+                    "electricalPartsCondition": {
+                        key: "loanAccount.vehicleLoanDetails.electricalPartsCondition",
+                        title: "ELECTRICAL_PARTS_CONDITION",
+                    },
+                    "electricalPartsRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.electricalPartsRemarks",
+                        title: "ELECTRICAL_PARTS_REMARKS",
+                    },
+                    "bodyCondition": {
+                        key: "loanAccount.vehicleLoanDetails.bodyCondition",
+                        title: "BODY_CONDITION",
+                    },
+                    "seatingCapacity": {
+                        key: "loanAccount.vehicleLoanDetails.seatingCapacity",
+                        title: "SEATING_CAPACITY",
+                    },
+                    "suspensionCondition": {
+                        key: "loanAccount.vehicleLoanDetails.suspensionCondition",
+                        title: "SUSPENSION_CONDITION",
+                    },
+                    "tyreType": {
+                        key: "loanAccount.vehicleLoanDetails.tyreType",
+                        title: "TYRE_TYPE",
+                    },
+                    "lhFrontMake": {
+                        key: "loanAccount.vehicleLoanDetails.lhFrontMake",
+                        title: "LH_FRONT_MAKE",
+                    }
+                }
+            },
+
+            "Accessories": {
+                "type": "box",
+                "title": "ACCESSORIES",
+                "items": {
+                    "powerWindowFont": {
+                        key: "loanAccount.vehicleLoanDetails.powerWindowFont",
+                        title: "POWER_WINDOW_FRONT"
+                    },
+                    "powerWindowRear": {
+                        key: "loanAccount.vehicleLoanDetails.powerWindowRear",
+                        title: "POWER_WINDOW_REAR",
+                    },
+                    "powerSteering": {
+                        key: "loanAccount.vehicleLoanDetails.powerSteering",
+                        title: "POWER_STEERING",
+                    },
+                    "airbag": {
+                        key: "loanAccount.vehicleLoanDetails.airbag",
+                        title: "AIR_BAG_SYSTEM",
+                    },
+                    "accessories": {
+                        key: "loanAccount.vehicleLoanDetails.accessories",
+                        title: "ACCESSORIES",
+                    },
+                    "accessoriesStatus": {
+                        key: "loanAccount.vehicleLoanDetails.accessoriesStatus",
+                        title: "ACCESSORIES_STATUS",
+                    }
+                }
+            },
+
+            "Valuation": {
+                "type": "box",
+                "title": "VALUATION",
+                "items": {
+                    "valuationRating": {
+                        key: "loanAccount.vehicleLoanDetails.valuationRating",
+                        title: "VALUATION_RATING"
+                    },
+                    "futureLife": {
+                        key: "loanAccount.vehicleLoanDetails.futureLife",
+                        title: "EXPECTED_FUTURE_LIFE_OF_VEHICLE",
+                    },
+                    "currentMarketValue": {
+                        key: "loanAccount.vehicleLoanDetails.currentMarketValue",
+                        title: "MARKET_VALUE_AS_ON_DATE_OF_INSPECTION",
+                    },
+                    "distressValue": {
+                        key: "loanAccount.vehicleLoanDetails.distressValue",
+                        title: "DISTRESS_VALUE",
+                    }
+                }
+            },
+
+
+            "actionbox": {
+                "type": "actionbox",
+                //"condition": "model.customer.id",
+                "items": {
+                    "submit": {
+                        "type": "submit",
+                        "title": "SUBMIT"
+                    },
+                    "save": {
+                        "type": "save",
+                        "title": "OFFLINE_SAVE"
+                    },
+                }
+            }
+        };
 
 
 
