@@ -340,6 +340,15 @@
                      
                   ]
                },
+                "leadId":{
+                  "title":"Lead Id",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":10000000,
+                  "captureStages":[
+                    "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal" 
+                  ]
+               },
                "loanPurpose":{
                   "title":"Loan Purpose",
                   "type":"string",
