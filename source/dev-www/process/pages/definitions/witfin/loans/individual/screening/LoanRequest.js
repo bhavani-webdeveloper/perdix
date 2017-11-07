@@ -491,8 +491,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "revertReject.rejectReason",
                 "revertReject.targetStage",
                 "revertReject.sendBackButton",
-                "actionbox",
-                "actionbox.saveButton"
+                "actionBox",
+                "actionBox.saveButton"
+
                 
             ];
              

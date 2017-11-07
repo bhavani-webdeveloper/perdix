@@ -3637,7 +3637,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "dsaPayout": {
                         key: "loanAccount.dsaPayout",
                         type: "number",
-                        title: "DSA_LAYOUYT"
+                        title: "DSA_LAYOUT"
                     },
                     "estimatedEmi": {
                         key: "loanAccount.estimatedEmi",
@@ -3647,10 +3647,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-
+            
             "actionBox": {
                 "type": "actionbox",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView'",
                 "items": {
                     "saveButton": {
                         "type": "button",
