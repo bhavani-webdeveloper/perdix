@@ -292,7 +292,7 @@ define({
                                 "title": "VIEW_DSC_RESPONSE",
                                 "icon": "fa fa-eye",
                                 "style": "btn-primary",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
                                     console.log(form);
                                     console.warn(event);
@@ -602,7 +602,7 @@ define({
                                 "title": "VIEW_DSC_RESPONSE",
                                 "icon": "fa fa-eye",
                                 "style": "btn-primary",
-                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                                 "onClick": function(model, formCtrl, form, event) {
                                     console.log(form);
                                     console.warn(event);
