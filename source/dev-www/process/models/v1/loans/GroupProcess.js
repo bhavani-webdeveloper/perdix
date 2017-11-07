@@ -28,6 +28,14 @@ irf.models.factory('GroupProcess',
             url: endpoint + '/telecalling',
             isArray:true
         },
+        groupDisbursement: {
+            method: 'PUT',
+            url: endpoint + '/groupBatchDisburse',
+        },
+        closeGroup: {
+            method: 'PUT',
+            url: endpoint + '/close',
+        }
     });
 
     function PrinterConstants() {
