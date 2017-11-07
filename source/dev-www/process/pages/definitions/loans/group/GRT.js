@@ -206,6 +206,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -214,6 +215,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -222,6 +224,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -230,6 +233,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -238,6 +242,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -246,6 +251,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -288,6 +294,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -296,6 +303,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -304,6 +312,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -312,6 +321,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -320,6 +330,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -328,6 +339,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -336,6 +348,7 @@ define({
                     "key": "group.udf7",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -344,6 +357,7 @@ define({
                     "key": "group.udf8",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -352,6 +366,7 @@ define({
                     "key": "group.udf9",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -360,6 +375,7 @@ define({
                     "key": "group.udf10",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -368,6 +384,7 @@ define({
                     "key": "group.udf11",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -376,6 +393,7 @@ define({
                     "key": "group.udf12",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -384,6 +402,7 @@ define({
                     "key": "group.udf13",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -392,6 +411,7 @@ define({
                     "key": "group.udf14",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -400,6 +420,7 @@ define({
                     "key": "group.udf15",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -408,6 +429,7 @@ define({
                     "key": "group.udf16",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -416,6 +438,7 @@ define({
                     "key": "group.udf17",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -424,6 +447,7 @@ define({
                     "key": "group.udf18",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -432,6 +456,7 @@ define({
                     "key": "group.udf19",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -440,6 +465,7 @@ define({
                     "key": "group.udf20",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -448,6 +474,7 @@ define({
                     "key": "group.udf21",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -456,6 +483,7 @@ define({
                     "key": "group.udf22",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -499,6 +527,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -507,6 +536,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -515,6 +545,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -523,6 +554,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -531,6 +563,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -539,6 +572,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -547,6 +581,7 @@ define({
                     "key": "group.udf7",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -555,6 +590,7 @@ define({
                     "key": "group.udf8",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -563,6 +599,7 @@ define({
                     "key": "group.udf9",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -571,6 +608,7 @@ define({
                     "key": "group.udf10",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -579,6 +617,7 @@ define({
                     "key": "group.udf11",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -587,6 +626,7 @@ define({
                     "key": "group.udf12",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -595,6 +635,7 @@ define({
                     "key": "group.udf13",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -603,6 +644,7 @@ define({
                     "key": "group.udf14",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -611,6 +653,7 @@ define({
                     "key": "group.udf15",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -619,6 +662,7 @@ define({
                     "key": "group.udf16",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -627,6 +671,7 @@ define({
                     "key": "group.udf17",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
