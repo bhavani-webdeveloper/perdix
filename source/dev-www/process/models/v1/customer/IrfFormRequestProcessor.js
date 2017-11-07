@@ -2034,7 +2034,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             key: "lead.pincode",
                                             type: "lov",
                                             fieldType: "number",
-                                            autolov: true,
+                                            
                                             inputMap: {
                                                 "pincode": "lead.pincode",
                                                 "district": {
@@ -2099,7 +2099,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "key":"lead.referredBy",
                             "condition":"model.lead.leadSource=='Existing Customer Referral'",
                             "type": "lov",
-                            "autolov": true,
+                            
                             "lovonly": true,
                             // initialize: function(model, form, parentModel, context) {
 
@@ -3638,7 +3638,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "dsaPayout": {
                         key: "loanAccount.dsaPayout",
                         type: "number",
-                        title: "DSA_LAYOUT"
+                        title: "DSA_PAYOUT"
                     },
                     "estimatedEmi": {
                         key: "loanAccount.estimatedEmi",
@@ -4137,11 +4137,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "customerBranchId": {
                         key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
+                        orderNo: 10,
                         readonly:true,
                         type: "select"
                     },
                     "centerId":{
                         key:"customer.centreId",
+                        orderNo: 20,
                         type:"select",
                         readonly: true,
                         title:"CENTRE_NAME",
@@ -4154,6 +4156,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "centerId1":{
                         key: "customer.centreId",
                         type: "lov",
+                        orderNo: 30,
                         condition: "!customer.id",
                         autolov: true,
                         lovonly: true,
@@ -4201,11 +4204,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "photoImageId":{
                         key:"customer.photoImageId",
+                        orderNo: 40,
                         type:"file",
                         fileType:"image/*"
                     },
                     "title":{
                         "key": "customer.title",
+                        orderNo: 50,
                         "title": "TITLE",
                         "type": "select",
                         "enumCode": "title"
@@ -4213,6 +4218,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "firstName":{
                         key: "customer.firstName",
                         title:"FULL_NAME",
+                        orderNo: 60,
                         type:"string"
                     },
                     "enrolledAs":{
@@ -4226,6 +4232,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "dateOfBirth":{
                         key:"customer.dateOfBirth",
+                        orderNo:70,
                         required:true,
                         type:"date",
                         "onChange": function(modelValue, form, model) {
@@ -4236,6 +4243,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "age":{
                         key:"customer.age",
+                        orderNo: 80,
                         title: "AGE",
                         type:"number",
                         readonly: true
