@@ -1,12 +1,10 @@
-irf.pageCollection.factory("Pages__CentrePaymentCollection",
+irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","authService", "$rootScope","PagesDefinition",
+"$filter", "elementsUtils", "Utils","PagesDefinition",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,authService, $rootScope,PagesDefinition ){
-
-	var showDenomination = false;
+	$filter, elementsUtils, Utils,PagesDefinition ){
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -15,33 +13,24 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		"title": "CENTRE_PAYMENT_COLLECTION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-
-
-
-			if(!model.$$STORAGE_KEY$$){
-
-				model.showDenomination = showDenomination;
+			if (!model.$$STORAGE_KEY$$) {
+				model.showDenomination = false;
 				
 				PagesDefinition.getPageConfig("Page/Engine/CentrePaymentCollection").then(function(data){
-                    if(data.showDenomination != undefined && data.showDenomination !== null && data.showDenomination !=""){
-                        model.showDenomination = data.showDenomination;
-                        if(model.showDenomination){	
-							model.collectionDemandSummary.denominationFifty = null;
-							model.collectionDemandSummary.denominationFive = null;
-							model.collectionDemandSummary.denominationFiveHundred = null;
-							model.collectionDemandSummary.denominationHundred = null;
-							model.collectionDemandSummary.denominationOne = null;
-							model.collectionDemandSummary.denominationTen =null;
-							model.collectionDemandSummary.denominationThousand = null;
-							model.collectionDemandSummary.denominationTwenty = null;
-							model.collectionDemandSummary.denominationTwo = null;
-						};
-                    }
-                    console.log(model.showDenomination);
-                });
-
-                
-
+					if(data.showDenomination) {
+						model.showDenomination = data.showDenomination;
+						model.collectionDemandSummary.denominationFifty = null;
+						model.collectionDemandSummary.denominationFive = null;
+						model.collectionDemandSummary.denominationFiveHundred = null;
+						model.collectionDemandSummary.denominationHundred = null;
+						model.collectionDemandSummary.denominationOne = null;
+						model.collectionDemandSummary.denominationTen =null;
+						model.collectionDemandSummary.denominationThousand = null;
+						model.collectionDemandSummary.denominationTwenty = null;
+						model.collectionDemandSummary.denominationTwo = null;
+					}
+					$log.info("showDenomination: "+model.showDenomination);
+				});
 				model._offlineKey = formCtrl.$name+"Download" + "__" + SessionStore.getBranch();
 				var collectionData = StorageService.retrieveJSON(model._offlineKey);
 				model._storedData  = $stateParams.pageData;
@@ -72,8 +61,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				}
 				$log.info("I got initialized");
 			}
-
-			
 		},
 		offline: true,
 		getOfflineDisplayItem: function(item, index){
@@ -111,7 +98,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"key":"collectionDemandSummary.centreId",
 							"type":"select",
 							"title": "CENTRE",
-							"enumCode": "centre",
+							"enumCode": "usercentre",
 							filter: {
 								"parentCode": "branch_id"
 							},
@@ -713,7 +700,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						collectionDemandSummary.photoOfCentre = cds.photoOfCentre;
 						collectionDemandSummary.totalAmount = cds._denominationTotal;
 						
-						if(model.showDenomination){	
+						if (model.showDenomination) {
 							cashDenomination.denominationFifty = model.collectionDemandSummary.denominationFifty;
 							cashDenomination.denominationFive = model.collectionDemandSummary.denominationFive;
 							cashDenomination.denominationFiveHundred = model.collectionDemandSummary.denominationFiveHundred;
