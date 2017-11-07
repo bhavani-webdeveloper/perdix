@@ -76,7 +76,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     "items": [{
                             key: "lead.branchName",
                             type: "select",
-                            readonly: true
+                            "readonly": true
                         }, {
                             key: "lead.centreName",
                             type: "lov",
@@ -154,6 +154,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                     "type": "lov",
                                     // "autolov": true,
                                     "lovonly": true,
+                                    initialize: function(model, form, parentModel, context) {
+                                        model.branchId = parentModel.lead.branchName;
+                                        model.centreName = parentModel.lead.centreName;
+                                    },
                                     "inputMap": {
                                         "firstName": {
                                             "key": "lead.customerFirstName"
@@ -162,7 +166,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             "key": "lead.urnNo",
                                         },
                                         "branchId": {
-                                            "key": "lead.branchId",
+                                            "key": "lead.branchName",
                                             "type": "select",
                                             "screenFilter": true,
                                             "readonly": true
@@ -171,55 +175,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             "key": "lead.centreName",
                                             "type": "string",
                                             "readonly": true,
-
-                                        },
-                                        "centreId": {
-                                            key: "lead.centreId",
-                                            type: "lov",
-                                            autolov: true,
-                                            lovonly: true,
-                                            bindMap: {},
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form, model, context) {
-                                                var centres = SessionStore.getCentres();
-                                                var centreCode = formHelper.enum('centre').data;
-                                                var out = [];
-                                                if (centres && centres.length) {
-                                                    for (var i = 0; i < centreCode.length; i++) {
-                                                        for (var j = 0; j < centres.length; j++) {
-                                                            if (centreCode[i].value == centres[j].id) {
-
-                                                                out.push({
-                                                                    name: centreCode[i].name,
-                                                                    id: centreCode[i].value
-                                                                })
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                return $q.resolve({
-                                                    headers: {
-                                                        "x-total-count": out.length
-                                                    },
-                                                    body: out
-                                                });
-                                            },
-                                            onSelect: function(valueObj, model, context) {
-                                                model.lead.centreId = valueObj.id;
-                                                model.lead.centreName = valueObj.name;
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.name
-                                                ];
-                                            }
                                         },
                                     },
                                     "outputMap": {
-                                        "id": "lead.applicantCustomerId"
+                                        "id": "lead.applicantCustomerId",
+                                        "firstName": "lead.firstName"
                                     },
                                     "searchHelper": formHelper,
-                                    "search": function(inputModel, form) {
+                                    "search": function(inputModel, form,model) {
                                         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                         var branches = formHelper.enum('branch_id').data;
                                         var branchName;
@@ -230,7 +193,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         var promise = Enrollment.search({
                                             'branchName': branchName || SessionStore.getBranch(),
                                             'firstName': inputModel.firstName,
-                                            'centreId': inputModel.centreId,
+                                            'centreId': model.lead.centreId,
                                             'customerType': "individual",
                                             'urnNo': inputModel.urnNo
                                         }).$promise;
@@ -244,12 +207,18 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         ];
                                     },
                                     onSelect: function(valueObj, model, context) {
-
+                                        model.lead.leadName = model.lead.firstName;
                                     }
 
                                 }, {
                                     key: "lead.leadName",
-                                    title: "APPLICANT_NAME"
+                                    title: "APPLICANT_NAME",
+                                    "condition": "model.lead.applicantCustomerId",
+                                    "readonly": true,
+                                }, {
+                                    key: "lead.leadName",
+                                    title: "APPLICANT_NAME",                                    
+                                    "condition": "!model.lead.applicantCustomerId"
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
@@ -260,6 +229,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         "type": "lov",
                                         // "autolov": true,
                                         "lovonly": true,
+                                        initialize: function(model, form, parentModel, context) {
+                                            model.branchId = parentModel.lead.branchName;
+                                            model.centreName = parentModel.lead.centreName;
+                                        },
                                         "inputMap": {
                                             "firstName": {
                                                 "key": "lead.customerFirstName"
@@ -268,7 +241,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 "key": "lead.urnNo",
                                             },
                                             "branchId": {
-                                                "key": "lead.branchId",
+                                                "key": "lead.branchName",
                                                 "type": "select",
                                                 "screenFilter": true,
                                                 "readonly": true
@@ -276,56 +249,15 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             "centreName": {
                                                 "key": "lead.centreName",
                                                 "type": "string",
-                                                "readonly": true,
-
-                                            },
-                                            "centreId": {
-                                                key: "lead.centreId",
-                                                type: "lov",
-                                                autolov: true,
-                                                lovonly: true,
-                                                bindMap: {},
-                                                searchHelper: formHelper,
-                                                search: function(inputModel, form, model, context) {
-                                                    var centres = SessionStore.getCentres();
-                                                    var centreCode = formHelper.enum('centre').data;
-                                                    var out = [];
-                                                    if (centres && centres.length) {
-                                                        for (var i = 0; i < centreCode.length; i++) {
-                                                            for (var j = 0; j < centres.length; j++) {
-                                                                if (centreCode[i].value == centres[j].id) {
-
-                                                                    out.push({
-                                                                        name: centreCode[i].name,
-                                                                        id: centreCode[i].value
-                                                                    })
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function(valueObj, model, context) {
-                                                    model.lead.centreId = valueObj.id;
-                                                    model.lead.centreName = valueObj.name;
-                                                },
-                                                getListDisplayItem: function(item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-                                            },
+                                                "readonly": true
+                                            },                                           
                                         },
                                         "outputMap": {
-                                            "id": "lead.customerId"
+                                            "id": "lead.customerId",
+                                            "firstName": "lead.firstName",
                                         },
                                         "searchHelper": formHelper,
-                                        "search": function(inputModel, form) {
+                                        "search": function(inputModel, form, model) {
                                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                             var branches = formHelper.enum('branch_id').data;
                                             var branchName;
@@ -336,7 +268,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             var promise = Enrollment.search({
                                                 'branchName': branchName || SessionStore.getBranch(),
                                                 'firstName': inputModel.firstName,
-                                                'centreId': inputModel.centreId,
+                                                'centreId': model.lead.centreId,
                                                 'customerType': "enterprise",
                                                 'urnNo': inputModel.urnNo
                                             }).$promise;
@@ -350,11 +282,17 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             ];
                                         },
                                         onSelect: function(valueObj, model, context) {
-
+                                            model.lead.businessName = model.lead.firstName;
                                         }
 
                                     }, {
-                                        key: "lead.businessName"
+                                        key: "lead.businessName",
+                                        "condition":"model.lead.customerId",
+                                        "readonly": true
+                                    }, {
+                                        key: "lead.businessName",
+                                        "condition":"!model.lead.customerId",
+                                        // "readonly": true
                                     }, {
                                         key: "lead.companyRegistered",
                                         type: "radios",
