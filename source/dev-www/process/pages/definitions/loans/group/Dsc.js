@@ -17,12 +17,12 @@ define({
                 dscId: dscId
             }, function(resp, headers) {
                 PageHelper.hideLoader();
-                var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+                /*var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
                 dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
                 dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
                 dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
-                dataHtml += "</table>"
-                irfSimpleModal('DSC Check Details', dataHtml);
+                dataHtml += "</table>"*/
+                irfSimpleModal('DSC Response', resp.responseMessage);
             }, function(res) {
                 PageHelper.showErrors(res);
                 PageHelper.hideLoader();
