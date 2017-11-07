@@ -848,6 +848,10 @@ define({
                 preSave: function(model, form, formName) {},
                 doDSCCheck: function(model, form) {
                     PageHelper.clearErrors();
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('DSC', "Remarks is mandatory", 2000);
+                        return false;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('group-dsc-check', 'Performing DSC Check');
                     GroupProcess.DSCCheck({
@@ -926,6 +930,10 @@ define({
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
+                        return false;
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
@@ -945,6 +953,10 @@ define({
                 reject: function(model, form, formName) {
                     if (!model.review.rejectStage){
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
+                        return false;
+                    }
+                    if (!model.group.groupRemarks){
+                        irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
                     PageHelper.showLoader();

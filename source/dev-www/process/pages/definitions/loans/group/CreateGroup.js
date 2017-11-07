@@ -554,7 +554,7 @@ define({
                 "condition": "model.group.id",
                 "items": [{
                     "type": "submit",
-                    "title": "EDIT_GROUP"
+                    "title": "SUBMIT"
                 }]
             }],
 

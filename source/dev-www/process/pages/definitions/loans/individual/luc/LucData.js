@@ -185,12 +185,17 @@ define({
                                     },
                                     function(httpRes) {
                                         PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
+                                        PageHelper.showErrors(httpRes);
                                     }
                                 );
 
                                 model = Utils.removeNulls(model, true);
                                 PageHelper.hideLoader();
-
+                            },
+                            function(error) {
+                                PageHelper.showErrors(error);
+                                PageHelper.hideLoader();
+                                PageHelper.showProgress('Load-LUC', 'Some error while loading the loan details', 2000);
                             }
                         );
                     }
