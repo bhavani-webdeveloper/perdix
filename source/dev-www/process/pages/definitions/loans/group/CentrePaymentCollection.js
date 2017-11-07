@@ -193,6 +193,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"items": [
 					{
 						"key": "groupCollectionDemand[].collectiondemand",
+						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
 						"add": null,
 						"remove": null,
 						"view": "fixed",
@@ -205,9 +206,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"type": "section",
 									"htmlClass": "col-xs-5",
 									"items": [{
-										"key": "groupCollectionDemand[].collectiondemand[].customerName",
-										"readonly": true,
-										"notitle": true
+										"type": "section",
+										"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].totalToBeCollected|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (with overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
 									}]
 								},{
 									"type": "section",
@@ -217,6 +217,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										"type": "amount",
 										"notitle": true,
 										"onChange": function(modelValue, form, model){
+											var demand = model.groupCollectionDemand[form.arrayIndexes[0]].collectiondemand[form.arrayIndexes[1]];
+											demand.error = '';
+											if (demand.amountPaid > demand.totalToBeCollected) {
+												demand.error = "No advance payment allowed";
+												return;
+											}
 											var collected = 0;
 											var l1 = model.groupCollectionDemand.length;
 											for(i=0;i<l1;i++){
@@ -258,7 +264,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"items": [
 					{
 						"key": "groupCollectionDemand[].collectiondemand",
-						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName + model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue? ' ('+('OVERDUE'|translate)+')':''",
 						"add": null,
 						"remove": null,
 						"view": "fixed",
@@ -281,18 +286,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"items": [{
 										"key": "groupCollectionDemand[].collectiondemand[].amountPaid",
 										"type": "amount",
-										"notitle": true,
-										"onChange": function(modelValue, form, model){
-											var collected = 0;
-											var l1 = model.groupCollectionDemand.length;
-											for(i=0;i<l1;i++){
-												var l2=model.groupCollectionDemand[i].collectiondemand.length;
-												for(j=0;j<l2;j++){
-													collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
-												}
-											}
-											model.collected = collected;
-										}
+										"notitle": true
 									}]
 								},{
 									"type": "section",
@@ -511,9 +505,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			}]
 		}],
 		actions: {
-
 			valueOfDenoms : function(model,form){
-
 				var thousands = 1000*parseInt(model.collectionDemandSummary.denominationThousand,10);
 				var fivehundreds = 500*parseInt(model.collectionDemandSummary.denominationFiveHundred,10);
 				var hundreds = 100*parseInt(model.collectionDemandSummary.denominationHundred,10);
@@ -625,26 +617,38 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 
 				return;
 			},
-			preSave: function(model, formCtrl) {
-				/*$rootScope.$broadcast('schemaFormValidate');
-				if (formCtrl && formCtrl.$invalid) {
-					irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
-					return;
-				}*/
+			validateCollection: function(model, formCtrl) {
 				if (!(model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId)) {
 					PM.pop('collection-demand', 'Demand not avilable / Centre is mandatory', 5000);
-					return;
+					return false;
 				}
 				if (!model.collectionDemandSummary.latitude) {
 					PM.pop('collection-demand', 'Centre location is mandatory', 5000);
-					return;
+					return false;
 				}
 				if (!(model.collectionDemandSummary.photoOfCentre || model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre.data)) {
 					PM.pop('collection-demand', 'Centre Photo is mandatory', 5000);
-					return;
+					return false;
 				}
 				if(!this.valueOfDenoms(model)) {
 					PM.pop('collection-demand', 'Denomination Sum Does not Match Collected Amount',5000);
+					return false;
+				}
+				var memberError = false;
+				_.each(model.groupCollectionDemand, function(group, gk){
+					_.each(group.collectiondemand, function(v,k){
+						if (v.error) {
+							memberError = v.error + ' for ' + v.customerName + ' on Group - ' + v.groupCode;
+						}
+					});
+				});
+				if (memberError) {
+					PM.pop('collection-demand', memberError,5000);
+					return false;
+				}
+			},
+			preSave: function(model, formCtrl) {
+				if (!this.validateCollection(model, formCtrl)) {
 					return;
 				}
 
@@ -670,15 +674,11 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				return deferred.promise;
 			},
 			submit: function(model, formCtrl, formName) {
-				$log.info("formCtrl.$valid: " + formCtrl.$valid);
-
-				console.warn(model);
-				if(!this.valueOfDenoms(model)) {
-					PM.pop('collection-demand', 'Denomination Sum Does not Match Collected Amount',5000);
+				if (!this.validateCollection(model, formCtrl)) {
 					return;
 				}
+				$log.warn(model);
 				if (formCtrl.$valid) {
-
 					var cds = model.collectionDemandSummary;
 					var gcd = model.groupCollectionDemand;
 					var cd = [];
@@ -692,19 +692,19 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							});
 						});
 
-						var cashDenomination = {"denominationFifty": 0,
-										      "denominationFive": 0,
-										      "denominationFiveHundred": 0,
-										      "denominationHundred": 0,
-										      "denominationOne": 0,
-										      "denominationTen": 0,
-										      "denominationThousand": 1,
-										      "denominationTwenty": 0,
-										      "denominationTwo": 0,
-										      "denominationTwoThousand": 0
-										      };
-						
-						//var collectionDemandSummary = _.clone(cds);
+						var cashDenomination = {
+							"denominationFifty": 0,
+							"denominationFive": 0,
+							"denominationFiveHundred": 0,
+							"denominationHundred": 0,
+							"denominationOne": 0,
+							"denominationTen": 0,
+							"denominationThousand": 1,
+							"denominationTwenty": 0,
+							"denominationTwo": 0,
+							"denominationTwoThousand": 0
+						};
+
 						var collectionDemandSummary = {};
 						collectionDemandSummary.centreId = cds.centreId;
 						collectionDemandSummary.demandDate = cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD');
@@ -727,8 +727,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							collectionDemandSummary.cashDenomination = cashDenomination;
 						};
 
-						
-						
 						var requestObj = {
 							collectionDemandSummary: collectionDemandSummary,
 							collectionDemands: _.clone(cd)
