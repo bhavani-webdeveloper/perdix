@@ -2,7 +2,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager",
     function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager) {
         var formRepository = {}
-        
+
         formRepository['IndividualEnrollment'] = { 
             "CustomerInformation": {
                 "type": "box",
@@ -5566,6 +5566,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
         formRepository['VehicleValuation'] = {
             "primaryInfo": {
+                orderNo: 10,
                 "type": "box",
                 "title": "PRIMARY_INFORMATION",
                 "items": {
@@ -5577,15 +5578,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
 
             "valuationPriliminaryInformation": {
+                orderNo: 20,
                 "type": "box",
                 "title": "VALUATION_PRILIMINARY_INFORMATION",
                 "items": {
                     "valuationPurpose": {
                         key: "loanAccount.vehicleLoanDetails.valuationPurpose",
+                        type:"select",
                         title: "PURPOSE_OF_VALUATION"
                     },
                     "valuationDate": {
                         key: "loanAccount.vehicleLoanDetails.valuationDate",
+                        type:"select",
                         title: "DATE_OF_VALUATION",
                     },
                     "valuationPlace": {
@@ -5603,16 +5607,21 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "bankReferenceNumber": {
                         key: "loanAccount.vehicleLoanDetails.bankReferenceNumber",
                         title: "BANK_REFERENCE_NUMBER",
+                        "schema":{
+                            "type":"number"
+                        }
                     }
                 }
             },
 
             "InspectionDetails": {
                 "type": "box",
+                 orderNo: 30,
                 "title": "INSPECTION_DETAILS",
                 "items": {
                     "inspectionDate": {
                         key: "loanAccount.vehicleLoanDetails.inspectionDate",
+                        type:"date",
                         title: "INSPECTION_DATE",
                     },
                     "inspectedBy": {
@@ -5622,10 +5631,15 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "vehicleMoved": {
                         key: "loanAccount.vehicleLoanDetails.vehicleMoved",
                         title: "VECHICLE_MOVED",
+                        type:"select",
+                        "enumCode":"decisionmaker"
                     },
                     "inspectionLatitude": {
                         key: "loanAccount.vehicleLoanDetails.inspectionLatitude",
                         title: "PLACE_OF_INSPECTION",
+                        "type": "geotag",
+                        "latitude": "latitude",
+                        "longitude": "longitude",
                     },
                     "inspectionAltitude": {
                         key: "loanAccount.vehicleLoanDetails.inspectionAltitude",
@@ -5634,17 +5648,21 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "engineStarted": {
                         key: "loanAccount.vehicleLoanDetails.engineStarted",
                         title: "ENGINE_STARTED",
+                        type:"select",
+                        "enumCode":"decisionmaker"
                     },
                 }
             },
 
             "VehicleIdentityDetails": {
                 "type": "box",
+                orderNo: 40,
                 "title": "VEHICLE_IDENTITY_DETAILS",
                 "items": {
                     "make": {
                         key: "loanAccount.vehicleLoanDetails.make",
-                        title: "MAKE"
+                        title: "MAKE",
+                        type:"select"
                     },
                     "variant": {
                         key: "loanAccount.vehicleLoanDetails.variant",
@@ -5669,36 +5687,62 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "odometerReading": {
                         key: "loanAccount.vehicleLoanDetails.odometerReading",
                         title: "ODOMETER_READING",
+                        "schema":{
+                            "type":"number"
+                        }
                     },
                     "estimatedReading": {
                         key: "loanAccount.vehicleLoanDetails.estimatedReading",
                         title: "BANK_REFERENCE_NUMBER",
+                        "schema":{
+                            "type":"number"
+                        }
                     },
+
                     "transmission": {
                         key: "loanAccount.vehicleLoanDetails.transmission",
                         title: "TRANSMISSION",
+                        type:"radios",
+                        titleMap:{
+                            "Automatic":"Automatic",
+                            "Manual":"Manual"
+                        }
                     },
                     "odometer": {
                         key: "loanAccount.vehicleLoanDetails.odometer",
                         title: "ODOMETER",
+                        type:"radios",
+                        titleMap:{
+                            "Electronic":"Electronic",
+                            "Manual":"Manual"
+                        }
                     },
                     "usedFor": {
                         key: "loanAccount.vehicleLoanDetails.usedFor",
                         title: "USED_FOR",
+                        type:"select",
+                        titleMap:{
+                            "Commercial":"Commercial",
+                            "Non-commercial":"Non-commercial"
+                        }
                     },
                 }
             },
 
             "RegistrationDetails": {
                 "type": "box",
+                orderNo: 50,
                 "title": "REGISTRATION_DETAILS",
                 "items": {
                     "reRegistered": {
                         key: "loanAccount.vehicleLoanDetails.reRegistered",
-                        title: "RE_REGISTERED"
+                        title: "RE_REGISTERED",
+                        type:"select",
+                        "enumCode":"decisionmaker"
                     },
                     "previousRegistrationNumber": {
                         key: "loanAccount.vehicleLoanDetails.previousRegistrationNumber",
+                        condition:"model.loanAccount.vehicleLoanDetails.reRegistered=='Yes'",
                         title: "PREVIOUS_REGISTRATION_NUMBER",
                     },
                     "registrationAsPerRcbook": {
@@ -5711,6 +5755,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "numberPlateCOlour": {
                         key: "loanAccount.vehicleLoanDetails.numberPlateCOlour",
+                        type:"radios",
+                        titleMap:{
+                            "Yellow":"Yellow",
+                            "White":"White"
+                        },
                         title: "NUMBER_PLATE_COLOUR",
                     },
                     "engineNo": {
@@ -5728,14 +5777,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "registrationDate": {
                         key: "loanAccount.vehicleLoanDetails.registrationDate",
                         title: "REGISTRATION_DATE",
+                        type:"date"
                     },
                     "vehicleClass": {
                         key: "loanAccount.vehicleLoanDetails.vehicleClass",
                         title: "VEHICLE_CLASS",
+                        type:"select",
                     },
                     "bodyType": {
                         key: "loanAccount.vehicleLoanDetails.bodyType",
                         title: "BODY_TYPE",
+                        type:"select",
                     },
                     "requestedLoanPurpose": {
                         key: "loanAccount.vehicleLoanDetails.fuelUsed",
@@ -5744,6 +5796,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "fuelUsed": {
                         key: "loanAccount.vehicleLoanDetails.cubicCapacity",
                         title: "FUEL_USED",
+                        type:"select"
                     },
                     "makersClassification": {
                         key: "loanAccount.vehicleLoanDetails.makersClassification",
@@ -5751,6 +5804,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "seatingCapacity": {
                         key: "loanAccount.vehicleLoanDetails.seatingCapacity",
+                        type:"select",
                         title: "SEATING_CAPACITY",
                     },
                     "unladenWeight": {
@@ -5760,25 +5814,30 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "hypothecatedTo": {
                         key: "loanAccount.vehicleLoanDetails.hypothecatedTo",
                         title: "HYPOTHECATED_TO",
+                        type:"select"
                     },
                     "fitnesscertifiedUpto": {
                         key: "loanAccount.vehicleLoanDetails.fitnesscertifiedUpto",
                         title: "FITNESS_CERTIFIED_UP_TO",
+                        "type":"select"
                     }
                 }
             },
 
             "permitAndTaxDetails": {
                 "type": "box",
+                orderNo: 60,
                 "title": "PERMIT_AND_TAX_DETAILS",
                 "items": {
                     "permitStatus": {
                         key: "loanAccount.vehicleLoanDetails.permitStatus",
-                        title: "PERMIT_STATUS"
+                        title: "PERMIT_STATUS",
+                        type:"select"
                     },
                     "permitValidUpto": {
                         key: "loanAccount.vehicleLoanDetails.permitValidUpto",
                         title: "PERMIT_VALID_UP_TO",
+                        type:"date"
                     },
                     "operationroute": {
                         key: "loanAccount.vehicleLoanDetails.operationroute",
@@ -5787,21 +5846,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "taxPaid": {
                         key: "loanAccount.vehicleLoanDetails.taxPaid",
                         title: "TAX_PAID",
+                        type:"select"
                     },
                     "taxValidUpto": {
                         key: "loanAccount.vehicleLoanDetails.taxValidUpto",
                         title: "TAX_VALID_UP_TO",
+                        type:"date"
                     }
                 }
             },
 
             "InsurenceDetails": {
                 "type": "box",
+                orderNo: 70,
                 "title": "INSURENCE_DETAILS",
                 "items": {
                     "insuranceCompany": {
                         key: "loanAccount.vehicleLoanDetails.insuranceCompany",
-                        title: "INSURANCE_COMPANY"
+                        title: "INSURANCE_COMPANY",
+                        type:"select"
                     },
                     "insurancePolicyNumber": {
                         key: "loanAccount.vehicleLoanDetails.insurancePolicyNumber",
@@ -5817,18 +5880,21 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "insuranceValidTo": {
                         key: "loanAccount.vehicleLoanDetails.insuranceValidTo",
+                        type:"date",
                         title: "INSURANCE_VALID_TO",
                     },
                     "insurancePolicyType": {
                         key: "loanAccount.vehicleLoanDetails.insurancePolicyType",
                         title: "INSURANCE_POLICY_TYPE",
+                        type:"select"
                     }
                 }
             },
 
             "otherRemarks": {
                 "type": "box",
-                "title": "Other_Remarks",
+                "title": "OTHER_REMARKS",
+                orderNo: 80,
                 "items": {
                     "modelUnderProduction": {
                         key: "loanAccount.vehicleLoanDetails.modelUnderProduction",
@@ -5837,6 +5903,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "accident": {
                         key: "loanAccount.vehicleLoanDetails.accident",
                         title: "ACCIDENT",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "accidentRemarks": {
                         key: "loanAccount.vehicleLoanDetails.accidentRemarks",
@@ -5849,6 +5917,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "majorRepair": {
                         key: "loanAccount.vehicleLoanDetails.majorRepair",
                         title: "MAJOR_REPAIR",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "currentInvoiceValue": {
                         key: "loanAccount.vehicleLoanDetails.currentInvoiceValue",
@@ -5857,6 +5927,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "rcbookStatus": {
                         key: "loanAccount.vehicleLoanDetails.rcbookStatus",
                         title: "RC_BOOK_STATUS",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     }
                 }
             },
@@ -5865,6 +5937,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "pastValuations": {
                 "type": "box",
                 "title": "PAST_VALUATIONS",
+                orderNo: 90,
                 "items": {
                     "financier": {
                         key: "loanAccount.vehicleLoanDetails.financier",
@@ -5873,6 +5946,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "valuationDate": {
                         key: "loanAccount.vehicleLoanDetails.valuationDate",
                         title: "VALUATION_DATE",
+                        type:"date"
                     },
                     "valuation": {
                         key: "loanAccount.vehicleLoanDetails.valuation",
@@ -5884,10 +5958,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "conditionOfAsset": {
                 "type": "box",
                 "title": "CONDITION_OF_ASSETS",
+                orderNo: 100,
                 "items": {
                     "engineCondition": {
                         key: "loanAccount.vehicleLoanDetails.engineCondition",
-                        title: "ENGINE_CONDITION"
+                        title: "ENGINE_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "engineRemarks": {
                         key: "loanAccount.vehicleLoanDetails.engineRemarks",
@@ -5896,6 +5973,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "batteryCondition": {
                         key: "loanAccount.vehicleLoanDetails.batteryCondition",
                         title: "BATTERY_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "batteryRemarks": {
                         key: "loanAccount.vehicleLoanDetails.batteryRemarks",
@@ -5904,6 +5983,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "chasisCondition": {
                         key: "loanAccount.vehicleLoanDetails.chasisCondition",
                         title: "CHASIS_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "chasisRemarks": {
                         key: "loanAccount.vehicleLoanDetails.chasisRemarks",
@@ -5912,6 +5993,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "paintCondition": {
                         key: "loanAccount.vehicleLoanDetails.paintCondition",
                         title: "PAINT_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "paintRemarks": {
                         key: "loanAccount.vehicleLoanDetails.paintRemarks",
@@ -5920,6 +6003,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "upholsteryCondition": {
                         key: "loanAccount.vehicleLoanDetails.upholsteryCondition",
                         title: "UPHOLSTERY_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "upholsteryRemarks": {
                         key: "loanAccount.vehicleLoanDetails.upholsteryRemarks",
@@ -5928,6 +6013,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "transimissionCondition": {
                         key: "loanAccount.vehicleLoanDetails.transimissionCondition",
                         title: "TRANSMISSION_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "transmissionRemarks": {
                         key: "loanAccount.vehicleLoanDetails.transmissionRemarks",
@@ -5936,6 +6023,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "electricalPartsCondition": {
                         key: "loanAccount.vehicleLoanDetails.electricalPartsCondition",
                         title: "ELECTRICAL_PARTS_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "electricalPartsRemarks": {
                         key: "loanAccount.vehicleLoanDetails.electricalPartsRemarks",
@@ -5944,6 +6033,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "bodyCondition": {
                         key: "loanAccount.vehicleLoanDetails.bodyCondition",
                         title: "BODY_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "seatingCapacity": {
                         key: "loanAccount.vehicleLoanDetails.seatingCapacity",
@@ -5952,55 +6043,163 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "suspensionCondition": {
                         key: "loanAccount.vehicleLoanDetails.suspensionCondition",
                         title: "SUSPENSION_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
                     },
                     "tyreType": {
                         key: "loanAccount.vehicleLoanDetails.tyreType",
                         title: "TYRE_TYPE",
+                        type:"radios",
+                        enumCode:"vehicle_tyre_type"
                     },
                     "lhFrontMake": {
                         key: "loanAccount.vehicleLoanDetails.lhFrontMake",
                         title: "LH_FRONT_MAKE",
+                        type:"select",
+                        enumCode:"vehicle_tyre_type_make"
+                    },
+                    "lhFrontCondition": {
+                        key: "loanAccount.vehicleLoanDetails.lhFrontCondition",
+                        title: "LH_FRONT_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "rhFrontMake": {
+                        key: "loanAccount.vehicleLoanDetails.rhFrontMake",
+                        title: "RH_FRONT_MAKE",
+                        type:"select",
+                        enumCode:"vehicle_tyre_type_make"
+                    },
+                    "rhFrontCondition": {
+                        key: "loanAccount.vehicleLoanDetails.rhFrontCondition",
+                        title: "RH_FRONT_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "lhRearMake": {
+                        key: "loanAccount.vehicleLoanDetails.lhRearMake",
+                        title: "LH_REAR_MAKE",
+                        type:"select",
+                        enumCode:"vehicle_tyre_type_make"
+                    },
+                    "lhRearCondition": {
+                        key: "loanAccount.vehicleLoanDetails.lhRearCondition",
+                        title: "LH_REAR_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "rhRearMake": {
+                        key: "loanAccount.vehicleLoanDetails.rhRearMake",
+                        title: "LH_REAR_MAKE",
+                        type:"select",
+                        enumCode:"vehicle_tyre_type_make"
+                    },
+                    "rhrearCondition": {
+                        key: "loanAccount.vehicleLoanDetails.rhrearCondition",
+                        title: "LH_REAR_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "tyreRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.tyreRemarks",
+                        title: "TYRE_REMARKS",
+                    },
+                    "fogLampCondition": {
+                        key: "loanAccount.vehicleLoanDetails.fogLampCondition",
+                        title: "FOG_LAMP_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "fogLampRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.fogLampRemarks",
+                        title: "FOG_LAMP_REMARKS"
+                    },
+                    "gearBoxCondition": {
+                        key: "loanAccount.vehicleLoanDetails.gearBoxCondition",
+                        title: "GEAR_BOX_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "gearBoxremarks": {
+                        key: "loanAccount.vehicleLoanDetails.gearBoxremarks",
+                        title: "GEAR_BOX_REMARKS"
+                    },
+                    "steeringCondiiton": {
+                        key: "loanAccount.vehicleLoanDetails.steeringCondiiton",
+                        title: "STEERING_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "steeringRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.steeringRemarks",
+                        title: "STEERING_REMARKS",
+                    },
+                    "lightWiringCondition": {
+                        key: "loanAccount.vehicleLoanDetails.lightWiringCondition",
+                        title: "LIGHT_WIRING_CONDITION",
+                        type:"select",
+                        enumCode:"vehicle_condition"
+                    },
+                    "lightWiringRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.lightWiringRemarks",
+                        title: "LIGHT_WIRING_REMARKS",
                     }
                 }
             },
 
             "Accessories": {
                 "type": "box",
+                orderNo: 110,
                 "title": "ACCESSORIES",
                 "items": {
                     "powerWindowFont": {
                         key: "loanAccount.vehicleLoanDetails.powerWindowFont",
-                        title: "POWER_WINDOW_FRONT"
+                        title: "POWER_WINDOW_FRONT",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "powerWindowRear": {
                         key: "loanAccount.vehicleLoanDetails.powerWindowRear",
                         title: "POWER_WINDOW_REAR",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "powerSteering": {
                         key: "loanAccount.vehicleLoanDetails.powerSteering",
                         title: "POWER_STEERING",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "airbag": {
                         key: "loanAccount.vehicleLoanDetails.airbag",
                         title: "AIR_BAG_SYSTEM",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     },
                     "accessories": {
                         key: "loanAccount.vehicleLoanDetails.accessories",
                         title: "ACCESSORIES",
+                        type:"select",
+                        enumCode:"vehicle_accessory"
                     },
                     "accessoriesStatus": {
                         key: "loanAccount.vehicleLoanDetails.accessoriesStatus",
                         title: "ACCESSORIES_STATUS",
+                        type:"radios",
+                        enumCode:"decisionmaker"
                     }
                 }
             },
 
             "Valuation": {
                 "type": "box",
+                orderNo: 120,
                 "title": "VALUATION",
                 "items": {
                     "valuationRating": {
                         key: "loanAccount.vehicleLoanDetails.valuationRating",
+                        type:"select",
+                        enumCode:"vehicle_condition",
                         title: "VALUATION_RATING"
                     },
                     "futureLife": {
@@ -6018,9 +6217,127 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 }
             },
 
+            "photoCapture": {
+                "type": "box",
+                orderNo: 120,
+                "title": "VALUATION",
+                "items": {
+                    "Image1": {
+                        "type": "fieldset",
+                        "title": "IMAGE_1",
+                        "items": {
+                            "photoType1": {
+                                key: "loanAccount.vehicleLoanDetails.photoType1",
+                                title: "PHOTO_TYPE"
+                            },
+                            "photoFileId1": {
+                                key: "loanAccount.vehicleLoanDetails.photoFileId1",
+                                title: "IMAGE_1",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "Loan",
+                                "subCategory": "COLLATERALPHOTO"
+                            },
+                            "photoRemarks1": {
+                                key: "loanAccount.vehicleLoanDetails.photoRemarks1",
+                                title: "REMARKS"
+                            }
+                        }
+                    },
+                    "Image2":{
+                        "type": "fieldset",
+                        "title": "IMAGE_2",
+                        "items": {
+                            "photoType2": {
+                                key: "loanAccount.vehicleLoanDetails.photoType2",
+                                title: "PHOTO_TYPE"
+                            },
+                            "photoFileId2": {
+                                key: "loanAccount.vehicleLoanDetails.photoFileId2",
+                                title: "IMAGE_2",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "Loan",
+                                "subCategory": "COLLATERALPHOTO"
+                            },
+                            "photoRemarks2": {
+                                key: "loanAccount.vehicleLoanDetails.photoRemarks2",
+                                title:"REMARKS"
+                            }
+                        }
+                    },
+                    "Image3":{
+                        "type": "fieldset",
+                        "title": "IMAGE_3",
+                        "items": {
+                            "photoType3": {
+                                key: "loanAccount.vehicleLoanDetails.photoType3",
+                                title: "PHOTO_TYPE"
+                            },
+                            "photoFileId3": {
+                                key: "loanAccount.vehicleLoanDetails.photoFileId3",
+                                title: "IMAGE_3",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "Loan",
+                                "subCategory": "COLLATERALPHOTO"
+                            },
+                            "photoRemarks3": {
+                                key: "loanAccount.vehicleLoanDetails.photoRemarks3",
+                                title: "REMARKS"
+                            }
+                        }
+                    },
+                    "Image4":{
+                        "type": "fieldset",
+                        "title": "IMAGE_4",
+                        "items": {
+                            "photoType4": {
+                                key: "loanAccount.vehicleLoanDetails.photoType4",
+                                title: "PHOTO_TYPE"
+                            },
+                            "photoFileId4": {
+                                key: "loanAccount.vehicleLoanDetails.photoFileId4",
+                                title: "IMAGE_4",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "Loan",
+                                "subCategory": "COLLATERALPHOTO"
+                            },
+                            "photoRemarks4": {
+                                key: "loanAccount.vehicleLoanDetails.photoRemarks4",
+                                title:"REMARKS"
+                            }
+                        }
+                    }
+                }
+            },
+
+            "Recomendation": {
+                "type": "box",
+                orderNo: 130,
+                "title": "RECOMENDATION",
+                "items": {
+                    "recommendationStatus": {
+                        key: "loanAccount.vehicleLoanDetails.recommendationStatus",
+                        title: "RECOMMENDATION_STATUS"
+                    },
+                    "recommendationDate": {
+                        key: "loanAccount.vehicleLoanDetails.recommendationDate",
+                        title: "RECOMMENDATION_DATE",
+                        type:"date",
+                    },
+                    "recommendationRemarks": {
+                        key: "loanAccount.vehicleLoanDetails.recommendationRemarks",
+                        title: "RECOMMENDATION_REMARKS"
+                    }
+                }
+            },
+
 
             "actionbox": {
                 "type": "actionbox",
+                orderNo: 131,
                 //"condition": "model.customer.id",
                 "items": {
                     "submit": {
@@ -6039,8 +6356,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
         return {
             getFormDefinition: function(formName, formRequest, configFile, model) {
-                
-
                 var form = [],
                     keys;
                 if (Object.keys(formRepository).indexOf(formName) === -1)
