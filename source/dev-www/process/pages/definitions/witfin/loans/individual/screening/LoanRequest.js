@@ -405,7 +405,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                        },
                        "IRR": {
                             "readonly": true
-                       }
+                       },
                        "postReview": {
                             "readonly": true
                        }
