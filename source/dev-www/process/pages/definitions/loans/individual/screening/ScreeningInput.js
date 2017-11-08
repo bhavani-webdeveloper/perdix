@@ -117,7 +117,7 @@ function (
                             pageClass: 'loan-review',
                             minimum: 1,
                             maximum: 1
-                        }   
+                        }
                     ]);
                 },
         		"bundlePages": [],
@@ -266,7 +266,7 @@ function (
                         .then(function(settings){
                             BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
                         })
-                    
+
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){

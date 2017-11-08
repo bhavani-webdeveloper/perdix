@@ -48,14 +48,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         model.proxyIndicatorsHasValue = true;
                         $log.debug('PROXY_INDICATORS already has value');
                         }
-                        
+
                         bundleModel.business = model.customer;
 
                          if(model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined){
                                      model.customer.enterprise.isGSTAvailable = "No";
                          }
                          if(model.customer.enterprise.isGSTAvailable == "Yes"){
-                             model.customer.enterprise.companyRegistered = "YES";    
+                             model.customer.enterprise.companyRegistered = "YES";
                          }
 
                         if(model.customer.enterpriseCustomerRelations)
@@ -64,7 +64,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             for(i=0;i<model.customer.enterpriseCustomerRelations.length;i++) {
                                 linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
                             };
-                            
+
                             Queries.getCustomerBasicDetails({
                                 "ids": linkedIds
                             }).then(function(result) {
@@ -102,13 +102,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         model.customer.kgfsName = branch1[i].name;
                     }
                 }
-                
+
                 model.customer.centreId = centreName[0];
                 model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
                 model.customer.enterprise.isGSTAvailable = 'YES';
                 model.customer.enterprise.companyRegistered = "YES";
-            }   
+            }
             if (bundlePageObj){
                 model._bundlePageObj = bundlePageObj;
             }
@@ -138,40 +138,53 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "linkedToCustomerName": params.customer.firstName
                     };
 
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
                 }
             },
             "lead-loaded": function(bundleModel, model, obj){
                 $log.info(obj);
-                            model.customer.mobilePhone = obj.mobileNo;
-                            model.customer.gender = obj.gender;
-                            model.customer.firstName = obj.businessName;
-                            model.customer.maritalStatus=obj.maritalStatus;
-                            model.customer.customerBranchId=obj.branchId;
-                            model.customer.centreId=obj.centreId;
-                            model.customer.centreName=obj.centreName;
-                            model.customer.street=obj.addressLine2;
-                            model.customer.doorNo=obj.addressLine1;
-                            model.customer.pincode=obj.pincode;
-                            model.customer.district=obj.district;
-                            model.customer.state=obj.state;
-                            model.customer.locality=obj.area;
-                            model.customer.villageName=obj.cityTownVillage;
-                            model.customer.landLineNo=obj.alternateMobileNo;
-                            model.customer.dateOfBirth=obj.dob;
-                            model.customer.age=obj.age;
-                            model.customer.mobilePhone = obj.mobileNo;
-                            model.customer.latitude =obj.location;
-                            model.customer.id =obj.customerId;
-                            if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                                model.customer.enterprise = {};
-                            }
-                            model.customer.enterprise.ownership =obj.ownership;
-                            model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
-                            model.customer.enterprise.companyRegistered =obj.companyRegistered;
-                            model.customer.enterprise.businessType =obj.businessType;
-                            model.customer.enterprise.businessActivity=obj.businessActivity;
-                        },
+                var lep = null;
+                if (obj.customerId != null) {
+                    lep = Enrollment.getCustomerById({id: obj.customerId})
+                        .$promise;
+                    lep.then(function(res){
+                        PageHelper.showProgress("customer-load", "Done..", 5000);
+                        model.customer = Utils.removeNulls(res, true);
+                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                    }, function(httpRes){
+                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                    })
+                } else {
+                    model.customer.mobilePhone = obj.mobileNo;
+                    model.customer.gender = obj.gender;
+                    model.customer.firstName = obj.businessName;
+                    model.customer.maritalStatus=obj.maritalStatus;
+                    model.customer.customerBranchId=obj.branchId;
+                    model.customer.centreId=obj.centreId;
+                    model.customer.centreName=obj.centreName;
+                    model.customer.street=obj.addressLine2;
+                    model.customer.doorNo=obj.addressLine1;
+                    model.customer.pincode=obj.pincode;
+                    model.customer.district=obj.district;
+                    model.customer.state=obj.state;
+                    model.customer.locality=obj.area;
+                    model.customer.villageName=obj.cityTownVillage;
+                    model.customer.landLineNo=obj.alternateMobileNo;
+                    model.customer.dateOfBirth=obj.dob;
+                    model.customer.age=obj.age;
+                    model.customer.mobilePhone = obj.mobileNo;
+                    model.customer.latitude =obj.location;
+                    if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                        model.customer.enterprise = {};
+                    }
+                    model.customer.enterprise.ownership =obj.ownership;
+                    model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
+                    model.customer.enterprise.companyRegistered =obj.companyRegistered;
+                    model.customer.enterprise.businessType =obj.businessType;
+                    model.customer.enterprise.businessActivity=obj.businessActivity;
+                }
+
+            },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Inside new co-applicant of EnterpriseEnrollment");
 
@@ -188,7 +201,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "linkedToCustomerName": params.customer.firstName
                     };
 
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
                 }
             },
             "new-guarantor": function(bundleModel, model, params){
@@ -207,7 +220,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "linkedToCustomerName": params.customer.firstName
                     };
 
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
                 }
             },
             "origination-stage": function(bundleModel, model, obj){
@@ -217,7 +230,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 $log.info("Inside remove-customer-relation of EnterpriseEnrolment2");
                 /**
                  * Following to be Done
-                 * 
+                 *
                  * 1. Remove customer from Enterprise Customer Relation if exists.
                  */
 
@@ -268,7 +281,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "title":"CENTRE_NAME",
                                 "type": "string",
                                 "readonly": true,
-                                
+
                             },
                             "centreId":{
                                 key: "customer.centreId",
@@ -319,7 +332,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                         },
                         "outputMap": {
-                            "urnNo": "customer.urnNo", 
+                            "urnNo": "customer.urnNo",
                             "firstName":"customer.firstName"
                         },
                         "searchHelper": formHelper,
@@ -697,7 +710,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             var businessSectors = formHelper.enum('businessSector').data;
 
                             var selectedBusinessSector  = null;
-                            
+
                             for (var i=0;i<businessSectors.length;i++){
                                 if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
                                     selectedBusinessSector = businessSectors[i];
@@ -711,7 +724,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     out.push({
                                         name: businessSubsectors[i].name,
                                         value: businessSubsectors[i].value
-                                    })    
+                                    })
                                 }
                             }
                             return $q.resolve({
@@ -826,7 +839,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
-                            
+
                             {
                                 key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                                 title: "PARTNER_OF_ANY_OTHER_COMPANY",
@@ -1164,7 +1177,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         "key": "customer.landLineNo",
                         "inputmode": "number",
-                        "numberType": "tel"  
+                        "numberType": "tel"
                     },
                     "customer.doorNo",
                     "customer.street",
@@ -1447,8 +1460,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true, 
-                                        //maximum:99,                                     
+                                        required:true,
+                                        //maximum:99,
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                     {
@@ -1622,7 +1635,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                            {
                                key:"customer.liabilities[].loanType",
                                type:"select",
-                               enumCode:"liability_loan_type" 
+                               enumCode:"liability_loan_type"
                            },
                            {
                                key:"customer.liabilities[].loanSource",
@@ -1685,7 +1698,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 fileType: "application/pdf",
                                 using: "scanner"
                             }
-                           
+
                            /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
@@ -1793,7 +1806,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.buyerDetails[].buyerName",
                                 title: "BUYER_NAME",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
@@ -1822,7 +1835,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.buyerDetails[].product",
                                 title:"PRODUCT",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
@@ -1853,7 +1866,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.supplierDetails",
                         title:"SUPPLIERS_DEATILS",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.supplierDetails[].supplierName",
@@ -1878,9 +1891,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"PAYABLE_OUTSTANDING",
                                 type:"amount"
                             },
-                         ] 
-                     }     
-                ] 
+                         ]
+                     }
+                ]
             },
             {
                 "type": "box",
@@ -1891,7 +1904,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.supplierDetails",
                         title:"SUPPLIERS_DEATILS",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.supplierDetails[].supplierName",
@@ -1916,9 +1929,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"amount",
                                 title:"PAYABLE_OUTSTANDING",
                             },
-                         ] 
-                     }     
-                ] 
+                         ]
+                     }
+                ]
             },
             {
                type:"box",
@@ -1936,12 +1949,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.buyerDetails[].buyerName",
                                 title: "BUYER_NAME",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
                             },
-                            
+
                             {
                                 key: "customer.buyerDetails[].paymentDate",
                                 title: "PAYMENT_DATE",
@@ -1963,7 +1976,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.buyerDetails[].product",
                                 title:"PRODUCT",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
@@ -2297,7 +2310,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     },
                                 ]
                             },
-                               
+
                 ]
             },
              {
@@ -2309,13 +2322,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "MONTHLY_TURNOVER",
                         required:true,
                         type: "amount",
-                 
+
                     },
                     {
                         key: "customer.enterprise.monthlyBusinessExpenses",
                         title: "MONTHLY_BUSINESS_EXPENSES",
                         type: "amount",
-                    
+
                     },
                     {
                         key: "customer.enterprise.avgMonthlyNetIncome",
@@ -2364,7 +2377,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "AVERAGE_MONTHLY_NET_INCOME",
                         type: "amount"
                     },
-                
+
                         {
                                 type:"fieldset",
                                 title:"Income",
@@ -2393,7 +2406,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key: "customer.incomeThroughSales[].amount",
                                     title: "AMOUNT",
-                                    type: "amount"   
+                                    type: "amount"
                                 },
                                 {
                                     key: "customer.incomeThroughSales[].incomeSalesDate",
@@ -2410,7 +2423,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     using: "scanner"
                                 }
 
-                                
+
                             ]
                         },
                         {
@@ -2434,9 +2447,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     key: "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
                                     title: "DATE",
                                     type: "date"
-                                }, 
-                             ]    
-                        }, 
+                                },
+                             ]
+                        },
                          {
                                 type:"fieldset",
                                 title:"EXPENSES",
@@ -2565,10 +2578,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                             type: "amount"
                                         },
                                     ]
-                                },   
-                            
-                        
-                        
+                                },
+
+
+
                 ]
             },
             {
@@ -3158,7 +3171,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].relationship",
@@ -3183,7 +3196,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"string",
                                 inputmode: "number",
                                 numberType: "tel"
-                                
+
                             }/*,
                             {
                                 key:"customer.verifications[].businessSector",
@@ -3263,7 +3276,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -3276,7 +3289,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].relationship",
@@ -3367,7 +3380,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ]
                             }
 
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -3379,7 +3392,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.enterpriseBureauDetails",
                         title:"CB Check",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.enterpriseBureauDetails[].bureau",
@@ -3423,7 +3436,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"number"
                             },
 
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -3436,7 +3449,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.enterpriseBureauDetails",
                         title:"CB Check",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.enterpriseBureauDetails[].bureau",
@@ -3480,7 +3493,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"number"
                             },
 
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -3534,7 +3547,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         var count = 0;
                         for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != ""
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != null
                                 ) {
@@ -3588,7 +3601,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-                
+
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -3611,7 +3624,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         var count = 0;
                         for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != ""
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != null
                                 && model.customer.enterpriseRegistrations[i].registeredDate != ""
@@ -3644,10 +3657,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         for (var i = model.customer.enterpriseBureauDetails.length - 1; i >= 0; i--) {
                             if(!model.customer.enterpriseBureauDetails[i].fileId
                                 || !model.customer.enterpriseBureauDetails[i].bureau
-                                || model.customer.enterpriseBureauDetails[i].doubtful==null 
-                                || model.customer.enterpriseBureauDetails[i].loss==null 
-                                || model.customer.enterpriseBureauDetails[i].specialMentionAccount==null 
-                                || model.customer.enterpriseBureauDetails[i].standard==null 
+                                || model.customer.enterpriseBureauDetails[i].doubtful==null
+                                || model.customer.enterpriseBureauDetails[i].loss==null
+                                || model.customer.enterpriseBureauDetails[i].specialMentionAccount==null
+                                || model.customer.enterpriseBureauDetails[i].standard==null
                                 || model.customer.enterpriseBureauDetails[i].subStandard==null){
                                 commercialCheckFailed = true;
                                 break;
