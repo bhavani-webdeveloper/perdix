@@ -395,6 +395,26 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
     }
 
+    var configFile = function() {
+        return {
+            "currentStage": {
+                "ScreeningReview": {
+                    "overrides": {
+                       "LoanRecomendation": {
+                            "readonly": true
+                       },
+                       "IRR": {
+                            "readonly": true
+                       }
+                       "postReview": {
+                            "readonly": true
+                       }
+                    }
+                }
+            }
+            
+        }
+    }
 
     var getIncludes = function (model) {
             
@@ -612,7 +632,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     ""
                 ]
             };
-            self.form = IrfFormRequestProcessor.getFormDefinition('LoanRequest', formRequest);
+            self.form = IrfFormRequestProcessor.getFormDefinition('LoanRequest', formRequest, configFile(), model);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
