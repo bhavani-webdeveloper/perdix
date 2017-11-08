@@ -52,7 +52,8 @@
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/JournalMaintenanceDashboard",
-                "Page/JournalPostingDashboard"
+                "Page/JournalPostingDashboard",
+                "Page/JournalMultiPostingDashboard"
             ]
         },
         {

@@ -1974,7 +1974,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "educationStatus":{
                                             key: "lead.educationStatus",
                                             type: "select",
-                                            enumCode: "education",
+                                            enumCode: "applicant_education_status",
                                         /* titleMap: {
                                              "Below SSLC": "Below SSLC",
                                              "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
@@ -2277,7 +2277,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                            },*/
                         "loanAmountRequested":{
                             key: "lead.loanAmountRequested",
-                            
+                            type: "select",
+                            enumCode: "lead_amount_requested",
                             condition: "model.lead.interestedInProduct==='YES'",
                             
                         }, 
@@ -4252,7 +4253,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "customer.language",
                         title: "PREFERRED_LANGUAGE",
                         type: "select",
-                        enumCode: "language"
+                        enumCode: "applicant_preffered_language"
                     },
                     "fatherFirstName":{
                         key: "customer.fatherFirstName",
@@ -4353,23 +4354,29 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "careOf":{
                               key:"customer.careOf",
                               //required:true,
+                              orderNo: 10,
                               title:"C/O",
                             },
                             "doorNo":{
+                                orderNo: 20,
                                 key:"customer.doorNo"
                             },
                             "street":{
+                                orderNo: 30,
                                 key:"customer.street"
                             },
                             "postOffice":{
+                                orderNo: 40,
                                 key:"customer.postOffice"
                             },
                             "landmark":{
+                                orderNo: 50,
                                 key:"customer.landmark"
                             },
                             
                             "pincode":{
                                 key: "customer.pincode",
+                                orderNo: 60,
                                 type: "lov",
                                 fieldType: "number",
                                 autolov: true,
@@ -4689,34 +4696,41 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "loanSourceCategory": {
                                 key:"customer.liabilities[].loanSourceCategory",
                                 type: "select",
+                                orderNo: 10,
                                 title:"LOAN_SOURCE_CATEGORY",
-                                enumCode:"loan_source_category"
+                                enumCode:"applicant_loan_source_category"
                             },
                             "loanSource": {
                                 key:"customer.liabilities[].loanSource",
                                 type:"select",
+                                orderNo: 20,
                                 enumCode:"loan_source"
                             },
                             "loanAmountInPaisa": {
                                 key: "customer.liabilities[].loanAmountInPaisa",
+                                orderNo: 30,
                                 type: "amount"
                             },
                             "installmentAmountInPaisa": {
                                  key: "customer.liabilities[].installmentAmountInPaisa",
                                 type: "amount",
+                                orderNo: 40,
                                 title:"AVG_INSTALLEMENT_AMOUNT"
                             },
                             "outstandingAmountInPaisa": {
                                 key: "customer.liabilities[].outstandingAmountInPaisa",
                                 type: "amount",
+                                orderNo: 50,
                                 title: "OUTSTANDING_AMOUNT"
                             },
                             "startDate": {
                                 key: "customer.liabilities[].startDate",
+                                orderNo: 60,
                                 type:"date"
                             },
                             "maturityDate": {
                                 key:"customer.liabilities[].maturityDate",
+                                orderNo: 70,
                                 type:"date"
                             },
                             "noOfInstalmentPaid": {
@@ -4730,6 +4744,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "liabilityLoanPurpose": {
                                 key:"customer.liabilities[].liabilityLoanPurpose",
+                                type: "select",
+                                enumCode: "vehicle_loan_purpose"
                             },
                             "interestOnly": {
                                 key:"customer.liabilities[].interestOnly",
@@ -4765,7 +4781,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "ownership":{
                                 key:"customer.ownership",
                                 required:true,
-                                type:"select"
+                                type:"select",
+                                enumCode: "applicant_premise_owenership"
                             },
                             "udf29":{
                                 key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
@@ -5056,18 +5073,24 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 80,
                                 type:"date"
                             },
+                            "details": {
+                                key: "customer.enterpriseAssets[].details",
+                                orderNo: 90,
+                                type: "select",
+                                enumCode:"business_asset_description"
+                            },
                             "subDetails": {
                                 key: "customer.enterpriseAssets[].subDetails",
-                                orderNo: 90,
+                                orderNo: 100,
                                 type: "select"
                             },
                             "assetregistrationNumber": {
                                 key: "customer.enterpriseAssets[].assetregistrationNumber",
-                                orderNo: 100,
+                                orderNo: 110,
                             },
                             "valueOfAsset": {
                                 key: "customer.enterpriseAssets[].valueOfAsset",
-                                orderNo: 110,
+                                orderNo: 120,
                             }
                         }
                     }

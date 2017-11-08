@@ -487,6 +487,10 @@
                                 "type": "string",
                                 "title": "YEAR_AND_MONTH_OF_MANUFACTURE"
                             },
+                            "details": {
+                                "type": "string",
+                                "title": "DESCRIPTION"
+                            },
                             "subDetails": {
                                 "type": "string",
                                 "title": "SUB_DESCRIPTION"

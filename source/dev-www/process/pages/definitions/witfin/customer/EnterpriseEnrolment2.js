@@ -45,6 +45,7 @@ function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHel
                     "enterpriseAssets.enterpriseAssets.assetCategory",
                     "enterpriseAssets.enterpriseAssets.vehicleMakeModel",
                     "enterpriseAssets.enterpriseAssets.manufactureDate",
+                    "enterpriseAssets.enterpriseAssets.details",
                     "enterpriseAssets.enterpriseAssets.subDetails",
                     "enterpriseAssets.enterpriseAssets.assetregistrationNumber",
                     "enterpriseAssets.enterpriseAssets.valueOfAsset",
