@@ -227,7 +227,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         "key": "lead.customerId",
                                         "title": "CHOOSE_EXISTING_BUSINESS",
                                         "type": "lov",
-                                        // "autolov": true,
                                         "lovonly": true,
                                         initialize: function(model, form, parentModel, context) {
                                             model.branchId = parentModel.lead.branchName;
