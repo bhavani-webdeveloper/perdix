@@ -298,6 +298,10 @@
             "default": "Individual",
             "title": "ENTITY_TYPE"
          },
+         "applicantCustomerId": {
+            "type": "integer",
+            "title": "CHOOSE_EXISTING_APPLICANT"
+         },
          "customerTypeString": {
             "type": ["string", "null"],
             "default": "Individual",
