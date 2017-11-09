@@ -32,32 +32,6 @@
       },
       {
          "order":3,
-         "code":"Application",
-         "name":"Application",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":4,
-         "code":"ApplicationReview",
-         "name":"Application Review",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"ApplicationReview",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore3",
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":5,
          "code":"FieldAppraisal",
          "name":"FieldAppraisal",
          "stageType":"CAPTURE",
@@ -70,31 +44,7 @@
          ]
       },
       {
-         "order":6,
-         "code":"FieldAppraisalReview",
-         "name":"FieldAppraisal Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":7,
-         "code":"CentralRiskReview",
-         "name":"Central Risk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"FieldAppraisal",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":8,
+         "order":4,
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
@@ -107,7 +57,7 @@
          ]
       },
       {
-         "order":9,
+         "order":5,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",
@@ -119,7 +69,7 @@
          ]
       },
       {
-         "order":10,
+         "order":6,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -131,31 +81,7 @@
          ]
       },
       {
-         "order":11,
-         "code":"LoanInitiation",
-         "name":"Loan Input",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"Sanction",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":12,
-         "code":"PendingForPartner",
-         "name":"Pending for Partner",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":14,
+         "order":7,
          "code":"LoanBooking",
          "name":"Loan Booking",
          "stageType":"CAPTURE",
@@ -167,23 +93,11 @@
          ]
       },
       {
-         "order":15,
+         "order":8,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
          "sendSms":"Yes",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":16,
-         "code":"DocumentVerification",
-         "name":"Document Verification",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
          "smsCategory":"LoanBooking",
          "isAccountOpening":false,
          "allowedRoles":[
