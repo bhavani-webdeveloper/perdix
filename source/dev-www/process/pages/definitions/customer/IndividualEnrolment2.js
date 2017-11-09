@@ -1941,7 +1941,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     items:[
                                         {
                                             key:"customer.ownership",
-                                            required:true,
+                                            required:false, //DUMMY
                                             type:"select"
                                         },
                                         {
@@ -1952,7 +1952,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
                                             type:"select",
-                                            required:true,
+                                            required:false,//DUMMY
                                             title: "IN_CURRENT_AREA_SINCE"
                                         }
                                     ]
