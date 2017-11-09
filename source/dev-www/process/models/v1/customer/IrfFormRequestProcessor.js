@@ -5596,6 +5596,22 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "registrationNumber": {
                         key: "loanAccount.vehicleLoanDetails.registrationNumber",
                         title: "REGISTRATION_NUMBER"
+                    },
+                    "firstName": {
+                        key: "loanAccount.vehicleLoanDetails.firstName",
+                        title: "BORROWER_NAME"
+                    },
+                    "mobileNo": {
+                        key: "loanAccount.vehicleLoanDetails.mobileNo",
+                        title: "MOBILE_NO"
+                    },
+                    "AlternatemobileNo": {
+                        key: "loanAccount.vehicleLoanDetails.AlternatemobileNo",
+                        title: "ALTERNATE_MOBILE_NO"
+                    },
+                    "registeredaddress": {
+                        key: "loanAccount.vehicleLoanDetails.registeredaddress",
+                        title: "REGISTERED_ADDRESS"
                     }
                 }
             },
@@ -5612,7 +5628,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "valuationDate": {
                         key: "loanAccount.vehicleLoanDetails.valuationDate",
-                        type:"select",
+                        type:"date",
                         title: "DATE_OF_VALUATION",
                     },
                     "valuationPlace": {
@@ -5630,9 +5646,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "bankReferenceNumber": {
                         key: "loanAccount.vehicleLoanDetails.bankReferenceNumber",
                         title: "BANK_REFERENCE_NUMBER",
-                        "schema":{
-                            "type":"number"
-                        }
+                        inputmode: "number",
+                        numberType: "tel"  
                     }
                 }
             },
@@ -5710,44 +5725,34 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "odometerReading": {
                         key: "loanAccount.vehicleLoanDetails.odometerReading",
                         title: "ODOMETER_READING",
-                        "schema":{
-                            "type":"number"
-                        }
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "estimatedReading": {
                         key: "loanAccount.vehicleLoanDetails.estimatedReading",
                         title: "BANK_REFERENCE_NUMBER",
-                        "schema":{
-                            "type":"number"
-                        }
+                        inputmode: "number",
+                        numberType: "tel"
                     },
 
                     "transmission": {
                         key: "loanAccount.vehicleLoanDetails.transmission",
                         title: "TRANSMISSION",
                         type:"radios",
-                        titleMap:{
-                            "Automatic":"Automatic",
-                            "Manual":"Manual"
-                        }
+                        enumCode:"vehicle_transmission"
                     },
                     "odometer": {
                         key: "loanAccount.vehicleLoanDetails.odometer",
                         title: "ODOMETER",
                         type:"radios",
-                        titleMap:{
-                            "Electronic":"Electronic",
-                            "Manual":"Manual"
-                        }
+                        enumCode:"vehicle_odometer"
+                       
                     },
                     "usedFor": {
                         key: "loanAccount.vehicleLoanDetails.usedFor",
                         title: "USED_FOR",
                         type:"select",
-                        titleMap:{
-                            "Commercial":"Commercial",
-                            "Non-commercial":"Non-commercial"
-                        }
+                        enumCode:"vehicle_usedfor"
                     },
                 }
             },
@@ -5765,7 +5770,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "previousRegistrationNumber": {
                         key: "loanAccount.vehicleLoanDetails.previousRegistrationNumber",
-                        condition:"model.loanAccount.vehicleLoanDetails.reRegistered=='Yes'",
+                        condition:"model.loanAccount.vehicleLoanDetails.reRegistered=='YES'",
                         title: "PREVIOUS_REGISTRATION_NUMBER",
                     },
                     "registrationAsPerRcbook": {
@@ -5779,12 +5784,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "numberPlateCOlour": {
                         key: "loanAccount.vehicleLoanDetails.numberPlateCOlour",
                         type:"radios",
-                        titleMap:{
-                            "Yellow":"Yellow",
-                            "White":"White"
-                        },
+                        enumCode:"numberPlateCOlour",
                         title: "NUMBER_PLATE_COLOUR",
                     },
+                    "registeredownersname":{
+                         key: "loanAccount.vehicleLoanDetails.registeredownersname",
+                         title: "REGISTERED_OWNER_NAME",
+                    }
                     "engineNo": {
                         key: "loanAccount.vehicleLoanDetails.engineNo",
                         title: "ENGINE_NO",
@@ -5796,6 +5802,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "ownerSerialNo": {
                         key: "loanAccount.vehicleLoanDetails.ownerSerialNo",
                         title: "OWNER_SERIAL_NO",
+                        type:"select",
+                        "enumCode":"vehicle_ownerSerialNo"
                     },
                     "registrationDate": {
                         key: "loanAccount.vehicleLoanDetails.registrationDate",
@@ -5806,21 +5814,24 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.vehicleClass",
                         title: "VEHICLE_CLASS",
                         type:"select",
+                        enumCode:"vehicle_class"
                     },
                     "bodyType": {
                         key: "loanAccount.vehicleLoanDetails.bodyType",
                         title: "BODY_TYPE",
                         type:"select",
                     },
-                    "requestedLoanPurpose": {
-                        key: "loanAccount.vehicleLoanDetails.fuelUsed",
-                        title: "REQUESTED_LOAN_PURPOSE",
-                    },
                     "fuelUsed": {
+                        key: "loanAccount.vehicleLoanDetails.fuelUsed",
+                        title: "FUEL_USED",
+                        type:"select",
+                        enumCode:"vehicle_fuelUsed"
+                    },
+                    "cubicCapacity":{
                         key: "loanAccount.vehicleLoanDetails.cubicCapacity",
                         title: "FUEL_USED",
                         type:"select"
-                    },
+                    }
                     "makersClassification": {
                         key: "loanAccount.vehicleLoanDetails.makersClassification",
                         title: "MAKER_CLASSIFICATION",
@@ -5833,6 +5844,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "unladenWeight": {
                         key: "loanAccount.vehicleLoanDetails.unladenWeight",
                         title: "UNLADEN_WEIGHT",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "hypothecatedTo": {
                         key: "loanAccount.vehicleLoanDetails.hypothecatedTo",
@@ -5842,7 +5855,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "fitnesscertifiedUpto": {
                         key: "loanAccount.vehicleLoanDetails.fitnesscertifiedUpto",
                         title: "FITNESS_CERTIFIED_UP_TO",
-                        "type":"select"
+                        "type":"date"
                     }
                 }
             },
@@ -5896,10 +5909,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "insuranceIdv": {
                         key: "loanAccount.vehicleLoanDetails.insuranceIdv",
                         title: "INSURANCE_IDV",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "taxPaid": {
                         key: "loanAccount.vehicleLoanDetails.taxPaid",
                         title: "TAX_PAID",
+                    },
+                    "insurancevalidfrom": {
+                        key: "loanAccount.vehicleLoanDetails.insurancevalidfrom",
+                        type:"date",
+                        title: "INSURANCE_VALID_FROM",
                     },
                     "insuranceValidTo": {
                         key: "loanAccount.vehicleLoanDetails.insuranceValidTo",
@@ -5931,11 +5951,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "accidentRemarks": {
                         key: "loanAccount.vehicleLoanDetails.accidentRemarks",
+                        condition:"model.loanAccount.vehicleLoanDetails.accident=='YES'",
                         title: "ACCIDENT_REMARKS",
                     },
                     "originalInvoiceValue": {
                         key: "loanAccount.vehicleLoanDetails.originalInvoiceValue",
                         title: "ORIGINAL_INVOICE_VALUE",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "majorRepair": {
                         key: "loanAccount.vehicleLoanDetails.majorRepair",
@@ -5946,6 +5969,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "currentInvoiceValue": {
                         key: "loanAccount.vehicleLoanDetails.currentInvoiceValue",
                         title: "CURRENT_INVOICE_VALUE",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "rcbookStatus": {
                         key: "loanAccount.vehicleLoanDetails.rcbookStatus",
@@ -5984,186 +6009,221 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 orderNo: 100,
                 "items": {
                     "engineCondition": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.engineCondition",
                         title: "ENGINE_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "engineRemarks": {
+                        orderNo: 20,
                         key: "loanAccount.vehicleLoanDetails.engineRemarks",
                         title: "ENGINE_REMARKS",
                     },
                     "batteryCondition": {
+                        orderNo: 30,
                         key: "loanAccount.vehicleLoanDetails.batteryCondition",
                         title: "BATTERY_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "batteryRemarks": {
+                        orderNo: 40,
                         key: "loanAccount.vehicleLoanDetails.batteryRemarks",
                         title: "BATTERY_REMARKS",
                     },
                     "chasisCondition": {
+                        orderNo: 50,
                         key: "loanAccount.vehicleLoanDetails.chasisCondition",
                         title: "CHASIS_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "chasisRemarks": {
+                        orderNo: 60,
                         key: "loanAccount.vehicleLoanDetails.chasisRemarks",
                         title: "CHASIS_REMARKS",
                     },
                     "paintCondition": {
+                        orderNo: 70,
                         key: "loanAccount.vehicleLoanDetails.paintCondition",
                         title: "PAINT_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "paintRemarks": {
+                        orderNo: 80,
                         key: "loanAccount.vehicleLoanDetails.paintRemarks",
                         title: "PAINT_REMARKS",
                     },
                     "upholsteryCondition": {
+                        orderNo: 90,
                         key: "loanAccount.vehicleLoanDetails.upholsteryCondition",
                         title: "UPHOLSTERY_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "upholsteryRemarks": {
+                        orderNo: 100,
                         key: "loanAccount.vehicleLoanDetails.upholsteryRemarks",
                         title: "UPHOLSTERY_REMARKS",
                     },
                     "transimissionCondition": {
+                        orderNo: 110,
                         key: "loanAccount.vehicleLoanDetails.transimissionCondition",
                         title: "TRANSMISSION_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "transmissionRemarks": {
+                        orderNo: 120,
                         key: "loanAccount.vehicleLoanDetails.transmissionRemarks",
                         title: "TRANSMISSION_REMARKS",
                     },
                     "electricalPartsCondition": {
+                        orderNo: 130,
                         key: "loanAccount.vehicleLoanDetails.electricalPartsCondition",
                         title: "ELECTRICAL_PARTS_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "electricalPartsRemarks": {
+                        orderNo: 140,
                         key: "loanAccount.vehicleLoanDetails.electricalPartsRemarks",
                         title: "ELECTRICAL_PARTS_REMARKS",
                     },
                     "bodyCondition": {
+                        orderNo: 150,
                         key: "loanAccount.vehicleLoanDetails.bodyCondition",
                         title: "BODY_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "seatingCapacity": {
+                        orderNo: 160,
                         key: "loanAccount.vehicleLoanDetails.seatingCapacity",
                         title: "SEATING_CAPACITY",
                     },
                     "suspensionCondition": {
+                        orderNo: 170,
                         key: "loanAccount.vehicleLoanDetails.suspensionCondition",
                         title: "SUSPENSION_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "tyreType": {
+                        orderNo: 180,
                         key: "loanAccount.vehicleLoanDetails.tyreType",
                         title: "TYRE_TYPE",
                         type:"radios",
                         enumCode:"vehicle_tyre_type"
                     },
                     "lhFrontMake": {
+                        orderNo: 190,
                         key: "loanAccount.vehicleLoanDetails.lhFrontMake",
                         title: "LH_FRONT_MAKE",
                         type:"select",
                         enumCode:"vehicle_tyre_type_make"
                     },
                     "lhFrontCondition": {
+                        orderNo: 200,
                         key: "loanAccount.vehicleLoanDetails.lhFrontCondition",
                         title: "LH_FRONT_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "rhFrontMake": {
+                        orderNo: 210,
                         key: "loanAccount.vehicleLoanDetails.rhFrontMake",
                         title: "RH_FRONT_MAKE",
                         type:"select",
                         enumCode:"vehicle_tyre_type_make"
                     },
                     "rhFrontCondition": {
+                        orderNo: 220,
                         key: "loanAccount.vehicleLoanDetails.rhFrontCondition",
                         title: "RH_FRONT_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "lhRearMake": {
+                        orderNo: 230,
                         key: "loanAccount.vehicleLoanDetails.lhRearMake",
                         title: "LH_REAR_MAKE",
                         type:"select",
                         enumCode:"vehicle_tyre_type_make"
                     },
                     "lhRearCondition": {
+                        orderNo: 0,
                         key: "loanAccount.vehicleLoanDetails.lhRearCondition",
                         title: "LH_REAR_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "rhRearMake": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.rhRearMake",
-                        title: "LH_REAR_MAKE",
+                        title: "RH_REAR_MAKE",
                         type:"select",
                         enumCode:"vehicle_tyre_type_make"
                     },
                     "rhrearCondition": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.rhrearCondition",
-                        title: "LH_REAR_CONDITION",
+                        title: "RH_REAR_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "tyreRemarks": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.tyreRemarks",
                         title: "TYRE_REMARKS",
                     },
                     "fogLampCondition": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.fogLampCondition",
                         title: "FOG_LAMP_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "fogLampRemarks": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.fogLampRemarks",
                         title: "FOG_LAMP_REMARKS"
                     },
                     "gearBoxCondition": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.gearBoxCondition",
                         title: "GEAR_BOX_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "gearBoxremarks": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.gearBoxremarks",
                         title: "GEAR_BOX_REMARKS"
                     },
                     "steeringCondiiton": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.steeringCondiiton",
                         title: "STEERING_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "steeringRemarks": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.steeringRemarks",
                         title: "STEERING_REMARKS",
                     },
                     "lightWiringCondition": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.lightWiringCondition",
                         title: "LIGHT_WIRING_CONDITION",
                         type:"select",
                         enumCode:"vehicle_condition"
                     },
                     "lightWiringRemarks": {
+                        orderNo: 10,
                         key: "loanAccount.vehicleLoanDetails.lightWiringRemarks",
                         title: "LIGHT_WIRING_REMARKS",
                     }
@@ -6228,14 +6288,20 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "futureLife": {
                         key: "loanAccount.vehicleLoanDetails.futureLife",
                         title: "EXPECTED_FUTURE_LIFE_OF_VEHICLE",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "currentMarketValue": {
                         key: "loanAccount.vehicleLoanDetails.currentMarketValue",
                         title: "MARKET_VALUE_AS_ON_DATE_OF_INSPECTION",
+                        inputmode: "number",
+                        numberType: "tel"
                     },
                     "distressValue": {
                         key: "loanAccount.vehicleLoanDetails.distressValue",
                         title: "DISTRESS_VALUE",
+                        inputmode: "number",
+                        numberType: "tel"
                     }
                 }
             },

@@ -7,6 +7,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LeadDashboardCtrl"
 	},{
+		name: "Page.witfinLeadDashboard",
+		url: "/witfinLeadDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "witfinLeadDashboardCtrl"
+	},{
 		name: "Page.JournalMaintenanceDashboard",
 		url: "/JournalMaintenanceDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",

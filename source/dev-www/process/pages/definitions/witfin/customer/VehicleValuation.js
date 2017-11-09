@@ -439,8 +439,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "RegistrationDetails.registrationDate",
                 "RegistrationDetails.vehicleClass",
                 "RegistrationDetails.bodyType",
-                "RegistrationDetails.requestedLoanPurpose",
                 "RegistrationDetails.fuelUsed",
+                "RegistrationDetails.cubicCapacity",
                 "RegistrationDetails.makersClassification",
                 "RegistrationDetails.seatingCapacity",
                 "RegistrationDetails.unladenWeight",
@@ -457,6 +457,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "InsurenceDetails.insurancePolicyNumber",
                 "InsurenceDetails.insuranceIdv",
                 "InsurenceDetails.taxPaid",
+                "InsurenceDetails.insurancevalidfrom",
                 "InsurenceDetails.insuranceValidTo",
                 "InsurenceDetails.insurancePolicyType",
                 "otherRemarks",
@@ -550,7 +551,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         "title": "LOAN_REQUEST",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-            model.currentStage = bundleModel.currentStage;
+            //model.currentStage = bundleModel.currentStage;
             model.customer=model.customer || {};
             model.review = model.review|| {};
             model.temp=model.temp||{}

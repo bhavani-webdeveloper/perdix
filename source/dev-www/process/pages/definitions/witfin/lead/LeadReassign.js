@@ -1,7 +1,10 @@
-irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Lead", "SessionStore",
-    "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper",
+define({
+    pageUID: "witfin.lead.LeadReassign",
+    pageType: "Engine",
+    dependencies: ["$log", "$state", "$stateParams", "Lead", "SessionStore",
+    "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper"],
 
-    function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, LeadHelper) {
 
         return {
@@ -130,4 +133,4 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
             }
         };
     }
-]);
+})
