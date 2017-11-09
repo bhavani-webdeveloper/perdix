@@ -60,7 +60,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "GROUP",
+            "title": "DSC",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.group = model.group || {};
