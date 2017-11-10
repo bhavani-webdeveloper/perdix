@@ -5790,7 +5790,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "registeredownersname":{
                          key: "loanAccount.vehicleLoanDetails.registeredownersname",
                          title: "REGISTERED_OWNER_NAME",
-                    }
+                    },
                     "engineNo": {
                         key: "loanAccount.vehicleLoanDetails.engineNo",
                         title: "ENGINE_NO",
@@ -5831,7 +5831,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.cubicCapacity",
                         title: "FUEL_USED",
                         type:"select"
-                    }
+                    },
                     "makersClassification": {
                         key: "loanAccount.vehicleLoanDetails.makersClassification",
                         title: "MAKER_CLASSIFICATION",
