@@ -15,8 +15,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         var isCBCheckValid = function (model) {
             var deferred = $q.defer();
             var customerIdList = [model.loanAccount.customerId];
-            var validUrns = [model.loanAccount.customer.urnNo];
-            var urns = [], invalidUrns = [];
+            var validUrns = [];
+            var urns = [model.loanAccount.customer.urnNo], invalidUrns = [];
 
             Queries.getLatestCBCheckDoneDateByCustomerIds(customerIdList).then(function(resp) {
                 if(resp && resp.length > 0){
