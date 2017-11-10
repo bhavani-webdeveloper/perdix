@@ -2437,7 +2437,8 @@
             "title": "ID_PROOF_BACK_SIDE",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "udf31": {
@@ -2590,7 +2591,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "landLineNo": {
@@ -2599,7 +2603,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "landmark": {
@@ -2608,7 +2615,10 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "mobilePhone": {
@@ -2617,7 +2627,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "stdCode": {
@@ -2626,7 +2639,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "doorNo": {
@@ -2635,7 +2651,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "street": {
@@ -2644,7 +2663,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "oldCustomerId": {
@@ -2653,7 +2675,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "postOffice": {
@@ -2662,7 +2687,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "locality": {
@@ -2671,7 +2699,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "district": {
@@ -2680,7 +2711,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "state": {
@@ -2689,7 +2723,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "pincode": {
@@ -2698,14 +2735,20 @@
             "minimum": 100000,
             "maximum": 999999,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "verified": {
             "title": "verified",
             "type": "boolean",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "villageName": {
@@ -2714,7 +2757,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "distanceFromBranch": {
@@ -2723,7 +2769,10 @@
             "minimum": 0,
             "maximum": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "properAndMatchingSignboard": {
@@ -2732,7 +2781,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "bribeOffered": {
@@ -2741,7 +2793,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "shopOrganized": {
@@ -2750,7 +2805,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "isIndustrialArea": {
@@ -2759,7 +2817,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "customerAttitudeToKinara": {
@@ -2768,7 +2829,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "bookKeepingQuality": {
@@ -2777,7 +2841,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "challengingChequeBounce": {
@@ -2786,7 +2853,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "allMachinesAreOperational": {
@@ -2795,7 +2865,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "employeeSatisfaction": {
@@ -2804,7 +2877,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "politicalOrPoliceConnections": {
@@ -2813,7 +2889,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "multipleProducts": {
@@ -2822,7 +2901,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "multipleBuyers": {
@@ -2831,7 +2913,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "seasonalBusiness": {
@@ -2840,7 +2925,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "incomeStability": {
@@ -2849,7 +2937,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "utilisationOfBusinessPremises": {
@@ -2858,7 +2949,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "approachForTheBusinessPremises": {
@@ -2867,7 +2961,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "safetyMeasuresForEmployees": {
@@ -2876,7 +2973,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "childLabours": {
@@ -2885,7 +2985,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "isBusinessEffectingTheEnvironment": {
@@ -2894,7 +2997,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "stockMaterialManagement": {
@@ -2903,7 +3009,10 @@
             "minLength": 1,
             "maxLength": 1000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "customerWalkinToBusiness": {
@@ -2912,7 +3021,10 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "partnerCode": {
@@ -2921,7 +3033,10 @@
             "minLength": 0,
             "maxLength": 45,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           }
         }
@@ -2942,7 +3057,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessHistory": {
@@ -2951,7 +3069,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessDescription": {
@@ -2960,7 +3081,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "corporateName": {
@@ -2969,7 +3093,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "registeredOffice": {
@@ -2978,7 +3105,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "companyOperatingSince": {
@@ -2987,7 +3117,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "registeredAt": {
@@ -2996,7 +3129,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "registrationDate": {
@@ -3004,7 +3140,10 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "registrationNumber": {
@@ -3013,7 +3152,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "companyWebsite": {
@@ -3022,7 +3164,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessName": {
@@ -3031,7 +3176,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessType": {
@@ -3040,7 +3188,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessLine": {
@@ -3049,7 +3200,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessActivity": {
@@ -3058,7 +3212,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessSector": {
@@ -3067,7 +3224,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessSubsector": {
@@ -3076,7 +3236,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessConstitution": {
@@ -3085,7 +3248,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessAddress1": {
@@ -3094,7 +3260,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessAddress2": {
@@ -3103,7 +3272,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "state": {
@@ -3112,7 +3284,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "district": {
@@ -3121,7 +3296,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "pincode": {
@@ -3130,7 +3308,10 @@
             "minimum": 100000,
             "maximum": 999999,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessLandline1": {
@@ -3139,7 +3320,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "landmark": {
@@ -3148,7 +3332,10 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "referredBy": {
@@ -3157,7 +3344,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "referredName": {
@@ -3166,7 +3356,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "ownership": {
@@ -3175,7 +3368,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "companyRegistered": {
@@ -3184,7 +3380,10 @@
             "minLength": 1,
             "maxLength": 3,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "registrationType": {
@@ -3193,7 +3392,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "monthlyTurnover": {
@@ -3202,7 +3404,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "monthlyBusinessExpenses": {
@@ -3211,7 +3416,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "avgMonthlyNetIncome": {
@@ -3220,7 +3428,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "noOfFemaleEmployees": {
@@ -3229,7 +3440,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "noOfMaleEmployees": {
@@ -3238,7 +3452,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "avgMonthlySalary": {
@@ -3247,7 +3464,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "itrAvailable": {
@@ -3256,7 +3476,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "anyPartnerOfPresentBusiness": {
@@ -3265,7 +3488,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "partnershipDissolvedDate": {
@@ -3274,7 +3500,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "noOfPartners": {
@@ -3283,7 +3512,10 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessInCurrentAddressSince": {
@@ -3292,7 +3524,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "businessInPresentAreaSince": {
@@ -3301,7 +3536,10 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+             "Stage01",
+              "Stage02",
+              "EDF",
+              "Completed"
             ]
           },
           "rawMaterial": {
