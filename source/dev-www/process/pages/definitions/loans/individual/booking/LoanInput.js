@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var bankName = SessionStore.getBankName();
         var bankId;
         var showLoanBookingDetails = false;
-        
+
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
 
         var getSanctionedAmount = function(model){
@@ -252,18 +252,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     });
                     //model.loanAccount.guarantors = [];
                     for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
-                        if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' || 
+                        if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
                             model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
                         }
-                        else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' || 
+                        else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
                             model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
                         }
-                        else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' || 
+                        else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                                 model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
                             model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
@@ -766,7 +766,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         return Queries.getLoanPurpose1(model.loanAccount.productCode);
                                     else
                                         return Queries.getAllLoanPurpose1();
-                                    
+
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1223,7 +1223,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         return Queries.getLoanPurpose1(model.loanAccount.productCode);
                                     else
                                         return Queries.getAllLoanPurpose1();
-                                    
+
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1321,7 +1321,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "required": true
                     }
                 ]
-            }, 
+            },
             {
                 "type":"box",
                 "title":"COLLATERAL",
@@ -1745,7 +1745,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         },
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            
+
                                             var trancheConditions = formHelper.enum('tranche_conditions').data;
                                             var out = [];
                                             for (var i=0;i<trancheConditions.length; i++){
@@ -1757,7 +1757,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                     out.push({
                                                         name: trancheConditions[i].name,
                                                         value: trancheConditions[i].value
-                                                    })    
+                                                    })
                                                 }
                                             }
                                             return $q.resolve({
@@ -2054,7 +2054,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         },
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            
+
                                             var trancheConditions = formHelper.enum('tranche_conditions').data;
                                             var out = [];
                                             for (var i=0;i<trancheConditions.length; i++){
@@ -2066,7 +2066,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                     out.push({
                                                         name: trancheConditions[i].name,
                                                         value: trancheConditions[i].value
-                                                    })    
+                                                    })
                                                 }
                                             }
                                             return $q.resolve({
@@ -2195,7 +2195,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type":"box",
                 "title":"Partner Remarks",
                 "condition": "model.siteCode == 'IFMRCapital' && model.loanAccount.partnerApprovalStatus",
-                "readonly": true,  
+                "readonly": true,
                 "items":[
                     {
                         key:"loanAccount.partnerApprovalStatus",
@@ -2286,7 +2286,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 }
                             },
-                                
+
                             {
                                 key: "review.rejectButton",
                                 type: "button",
@@ -2488,7 +2488,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    
+
                     populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -2551,7 +2551,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 if (!_.hasIn(reqData.loanAccount, "id")){
                                     completeLead = true;
                                 }
-                                
+
                                 IndividualLoan.create(reqData)
                                     .$promise
                                     .then(function(res){
@@ -2579,7 +2579,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (model.additional.product && !_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
                         if (!_.isArray(model.loanAccount.guarantors) || model.loanAccount.guarantors.length == 0){
                             PageHelper.showProgress('loan-product-guarantor-required', 'Guarantor is mandatory for the selected product', 5000);
-                            return;    
+                            return;
                         }
                     }
 
@@ -2706,26 +2706,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (model.siteCode != 'sambandh') {
                         $log.info("inside sam");
                         var cbsdate=SessionStore.getCBSDate();
-                        if(model._currentDisbursement.scheduledDisbursementDate)
-                        var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                        var cbsmonth = ((new Date(cbsdate)).getMonth());
-                        var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
+                        if( model._currentDisbursement && model._currentDisbursement.scheduledDisbursementDate)
+                        {
+                            var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            var cbsmonth = ((new Date(cbsdate)).getMonth());
+                            var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
 
-                        if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "ALL") {
-                            if (scheduledDisbursementDate.diff(cbsdate, "days") < 0) {
-                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should be greater than CBS date", 5000);
-                                return false;
+                            if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "ALL") {
+                                if (scheduledDisbursementDate.diff(cbsdate, "days") < 0) {
+                                    PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should be greater than CBS date", 5000);
+                                    return false;
+                                }
                             }
-                        }
-                        if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "CURRENT_MONTH") {
-                            if (scheduledDisbursementDate.diff(cbsdate, "days") < 0 && (cbsmonth !== dismonth)) {
-                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
-                                return false;
+                            if (model.BackedDatedDisbursement && model.BackedDatedDisbursement == "CURRENT_MONTH") {
+                                if (scheduledDisbursementDate.diff(cbsdate, "days") < 0 && (cbsmonth !== dismonth)) {
+                                    PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
+                                    return false;
+                                }
                             }
                         }
                     }
 
-                    
+
 
                     var reqData = _.cloneDeep(model);
                     // if(reqData.loanAccount.frequency)
@@ -2781,7 +2783,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             reqData.remarks = model.review.remarks;
                             if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
                                 reqData.stage = 'LoanBooking';
-                            
+
                             if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.partnerCode !=='DO Partner1-IC')
                                 {
                                     $log.info("printing in else ");
