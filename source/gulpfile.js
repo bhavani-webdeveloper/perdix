@@ -173,18 +173,18 @@ gulp.task('ts:scripts', function() {
     //     tsResult.dts.pipe(gulp.dest('dev-www/domain')),
     //     tsResult.js.pipe(gulp.dest('dev-www/domain/js'))
     // ]);
-    return gulp.src('./dev-www/domain/**/*.ts')
+    return gulp.src('./dev-www/ts/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
             module: 'AMD',
 
             experimentalDecorators: true
         }))
-        .pipe(gulp.dest('./dev-www/domain/js'));
+        .pipe(gulp.dest('./dev-www/tsjs'));
 });
 
 gulp.task('watch', ['ts:scripts'], function() {
-    gulp.watch('dev-www/domain/**/*.ts', ['ts:scripts']);
+    gulp.watch('dev-www/ts/**/*.ts', ['ts:scripts']);
 });
 
 gulp.task('build', ['html', 'assets', 'fonts']);
