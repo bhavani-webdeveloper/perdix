@@ -5,6 +5,8 @@ var useref = require('gulp-useref');
 var del = require('del');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var argv = require('yargs').argv;
+var ts = require('gulp-typescript');
+var merge = require('merge2');
 var $ = gulpLoadPlugins();
 
 /*
@@ -156,6 +158,34 @@ gulp.task('generateBuildMetaFile', function(){
     var str = version + "\t" + appName + "\t" + bundleId + "\t" + currTime.toISOString() + "\t" + svnURL + "\t" + svnRevision;
     return gulp.file('VERSION', str, {src: true})
 })
+
+
+var tsProject = ts.createProject({
+    declaration: true,
+    out: 'dev-www/domain/run.js'
+});
+
+gulp.task('ts:scripts', function() {
+    // var tsResult = gulp.src('dev-www/domain/entites/*.ts')
+    //     .pipe(tsProject());
+
+    // return merge([ // Merge the two output streams, so this task is finished when the IO of both operations is done.
+    //     tsResult.dts.pipe(gulp.dest('dev-www/domain')),
+    //     tsResult.js.pipe(gulp.dest('dev-www/domain/js'))
+    // ]);
+    return gulp.src('./dev-www/domain/**/*.ts')
+        .pipe(ts({
+            noImplicitAny: true,
+            module: 'AMD',
+
+            experimentalDecorators: true
+        }))
+        .pipe(gulp.dest('./dev-www/domain/js'));
+});
+
+gulp.task('watch', ['ts:scripts'], function() {
+    gulp.watch('dev-www/domain/**/*.ts', ['ts:scripts']);
+});
 
 gulp.task('build', ['html', 'assets', 'fonts']);
 

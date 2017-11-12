@@ -1,4 +1,7 @@
-define({
+define(['perdix/entities/Lead'],function(Lead){
+    console.log(Lead);
+    console.log("TESTING");
+    return {
     pageUID: "Journal.JournalMultiPosting",
     pageType: "Engine",
     dependencies: ["$log", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "SchemaResource"],
@@ -205,4 +208,4 @@ define({
             }
         }
     }
-})
+}})

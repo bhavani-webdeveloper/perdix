@@ -232,7 +232,6 @@ irf.pageCollection.factory(irf.page("witfin.customer.IndividualEnrollment2"),
             "subTitle": "",
              initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                 // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
-
                 if (bundlePageObj){
                     model._bundlePageObj = _.cloneDeep(bundlePageObj);
                 }

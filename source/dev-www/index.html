@@ -318,7 +318,6 @@
 <script src="process/pages/definitions/customer/EnterpriseEnrollment.js"></script>
 <script src="process/pages/definitions/customer/EnterpriseEnrolment2.js"></script>
 <script src="process/pages/definitions/customer/IndividualEnrollment.js"></script>
-<script src="process/pages/definitions/customer/IndividualEnrolment2.js"></script>
 <script src="process/pages/definitions/customer/IndividualEnrollment3.js"></script>
 
 <script src="process/pages/definitions/customer360/CustomerProfile.js"></script>
@@ -393,6 +392,7 @@
 
 
 <script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningInput.js"></script>
+<script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningTest.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningReview.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/LoanRequest.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/Application.js"></script>
@@ -575,9 +575,12 @@
 <script type="text/javascript" src="js/require.js"></script>
 <script>
   require.config({
+
     baseUrl: "./",
     paths: {
-        "pages": "process/pages/definitions"
+        "pages": "process/pages/definitions",
+        "perdix": "domain/js"
+
     },
     waitSeconds: 0
   });

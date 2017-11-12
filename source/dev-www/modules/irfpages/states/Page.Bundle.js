@@ -7,7 +7,7 @@
  *
  *
  */
-irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', '$filter', function(BundleLog, $injector, $q, formHelper, $filter){
+irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', '$filter', '$log', function(BundleLog, $injector, $q, formHelper, $filter, $log){
 
     var currentInstance = null;
     var pages = [];
@@ -70,6 +70,8 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          * @return pageObj
          */
         createPageObject: function(definition, model, bundleModel, shouldInitialize, bundlePageName) {
+            var deferred = $q.defer();
+
             var pageObj = {};
             definition.bundlePageName = bundlePageName;
             pageObj.singlePageDefinition = _.cloneDeep(definition);
@@ -79,18 +81,36 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             pageObj.formName = irf.form(definition.pageName) + (pageCounter++);
             pageObj.title = definition.title;
             pageObj.model = model || {};
-
             pageObj.error = false;
+            var pageDefPath = "pages/" + pageObj.pageName.replace(/\./g, "/");
             try {
                 pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
                 if (angular.isFunction(pageObj.page.initialize) && shouldInitialize) {
                     pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
                 }
-            } catch (e) {
-                BundleLog.error(e);
-                pageObj.error = true;
+                deferred.resolve(pageObj);
+            } catch (err) {
+                require([pageDefPath], function(pageDefObj){
+                    /* Page is loaded, now bind it to pages */
+                    $log.info("[REQUIRE] Done loading page(" + pageObj.pageName + ")");
+                    irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+                    try {
+                        pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
+                        if (angular.isFunction(pageObj.page.initialize) && shouldInitialize) {
+                            pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
+                        }
+                        deferred.resolve(pageObj);
+                    } catch (e) {
+                        BundleLog.error(e);
+                        pageObj.error = true;
+                    }
+                }, function(err){
+                    $log.info("[REQUIRE] Error loading page(" + pageObj.pageName + ")");
+                    $log.error(err)
+                });
+            } finally {
+                return deferred.promise;
             }
-            return pageObj;
         },
         initializePageUI: function(pageObj) {
             var deferredUI = $q.defer(); // TODO: deferredUI resolve
@@ -299,22 +319,25 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.addTab = function(index, e) {
         e && e.preventDefault();
         var definition = $scope.addTabMenu[index];
-        var openPage = BundleManager.createPageObject(definition, null, $scope.bundleModel, true, $scope.pageName);
-        var insertIndex = -1;
-        for (var i = 0; i < $scope.pages.length; i++) {
-            if ($scope.pages[i].definition == definition) {
-                insertIndex = i+1;
+        BundleManager.createPageObject(definition, null, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
+            var openPage = pageObj
+            var insertIndex = -1;
+            for (var i = 0; i < $scope.pages.length; i++) {
+                if ($scope.pages[i].definition == definition) {
+                    insertIndex = i+1;
+                }
+            };
+            if (insertIndex > -1) {
+                $scope.pages.splice(insertIndex, 0, openPage);
+            } else {
+                $scope.pages.push(openPage);
             }
-        };
-        if (insertIndex > -1) {
-            $scope.pages.splice(insertIndex, 0, openPage);
-        } else {
-            $scope.pages.push(openPage);
-        }
-        ++definition.openPagesCount;
-        if (definition.maximum <= definition.openPagesCount) {
-            BundleLog.debug($scope.addTabMenu.splice(index, 1));
-        }
+            ++definition.openPagesCount;
+            if (definition.maximum <= definition.openPagesCount) {
+                BundleLog.debug($scope.addTabMenu.splice(index, 1));
+            }
+        })
+
         //BundleManager.initializePageUI(openPage);
     };
 
@@ -343,7 +366,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             offlineData.bundlePages.push(initialData);
         }
         var prePromise;
-        if (_.isFunction($scope.bundlePage.preSave)) { 
+        if (_.isFunction($scope.bundlePage.preSave)) {
             prePromise = $scope.bundlePage.preSave(offlineData);
         }
         if (prePromise && _.isFunction(prePromise.then)) {
@@ -385,7 +408,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 /*
     var pageData = $stateParams.pageData;
     if (pageData && pageData.$offlineData) {
-        
+
         var offlineData = pageData.$offlineData;
         for (var i=0; i<offlineData.pagesData.length; i++){
             $scope.bundlePage.bundlePages.push(_.merge(offlineData.pagesData[i].pageDefinition, {model:offlineData.pagesData[i].model}));
@@ -451,12 +474,16 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     for (i in initialData) {
                         var iData = _.cloneDeep(initialData[i]);
                         var bDef = bundleDefinitionMap[iData.pageClass];
-                        var openPage = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName);
-                        $scope.pages.push(openPage);
-                        if (!openPage.error && openPage.$initPromise) {
-                            initPromises.push(openPage.$initPromise);
-                        }
-                        bDef.openPagesCount++;
+
+                        BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName).then(function(pageObj) {
+                            var openPage = pageObj;
+                            $scope.pages.push(openPage);
+                            if (!openPage.error && openPage.$initPromise) {
+                                initPromises.push(openPage.$initPromise);
+                            }
+                            bDef.openPagesCount++;
+                        })
+
                     }
                     for (i in bundleDefinition) {
                         var bDef = bundleDefinition[i];
@@ -475,11 +502,14 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         }
                         if (bDef.minimum > 0) {
                             for (var i = 0; i < bDef.minimum; i++) {
-                                var openPage = BundleManager.createPageObject(bDef, null, $scope.bundleModel, true, $scope.pageName);
-                                $scope.pages.push(openPage);
-                                if (!openPage.error && openPage.$initPromise) {
-                                    initPromises.push(openPage.$initPromise);
-                                }
+                                BundleManager.createPageObject(bDef, null, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
+                                    var openPage = pageObj;
+                                    $scope.pages.push(openPage);
+                                    if (!openPage.error && openPage.$initPromise) {
+                                        initPromises.push(openPage.$initPromise);
+                                    }
+                                })
+
                             };
                             bDef.openPagesCount = bDef.minimum;
                         }

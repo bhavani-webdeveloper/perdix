@@ -1,7 +1,9 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
-        ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter",
-            function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+define({
+    pageUID: "customer.IndividualEnrolment2",
+    pageType: "Engine",
+    dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter"],
+    $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter){
 
                 var pageParams = {
@@ -3279,4 +3281,5 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         }
                     }
                 };
-            }]);
+            }
+})
