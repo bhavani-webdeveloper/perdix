@@ -203,6 +203,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                                  recordStr = deriveRecordStr(m[0].record_id_format, data);
                                                                 return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
                                                             }
+                                                        } else if (data.transactionName == 'Fee Payment'){
+                                                            var m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: data.description, invoice_type: "Fee Payment"});
+                                                            if (m && m.length==0){
+                                                                m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: "ALL", invoice_type: "Fee Payment"});
+                                                            }
+
+                                                            if (m && m.length>0){
+                                                                 recordStr = deriveRecordStr(m[0].record_id_format, data);
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
+                                                            }
                                                         }
                                                         return Utils.alert("Form not maintained");
                                                     }
@@ -287,8 +297,24 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     if (m && m.length > 0) {
                                                         isapplicable = true;
                                                     }
+                                                } else if (value.transactionName == 'Fee Payment') {
+                                                    var m = $filter('filter')(model.feesFormMappingList, {
+                                                        fee_category: value.param1,
+                                                        fee_description: value.description,
+                                                        invoice_type: "Fee Payment"
+                                                    });
+                                                    if (m && m.length==0){
+                                                        m = $filter('filter')(model.feesFormMappingList, {fee_category:value.param1, fee_description: "ALL", invoice_type: "Fee Charge"});
+                                                    }
+                                                    if (m && m.length > 0) {
+                                                        isapplicable = true;
+                                                    }
                                                 }
-                                                return isapplicable && (value.transactionName =='Demand' || value.transactionName == 'Fee Charge');
+                                                return isapplicable && 
+                                                    (
+                                                        value.transactionName =='Demand' || 
+                                                        value.transactionName == 'Fee Charge' || 
+                                                        (value.transactionName == 'Fee Payment' && parseFloat(value.part6)!=0 && parseFloat(value.part6)!=NaN));
                                             });
 
                                             _.forEach(model.cbsLoan.invoiceTransactions.data, function(txn){
