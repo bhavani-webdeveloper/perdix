@@ -5670,7 +5670,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.vehicleMoved",
                         title: "VECHICLE_MOVED",
                         type:"select",
-                        "enumCode":"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "inspectionLatitude": {
                         key: "loanAccount.vehicleLoanDetails.inspectionLatitude",
@@ -5687,7 +5691,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.engineStarted",
                         title: "ENGINE_STARTED",
                         type:"select",
-                        "enumCode":"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                 }
             },
@@ -5726,13 +5734,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.odometerReading",
                         title: "ODOMETER_READING",
                         inputmode: "number",
-                        numberType: "tel"
+                        numberType: "number"
                     },
                     "estimatedReading": {
                         key: "loanAccount.vehicleLoanDetails.estimatedReading",
                         title: "BANK_REFERENCE_NUMBER",
+                        type:"number",
                         inputmode: "number",
-                        numberType: "tel"
+                        numberType: "number"
                     },
 
                     "transmission": {
@@ -5766,7 +5775,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.reRegistered",
                         title: "RE_REGISTERED",
                         type:"select",
-                        "enumCode":"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "previousRegistrationNumber": {
                         key: "loanAccount.vehicleLoanDetails.previousRegistrationNumber",
@@ -5845,7 +5858,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.unladenWeight",
                         title: "UNLADEN_WEIGHT",
                         inputmode: "number",
-                        numberType: "tel"
+                        numberType: "number"
                     },
                     "hypothecatedTo": {
                         key: "loanAccount.vehicleLoanDetails.hypothecatedTo",
@@ -5910,7 +5923,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.insuranceIdv",
                         title: "INSURANCE_IDV",
                         inputmode: "number",
-                        numberType: "tel"
+                        numberType: "number"
                     },
                     "taxPaid": {
                         key: "loanAccount.vehicleLoanDetails.taxPaid",
@@ -5947,7 +5960,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.accident",
                         title: "ACCIDENT",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "accidentRemarks": {
                         key: "loanAccount.vehicleLoanDetails.accidentRemarks",
@@ -5958,13 +5975,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.originalInvoiceValue",
                         title: "ORIGINAL_INVOICE_VALUE",
                         inputmode: "number",
-                        numberType: "tel"
+                        numberType: "number"
                     },
                     "majorRepair": {
                         key: "loanAccount.vehicleLoanDetails.majorRepair",
                         title: "MAJOR_REPAIR",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "currentInvoiceValue": {
                         key: "loanAccount.vehicleLoanDetails.currentInvoiceValue",
@@ -5976,7 +5997,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.rcbookStatus",
                         title: "RC_BOOK_STATUS",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            true:"Yes",
+                            false:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     }
                 }
             },
@@ -6239,25 +6264,41 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.powerWindowFont",
                         title: "POWER_WINDOW_FRONT",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            1:"Yes",
+                            0:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "powerWindowRear": {
                         key: "loanAccount.vehicleLoanDetails.powerWindowRear",
                         title: "POWER_WINDOW_REAR",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            1:"Yes",
+                            0:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "powerSteering": {
                         key: "loanAccount.vehicleLoanDetails.powerSteering",
                         title: "POWER_STEERING",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            1:"Yes",
+                            0:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "airbag": {
                         key: "loanAccount.vehicleLoanDetails.airbag",
                         title: "AIR_BAG_SYSTEM",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            1:"Yes",
+                            0:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     },
                     "accessories": {
                         key: "loanAccount.vehicleLoanDetails.accessories",
@@ -6269,7 +6310,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.accessoriesStatus",
                         title: "ACCESSORIES_STATUS",
                         type:"radios",
-                        enumCode:"decisionmaker"
+                        "titleMap":{
+                            1:"Yes",
+                            0:"No"
+                        }
+                        //"enumCode":"decisionmaker"
                     }
                 }
             },

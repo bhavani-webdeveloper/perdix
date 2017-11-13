@@ -378,6 +378,14 @@
                         ]
                     }
                 },
+                "vehicleLoanDetails": {
+                    "type":"object",
+                    "properties": {
+                        "odometerReading": {
+                            "type":"number"
+                        }
+                    }
+                },
                 "commercialCibilCharge":{
                     "type": ["null","integer"],
                     "title":"COMMERCIAL_CIBIL_CHARGE"
