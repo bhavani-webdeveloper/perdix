@@ -1,115 +1,115 @@
 {
-"dedupeCutoffPercentage":60,
-"dedupeFieldsConfigurationDTOs" : [
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"firstName",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"true",
-		"weightage":40
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"mobilePhone",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":11
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"enterprise.registrationNumber",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"true",
-		"weightage":14
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"enterprise.businessLandline1",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":8
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"enterprise.businessAddress1",
-		"required":"true",
-		"matchType":"partial",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":8
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"enterprise.companyOperatingSinceLong",
-		"required":"true",
-		"matchType":"partial",
-		"toleranceInDays":"365",
-		"primarySearch":"true",
-		"weightage":8
-	},
-	{
-		"dedupeType":"Enterprise",
-		"fieldName":"address",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":4
-	}
-	],
-		"addressFields" : [
-		{
-			"dedupeType":"Individual",
-			"fieldName":"doorNo",
-			"matchType":"exact"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"street",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"postOffice",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"locality",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"district",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"state",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"pincode",
-			"matchType":"exact"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"villageName",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"landmark",
-			"matchType":"phonetic"
-		}
-	]
+  "dedupeCutoffPercentage": 60,
+  "dedupeFieldsConfigurationDTOs": [
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "firstName",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "true",
+      "weightage": 40
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "mobilePhone",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 11
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "enterprise.registrationNumber",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "true",
+      "weightage": 14
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "enterprise.businessLandline1",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 8
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "enterprise.businessAddress1",
+      "required": "true",
+      "matchType": "partial",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 8
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "enterprise.companyOperatingSinceLong",
+      "required": "true",
+      "matchType": "partial",
+      "toleranceInDays": "365",
+      "primarySearch": "true",
+      "weightage": 8
+    },
+    {
+      "dedupeType": "Enterprise",
+      "fieldName": "address",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 4
+    }
+  ],
+  "addressFields": [
+    {
+      "dedupeType": "Individual",
+      "fieldName": "doorNo",
+      "matchType": "exact"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "street",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "postOffice",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "locality",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "district",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "state",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "pincode",
+      "matchType": "exact"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "villageName",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "landmark",
+      "matchType": "phonetic"
+    }
+  ]
 }

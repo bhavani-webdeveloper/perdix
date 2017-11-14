@@ -1,152 +1,151 @@
 {
-"dedupeCutoffPercentage":60,
-"dedupeFieldsConfigurationDTOs" : [
-	{
-		"dedupeType":"Individual",
-		"fieldName":"identityProofNo",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":16
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"addressProofNo",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":17
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"firstName",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"true",
-		"weightage":40
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"fatherFirstName",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":8
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"spouseFirstName",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":8
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"mobilePhone",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":11
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"landLineNo",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":4
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"whatsAppMobileNo",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":4
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"gender",
-		"required":"true",
-		"matchType":"exact",
-		"toleranceInDays":"",
-		"primarySearch":"true",
-		"weightage":4
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"dateOfBirthLong",
-		"required":"true",
-		"matchType":"partial",
-		"toleranceInDays":"60",
-		"primarySearch":"true",
-		"weightage":11
-	},
-	{
-		"dedupeType":"Individual",
-		"fieldName":"address",
-		"required":"true",
-		"matchType":"phonetic",
-		"toleranceInDays":"",
-		"primarySearch":"false",
-		"weightage":4
-	}
-	],
-	"addressFields" : [
-		{
-			"dedupeType":"Individual",
-			"fieldName":"doorNo",
-			"matchType":"exact"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"street",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"postOffice",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"locality",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"district",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"state",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"pincode",
-			"matchType":"exact"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"villageName",
-			"matchType":"phonetic"
-		},
-		{
-			"dedupeType":"Individual",
-			"fieldName":"landmark",
-			"matchType":"phonetic"
-		}
-	]
-
+  "dedupeCutoffPercentage": 60,
+  "dedupeFieldsConfigurationDTOs": [
+    {
+      "dedupeType": "Individual",
+      "fieldName": "identityProofNo",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 16
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "addressProofNo",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 17
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "firstName",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "true",
+      "weightage": 40
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "fatherFirstName",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 8
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "spouseFirstName",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 8
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "mobilePhone",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 11
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "landLineNo",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 4
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "whatsAppMobileNo",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 4
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "gender",
+      "required": "true",
+      "matchType": "exact",
+      "toleranceInDays": "",
+      "primarySearch": "true",
+      "weightage": 4
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "dateOfBirthLong",
+      "required": "true",
+      "matchType": "partial",
+      "toleranceInDays": "60",
+      "primarySearch": "true",
+      "weightage": 11
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "address",
+      "required": "true",
+      "matchType": "phonetic",
+      "toleranceInDays": "",
+      "primarySearch": "false",
+      "weightage": 4
+    }
+  ],
+  "addressFields": [
+    {
+      "dedupeType": "Individual",
+      "fieldName": "doorNo",
+      "matchType": "exact"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "street",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "postOffice",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "locality",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "district",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "state",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "pincode",
+      "matchType": "exact"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "villageName",
+      "matchType": "phonetic"
+    },
+    {
+      "dedupeType": "Individual",
+      "fieldName": "landmark",
+      "matchType": "phonetic"
+    }
+  ]
 }
