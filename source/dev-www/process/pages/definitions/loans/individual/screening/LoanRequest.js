@@ -1023,6 +1023,78 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 ]
             },
             {
+                type: "box",
+                title: "LOAN_CUSTOMER_RELATIONS",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                items: [{
+                    key: "loanAccount.loanCustomerRelations",
+                    type: "array",
+                    add: null,
+                    remove: null,
+                    title: "LOAN_CUSTOMER_RELATIONS",
+                    items: [{
+                        key: "loanAccount.loanCustomerRelations[].customerId",
+                        title: "CUSTOMER_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].urn",
+                        title: "URN_NO",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].name",
+                        "title": "NAME",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relation",
+                        readonly: true,
+                        title: "RELATIONSHIP"
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                        title: "RELATIONSHIP_WITH_APPLICATION",
+                        condition:"model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                        required:true,
+                        type:"select",
+                        enumCode:"relation"
+                    }]
+                }]
+            },
+            {
+                type: "box",
+                title: "LOAN_CUSTOMER_RELATIONS",
+                "readonly":true,
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                items: [{
+                    key: "loanAccount.loanCustomerRelations",
+                    type: "array",
+                    add: null,
+                    remove: null,
+                    title: "LOAN_CUSTOMER_RELATIONS",
+                    items: [{
+                        key: "loanAccount.loanCustomerRelations[].customerId",
+                        title: "CUSTOMER_ID",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].urn",
+                        title: "URN_NO",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].name",
+                        "title": "NAME",
+                        readonly: true,
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relation",
+                        readonly: true,
+                        title: "RELATIONSHIP"
+                    }, {
+                        key: "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                        title: "RELATIONSHIP_WITH_APPLICATION",
+                        condition:"model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                        type:"select",
+                        enumCode:"relation"
+                    }]
+                }]
+            },
+            {
                 "type": "box",
                 "title": "DEDUCTIONS_FROM_LOANAMOUNT",
                 "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
@@ -2649,15 +2721,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                 var autoRejected = false;
 
-                if (model.currentStage == 'FieldAppraisal'){
+                /*if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
                         return;
                     }
 
-                    /**
-                     * Move to Rejected if some proxy indicators are set as YES
-                     */
+                    
+                     // Move to Rejected if some proxy indicators are set as YES
+                     
                     if (_.hasIn(model.enterprise, "bribeOffered") && 
                         _.hasIn(model.enterprise, "challengingChequeBounce") && 
                         _.hasIn(model.enterprise, "politicalOrPoliceConnections") &&
@@ -2673,7 +2745,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         autoRejected = true;
                         
                     }
-                }
+                }*/
 
                 if(model.currentStage=='ScreeningReview'){
                     var commercialCheckFailed = false;
@@ -2694,7 +2766,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     else
                         commercialCheckFailed = true;
                     
-                    if (commercialCheckFailed){
+                    /*if (commercialCheckFailed){
                         if(model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
                             for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
                                 if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC' ){
@@ -2718,7 +2790,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
 
                 if (!preLoanSaveOrProceed(model)){
