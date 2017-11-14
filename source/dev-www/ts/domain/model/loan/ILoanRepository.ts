@@ -2,7 +2,7 @@ import LoanProcess = require('./LoanProcess');
 
 export interface ILoanRepository{
 
-	getLoanProcess(): LoanProcess;
+	getLoanProcess(id: number): LoanProcess;
 
 
 }

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@reactivex/rxjs": "^5.5.2",
     "chalk": "^1.1.1",
     "com.lampa.startapp": "https://github.com/stalingino/com.lampa.startapp.git",
     "cordova-android": "~5.1.1",
@@ -26,6 +27,7 @@
     "irf-bluetooth-plugin": "~1.1.0",
     "npm-git-install": "^0.2.0",
     "phonegap-plugin-barcodescanner": "~4.1.0",
+    "rxjs-es": "^5.0.0-beta.12",
     "wiredep": "^3.0.0"
   },
   "devDependencies": {

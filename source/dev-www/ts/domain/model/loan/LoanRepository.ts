@@ -1,19 +1,17 @@
 import { ILoanRepository } from './ILoanRepository';
+import Rx = require('@reactivex/rxjs');
 import LoanProcess = require('./LoanProcess');
-import AngularResourceRepository = require('../../shared/AngularResourceRepository');
+import AngularResourceService = require('../../shared/AngularResourceService');
 
 class LoanRepository implements ILoanRepository {
 
 	private individualLoanService: any;
 	constructor() {
-		this.individualLoanService = AngularResourceRepository.getInstance().getInjector('IndividualLoan');
+		this.individualLoanService = AngularResourceService.getInstance().getInjector('IndividualLoan');
 	}
-	getLoanProcess():LoanProcess {
-		let data;
-		this.individualLoanService.getData(function(d) {
-			data = d;
-		})
-
-		return data;
+	getLoanProcess(id: number):LoanProcess {
+		var observable = Rx.Observable.fromPromise(this.individualLoanService.get({id: id}).$promise);
+	
+		return observable;
 	}
 }
