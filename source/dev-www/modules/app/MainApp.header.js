@@ -569,4 +569,6 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 	$scope.changeTheme = function(color) {
 		return themeswitch.changeTheme(color, true)
 	}
+
+	$scope.isPerdix7Integrated = !!parent.i7;
 }]);

@@ -1,68 +1,37 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$q', 'SysQueries', 'irfNavigator',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $q, SysQueries, irfNavigator){
+['$scope', 'authService', '$log', '$state', '$stateParams', '$timeout', 'irfStorageService', 'SessionStore', 'Utils', '$q', 'SysQueries', 'irfNavigator',
+function($scope, authService, $log, $state, $stateParams, $timeout, irfStorageService, SessionStore, Utils, $q, SysQueries, irfNavigator){
 
-	var loadUserBranches = function(username){
-		var deferred = $q.defer();
-		SysQueries.getUserBranches(username)
-			.then(function(response){
-				var branches = response.body;
-				var out = [];
-				for (var i=0; i<branches.length; i++){
-					out.push({
-						branchId: branches[i].branch_id,
-						branchCode: branches[i].branch_code,
-						branchName: branches[i].branch_name,
-						bankId : branches[i].bank_id
-					})
-				}
-				SessionStore.setItem('UserAllowedBranches', out);
-				SessionStore.setItem('AllAllowedBranches', out);
-				deferred.resolve();
-			}, function(httpResponse){
-				$log.error("Error trying to load allowed branches of user.")
-				deferred.resolve();
-			})
-		return deferred.promise;
-	}
+	var failedLogin = function(arg) {
+		$log.error(arg);
+		if (arg.data && arg.data.error_description) {
+			$scope.errorMessage = arg.data.error_description;
+		} else if (!$scope.serverConnectionError) {
+			$scope.errorMessage = arg.statusText || (arg.status + " Unknown Error");
+		}
+		if ($scope.errorMessage.trim() === 'User credentials have expired') {
+			$state.go("Reset", {"type": "reset"});
+		}
+		$scope.showLoading = false;
+		$scope.hideLogin = false;
+		$scope.serverConnectionError = false;
+	};
 
-	var onlineLogin = function(username, password, refresh) {
-		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
-			$scope.showLoading = true;
-
-			var p = [
-				irfStorageService.cacheAllMaster(true, refresh),
-				loadUserBranches(username)
-			]
-			$q.all(p).then(function(msg){
-				$log.info(msg);
-                SessionStore.session.offline = false;
-                themeswitch.changeTheme(themeswitch.getThemeColor(), true);
-				irfNavigator.goHome();
-				if (refresh) {
-					window.location.hash = '#/' + irf.HOME_PAGE.url;
-					window.location.reload();
-				}
-			},function(e){ // Error callback
-				$log.error(e);
-				$scope.showLoading = false;
-			}).finally(function(){
-				// $scope.showLoading = false;
-			});
-			$scope.serverConnectionError = false;
-		}, function(arg){ // Error callback
-			$scope.showLoading = false;
-			$log.error(arg);
-			if (arg.data && arg.data.error_description) {
-				$scope.errorMessage = arg.data.error_description;
-			} else if (!$scope.serverConnectionError) {
-				$scope.errorMessage = arg.statusText || (arg.status + " Unknown Error");
-			}
-			if ($scope.errorMessage.trim() === 'User credentials have expired') {
-				$state.go("Reset", {"type": "reset"});
+	var successLogin = function(refresh) {
+		$scope.showLoading = true;
+		authService.postLogin(refresh).then(function() {
+			irfNavigator.goHome();
+			if (refresh) {
+				window.location.hash = '#/' + irf.HOME_PAGE.url;
+				window.location.reload();
 			}
 			$scope.serverConnectionError = false;
-		});
+		}, failedLogin);
+	};
+
+	var doLogin = function(username, password, refresh) {
+		$scope.showLoading = 'cc';
+		authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
 	};
 
 	$scope.$on('server-connection-error', function(event, arg) {
@@ -74,35 +43,51 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 		}
 	});
 
-	this.onlineLogin = function(username, password){
+	var self = this;
+
+	self.reset = function() {
+		if (!$scope.autoLogin)
+			self.username = null;
+		self.password = null;
+		self.pin = null;
+	}
+
+	self.onlineLogin = function(username, password, autoLogin){
 		$log.info("Inside onlineLogin");
-		if (!username || !password) {
+		if (!username || !(password || autoLogin)) {
 			$scope.errorMessage = 'LOGIN_USERNAME_PASSWORD_REQ';
 			return false;
 		}
 		$scope.errorMessage = null;
 		if (userData && userData.login && username.toLowerCase() !== userData.login.toLowerCase()) {
-			// different user
-			Utils.confirm('User is different. This will clear all data saved by previous user ('+
-				userData.login+'). Do you want to proceed?', 'User Data Clear Alert')
-				.then(function(){
-					// clear al offline records.
-					$scope.showLoading = 'cc';
-					$log.debug('localStorage.clear()');
+			if (autoLogin) {
+				$log.info('auto login - clearing all offline records');
+				localStorage.clear();
+				SessionStore.clear();
+				successLogin(true);
+			} else {
+				Utils.confirm('User is different. This will clear all data saved by previous user ('+
+					userData.login+'). Do you want to proceed?', 'User Data Clear Alert').then(function() {
+					$log.info('clearing all offline records');
 					localStorage.clear();
 					SessionStore.clear();
-
-					setTimeout(function() {onlineLogin(username, password, true);});
+					$timeout(function() {
+						doLogin(username, password, true);
+					});
 				});
+			}
 		} else {
-			var AppLoaded = SessionStore.getItem('AppLoaded');
-			SessionStore.setItem('AppLoaded', {'loaded':true});
-			$scope.showLoading = 'cc';
-			onlineLogin(username, password, !AppLoaded);
+			var appLoaded = SessionStore.getItem('appLoaded');
+			SessionStore.setItem('appLoaded', {'loaded':true});
+			if (autoLogin) {
+				successLogin(!appLoaded);
+			} else {
+				doLogin(username, password, !appLoaded);
+			}
 		}
 	};
 
-	this.offlineLogin = function(pin){
+	self.offlineLogin = function(pin){
 		$log.info("Inside offlineLogin");
 		if (!pin) {
 			$scope.errorMessage = 'LOGIN_PIN_REQ';
@@ -113,7 +98,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			authService.setUserData(userData);
 			SessionStore.session.offline = true;
 			themeswitch.changeTheme('offline');
-			$log.debug("Offline login success");
+			$log.info("Offline login success");
 			irfNavigator.goHome();
 		} else {
 			$scope.errorMessage = "LOGIN_INVALID_PIN";
@@ -142,10 +127,26 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 					}
 					SessionStore.profile = model.profile;
 					SessionStore.settings = model.settings;
-					$log.debug("Offline login available");
+					$log.info("Offline login available");
 				}
 			}
 		}
+	}
+
+	// Auto Login
+	if ($stateParams.username && $stateParams.authToken) {
+		authService.autoLogin($stateParams.username, $stateParams.authToken).then(function() {
+			$state.go("Login", {"username": null, "authToken": null, "autoLoginUsername": $stateParams.username});
+		}, function() {
+			failedLogin({"statusText": "Auto login failed"});
+		});
+	}
+	if ($stateParams.autoLoginUsername) {
+		self.username = $stateParams.autoLoginUsername;
+		$scope.autoLogin = true;
+		$scope.hideLogin = true;
+		$scope.showLoading = true;
+		self.onlineLogin(self.username, null, true);
 	}
 
 }])
