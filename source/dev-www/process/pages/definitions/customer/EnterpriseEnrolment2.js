@@ -143,6 +143,42 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             "lead-loaded": function(bundleModel, model, obj){
                 $log.info(obj);
+
+                var overlayData = function(model, obj){
+                    try {
+                        model.customer.mobilePhone = obj.mobileNo;
+                        model.customer.gender = obj.gender;
+                        model.customer.firstName = obj.businessName;
+                        model.customer.maritalStatus=obj.maritalStatus;
+                        model.customer.customerBranchId=obj.branchId;
+                        model.customer.centreId=obj.centreId;
+                        model.customer.centreName=obj.centreName;
+                        model.customer.street=obj.addressLine2;
+                        model.customer.doorNo=obj.addressLine1;
+                        model.customer.pincode=obj.pincode;
+                        model.customer.district=obj.district;
+                        model.customer.state=obj.state;
+                        model.customer.locality=obj.area;
+                        model.customer.villageName=obj.cityTownVillage;
+                        model.customer.landLineNo=obj.alternateMobileNo;
+                        model.customer.dateOfBirth=obj.dob;
+                        model.customer.age=obj.age;
+                        model.customer.mobilePhone = obj.mobileNo;
+                        model.customer.latitude =obj.location;
+                        if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                            model.customer.enterprise = {};
+                        }
+                        model.customer.enterprise.ownership =obj.ownership;
+                        model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
+                        model.customer.enterprise.companyRegistered =obj.companyRegistered;
+                        model.customer.enterprise.businessType =obj.businessType;
+                        model.customer.enterprise.businessActivity=obj.businessActivity;
+                    } catch (e){
+                        $log.error("Error while overlay");
+                    }
+
+                }
+
                 var lep = null;
                 if (obj.customerId != null) {
                     lep = Enrollment.getCustomerById({id: obj.customerId})
@@ -150,38 +186,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     lep.then(function(res){
                         PageHelper.showProgress("customer-load", "Done..", 5000);
                         model.customer = Utils.removeNulls(res, true);
+                        overlayData(model, obj);
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                     }, function(httpRes){
                         PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                     })
                 } else {
-                    model.customer.mobilePhone = obj.mobileNo;
-                    model.customer.gender = obj.gender;
-                    model.customer.firstName = obj.businessName;
-                    model.customer.maritalStatus=obj.maritalStatus;
-                    model.customer.customerBranchId=obj.branchId;
-                    model.customer.centreId=obj.centreId;
-                    model.customer.centreName=obj.centreName;
-                    model.customer.street=obj.addressLine2;
-                    model.customer.doorNo=obj.addressLine1;
-                    model.customer.pincode=obj.pincode;
-                    model.customer.district=obj.district;
-                    model.customer.state=obj.state;
-                    model.customer.locality=obj.area;
-                    model.customer.villageName=obj.cityTownVillage;
-                    model.customer.landLineNo=obj.alternateMobileNo;
-                    model.customer.dateOfBirth=obj.dob;
-                    model.customer.age=obj.age;
-                    model.customer.mobilePhone = obj.mobileNo;
-                    model.customer.latitude =obj.location;
-                    if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                        model.customer.enterprise = {};
-                    }
-                    model.customer.enterprise.ownership =obj.ownership;
-                    model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
-                    model.customer.enterprise.companyRegistered =obj.companyRegistered;
-                    model.customer.enterprise.businessType =obj.businessType;
-                    model.customer.enterprise.businessActivity=obj.businessActivity;
+                    overlayData(model, obj);
                 }
 
             },

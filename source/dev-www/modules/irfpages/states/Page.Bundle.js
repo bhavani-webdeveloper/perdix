@@ -36,8 +36,13 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             BundleLog.info("Recieved event [" + eventName + "]");
             BundleLog.info("Calling event handler");
             if (_.hasIn(currentInstance.bundlePage, 'eventListeners') && _.hasIn(currentInstance.bundlePage.eventListeners, eventName)){
-                BundleLog.info("Inside here");
-                currentInstance.bundlePage.eventListeners[eventName](pageObj, currentInstance.bundleModel, obj);
+                BundleLog.info("Pushing event [" + eventName + "]");
+                try{
+                    currentInstance.bundlePage.eventListeners[eventName](pageObj, currentInstance.bundleModel, obj);
+                }catch (e){
+                    BundleLog.error("Error pushing event [" + eventName + "]. Proceeding to next event.", e);
+                }
+
             }
         },
         /**
@@ -48,10 +53,16 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          */
         broadcastEvent: function(eventName, obj){
             var pagesLength = pages.length;
+            BundleLog.info("Broadcasting event [" + eventName + "]");
             for (var i=0; i<pagesLength; i++){
                 var page = pages[i].page;
                 if (_.hasIn(page, 'eventListeners.' + eventName)) {
-                    page.eventListeners[eventName](currentInstance.bundleModel, pages[i].model, obj);
+                    try {
+                        page.eventListeners[eventName](currentInstance.bundleModel, pages[i].model, obj);
+                    } catch(e){
+                        BundleLog.error("Error while broadcasting event [" + eventName + "]. Target Page Class:[" + pages[i].singlePageDefinition.pageClass + "] , Form Name: [" + pages[i].formName+ "]", e);
+                    }
+
                 }
             }
         },
@@ -252,11 +263,17 @@ irf.pages.factory('BundleLog', ['$log', function($log){
         "debug": function(msg){
             $log.debug("<<BUNDLE>> :: " + msg);
         },
-        "error": function(msg){
+        "error": function(msg, e){
             $log.error("<<BUNDLE>> :: " + msg);
+            if (e){
+                console.error(e);
+            }
         },
-        "warn": function(msg){
+        "warn": function(msg, e){
             $log.warn("<<BUNDLE>> :: " + msg);
+            if (e){
+                console.warn(e);
+            }
         }
     }
 }]);

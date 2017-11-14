@@ -207,8 +207,31 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         ];
                                     },
                                     onSelect: function(valueObj, model, context) {
-                                        model.lead.leadName = model.lead.firstName;
-                                    }
+                                        Enrollment.getCustomerById({id: valueObj.id})
+                                            .$promise
+                                            .then(function(res){
+                                                PageHelper.showProgress("customer-load", "Done..", 5000);
+                                                model.lead.mobileNo = res.mobilePhone;
+                                                model.lead.gender = res.gender;
+                                                model.lead.leadName = res.firstName;
+                                                model.lead.maritalStatus=res.maritalStatus;
+                                                model.lead.landLineNo=res.landLineNo;
+                                                model.lead.dob=res.dateOfBirth;
+                                                model.lead.age=res.age;
+                                                model.lead.addressLine1=res.doorNo;
+                                                model.lead.addressLine2=res.street;
+                                                model.lead.pincode=res.pincode;
+                                                model.lead.district=res.district;
+                                                model.lead.state=res.state;
+                                                model.lead.area=res.locality;
+                                                model.lead.cityTownVillage=res.villageName;
+                                                model.lead.applicantCustomerId = res.id;
+
+                                            }, function(httpRes){
+                                                PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                        })
+
+                                     }
 
                                 }, {
                                     key: "lead.leadName",
@@ -217,7 +240,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                     "readonly": true,
                                 }, {
                                     key: "lead.leadName",
-                                    title: "APPLICANT_NAME",                                    
+                                    title: "APPLICANT_NAME",
                                     "condition": "!model.lead.applicantCustomerId"
                                 }, {
                                     type: "fieldset",
@@ -249,7 +272,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 "key": "lead.centreName",
                                                 "type": "string",
                                                 "readonly": true
-                                            },                                           
+                                            },
                                         },
                                         "outputMap": {
                                             "id": "lead.customerId",
@@ -281,7 +304,22 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             ];
                                         },
                                         onSelect: function(valueObj, model, context) {
-                                            model.lead.businessName = model.lead.firstName;
+                                              Enrollment.getCustomerById({id: valueObj.id})
+                                            .$promise
+                                            .then(function(res){
+                                                PageHelper.showProgress("customer-load", "Done..", 5000);
+                                                model.lead.businessName = res.firstName;
+                                                model.lead.alternateMobileNo=res.mobilePhone;
+                                                model.lead.location =res.latitude;
+                                                model.lead.ownership =res.enterprise.ownership
+                                                model.lead.companyOperatingSince =res.enterprise.companyOperatingSince;
+                                                model.lead.companyRegistered =res.enterprise.companyRegistered;
+                                                model.lead.businessType =res.enterprise.businessType;
+                                                model.lead.businessActivity=res.enterprise.businessActivity;
+
+                                            }, function(httpRes){
+                                                PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                        })
                                         }
 
                                     }, {

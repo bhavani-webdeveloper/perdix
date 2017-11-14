@@ -172,6 +172,40 @@ define({
 
                         },
                         "lead-loaded": function(bundleModel, model, obj){
+                            var overlayData = function(model, obj) {
+                                try{
+                                    model.customer.mobilePhone = obj.mobileNo;
+                                    model.customer.gender = obj.gender;
+                                    model.customer.firstName = obj.leadName;
+                                    model.customer.maritalStatus=obj.maritalStatus;
+                                    model.customer.customerBranchId=obj.branchId;
+                                    model.customer.centreId=obj.centreId;
+                                    model.customer.centreName=obj.centreName;
+                                    model.customer.street=obj.addressLine2;
+                                    model.customer.doorNo=obj.addressLine1;
+                                    model.customer.pincode=obj.pincode;
+                                    model.customer.district=obj.district;
+                                    model.customer.state=obj.state;
+                                    model.customer.locality=obj.area;
+                                    model.customer.villageName=obj.cityTownVillage;
+                                    model.customer.landLineNo=obj.alternateMobileNo;
+                                    model.customer.dateOfBirth=obj.dob;
+                                    model.customer.age=obj.age;
+                                    model.customer.gender=obj.gender;
+                                    model.customer.landLineNo = obj.alternateMobileNo;
+                                    model.customer.id = obj.applicantCustomerId;
+                                    for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                        $log.info(model.customer.familyMembers[i].relationShip);
+                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                        /*if (model.customer.familyMembers[i].relationShip == "self") {
+                                            model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                            break;
+                                        }*/
+                                    }
+                                } catch (e){
+                                    $log.error("Error while overlay");
+                                }
+                            }
                             if (obj.applicantCustomerId!=null && model._bundlePageObj.pageClass == 'applicant'){
                                 Enrollment.getCustomerById({id: obj.applicantCustomerId})
                                     .$promise
@@ -180,41 +214,13 @@ define({
                                         model.customer = Utils.removeNulls(res, true);
                                         model.customer.identityProof = "Pan Card";
                                         model.customer.addressProof= "Aadhar Card";
+                                        overlayData(model, obj);
                                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                     }, function(httpRes){
                                         PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                                     })
                             } else {
-                                model.customer.mobilePhone = obj.mobileNo;
-                                model.customer.gender = obj.gender;
-                                model.customer.firstName = obj.leadName;
-                                model.customer.maritalStatus=obj.maritalStatus;
-                                model.customer.customerBranchId=obj.branchId;
-                                model.customer.centreId=obj.centreId;
-                                model.customer.centreName=obj.centreName;
-                                model.customer.street=obj.addressLine2;
-                                model.customer.doorNo=obj.addressLine1;
-                                model.customer.pincode=obj.pincode;
-                                model.customer.district=obj.district;
-                                model.customer.state=obj.state;
-                                model.customer.locality=obj.area;
-                                model.customer.villageName=obj.cityTownVillage;
-                                model.customer.landLineNo=obj.alternateMobileNo;
-                                model.customer.dateOfBirth=obj.dob;
-                                model.customer.age=obj.age;
-                                model.customer.gender=obj.gender;
-                                model.customer.landLineNo = obj.alternateMobileNo;
-                                model.customer.id = obj.applicantCustomerId;
-
-
-                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                    $log.info(model.customer.familyMembers[i].relationShip);
-                                    model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                    /*if (model.customer.familyMembers[i].relationShip == "self") {
-                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                        break;
-                                    }*/
-                                }
+                                overlayData(model, obj);
                             }
 
                         },
