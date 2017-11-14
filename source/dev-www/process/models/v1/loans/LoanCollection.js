@@ -61,7 +61,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/depositSummary'
         },
-        save:{ 
+        save:{
             method:'POST',
             url:endpoint+'/',
         },
@@ -69,9 +69,18 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'PUT',
             url:endpoint+'/',
         },
+        batchUpdate: {
+            method: 'PUT',
+            url: endpoint + '/batchRepay'
+        },
         processCashDeposite:{
             method:'POST',
             url:endpoint+'/processCashDeposite',
+            isArray: true
+        },
+        findDepositSummaries: {
+            method: "GET",
+            url: endpoint + "/findDepositSummaries",
             isArray: true
         }
     });
