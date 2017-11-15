@@ -633,6 +633,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					PM.pop('collection-demand', memberError,5000);
 					return false;
 				}
+				return true;
 			},
 			preSave: function(model, formCtrl) {
 				if (!this.validateCollection(model, formCtrl)) {
