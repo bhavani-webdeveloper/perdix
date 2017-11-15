@@ -4269,14 +4269,7 @@
         "items": {
           "type": "object",
           "required": [
-            "buyerName",
-            "sector",
-            "subSector",
-            "product",
-            "paymentTerms",
-            "paymentDate",
-            "paymentFrequency",
-            "receivablesOutstanding"
+            "buyerName"
           ],
           "properties": {
             "buyerName": {
