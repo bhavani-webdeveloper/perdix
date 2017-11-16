@@ -2749,7 +2749,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                 var autoRejected = false;
 
-                /*if (model.currentStage == 'FieldAppraisal'){
+                if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
                         return;
@@ -2773,7 +2773,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         autoRejected = true;
                         
                     }
-                }*/
+                }
 
                 if(model.currentStage=='ScreeningReview'){
                     var commercialCheckFailed = false;
