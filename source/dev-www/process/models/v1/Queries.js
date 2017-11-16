@@ -697,6 +697,20 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+
+        resource.getDedupeDetails = function(filter) {
+            var deferred = $q.defer();
+            var request = {};
+            request.ids = (_.hasIn(filter, 'ids') && filter.ids.length > 0) ? filter.ids : [""];
+            resource.getResult("dedupe.list", request).then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
+
         return resource;
     }
 ]);

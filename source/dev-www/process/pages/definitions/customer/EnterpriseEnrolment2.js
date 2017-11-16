@@ -1,9 +1,9 @@
 
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "Dedupe", "$filter",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, Dedupe, $filter){
 
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
@@ -3703,7 +3703,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     Utils.removeNulls(resp.customer,true);
                     model.customer = resp.customer;
                     if (model._bundlePageObj){
-                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
+                        Dedupe.create({
+                            "customerId": model.customer.id,
+                            "status": "pending"
+                            }).$promise;
                     }
                 }, function(httpRes){
                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

@@ -537,7 +537,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     });
                     model.loanAccount.applicant = params.customer.urnNo;
                 }
-                model.applicant.id = params.customer.id;
+                model.applicant = params.customer;
             },
             "lead-loaded": function(bundleModel, model, obj) {
                 model.lead = obj;
@@ -2775,6 +2775,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
                 var nextStage = null;
+                var dedupeCustomerIdArray = [];
                 /* TODO Call proceed servcie for the loan account */
                 // if(isEnrollmentsSubmitPending(model)){
                 //     return;
@@ -2791,7 +2792,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     if(!validateCibilHighmark(model)){
                         return;
                     }
+
+                    angular.forEach(model.loanAccount.loanCustomerRelations, function(item, index) {
+                                dedupeCustomerIdArray.push(item.customerId);
+                    })
+                    dedupeCustomerIdArray.push(model.loanAccount.customerId);
                 }
+
 
                 var autoRejected = false;
 
@@ -2876,6 +2883,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 }
 
                 Utils.confirm("Are You Sure?").then(function(){
+                    var mandatoryPromises = [];
+                    var mandatoryToProceedLoan = {
+                        "Dedupe": true
+                    };
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
@@ -2891,41 +2902,67 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     PageHelper.showProgress("update-loan", "Working...");
 
                     if (reqData.loanAccount.currentStage == 'Screening'){
-                        return Scoring.get({
-                            auth_token:AuthTokenHelper.getAuthData().access_token,
-                            LoanId:reqData.loanAccount.id,
-                            ScoreName: "RiskScore1"
+
+
+                        var p2 = $q.when()
+                        .then(function(){
+                            $log.info("p2_1 is resolved");
+                            var p2_1 = Scoring.get({
+                                auth_token:AuthTokenHelper.getAuthData().access_token,
+                                LoanId:reqData.loanAccount.id,
+                                ScoreName: "RiskScore1"
+                            }).$promise;
+                            return p2_1;
                         })
-                            .$promise
-                            .finally(function(){
-                                Queries.getQueryForScore1(reqData.loanAccount.id)
-                                    .then(function(result){
-                                        reqData.loanAccount.literateWitnessFirstName = result.cbScore;
-                                        reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
-                                    }, function(response){
+                        .then(function(){
+                            var p2_2 = Queries.getQueryForScore1(reqData.loanAccount.id);
+                            p2_2.then(function(result){
+                                $log.info("p2_2 is resolved");
+                                reqData.loanAccount.literateWitnessFirstName = result.cbScore;
+                                reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
+                            }, function(response){
 
-                                    })
-                                    .finally(function(){
-                                        IndividualLoan.update(reqData)
-                                            .$promise
-                                            .then(function(res){
-                                                PageHelper.showProgress("update-loan", "Done.", 3000);
-                                                return navigateToQueue(model);
-                                            }, function(httpRes){
-                                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                                                PageHelper.showErrors(httpRes);
-                                            })
-                                            .finally(function(){
-                                                PageHelper.hideLoader();
-                                            })
-                                    })
-                            })
+                            });
+                            return p2_2;
+                        })
+
+                        mandatoryPromises.push(p2);
+
+                        // Dedupe call
+                        var p3 =Queries.getDedupeDetails({
+                            "ids" : dedupeCustomerIdArray
+                        }).then(function(d){
+                            console.log(d);
+
+                            if (d.length != dedupeCustomerIdArray.length) {
+                                PageHelper.showProgress("dedupe-status", "Not all customers have done dedupe", 5000);
+                                mandatoryToProceedLoan['Dedupe'] = false;
+                                return;
+                            }
+
+                            for (var i=0;i<d.length;i++){
+                                var item = d[i];
+                                if (item.status != 'finished'){
+                                    PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);
+                                    mandatoryToProceedLoan['Dedupe'] = false;
+                                }
+                            }
+
+                            for (var i=0; i< d.length; i++){
+                                item = d[i];
+                                if (item.duplicate_above_threshold_count != null && item.duplicate_above_threshold_count > 0) {
+                                    reqData.stage = 'Dedupe';
+                                    break;
+                                }
+                            }
+                        })
+
+                        mandatoryPromises.push(p3);
+
                     }
-
-                    var p1, mandatoryPromises = [];
                     if (reqData.loanAccount.currentStage == 'Sanction'){
                         /* Auto population of Loan Collateral */
-                        p1 = Enrollment.getCustomerById({id:model.loanAccount.customerId})
+                        var p1 = Enrollment.getCustomerById({id:model.loanAccount.customerId})
                             .$promise
                             .then(function(enterpriseCustomer){
                                 model.availableMachines = [];
@@ -2954,45 +2991,57 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             }, function(httpResponse){
 
                             });
+
+                        mandatoryPromises.push(p1);
                     }
 
                     if(model.loanAccount.currentStage === 'Application'){
                         var psychoPromise = checkPsychometricTestValidity(model);
-
                         mandatoryPromises.push(psychoPromise);
                     }
 
 
-                    $q.all(mandatoryPromises).then(function(){
-                        $q.all([p1])
-                        .finally(function(httpRes){
-                            reqData.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted;
-                            reqData.loanAccount.loanCustomerRelations = _.cloneDeep(model.loanAccount.loanCustomerRelations);
-                            if(autoRejected) {
-                               reqData.loanAccount.rejectReason = reqData.remarks = "Loan Application Auto-Rejected due to Negative Proxy Indicators";
-                            }
-                            IndividualLoan.update(reqData)
-                            .$promise
-                            .then(function(res){
-
-                                if(res.stage = "Rejected" && autoRejected){
-                                    Utils.alert("Loan Application Auto-Rejected due to Negative Proxy Indicators");
+                    $q.all(mandatoryPromises)
+                        .then(function(){
+                            try{
+                                $log.info("All promises resolved. ")
+                                if (mandatoryToProceedLoan["Dedupe"] == false){
+                                    throw new Error("Dedupe is preventing Loan proceed");
                                 }
 
-                                PageHelper.showProgress("update-loan", "Done.", 3000);
-                                return navigateToQueue(model);
-                            }, function(httpRes){
-                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                                PageHelper.showErrors(httpRes);
-                            })
-                            .finally(function(){
+                                reqData.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted;
+                                reqData.loanAccount.loanCustomerRelations = _.cloneDeep(model.loanAccount.loanCustomerRelations);
+                                if (autoRejected) {
+                                   reqData.loanAccount.rejectReason = reqData.remarks = "Loan Application Auto-Rejected due to Negative Proxy Indicators";
+                                }
+
+                                IndividualLoan.update(reqData)
+                                .$promise
+                                .then(function(res){
+
+                                    if(res.stage = "Rejected" && autoRejected){
+                                        Utils.alert("Loan Application Auto-Rejected due to Negative Proxy Indicators");
+                                    }
+
+                                    PageHelper.showProgress("update-loan", "Done.", 3000);
+                                    return navigateToQueue(model);
+                                }, function(httpRes){
+                                    PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
+                            } catch (e){
                                 PageHelper.hideLoader();
-                            })
-                        })
-                    }, function(res) {
-                        PageHelper.showErrors(res);
-                        PageHelper.hideLoader();
-                    });
+                                PageHelper.showProgress("update-loan", "Unable to proceed Loan.", 3000);
+                            }
+
+                        }, function(res) {
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(res);
+                        }
+                    );
 
                 })
             },

@@ -2,9 +2,9 @@ define({
     pageUID: "customer.IndividualEnrolment2",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe"],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter){
+                     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe){
 
                 var pageParams = {
                     readonly: true
@@ -3169,7 +3169,11 @@ define({
                                                     Utils.removeNulls(res.customer, true);
                                                     model.customer = res.customer;
                                                     if (model._bundlePageObj){
-                                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
+                                                        Dedupe.create({
+                                                            "customerId": model.customer.id,
+                                                            "status": "pending"
+                                                            }).$promise;
                                                     }
                                                 },
                                                 function(httpRes){

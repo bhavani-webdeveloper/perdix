@@ -55,6 +55,32 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 });
             }
 
+
+            var dqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.DedupeQueue"];
+
+            if (dqMenu) {
+                dqMenu.data = 0;
+                _.forEach(centres, function(centre) {
+                    IndividualLoan.search({
+                        'stage': 'Dedupe',
+                        'enterprisePincode': '',
+                        'applicantName': '',
+                        'area': '',
+                        'villageName': '',
+                        'customerName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'branchName': currentBranch.branchName,
+                        'centreCode': centre.centreCode
+                    }).$promise.then(function(response, headerGetter) {
+                        dqMenu.data = dqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        dqMenu.data = '-';
+                    });
+                });
+            }
+
+
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
