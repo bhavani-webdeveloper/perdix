@@ -1,6 +1,12 @@
-irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "Audit",
-    function($log, $q, $stateParams, $scope, PagesDefinition, SessionStore, Audit) {
+irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
+["$log", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "PageHelper", "Audit",
+    function($log, $q, $stateParams, $scope, PagesDefinition, SessionStore, PageHelper, Audit) {
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
+
+        if (!irf.appConfig.AMS_ENABLED) {
+            PageHelper.setError({message: "Audit Feature is disabled"});
+            return;
+        }
 
         PagesDefinition.getUserAllowedDefinition({
             "title": "AUDIT_DASHBOARD",
@@ -304,8 +310,5 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
             }
         });
-
-
-
     }
 ]);
