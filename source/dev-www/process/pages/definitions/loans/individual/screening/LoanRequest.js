@@ -2135,6 +2135,33 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 }
                             },
                             {
+                                "key": "loanAccount.partnerCode",
+                                "title": "PARTNER_NAME", //add label in translation                        
+                                "type": "select",
+                                "enumCode": "partner",
+                                "condition":"model.siteCode=='KGFS'",
+                                //"readonly": true
+                            },
+                            {
+                                "key": "loanAccount.productCategory",
+                                "type":"select",
+                                "title":"PRODUCT_CATEGORY",
+                                "condition":"model.siteCode=='KGFS'",
+                                "enumCode":"loan_product_category"
+                            },
+                            {
+                                "key": "loanAccount.frequency",
+                                "type":"select",
+                                "condition":"model.siteCode=='KGFS'",
+                                "enumCode":"loan_product_frequency"
+                            },
+                            {
+                                "key": "loanAccount.loanApplicationDate",
+                                "type": "date",
+                                "condition":"model.siteCode=='KGFS'",
+                                    //"readonly": true
+                            },
+                            {
                                 key:"loanAccount.disbursementSchedules",
                                 title:"DISBURSEMENT_SCHEDULES",
                                 add:null,
