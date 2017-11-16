@@ -2706,7 +2706,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (model.siteCode != 'sambandh') {
                         $log.info("inside sam");
                         var cbsdate=SessionStore.getCBSDate();
-                        if(model._currentDisbursement.scheduledDisbursementDate)
+                        if(model._currentDisbursement && model._currentDisbursement.scheduledDisbursementDate)
                         var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
                         var cbsmonth = ((new Date(cbsdate)).getMonth());
                         var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());

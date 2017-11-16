@@ -2135,33 +2135,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 }
                             },
                             {
-                                "key": "loanAccount.partnerCode",
-                                "title": "PARTNER_NAME", //add label in translation                        
-                                "type": "select",
-                                "enumCode": "partner",
-                                "condition":"model.siteCode=='KGFS'",
-                                //"readonly": true
-                            },
-                            {
-                                "key": "loanAccount.productCategory",
-                                "type":"select",
-                                "title":"PRODUCT_CATEGORY",
-                                "condition":"model.siteCode=='KGFS'",
-                                "enumCode":"loan_product_category"
-                            },
-                            {
-                                "key": "loanAccount.frequency",
-                                "type":"select",
-                                "condition":"model.siteCode=='KGFS'",
-                                "enumCode":"loan_product_frequency"
-                            },
-                            {
-                                "key": "loanAccount.loanApplicationDate",
-                                "type": "date",
-                                "condition":"model.siteCode=='KGFS'",
-                                    //"readonly": true
-                            },
-                            {
                                 key:"loanAccount.disbursementSchedules",
                                 title:"DISBURSEMENT_SCHEDULES",
                                 add:null,
@@ -2794,7 +2767,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     else
                         commercialCheckFailed = true;
                     
-                    /*if (commercialCheckFailed){
+                    if (commercialCheckFailed){
                         if(model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
                             for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
                                 if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC' ){
@@ -2818,7 +2791,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 }
                             }
                         }
-                    }*/
+                    }
                 }
 
                 if (!preLoanSaveOrProceed(model)){
@@ -2837,11 +2810,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
                     if(model.currentStage == 'Sanction'){
-                        if(model.siteCode=='KGFS'){
-                            reqData.stage = 'LoanBooking'; 
-                        }else{
-                           reqData.stage = 'LoanInitiation'; 
-                        }
+                        reqData.stage = 'LoanInitiation'; 
                     }
                    
                     PageHelper.showProgress("update-loan", "Working...");

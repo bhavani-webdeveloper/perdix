@@ -82,6 +82,18 @@
       },
       {
          "order":7,
+         "code":"LoanInitiation",
+         "name":"Loan Input",
+         "stageType":"CAPTURE",
+         "sendSms":"Yes",
+         "smsCategory":"Sanction",
+         "isAccountOpening":false,
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":8,
          "code":"LoanBooking",
          "name":"Loan Booking",
          "stageType":"CAPTURE",
@@ -93,7 +105,7 @@
          ]
       },
       {
-         "order":8,
+         "order":9,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
@@ -876,7 +888,7 @@
                      "Application", "Screening", "FieldAppraisal", "LoanInitiation","DocumentUpload"
                   ]
                },
-            "scheduleStartDate":{
+			   "scheduleStartDate":{
                   "title":"scheduleStartDate",
                   "type":"string",
                   "captureStages":[
