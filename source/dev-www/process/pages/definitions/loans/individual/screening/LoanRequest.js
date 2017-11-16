@@ -397,6 +397,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
+            model.siteCode = SessionStore.getGlobalSetting("siteCode");
             model.customer=model.customer || {};
             model.review = model.review|| {};
             if (_.hasIn(model, 'loanAccount')){
@@ -2808,9 +2809,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
-                    if (model.currentStage == 'Sanction') {
-                        reqData.stage = 'LoanInitiation';
+                    if(model.currentStage == 'Sanction'){
+                        if(model.siteCode=='KGFS'){
+                            reqData.stage = 'LoanBooking'; 
+                        }else{
+                           reqData.stage = 'LoanInitiation'; 
+                        }
                     }
+                   
                     PageHelper.showProgress("update-loan", "Working...");
 
                     if (reqData.loanAccount.currentStage == 'Screening'){
