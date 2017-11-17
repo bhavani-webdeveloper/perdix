@@ -60,20 +60,17 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                             headers: {},
                             body: data[0].body
                         };
-                        returnObj.headers['max-total-count'] = 0;
+                        var maxCount = 0;
                         if (data[0].headers['x-total-count']) {
-                            var c1 = Number(data[0].headers['x-total-count']);
-                            returnObj.headers['x-total-count'] = c1;
-                            returnObj.headers['max-total-count'] = c1;
+                            maxCount = returnObj.headers['x-total-count'] = Number(data[0].headers['x-total-count']);
                         }
                         if (data[1].headers['x-total-count']) {
-                            var c1 = returnObj.headers['max-total-count'];
                             var c2 = Number(data[1].headers['x-total-count']);
-                            if (c2 > c1) {
-                                returnObj.headers['max-total-count'] = c2;
+                            if (c2 > maxCount) {
+                                maxCount = c2;
                             }
-                            returnObj.headers['x-total-count'] += c2;
                         }
+                        returnObj.headers['x-total-count'] = String(maxCount);
                         returnObj.body.push.apply(returnObj.body, data[1].body);
                         deferred.resolve(returnObj);
                     }, function(data) {
@@ -86,7 +83,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                         return 15;
                     },
                     "getTotalItemsCount": function(response, headers) {
-                        return headers['max-total-count']
+                        return headers['x-total-count']
                     }
                 },
                 listOptions: {
@@ -95,10 +92,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                     listStyle: "table",
                     itemCallback: function(item, index) {},
                     getItems: function(response, headers) {
-                        if (response != null && response.length && response.length != 0) {
-                            return response;
-                        }
-                        return [];
+                        return response && response.length? response: [];
                     },
                     getListItem: function(item) {
                         return [
