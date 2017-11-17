@@ -196,11 +196,11 @@ define({
                                     model.customer.id = obj.applicantCustomerId;
                                     for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                         $log.info(model.customer.familyMembers[i].relationShip);
-                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                        /*if (model.customer.familyMembers[i].relationShip == "self") {
+                                        // model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                        if (model.customer.familyMembers[i].relationShip == "self") {
                                             model.customer.familyMembers[i].educationStatus=obj.educationStatus;
                                             break;
-                                        }*/
+                                        }
                                     }
                                 } catch (e){
                                     $log.error("Error while overlay");

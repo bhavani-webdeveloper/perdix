@@ -226,7 +226,16 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 model.lead.area=res.locality;
                                                 model.lead.cityTownVillage=res.villageName;
                                                 model.lead.applicantCustomerId = res.id;
-
+                                                $log.info(res.familyMembers)
+                                                $log.info("res.familyMembers")
+                                                for (var i=0;i<res.familyMembers.length; i++){
+                                                    var f = res.familyMembers[i];
+                                                    if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                                                        selfExist = true;
+                                                        break;
+                                                    }
+                                                }
+                                                model.lead.educationStatus = f.educationStatus;
                                             }, function(httpRes){
                                                 PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                                         })
@@ -343,7 +352,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                         //title:"BUSINESS_LINE",
                                         type: "select",
                                         enumCode: "businessActivity",
-                                        parentEnumCode: "businessType"
+                                        parentEnumCode: "businessType",
+                                        parentValueExpr:"model.lead.businessType",
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type: "date"
