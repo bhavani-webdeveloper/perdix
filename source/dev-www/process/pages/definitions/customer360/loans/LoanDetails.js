@@ -8,7 +8,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
         var deriveRecordStr=function(format,data){
             var Recordstr=format;
-            Recordstr=Recordstr.replace("<ACCOUNT>",data.accountId).replace("<FEE_SEQUENCE_NUMBER>",data.sequenceNum).replace("<DEMAND_SEQUENCE_NUMBER>",data.sequenceNum);
+            Recordstr=Recordstr
+                .replace("<ACCOUNT>",data.accountId)
+                .replace("<FEE_SEQUENCE_NUMBER>",data.sequenceNum)
+                .replace("<DEMAND_SEQUENCE_NUMBER>",data.sequenceNum)
+                .replace("<LOAN_ID>", $stateParams.pageId);
             return Recordstr;
         }
 
