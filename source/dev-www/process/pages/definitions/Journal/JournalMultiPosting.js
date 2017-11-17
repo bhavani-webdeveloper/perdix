@@ -1,13 +1,14 @@
-define(['perdix/entities/Lead'],function(Lead){
-    console.log(Lead);
-    console.log("TESTING");
+define([],function(){
+    
+
+    
     return {
     pageUID: "Journal.JournalMultiPosting",
     pageType: "Engine",
-    dependencies: ["$log", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "SchemaResource"],
+    dependencies: ["$log", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "SchemaResource", "$injector"],
 
     $pageFn: function($log, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, SchemaResource) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, SchemaResource, $injector) {
 
         var branch = SessionStore.getBranch();
 
@@ -16,6 +17,9 @@ define(['perdix/entities/Lead'],function(Lead){
             "title": "MULTI_ENTRY_JOURNAL_POSTING",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                // AngularResourceService.getInstance().setInjector($injector);
+                // var ln = new LoanRepository();
+                // console.log(ln.searchIndividualLoan());
                 model.journal = model.journal || {};
                 model.journal.journalHeader = model.journal.journalHeader || {};
                 model.journal.journalHeader.journalDetails = [{

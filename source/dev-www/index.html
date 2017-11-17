@@ -105,6 +105,7 @@
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
 <script src="bower_components/accounting/accounting.js"></script>
 <script src="bower_components/mathjs/dist/math.min.js"></script>
+<script src="js/Rx.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -395,7 +396,7 @@
 <!-- <script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningReviewQueue.js"></script> -->
 <script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningTest.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/ScreeningReview.js"></script>
-<script src="process/pages/definitions/witfin/loans/individual/screening/LoanRequest.js"></script>
+<!-- <script src="process/pages/definitions/witfin/loans/individual/screening/LoanRequest.js"></script> -->
 <script src="process/pages/definitions/witfin/loans/individual/screening/Application.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/CrAppraisal.js"></script>
 <script src="process/pages/definitions/witfin/loans/individual/screening/VehicleValuation.js"></script>
@@ -580,9 +581,11 @@
     baseUrl: "./",
     paths: {
         "pages": "process/pages/definitions",
-        "perdix": "tsjs"
+        "perdix": "tsjs",
+        "@reactivex/rxjs": 'js/Rx'
 
     },
+    
     waitSeconds: 0
   });
 
