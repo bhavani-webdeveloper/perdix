@@ -1069,6 +1069,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     type: "array",
                     add: null,
                     remove: null,
+                    startEmpty: true,
                     title: "LOAN_CUSTOMER_RELATIONS",
                     items: [{
                         key: "loanAccount.loanCustomerRelations[].customerId",
