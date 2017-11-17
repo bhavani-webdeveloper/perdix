@@ -21,6 +21,16 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		return promise;
 	};
 
+	var autoLogin = function(username, authToken) {
+		AuthTokenHelper.setAuthData({
+			"access_token": authToken,
+			"token_type": "bearer",
+			"scope": "read write",
+			"auto_login_username": username
+		});
+		return $q.resolve();
+	};
+
 	var setUserData = function(_userData) {
 		if (_userData && _userData.login) {
 			userData = _userData;
@@ -72,41 +82,68 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);
 			});
-		}, function(response){
-			deferred.reject({
-				'status': response.status,
-				'statusText': response.statusText,
-				'data': response.data
-			});
+		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	var loadUserBranches = function() {
+		var deferred = $q.defer();
+		var username = SessionStore.getLoginname();
+		SysQueries.getUserBranches(username).then(function(response){
+			var branches = response.body;
+			var out = [];
+			for (var i=0; i<branches.length; i++){
+				out.push({
+					branchId: branches[i].branch_id,
+					branchCode: branches[i].branch_code,
+					branchName: branches[i].branch_name,
+					bankId : branches[i].bank_id
+				})
+			}
+			SessionStore.setItem('UserAllowedBranches', out);
+			deferred.resolve();
+		}, function(httpResponse) {
+			$log.error("Error trying to load allowed branches of user.")
+			deferred.resolve();
 		});
+		return deferred.promise;
+	};
+
+	var postLogin = function(refresh) {
+		var deferred = $q.defer();
+		removeUserData();
+		getUser().then(function(result) {
+			var m = irfStorageService.getMasterJSON("UserProfile");
+			var km = _.keys(m);
+			if (km.length !== 1 || km[0] !== username) {
+				// clear UserProfile
+				irfStorageService.removeMasterJSON("UserProfile");
+			}
+			setUserData(result);
+
+			var p = [
+				irfStorageService.cacheAllMaster(true, refresh),
+				loadUserBranches()
+			];
+			$q.all(p).then(function(msg) {
+				SessionStore.session.offline = false;
+				deferred.resolve();
+				themeswitch.changeTheme(themeswitch.getThemeColor(), true);
+			}, deferred.reject);
+		}, deferred.reject);
 		return deferred.promise;
 	};
 
 	return {
 		login: login,
+		autoLogin: autoLogin,
 		getUser: getUser,
-		getUserData: function() {
-			return userData;
-		},
+		getUserData: function() { return userData; },
+		removeUserData: removeUserData,
+		postLogin: postLogin,
 		loginAndGetUser: function(username, password){
 			var deferred = $q.defer();
-			login(username, password).then(function(arg){
-				removeUserData();
-				getUser().then(function(result){
-					var m = irfStorageService.getMasterJSON("UserProfile");
-					var km = _.keys(m);
-					if (km.length !== 1 || km[0] !== username) {
-						// clear UserProfile
-						irfStorageService.removeMasterJSON("UserProfile");
-					}
-					setUserData(result);
-					deferred.resolve(result);
-				},function(response){
-					deferred.reject(response);
-				});
-			},function(errorArg){
-				deferred.reject(errorArg);
-			});
+			login(username, password).then(function() {postLogin(true)}, deferred.reject);
 			return deferred.promise;
 		},
 		isUserDataResolved: function(){

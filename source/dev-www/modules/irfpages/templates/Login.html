@@ -1,7 +1,7 @@
 <br/><br/>
-
+&nbsp;
 <div class="center-box login-box">
-    <div class="box box-widget widget-user-2 animat effect7" ng-class="{anim:showLoading}">
+    <div class="box box-widget widget-user-2 animat effect7" ng-class="{anim:showLoading,'hide-login':hideLogin}">
         <!-- Add the bg color to the header using any of the bg-* classes -->
         <div class="widget-user-header bg-theme">
             <div class="widget-user-image">
@@ -17,7 +17,7 @@
         <div class="box-footer animat">
             <form name="onlineForm" ng-show="isOnline" class="form-horizontal" ng-submit="c.onlineLogin(c.username, c.password)">
                 <div ng-show="isOnline" class="box-body pass-form">
-                    <input type="text" ng-model="c.username" class="form-control" id="inputEmail3" placeholder="Username" autocomplete="off" required>
+                    <input type="text" ng-model="c.username" class="form-control" id="inputEmail3" placeholder="Username" autocomplete="off" required ng-readonly="autoLogin">
                     <br/>
                     <input type="password" ng-model="c.password" class="form-control" id="inputPassword3" placeholder="Password" autocomplete="off" required>
                     <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
@@ -37,7 +37,7 @@
                         ng-click="isOnline ? c.onlineLogin(c.username, c.password) : c.offlineLogin(c.pin)"
                         class="btn btn-theme pull-right login-button">&nbsp;Sign in&nbsp;</button>
                         <!-- ng-disabled="isOnline ? (!c.username || !c.password) : (!c.pin)" -->
-                    <button type="reset" ng-click="c.username=c.password=c.pin=null" class="btn btn-default pull-right login-button">&nbsp;Clear&nbsp;</button>
+                    <button type="reset" ng-click="c.reset()" class="btn btn-default pull-right login-button">&nbsp;Clear&nbsp;</button>
                 </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <a class="pull-left color-theme" href="" ui-sref="Reset({type:'forgot'})">Forgot password?</a>
         <a class="pull-right color-theme" href="" ui-sref="Reset({type:'reset'})">Reset password</a>
     </div>
-    <center><div class="cantina-loader animat" ng-class="{anim:showLoading,cc:showLoading==='cc'}" style="left:35px;top:-160px;"></div></center>
+    <center><div class="cantina-loader animat" ng-class="{anim:showLoading,cc:showLoading==='cc'}" style="left:35px" ng-style="hideLogin?{top:'160px'}:{top:'-160px'}"></div></center>
 </div>
 
 <br/><br/><br/><br/>

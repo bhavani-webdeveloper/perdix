@@ -371,7 +371,12 @@ irf.pages.config([
 	function($stateProvider, $urlRouterProvider) {
 	var statesDefinition = [{
 		name: "Login",
-		url: "/Login",
+		url: "/Login/:username/:authToken",
+		params: {
+			username: {value: null, squash: true},
+			authToken: {value: null, squash: true},
+			autoLoginUsername: null
+		},
 		templateUrl: "modules/irfpages/templates/Login.html",
 		controller: 'LoginCtrl',
 		controllerAs: 'c'

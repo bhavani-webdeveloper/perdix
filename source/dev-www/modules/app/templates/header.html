@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <!-- For perdix 7 compatibility -->
-                <li id="connect_perdix7" ng-show="$parent.appConfig.CONNECT_PERDIX7" class="dropdown notifications-menu">
+                <li id="connect_perdix7" ng-show="$parent.appConfig.CONNECT_PERDIX7 && isPerdix7Integrated" class="dropdown notifications-menu">
                     <a href="" class="dropdown-toggle" onclick="integrationApi.switchApp()">
                         <strong>7</strong>
                     </a>
@@ -175,7 +175,7 @@
                             <div class="pull-left" ng-show="!$parent.latest_apk_force_upgrade">
                                 <a ng-click="gotoPageEngine({pageName: 'UserProfile', pageId: ss.session.login})" href="#" class="btn btn-default btn-flat" onClick="$('.dropdown.user.user-menu').removeClass('open')">Profile</a>
                             </div>
-                            <div class="pull-right">
+                            <div class="pull-right" ng-hide="$parent.appConfig.CONNECT_PERDIX7 && isPerdix7Integrated">
                                 <a ng-click="logout()" class="btn btn-default btn-flat" onClick="$('.dropdown.user.user-menu').removeClass('open')">Sign out</a>
                             </div>
                         </li>

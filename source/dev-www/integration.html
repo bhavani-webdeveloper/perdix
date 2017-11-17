@@ -81,7 +81,7 @@
         <iframe id="i8iframe" src="index8.html"></iframe>
     </div>
     <div id="i7">
-        <iframe id="i7iframe" src="http://uatperdix.kgfs.co.in/perdix7/"></iframe>
+        <iframe id="i7iframe" src="http://kgfsuat2.perdix.co.in:8080/perdix7"></iframe>
     </div>
 
 <script type="text/html" id="i7Html">
@@ -115,8 +115,8 @@
 
     var switchApp = function () {
         if (showI7) {
-            if (!linkOn8Visible) {
-                injectTokenStorage();
+            if (!linkOn8Visible) { // only under '/Page'(success login) header will be available, so like will be visible
+                autoLoginPerdix8();
                 if (typeof (integrationApi) != 'undefined') {
                     integrationApi.switchApp();
                     return;
@@ -182,16 +182,10 @@
         i7iframe.contentWindow.location.reload();
     };
 
-    var injectTokenStorage = function() {
+    var autoLoginPerdix8 = function() {
+        var username = new CookieManager(i7iframe.contentDocument).readCookie('logedInUserId');
         var access_token = new CookieManager(i7iframe.contentDocument).readCookie('oauth_token');
-        var authData = null;
-        try { authData = JSON.parse(localStorage.getItem('AuthData')); } catch (e) {}
-        if (!authData) {
-            authData = {};
-        }
-        authData.access_token = access_token;
-        localStorage.setItem('AuthData', JSON.stringify(authData));
-        i8iframe.contentWindow.location.hash = '#/' + i8iframe.contentWindow.irf.HOME_PAGE.url;
+        i8iframe.contentWindow.location.hash = '#/Login/' + username + '/' + access_token;
     };
 
     show7(); // STARTING POINT
