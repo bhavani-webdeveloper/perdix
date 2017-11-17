@@ -1124,6 +1124,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
                         title: "RELATIONSHIP_TO_BUSINESS",
+                        startEmpty: true,
                         items: [
                             {
                                 key: "customer.enterpriseCustomerRelations[].relationshipType",
