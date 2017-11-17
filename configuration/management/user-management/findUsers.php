@@ -7,9 +7,8 @@ header("Access-Control-Request-Method: PUT");
 $QUERY = "
 SELECT u.user_id, u.user_name, ur.role_id, r.name role_name, ur.id user_role_id
 FROM ".DB_SCHEMA.".users u
-  LEFT JOIN ".DB_SCHEMA.".user_roles ur
-    INNER JOIN ".DB_SCHEMA.".roles r ON ur.role_id = r.id
-  ON u.user_id = ur.user_id
+  LEFT JOIN ".DB_SCHEMA.".user_roles ur ON u.user_id = ur.user_id
+  LEFT JOIN ".DB_SCHEMA.".roles r ON ur.role_id = r.id
 WHERE u.user_id like concat(?, '%')
 AND u.user_name like concat(?, '%')
 ";
