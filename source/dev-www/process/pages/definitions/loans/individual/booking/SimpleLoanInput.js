@@ -294,7 +294,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                         "loanAccount.partnerCode",
                         "loanAccount.productCategory",
                         "loanAccount.frequency",
-                        "loanAccount.productCode",
+                        {
+                            key: "loanAccount.productCode",
+                            onSelect: function(valueObj, model, context) {
+                                model.loanAccount.productCode = valueObj.productCode;
+                                if(valueObj.tenure_from == valueObj.tenure_to) {
+                                    model.loanAccount.tenure = valueObj.tenure_to;
+                                }
+                                else {
+                                    delete model.loanAccount.tenure;
+                                    model.tenurePlaceHolderExpr = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                }
+                                getProductDetails(model.loanAccount.productCode, model);
+                            },
+                        },
                         "loanAccount.tenure"
                     ]
                 }, {

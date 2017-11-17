@@ -93,6 +93,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "PRODUCT_CATEGORY",
                         "x-schema-form": {
                             "type": "select",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                model.loanAccount.productCode = undefined;
+                            }
                         },
                         "enumCode": "loan_product_category"
                     },
@@ -101,6 +104,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "FREQUENCY",
                         "x-schema-form": {
                             "type": "select",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                model.loanAccount.productCode = undefined;
+                            }
                         },
                         "enumCode": "loan_product_frequency"
                     },
@@ -122,24 +128,14 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
 
                                 return Queries.getLoanProductCode(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode);
                             },
-                            onSelect: function(valueObj, model, context) {
-                                model.loanAccount.productCode = valueObj.productCode;
-                                if(valueObj.tenure_from == valueObj.tenure_to) {
-                                    model.loanAccount.tenure = valueObj.tenure_to;
-                                }
-                                else {
-                                    delete model.loanAccount.tenure;
-                                    model.tenurePlaceHolderExpr = valueObj.tenure_from + '-' + valueObj.tenure_to;
-                                }
-                            },
                             getListDisplayItem: function(item, index) {
                                 return [
                                     item.name
                                 ];
                             },
-                            onChange: function(value, form, model) {
-                                getProductDetails(value, model);
-                            },
+                            // onChange: function(value, form, model) {
+                            //     getProductDetails(value, model);
+                            // },
                         }
                     },
                     "tenure": {
