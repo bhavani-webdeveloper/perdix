@@ -10,6 +10,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Bundle/loans.individual.screening.ScreeningInput",
+                "Page/Engine/loans.individual.screening.DedupeQueue",
                 "Page/Engine/loans.individual.screening.ScreeningQueue",
                 "Page/Engine/loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/loans.individual.screening.ApplicationQueue",

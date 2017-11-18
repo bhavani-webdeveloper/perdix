@@ -6,12 +6,12 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
     var branch = SessionStore.getCurrentBranch().branchName;
 
     var computeTotal = function(model){
-        model.totalAmount=0;
+        var totalAmount=0;
         for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
             if(model.pendingCashDeposits[i].check)
-                model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
+                totalAmount+=model.pendingCashDeposits[i].amount_collected;
         }
-        model.amountDeposited = model.totalAmount;
+        model.bankDepositSummary.totalAmount = totalAmount;
     }
 
     return {
@@ -22,6 +22,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             $log.info("Individual Loan Booking Page got initialized");
             model.loggedInUser = SessionStore.getLoginname();
             PageHelper.showLoader();
+            model.bankDepositSummary = {};
 
             var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
@@ -51,9 +52,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 var records = res.body;
 
                 if(records && _.isArray(records) && records.length > 0){
-
                     var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
-                    model.bankDepositSummary = {};
                     if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
                         model.bankDepositSummary.bankAccountNumber = defaultBank[0].account_number;
                 }
@@ -185,9 +184,14 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 }]
             },
             {
-                "key":"amountDeposited",
+                "key":"bankDepositSummary.totalAmount",
                 "type":"amount",
                 "title":"AMOUNT_DEPOSITED"
+            },
+            {
+                "key":"bankDepositSummary.reference",
+                "type":"text",
+                "title":"REFERENCE"
             },
             {
                 key: "bankDepositSummary.bankAccountNumber",
@@ -311,7 +315,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         },
         actions: {
             submit: function(model, form, formName){
-                if (!model.amountDeposited || model.amountDeposited <=0){
+                if (!model.bankDepositSummary.totalAmount || model.bankDepositSummary.totalAmount <=0){
                     PageHelper.showProgress("deposit-cash","Amount deposited cannot be zero",5000);
                     return false;
                 }
