@@ -4,26 +4,30 @@ define({
     dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state"],
     $pageFn: function($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state) {
         var branch = SessionStore.getBranch();
+
+        var loadBRSRecords = function(model){
+            PageHelper.showBlockingLoader("Loading...");
+            model.loanCollectionSummaryDTOs = {};
+            LoanCollection.findDepositSummaries({
+                'currentStage': "BRSValidation",
+            }).$promise.then(function(result) {
+                $log.info(result)
+                $log.info("result")
+                if (result && result.length) {
+                    model.loanCollectionSummaryDTOs = [];
+                    for (var i = 0; i < result.length; i++) {
+                        model.loanCollectionSummaryDTOs.push(result[i]);
+                    };
+                }
+            }).finally(function() {
+                PageHelper.hideBlockingLoader();
+            });
+        }
         return {
             "type": "schema-form",
             "title": "BRS_MULTI_APPROVAL",
             initialize: function(model, form, formCtrl) {
-                model.loanCollectionSummaryDTOs = model.loanCollectionSummaryDTOs || {};
-                LoanCollection.findDepositSummaries({
-                    'currentStage': "BRSValidation",
-                }).$promise.then(function(result) {
-                    $log.info(result)
-                    $log.info("result")
-                    if (result && result.length) {
-                        model.loanCollectionSummaryDTOs = [];
-                        for (var i = 0; i < result.length; i++) {
-                            model.loanCollectionSummaryDTOs.push(result[i]);
-                        };
-                        $log.info(model.loanCollectionSummaryDTOs);
-                    }
-                }).finally(function() {
-                    PageHelper.hideLoader();
-                });
+                loadBRSRecords(model);
             },
             form: [{
                 "type": "box",
@@ -115,14 +119,13 @@ define({
                         Utils.confirm("Are You Sure?")
                             .then(function() {
                                 PageHelper.showLoader();
+                                PageHelper.showProgress("brs-update", "Working");
                                 reqData.repaymentProcessAction = "PROCEED";
                                 LoanCollection.batchUpdate(reqData, function(resp, header) {
-                                    PageHelper.hideLoader();
-                                    return irfNavigator.go({
-                                        state: "Page",
-                                        pageName: "LoansCollectionsDashboard"
-                                    });
+                                    PageHelper.showProgress("brs-update", "Done", 5000);
+                                    loadBRSRecords(model);
                                 }, function(resp) {
+                                    PageHelper.showProgress("brs-update", "Failed.");
                                     PageHelper.showErrors(resp);
                                 }).$promise.finally(function() {
                                     PageHelper.hideLoader();

@@ -71,7 +71,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         batchUpdate: {
             method: 'PUT',
-            url: endpoint + '/batchRepay'
+            url: endpoint + '/batchRepay',
+            isArray: true
         },
         processCashDeposite:{
             method:'POST',
