@@ -360,6 +360,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
         if(model.currentStage=='Screening')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
+        if (model.currentStage == 'Dedupe')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.DedupeQueue', pageId:null});
         if(model.currentStage=='ScreeningReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
         if(model.currentStage=='Application')
@@ -901,7 +903,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
               {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal'|| model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal'|| model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
 
                 "items": [
                     {
@@ -1101,7 +1103,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 type: "box",
                 title: "LOAN_CUSTOMER_RELATIONS",
                 "readonly":true,
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 items: [{
                     key: "loanAccount.loanCustomerRelations",
                     type: "array",
@@ -1159,7 +1161,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             {
                 "type": "box",
                 "title": "DEDUCTIONS_FROM_LOANAMOUNT",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 readonly:true,
                 "items": [
                     {
@@ -1204,7 +1206,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         {
             "type": "box",
             "title": "LOAN_MITIGANTS",
-            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
+            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
             "items": [{
                 key: "deviations.deviationParameter",
                 type: "array",
@@ -1986,7 +1988,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             {
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'",
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",
@@ -2796,7 +2798,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                     angular.forEach(model.loanAccount.loanCustomerRelations, function(item, index) {
                                 dedupeCustomerIdArray.push(item.customerId);
-                    })
+                    });
                     dedupeCustomerIdArray.push(model.loanAccount.customerId);
                 }
 

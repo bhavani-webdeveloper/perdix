@@ -542,7 +542,7 @@ define({
                         {
                             "type":"box",
                             "title":"KYC",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage =='Dedupe' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                             "readonly": true,
                             "items":[
                                 {
@@ -988,7 +988,7 @@ define({
                         {
                             "type": "box",
                             "title": "PERSONAL_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage =='Dedupe' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                             readonly:true,
                             "items": [
                                 {
@@ -1311,7 +1311,7 @@ define({
                         {
                             "type": "box",
                             "title": "CONTACT_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage =='Dedupe' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                             readonly:true,
                             "items": [
                                 "customer.mobilePhone",
@@ -1873,7 +1873,7 @@ define({
                         {
                             type:"box",
                             title:"HOUSEHOLD_LIABILITIES",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage =='Dedupe' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                             readonly:true,
                             items:[
                                 {
