@@ -217,7 +217,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 model.lead.maritalStatus=res.maritalStatus;
                                                 model.lead.landLineNo=res.landLineNo;
                                                 model.lead.dob=res.dateOfBirth;
-                                                model.lead.age=res.age;
                                                 model.lead.addressLine1=res.doorNo;
                                                 model.lead.addressLine2=res.street;
                                                 model.lead.pincode=res.pincode;
@@ -226,8 +225,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 model.lead.area=res.locality;
                                                 model.lead.cityTownVillage=res.villageName;
                                                 model.lead.applicantCustomerId = res.id;
-                                                $log.info(res.familyMembers)
-                                                $log.info("res.familyMembers")
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                }
                                                 for (var i=0;i<res.familyMembers.length; i++){
                                                     var f = res.familyMembers[i];
                                                     if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
