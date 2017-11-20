@@ -100,7 +100,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             updateAuditInfo: {
                 method: 'POST',
-                url: endpoint + '/UpdateAuditInfo'
+                url: endpoint + '/updateAuditInfo'
             },
             getAuditFull: {
                 method: 'GET',
