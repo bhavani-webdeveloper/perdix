@@ -1,16 +1,16 @@
-class AngularResourceRepository {
+class AngularResourceService {
 	
-	private static _instance = new AngularResourceRepository();
+	private static _instance = new AngularResourceService();
 	private $injector: any;
  	private constructor() {
-        if(AngularResourceRepository._instance){
-            throw new Error("Error: Instantiation failed: Use AngularResourceRepository.getInstance() instead of new.");
+        if(AngularResourceService._instance){
+            throw new Error("Error: Instantiation failed: Use AngularResourceService.getInstance() instead of new.");
         }
-        AngularResourceRepository._instance = this;
+        AngularResourceService._instance = this;
     }
 
-    public static getInstance():AngularResourceRepository {
-        return AngularResourceRepository._instance;
+    public static getInstance():AngularResourceService {
+        return AngularResourceService._instance;
     }
 
     public setInjector(service: any):void {
@@ -24,4 +24,4 @@ class AngularResourceRepository {
 
 }
 
-export = AngularResourceRepository;
+export = AngularResourceService;

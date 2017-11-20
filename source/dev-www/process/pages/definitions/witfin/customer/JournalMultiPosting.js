@@ -1,13 +1,13 @@
-define(['perdix/entities/Lead'],function(Lead){
-    console.log(Lead);
+define(['perdix/domain/model/loan/LoanProcess', 'perdix/domain/shared/AngularResourceService'],function(LoanProcess, AngularResourceService){
+    console.log(LoanProcess);
     console.log("TESTING");
     return {
     pageUID: "witfin.customer.JournalMultiPosting",
     pageType: "Engine",
-    dependencies: ["$log", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "SchemaResource"],
+    dependencies: ["$log", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "SchemaResource", "$injector"],
 
     $pageFn: function($log, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, SchemaResource) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, SchemaResource, $injector) {
 
         var branch = SessionStore.getBranch();
 
@@ -21,14 +21,32 @@ define(['perdix/entities/Lead'],function(Lead){
                 model.journal.journalHeader.journalDetails = [{
                         "interactionDate": Utils.getCurrentDate()
                 }];
-               
-                
+
+                AngularResourceService.getInstance().setInjector($injector);
+
+                var lp = new LoanProcess();
+                lp.get(6895)
+                    .finally(function(){
+                        console.log('INSIDE FINALLY');
+                    })
+                    .subscribe(
+                        function(data){
+                            console.log("data loaded");
+                            console.log(data);
+                        },
+                        function(err) {
+                            console.log("data error");
+                            console.log(err);
+                        }
+                    )
+
+
                 model.journal.journalHeader.valueDate = moment(new Date()).format("YYYY-MM-DD");
                 model.journal.journalHeader.transactionDate = moment(new Date()).format("YYYY-MM-DD");
                 model.journal.journalHeader.journalDetails.branchId = SessionStore.getCurrentBranch().branchId;
 
 
-               
+
                 $log.info("Inside submit()");
             },
             offline: true,
@@ -58,7 +76,7 @@ define(['perdix/entities/Lead'],function(Lead){
                                 "name": "CREDIT",
                                 "value": "CREDIT"
                             }]
-                    
+
                     }, {
                         key: "journal.journalHeader.journalDetails[].glAcNo",
                         type: "string",
@@ -75,7 +93,7 @@ define(['perdix/entities/Lead'],function(Lead){
                         key: "journal.journalHeader.journalDetails[].instrumentBranchName",
                         type: "string",
                     },
-                    
+
                     {
                         key: "journal.journalHeader.journalDetails[].instrumentNumber",
                         type: "string",
@@ -124,7 +142,7 @@ define(['perdix/entities/Lead'],function(Lead){
                 "title": "Journal Transaction Details",
 
                 "items":[
-                
+
                 {
                     key:"journal.journalHeader.transactionBranchId",
                     type: "number"
@@ -151,7 +169,7 @@ define(['perdix/entities/Lead'],function(Lead){
             },
 
             actions: {
-                
+
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
                     if (model.journal.journalHeader.transactionBranchId) {
@@ -164,10 +182,10 @@ define(['perdix/entities/Lead'],function(Lead){
                 },
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    
+
 
                     var totalJournal = model.journal.journalHeader.journalDetails;
-                   
+
                     var debitCount = 0, creditCount = 0;
                     var debitAmount = 0; creditAmount = 0;
                     for(var i = 0; i < totalJournal.length; i++) {
@@ -203,7 +221,7 @@ define(['perdix/entities/Lead'],function(Lead){
                         })
 
 
-                   
+
                 }
             }
         }

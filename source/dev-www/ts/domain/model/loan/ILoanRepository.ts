@@ -1,8 +1,11 @@
 import LoanProcess = require('./LoanProcess');
+import {Observable} from "@reactivex/rxjs";
 
 export interface ILoanRepository {
 
-	getIndividualLoan(id: number): LoanProcess;
+
+	getIndividualLoan(id: number): Observable<any>;
+
 	searchIndividualLoan(): LoanProcess;
 	createIndividualLoan(reqData: any): LoanProcess;
 	updateIndividualLoan(reqData: any): LoanProcess;

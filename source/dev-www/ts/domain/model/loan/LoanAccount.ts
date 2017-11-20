@@ -1,4 +1,7 @@
+import Customer = require("../customer/Customer");
+
 class LoanAccount {
+
 	accountNumber: string;
 	annualizedPercentage: number;
 	applicant: string;
@@ -148,6 +151,10 @@ class LoanAccount {
     witnessRelationship: string;
     wmName: string;
 
+
+    public static createFromJSON(data:any) {
+
+    }
 }
 
 export = LoanAccount;

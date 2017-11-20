@@ -178,7 +178,7 @@ gulp.task('ts:scripts', function() {
             noImplicitAny: true,
             module: 'AMD',
             moduleResolution:'node',
-            target: "es2015",
+            target: "es5",
             experimentalDecorators: true
         }))
         .pipe(gulp.dest('./dev-www/tsjs'));

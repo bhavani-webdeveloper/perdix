@@ -1,13 +1,21 @@
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import LoanAccount = require("./LoanAccount");
+import {ILoanRepository} from "./ILoanRepository";
+import {Observable} from "@reactivex/rxjs";
 
 
 
 class LoanProcess {
 	remarks: string;
 	stage: string;
-	
+    loanAccount: LoanAccount;
+    individualLoanRepo: ILoanRepository;
+
+    constructor(){
+    	this.individualLoanRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess);
+	}
+
 	loanProcessAction(actionName: string): boolean {
 		switch(actionName) {
 			case "SAVE":
@@ -20,14 +28,26 @@ class LoanProcess {
 	}
 
 	save(loanAccount: LoanAccount, remarks?: string) :any{
-		var individualLoanRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess)
-		return individualLoanRepo.updateIndividualLoan(loanAccount);
+        /* Calls all business policies associated with save */
+		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
 	}
 
-	create(loanAccount: LoanAccount, remarks?: string): any {
-		var individualLoanRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess)
-		return individualLoanRepo.updateIndividualLoan(loanAccount);
+	update(loanAccount: LoanAccount, remarks?: string): any {
+        /* Calls all business policies assocaited with proceed */
+
+		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
 	}
+
+    get(id: number): Observable<LoanProcess> {
+        return this.individualLoanRepo.getIndividualLoan(id)
+            .map(
+                (value) => {
+                    this.loanAccount = value;
+                    this.loanAccount.currentStage = "SHAHAL STGE";
+                    return this;
+                }
+            )
+    }
 }
 
 export = LoanProcess;
