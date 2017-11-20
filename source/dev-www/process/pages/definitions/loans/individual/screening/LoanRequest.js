@@ -2599,7 +2599,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
                                         for(i in model.temp.loanCustomerRelations){
                                             for(j in model.loanAccount.loanCustomerRelations){
-                                                if(model.temp.loanCustomerRelations[i].id == model.loanAccount.loanCustomerRelations[i].id ){
+                                                if(model.temp.loanCustomerRelations[i].customerId == model.loanAccount.loanCustomerRelations[i].customerId ){
                                                     model.loanAccount.loanCustomerRelations[i].name = model.temp.loanCustomerRelations[i].name;
                                                 }
                                             }
