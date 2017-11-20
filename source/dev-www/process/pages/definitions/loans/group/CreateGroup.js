@@ -54,6 +54,17 @@ define({
                     if (resp.firstName && resp.firstName.length > 0) {
                         model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     }
+                    var familyMembers = [];
+                    for (i in resp.familyMembers) {
+                        var obj = {};
+                        if (resp.familyMembers[i].relationShip != 'Self' || resp.familyMembers[i].relationShip != 'self') {
+                            obj.name = resp.familyMembers[i].familyMemberFirstName;
+                            obj.relationShip = resp.familyMembers[i].relationShip;
+                            obj.age = moment().diff(moment(resp.familyMembers[i].dateOfBirth), 'years');
+                            familyMembers.push(obj);
+                        }
+                    }
+                    model.group.jlgGroupMembers[key].familyMembers=familyMembers;
                     try {
                         if (resp.middleName && resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
@@ -376,11 +387,14 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
+                                 model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
+                                 model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship = undefined;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
                                         obj.name = res.familyMembers[i].familyMemberFirstName;
                                         obj.relationShip = res.familyMembers[i].relationShip;
+                                        obj.age = moment().diff(moment(res.familyMembers[i].dateOfBirth), 'years');
                                         familyMembers.push(obj);
                                     }
                                 }
@@ -496,6 +510,7 @@ define({
                             return [
                                 data.name,
                                 data.relationShip,
+                                "Age: " + data.age ? (data.age + ' years') : '' ,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
@@ -528,6 +543,7 @@ define({
                             return [
                                 data.name,
                                 data.relationShip,
+                                "Age: " + data.age ? (data.age + ' years') : '' ,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
