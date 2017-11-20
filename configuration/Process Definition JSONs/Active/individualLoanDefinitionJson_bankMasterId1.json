@@ -2403,8 +2403,6 @@
                   "valuation":{
                      "title":"valuation",
                      "type":"number",
-                     "minimum":1,
-                     "maximum":100000,
                      "captureStages":[
                         "Screening", "LoanInitiation"
                      ]
@@ -2555,8 +2553,6 @@
                   "incomeAmount":{
                      "title":"incomeAmount",
                     "type":"number",
-                     "minimum":1,
-                     "maximum":1000000,
                      "captureStages":[
                         "Screening", "LoanInitiation"
                      ]
@@ -2585,9 +2581,7 @@
                   },
                   "expenseAmount":{
                      "title":"expenseAmount",
-                    "type":"number",
-                     "minimum":1,
-                     "maximum":1000000,
+                     "type":"number",
                      "captureStages":[
                         "Screening", "LoanInitiation"
                      ]

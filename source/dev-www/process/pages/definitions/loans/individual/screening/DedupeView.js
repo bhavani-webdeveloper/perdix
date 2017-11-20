@@ -83,7 +83,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.DedupeView'),
                         maximum: 1
                     },
                     {
-                        pageName: 'loans.individual.misc.Dedupe',
+                        pageName: 'customer.Dedupe',
                         title: 'DEDUPE',
                         pageClass: 'dedupe',
                         minimum: 1,
