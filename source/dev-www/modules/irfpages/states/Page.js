@@ -177,7 +177,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 irfProgressMessage.gracefulClearAll(2000);
             },
             showErrors: function(res){
-                this.clearErrors();
+                clearErrorsFn();
                 try {
                     var data = res.data;
                     var errors = [];

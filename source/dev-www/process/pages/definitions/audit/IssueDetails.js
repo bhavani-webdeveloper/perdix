@@ -214,11 +214,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {
                         PageHelper.showProgress("audit", "Issue Updated Successfully.", 3000);
                         irfNavigator.goBack();
-                    }, function(errRes) {
-                        PageHelper.showErrors(errRes);
-                    }).finally(function() {
-                        PageHelper.hideLoader();
-                    });
+                    }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                 }
             }
         };
