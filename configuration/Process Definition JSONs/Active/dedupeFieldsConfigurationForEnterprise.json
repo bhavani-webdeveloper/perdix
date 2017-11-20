@@ -17,7 +17,7 @@
       "matchType": "exact",
       "toleranceInDays": "",
       "primarySearch": "false",
-      "weightage": 11
+      "weightage": 1
     },
     {
       "dedupeType": "Enterprise",
@@ -62,7 +62,7 @@
       "matchType": "phonetic",
       "toleranceInDays": "",
       "primarySearch": "false",
-      "weightage": 4
+      "weightage": 14
     }
   ],
   "addressFields": [
