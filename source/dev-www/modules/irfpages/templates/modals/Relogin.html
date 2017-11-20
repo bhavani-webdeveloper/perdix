@@ -1,4 +1,4 @@
-<div class="center-box login-box">
+<div class="center-box login-box relogin">
     <div class="box box-widget widget-user-2 animat effect7" ng-class="{anim:showLoading}">
         <!-- Add the bg color to the header using any of the bg-* classes -->
         <div class="widget-user-header bg-theme">
@@ -15,9 +15,10 @@
         <div class="box-footer animat">
             <form class="form-horizontal">
                 <div class="box-body pass-form">
-                    <input type="text" ng-model="username" class="form-control" id="inputEmail3" placeholder="Used ID" autocomplete="off" required>
+                    <input type="text" ng-model="username" class="form-control" id="inputEmail3" placeholder="Used ID" autocomplete="off" readonly="true">
                     <br/>
                     <input type="password" ng-model="password" class="form-control" id="inputPassword3" placeholder="Password" autocomplete="off" required>
+                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
                 </div>
                 <div class="box-footer">
                     <button type="button" ng-click="cancelRelogin()" class="btn btn-default login-button">&nbsp; Close &nbsp;</button>

@@ -75,6 +75,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
         self.loginSuccess = false;
         self.launchRelogin = function () {
             var def = $q.defer();
+            $scope.username = authService.getUserData().login;
             var modalWindow = $uibModal.open({
                 templateUrl: "modules/irfpages/templates/modals/Relogin.html",
                 windowTopClass: "relogin-window",
@@ -89,19 +90,14 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
                     $scope.relogin = function (username, password) {
                         $log.info("Inside onlineLogin");
-                        if (!username || !password) {
-                            return false;
-                        }
-                        var userData = authService.getUserData();
-                        if (username.toLowerCase() !== userData.login.toLowerCase()) {
-                            $scope.errorMessage = "Only current user can login";
+                        if (!password) {
+                            $scope.errorMessage = "Password cannot be empty";
                             return false;
                         }
                         $scope.errorMessage = null;
                         authService.login(username, password)
                             .then(function (arg) { // Success callback
                                 modalWindow.close();
-                                // TODO
                                 def.resolve();
                             }, function (arg) { // Error callback
                                 $scope.showLoading = false;
@@ -113,6 +109,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
                 }
             });
+            modalWindow.rendered.then(function() { $('.relogin #inputPassword3').focus() });
             return def.promise;
         };
     }])
