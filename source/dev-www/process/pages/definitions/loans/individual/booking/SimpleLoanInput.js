@@ -503,6 +503,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                             trancheTotalAmount += (model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                         }
                     }
+                    if (trancheTotalAmount > model.loanAccount.loanAmount) {
+                        PageHelper.showProgress("loan-create", "Disbursement Amount is greater than Loan Amount of the loan product selected.", 5000);
+                        return false;
+                    }
                     // if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount) {
                     //     PageHelper.showProgress("loan-create", "Total tranche amount is more than the Loan amount", 5000);
                     //     return false;
@@ -529,6 +533,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                             }
                             if (model.loanAccount.loanAmount > model.additional.product.amountTo) {
                                 PageHelper.showProgress("loan-create", "Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]", 5000);
+                                return false;
+                            }
+
+                            if (trancheTotalAmount > model.additional.product.amountTo || trancheTotalAmount < model.additional.product.amountFrom) {
+                                PageHelper.showProgress("loan-create", "Total disbursement amount should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]", 5000);
                                 return false;
                             }
                         }

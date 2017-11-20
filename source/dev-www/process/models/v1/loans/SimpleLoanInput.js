@@ -223,6 +223,13 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "type": ["number", "null"],
                         "title": "LOAN_AMOUNT",
                         "placeholderExpr": "model.additional.product.amountBracket",
+                        "x-schema-form": {
+                            onChange:function(value,form,model){
+                                if (model.loanAccount.numberOfDisbursements ==1){
+                                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                                } 
+                            }
+                        },
                     },
                     "processingFeePercentage": {
                         "type": ["number", "null"],
