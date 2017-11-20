@@ -44,5 +44,5 @@ CBCheck.customerList=select max(created_at) as created_at, customer_id from high
 groupProcess.remarksHistory = SELECT pre_stage as stage, actions as action, group_remarks as remarks, created_by as updatedBy, created_at as updatedOn  FROM jlg_groups_snapshot where group_id = :groupId and group_remarks IS NOT NULL 
 groupLoanProductsByPartner.list=SELECT product_name as productName, `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `partner_code`=:partner and loan_type = 'JLG'
 feesFormMapping.list = select * from invoice_form_mapping
-dedupe.list = SELECT d.id, d.customer_id, d.duplicate_above_threshold_count, d.status FROM dedupe_request d INNER JOIN customer c ON (c.id = d.customer_id AND d.created_at > c.last_edited_at) where d.customer_id in (:ids) and d.id = (select max(id) from dedupe_request dr where dr.customer_id = d.customer_id)
+dedupe.list = SELECT d.id, d.customer_id, d.duplicate_above_threshold_count, d.status FROM dedupe_request d INNER JOIN customer c ON (c.id = d.customer_id AND d.created_at >= c.last_edited_at) where d.customer_id in (:ids) and d.id = (select max(id) from dedupe_request dr where dr.customer_id = d.customer_id)
 
