@@ -57,7 +57,8 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 			pagesArray.push(v);
 		});
 		for (i in favoriteItems) {
-			$scope.allPages[favoriteItems[i]].favorited = 'favorite';
+			if ($scope.allPages[favoriteItems[i]])
+				$scope.allPages[favoriteItems[i]].favorited = 'favorite';
 		}
 		var favPickerModal = irfSimpleModal("Pick favorites", favoritesPopupHtml, {
 			"pages": pagesArray,

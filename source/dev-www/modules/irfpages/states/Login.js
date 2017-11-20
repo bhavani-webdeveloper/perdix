@@ -131,6 +131,7 @@ function($scope, authService, $log, $state, $stateParams, $timeout, irfStorageSe
 				}
 			}
 		}
+		self.username = userData.login;
 	}
 
 	// Auto Login
