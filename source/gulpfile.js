@@ -165,6 +165,18 @@ var tsProject = ts.createProject({
     out: 'dev-www/domain/run.js'
 });
 
+gulp.task('ts:perdixConfig', function(){
+    return gulp.src('./dev-www/process/config/**/*.ts')
+        .pipe(ts({
+            noImplicitAny: true,
+            module: 'AMD',
+            moduleResolution:'node',
+            target: "es5",
+            experimentalDecorators: true
+        }))
+        .pipe(gulp.dest('./dev-www/process/config'));
+})
+
 gulp.task('ts:scripts', function() {
     // var tsResult = gulp.src('dev-www/domain/entites/*.ts')
     //     .pipe(tsProject());
@@ -184,28 +196,9 @@ gulp.task('ts:scripts', function() {
         .pipe(gulp.dest('./dev-www/tsjs'));
 });
 
-gulp.task('ts:node:scripts', function() {
-    // var tsResult = gulp.src('dev-www/domain/entites/*.ts')
-    //     .pipe(tsProject());
-
-    // return merge([ // Merge the two output streams, so this task is finished when the IO of both operations is done.
-    //     tsResult.dts.pipe(gulp.dest('dev-www/domain')),
-    //     tsResult.js.pipe(gulp.dest('dev-www/domain/js'))
-    // ]);
-    return gulp.src('./node_modules/class-transformer/*.ts')
-        .pipe(ts({
-            noImplicitAny: true,
-            module: 'AMD',
-            out: 'classt.js',
-            
-            experimentalDecorators: true,
-            
-        }))
-        .pipe(gulp.dest('./dev-www/js/vendor'));
-});
-
-gulp.task('watch', ['ts:scripts'], function() {
+gulp.task('watch', ['ts:scripts', 'ts:perdixConfig'], function() {
     gulp.watch('dev-www/ts/**/*.ts', ['ts:scripts']);
+    gulp.watch('dev-www/process/config/**/*.ts', ['ts:perdixConfig'])
 });
 
 gulp.task('build', ['html', 'assets', 'fonts']);
