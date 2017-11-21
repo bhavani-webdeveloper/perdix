@@ -105,10 +105,10 @@
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
 <script src="bower_components/accounting/accounting.js"></script>
 <script src="bower_components/mathjs/dist/math.min.js"></script>
-<script src="js/Rx.js"></script>
-<script src="node_modules/reflect-metadata/Reflect.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
+
+
 
 <!--
   IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
@@ -581,19 +581,19 @@
 <!--Cordova-->
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/require.js"></script>
+<script type="text/javascript" src="js/vendor/Reflect.js"></script>
+
+
 <script>
   require.config({
 
     baseUrl: "./",
     paths: {
         "pages": "process/pages/definitions",
-        "class-transformer":'./node_modules/class-transformer/class-transformer.amd',
         "perdix": "tsjs",
-        "@reactivex/rxjs": 'js/Rx'
-        
-
+        "@reactivex/rxjs": "js/vendor/Rx",
+        "class-transformer": "js/vendor/class-transformer.amd"
     },
-
     waitSeconds: 0
   });
 

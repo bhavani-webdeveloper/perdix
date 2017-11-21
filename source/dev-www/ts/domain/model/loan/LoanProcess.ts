@@ -3,6 +3,8 @@ import RepositoryFactory = require('../../shared/RepositoryFactory');
 import LoanAccount = require("./LoanAccount");
 import {ILoanRepository} from "./ILoanRepository";
 import {Observable} from "@reactivex/rxjs";
+import {plainToClass} from "class-transformer";
+
 
 
 
@@ -34,6 +36,8 @@ class LoanProcess {
 
 	update(loanAccount: LoanAccount, remarks?: string): any {
         /* Calls all business policies assocaited with proceed */
+
+        plainToClass
 
 		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
 	}
