@@ -12,6 +12,7 @@
     "@reactivex/rxjs": "5.4.3",
     "@types/rx": "^4.1.1",
     "chalk": "^1.1.1",
+    "class-transformer": "^0.1.8",
     "com.lampa.startapp": "https://github.com/stalingino/com.lampa.startapp.git",
     "cordova-android": "~5.1.1",
     "cordova-browser": "~4.0.0",
@@ -28,6 +29,7 @@
     "irf-bluetooth-plugin": "~1.1.0",
     "npm-git-install": "^0.2.0",
     "phonegap-plugin-barcodescanner": "~4.1.0",
+    "reflect-metadata": "^0.1.10",
     "wiredep": "^3.0.0"
   },
   "devDependencies": {

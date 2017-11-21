@@ -106,6 +106,7 @@
 <script src="bower_components/accounting/accounting.js"></script>
 <script src="bower_components/mathjs/dist/math.min.js"></script>
 <script src="js/Rx.js"></script>
+<script src="node_modules/reflect-metadata/Reflect.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -586,8 +587,10 @@
     baseUrl: "./",
     paths: {
         "pages": "process/pages/definitions",
+        "class-transformer":'./node_modules/class-transformer/class-transformer.amd',
         "perdix": "tsjs",
         "@reactivex/rxjs": 'js/Rx'
+        
 
     },
 

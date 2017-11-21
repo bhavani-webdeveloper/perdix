@@ -17,92 +17,92 @@ class LoanRepository implements ILoanRepository {
 		return observable;
 	}
 
-	searchIndividualLoan(): LoanProcess {
+	searchIndividualLoan(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.search().$promise);
 	}
 
-	createIndividualLoan(reqData: any): LoanProcess {
+	createIndividualLoan(reqData: any): Observable<any> {
 
 		return Ro.fromPromise(this.individualLoanService.create(reqData).$promise);
 	}
 
-	updateIndividualLoan(reqData: any): LoanProcess {
+	updateIndividualLoan(reqData: any): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.update(reqData).$promise);
 	}
 
-	closeIndividualLoan(): LoanProcess {
+	closeIndividualLoan(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.close().$promise);
 	}
 
-	getLoanDefinition(): LoanProcess {
+	getLoanDefinition(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.getDefiniftion().$promise);
 	}
 
-	loanDisburse(): LoanProcess {
+	loanDisburse(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.disburse().$promise);
 	}
 
-	loanBatchDisburse(): LoanProcess {
+	loanBatchDisburse(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.batchDisburse().$promise);
 	}
 
-	loanBatchDisburseConfirmation(): LoanProcess {
+	loanBatchDisburseConfirmation(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.batchDisbursementConfirmation().$promise);
 	}
 
-	loanMultiTrancheDisbursement(): LoanProcess {
+	loanMultiTrancheDisbursement(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.multiTrancheDisbursement().$promise);
 	}
 
-	loanSearchHead(): LoanProcess {
+	loanSearchHead(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.searchHead().$promise);
 	}
 
-	loanSearchDisbursement(): LoanProcess {
+	loanSearchDisbursement(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.searchDisbursement().$promise);
 	}
 
-	loanSearchDisbursementHead(): LoanProcess {
+	loanSearchDisbursementHead(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.searchDisbursementHead().$promise);
 	}
 
-	loanGetDisbursementList(): LoanProcess {
+	loanGetDisbursementList(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.getDisbursementList().$promise);
 	}
 
-	loanGetDocuments(): LoanProcess {
+	loanGetDocuments(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.getDocuments().$promise);
 	}
 
-	loanDownloadAllDocuments(): LoanProcess {
+	loanDownloadAllDocuments(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.downloadAllDocuments().$promise);
 	}
 
-	loanDocumentsHead(): LoanProcess {
+	loanDocumentsHead(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.documentsHead().$promise);
 	}
 
-	loanUpdateDisbursement(): LoanProcess {
+	loanUpdateDisbursement(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.updateDisbursement().$promise);
 	}
 
-	loanLoadSingleLoanWithHistory(): LoanProcess {
+	loanLoadSingleLoanWithHistory(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.loadSingleLoanWithHistory().$promise);
 	}
 
-	loanAddTranch(): LoanProcess {
+	loanAddTranch(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.addTranch().$promise);
 	}
 
-	loanRemarksSummary(): LoanProcess {
+	loanRemarksSummary(): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.loanRemarksSummary().$promise);
 	}
 
-	loanGetAllDocumentsUrl(loanId: number): LoanProcess {
+	loanGetAllDocumentsUrl(loanId: number): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.getAllDocumentsUrl(loanId).$promise);
 	}
 
-	loanConfirmationUpload(file: any, progress: any): LoanProcess {
+	loanConfirmationUpload(file: any, progress: any): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.ConfirmationUpload(file, progress).$promise);
 	}
 
