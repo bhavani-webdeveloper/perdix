@@ -1,3 +1,5 @@
+///<amd-dependency path="perdixConfig/LeadProcessConfig" name="leadProcessConfig"/>
+
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Lead = require("./Lead");
@@ -5,10 +7,7 @@ import {ILeadRepository} from "./ILeadRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 
-/// <amd-dependency path="perdixConfig/LeadProcessConfig" name="leadProcessConfig"/>
-declare var leadProcessConfig: Object;
-
-
+declare var leadProcessConfig:Object
 
 class LeadProcess {
 	remarks: string;
@@ -31,36 +30,83 @@ class LeadProcess {
 		}
 	}
 
-	// save(loanAccount: LoanAccount, remarks?: string) :any{
- //        /* Calls all business policies associated with save */
-	// 	return this.leadRepo.updateIndividualLoan(loanAccount);
-	// }
-
-	// update(loanAccount: LoanAccount, remarks?: string): any {
- //        /* Calls all business policies assocaited with proceed */
-
-	// 	return this.leadRepo.updateIndividualLoan(loanAccount);
-	// }
 
     newLeadProcess(): LeadProcess {
-        /// <amd-dependency path="perdixConfig/LeadProcessConfig" name="leadProcessConfig"/>
-        console.log(leadProcessConfig);
+        let onNewObj = leadProcessConfig['default']['onNew'];
+        let policies: Array<any> = [];
+
+
+        for(let entry of onNewObj['defaults']) {
+        	console.log(entry.name)
+        	
+        	policies.push(entry);
+        }
+        console.log(policies)
         return null;
     }
 
-    utilJSON(data): any{
+    utilJSON(data: Object): Object{
         return JSON.parse(JSON.stringify(data));
     }
 
     get(id: number): Observable<LeadProcess> {
         return this.leadRepo.getLead(id)
             .map(
-                (value) => {
-                    this.lead = <Lead>plainToClass(Lead, this.utilJSON(value));
-                    this.lead.currentStage = "SOME STGE";
+                (value: Object) => {
+                    this.lead = plainToClass(Lead, this.utilJSON(value));
+                    // this.lead = value;
+                    // this.lead.currentStage = "SOME STGE";
                     return this;
                 }
             )
+    }
+
+    save(reqData: any): Observable<LeadProcess> {
+		reqData.lead.udf = {};
+        reqData.lead.udfDate = {};
+        reqData.lead.udf.userDefinedFieldValues = {};
+        reqData['leadAction'] = 'SAVE';
+        if (reqData.lead.leadStatus == "Screening") {
+            if (reqData.lead.siteCode == 'sambandh') {
+                reqData['stage'] = 'ReadyForEnrollment';
+            } else {
+                reqData['stage'] = 'ReadyForScreening';
+            }
+        } else if (reqData.lead.leadStatus == "Incomplete") {
+            reqData['stage'] = 'Incomplete';
+        } else {
+            reqData['stage'] = 'Inprocess';
+        }
+
+        return this.leadRepo.saveLead(reqData);
+    }
+
+    update(reqData: any): Observable<LeadProcess> {
+    	if (reqData.lead.id === undefined || reqData.lead.id === null) {
+            // TO Do
+        } else {
+            reqData.leadAction = "PROCEED";
+            if (reqData.lead.leadStatus == "Screening") {
+                if (reqData.lead.siteCode == 'sambandh') {
+                    reqData.stage = 'ReadyForEnrollment';
+                } else {
+                    reqData.stage = 'ReadyForScreening';
+                }
+            } else if (reqData.lead.leadStatus == "Reject") {
+                reqData.stage = 'Inprocess';
+            } else if (reqData.lead.leadStatus == "Incomplete") {
+                reqData.stage = 'Incomplete';
+            }
+            
+
+            return this.leadRepo.updateLead(reqData);
+            
+        }
+    }
+
+    followUp(reqData: any): Observable<LeadProcess> {
+    	reqData.leadAction = "SAVE";
+    	return this.leadRepo.updateLead(reqData);
     }
 }
 

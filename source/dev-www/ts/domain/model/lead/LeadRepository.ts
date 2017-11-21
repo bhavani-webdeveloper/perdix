@@ -18,6 +18,14 @@ class LoanRepository implements ILeadRepository {
 		return observable;
 	}
 
+	saveLead(reqData: Object): Observable<any> {
+		return Ro.fromPromise(this.leadService.save(reqData).$promise);
+	}
+
+	updateLead(reqData: Object): Observable<any> {
+		return Ro.fromPromise(this.leadService.updateLead(reqData).$promise);
+	}
+
 }
 
 export = LoanRepository;

@@ -1,5 +1,5 @@
 define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, AngularResourceService) {
-    console.log(LeadProcess)
+
     return {
         pageUID: "witfin.lead.LeadGeneration",
         pageType: "Engine",
@@ -10,7 +10,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
             PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector) {
 
             var branch = SessionStore.getBranch();
-            
+            AngularResourceService.getInstance().setInjector($injector);
+            var leadProcessTs = new LeadProcess();
             var getOverrides = function (model) {
                 return {
                     "leadProfile.leadDetails.individualDetails.gender": {
@@ -97,7 +98,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                 "title": "LEAD_GENERATION",
                 "subTitle": "Lead",
                 initialize: function(model, form, formCtrl) {
-                    AngularResourceService.getInstance().setInjector($injector);
+                    leadProcessTs.newLeadProcess();
+
                     model.lead = model.lead || {};
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
                                        
@@ -135,40 +137,45 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                         if (!leadId) {
                             PageHelper.hideLoader();
                         }
-                        Lead.get({
-                                id: leadId
-                            },
-                            function(res) {
-                                _.assign(model.lead, res);
-                                
-                                if (model.lead.currentStage == 'Incomplete') {
-                                    model.lead.customerType = "Enterprise";
-                                    model.lead.leadStatus = "Incomplete";
-                                    model.lead.leadInteractions = [{
-                                        "interactionDate": Utils.getCurrentDate(),
-                                        "loanOfficerId": SessionStore.getUsername() + ''
-                                    }];
-                                }
-                                if (model.lead.currentStage == 'Inprocess') {
-                                    model.lead.leadInteractions1 = model.lead.leadInteractions;
-                                    model.lead.leadInteractions = [{
-                                        "interactionDate": Utils.getCurrentDate(),
-                                        "loanOfficerId": SessionStore.getUsername() + ''
-                                    }];
-                                }
-                                model = Utils.removeNulls(model, true);
-                                var p1 = new Promise(function(resolve, reject) {
-                                    resolve(Lead.getConfigFile());
-                                })
 
-                                p1.then(function(resp) {
-                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                         leadProcessTs.get(leadId)
+                            .finally(function(){
+                                console.log('INSIDE FINALLY');
+                            })
+                            .subscribe(
+                                function(data){ 
+                                    _.assign(model.lead, data.lead);
+                                    if (model.lead.currentStage == 'Incomplete') {
+                                        model.lead.customerType = "Enterprise";
+                                        model.lead.leadStatus = "Incomplete";
+                                        model.lead.leadInteractions = [{
+                                            "interactionDate": Utils.getCurrentDate(),
+                                            "loanOfficerId": SessionStore.getUsername() + ''
+                                        }];
+                                    }
+                                    if (model.lead.currentStage == 'Inprocess') {
+                                        model.lead.leadInteractions1 = model.lead.leadInteractions;
+                                        model.lead.leadInteractions = [{
+                                            "interactionDate": Utils.getCurrentDate(),
+                                            "loanOfficerId": SessionStore.getUsername() + ''
+                                        }];
+                                    }
+                                    model = Utils.removeNulls(model, true);
+                                    var p1 = new Promise(function(resolve, reject) {
+                                        resolve(Lead.getConfigFile());
+                                    })
+
+                                    p1.then(function(resp) {
+                                        self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                                        PageHelper.hideLoader();
+                                    })
+                                },
+                                function(err) {
+                                    PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
-                                })
-                                
-                                
-                            }
-                        );
+                                }
+                            )
+                        
                     }
                     else {
                      this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
@@ -239,28 +246,50 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                         if (reqData.lead.id) {
 
                             if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
-                                LeadHelper.followData(reqData).then(function(resp) {
-                                    $state.go('Page.LeadDashboard', null);
-                                });
+                                leadProcessTs.followUp(reqData)
+                                    .finally(function(){
+                                        console.log('INSIDE FINALLY');
+                                    })
+                                    .subscribe(
+                                        function(data){ 
+                                        $state.go('Page.LeadDashboard', null);
+                                    },
+                                    function(err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    }
+                                )
+                                
                             } else {
-                                LeadHelper.proceedData(reqData).then(function(resp) {
-                                    $state.go('Page.LeadDashboard', null);
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    // Utils.removeNulls(resp.lead, true);
-                                    // model.lead = resp.lead;
-                                });
+                                leadProcessTs.update(reqData)
+                                    .finally(function(){
+                                        console.log('INSIDE FINALLY');
+                                    })
+                                    .subscribe(
+                                        function(data){ 
+                                        $state.go('Page.LeadDashboard', null);
+                                    },
+                                    function(err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    }
+                                )
                             }
                         } else {
-                            LeadHelper.saveData(reqData).then(function(res) {
-                                LeadHelper.proceedData(res).then(function(resp) {
-                                    $state.go('Page.LeadDashboard', null);
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    // Utils.removeNulls(resp.lead, true);
-                                    // model.lead = resp.lead;
-                                });
-                            });
+                            leadProcessTs.save(reqData)
+                                .finally(function(){
+                                    console.log('INSIDE FINALLY');
+                                })
+                                .subscribe(
+                                    function(data){ 
+                                        $state.go('Page.LeadDashboard', null);
+                                    },
+                                    function(err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    }
+                                )
+                            
                         }
                     }
                 }

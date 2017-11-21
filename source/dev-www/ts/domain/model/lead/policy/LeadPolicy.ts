@@ -3,7 +3,7 @@ import LeadProcess = require("../LeadProcess");
 import {Observable} from "@reactivex/rxjs";
 
 abstract class LeadPolicy extends IPolicy<LeadProcess> {
-    abstract setArguments(arguments: any);
+    abstract setArguments(argument: any);
 
     abstract run(obj: LeadProcess): Observable<LeadProcess>;
 }

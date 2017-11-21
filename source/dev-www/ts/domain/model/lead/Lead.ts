@@ -1,3 +1,6 @@
+import LeadInteraction = require("./LeadInteraction");
+
+
 class Lead {
     addressLine1: string;
     addressLine2: string;
@@ -20,6 +23,7 @@ class Lead {
     currentStage: string;
     customerId: number;
     customerType: string;
+    leadInteractions: LeadInteraction[];
     district: string;
     dob: string;
     educationStatus: string;
