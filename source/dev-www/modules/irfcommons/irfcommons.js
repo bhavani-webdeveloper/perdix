@@ -255,6 +255,7 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 				return seconds + ' second' + numberEnding(seconds);
 			}
 			return 'less than a second'; //'just now' //or other string you like;
+			// return moment(milliseconds).humanize();
 		},
         dateToLocalTZ: function(mysqlDate){
         	var localUtcOffset = moment().utcOffset();
@@ -270,6 +271,9 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 			});
 			$log.info("Generated UUID: " + uuid);
 			return uuid;
+		},
+		updateAppTitle: function(menuTitle) {
+			document.title = translateFilter(menuTitle) + " | " + document.mainTitle;
 		}
 	};
 }]);
