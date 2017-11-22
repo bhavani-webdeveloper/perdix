@@ -1,7 +1,7 @@
 
 import {LeadPolicy} from "./LeadPolicy";
 import {PopulateLeadInteractionPolicy} from "./PopulateLeadInteractionPolicy";
-class LeadPolicyFactory {
+export class LeadPolicyFactory {
 
     static fromPolicyName(name: string):LeadPolicy{
         let obj = null;

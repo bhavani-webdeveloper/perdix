@@ -6,10 +6,13 @@ import Lead = require("./Lead");
 import {ILeadRepository} from "./ILeadRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
+import {LeadPolicy} from "./policy/LeadPolicy";
+import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
+import {CanApplyPolicy} from "../../shared/IPolicy";
 
 declare var leadProcessConfig:Object
 
-class LeadProcess {
+class LeadProcess implements CanApplyPolicy{
 	remarks: string;
 	stage: string;
     lead: Lead;
@@ -18,6 +21,29 @@ class LeadProcess {
     constructor(){
     	this.leadRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LeadProcess);
 	}
+
+	applyPolicies(policyStage): Observable<LeadProcess> {
+        let policies = LeadPolicy.resolvePolicy(this, policyStage);
+
+        /* If there are no policies applicable */
+        if (!_.isArray(policies) || (_.isArray(policies) && policies.length == 0)) {
+            return Observable.of(this);
+        }
+
+        let observables = [];
+
+        for (let policy of policies) {
+            try{
+                let policyObj:LeadPolicy = LeadPolicyFactory.fromPolicyName(policy.name);
+                observables.push(policyObj.run(this));
+            } catch (e){
+                console.log("Unable to apply policy :: " + policy.name + ". Skipping now.");
+                console.error(e);
+            }
+        }
+
+        return Observable.concat(observables);
+    }
 
 	loanProcessAction(actionName: string): boolean {
 		switch(actionName) {
@@ -30,30 +56,11 @@ class LeadProcess {
 		}
 	}
 
-
-    newLeadProcess(): LeadProcess {
-        let onNewObj = leadProcessConfig['default']['onNew'];
-        let policies: Array<any> = [];
-
-
-        for(let entry of onNewObj['defaults']) {
-        	console.log(entry.name)
-        	
-        	policies.push(entry);
-        }
-        console.log(policies)
-        return null;
-    }
-
-    utilJSON(data: Object): Object{
-        return JSON.parse(JSON.stringify(data));
-    }
-
     get(id: number): Observable<LeadProcess> {
         return this.leadRepo.getLead(id)
             .map(
                 (value: Object) => {
-                    this.lead = plainToClass(Lead, this.utilJSON(value));
+                    this.lead = <Lead>plainToClass(Lead, Utils.toJSObj(value));
                     // this.lead = value;
                     // this.lead.currentStage = "SOME STGE";
                     return this;
@@ -97,10 +104,10 @@ class LeadProcess {
             } else if (reqData.lead.leadStatus == "Incomplete") {
                 reqData.stage = 'Incomplete';
             }
-            
+
 
             return this.leadRepo.updateLead(reqData);
-            
+
         }
     }
 

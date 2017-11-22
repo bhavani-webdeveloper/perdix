@@ -598,6 +598,13 @@
     waitSeconds: 0
   });
 
+  if (typeof _ === 'function') {
+      define('lodash', function(){
+          return _;
+      })
+  }
+
+
   requirejs.onError = function(err){
     console.log(err);
     debugger;
