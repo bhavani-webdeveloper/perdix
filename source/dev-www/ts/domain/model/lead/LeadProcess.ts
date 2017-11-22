@@ -9,10 +9,14 @@ import {plainToClass} from "class-transformer";
 import {LeadPolicy} from "./policy/LeadPolicy";
 import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {CanApplyPolicy} from "../../shared/IPolicy";
+import Utils = require("../../shared/Utils");
+import * as _ from "lodash";
 
-declare var leadProcessConfig:Object
 
-class LeadProcess implements CanApplyPolicy{
+
+declare var leadProcessConfig: Object;
+
+class LeadProcess implements CanApplyPolicy {
 	remarks: string;
 	stage: string;
     lead: Lead;
@@ -22,7 +26,7 @@ class LeadProcess implements CanApplyPolicy{
     	this.leadRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LeadProcess);
 	}
 
-	applyPolicies(policyStage): Observable<LeadProcess> {
+	applyPolicies(policyStage: string): Observable<LeadProcess> {
         let policies = LeadPolicy.resolvePolicy(this, policyStage);
 
         /* If there are no policies applicable */
@@ -60,7 +64,7 @@ class LeadProcess implements CanApplyPolicy{
         return this.leadRepo.getLead(id)
             .map(
                 (value: Object) => {
-                    this.lead = <Lead>plainToClass(Lead, Utils.toJSObj(value));
+                    this.lead = plainToClass(Lead, Utils.toJSObj(value));
                     // this.lead = value;
                     // this.lead.currentStage = "SOME STGE";
                     return this;

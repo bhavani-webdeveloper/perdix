@@ -8,6 +8,7 @@ export class PopulateLeadInteractionPolicy implements LeadPolicy{
     }
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
+    	console.log(leadProcess)
         return undefined;
     }
 

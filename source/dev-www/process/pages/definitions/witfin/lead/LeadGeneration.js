@@ -98,7 +98,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                 "title": "LEAD_GENERATION",
                 "subTitle": "Lead",
                 initialize: function(model, form, formCtrl) {
-                    leadProcessTs.newLeadProcess();
+                    // leadProcessTs.newLeadProcess();
 
                     model.lead = model.lead || {};
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
@@ -145,9 +145,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                             .subscribe(
                                 function(data){ 
                                     _.assign(model.lead, data.lead);
+                                    leadProcessTs.applyPolicies("onLoad");
                                     if (model.lead.currentStage == 'Incomplete') {
                                         model.lead.customerType = "Enterprise";
                                         model.lead.leadStatus = "Incomplete";
+
                                         model.lead.leadInteractions = [{
                                             "interactionDate": Utils.getCurrentDate(),
                                             "loanOfficerId": SessionStore.getUsername() + ''

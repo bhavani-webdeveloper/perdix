@@ -6,11 +6,14 @@ export class LeadPolicyFactory {
     static fromPolicyName(name: string):LeadPolicy{
         let obj = null;
         switch (name) {
-            case 'PopulateLeadInteraction':
+            case 'PopulateLeadInteractionPolicy':
                 obj =  new PopulateLeadInteractionPolicy();
+                return obj;
+            default:
+            	return null;
 
         }
 
-        return obj;
+        // return obj;
     }
 }

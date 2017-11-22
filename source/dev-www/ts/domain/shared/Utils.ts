@@ -4,8 +4,8 @@
 
 
 class Utils {
-    static evalInContext(context, str): any{
-        let out = function(str){
+    static evalInContext(context: any, str: string): any{
+        let out = function(str: string){
             return eval(str);
         }.call(context, str);
         return out;
@@ -15,3 +15,5 @@ class Utils {
         return JSON.parse(JSON.stringify(data));
     }
 }
+
+export = Utils;

@@ -3,6 +3,7 @@
 import {IPolicy} from "../../../shared/IPolicy";
 import LeadProcess = require("../LeadProcess");
 import {Observable} from "@reactivex/rxjs";
+import Utils = require("../../../shared/Utils");
 import * as _ from "lodash";
 
 declare let leadProcessConfig:any;
@@ -35,7 +36,7 @@ abstract class LeadPolicy extends IPolicy<LeadProcess> {
 
                     for (let pToRemove of entry['remove']) {
                         _.remove(policies, function (policy) {
-                            return policy.name == pToRemove.name;
+                            return policy.name === pToRemove.name;
                         })
                     }
                 }
