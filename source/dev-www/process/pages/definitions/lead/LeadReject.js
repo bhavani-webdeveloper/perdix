@@ -160,7 +160,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                                     }, {
                                         key: "lead.companyRegistered",
                                         type: "radios",
-                                        enumCode: "decisionmaker"
+                                        enumCode: "DECISIONMAKER"
                                     }, {
                                         key: "lead.businessType",
                                         type: "select",
@@ -364,7 +364,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                             title: "INTERESTED_IN_LOAN_PRODUCT",
                             type: "select",
                             required: true,
-                            enumCode: "decisionmaker",
+                            enumCode: "DECISIONMAKER",
                             "onChange": function(modelValue, form, model) {
                                     if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                                         model.lead.leadStatus = "Reject";
@@ -453,7 +453,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                             items: [{
                                 key: "lead.eligibleForProduct",
                                 type: "radios",
-                                enumCode: "decisionmaker",
+                                enumCode: "DECISIONMAKER",
                                 onChange: "actions.changeStatus(modelValue, form, model)",
                             }]
                         }, {
