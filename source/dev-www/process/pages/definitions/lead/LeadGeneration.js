@@ -10,6 +10,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
+
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
 

@@ -23,7 +23,7 @@ class Lead {
     currentStage: string;
     customerId: number;
     customerType: string;
-    leadInteractions: LeadInteraction[];
+    leadInteractions: LeadInteraction[] = [];
     district: string;
     dob: string;
     educationStatus: string;

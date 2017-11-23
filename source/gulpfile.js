@@ -56,7 +56,7 @@ gulp.task('assets', function(){
         'dev-www/process/**/*.' + '+(json|html|css)',
         'dev-www/process/pages/definitions/**/*',
         'dev-www/css/fonts/**/*',
-        'dev-www/js/vendor/renderjson.js',
+        'dev-www/js/vendor/**/*',
         'dev-www/js/themeswitch.js',
         'dev-www/js/require.js',
         'dev-www/js/index.js',

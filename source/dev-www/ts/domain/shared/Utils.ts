@@ -1,3 +1,4 @@
+import moment = require("../../../bower_components/moment/moment");
 /**
  * Created by shahalpk on 21/11/17.
  */
@@ -14,6 +15,19 @@ class Utils {
     static toJSObj(data: any): Object {
         return JSON.parse(JSON.stringify(data));
     }
+
+    static applyMixins(derivedCtor: any, baseCtors: any[]) {
+        baseCtors.forEach(baseCtor => {
+            Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+                derivedCtor.prototype[name] = baseCtor.prototype[name];
+            });
+        });
+    }
+
+    static getCurrentDate():string {
+        return moment().format('YYYY-MM-DD');
+    }
+
 }
 
 export = Utils;

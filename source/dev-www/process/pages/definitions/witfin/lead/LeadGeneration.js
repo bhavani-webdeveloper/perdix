@@ -1,4 +1,4 @@
-define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, AngularResourceService) {
+define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/AngularResourceService'], function(LeadProcessFactory, AngularResourceService) {
 
     return {
         pageUID: "witfin.lead.LeadGeneration",
@@ -11,7 +11,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
-            var leadProcessTs = new LeadProcess();
             var getOverrides = function (model) {
                 return {
                     "leadProfile.leadDetails.individualDetails.gender": {
@@ -98,26 +97,15 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                 "title": "LEAD_GENERATION",
                 "subTitle": "Lead",
                 initialize: function(model, form, formCtrl) {
-                    // leadProcessTs.newLeadProcess();
 
-                    model.lead = model.lead || {};
+                    LeadProcessFactory.createNew()
+                        .subscribe(function(value){
+                            model.leadProcess = value;
+                            model.lead = model.leadProcess.lead;
+
+                        });
+
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                                       
-                    if (!(model.$$STORAGE_KEY$$)) {
-                        model.lead.customerType = "Enterprise";
-                        model.lead.leadStatus = "Incomplete";
-                        model.lead.leadInteractions = [{
-                            "interactionDate": Utils.getCurrentDate(),
-                            "loanOfficerId": SessionStore.getUsername() + ''
-                        }];
-
-                        model.lead.branchId = SessionStore.getBranchId();
-                        model.lead.branchName = SessionStore.getBranch();
-
-                    }
-                    model = Utils.removeNulls(model, true);
-
-
 
                     var self = this;
                     var formRequest = {
@@ -127,64 +115,15 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                             "",
                         ]
                     };
-
-                    
                     if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
 
-                        PageHelper.showLoader();
-                        PageHelper.showProgress("page-init", "Loading...");
-                        var leadId = $stateParams.pageId;
-                        if (!leadId) {
-                            PageHelper.hideLoader();
-                        }
-
-                         leadProcessTs.get(leadId)
-                            .finally(function(){
-                                console.log('INSIDE FINALLY');
-                            })
-                            .subscribe(
-                                function(data){ 
-                                    _.assign(model.lead, data.lead);
-                                    leadProcessTs.applyPolicies("onLoad");
-                                    if (model.lead.currentStage == 'Incomplete') {
-                                        model.lead.customerType = "Enterprise";
-                                        model.lead.leadStatus = "Incomplete";
-
-                                        model.lead.leadInteractions = [{
-                                            "interactionDate": Utils.getCurrentDate(),
-                                            "loanOfficerId": SessionStore.getUsername() + ''
-                                        }];
-                                    }
-                                    if (model.lead.currentStage == 'Inprocess') {
-                                        model.lead.leadInteractions1 = model.lead.leadInteractions;
-                                        model.lead.leadInteractions = [{
-                                            "interactionDate": Utils.getCurrentDate(),
-                                            "loanOfficerId": SessionStore.getUsername() + ''
-                                        }];
-                                    }
-                                    model = Utils.removeNulls(model, true);
-                                    var p1 = new Promise(function(resolve, reject) {
-                                        resolve(Lead.getConfigFile());
-                                    })
-
-                                    p1.then(function(resp) {
-                                        self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
-                                        PageHelper.hideLoader();
-                                    })
-                                },
-                                function(err) {
-                                    PageHelper.showErrors(err);
-                                    PageHelper.hideLoader();
-                                }
-                            )
-                        
                     }
                     else {
-                     this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
-                     console.log(this.form);
+                        this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                        console.log(this.form);
                     }
                     //this.form.push(actionbox);
-                    
+
                 },
                 offline: true,
                 getOfflineDisplayItem: function(item, index) {
@@ -253,7 +192,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                                         console.log('INSIDE FINALLY');
                                     })
                                     .subscribe(
-                                        function(data){ 
+                                        function(data){
                                         $state.go('Page.LeadDashboard', null);
                                     },
                                     function(err) {
@@ -261,14 +200,14 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                                         PageHelper.hideLoader();
                                     }
                                 )
-                                
+
                             } else {
                                 leadProcessTs.update(reqData)
                                     .finally(function(){
                                         console.log('INSIDE FINALLY');
                                     })
                                     .subscribe(
-                                        function(data){ 
+                                        function(data){
                                         $state.go('Page.LeadDashboard', null);
                                     },
                                     function(err) {
@@ -283,7 +222,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                                     console.log('INSIDE FINALLY');
                                 })
                                 .subscribe(
-                                    function(data){ 
+                                    function(data){
                                         $state.go('Page.LeadDashboard', null);
                                     },
                                     function(err) {
@@ -291,7 +230,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                                         PageHelper.hideLoader();
                                     }
                                 )
-                            
+
                         }
                     }
                 }
