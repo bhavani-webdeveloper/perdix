@@ -42,7 +42,7 @@ abstract class LeadPolicy<V> extends IPolicy<LeadProcess> {
                 }
             }
         }
-        return policies;
+        return _.uniqBy(policies, 'name');
     }
 }
 

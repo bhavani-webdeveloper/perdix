@@ -24,11 +24,13 @@ export class PopulateLeadInteractionPolicy implements LeadPolicy<PopulateLeadInt
             if (leadProcess.lead && leadProcess.lead.leadInteractions) {
                 let activeSession:ISession = ObjectFactory.getInstance("Session");
                 let i = new LeadInteraction();
-                if (this.args &&  this.args.defaultUserName == true) {
-                    i.loanOfficerId = activeSession.getUsername();
-                }
+               
+                i.loanOfficerId = activeSession.getUsername();
+                
                 i.interactionDate = Utils.getCurrentDate();
                 leadProcess.lead.leadInteractions.push(i);
+                leadProcess.lead.branchId = activeSession.getBranchId();
+                leadProcess.lead.branchName = activeSession.getBranch();
             }
             return Observable.of(leadProcess);
         })

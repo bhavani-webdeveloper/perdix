@@ -1,4 +1,4 @@
-define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/AngularResourceService'], function(LeadProcessFactory, AngularResourceService) {
+define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, LeadProcessFactory, AngularResourceService) {
 
     return {
         pageUID: "witfin.lead.LeadGeneration",
@@ -11,6 +11,9 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
+
+            var leadProcessTs = new LeadProcess();
+
             var getOverrides = function (model) {
                 return {
                     "leadProfile.leadDetails.individualDetails.gender": {
@@ -106,6 +109,7 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
                         });
 
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                   
 
                     var self = this;
                     var formRequest = {
@@ -116,7 +120,21 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
                         ]
                     };
                     if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
+                        var leadId = $stateParams.pageId;
+                        LeadProcessFactory.createFromLeadId(leadId)
+                            .subscribe(function(value){
+                                model.leadProcess = value;
+                                model.lead = model.leadProcess.lead;
+                                var deferred = $q.defer();
+                                var promise = deferred.promise;
+                                deferred.resolve(Lead.getConfigFile())
 
+                                promise.then(function(resp) {
+                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                                    PageHelper.hideLoader();
+                                })
+
+                            });
                     }
                     else {
                         this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
@@ -164,6 +182,7 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
 
                     submit: function(model, form, formName) {
                         $log.info("Inside submit()");
+                        PageHelper.showLoader();
                         model.lead.productCategory = "Asset";
                         model.lead.productSubCategory = "Loan";
                         $log.warn(model);
@@ -189,7 +208,7 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
                             if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
                                 leadProcessTs.followUp(reqData)
                                     .finally(function(){
-                                        console.log('INSIDE FINALLY');
+                                        PageHelper.hideLoader();
                                     })
                                     .subscribe(
                                         function(data){
@@ -204,7 +223,7 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
                             } else {
                                 leadProcessTs.update(reqData)
                                     .finally(function(){
-                                        console.log('INSIDE FINALLY');
+                                        PageHelper.hideLoader();
                                     })
                                     .subscribe(
                                         function(data){
@@ -219,7 +238,7 @@ define(['perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/Ang
                         } else {
                             leadProcessTs.save(reqData)
                                 .finally(function(){
-                                    console.log('INSIDE FINALLY');
+                                    PageHelper.hideLoader();
                                 })
                                 .subscribe(
                                     function(data){

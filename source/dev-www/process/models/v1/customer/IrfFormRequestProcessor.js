@@ -2277,8 +2277,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                            },*/
                         "loanAmountRequested":{
                             key: "lead.loanAmountRequested",
-                            type: "select",
-                            enumCode: "lead_amount_requested",
+                            // type: "select",
+                            // enumCode: "lead_amount_requested",
                             condition: "model.lead.interestedInProduct==='YES'",
                             
                         }, 

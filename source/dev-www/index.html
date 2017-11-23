@@ -604,6 +604,11 @@
       })
   }
 
+  if (typeof moment === 'function') {
+      define('moment', function(){
+          return moment;
+      })
+  }
 
   requirejs.onError = function(err){
     console.log(err);

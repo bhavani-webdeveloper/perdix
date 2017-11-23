@@ -10,7 +10,6 @@ export class LeadPolicyFactory {
             case 'PopulateLeadInteractionPolicy':
                 obj =  new PopulateLeadInteractionPolicy();
                 return obj;
-                break;
             case 'PopulateBasicLeadDataPolicy':
                 obj = new PopulateBasicLeadDataPolicy();
                 return obj;

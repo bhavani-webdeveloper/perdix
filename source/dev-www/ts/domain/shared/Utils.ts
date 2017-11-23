@@ -1,9 +1,9 @@
-import moment = require("../../../bower_components/moment/moment");
+///<amd-dependency path="moment" name="moment"/>
 /**
  * Created by shahalpk on 21/11/17.
  */
 
-
+declare var moment: Object;
 class Utils {
     static evalInContext(context: any, str: string): any{
         let out = function(str: string){

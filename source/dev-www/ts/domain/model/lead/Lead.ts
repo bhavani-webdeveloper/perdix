@@ -1,4 +1,5 @@
 import LeadInteraction = require("./LeadInteraction");
+import Udf = require("./Udf");
 
 
 class Lead {
@@ -24,6 +25,7 @@ class Lead {
     customerId: number;
     customerType: string;
     leadInteractions: LeadInteraction[] = [];
+    udf: Udf;
     district: string;
     dob: string;
     educationStatus: string;

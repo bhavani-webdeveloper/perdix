@@ -39,8 +39,12 @@ class LeadProcess implements CanApplyPolicy {
         for (let policy of policies) {
             try{
                 let policyObj:LeadPolicy<Object> = LeadPolicyFactory.fromPolicyName(policy.name);
-                policyObj.setArguments(policy.arguments);
-                observables.push(policyObj.run(this));
+                if(policyObj && policy.arguments) {
+                	policyObj.setArguments(policy.arguments);
+                	observables.push(policyObj.run(this));
+                }
+                
+                
             } catch (e){
                 console.log("Unable to apply policy :: " + policy.name + ". Skipping now.");
                 console.error(e);

@@ -60,6 +60,7 @@ gulp.task('assets', function(){
         'dev-www/js/themeswitch.js',
         'dev-www/js/require.js',
         'dev-www/js/index.js',
+        'dev-www/tsjs/**/*',
         'dev-www/app_manifest.json'
         ], {base: 'dev-www/'})
         .pipe(gulp.dest(buildDirectory));

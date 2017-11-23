@@ -9,6 +9,8 @@ function getInjector(serviceName) {
 
 export interface ISession {
     getUsername(): string;
+    getBranchId(): number;
+    getBranch(): string
 }
 
 export abstract class NeedsAngularInjector {
@@ -35,5 +37,13 @@ export class UserSession extends NeedsAngularInjector implements ISession {
 
     getUsername(): string {
         return this.getInjector().getUsername();
+    }
+
+    getBranchId(): number {
+        return this.getInjector().getBranchId();
+    }
+
+    getBranch(): string {
+        return this.getInjector().getBranch();
     }
 }
