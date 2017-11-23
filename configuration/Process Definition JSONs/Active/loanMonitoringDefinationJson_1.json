@@ -878,6 +878,176 @@
                                 "LUCReschedule",
                                 "LUCLegalRecovery"
                             ]
+                        },
+                        "isAssetDelivered": {
+                            "title": "isAssetDelivered",
+                            "type": "boolean",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "careOf": {
+                            "title": "careOf",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "doorNo": {
+                            "title": "doorNo",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "street": {
+                            "title": "street",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "postOffice": {
+                            "title": "postOffice",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "landmark": {
+                            "title": "landmark",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "pincode": {
+                            "title": "pincode",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "area": {
+                            "title": "area",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "villageName": {
+                            "title": "villageName",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "district": {
+                            "title": "district",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "state": {
+                            "title": "state",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "isMailingAddress": {
+                            "title": "isMailingAddress",
+                            "type": "boolean",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "mobilePhone": {
+                            "title": "mobilePhone",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "isPrimaryNumber": {
+                            "title": "isPrimaryNumber",
+                            "type": "boolean",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "nonIntendedSubpurpose": {
+                            "title": "nonIntendedSubpurpose",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucRescheduledRemarks": {
+                            "title": "lucRescheduledRemarks",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucEscalatedRemarks": {
+                            "title": "lucEscalatedRemarks",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
                         }
                     }
                 }
