@@ -1165,6 +1165,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     model.customer.title=String(model.customer.addressProofSameAsIdProof);
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
+                    EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.currentStage == 'Completed'){ 
                         reqData['enrollmentAction'] = 'PROCEED';
                     } else {
@@ -1177,7 +1178,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                             model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
                             model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
                             model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        
+                            model = EnrollmentHelper.fixData(model);
+    
                         }
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);

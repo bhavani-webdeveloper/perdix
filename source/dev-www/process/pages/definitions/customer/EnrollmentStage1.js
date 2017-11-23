@@ -633,6 +633,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             proceed: function(model, formCtrl, form, $event) {
                 formCtrl.scope.$broadcast('schemaFormValidate');
+                model.customer.title=String(model.customer.addressProofSameAsIdProof);
 
                 if (formCtrl && formCtrl.$invalid) {
                     PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
@@ -641,9 +642,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.ageProof=model.customer.addressProofSameAsIdProof;
                 model.customer.customerType="Individual";
                 var reqData = _.cloneDeep(model);
+                EnrollmentHelper.fixData(reqData);
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
                     EnrollmentHelper.proceedData(reqData).then(function (res) {
+                        model.customer = _.clone(res.customer);
+                        model = EnrollmentHelper.fixData(model);
+                        model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                         $stateParams.confirmExit = false;
                         irfNavigator.goBack();
                     });

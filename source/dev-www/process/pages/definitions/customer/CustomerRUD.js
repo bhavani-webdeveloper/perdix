@@ -1131,6 +1131,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             model.customer.title=String(model.customer.addressProofSameAsIdProof);
                             $log.info(model);
                             var reqData = _.cloneDeep(model);
+                            EnrollmentHelper.fixData(reqData);
                             if (reqData.customer.currentStage == 'Completed'){ 
                                 reqData['enrollmentAction'] = 'PROCEED';
                             } else {
@@ -1140,6 +1141,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             Enrollment.updateCustomer(reqData, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
+                                model.customer = _.clone(res.customer);
+                                model = EnrollmentHelper.fixData(model);
+                                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                                 $state.go("Page.Engine", {
                                     pageName: "CustomerRUD",
                                     pageId: model.customer.id,
