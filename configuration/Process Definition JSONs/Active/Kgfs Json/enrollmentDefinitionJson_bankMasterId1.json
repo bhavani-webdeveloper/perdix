@@ -59,35 +59,40 @@
             "title": "Height (In)",
             "type": "number",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "weightInKg": {
             "title": "Weight (Kg)",
             "type": "number",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "tobaccoConsumption": {
             "title": "Tobacco Consumption",
             "type": "boolean",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "alcoholConsumption": {
             "title": "Alcohol Consumption",
             "type": "boolean",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "narcoticsConsumption": {
             "title": "Narcotics Consumption",
             "type": "boolean",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           }
         }
@@ -210,6 +215,7 @@
               "minimum": 0,
               "maximum": 100000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -228,6 +234,7 @@
               "title": "anualEducationFee",
               "type": "bigDecimal",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -235,6 +242,7 @@
               "title": "salary",
               "type": "bigDecimal",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -242,6 +250,7 @@
               "title": "udf1",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -249,6 +258,7 @@
               "title": "udf2",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -256,6 +266,7 @@
               "title": "udf3",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -263,6 +274,7 @@
               "title": "udf4",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -270,6 +282,7 @@
               "title": "udf5",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -320,6 +333,7 @@
               "minimum": 0,
               "maximum": 100,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -462,16 +476,11 @@
         "items": {
           "type": "object",
           "required": [
-            "loanType",
-            "instituteName",
-            "liabilityLoanPurpose",
-            "loanAmountInPaisa"
-          ],
+           ],
           "properties": {
             "loanType": {
               "title": "Loan Type",
               "type": "string",
-              "refCodeCategory": "liability_loan_type",
               "captureStages": [
                 "Stage02",
                 "Completed"
@@ -499,7 +508,6 @@
             "liabilityLoanPurpose": {
               "title": "Loan Purpose",
               "type": "string",
-              "refCodeCategory": "liability_loan_purpose",
               "captureStages": [
                 "Stage02",
                 "Completed"
@@ -540,6 +548,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -549,6 +558,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -558,6 +568,7 @@
               "minimum": 0,
               "maximum": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -567,6 +578,7 @@
               "minimum": 0,
               "maximum": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -576,6 +588,7 @@
               "minimum": 0,
               "maximum": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -603,6 +616,7 @@
               "minimum": 0,
               "maximum": 10000,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -634,7 +648,8 @@
             "minLength": 16,
             "maxLength": 16,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "parentCustomerId": {
@@ -684,6 +699,7 @@
             "minLength": 1,
             "maxLength": 50,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -711,6 +727,7 @@
             "title": "Old Customer ID",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -740,7 +757,8 @@
             "minLength": 1,
             "maxLength": 45,
             "captureStages": [
-
+              "Stage01",
+              "Completed"
             ]
           },
           "postOffice": {
@@ -801,6 +819,7 @@
             "maxLength": 15,
             "captureStages": [
               "Stage01",
+              "Stage02",
               "Completed"
             ]
           },
@@ -809,6 +828,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -817,6 +837,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -826,7 +847,8 @@
             "minLength": 10,
             "maxLength": 15,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "whatsAppMobileNo": {
@@ -835,6 +857,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Stage01",
+              "Stage02",
+              "Completed"
 
             ]
           },
@@ -844,7 +869,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "mailSameAsResidence": {
@@ -861,7 +888,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "lastName": {
@@ -870,7 +898,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "middleName": {
@@ -879,7 +908,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "motherName": {
@@ -888,6 +918,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+            "Stage01",
+            "Stage02",
+            "Completed"
 
             ]
           },
@@ -897,7 +930,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "fatherLastName": {
@@ -906,7 +941,9 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "fatherMiddleName": {
@@ -915,7 +952,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "gender": {
@@ -923,7 +961,8 @@
             "type": "string",
             "refCodeCategory": "gender",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "dateOfBirth": {
@@ -931,7 +970,8 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "religion": {
@@ -985,7 +1025,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "spouseMiddleName": {
@@ -994,6 +1035,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -1003,6 +1045,7 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -1011,7 +1054,8 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "careOf": {
@@ -1020,6 +1064,7 @@
             "minLength": 0,
             "maxLength": 100,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -1029,7 +1074,9 @@
             "minLength": 0,
             "maxLength": 10,
             "captureStages": [
-
+              "Stage01",
+              "Stage02",
+              "Completed"
             ]
           },
           "authenticationRegisterId": {
@@ -1038,6 +1085,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -1045,7 +1093,8 @@
             "title": "Verified",
             "type": "boolean",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "partnerCode": {
@@ -1054,6 +1103,7 @@
             "minLength": 0,
             "maxLength": 45,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -1083,21 +1133,24 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "enrolledAs": {
             "title": "Enrolled as",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "inviteId": {
             "title": "Invite Id",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           }
         }
@@ -1240,7 +1293,8 @@
             "minLength": 10,
             "maxLength": 10,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "aadhaarNo": {
@@ -1371,7 +1425,8 @@
             "title": "Pan Card Image",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "ageProof": {
@@ -1387,14 +1442,16 @@
             "title": "Age Proof Image",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "houseNo": {
             "title": "HouseNo",
             "type": "string",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "houseNoIsVerified": {
@@ -1413,7 +1470,8 @@
             "type": "string",
             "refCodeCategory": "relationship",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "referenceFirstName": {
@@ -1422,7 +1480,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "referenceMiddleName": {
@@ -1431,7 +1490,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "referenceLastName": {
@@ -1440,7 +1500,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           }
         }
@@ -1904,6 +1965,7 @@
               "title": "Name Of Owned Asset",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -1911,6 +1973,7 @@
               "title": "Name Of Owned Asset",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -1965,7 +2028,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "date": {
@@ -1973,7 +2037,8 @@
             "type": "string",
             "format": "date",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "place": {
@@ -1982,7 +2047,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "houseVerificationPhoto": {
@@ -1991,7 +2057,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "latitude": {
@@ -2020,7 +2087,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           }
         }
@@ -2038,7 +2106,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           }
         }
@@ -2054,7 +2123,8 @@
             "title": "Finger Print is Required",
             "type": "boolean",
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "leftHandIndexImageId": {
@@ -2063,7 +2133,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "leftHandMiddleImageId": {
@@ -2072,7 +2143,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "leftHandRingImageId": {
@@ -2081,7 +2153,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "leftHandSmallImageId": {
@@ -2090,7 +2163,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "leftHandThumpImageId": {
@@ -2099,7 +2173,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "rightHandIndexImageId": {
@@ -2108,7 +2183,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "rightHandMiddleImageId": {
@@ -2117,7 +2193,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "rightHandRingImageId": {
@@ -2126,7 +2203,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "rightHandSmallImageId": {
@@ -2135,7 +2213,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           },
           "rightHandThumpImageId": {
@@ -2144,7 +2223,8 @@
             "minLength": 1,
             "maxLength": 100,
             "captureStages": [
-              "Stage02"
+              "Stage02",
+              "Completed"
             ]
           }
         }
@@ -2430,7 +2510,8 @@
             "title": "ADDRESS_PROOF_BACK_SIDE",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "udf30": {
@@ -2496,14 +2577,16 @@
             "title": "SPOUSE_ID_PROOF_ISSUE_DATE",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           },
           "udfDate2": {
             "title": "SPOUSE_ID_PROOF_VALID_UPTO_DATE",
             "type": "string",
             "captureStages": [
-              "Stage01"
+              "Stage01",
+              "Completed"
             ]
           }
         }
@@ -2519,6 +2602,7 @@
             "minLength": 1,
             "maxLength": 500,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -2526,6 +2610,7 @@
             "title": "Availed Any MFI service?",
             "type": "boolean",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -2535,6 +2620,7 @@
             "minLength": 1,
             "maxLength": 500,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -2542,6 +2628,7 @@
             "title": "Enterprise Name 1",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -2549,6 +2636,7 @@
             "title": "Enterprise Name 2",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           }
@@ -2566,6 +2654,7 @@
             "title": "date1",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -2573,6 +2662,7 @@
             "title": "date2",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           }
@@ -3548,6 +3638,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3557,6 +3648,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3566,6 +3658,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3575,6 +3668,7 @@
             "minLength": 0,
             "maxLength": 10,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3584,6 +3678,7 @@
             "minLength": 0,
             "maxLength": 100,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3593,6 +3688,7 @@
             "minimum": 0,
             "maximum": 100000000,
             "captureStages": [
+              "Completed"
 
             ]
           }
@@ -3613,6 +3709,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3621,6 +3718,7 @@
             "type": "string",
             "refCodeCategory": "relationship_type",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3628,6 +3726,7 @@
             "title": "linkedToCustomerId",
             "type": "number",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3637,6 +3736,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3646,6 +3746,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3655,6 +3756,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3664,6 +3766,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3672,6 +3775,7 @@
             "type": "string",
             "format": "date",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3681,6 +3785,7 @@
             "minimum": 0,
             "maximum": 45,
             "captureStages": [
+              "Completed"
 
             ]
           }
@@ -3698,6 +3803,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3707,6 +3813,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3716,6 +3823,7 @@
             "minimum": 0,
             "maximum": 100,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3725,6 +3833,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3732,6 +3841,7 @@
             "title": "Bank Statement Doc Id",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3741,6 +3851,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3750,6 +3861,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3759,6 +3871,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3768,6 +3881,7 @@
             "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3775,6 +3889,7 @@
             "title": "DISBURSEMENT_ACCOUNT",
             "type": "boolean",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3782,6 +3897,7 @@
             "title": "BANKING_SINCE",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3789,6 +3905,7 @@
             "title": "netBankingAvailable",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3798,6 +3915,7 @@
             "minimum": 0,
             "maximum": 10000000,
             "captureStages": [
+              "Completed"
 
             ]
           },
@@ -3805,6 +3923,7 @@
             "title": "customerNameAsInBank",
             "type": "string",
             "captureStages": [
+              "Completed"
 
             ]
           }
@@ -3828,6 +3947,7 @@
               "minLength": 1,
               "maxLength": 1000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3837,6 +3957,7 @@
               "minLength": 1,
               "maxLength": 1000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3845,6 +3966,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3853,6 +3975,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3862,6 +3985,7 @@
               "minLength": 1,
               "maxLength": 500,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -3887,6 +4011,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3896,6 +4021,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3905,6 +4031,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3914,6 +4041,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3923,6 +4051,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3932,6 +4061,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -3955,6 +4085,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3962,6 +4093,7 @@
               "title": "Income Type",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3969,6 +4101,7 @@
               "title": "Invoice Type",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3977,6 +4110,7 @@
               "type": "number",
               "minimum": 0,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -3985,6 +4119,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4007,6 +4142,7 @@
               "type": "string",
               "refCodeCategory": "occupation",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4016,6 +4152,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4024,6 +4161,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4047,6 +4185,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4055,6 +4194,7 @@
               "type": "string",
               "refCodeCategory": "income_type",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4064,6 +4204,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4072,6 +4213,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4091,6 +4233,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4100,6 +4243,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4109,6 +4253,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4118,6 +4263,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4126,6 +4272,7 @@
               "type": "string",
               "refCodeCategory": "collateral_type",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4135,6 +4282,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4144,6 +4292,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4153,6 +4302,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4162,6 +4312,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4171,6 +4322,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4179,6 +4331,7 @@
               "type": "string",
               "refCodeCategory": "new_machine",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4186,6 +4339,7 @@
               "title": "Funding Source",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4194,6 +4348,7 @@
               "type": "string",
               "refCodeCategory": "decisionmaker",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4202,6 +4357,7 @@
               "type": "string",
               "refCodeCategory": "decisionmaker",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4211,6 +4367,7 @@
               "minLength": 1,
               "maxLength": 500,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4232,6 +4389,7 @@
               "type": "string",
               "refCodeCategory": "enterprice_asset_types",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4241,6 +4399,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4250,6 +4409,7 @@
               "minimum": 0,
               "maximum": 10000000000,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4280,6 +4440,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4289,6 +4450,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4298,6 +4460,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4307,6 +4470,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4316,6 +4480,7 @@
               "minLength": 1,
               "maxLength": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4325,6 +4490,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4334,6 +4500,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4343,6 +4510,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4352,6 +4520,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4361,6 +4530,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4389,6 +4559,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4396,6 +4567,7 @@
               "title": "Customer Since",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4405,6 +4577,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4414,6 +4587,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4423,6 +4597,7 @@
               "minLength": 1,
               "maxLength": 100,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4432,6 +4607,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4440,6 +4616,7 @@
               "type": "string",
               "format": "date",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4448,6 +4625,7 @@
               "type": "string",
               "refCodeCategory": "payment_frequency",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4457,6 +4635,7 @@
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4479,6 +4658,7 @@
               "title": "Supplier Name",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4486,6 +4666,7 @@
               "title": "Supplier Type",
               "type": "string",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4493,6 +4674,7 @@
               "title": "Payment Terms",
               "type": "integer",
               "captureStages": [
+                "Completed"
 
               ]
             },
@@ -4500,6 +4682,7 @@
               "title": "Amount",
               "type": "number",
               "captureStages": [
+                "Completed"
 
               ]
             }
@@ -4521,49 +4704,56 @@
               "enum": [
 
               ],
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "fileId": {
               "title": "fileId",
               "type": "string",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "doubtful": {
               "title": "doubtful",
               "type": "number",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "loss": {
               "title": "loss",
               "type": "number",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "specialMentionAccount": {
               "title": "specialMentionAccount",
               "type": "number",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "standard": {
               "title": "standard",
               "type": "number",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             },
             "subStandard": {
               "title": "subStandard",
               "type": "number",
-              "captureStages": [
+             "captureStages": [
+                "Completed"
 
               ]
             }

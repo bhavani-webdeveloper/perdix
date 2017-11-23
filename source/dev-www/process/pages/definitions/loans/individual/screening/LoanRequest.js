@@ -1532,7 +1532,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             },
                             {
                                 key: "loanAccount.collateral[].hypothecatedToBank",
-                                title:"HYPOTHECATED_TO_KINARA",
+                                title:"HYPOTHECATED_TO_BANK",
                                 required:true,
                                 enumCode: "decisionmaker",
                                 type: "select",
@@ -1660,7 +1660,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key:"loanAccount.nominees[].nomineeFirstName",
                                 "title":"NAME",
-                                required: true,
+                                //required: true,
                                 "type":"lov",
                                 "lovonly": false,
                                 "inputMap": {
@@ -1688,18 +1688,18 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key:"loanAccount.nominees[].nomineeGender",
                                 type:"select",
-                                required: true,
+                                //required: true,
                                 "title":"GENDER"
                             },
                             {
                                 key:"loanAccount.nominees[].nomineeDOB",
                                 type:"date",
-                                required: true,
+                                //required: true,
                                 "title":"DATE_OF_BIRTH"
                             },
                             {
                                 key:"loanAccount.nominees[].nomineeDoorNo",
-                                required: true,
+                                //required: true,
                                 "title":"DOOR_NO"
                             },
                             {
@@ -1716,7 +1716,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 "title":"PIN_CODE",
                                 fieldType: "text",
                                 "inputmode": "number",                               
-                                required: true,
+                                //required: true,
                                 autolov: true,
                                 inputMap: {
                                     "pincode": {
@@ -1766,7 +1766,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             {
                                 key:"loanAccount.nominees[].nomineeRelationship",
                                 type:"select",
-                                required: true,
+                                //required: true,
                                 "title":"RELATIONSHIP"
                             }
                         ]

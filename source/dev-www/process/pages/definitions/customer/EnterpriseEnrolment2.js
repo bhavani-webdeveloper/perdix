@@ -126,12 +126,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 $log.info("Inside new-applicant of EnterpriseEnrollment");
 
                 var addToRelation = true;
-                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
-                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
-                        addToRelation = false;
-                        break;
+                if(model.customer && model.customer.enterpriseCustomerRelations){
+                    for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
+                        if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
+                            addToRelation = false;
+                            break;
+                        }
                     }
                 }
+                
                 if (addToRelation){
                     var newLinkedCustomer = {
                         "linkedToCustomerId": params.customer.id,
@@ -1818,18 +1821,21 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].supplierType",
                                 title:"TYPE",
+                                required:true,
                                 type:"select",
                                 enumCode: "supplier_type"
                             },
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
                                 title:"PAYMENT_TERMS_IN_DAYS",
+                                required:true,
                                 type: "select",
                                 enumCode: "payment_terms"
                             },
                             {
                                 key:"customer.supplierDetails[].amount",
                                 title:"PAYABLE_OUTSTANDING",
+                                required:true,
                                 type:"amount"
                             },
                          ] 
@@ -2076,6 +2082,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.expenditures",
                                 type:"array",
+                                startEmpty: true,
                                 title:"BUSINESS_EXPENSE",
                                 items:[
                                     {
@@ -2763,7 +2770,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     enumCode: "decisionmaker",
                 }, {
                     key: "customer.customerAttitudeToKinara",
-                    title: "CUSTOMER_ATTITUDE_TO_KINARA",
+                    title: "CUSTOMER_ATTITUDE_TO_BANK",
                     type: "select",
                     required: "true",
                     enumCode: "status_scale_2"

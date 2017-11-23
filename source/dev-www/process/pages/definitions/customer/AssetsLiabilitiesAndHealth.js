@@ -34,8 +34,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
             if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
                     model.customer.udf.userDefinedFieldValues.udf26 = false;
             }
-
-         }
+        }
         $log.info("After fixData");
         $log.info(model);
         return model;
@@ -155,10 +154,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     }
                 );
             }
-
-            model.isFPEnrolled = function(fingerId){
+            model.isFPEnrolled = function(fingerId) {
                 //$log.info("Inside isFPEnrolled: " + BiometricService.getFingerTF(fingerId) + " :"  + fingerId);
-                if (model.customer[BiometricService.getFingerTF(fingerId)]!=null || (typeof(model.customer.$fingerprint)!='undefined' && typeof(model.customer.$fingerprint[fingerId])!='undefined' && model.customer.$fingerprint[fingerId].data!=null )) {
+                if (model.customer[BiometricService.getFingerTF(fingerId)] != null || (typeof(model.customer.$fingerprint) != 'undefined' && typeof(model.customer.$fingerprint[fingerId]) != 'undefined' && model.customer.$fingerprint[fingerId].data != null)) {
                     //$log.info("Inside isFPEnrolled: :true");
                     return "fa-check text-success";
                 }
@@ -166,9 +164,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 return "fa-close text-danger";
             }
 
-            model.getFingerLabel = function(fingerId){
+            model.getFingerLabel = function(fingerId) {
                 return BiometricService.getLabel(fingerId);
-            }
+            }    
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -247,8 +245,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 }, function (resp) {
                                     PageHelper.hideLoader();
                                     irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)           
-                                });
-                                    
+                                });      
                             },
                             getListDisplayItem: function(data, index) {
                                 return [
@@ -737,10 +734,12 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     },
                     {
                         key:"customer.caste",
+                        "required":true,
                         type:"select"
                     },
                     {
                         key:"customer.language",
+                        "required":true,
                         type:"select"
                     },
                     {
@@ -826,7 +825,11 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         key: "customer.date",
                         type:"date"
                     },
-                    "customer.place"
+                    {
+                        key:"customer.place",
+                        required:true
+                    }
+                    
                 ]
             },
             {
@@ -1101,7 +1104,6 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         })
                     $log.info(reqData);
                 })
-
             }
 
         }
