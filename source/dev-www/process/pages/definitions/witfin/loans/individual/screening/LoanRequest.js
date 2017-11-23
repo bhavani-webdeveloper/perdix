@@ -1,4 +1,4 @@
-define(['perdix/domain/model/loan/LoanProcess', 'perdix/domain/shared/AngularResourceService'],function(LoanProcessRepo, AngularResourceService){
+define([],function(){
      
     return {
         pageUID: "witfin.loans.individual.screening.LoanRequest",
@@ -11,7 +11,7 @@ define(['perdix/domain/model/loan/LoanProcess', 'perdix/domain/shared/AngularRes
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
     BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, $injector) {
         var branch = SessionStore.getBranch();
-        var loan_process = new LoanProcessRepo();
+        
         
         var self;
         var validateForm = function(formCtrl){
@@ -529,7 +529,7 @@ define(['perdix/domain/model/loan/LoanProcess', 'perdix/domain/shared/AngularRes
             "title": "LOAN_REQUEST",
             "subTitle": "BUSINESS",
             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                 AngularResourceService.getInstance().setInjector($injector);
+                 // AngularResourceService.getInstance().setInjector($injector);
                 
                 
                 model.currentStage = bundleModel.currentStage;
