@@ -54,14 +54,59 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "readonly" : true
                             },
                             {
+                                "key": "dedupeData[].customerName",
+                                "title": "CUSTOMER_NAME",
+                                "readonly" : true
+                            },
+                            {
+                                "key": "dedupeData[].customerType",
+                                "title": "CUSTOMER_TYPE",
+                                "readonly" : true
+                            },
+                            {
                                 "key": "dedupeData[].dedupeRequestDeatils",
                                 "type":"array",
                                 "title": "MATCHES_FOUND",
-                                "items": [{
-                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeCustomerId",
-                                    "title": "MATCH_ID",
-                                    "readonly": true
-                                }]
+                                "items": [
+                                    {
+                                        "key": "dedupeData[].dedupeRequestDeatils[].dedupeCustomerId",
+                                        "title": "MATCH_ID",
+                                        "readonly": true
+                                    }, 
+                                    {
+                                        "key": "dedupeData[].dedupeRequestDeatils[].score",
+                                        "title": "SCORE",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails",
+                                        "title": "MATCHING_FIELDS",
+                                        "type": "array",
+                                        "titleExpr":  "model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].dedupeMatchDetails[arrayIndexes[2]].fieldName",
+                                        "items": [
+                                            {
+                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].fieldName",
+                                                "title": "FIELD_NAME",
+                                                "readonly": true
+                                            }, 
+                                            {
+                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].score",
+                                                "title": "SCORE",
+                                                "readonly": true
+                                            },
+                                            {
+                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].matchFieldValue",
+                                                "title": "MATCHED_CUSTOMER_FIELD_VALUE", // Matched Customer Value
+                                                "readonly": true
+                                            }, 
+                                            {
+                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].requestFieldValue",
+                                                "title": "CUSTOMER_FIELD_VALUE", // Customer Value
+                                                "readonly": true
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }],
