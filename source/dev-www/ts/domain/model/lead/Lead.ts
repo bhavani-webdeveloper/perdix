@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import LeadInteraction = require("./LeadInteraction");
 import Udf = require("./Udf");
 
@@ -24,7 +25,10 @@ class Lead {
     currentStage: string;
     customerId: number;
     customerType: string;
-    leadInteractions: LeadInteraction[] = [];
+    @Type(() => LeadInteraction)
+    leadInteractions: LeadInteraction[];
+
+    @Type(() => Udf)
     udf: Udf;
     district: string;
     dob: string;
@@ -63,7 +67,7 @@ class Lead {
     state: string;
     udfId: number;
     version: number;
-
+    
     public getLead() {
         return "Lead Here!";
     }

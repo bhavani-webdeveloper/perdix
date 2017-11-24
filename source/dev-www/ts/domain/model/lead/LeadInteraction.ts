@@ -13,6 +13,10 @@ class LeadInteraction {
     picture: string;
     typeOfInteraction: string;
     version: number;
+
+    public getLeadInteractions() {
+        return "Hello! LeadInteractions!"
+    }
 }
 
 export = LeadInteraction;

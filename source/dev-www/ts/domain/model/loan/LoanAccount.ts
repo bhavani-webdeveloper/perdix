@@ -1,7 +1,24 @@
+import { Type } from "class-transformer";
 import Customer = require("../customer/Customer");
+import AccountUserDefinedField = require("./AccountUserDefinedField");
+
+import BcAccount = require("./BcAccount");
+import Collateral = require("./Collateral");
+import DisbursementSchedule = require("./DisbursementSchedule");
+import Guarantor = require("./Guarantor");
+import JewelLoanDetails = require("./JewelLoanDetails");
+import LoanCentre = require("./LoanCentre");
+import LoanCustomerRelation = require("./LoanCustomerRelation");
+import LoanDocument = require("./LoanDocument");
+import LoanInsurance = require("./LoanInsurance");
+import LoanMitigant = require("./LoanMitigant");
+import Nominee = require("./Nominee");
+import OrnamentsAppraisal = require("./OrnamentsAppraisal");
+import TelecallingDetail = require("./TelecallingDetail");
+import VehicleLoanDetails = require("./VehicleLoanDetails");
+//vehicleDTOs
 
 class LoanAccount {
-
 	accountNumber: string;
 	annualizedPercentage: number;
 	applicant: string;
@@ -150,6 +167,52 @@ class LoanAccount {
     witnessMiddleName: string;
     witnessRelationship: string;
     wmName: string;
+
+    @Type(() => AccountUserDefinedField)
+    accountUserDefinedFields: AccountUserDefinedField;
+
+    @Type(() => BcAccount)
+    bcAccount: BcAccount;
+
+    @Type(() => Collateral)
+    collateral: Collateral[]; 
+
+    @Type(() => DisbursementSchedule)
+    disbursementSchedules: DisbursementSchedule[]; 
+
+    @Type(() => Guarantor)
+    guarantors: Guarantor[];
+
+    @Type(() => JewelLoanDetails)
+    jewelLoanDetails: JewelLoanDetails;
+
+    @Type(() => LoanCentre)
+    loanCentre: LoanCentre;
+
+    @Type(() => LoanCustomerRelation)
+    loanCustomerRelations: LoanCustomerRelation[];
+
+    @Type(() => LoanDocument)
+    loanDocuments: LoanDocument[];
+
+    @Type(() => LoanInsurance)
+    loanInsurance: LoanInsurance;
+
+    @Type(() => LoanMitigant)
+    loanMitigants: LoanMitigant[];
+
+    @Type(() => OrnamentsAppraisal)
+    ornamentsAppraisals: OrnamentsAppraisal[];
+
+    @Type(() => VehicleLoanDetails)
+    vehicleLoanDetails: VehicleLoanDetails[];
+
+    @Type(() => TelecallingDetail)
+    telecallingDetails: TelecallingDetail[];
+
+    @Type(() => Nominee)
+    nominees: Nominee[];
+
 
 
     public static createFromJSON(data:any) {

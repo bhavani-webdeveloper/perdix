@@ -1,3 +1,14 @@
+import { Type } from "class-transformer";
+import VehicleAccessory = require("./VehicleAccessory");
+import VehicleAssetCondition = require("./VehicleAssetCondition");
+import VehicleLoanExpense = require("./VehicleLoanExpense");
+import VehicleLoanIncome = require("./VehicleLoanIncome");
+import VehiclePastValuation = require("./VehiclePastValuation");
+import VehiclePhotoCapture = require("./VehiclePhotoCapture");
+import VehicleRouteDetail = require("./VehicleRouteDetail");
+
+
+
 class VehicleLoanDetails {
 	accessories: string;
     accessoriesStatus: boolean;
@@ -140,6 +151,28 @@ class VehicleLoanDetails {
     vehicleClass: string;
     vehicleMoved: boolean;
     version: number;
+
+    @Type(() => VehicleAccessory)
+    vehicleAccessories: VehicleAccessory[];
+
+    @Type(() => VehicleAssetCondition)
+    vehicleAssetConditions: VehicleAssetCondition[];
+
+    @Type(() => VehicleLoanExpense)
+    vehicleLoanExpenses: VehicleLoanExpense[];
+
+    @Type(() => VehicleLoanIncome)
+    vehicleLoanIncomes: VehicleLoanIncome[];
+
+    @Type(() => VehiclePastValuation)
+    vehiclePastValuations: VehiclePastValuation[];
+
+    @Type(() => VehiclePhotoCapture)
+    vehiclePhotoCaptures: VehiclePhotoCapture[];
+
+    @Type(() => VehicleRouteDetails)
+    vehicleRouteDetails: VehicleRouteDetails[];
+
 }
 
 export = VehicleLoanDetails;
