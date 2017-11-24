@@ -411,6 +411,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
+                if(model.currentStage=='Screening' || model.currentStage=='Application') {
+                    model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi || 0;
+                }
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -2596,6 +2599,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 .then(function(res){
 
                                     model.loanAccount = res.loanAccount;
+                                    if(model.currentStage=='Screening' || model.currentStage=='Application') {
+                                        model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi || 0;
+                                    }
                                     if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
                                         for(i in model.temp.loanCustomerRelations){
                                             for(j in model.loanAccount.loanCustomerRelations){
