@@ -762,6 +762,26 @@
               "Completed"
             ]
           },
+		   "localityType": {
+            "title": "localityType",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		   "accomodationType": {
+            "title": "accomodationType",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "landmark": {
             "title": "Landmark",
             "type": "string",
