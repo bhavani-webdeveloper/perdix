@@ -11,8 +11,7 @@
                 "aadhaarNo": {
                     "type": ["string", "null"],
                     "title": "AADHAAR_NO",
-                    "minLength": 12,
-                    "maxLength": 12
+                    "pattern":"^[2-9]{1}[0-9]{11}$"
                 },
                 "whatsAppMobileNo": {
                     "type": ["string", "null"],

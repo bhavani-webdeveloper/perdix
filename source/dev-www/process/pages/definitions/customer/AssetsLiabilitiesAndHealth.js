@@ -796,6 +796,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                     {
                         key:"customer.houseVerificationPhoto",
                         offline: true,
+                        "required":true,
                         type:"file",
                         fileType:"image/*"
                     },

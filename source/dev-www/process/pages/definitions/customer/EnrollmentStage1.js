@@ -106,6 +106,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 {
                     key:"customer.photoImageId",
                     type:"file",
+                    "required":true,
                     fileType:"image/*",
                     "offline": true
                 },
@@ -225,6 +226,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         {
                             key:"customer.villageName",
+                            required:true,
                             type:"select",
                             "enumCode":"village",
                             filter: {
@@ -379,7 +381,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 model.customer.addressProofNo = result.text;
                             },
                             "schema":{
-                                "pattern":"^[a-zA-Z0-9]*$"
+                                "pattern":"^[2-9]{1}[0-9]{11}$"
                             }
                         },
                         {
