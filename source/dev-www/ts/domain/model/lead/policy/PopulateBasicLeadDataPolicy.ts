@@ -16,8 +16,8 @@ export class PopulateBasicLeadDataPolicy extends LeadPolicy<PopulateBasicLeadDat
     }
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
-        return Observable.create((observer) => {
-            debugger;
+        return Observable.create((observer: any) => {
+            
             if (leadProcess.lead) {
                 leadProcess.lead.leadStatus = "Incomplete";
             }

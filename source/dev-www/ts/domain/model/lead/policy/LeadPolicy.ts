@@ -9,7 +9,7 @@ import * as _ from "lodash";
 declare let leadProcessConfig:any;
 
 abstract class LeadPolicy<V> extends IPolicy<LeadProcess> {
-    abstract setArguments(args: V);
+    abstract setArguments(args: V): any;
 
     abstract run(obj: LeadProcess): Observable<LeadProcess>;
 

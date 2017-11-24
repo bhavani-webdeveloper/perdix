@@ -3,7 +3,7 @@
 import AngularResourceService = require("./AngularResourceService");
 import {applyMixins} from "@reactivex/rxjs/dist/cjs/util/applyMixins";
 import Utils = require("./Utils");
-function getInjector(serviceName) {
+function getInjector(serviceName: string) {
     return AngularResourceService.getInstance().getInjector(serviceName)
 }
 
@@ -26,7 +26,7 @@ export class UserSession extends NeedsAngularInjector implements ISession {
 
     angularServiceName: string = "SessionStore";
 
-    private static _instance = null;
+    private static _instance:any = null;
 
     static getInstance(): UserSession {
         if (this._instance == null) {
