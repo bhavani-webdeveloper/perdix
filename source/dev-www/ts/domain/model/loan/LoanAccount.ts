@@ -19,6 +19,7 @@ import VehicleLoanDetails = require("./VehicleLoanDetails");
 //vehicleDTOs
 
 class LoanAccount {
+
 	accountNumber: string;
 	annualizedPercentage: number;
 	applicant: string;
@@ -175,10 +176,10 @@ class LoanAccount {
     bcAccount: BcAccount;
 
     @Type(() => Collateral)
-    collateral: Collateral[]; 
+    collateral: Collateral[];
 
     @Type(() => DisbursementSchedule)
-    disbursementSchedules: DisbursementSchedule[]; 
+    disbursementSchedules: DisbursementSchedule[];
 
     @Type(() => Guarantor)
     guarantors: Guarantor[];
@@ -212,6 +213,12 @@ class LoanAccount {
 
     @Type(() => Nominee)
     nominees: Nominee[];
+
+
+    customer: Customer;
+    applicantCustomer: Customer;
+    coApplicants: Customer[];
+    guarantors: Customer[];
 
 
 

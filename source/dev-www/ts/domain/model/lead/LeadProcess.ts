@@ -26,33 +26,7 @@ class LeadProcess implements CanApplyPolicy {
     	this.leadRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LeadProcess);
 	}
 
-	applyPolicies(policyStage: string): Observable<LeadProcess> {
-        let policies = LeadPolicy.resolvePolicy(this, policyStage);
 
-        /* If there are no policies applicable */
-        if (!_.isArray(policies) || (_.isArray(policies) && policies.length == 0)) {
-            return Observable.of(this);
-        }
-
-        let observables = [];
-
-        for (let policy of policies) {
-            try{
-                let policyObj:LeadPolicy<Object> = LeadPolicyFactory.fromPolicyName(policy.name);
-                if(policyObj && policy.arguments) {
-                	policyObj.setArguments(policy.arguments);
-                	observables.push(policyObj.run(this));
-                }
-                
-                
-            } catch (e){
-                console.log("Unable to apply policy :: " + policy.name + ". Skipping now.");
-                console.error(e);
-            }
-        }
-
-        return Observable.concat(...observables).last();
-    }
 
 	loanProcessAction(actionName: string): boolean {
 		switch(actionName) {
@@ -69,7 +43,8 @@ class LeadProcess implements CanApplyPolicy {
         return this.leadRepo.getLead(id)
             .map(
                 (value: Object) => {
-                    this.lead = plainToClass(Lead, Utils.toJSObj(value));
+                    //noinspection TypeScriptValidateTypes
+                    this.lead = plainToClass<Lead, Object>(Lead, Utils.toJSObj(value));
                     // this.lead = value;
                     // this.lead.currentStage = "SOME STGE";
                     return this;
@@ -123,6 +98,10 @@ class LeadProcess implements CanApplyPolicy {
     followUp(reqData: any): Observable<LeadProcess> {
     	reqData.leadAction = "SAVE";
     	return this.leadRepo.updateLead(reqData);
+    }
+
+    static getProcessConfig(){
+        return leadProcessConfig;
     }
 }
 

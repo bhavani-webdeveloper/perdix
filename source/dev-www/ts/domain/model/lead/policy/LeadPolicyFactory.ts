@@ -2,9 +2,21 @@
 import {LeadPolicy} from "./LeadPolicy";
 import {PopulateLeadInteractionPolicy} from "./PopulateLeadInteractionPolicy";
 import {PopulateBasicLeadDataPolicy} from "./PopulateBasicLeadDataPolicy";
-export class LeadPolicyFactory {
+import {IPolicyFactory} from "../../../shared/IPolicyFactory";
+export class LeadPolicyFactory implements IPolicyFactory{
 
-    static fromPolicyName(name: string):LeadPolicy<Object>{
+    private static _instance:LeadPolicyFactory = null;
+
+    private constructor(){}
+
+    public static getInstance(): LeadPolicyFactory{
+        if (LeadPolicyFactory._instance == null){
+            LeadPolicyFactory._instance = new LeadPolicyFactory();
+        }
+        return LeadPolicyFactory._instance;
+    }
+
+    fromPolicyName(name: string):LeadPolicy<Object>{
         let obj = null;
         switch (name) {
             case 'PopulateLeadInteractionPolicy':

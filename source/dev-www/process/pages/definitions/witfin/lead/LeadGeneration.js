@@ -109,7 +109,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadPr
                         });
 
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                   
+
 
                     var self = this;
                     var formRequest = {
