@@ -1,4 +1,4 @@
-export = class VehicleLoanExpense {
+class VehicleLoanExpense {
     expenseAmount: number;
     expenseType: string;
     id: number;
@@ -6,3 +6,5 @@ export = class VehicleLoanExpense {
     vehicleLoanId: number;
     version: number;
 }
+
+export = VehicleLoanExpense;

@@ -170,8 +170,8 @@ class VehicleLoanDetails {
     @Type(() => VehiclePhotoCapture)
     vehiclePhotoCaptures: VehiclePhotoCapture[];
 
-    @Type(() => VehicleRouteDetails)
-    vehicleRouteDetails: VehicleRouteDetails[];
+    @Type(() => VehicleRouteDetail)
+    vehicleRouteDetails: VehicleRouteDetail[];
 
 }
 
