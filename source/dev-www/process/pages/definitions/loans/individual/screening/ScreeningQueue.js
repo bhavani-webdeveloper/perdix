@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue"), ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons",
-    function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue"), 
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreId = [];
@@ -203,9 +204,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
                                 entityManager.setModel('loans.individual.screening.ScreeningInput', {
                                     _request: item
                                 });
-                                $state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
                                     pageName: "loans.individual.screening.ScreeningInput",
                                     pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.ScreeningQueue"
                                 });
                             },
                             isApplicable: function(item, index) {

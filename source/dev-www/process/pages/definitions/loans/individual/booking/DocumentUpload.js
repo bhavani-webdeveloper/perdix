@@ -40,6 +40,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         function(res) {
                             PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                             model.loanAccount = res;
+                            /* DO BASIC VALIDATION */
+                            if (res.currentStage!= 'DocumentUpload'){
+                                PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
+                                irfNavigator.goBack();
+                                return;
+                            }
                             if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length)
                             {
                                  model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';

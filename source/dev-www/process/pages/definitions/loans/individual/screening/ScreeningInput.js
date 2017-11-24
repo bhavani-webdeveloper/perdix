@@ -24,6 +24,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
     "Utils",
     "IndividualLoan",
     "BundleManager",
+    "irfNavigator",
 function (
     $log,
     $q,
@@ -48,7 +49,8 @@ function (
     Queries,
     Utils,
     IndividualLoan,
-    BundleManager
+    BundleManager,
+    irfNavigator
 ) {
         	$log.info("Inside LoanBookingBundle");
 /*
@@ -153,6 +155,12 @@ function (
                                     var guarantors = [];
                                     var business;
                                     var urnNos = [];
+
+                                    if (res.currentStage!= 'Screening'){
+                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                        irfNavigator.goBack();
+                                        return;
+                                    }
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++) {
                                         var cust = res.loanCustomerRelations[i];

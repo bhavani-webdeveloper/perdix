@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
-["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons",
-function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons){
+["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator",
+function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator){
     return {
         "type": "search-list",
         "title": "DOCUMENT_EXECUTION",
@@ -138,7 +138,15 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                             name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageData: item, pageId: item.loanId});
+                                irfNavigator.go({
+                                    state: 'Page.Engine', 
+                                    pageName: 'loans.individual.booking.DocumentUpload', 
+                                    pageData: item, 
+                                    pageId: item.loanId
+                                }, {
+                                    state: 'Page.Engine',
+                                    pageName: "loans.individual.booking.DocumentUploadQueue"
+                                });
                             },
                             isApplicable: function(item, index){
                                 return true;

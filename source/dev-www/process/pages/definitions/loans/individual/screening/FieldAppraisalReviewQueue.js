@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalReviewQueue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		
 		return {
 			"type": "search-list",
@@ -171,9 +171,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 								entityManager.setModel('loans.individual.screening.FieldAppraisalReview', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.FieldAppraisalReview",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.FieldAppraisalReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingVerificationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator){
     return {
         "type": "search-list",
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
@@ -126,7 +126,15 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentVerification', pageId: item.loanId});
+                                irfNavigator.go({
+                                    state: 'Page.Engine', 
+                                    pageName: 'loans.individual.booking.DocumentVerification', 
+                                    pageId: item.loanId
+                                },
+                                {
+                                    state: 'Page.Engine',
+                                    pageName: "loans.individual.booking.PendingVerificationQueue"
+                                });
                             },
                             isApplicable: function(item, index){
                                 return true;
