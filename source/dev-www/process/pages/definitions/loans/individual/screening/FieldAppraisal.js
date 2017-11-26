@@ -16,56 +16,64 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         title: 'SUMMARY',
                         pageClass: 'summary',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:5
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 0
+                        maximum: 0,
+                        order:10
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 5,
-                        maximum: 0
+                        maximum: 0,
+                        order:20
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 5,
-                        maximum: 0
+                        maximum: 0,
+                        order:30
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:40
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:45
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:50
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:60
                     }
                 ],
                 "bundlePages": [],
@@ -147,7 +155,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanAccount: res
                                         }
                                     });
-                                    
+
                                     $this.bundlePages.push({
                                         pageClass: 'applicant',
                                         model: {
@@ -193,7 +201,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanAccount: res
                                         }
                                     });
-                                    
+
                                     deferred.resolve();
 
                                 }, function(httpRes){
@@ -213,7 +221,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){
-                        
+
         			},
                     "customer-loaded": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
