@@ -4,10 +4,10 @@ define([], function() {
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector"],
-        
+
          $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector) {
-                
+
             var self;
             var branch = SessionStore.getBranch();
             var pageParams = {
@@ -84,13 +84,13 @@ define([], function() {
                             ]
                         }
                     }
-                    
-                    
+
+
                 }
             }
             var getIncludes = function (model) {
-                
-                return [                       
+
+                return [
                         "KYC",
                         "KYC.customerSearch",
                         "KYC.IdentityProof1",
@@ -227,7 +227,7 @@ define([], function() {
                         "actionbox.submit",
                         "actionbox.save",
                 ];
-                 
+
             }
 
             return {
@@ -284,7 +284,7 @@ define([], function() {
                                             model.proxyIndicatorsHasValue = true;
                                             $log.debug('PROXY_INDICATORS already has value');
                                         }
-                                        
+
                                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest, configFile(), model);
                                     }, function(httpRes){
                                         PageHelper.showErrors(httpRes);
@@ -362,10 +362,10 @@ define([], function() {
                         }
                     }
 
-                    
+
 
                 },
-               
+
                 preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                             // console.log("Inside preDestroy");
                             // console.log(arguments);
@@ -388,13 +388,13 @@ define([], function() {
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;
                                 model.customer.firstName = obj.leadName;
-                                model.customer.maritalStatus=obj.maritalStatus;
-                                model.customer.customerBranchId=obj.branchId;
-                                model.customer.centreId=obj.centreId;
-                                model.customer.centreName=obj.centreName;
-                                model.customer.street=obj.addressLine2;
-                                model.customer.doorNo=obj.addressLine1;
-                                model.customer.pincode=obj.pincode;
+                                model.customer.maritalStatus = obj.maritalStatus;
+                                model.customer.customerBranchId = obj.branchId;
+                                model.customer.centreId = obj.centreId;
+                                model.customer.centreName = obj.centreName;
+                                model.customer.street = obj.addressLine2;
+                                model.customer.doorNo = obj.addressLine1;
+                                model.customer.pincode = obj.pincode;
                                 model.customer.district=obj.district;
                                 model.customer.state=obj.state;
                                 model.customer.locality=obj.area;
@@ -673,7 +673,7 @@ define([], function() {
                             }catch(err){
                                 console.error(err);
                             }
-                            if (preSaveOrProceed(reqData) == false){
+                            if (preSaveOrProceedpreSaveOrProceed(reqData) == false){
                                 return;
                             }
                             EnrollmentHelper.fixData(reqData);
@@ -698,8 +698,8 @@ define([], function() {
 // ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
 //             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor",
 //       function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-//                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor) 
+//                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor)
 //       {
-        
+
 //     }
 // ]);

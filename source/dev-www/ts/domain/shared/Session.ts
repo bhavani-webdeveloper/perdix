@@ -1,10 +1,8 @@
-
-
-import AngularResourceService = require("./AngularResourceService");
+import AngularResourceService = require("../../infra/api/AngularResourceService");
 import {applyMixins} from "@reactivex/rxjs/dist/cjs/util/applyMixins";
 import Utils = require("./Utils");
 function getInjector(serviceName: string) {
-    return AngularResourceService.getInstance().getInjector(serviceName)
+    return AngularResourceService.getInstance().getNGService(serviceName)
 }
 
 export interface ISession {
@@ -17,7 +15,7 @@ export abstract class NeedsAngularInjector {
 
     abstract angularServiceName: string;
     getInjector(): any {
-        return AngularResourceService.getInstance().getInjector(this.angularServiceName)
+        return AngularResourceService.getInstance().getNGService(this.angularServiceName)
     }
 }
 

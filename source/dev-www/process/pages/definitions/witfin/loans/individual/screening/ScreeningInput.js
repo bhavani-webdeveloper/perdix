@@ -1,65 +1,13 @@
-irf.pageCollection.factory(irf.page('witfin.loans.individual.screening.ScreeningInput'),
-[
-    "$log",
-    "$q",
-    "$timeout",
-    "SessionStore",
-    "$state",
-    "entityManager",
-    "formHelper",
-    "$stateParams",
-    "Enrollment",
-    "LoanAccount",
-    "Lead",
-    "PageHelper",
-    "irfStorageService",
-    "$filter",
-    "Groups",
-    "AccountingUtils",
-    "Enrollment",
-    "Files",
-    "elementsUtils",
-    "CustomerBankBranch",
-    "Queries",
-    "Utils",
-    "IndividualLoan",
-    "BundleManager",
-function (
-    $log,
-    $q,
-    $timeout,
-    SessionStore,
-    $state,
-    entityManager,
-    formHelper,
-    $stateParams,
-    Enrollment,
-    LoanAccount,
-    Lead,
-    PageHelper,
-    StorageService,
-    $filter,
-    Groups,
-    AccountingUtils,
-    Enrollment,
-    Files,
-    elementsUtils,
-    CustomerBankBranch,
-    Queries,
-    Utils,
-    IndividualLoan,
-    BundleManager
-) {
-        	$log.info("Inside LoanBookingBundle");
-/*
-            var onLeadLoad = function(lead){
-                BundleManager.broadcastEvent('l')
-            }
-*/
-        	return {
-        		"type": "page-bundle",
-        		"title": "SCREENING",
-        		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+define(["perdix/domain/model/loan/LoanProcessFactory"], function(LoanFactory) {
+    return {
+        pageUID: "witfin.loans.individual.screening.ScreeningInput",
+        pageType: "Bundle",
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
+            return {
+                "type": "page-bundle",
+                "title": "SCREENING",
+                "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
@@ -67,60 +15,68 @@ function (
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:10
                         },
                         {
                             pageName: 'customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4
+                            maximum: 4,
+                            order:20
                         },
                         {
                             pageName: 'customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3
+                            maximum: 3,
+                            order:30
                         },
                         {
                             pageName: 'witfin.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:40
                         },
                         {
                             pageName: 'witfin.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:50
                         },
                         {
                             pageName: 'loans.individual.screening.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:60
                         },
                         {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order:70
                         },
                         {
                             pageName: 'loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
                             minimum: 1,
-                            maximum: 1
-                        }   
+                            maximum: 1,
+                            order:80
+                        }
                     ]);
                 },
-        		"bundlePages": [],
+                "bundlePages": [],
                 "offline": true,
                 "getOfflineDisplayItem": function(value, index){
                     var out = new Array(2);
@@ -237,7 +193,11 @@ function (
                                 PageHelper.hideLoader();
                             })
                     } else {
-                        deferred.resolve();
+                        var loanProcess = LoanFactory.newLoanProcess()
+                            .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
+                                deferred.resolve();
+                            });
                     }
                     return deferred.promise;
 
@@ -266,12 +226,12 @@ function (
                         .then(function(settings){
                             BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
                         })
-                    
+
                 },
-        		eventListeners: {
-        			"on-customer-load": function(pageObj, bundleModel, params){
+                eventListeners: {
+                    "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
-        			},
+                    },
                     "new-loan": function(pageObj, bundleModel, params){
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
@@ -321,7 +281,7 @@ function (
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
                     }
-        		},
+                },
                 preSave: function(offlineData) {
                     var defer = $q.defer();
                     for (var i=0; i<offlineData.bundlePages.length; i++){
@@ -334,7 +294,7 @@ function (
                     defer.resolve();
                     return defer.promise;
                 }
-        	}
+            }
         }
-    ]
-)
+    }
+})

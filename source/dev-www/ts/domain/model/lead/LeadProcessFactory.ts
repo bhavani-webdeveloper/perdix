@@ -18,11 +18,10 @@ import {PolicyManager} from "../../shared/PolicyManager";
 
 export = class LeadProcessFactory {
 
-
-
     static createNew() : Observable<LeadProcess>{
         let leadProcess: LeadProcess = new LeadProcess();
         leadProcess.lead = new Lead();
+        leadProcess.lead.leadInteractions = [];
         let pm: PolicyManager<LeadProcess> = new PolicyManager<LeadProcess>(leadProcess, LeadPolicyFactory.getInstance(), 'onNew', LeadProcess.getProcessConfig());
         return pm.applyPolicies();
     }
@@ -33,6 +32,7 @@ export = class LeadProcessFactory {
             .map(
                 (value: Object) => {
                 	let obj:Object = Utils.toJSObj(value);
+                    //noinspection TypeScriptValidateTypes
                     let lead:Lead = <Lead>plainToClass<Lead, Object>(Lead, obj);
                     let leadProcess = new LeadProcess();
                     leadProcess.lead = lead;

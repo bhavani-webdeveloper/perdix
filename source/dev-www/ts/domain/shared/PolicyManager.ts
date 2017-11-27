@@ -53,16 +53,17 @@ export class PolicyManager<T> {
     }
 
     private resolvePolicy(): Array<PolicyDefinition> {
-        if (!_.hasIn(this.policyConfig, 'default.' + this.policyStage)) {
+        if (!_.hasIn(this.policyConfig, 'policies.default.' + this.policyStage)) {
             return [];
         }
 
-        let pObj = this.policyConfig['default'][this.policyStage];
+        let pObj = this.policyConfig['policies']['default'][this.policyStage];
         let policies = [];
 
         for (let entry of pObj["defaults"]) {
             policies.push(entry);
         }
+
         if (_.hasIn(pObj, 'overrides') && _.isArray(pObj.overrides)) {
             for (let entry of pObj["overrides"]) {
                 if (entry.type == 'expr') {
