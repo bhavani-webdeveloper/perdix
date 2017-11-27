@@ -1,4 +1,4 @@
-define([], function() {
+define(['perdix/domain/model/customer/EnrollmentProcess', 'perdix/domain/shared/AngularResourceService'], function(EnrollmentProcess, AngularResourceService) {
     return {
         pageUID: "witfin.customer.IndividualEnrollment2",
         pageType: "Engine",
@@ -9,6 +9,7 @@ define([], function() {
                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector) {
 
             var self;
+            AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
             var pageParams = {
                 readonly: true

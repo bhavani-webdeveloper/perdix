@@ -6,6 +6,10 @@ import LoanAccount = require("./LoanAccount");
 import {ILoanRepository} from "./ILoanRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
+import EnrollmentProcessFactory = require("../customer/EnrollmentProcessFactory");
+import Customer = require("../customer/Customer");
+
+
 
 
 declare var loanProcessConfig: Object;
@@ -14,6 +18,7 @@ class LoanProcess {
 	remarks: string;
 	stage: string;
     loanAccount: LoanAccount;
+    customer: Customer;
     individualLoanRepo: ILoanRepository;
 
     constructor(){
@@ -50,6 +55,16 @@ class LoanProcess {
                 (value) => {
                     this.loanAccount = value;
                     this.loanAccount.currentStage = "SHAHAL STGE";
+                    return this;
+                }
+            )
+    }
+
+    getCustomerId(id: number): Observable<LoanProcess> {
+        return EnrollmentProcessFactory.fromCustomer(this.customer).get(id)
+            .map(
+                (value) => {
+                    this.loanAccount.customer = value;
                     return this;
                 }
             )
