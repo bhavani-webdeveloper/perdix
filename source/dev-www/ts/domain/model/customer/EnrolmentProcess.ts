@@ -3,18 +3,18 @@
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Customer = require("./Customer");
-import {IEnrollmentRepository} from "./IEnrollmentRepository";
+import {IEnrolmentRepository} from "./IEnrollmentRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 
 
 declare var loanProcessConfig: Object;
 
-class EnrollmentProcess {
+class EnrolmentProcess {
 	remarks: string;
 	stage: string;
     customer: Customer;
-    enrolmentRepo: IEnrollmentRepository;
+    enrolmentRepo: IEnrolmentRepository;
 
     constructor(){
     	this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrollment);
@@ -31,12 +31,12 @@ class EnrollmentProcess {
 		}
 	}
 
-	save(customer: Customer, remarks?: string) :any{
+	save() :any{
         /* Calls all business policies associated with save */
 		// return this.enrolmentRepo.updateIndividualLoan(loanAccount);
 	}
 
-	update(customer: Customer, remarks?: string): any {
+	update(): any {
         /* Calls all business policies assocaited with proceed */
 
         // plainToClass
@@ -44,7 +44,7 @@ class EnrollmentProcess {
 		// return this.enrolmentRepo.updateIndividualLoan(loanAccount);
 	}
 
-    get(id: number): Observable<EnrollmentProcess> {
+    get(id: number): Observable<EnrolmentProcess> {
         return this.enrolmentRepo.getCustomerById(id)
             .map(
                 (value) => {
@@ -60,4 +60,4 @@ class EnrollmentProcess {
     }
 }
 
-export = EnrollmentProcess;
+export = EnrolmentProcess;

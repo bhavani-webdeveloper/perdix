@@ -1,4 +1,5 @@
-define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadProcessFactory', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, LeadProcessFactory, AngularResourceService) {
+define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, AngularResourceService) {
+    LeadProcess = LeadProcess["LeadProcess"];
 
     return {
         pageUID: "witfin.lead.LeadGeneration",
@@ -11,8 +12,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadPr
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
-
-            var leadProcessTs = new LeadProcess();
 
             var getOverrides = function (model) {
                 return {
@@ -101,11 +100,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadPr
                 "subTitle": "Lead",
                 initialize: function(model, form, formCtrl) {
 
-                    LeadProcessFactory.createNew()
+                    LeadProcess.createNewProcess()
                         .subscribe(function(value){
                             model.leadProcess = value;
                             model.lead = model.leadProcess.lead;
-
                         });
 
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
@@ -121,7 +119,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/model/lead/LeadPr
                     };
                     if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$) && $stateParams.pageId) {
                         var leadId = $stateParams.pageId;
-                        LeadProcessFactory.createFromLeadId(leadId)
+                        LeadProcess.get(leadId)
                             .subscribe(function(value){
                                 model.leadProcess = value;
                                 model.lead = model.leadProcess.lead;

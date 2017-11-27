@@ -10,23 +10,21 @@ import {LeadPolicy} from "./policy/LeadPolicy";
 import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {CanApplyPolicy} from "../../shared/IPolicy";
 import Utils = require("../../shared/Utils");
-import * as _ from "lodash";
-
-
+import {PolicyManager} from "../../shared/PolicyManager";
+import {LeadProcessFactory} from "./LeadProcessFactory";
 
 declare var leadProcessConfig: Object;
 
-class LeadProcess implements CanApplyPolicy {
+export class LeadProcess implements CanApplyPolicy {
 	remarks: string;
 	stage: string;
     lead: Lead;
     leadRepo: ILeadRepository;
+    private leadAction: string;
 
     constructor(){
     	this.leadRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LeadProcess);
 	}
-
-
 
 	loanProcessAction(actionName: string): boolean {
 		switch(actionName) {
@@ -39,60 +37,56 @@ class LeadProcess implements CanApplyPolicy {
 		}
 	}
 
-    get(id: number): Observable<LeadProcess> {
-        return this.leadRepo.getLead(id)
-            .map(
-                (value: Object) => {
-                    //noinspection TypeScriptValidateTypes
-                    this.lead = plainToClass<Lead, Object>(Lead, Utils.toJSObj(value));
-                    // this.lead = value;
-                    // this.lead.currentStage = "SOME STGE";
-                    return this;
-                }
-            )
+    static createNewProcess() : Observable<LeadProcess>{
+        let obs1 = LeadProcessFactory.createNew();
+        return obs1.flatMap(
+            (leadProcess) => {
+                let pm: PolicyManager<LeadProcess> = new PolicyManager<LeadProcess>(leadProcess, LeadPolicyFactory.getInstance(), 'onNew', LeadProcess.getProcessConfig());
+                return pm.applyPolicies();
+            }
+        )
     }
 
-    save(reqData: any): Observable<LeadProcess> {
-		reqData.lead.udf = {};
-        reqData.lead.udfDate = {};
-        reqData.lead.udf.userDefinedFieldValues = {};
-        reqData['leadAction'] = 'SAVE';
-        if (reqData.lead.leadStatus == "Screening") {
-            if (reqData.lead.siteCode == 'sambandh') {
-                reqData['stage'] = 'ReadyForEnrollment';
-            } else {
-                reqData['stage'] = 'ReadyForScreening';
+    static get(id: number): Observable<LeadProcess> {
+        let obs1 = LeadProcessFactory.createFromLeadId(id);
+        return obs1.flatMap(
+            (leadProcess) => {
+                let pm: PolicyManager<LeadProcess> = new PolicyManager<LeadProcess>(leadProcess, LeadPolicyFactory.getInstance(), 'onLoad', LeadProcess.getProcessConfig());
+                return pm.applyPolicies();
             }
-        } else if (reqData.lead.leadStatus == "Incomplete") {
-            reqData['stage'] = 'Incomplete';
-        } else {
-            reqData['stage'] = 'Inprocess';
-        }
-
-        return this.leadRepo.saveLead(reqData);
+        )
     }
 
-    update(reqData: any): Observable<LeadProcess> {
-    	if (reqData.lead.id === undefined || reqData.lead.id === null) {
-            // TO Do
-        } else {
-            reqData.leadAction = "PROCEED";
-            if (reqData.lead.leadStatus == "Screening") {
-                if (reqData.lead.siteCode == 'sambandh') {
-                    reqData.stage = 'ReadyForEnrollment';
-                } else {
-                    reqData.stage = 'ReadyForScreening';
-                }
-            } else if (reqData.lead.leadStatus == "Reject") {
-                reqData.stage = 'Inprocess';
-            } else if (reqData.lead.leadStatus == "Incomplete") {
-                reqData.stage = 'Incomplete';
-            }
+    save(): Observable<LeadProcess> {
+        this.leadAction = 'SAVE';
+        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeSave', LeadProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.leadRepo.updateLead(this);
+        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterSave', LeadProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3);
+    }
 
+    proceed(toStage: string): Observable<LeadProcess>{
+        this.stage = toStage;
+        this.leadAction = 'PROCEED';
+        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeProceed', LeadProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.leadRepo.updateLead(this);
+        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterProceed', LeadProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3);
+    }
 
-            return this.leadRepo.updateLead(reqData);
-
-        }
+    sendBack(toStage: string): Observable<LeadProcess> {
+        this.stage = toStage;
+        this.leadAction = 'PROCEED';
+        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeSendBack', LeadProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.leadRepo.updateLead(this);
+        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterSendBack', LeadProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3);
     }
 
     followUp(reqData: any): Observable<LeadProcess> {
@@ -104,5 +98,3 @@ class LeadProcess implements CanApplyPolicy {
         return leadProcessConfig;
     }
 }
-
-export = LeadProcess;

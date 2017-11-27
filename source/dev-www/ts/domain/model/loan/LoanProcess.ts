@@ -6,7 +6,7 @@ import LoanAccount = require("./LoanAccount");
 import {ILoanRepository} from "./ILoanRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
-import EnrollmentProcessFactory = require("../customer/EnrollmentProcessFactory");
+import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
 import Customer = require("../customer/Customer");
 
 

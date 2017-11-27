@@ -1,7 +1,7 @@
 
 import {Observable} from "@reactivex/rxjs";
 
-export interface IEnrollmentRepository {
-	
+export interface IEnrolmentRepository {
+
 	getCustomerById(id: number): Observable<any>;
 }
