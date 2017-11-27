@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.Dedupe"),
-["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["IndividualLoan", "$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "irfNavigator", "Dedupe",
-function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator, Dedupe){
        return {
             "type": "schema-form",
@@ -15,6 +15,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 });
 
                 var dedupeIds;
+
+                model.allMarkedAsNotDuplicate = false;
 
                 var p1 = $q.when()
                     .then(function(){
@@ -36,87 +38,211 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         .$promise
                         .then(function(data){
                             $log.info(data);
-                            model.dedupeData = data;
+                            model.dedupeData = [];
+
+                            for (var i=0;i<data.length;i++){
+                                if (data[i].duplicateAboveThresholdCount > 0){
+                                    model.dedupeData.push(data[i]);
+                                }
+                            }
                         })
                     })
             },
-            form: [{
-                "type": "box",
-                "title": "CUSTOMER_INFORMATION",
-                "items": [
+            form: [
+                {
+                    "type": "box",
+                    "title": "CUSTOMER_INFORMATION",
+                    "items": [
+                        {
+                            "key": "dedupeData",
+                            "type": "array",
+                            "add": null,
+                            "remove":null,
+                            "view": "fixed",
+                            "items": [
+                                {
+                                    "key": "dedupeData[].customerId",
+                                    "title": "CUSTOMER_ID",
+                                    "readonly" : true
+                                },
+                                {
+                                    "key": "dedupeData[].customerName",
+                                    "title": "CUSTOMER_NAME",
+                                    "readonly" : true
+                                },
+                                {
+                                    "key": "dedupeData[].customerType",
+                                    "title": "CUSTOMER_TYPE",
+                                    "readonly" : true
+                                },
+                                {
+                                    "key": "dedupeData[].dedupeRequestDeatils",
+                                    "type":"array",
+                                    "title": "MATCHES_FOUND",
+                                    "add": null,
+                                    "remove": null,
+                                    "view": "fixed",
+                                    "items": [
+                                        {
+                                            "key": "dedupeData[].dedupeRequestDeatils[].dedupeCustomerId",
+                                            "title": "MATCH_ID",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "dedupeData[].dedupeRequestDeatils[].score",
+                                            "title": "SCORE",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "dedupeData[].dedupeRequestDeatils[].markAsNotDuplicate",
+                                            "title": "MARK_AS_NOT_DUPLICATE",
+                                            "schema":{
+                                                "default": false
+                                            },
+                                            "default": false,
+                                            "readonly": false,
+                                            "type": "checkbox",
+                                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                var allNonDuplicates = true;
+
+                                                outerloop:
+                                                for (var i=0;i<model.dedupeData.length;i++){
+                                                    var d = model.dedupeData[i];
+                                                    for (var j=0;j<d.dedupeRequestDeatils.length;j++){
+                                                        var e = d.dedupeRequestDeatils[j];
+                                                        if (e.markAsNotDuplicate == false) {
+                                                            allNonDuplicates = false;
+                                                            break outerloop;
+                                                        }
+                                                    }
+                                                }
+
+                                                model.allMarkedAsNotDuplicate = allNonDuplicates;
+                                            }
+                                        },
+                                        {
+                                            "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails",
+                                            "title": "MATCHING_FIELDS",
+                                            "type": "array",
+                                            "view": "fixed",
+                                            "add": null,
+                                            "remove": null,
+                                            "titleExpr":  "model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].dedupeMatchDetails[arrayIndexes[2]].fieldName",
+                                            "items": [
+                                                {
+                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].fieldName",
+                                                    "title": "FIELD_NAME",
+                                                    "readonly": true
+                                                },
+                                                {
+                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].score",
+                                                    "title": "SCORE",
+                                                    "readonly": true
+                                                },
+                                                {
+                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].matchFieldValue",
+                                                    "title": "MATCHED_CUSTOMER_FIELD_VALUE", // Matched Customer Value
+                                                    "readonly": true
+                                                },
+                                                {
+                                                    "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].requestFieldValue",
+                                                    "title": "CUSTOMER_FIELD_VALUE", // Customer Value
+                                                    "readonly": true
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }],
+                    },
                     {
-                        "key": "dedupeData",
-                        "type": "array",
+                        "type": "box",
+                        "title": "REMARKS",
+                        "condition": "model.allMarkedAsNotDuplicate==false",
                         "items": [
                             {
-                                "key": "dedupeData[].customerId",
-                                "title": "CUSTOMER_ID",
-                                "readonly" : true
-                            },
-                            {
-                                "key": "dedupeData[].customerName",
-                                "title": "CUSTOMER_NAME",
-                                "readonly" : true
-                            },
-                            {
-                                "key": "dedupeData[].customerType",
-                                "title": "CUSTOMER_TYPE",
-                                "readonly" : true
-                            },
-                            {
-                                "key": "dedupeData[].dedupeRequestDeatils",
-                                "type":"array",
-                                "title": "MATCHES_FOUND",
-                                "items": [
-                                    {
-                                        "key": "dedupeData[].dedupeRequestDeatils[].dedupeCustomerId",
-                                        "title": "MATCH_ID",
-                                        "readonly": true
-                                    }, 
-                                    {
-                                        "key": "dedupeData[].dedupeRequestDeatils[].score",
-                                        "title": "SCORE",
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails",
-                                        "title": "MATCHING_FIELDS",
-                                        "type": "array",
-                                        "titleExpr":  "model.dedupeData[arrayIndexes[0]].dedupeRequestDeatils[arrayIndexes[1]].dedupeMatchDetails[arrayIndexes[2]].fieldName",
-                                        "items": [
-                                            {
-                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].fieldName",
-                                                "title": "FIELD_NAME",
-                                                "readonly": true
-                                            }, 
-                                            {
-                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].score",
-                                                "title": "SCORE",
-                                                "readonly": true
-                                            },
-                                            {
-                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].matchFieldValue",
-                                                "title": "MATCHED_CUSTOMER_FIELD_VALUE", // Matched Customer Value
-                                                "readonly": true
-                                            }, 
-                                            {
-                                                "key": "dedupeData[].dedupeRequestDeatils[].dedupeMatchDetails[].requestFieldValue",
-                                                "title": "CUSTOMER_FIELD_VALUE", // Customer Value
-                                                "readonly": true
-                                            }
-                                        ]
-                                    }
-                                ]
+                                "key": "dedupeData.remarks",
+                                "title": "SEND_BACK_REMARKS",
+                                "required": true,
+                                "type": "textarea"
                             }
                         ]
-                    }],
-                }]
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.allMarkedAsNotDuplicate==false",
+                        "items": [
+                            {
+                                "type": "button",
+                                "icon": "fa fa-circle-o",
+                                "title": "SEND_BACK",
+                                "onClick": "actions.sendback(model, formCtrl, form, $event)"
+                            }]
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.allMarkedAsNotDuplicate==true",
+                        "items": [
+                            {
+                                "type": "button",
+                                "icon": "fa fa-circle-o",
+                                "title": "PROCEED",
+                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                    },
+                ]
             ,
             schema: function(){
                 return Dedupe.getSchema().$promise;
                 },
             actions: {
-                submit: function(model, form, formName){
+                sendback: function(model, form, formName){
+                    form.scope.$broadcast('schemaFormValidate');
+                    if (form && form.$invalid){
+                        PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                        return;
+                    }
+                    Utils.confirm("Are You Sure?").then(function(){
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.stage = "Screening";
+                        reqData.remarks = model.dedupeData.remarks;
+
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-loan", "Done.", 3000);
+                            return $state.go('Page.Engine', {pageName: 'loans.individual.screening.DedupeQueue', pageId:null});
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                    })
+                },
+                proceed: function(model){
+                    Utils.confirm("Are You Sure?").then(function(){
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanProcessAction = "PROCEED";
+
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-loan", "Done.", 3000);
+                            return $state.go('Page.Engine', {pageName: 'loans.individual.screening.DedupeQueue', pageId:null});
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                    })
                 }
             }
         }
