@@ -23,6 +23,30 @@ irf.models.factory('LUC',
 
 		});
 
+		
+	resource.validateDate = function(req) {
+		if (req.loanMonitoringDetails && req.loanMonitoringDetails.lucRescheduledDate) {
+			var today = moment(new Date()).format("YYYY-MM-DD");
+			if (req.loanMonitoringDetails.lucRescheduledDate <= today) {
+				$log.info("bad night");
+				PageHelper.showProgress('validate-error', 'Rescheduled Date: Rescheduled Date must be a Future Date', 5000);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	resource.orderLUCDocuments = function(model) {
+
+		var lucDocuments = model.loanMonitoringDetails.loanMonitoringDocuments || [];
+
+		for (var i = 0; i < lucDocuments.length; i++) {
+
+			lucDocuments[i]["documentSl"] = (i + 1);
+		}
+		return model;
+	}
+
 		return resource;
 	}
 ]);

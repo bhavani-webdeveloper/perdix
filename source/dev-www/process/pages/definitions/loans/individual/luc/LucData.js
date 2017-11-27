@@ -100,6 +100,35 @@ define({
                     "LoanUtilisation.lucEscalated",
                     "LoanUtilisation.lucEscalatedReason",
                     "LoanUtilisation.udf3",
+                    "LUCDocuments",
+                    "LUCDocuments.loanMonitoringDocuments",
+                    "LUCDocuments.loanMonitoringDocuments.documentName",
+                    "LUCDocuments.loanMonitoringDocuments.documentId",
+                    "socialImpact",
+                    "socialImpact.Men",
+                    "socialImpact.Men.totalNumberOfMen",
+                    "socialImpact.Men.averageSalaryOfMen",
+                    "socialImpact.Men.menPartTimeEmployee",
+                    "socialImpact.Men.menFullTimeEmployee",
+                    "socialImpact.Men.avgSkillLevelOfMen",
+                    "socialImpact.Men.noOfFirstJobsMen",
+                    "socialImpact.WOMEN",
+                    "socialImpact.WOMEN.totalNumberOfWomen",
+                    "socialImpact.WOMEN.averageSalaryOfWomen",
+                    "socialImpact.WOMEN.womenPartTimeEmployee",
+                    "socialImpact.WOMEN.womenFullTimeEmployee",
+                    "socialImpact.WOMEN.avgSkillLevelOfWomen",
+                    "socialImpact.WOMEN.noOfFirstJobsWomen",
+                    "socialImpact.PreLoanDetails",
+                    "socialImpact.PreLoanDetails.preLoanMonthlyRevenue",
+                    "socialImpact.PreLoanDetails.preLoanMonthlyNetIncome",
+                    "socialImpact.PreLoanDetails.preLoanProprietorSalary",
+                    "socialImpact.PreLoanDetails.preLoanNumberOfCustomersOrBuyers",
+                    "socialImpact.PostLoanDetails",
+                    "socialImpact.PostLoanDetails.postLoanMonthlyRevenue",
+                    "socialImpact.PostLoanDetails.postLoanMonthlyNetIncome",
+                    "socialImpact.PostLoanDetails.postLoanProprietorSalary",
+                    "socialImpact.PostLoanDetails.postLoanNumberOfCustomersOrBuyers",
                     "RescheduleActionBox",
                     "RescheduleActionBox.ReScheduleButton",
                     "EscalateActionbox",
@@ -115,23 +144,57 @@ define({
                 ];
             }
 
-/*            var configFile = function() {
+            var configFile = function() {
                 return {
-                    "currentStage": {
-                        "Screening": {
-                            "excludes": [
-                                "bankAccounts"
-                            ]
-                        },
-                        "ScreeningReview": {
-                            "excludes": [
-                                "bankAccounts"
-                            ]
+                    "loanMonitoringDetails.loanPurposeCategory":{
+                            "Asset Purchase":{
+                                "excludes": [
+                                    "LoanUtilisation.LoanDetails",
+                                    "LoanUtilisation.MachineRefinanceDetails"
+                                ]
+                            },
+                            "Working Capital":{
+                                "excludes": [
+                                    "LoanUtilisation.AssetPurchase",
+                                    "LoanUtilisation.MachineRefinanceDetails"
+                                ]
+                            },
+                            "Business Development":{
+                                "excludes": [
+                                    "LoanUtilisation.AssetPurchase",
+                                    "LoanUtilisation.MachineRefinanceDetails"
+                                ]
+                            },
+                            "Line of credit":{
+                                "excludes": [
+                                    "LoanUtilisation.AssetPurchase",
+                                    "LoanUtilisation.MachineRefinanceDetails"
+                                ]
+                            },
+                            "Machine Refinance":{
+                                "excludes": [
+                                    "LoanUtilisation.AssetPurchase",
+                                    "LoanUtilisation.LoanDetails",
+                                ]
+                            }    
+                    },
+                    "loanMonitoringDetails.currentStage": {
+                        "Completed": {
+                            "overrides": {
+                                "LoanUtilisation": {
+                                    "readonly": true
+                                },
+                                "socialImpact": {
+                                    "readonly": true
+                                },
+                                "LUCDocuments": {
+                                    "readonly": true
+                                }
+                            }
                         }
                     }
                 }
-            }*/
-
+            }
 
             return {
                 "type": "schema-form",
@@ -286,7 +349,7 @@ define({
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
                                                         }
                                                     }
-                                                    self.form = LucFormRequestProcessor.getFormDefinition('LUC', formRequest);
+                                                    self.form = LucFormRequestProcessor.getFormDefinition('LUC', formRequest,configFile(), model);
                                                 }, function(httpRes) {
                                                     PageHelper.showErrors(httpRes);
                                                 })

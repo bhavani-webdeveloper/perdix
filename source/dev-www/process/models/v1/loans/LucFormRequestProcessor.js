@@ -1,7 +1,7 @@
-irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$stateParams",
+irf.pageCollection.factory("LucFormRequestProcessor", ["$log","jsonPath", "$state", "$stateParams",
     "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q",
     "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator",
-    function($log, $state, $stateParams,
+    function($log,jsonPath, $state, $stateParams,
         LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q,
         irfProgressMessage, PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
         var formRepository = {}
@@ -9,6 +9,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
         formRepository['LUC'] = {
             "LUC": {
                 "type": "box",
+                orderNo: 10,
                 "title": "LUC",
                 "items": {
                     "id": {
@@ -60,6 +61,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
 
             "LoanUtilisation": {
                 "type": "box",
+                orderNo: 20,
                 "title": "LOAN_UTILIZATION",
                 "items": {
                     "loanSeries": {
@@ -104,6 +106,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                         title: "Asset Purchase",
                         items: {
                             "numberOfAssetsDelivered": {
+                                orderNo: 10,
                                 key: "loanMonitoringDetails.numberOfAssetsDelivered",
                                 type: "select",
                                 titleMap: {
@@ -113,6 +116,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 },
                             },
                             "amountUtilizedForAssetsPurchase": {
+                                orderNo: 20,
                                 key: "loanMonitoringDetails.amountUtilizedForAssetsPurchase",
                                 type: "amount",
                                 "onChange": function(modelValue, form, model) {
@@ -121,26 +125,31 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "percentage": {
+                                orderNo: 30,
                                 key: "loanMonitoringDetails.percentage",
                                 title: "%OF_AMOUNT_UTILISED",
                                 type: "integer",
                                 "readonly": true
                             },
                             "totalCreationAssetValue": {
+                                orderNo: 40,
                                 key: "loanMonitoringDetails.totalCreationAssetValue",
                                 type: "number"
                             },
                             "isAssetsOrdered": {
+                                orderNo: 50,
                                 key: "loanMonitoringDetails.isAssetsOrdered",
                                 type: "radios",
                                 enumCode: "decisionmaker1",
                             },
                             "reasonForNotOrderingAssets": {
+                                orderNo: 60,
                                 key: "loanMonitoringDetails.reasonForNotOrderingAssets",
                                 type: "string",
                                 condition: "model.loanMonitoringDetails.isAssetsOrdered==0",
                             },
                             "machineDetails": {
+                                orderNo: 70,
                                 key: "loanMonitoringDetails.machineDetails",
                                 type: "array",
                                 startEmpty: true,
@@ -149,26 +158,32 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 items: {
 
                                     "make": {
+                                        orderNo: 10,
                                         key: "loanMonitoringDetails.machineDetails[].make",
                                         type: "string",
                                     },
                                     "type": {
+                                        orderNo: 20,
                                         key: "loanMonitoringDetails.machineDetails[].type",
                                         type: "string",
                                     },
                                     "year": {
+                                        orderNo: 30,
                                         key: "loanMonitoringDetails.machineDetails[].year",
                                         type: "date",
                                     },
                                     "model": {
+                                        orderNo: 40,
                                         key: "loanMonitoringDetails.machineDetails[].model",
                                         type: "string",
                                     },
                                     "serialNumber": {
+                                        orderNo: 50,
                                         key: "loanMonitoringDetails.machineDetails[].serialNumber",
                                         type: "string",
                                     },
                                     "assetType": {
+                                        orderNo: 60,
                                         key: "loanMonitoringDetails.machineDetails[].assetType",
                                         type: "select",
                                         titleMap: {
@@ -177,28 +192,33 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                         },
                                     },
                                     "udf1": {
+                                        orderNo: 70,
                                         key: "loanMonitoringDetails.machineDetails[].udf1",
                                         type: "select",
                                         title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                         enumCode: "decisionmaker1",
                                     },
                                     "udf2": {
+                                        orderNo: 80,
                                         key: "loanMonitoringDetails.machineDetails[].udf2",
                                         type: "select",
                                         title: "HYPOTHECATED_TO_KINARA",
                                         enumCode: "decisionmaker1",
                                     },
                                     "hypothecationLabelBeenApplied": {
+                                        orderNo: 90,
                                         key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
                                         type: "select",
                                         enumCode: "decisionmaker1",
                                     },
                                     "companyNameInOriginalInvoice": {
+                                        orderNo: 100,
                                         key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
                                         type: "select",
                                         enumCode: "decisionmaker1",
                                     },
                                     "hypothecatedTo": {
+                                        orderNo: 110,
                                         key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
                                         type: "select",
                                         titleMap: {
@@ -216,6 +236,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                         title: "Loan Details",
                         items: {
                             "loanAmountUsed": {
+                                orderNo: 10,
                                 key: "loanMonitoringDetails.loanAmountUsed",
                                 type: "amount",
                                 "onChange": function(modelValue, form, model) {
@@ -224,6 +245,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "loanAmountPurpose": {
+                                orderNo: 20,
                                 key: "loanMonitoringDetails.loanAmountPurpose",
                                 type: "select",
                                 titleMap: {
@@ -232,6 +254,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
 
                             },
                             "verifiedBy": {
+                                orderNo: 30,
                                 key: "loanMonitoringDetails.verifiedBy",
                                 type: "select",
                                 titleMap: {
@@ -239,12 +262,14 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "amountUsedPercentage": {
+                                orderNo: 40,
                                 key: "loanMonitoringDetails.amountUsedPercentage",
                                 "readonly": true,
                                 title: "%OF_AMOUNT_UTILISED",
                                 type: "integer"
                             },
                             "intendedPurposeAmount": {
+                                orderNo: 50,
                                 key: "loanMonitoringDetails.intendedPurposeAmount",
                                 type: "amount",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -257,6 +282,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "intendedPurposePercentage": {
+                                orderNo: 60,
                                 key: "loanMonitoringDetails.intendedPurposePercentage",
                                 title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -264,6 +290,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 "readonly": true,
                             },
                             "nonIntendedPurposeAmount": {
+                                orderNo: 70,
                                 key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 type: "amount",
@@ -274,6 +301,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                  }*/
                             },
                             "nonIntendedPurposePercentage": {
+                                orderNo: 80,
                                 key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                 title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -281,6 +309,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 "readonly": true
                             },
                             "nonIntendedPurposeAmountSpentOn": {
+                                orderNo: 90,
                                 key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             },
@@ -292,6 +321,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                         title: "Machine Refinance Details",
                         items: {
                             "repayedDebitAmount": {
+                                orderNo: 10,
                                 key: "loanMonitoringDetails.repayedDebitAmount",
                                 type: "amount",
                                 "onChange": function(modelValue, form, model) {
@@ -300,23 +330,28 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "monthlyInterestForDebit": {
+                                orderNo: 20,
                                 key: "loanMonitoringDetails.monthlyInterestForDebit",
                                 type: "amount"
                             },
                             "remainingAmountPurpose": {
+                                orderNo: 30,
                                 key: "loanMonitoringDetails.remainingAmountPurpose",
                             },
                             "remainingAmountUtilizedOn": {
+                                orderNo: 40,
                                 key: "loanMonitoringDetails.remainingAmountUtilizedOn",
                                 type: "date"
                             },
                             "amountUsedPercentage": {
+                                orderNo: 50,
                                 key: "loanMonitoringDetails.amountUsedPercentage",
                                 title: "%OF_AMOUNT_UTILISED",
                                 type: "integer",
                                 "readonly": true
                             },
                             "intendedPurposeAmount": {
+                                orderNo: 60,
                                 key: "loanMonitoringDetails.intendedPurposeAmount",
                                 type: "amount",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -329,6 +364,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }
                             },
                             "intendedPurposePercentage": {
+                                orderNo: 70,
                                 key: "loanMonitoringDetails.intendedPurposePercentage",
                                 title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -336,6 +372,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 "readonly": true,
                             },
                             "nonIntendedPurposeAmount": {
+                                orderNo: 80,
                                 key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 type: "amount",
@@ -346,6 +383,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 }*/
                             },
                             "nonIntendedPurposePercentage": {
+                                orderNo: 90,
                                 key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                 title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -353,6 +391,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 "readonly": true
                             },
                             "nonIntendedPurposeAmountSpentOn": {
+                                orderNo: 100,
                                 key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
                                 //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             }
@@ -434,6 +473,189 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                     }
                 }
             },
+            "LUCDocuments": {
+                "type": "box",
+                orderNo: 30,
+                "title": "LUC_DOCUMENTS",
+                "items": {
+                    "loanMonitoringDocuments": {
+                        "key": "loanMonitoringDetails.loanMonitoringDocuments",
+                        "type": "array",
+                        "title": "LUC_DOCUMENTS",
+                        startEmpty: true,
+                        "items": {
+                            "documentName": {
+                                orderNo: 10,
+                                key: "loanMonitoringDetails.loanMonitoringDocuments[].documentName",
+                                title: "DOCUMENT_NAME",
+                                required: true,
+                                "type": ["string", "null"],
+                            },
+                            "documentId": {
+                                orderNo: 20,
+                                key: "loanMonitoringDetails.loanMonitoringDocuments[].documentId",
+                                title: "UPLOAD",
+                                type: "file",
+                                required: true,
+                                fileType: "application/pdf",
+                                using: "scanner",
+                            }
+                        }
+                    }
+                }
+            },
+            "socialImpact": {
+                "type": "box",
+                orderNo: 40,
+                condition: "model.loanMonitoringDetails.lucDone== 'Yes'",
+                "title": "SOCIAL_IMPACT",
+                "items": {
+                    "Men": {
+                        type: "fieldset",
+                        orderNo: 10,
+                        title: "MEN",
+                        items: {
+                            "totalNumberOfMen": {
+                                orderNo: 10,
+                                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
+                                type: "number"
+                            },
+                            "averageSalaryOfMen": {
+                                orderNo: 20,
+                                key: "loanMonitoringDetails.socialImpactDetails.averageSalaryOfMen",
+                                type: "amount"
+                            },
+                            "menPartTimeEmployee": {
+                                orderNo: 30,
+                                key: "loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee",
+                                type: "number",
+                                "onChange": function(modelValue, form, model) {
+                                    model.loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen -
+                                        model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
+                                }
+                            },
+                            "menFullTimeEmployee": {
+                                orderNo: 40,
+                                key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
+                                type: "number"
+                            },
+                            "avgSkillLevelOfMen": {
+                                orderNo: 50,
+                                key: "loanMonitoringDetails.socialImpactDetails.avgSkillLevelOfMen",
+                                type: "select",
+                                titleMap: {
+                                    "SKILLED": "SKILLED",
+                                    "UNSKILLED": "UNSKILLED",
+                                },
+                            },
+                            "noOfFirstJobsMen": {
+                                orderNo: 60,
+                                key: "loanMonitoringDetails.socialImpactDetails.noOfFirstJobsMen",
+                                type: "number"
+                            }
+                        }
+                    },
+                    "WOMEN": {
+                        type: "fieldset",
+                        orderNo: 20,
+                        title: "WOMEN",
+                        items: {
+                            "totalNumberOfWomen": {
+                                orderNo: 10,
+                                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
+                                type: "number"
+                            },
+                            "averageSalaryOfWomen": {
+                                orderNo: 20,
+                                key: "loanMonitoringDetails.socialImpactDetails.averageSalaryOfWomen",
+                                type: "amount"
+                            },
+                            "womenPartTimeEmployee": {
+                                orderNo: 30,
+                                key: "loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee",
+                                type: "number",
+                                "onChange": function(modelValue, form, model) {
+                                    model.loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen -
+                                        model.loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee;
+                                }
+                            },
+                            "womenFullTimeEmployee": {
+                                orderNo: 40,
+                                key: "loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee",
+                                type: "number"
+                            },
+                            "avgSkillLevelOfWomen": {
+                                orderNo: 50,
+                                key: "loanMonitoringDetails.socialImpactDetails.avgSkillLevelOfWomen",
+                                type: "select",
+                                titleMap: {
+                                    "SKILLED": "SKILLED",
+                                    "UNSKILLED": "UNSKILLED",
+                                },
+                            },
+                            "noOfFirstJobsWomen": {
+                                orderNo: 60,
+                                key: "loanMonitoringDetails.socialImpactDetails.noOfFirstJobsWomen",
+                                type: "number"
+                            }
+                        }
+                    },
+                    "PreLoanDetails": {
+                        "type": "fieldset",
+                        orderNo: 30,
+                        "title": "PRE_LOAN_DETAILS",
+                        "items": {
+                            "preLoanMonthlyRevenue": {
+                                orderNo: 10,
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
+                                type: "number"
+                            },
+                            "preLoanMonthlyNetIncome": {
+                                orderNo: 20,
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
+                                type: "amount"
+                            },
+                            "preLoanProprietorSalary": {
+                                orderNo: 30,
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
+                                type: "amount"
+                            },
+                            "preLoanNumberOfCustomersOrBuyers": {
+                                orderNo: 40,
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
+                                type: "number"
+                            }
+                        }
+                    },
+                    "PostLoanDetails": {
+                        "type": "fieldset",
+                        orderNo: 40,
+                        "title": "POST_LOAN_DETAILS",
+                        "items": {
+                            "postLoanMonthlyRevenue": {
+                                orderNo: 10,
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
+                                type: "number"
+                            },
+                            "postLoanMonthlyNetIncome": {
+                                orderNo: 20,
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
+                                type: "amount"
+                            },
+                            "postLoanProprietorSalary": {
+                                orderNo: 30,
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
+                                type: "amount"
+                            },
+                            "postLoanNumberOfCustomersOrBuyers": {
+                                orderNo: 40,
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
+                                type: "number"
+                            }
+                        }
+                    }
+                }
+            },
             "RescheduleActionBox": {
                 "type": "actionbox",
                 condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && model.loanMonitoringDetails.lucEscalated=='No' ",
@@ -453,10 +675,10 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 return out;
                             };
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                model=LUC.orderLUCDocuments(model);
                                 var reqData = _.cloneDeep(model);
 
-                                if (!(validateDate(reqData))) {
+                                if (!(LUC.validateDate(reqData))) {
                                     return;
                                 }
 
@@ -493,7 +715,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                             };
 
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                model=LUC.orderLUCDocuments(model);
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.escalate(reqData).then(function(resp) {
@@ -546,7 +768,7 @@ irf.pageCollection.factory("LucFormRequestProcessor", ["$log", "$state", "$state
                                 return out;
                             };
                             formHelper.validate(formCtrl).then(function() {
-                                orderLUCDocuments(model);
+                                model=LUC.orderLUCDocuments(model);
                                 var reqData = _.cloneDeep(model);
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.goBack(reqData).then(function(resp) {
