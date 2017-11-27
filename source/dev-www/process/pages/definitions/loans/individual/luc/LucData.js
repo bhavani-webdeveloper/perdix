@@ -343,8 +343,11 @@ define({
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
                                                     if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
-                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
+                                                        if(response1.enterprise){
+                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
+                                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
+                                                        }
+                                                       
                                                         if (response1.buyerDetails && response1.buyerDetails.length) {
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
                                                         }

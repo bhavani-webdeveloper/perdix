@@ -517,6 +517,25 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getAllLoanPurpose3 = function(purpose1,purpose2) {
+            var deferred = $q.defer();
+            resource.getResult("Allloanpurpose3.list", {
+                "purpose1": purpose1,
+                "purpose2":purpose2
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getloanParameters = function(loanId, score) {
             var deferred = $q.defer();
             var request = {

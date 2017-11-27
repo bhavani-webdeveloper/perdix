@@ -766,6 +766,26 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             ];
                         }
                     },
+                    {
+                        key: "loanAccount.loanPurpose3",
+                        type: "lov",
+                        autolov: true,
+                        title:"LoanPurpose3",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose3": "loanAccount.loanPurpose3"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1,model.loanAccount.loanPurpose2);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose3
+                            ];
+                        }
+                    },
                     // {
                     //     key: "loanAccount.assetAvailableForHypothecation",
                     //     type: "select",
@@ -942,6 +962,26 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         getListDisplayItem: function(item, index) {
                             return [
                                 item.purpose2
+                            ];
+                        }
+                    },
+                    {
+                        key: "loanAccount.loanPurpose3",
+                        type: "lov",
+                        autolov: true,
+                        title:"LoanPurpose3",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose3": "loanAccount.loanPurpose3"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose3(model.loanAccount.loanPurpose1,model.loanAccount.loanPurpose2);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose3
                             ];
                         }
                     },
