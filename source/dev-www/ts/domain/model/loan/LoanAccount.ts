@@ -16,6 +16,8 @@ import OrnamentsAppraisal = require("./OrnamentsAppraisal");
 import TelecallingDetail = require("./TelecallingDetail");
 import VehicleLoanDetails = require("./VehicleLoanDetails");
 import Customer = require("../customer/Customer");
+import * as _ from 'lodash';
+
 //vehicleDTOs
 
 class LoanAccount {

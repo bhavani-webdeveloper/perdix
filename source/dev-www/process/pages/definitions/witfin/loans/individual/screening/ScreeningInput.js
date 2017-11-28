@@ -105,7 +105,8 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess.loanAccount;
-                                console.log("LOOK HERE");
+                                loanAccount.applicantCustomer.customerId = loanAccount.customerId;
+                                
                                 if (loanAccount.currentStage != 'Screening'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
@@ -115,7 +116,7 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        loanRelation: loanAccount
+                                        loanRelation: loanAccount.applicantCustomer
                                     }
                                 });
 
