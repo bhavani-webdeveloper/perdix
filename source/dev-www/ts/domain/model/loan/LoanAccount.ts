@@ -216,9 +216,15 @@ class LoanAccount {
 
 
     private _loanCustomer: Customer;
+
+    @Type(() => Customer)
     applicantCustomer: Customer;
-    coApplicantCustomers: Customer[] = [];
-    guarantorCustomers: Customer[] = [];
+
+    @Type(() => Customer)
+    coApplicantCustomers: Customer[];
+
+    @Type(() => Customer)
+    guarantorCustomers: Customer[];
 
 
     get loanCustomer(): Customer {

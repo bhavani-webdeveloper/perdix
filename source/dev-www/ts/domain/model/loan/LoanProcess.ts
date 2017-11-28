@@ -56,7 +56,7 @@ export class LoanProcess {
     static get(id: number): Observable<LoanProcess> {
         return LoanProcessFactory.createFromLoanId(id).flatMap(
             (loanProcess) => {
-                let pm: PolicyManager<LeadProcess> = new PolicyManager<LeadProcess>(loanProcess, LoanPolicyFactory.getInstance(), 'onLoad', LoanProcess.getProcessConfig());
+                let pm: PolicyManager<LoanProcess> = new PolicyManager<LoanProcess>(loanProcess, LoanPolicyFactory.getInstance(), 'onLoad', LoanProcess.getProcessConfig());
                 return pm.applyPolicies();
             }
         );

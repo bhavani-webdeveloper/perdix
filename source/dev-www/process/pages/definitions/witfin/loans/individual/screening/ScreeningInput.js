@@ -1,4 +1,4 @@
-define(["perdix/domain/model/loan/LoanProcess"], function(LoanProcess) {
+define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanProcessFactory"], function(LoanProcess, LoanFactory) {
     LoanProcess = LoanProcess["LoanProcess"];
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess"], function(LoanProcess) {
                             order:10
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'witfin.customer.IndividualEnrollment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess"], function(LoanProcess) {
                             order:20
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'witfin.customer.IndividualEnrollment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -104,8 +104,81 @@ define(["perdix/domain/model/loan/LoanProcess"], function(LoanProcess) {
 
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                var loanAccount = loanProcess.loanAccount;
                                 console.log("LOOK HERE");
-                                console.log(loanProcess);
+                                if (loanAccount.currentStage != 'Screening'){
+                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    irfNavigator.goBack();
+                                    return;
+                                }
+
+                                $this.bundlePages.push({
+                                    pageClass: 'applicant',
+                                    model: {
+                                        loanRelation: loanAccount
+                                    }
+                                });
+
+                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
+                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'co-applicant',
+                                            model: {
+                                                loanRelation: loanAccount.coApplicantCustomers[i]
+                                            }
+                                        });
+                                    }
+                                }
+
+                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
+                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'guarantor',
+                                            model: {
+                                                loanRelation: loanAccount.guarantorCustomers[i]
+                                            }
+                                        });
+                                    }
+                                }
+                                
+
+                                $this.bundlePages.push({
+                                    pageClass: 'business',
+                                    model: {
+                                        loanRelation: {customerId:loanAccount.customerId}
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model: {
+                                        loanAccount: loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cb-check',
+                                    model: {
+                                        loanAccount: loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanAccount
+                                    }
+                                });
+
+                                deferred.resolve();
+
                             });
 
                     } else {

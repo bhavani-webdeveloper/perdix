@@ -1,4 +1,4 @@
-define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/shared/AngularResourceService'], function(EnrollmentProcess, AngularResourceService) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrollmentProcess, AngularResourceService) {
     return {
         pageUID: "witfin.customer.IndividualEnrollment2",
         pageType: "Engine",
