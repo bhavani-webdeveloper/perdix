@@ -2955,7 +2955,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             for (var i=0;i<d.length;i++){
                                 var item = d[i];
                                 if (item.status != 'finished'){
-                                    PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);
+                                    if (item.status == 'failed') {
+                                        PageHelper.showProgress("dedupe-status", "Dedupe has failed. Please Contact IT", 5000);
+                                    } else {
+                                        PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);  
+                                    }
                                     mandatoryToProceedLoan['Dedupe'] = false;
                                 }
                             }
