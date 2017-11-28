@@ -219,9 +219,15 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 autolov: true,
                                 inputMap: {
                                     "pincode": "customer.pincode",
-                                    "division": "customer.locality",
-                                    "region": "customer.villageName",
-                                    "taluk" : "customer.taluk",
+                                    "division": {
+                                        key: "customer.locality"
+                                    },
+                                    "region": {
+                                        key: "customer.villageName"
+                                    },
+                                    "taluk" : {
+                                        key: "customer.taluk"
+                                    },
                                     "district": {
                                         key: "customer.district"
                                     },
