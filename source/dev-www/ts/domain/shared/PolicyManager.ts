@@ -33,6 +33,7 @@ export class PolicyManager<T> {
         let observables = [];
 
         for (let policy of policies) {
+            policy.arguments = policy.arguments || {};
             try {
                 let policyObj: IPolicy<T> = this.policyFactory.fromPolicyName(policy.name);
                 if (policyObj && policy.arguments) {

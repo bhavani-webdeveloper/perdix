@@ -1,7 +1,6 @@
 import { Type } from "class-transformer";
-import Customer = require("../customer/Customer");
-import AccountUserDefinedField = require("./AccountUserDefinedField");
 
+import AccountUserDefinedField = require("./AccountUserDefinedField");
 import BcAccount = require("./BcAccount");
 import Collateral = require("./Collateral");
 import DisbursementSchedule = require("./DisbursementSchedule");
@@ -16,6 +15,7 @@ import Nominee = require("./Nominee");
 import OrnamentsAppraisal = require("./OrnamentsAppraisal");
 import TelecallingDetail = require("./TelecallingDetail");
 import VehicleLoanDetails = require("./VehicleLoanDetails");
+import Customer = require("../customer/Customer");
 //vehicleDTOs
 
 class LoanAccount {
@@ -215,12 +215,52 @@ class LoanAccount {
     nominees: Nominee[];
 
 
-    customer: Customer;
+    private _loanCustomer: Customer;
     applicantCustomer: Customer;
-    coApplicants: Customer[];
-    guarantors: Customer[];
+    coApplicantCustomers: Customer[] = [];
+    guarantorCustomers: Customer[] = [];
 
 
+    get loanCustomer(): Customer {
+        return this._loanCustomer;
+    }
+
+    set loanCustomer(value: Customer) {
+        this._loanCustomer = value;
+        this.customerId = value.id;
+        this.urnNo = value.urnNo;
+    }
+
+    public setRelatedCustomer(customer: Customer): LoanAccount{
+        let index = _.findIndex(this.loanCustomerRelations, function(lcr){
+            return lcr.customerId==customer.id;
+        });
+
+        if (index == -1) {return this;}
+
+        let lcr: LoanCustomerRelation = this.loanCustomerRelations[index];
+        let relation = lcr.relation.toUpperCase();
+
+
+        switch (relation){
+            case 'APPLICANT':
+                this.applicantCustomer = customer;
+                break;
+
+            case 'COAPPLICANT':
+            case 'CO-APPLICANT':
+                this.coApplicantCustomers.push(customer);
+                break;
+
+            case 'GUARANTOR':
+                this.guarantorCustomers.push(customer);
+                break;
+
+            default:
+                break;
+        }
+        return this;
+    }
 
     public static createFromJSON(data:any) {
 

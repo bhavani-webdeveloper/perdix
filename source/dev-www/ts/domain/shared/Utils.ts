@@ -12,7 +12,7 @@ class Utils {
         return out;
     }
 
-    static toJSObj(data: any): Object {
+    static toJSObj(data: any): any {
         return JSON.parse(JSON.stringify(data));
     }
 

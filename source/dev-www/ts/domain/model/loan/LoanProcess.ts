@@ -8,16 +8,20 @@ import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
 import Customer = require("../customer/Customer");
+import LoanProcessFactory = require("./LoanProcessFactory");
+import {PolicyManager} from "../../shared/PolicyManager";
+import {LeadProcess} from "../lead/LeadProcess";
+import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
 
 
 
 
 declare var loanProcessConfig: Object;
 
-class LoanProcess {
+export class LoanProcess {
 	remarks: string;
 	stage: string;
-    loanAccount: LoanAccount;
+    public loanAccount: LoanAccount;
     customer: Customer;
     individualLoanRepo: ILoanRepository;
 
@@ -49,6 +53,16 @@ class LoanProcess {
 		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
 	}
 
+    static get(id: number): Observable<LoanProcess> {
+        return LoanProcessFactory.createFromLoanId(id).flatMap(
+            (loanProcess) => {
+                let pm: PolicyManager<LeadProcess> = new PolicyManager<LeadProcess>(loanProcess, LoanPolicyFactory.getInstance(), 'onLoad', LoanProcess.getProcessConfig());
+                return pm.applyPolicies();
+            }
+        );
+    }
+
+
     get(id: number): Observable<LoanProcess> {
         return this.individualLoanRepo.getIndividualLoan(id)
             .map(
@@ -64,7 +78,7 @@ class LoanProcess {
         return EnrollmentProcessFactory.fromCustomer(this.customer).get(id)
             .map(
                 (value) => {
-                    this.loanAccount.customer = value;
+                    this.loanAccount.loanCustomer = value;
                     return this;
                 }
             )
@@ -74,5 +88,3 @@ class LoanProcess {
         return loanProcessConfig;
     }
 }
-
-export = LoanProcess;

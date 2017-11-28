@@ -3,6 +3,7 @@ import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../shared/IPolicy";
 import {SampleSimplePolicy} from "./SampleSimplePolicy";
 import {SampleMultiPolicy} from "./SampleMultiPolicy";
+import {LoadRelatedCustomersPolicy} from "./LoadRelatedCustomersPolicy";
 export class LoanPolicyFactory implements IPolicyFactory{
 
     private static _instance:LoanPolicyFactory = null;
@@ -25,6 +26,9 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return obj;
             case 'SampleMultiPolicy':
                 obj = new SampleMultiPolicy();
+                return obj;
+            case 'LoadRelatedCustomersPolicy':
+                obj = new LoadRelatedCustomersPolicy();
                 return obj;
             default:
                 return null;

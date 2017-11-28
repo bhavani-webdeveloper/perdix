@@ -1,7 +1,7 @@
 import {LeadPolicy} from "./LeadPolicy";
 import {Observable} from "@reactivex/rxjs";
-import LeadProcess = require("../LeadProcess");
 import LeadInteraction = require("../LeadInteraction");
+import {LeadProcess} from "../LeadProcess";
 
 export interface PopulateBasicLeadDataArgs {
     defaultLeadStatus: string;
@@ -17,7 +17,7 @@ export class PopulateBasicLeadDataPolicy extends LeadPolicy<PopulateBasicLeadDat
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
         return Observable.create((observer: any) => {
-            
+
             if (leadProcess.lead) {
                 leadProcess.lead.leadStatus = "Incomplete";
             }

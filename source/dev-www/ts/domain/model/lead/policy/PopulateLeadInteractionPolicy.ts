@@ -1,10 +1,10 @@
 import {LeadPolicy} from "./LeadPolicy";
-import LeadProcess = require("../LeadProcess");
 import {Observable} from "@reactivex/rxjs";
 import LeadInteraction = require("../LeadInteraction");
 import {UserSession, ISession} from "../../../shared/Session";
 import {ObjectFactory} from "../../../shared/ObjectFactory";
 import Utils = require("../../../shared/Utils");
+import {LeadProcess} from "../LeadProcess";
 
 export interface PopulateLeadInteractionPolicyArgs {
     NoOfInteractions: string;
@@ -24,9 +24,9 @@ export class PopulateLeadInteractionPolicy implements LeadPolicy<PopulateLeadInt
             if (leadProcess.lead && leadProcess.lead.leadInteractions) {
                 let activeSession:ISession = ObjectFactory.getInstance("Session");
                 let i = new LeadInteraction();
-               
+
                 i.loanOfficerId = activeSession.getUsername();
-                
+
                 i.interactionDate = Utils.getCurrentDate();
                 leadProcess.lead.leadInteractions.push(i);
                 leadProcess.lead.branchId = activeSession.getBranchId();

@@ -1,13 +1,12 @@
 import {Observable} from "@reactivex/rxjs";
-import LoanProcess = require("../LoanProcess");
 import LeadInteraction = require("../LeadInteraction");
 import {IPolicy} from "../../../shared/IPolicy";
-import LoanProcess = require("../LoanProcess");
 import LoanRepository = require("../LoanRepository");
 import {plainToClass} from "class-transformer";
-import LoanAccount = require("../LoanAccount");
 import {map} from "@reactivex/rxjs/dist/cjs/operator/map";
 import Utils = require("../../../shared/Utils");
+import LoanAccount = require("../LoanAccount");
+import {LoanProcess} from "../LoanProcess";
 
 export interface SampleSimplePolicyArgs {
     defaultLeadStatus: string;

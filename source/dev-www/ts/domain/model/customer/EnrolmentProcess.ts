@@ -3,21 +3,21 @@
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Customer = require("./Customer");
-import {IEnrolmentRepository} from "./IEnrollmentRepository";
+import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 
 
 declare var loanProcessConfig: Object;
 
-class EnrolmentProcess {
+export class EnrolmentProcess {
 	remarks: string;
 	stage: string;
     customer: Customer;
     enrolmentRepo: IEnrolmentRepository;
 
     constructor(){
-    	this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrollment);
+    	this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
 	}
 
 	loanProcessAction(actionName: string): boolean {
@@ -59,5 +59,3 @@ class EnrolmentProcess {
         return loanProcessConfig;
     }
 }
-
-export = EnrolmentProcess;

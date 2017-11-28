@@ -1,7 +1,6 @@
-import EnrolmentProcess = require("./EnrolmentProcess");
 import {Observable} from "@reactivex/rxjs";
 import Customer = require("./Customer");
-import {IEnrolmentRepository} from "./IEnrollmentRepository";
+import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import {plainToClass} from "class-transformer";
@@ -10,7 +9,7 @@ import {IPolicy} from "../../shared/IPolicy";
 // import {LeadPolicy} from "./policy/LeadPolicy";
 // import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {PolicyManager} from "../../shared/PolicyManager";
-import EnrolmentProcess = require("./EnrolmentProcess");
+import {EnrolmentProcess} from "./EnrolmentProcess";
 
 /**
  * Created by shahalpk on 21/11/17.
@@ -29,7 +28,7 @@ class EnrolmentProcessFactory {
 
 
   static fromCustomerID(id: number): Observable<EnrolmentProcess> {
-      let enrollmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrollment);
+      let enrollmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
       return enrollmentRepo.getCustomerById(id)
             .map(
                 (value: Object) => {

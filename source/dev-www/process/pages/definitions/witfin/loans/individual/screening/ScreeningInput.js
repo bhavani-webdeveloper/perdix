@@ -1,4 +1,5 @@
-define(["perdix/domain/model/loan/LoanProcessFactory"], function(LoanFactory) {
+define(["perdix/domain/model/loan/LoanProcess"], function(LoanProcess) {
+    LoanProcess = LoanProcess["LoanProcess"];
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
@@ -100,98 +101,13 @@ define(["perdix/domain/model/loan/LoanProcessFactory"], function(LoanFactory) {
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
                         PageHelper.showLoader();
                         bundleModel.loanId = $stateParams.pageId;
-                        IndividualLoan.get({id: bundleModel.loanId})
-                            .$promise
-                            .then(
-                                function(res){
-                                    var applicant;
-                                    var coApplicants = [];
-                                    var guarantors = [];
-                                    var business;
-                                    var urnNos = [];
 
-                                    for (var i=0; i<res.loanCustomerRelations.length; i++) {
-                                        var cust = res.loanCustomerRelations[i];
-                                        if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
-                                            applicant = cust;
-                                            urnNos.push(cust.urn);
-                                        } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
-                                            coApplicants.push(cust);
-                                            urnNos.push(cust.urn);
-                                        } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
-                                            guarantors.push(cust);
-                                        }
-                                    }
+                        LoanProcess.get(bundleModel.loanId)
+                            .subscribe(function(loanProcess){
+                                console.log("LOOK HERE");
+                                console.log(loanProcess);
+                            });
 
-                                    $this.bundlePages.push({
-                                        pageClass: 'applicant',
-                                        model: {
-                                            loanRelation: applicant
-                                        }
-                                    });
-
-                                    for (var i=0;i<coApplicants.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'co-applicant',
-                                            model: {
-                                                loanRelation: coApplicants[i]
-                                            }
-                                        });
-                                    }
-
-                                    for (var i=0;i<guarantors.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'guarantor',
-                                            model: {
-                                                loanRelation: guarantors[i]
-                                            }
-                                        });
-                                    }
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'business',
-                                        model: {
-                                            loanRelation: {customerId:res.customerId}
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-request',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'cb-check',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'cbview',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    deferred.resolve();
-                                }, function(httpRes){
-                                    deferred.reject();
-                                    PageHelper.showErrors(httpRes);
-                                }
-                            )
-                            .finally(function(){
-                                PageHelper.hideLoader();
-                            })
                     } else {
                         var loanProcess = LoanFactory.newLoanProcess()
                             .subscribe(function(loanProcess){

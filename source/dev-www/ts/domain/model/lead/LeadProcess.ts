@@ -5,8 +5,6 @@ import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Lead = require("./Lead");
 import {ILeadRepository} from "./ILeadRepository";
 import {Observable} from "@reactivex/rxjs";
-import {plainToClass} from "class-transformer";
-import {LeadPolicy} from "./policy/LeadPolicy";
 import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {CanApplyPolicy} from "../../shared/IPolicy";
 import Utils = require("../../shared/Utils");

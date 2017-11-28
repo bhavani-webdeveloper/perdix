@@ -49,6 +49,14 @@ define(["require", "exports"], function (require, exports) {
                             }
                         }
                     ]
+                },
+                onLoad: {
+                    "defaults": [
+                        {
+                            "name": "LoadRelatedCustomersPolicy",
+                            "arguments": null
+                        }
+                    ]
                 }
             },
             'command': {
