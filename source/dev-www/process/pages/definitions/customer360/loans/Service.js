@@ -53,6 +53,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
+                                _.pullAll(response, [null]);
                                 return response;
                             }
                             return [];
