@@ -3,12 +3,12 @@ define({
     pageType: "Engine",
     dependencies: ["$log", "irfSimpleModal", "Groups","GroupProcess","Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "$timeout",
     ],
 
     $pageFn: function($log, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, $timeout) {
 
         var nDays = 15;
         var fixData = function(model) {
@@ -562,31 +562,12 @@ define({
                 // preSave: function(model, form, formName) {},
                 startGRT: function(model, form) {
                     PageHelper.showLoader();
-                    model.group.cgtDate3 = new Date();
-                    model.group.cgt3DoneBy=SessionStore.getUsername();
-                    $log.info("Inside submit()");
-                    var reqData = _.cloneDeep(model);
-                    reqData.groupAction = 'SAVE';
-                    PageHelper.clearErrors();
-                    Utils.removeNulls(reqData, true);
-                    GroupProcess.updateGroup(reqData, function(res) {
+                    $timeout(function() {
+                        model.group.cgtDate3 = new Date();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
-                        model.group = _.cloneDeep(res.group);
-                        fixData(model);
-                        if (model.group.jlgGroupMembers.length > 0) {
-                            fillNames(model).then(function(m) {
-                                model = m;
-                            }, function(m) {
-                                PageHelper.showErrors(m);
-                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-                            });
-                        }
                         PageHelper.hideLoader();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(res);
-                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000); 
                     });
+                    
                 },
                 endGRT: function(model, form) {
                     if(!model.group.cgtDate3) {
@@ -594,30 +575,12 @@ define({
                         return;
                     }
                     PageHelper.showLoader();
-                    model.group.cgtEndDate3 = new Date();
-                    model.group.cgt3DoneBy=SessionStore.getUsername();
-                    $log.info("Inside submit()");
-                    var reqData = _.cloneDeep(model);
-                    reqData.groupAction = 'SAVE';
-                    GroupProcess.updateGroup(reqData, function(res) {
+                    $timeout(function() {
+                        model.group.cgtEndDate3 = new Date();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
-                        Utils.removeNulls(res.group, true);
-                        model.group = _.cloneDeep(res.group);
-                        fixData(model);
-                        if (model.group.jlgGroupMembers.length > 0) {
-                            fillNames(model).then(function(m) {
-                                model = m;
-                            }, function(m) {
-                                PageHelper.showErrors(m);
-                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-                            });
-                        }
                         PageHelper.hideLoader();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(res);
-                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
                     });
+                    
                 },
                 submit: function(model, form, formName) {
 
