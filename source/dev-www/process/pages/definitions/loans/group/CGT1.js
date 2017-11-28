@@ -3,12 +3,12 @@ define({
     pageType: "Engine",
     dependencies: ["$log", "irfSimpleModal","GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "$timeout",
     ],
 
     $pageFn: function($log, irfSimpleModal, GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, $timeout) {
 
         var saveData = function(reqData) {
             PageHelper.showLoader();
@@ -497,23 +497,12 @@ define({
             actions: {
                 // preSave: function(model, form, formName) {},
                 startCGT1: function(model, form) {
-                    model.group.cgtDate1 = new Date();
+                    
                     PageHelper.showLoader();
-                    $log.info("Inside submit()");
-                    var reqData = _.cloneDeep(model);
-                    reqData.groupAction = 'SAVE';
-                    PageHelper.clearErrors();
-                    Utils.removeNulls(reqData, true);
-                    GroupProcess.updateGroup(reqData, function(res) {
+                    $timeout(function() {
+                        model.group.cgtDate1 = new Date();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
-                        model.group = _.clone(res.group);
-                        fillNames(model);
-                        model.group.tenure = parseInt(model.group.tenure);
                         PageHelper.hideLoader();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(res);
-                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
                     });
                 },
                 endCGT1: function(model, form) {
@@ -522,21 +511,12 @@ define({
                         return;
                     }
                     PageHelper.showLoader();
-                    model.group.cgtEndDate1 = new Date();
-                    $log.info("Inside submit()");
-                    var reqData = _.cloneDeep(model);
-                    reqData.groupAction = 'SAVE';
-                    GroupProcess.updateGroup(reqData, function(res) {
+                    $timeout(function() {
+                        model.group.cgtEndDate1 = new Date();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
-                        model.group = _.clone(res.group);
-                        fillNames(model);
-                        model.group.tenure = parseInt(model.group.tenure);
                         PageHelper.hideLoader();
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(res);
-                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
                     });
+
                 },
                 submit: function(model, form, formName) {
                     if(!model.group.cgtEndDate1) {
