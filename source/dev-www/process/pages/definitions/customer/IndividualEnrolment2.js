@@ -773,6 +773,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key: "customer.centreId",
+                                    "required":true,
                                     type: "lov",
                                     condition: "!model.customer.id",
                                     autolov: true,
@@ -816,6 +817,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key: "customer.centreId",
+                                    "required":true,
                                     condition: "model.customer.id",
                                     readonly: true
                                 },
@@ -1375,7 +1377,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                      "add": null,
                                      "remove": null,
                                     "items": [
-                                        
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
@@ -1384,13 +1385,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             "key": "customer.expenditures[].annualExpenses",
+                                            required: true,
                                             "type": "amount",
                                             "title": "AMOUNT"
                                         },
                                         {
                                             "key": "customer.expenditures[].frequency",
+                                            "required":true,
                                             "type": "select",
-                                            readonly: true,
+                                            //readonly: true,
                                             "title": "FREQUENCY"
                                         }
                                      ]

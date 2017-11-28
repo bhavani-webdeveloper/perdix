@@ -105,7 +105,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                         "accountNumber": model._queue.accountNumber,
                                                         "amount":model.loanAccount.disbursementSchedules[0].disbursementAmount,
                                                         "scheduledDisbursementDate":model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,
-                                                        "firstRepaymentDate":model.loanAccount.firstRepaymentDate
+                                                        "firstRepaymentDate":model.loanAccount.firstRepaymentDate,
+                                                        "loanId":model.loanAccount.id,
                                                     })
                                                     .$promise
                                                     .then(function(resp) {}, function(httpRes) {

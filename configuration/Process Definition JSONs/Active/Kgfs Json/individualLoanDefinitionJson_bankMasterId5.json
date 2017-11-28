@@ -115,6 +115,18 @@
          "allowedRoles":[
             "WM"
          ]
+      },
+      {
+         "order":10,
+         "code":"DocumentVerification",
+         "name":"Document Verification",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "allowedRoles":[
+            "WM"
+         ]
       }
    ],
    "schema":{

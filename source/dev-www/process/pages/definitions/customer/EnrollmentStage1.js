@@ -112,6 +112,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 },
                 {
                     key:"customer.centreId",
+                    "required":true,
                     type:"select",
                     "enumCode": "centre",
                     "parentEnumCode": "branch_id",
@@ -548,7 +549,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "title": "SAVE_OFFLINE",
             },{
                 "type": "submit",
-                "title": "SUBMIT"
+                "title": "SAVE"
             },{
                 "type": "button",
                 "icon": "fa fa-user-plus",

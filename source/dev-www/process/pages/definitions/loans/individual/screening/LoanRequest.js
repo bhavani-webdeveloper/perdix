@@ -838,7 +838,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key: "loanAccount.expectedEmi",
                         type: "amount",
-                        title: "ESTIMATED_KINARA_EMI",
+                        title: "ESTIMATED_BANK_EMI",
                         readonly:true
                     },
                     {
@@ -1024,7 +1024,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key: "loanAccount.estimatedEmi",
                         type: "amount",
-                        title: "ESTIMATED_KINARA_EMI",
+                        title: "ESTIMATED_BANK_EMI",
                         readonly:true
                     },
                     {

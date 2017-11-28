@@ -471,6 +471,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key": "loanAccount.tenure",
+                                "required":true,
                                 "title":"DURATION_IN_MONTHS"
                             },
                         ]
