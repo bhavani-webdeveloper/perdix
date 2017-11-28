@@ -3,7 +3,7 @@ import {LeadPolicy} from "./LeadPolicy";
 import {PopulateLeadInteractionPolicy} from "./PopulateLeadInteractionPolicy";
 import {PopulateBasicLeadDataPolicy} from "./PopulateBasicLeadDataPolicy";
 import {IPolicyFactory} from "../../../shared/IPolicyFactory";
-export class LeadPolicyFactory implements IPolicyFactory{
+export class LeadPolicyFactory implements IPolicyFactory {
 
     private static _instance:LeadPolicyFactory = null;
 

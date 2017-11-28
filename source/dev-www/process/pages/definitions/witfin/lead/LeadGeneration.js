@@ -1,4 +1,4 @@
-define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularResourceService'], function(LeadProcess, AngularResourceService) {
+define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourceService'], function(LeadProcess, AngularResourceService) {
     LeadProcess = LeadProcess["LeadProcess"];
 
     return {
@@ -12,6 +12,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
+            // var leadProcessTs = new LeadProcess();
 
             var getOverrides = function (model) {
                 return {
@@ -204,49 +205,53 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/domain/shared/AngularRes
                         if (reqData.lead.id) {
 
                             if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
-                                leadProcessTs.followUp(reqData)
-                                    .finally(function(){
+                                model.leadProcess.save()
+                                .finally(function(){
                                         PageHelper.hideLoader();
                                     })
-                                    .subscribe(
-                                        function(data){
-                                        $state.go('Page.LeadDashboard', null);
-                                    },
-                                    function(err) {
+                                    .subscribe(function(value){
+                                       $state.go('Page.LeadDashboard', null);
+                                    }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
-                                    }
-                                )
+                                    });
+                                // leadProcessTs.followUp(reqData)
+                                //     .finally(function(){
+                                //         PageHelper.hideLoader();
+                                //     })
+                                //     .subscribe(
+                                //         function(data){
+                                //         $state.go('Page.LeadDashboard', null);
+                                //     },
+                                //     function(err) {
+                                //         PageHelper.showErrors(err);
+                                //         PageHelper.hideLoader();
+                                //     }
+                                // )
 
                             } else {
-                                leadProcessTs.update(reqData)
-                                    .finally(function(){
+                                model.leadProcess.save()
+                                .finally(function(){
                                         PageHelper.hideLoader();
                                     })
-                                    .subscribe(
-                                        function(data){
-                                        $state.go('Page.LeadDashboard', null);
-                                    },
-                                    function(err) {
+                                    .subscribe(function(value){
+                                       $state.go('Page.LeadDashboard', null);
+                                    }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
-                                    }
-                                )
+                                    });
                             }
                         } else {
-                            leadProcessTs.save(reqData)
+                            model.leadProcess.proceed()
                                 .finally(function(){
-                                    PageHelper.hideLoader();
-                                })
-                                .subscribe(
-                                    function(data){
-                                        $state.go('Page.LeadDashboard', null);
-                                    },
-                                    function(err) {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value){
+                                       $state.go('Page.LeadDashboard', null);
+                                    }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
-                                    }
-                                )
+                                    });
 
                         }
                     }

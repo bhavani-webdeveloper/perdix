@@ -3,7 +3,7 @@ import { ILeadRepository } from './ILeadRepository';
 import { RxObservable as Ro} from '../../shared/RxObservable';
 
 
-import AngularResourceService = require('../../shared/AngularResourceService');
+import AngularResourceService = require('../../../infra/api/AngularResourceService');
 import {Observable} from "@reactivex/rxjs";
 
 class LeadRepository implements ILeadRepository {

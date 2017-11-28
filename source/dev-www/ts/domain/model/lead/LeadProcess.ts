@@ -57,10 +57,10 @@ export class LeadProcess implements CanApplyPolicy {
 
     save(): Observable<LeadProcess> {
         this.leadAction = 'SAVE';
-        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeSave', LeadProcess.getProcessConfig());
+        let pmBeforeUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'beforeSave', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.leadRepo.updateLead(this);
-        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterSave', LeadProcess.getProcessConfig());
+        let pmAfterUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'afterSave', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3);
     }
@@ -68,10 +68,10 @@ export class LeadProcess implements CanApplyPolicy {
     proceed(toStage: string): Observable<LeadProcess>{
         this.stage = toStage;
         this.leadAction = 'PROCEED';
-        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeProceed', LeadProcess.getProcessConfig());
+        let pmBeforeUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'beforeProceed', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.leadRepo.updateLead(this);
-        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterProceed', LeadProcess.getProcessConfig());
+        let pmAfterUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'afterProceed', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3);
     }
@@ -79,10 +79,10 @@ export class LeadProcess implements CanApplyPolicy {
     sendBack(toStage: string): Observable<LeadProcess> {
         this.stage = toStage;
         this.leadAction = 'PROCEED';
-        let pmBeforeUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'beforeSendBack', LeadProcess.getProcessConfig());
+        let pmBeforeUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'beforeSendBack', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.leadRepo.updateLead(this);
-        let pmAfterUpdate:PolicyManager  = new PolicyManager(this, LeadPolicyFactory, 'afterSendBack', LeadProcess.getProcessConfig());
+        let pmAfterUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory, 'afterSendBack', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3);
     }
