@@ -105,7 +105,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
 
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "FieldAppraisalReview";
+                    bundleModel.currentStage = "ZonalRiskReview";
                     var deferred = $q.defer();
 
                     var $this = this;

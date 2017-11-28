@@ -2368,7 +2368,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "textarea",
                         required: true
                     }, {
-                        key: "review.targetStage",
+                        key: "review.targetStage1",
                         type: "lov",
                         autolov: true,
                         lovonly:true,
@@ -2384,6 +2384,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 if (t.field1 == stage1) {
                                     out.push({
                                         name: t.name,
+                                        value:t.code
                                     })
                                 }
                             }
@@ -2395,7 +2396,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.review.targetStage = valueObj.name;
+                            model.review.targetStage1 = valueObj.name;
+                            model.review.targetStage = valueObj.value;
+
                         },
                         getListDisplayItem: function(item, index) {
                             return [
