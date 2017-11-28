@@ -519,8 +519,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 });
                             }
 
-                            var curTime = moment();
-                            var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+                            
+                            var today = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
                             pData.addLine(opts['entity_name'], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_BOLD
@@ -528,7 +528,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addLine(opts['branch'], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
-                                }).addLine("Date : " + curTimeStr, {
+                                }).addLine("Date : " + today, {
                                     'center': false,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
