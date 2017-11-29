@@ -247,10 +247,6 @@ define({
                         "condition": "model.lucCompleted",
                         readonly: true,
                         "items": [{
-                                key: "loanMonitoringDetails.loanSeries",
-                                type: "number",
-                                "readonly": true
-                            }, {
                                 key: "loanMonitoringDetails.loanProductName",
                                 type: "string",
                                 "readonly": true
@@ -265,7 +261,7 @@ define({
                             }, {
                                 key: "loanMonitoringDetails.loanAmount",
                                 type: "amount",
-                                //"readonly": true
+                                "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.disbursementDate",
                                 type: "date",

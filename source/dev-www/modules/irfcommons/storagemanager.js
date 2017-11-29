@@ -409,6 +409,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("partner", "partner", codeToValue);
 			createEnum("p2p_customer_category", "p2p_customer_category", codeToValue);
 			createEnum("creditBureauTypes", "creditBureauTypes", codeToValue);
+			createEnum("origination_stage", "origination_stage", codeToValue);
 
 			return $q.resolve();
 		});

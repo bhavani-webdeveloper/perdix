@@ -2961,6 +2961,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                         PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);  
                                     }
                                     mandatoryToProceedLoan['Dedupe'] = false;
+                                    break;
                                 }
                             }
 
