@@ -51,7 +51,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             offline: true,
             getOfflineDisplayItem: function(item, index) {
                 return [
-                    item.bank_survey.date
+                    item.bank_survey.surveyDate
                 ]
             },
             form: [{
@@ -224,7 +224,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
-                    if (model.bank_survey.date) {
+                    if (model.bank_survey.surveyDate) {
                         deferred.resolve();
                     } else {
                         irfProgressMessage.pop('save', 'date is required', 3000);
