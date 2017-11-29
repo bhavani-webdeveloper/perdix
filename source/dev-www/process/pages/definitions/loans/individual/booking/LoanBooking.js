@@ -69,6 +69,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     console.log(model.BackedDatedDisbursement);
                     console.log(model.showLoanBookingDetails);
                 });
+                PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanBooking").then(function(data){
+                    if(data.postDatedTransactionNotAllowed && data.postDatedTransactionNotAllowed != '') {
+                        model.postDatedTransactionNotAllowed = data.postDatedTransactionNotAllowed;
+                    }
+                });
                 IndividualLoan.get({id: $stateParams.pageId})
                     .$promise
                     .then(
@@ -473,6 +478,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //$log.info(BackedDatedDiffmonth);
 
                     if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
+
+                        if(model.postDatedTransactionNotAllowed) {
+                            if (customerSignatureDate.diff(cbsdate, "days") <0) {
+                                PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to CBS date", 5000);
+                                return false;
+                            }
+                        }
 
                         if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="ALL"){
                             if (scheduledDisbursementDate.diff(cbsdate, "days") <0) {
