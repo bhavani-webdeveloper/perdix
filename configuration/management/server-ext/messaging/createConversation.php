@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 
 use App\Models\Messaging\Conversation;
 use App\Models\Messaging\Message;
-use Illuminate\Support\Facades\Validator;
 
 // Get value 
 $queryString = $_SERVER['QUERY_STRING'];
