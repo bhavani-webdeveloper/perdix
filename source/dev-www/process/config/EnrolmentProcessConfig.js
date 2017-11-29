@@ -6,20 +6,7 @@ define(["require", "exports"], function (require, exports) {
                 onNew: {
                     "defaults": [
                         {
-                            "name": "SampleSimplePolicy",
-                            "arguments": {
-                                "name": "sasdf"
-                            }
-                        },
-                        {
-                            "name": "SampleMultiPolicy",
-                            "arguments": {
-                                "testargs": {
-                                    "shahal": "tharique"
-                                }
-                            }
-                        }, {
-                            "name": "LoadRelatedCustomerData",
+                            "name": "LoadNewCustomerData",
                             "arguments": null
                         }
                     ]
@@ -35,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
                 beforeProceed: {
                     "defaults": [
                         {
-                            "name": "preSaveCustomerPolicy",
+                            "name": "PreSaveCustomerPolicy",
                             "arguments": null
                         }
                     ]

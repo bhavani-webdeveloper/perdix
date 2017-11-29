@@ -10,6 +10,10 @@ import {IPolicy} from "../../shared/IPolicy";
 // import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {PolicyManager} from "../../shared/PolicyManager";
 import {EnrolmentProcess} from "./EnrolmentProcess";
+import FamilyMember = require("./FamilyMember");
+import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
+
+
 
 /**
  * Created by shahalpk on 21/11/17.
@@ -19,11 +23,18 @@ import {EnrolmentProcess} from "./EnrolmentProcess";
 class EnrolmentProcessFactory {
 
 
-  static fromCustomer(obj: Customer): EnrolmentProcess {
-      let ep = new EnrolmentProcess();
-      ep.customer = obj;
+  static fromCustomer(obj: Customer): Observable<EnrolmentProcess> {
+    let ep = new EnrolmentProcess();
+    ep.customer = obj;
+    let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentPolicyFactory.getInstance(), 'onNew', EnrolmentProcess.getProcessConfig());
+    return pm.applyPolicies();
+  }
 
-      return ep;
+  static beforeProceedCustomer(obj: Customer): Observable<EnrolmentProcess> {
+    let ep = new EnrolmentProcess();
+    ep.customer = obj;
+    let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentPolicyFactory.getInstance(), 'beforeProceed', EnrolmentProcess.getProcessConfig());
+    return pm.applyPolicies();
   }
 
 

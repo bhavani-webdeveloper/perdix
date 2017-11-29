@@ -299,43 +299,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
                     }
                     // else {
-
-                        model.customer = model.customer || {};
+                        model.loanProcess = bundleModel.loanProcess;
+                        model.customer = bundleModel.loanProcess.loanAccount.applicantCustomer;
+                        // console.log(model.customer)
+                        // model.customer = model.customer || {};
                         if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                             model.customer.enterprise = {};
                         }
 
-                        model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
+                        // model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
 
-                        model.customer.centreId = centreName[0];
-                        model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
+                        // model.customer.centreId = centreName[0];
+                        // model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
 
                         //model.branchId = SessionStore.getBranchId() + '';
-                        model.customer.date = model.customer.date || Utils.getCurrentDate();
-                        model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+                        // model.customer.date = model.customer.date || Utils.getCurrentDate();
+                        // model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
                         model = Utils.removeNulls(model,true);
                         //model.customer.kgfsName = SessionStore.getBranch();
-                        model.customer.identityProof = model.customer.identityProof || "Pan Card";
-                        model.customer.addressProof= model.customer.addressProof || "Aadhar Card";
-                        model.customer.customerType = 'Individual';
+                        // model.customer.identityProof = model.customer.identityProof || "Pan Card";
+                        // model.customer.addressProof= model.customer.addressProof || "Aadhar Card";
+                        // model.customer.customerType = 'Individual';
                         BundleManager.pushEvent("on-customer-load", {name: "11"})
 
-                        if(!model.customer.expenditures){
-                            model.customer.expenditures = [];
-                            model.customer.expenditures.push({
-                                "expenditureSource": "Monthly Declared Household expenses",
-                                "frequency": "Monthly"
-                            });
-                        }
+                        // if(!model.customer.expenditures){
+                        //     model.customer.expenditures = [];
+                        //     model.customer.expenditures.push({
+                        //         "expenditureSource": "Monthly Declared Household expenses",
+                        //         "frequency": "Monthly"
+                        //     });
+                        // }
 
 
-                        if(!model.customer.familyMembers){
-                            model.customer.familyMembers = [
-                                {
-                                    'relationShip': 'self'
-                                }
-                            ]
-                        }
+                        // if(!model.customer.familyMembers){
+                        //     model.customer.familyMembers = [
+                        //         {
+                        //             'relationShip': 'self'
+                        //         }
+                        //     ]
+                        // }
+
+                       
                     // }
 
 
@@ -639,6 +643,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             reqData['enrollmentAction'] = 'PROCEED';
 
+
+                            // PreProceed Policy
                             reqData.customer.verified = true;
                             if (reqData.customer.hasOwnProperty('verifications')){
                                 var verifications = reqData.customer['verifications'];
@@ -651,42 +657,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 }
                             }
-                            try{
-                                for(var i=0;i<reqData.customer.familyMembers.length;i++){
-                                    var incomes = reqData.customer.familyMembers[i].incomes;
-                                    if (incomes){
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
-                                        }
-                                    }
+                            // try{
+                            //     for(var i=0;i<reqData.customer.familyMembers.length;i++){
+                            //         var incomes = reqData.customer.familyMembers[i].incomes;
+                            //         if (incomes){
+                            //             for(var j=0;j<incomes.length;j++){
+                            //                 switch(incomes[i].frequency){
+                            //                     case 'M': incomes[i].monthsPerYear=12; break;
+                            //                     case 'Monthly': incomes[i].monthsPerYear=12; break;
+                            //                     case 'D': incomes[i].monthsPerYear=365; break;
+                            //                     case 'Daily': incomes[i].monthsPerYear=365; break;
+                            //                     case 'W': incomes[i].monthsPerYear=52; break;
+                            //                     case 'Weekly': incomes[i].monthsPerYear=52; break;
+                            //                     case 'F': incomes[i].monthsPerYear=26; break;
+                            //                     case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                            //                     case 'Fortnightly': incomes[i].monthsPerYear=26; break;
+                            //                 }
+                            //             }
+                            //         }
 
-                                }
-                            }catch(err){
-                                console.error(err);
-                            }
-                            if (preSaveOrProceedpreSaveOrProceed(reqData) == false){
+                            //     }
+                            // }catch(err){
+                            //     console.error(err);
+                            // }
+                            if (preSaveOrProceed(reqData) == false){
                                 return;
                             }
                             EnrollmentHelper.fixData(reqData);
                             PageHelper.showProgress('enrolment', 'Updating Customer');
-                            EnrollmentHelper.proceedData(reqData).then(function(resp){
-                                formHelper.resetFormValidityState(form);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                Utils.removeNulls(resp.customer,true);
-                                model.customer = resp.customer;
-                            }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                            });
+                            // EnrollmentHelper.proceedData(reqData).then(function(resp){
+                            //     formHelper.resetFormValidityState(form);
+                            //     PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            //     Utils.removeNulls(resp.customer,true);
+                            //     model.customer = resp.customer;
+                            // }, function(err) {
+                            //     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                            // });
+                            model.loanProcess.proceed()
+                                .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value){
+                                        formHelper.resetFormValidityState(form);
+                                        Utils.removeNulls(value,true);
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    }, function(err) {
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.hideLoader();
+                                    });
                         });
                         // $q.all end
                     }
@@ -695,12 +713,3 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
          }
     }
 })
-// irf.pageCollection.factory(irf.page("witfin.customer.IndividualEnrollment2"),
-// ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-//             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor",
-//       function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-//                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor)
-//       {
-
-//     }
-// ]);

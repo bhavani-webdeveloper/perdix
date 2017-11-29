@@ -251,10 +251,10 @@ class Customer {
     enterpriseRegistrations: EnterpriseRegistration[];
 
     @Type(() => Expenditure)
-    expenditures: Expenditure[];
+    expenditures: Expenditure[] = [];
 
     @Type(() => FamilyMember)
-    familyMembers: FamilyMember[];
+    familyMembers: FamilyMember[] = [];
 
     @Type(() => FinancialAsset)
     financialAssets: FinancialAsset[];
@@ -294,6 +294,8 @@ class Customer {
 
     @Type(() => Verification)
     verifications: Verification[];
+
+
 }
 
 

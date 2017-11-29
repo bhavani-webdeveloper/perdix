@@ -1,4 +1,4 @@
-///<amd-dependency path="perdixConfig/LoanProcessConfig" name="loanProcessConfig"/>
+///<amd-dependency path="perdixConfig/EnrolmentProcessConfig" name="enrolmentProcessConfig"/>
 
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
@@ -8,7 +8,7 @@ import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 
 
-declare var loanProcessConfig: Object;
+declare var enrolmentProcessConfig: Object;
 
 export class EnrolmentProcess {
 	remarks: string;
@@ -56,6 +56,6 @@ export class EnrolmentProcess {
     }
 
     static getProcessConfig() {
-        return loanProcessConfig;
+        return enrolmentProcessConfig;
     }
 }

@@ -18,7 +18,8 @@ class LoanProcessFactory {
         return LoanProcessFactory.loanRepo.getIndividualLoan(id)
             .map(
                 (loanAccount:Object) => {
-                    lp.loanAccount = plainToClass(LoanAccount, Utils.toJSObj(loanAccount));
+                    lp.loanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, Utils.toJSObj(loanAccount));
+                    // lp.loanAccount = plainToClass(LoanAccount, Utils.toJSObj(loanAccount));
                     return lp;
                 }
             )

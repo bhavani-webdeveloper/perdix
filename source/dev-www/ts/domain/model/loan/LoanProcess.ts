@@ -12,6 +12,8 @@ import LoanProcessFactory = require("./LoanProcessFactory");
 import {PolicyManager} from "../../shared/PolicyManager";
 import {LeadProcess} from "../lead/LeadProcess";
 import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
+import EnrolmentProcessFactory = require("../customer/EnrolmentProcessFactory");
+
 
 
 
@@ -40,17 +42,27 @@ export class LoanProcess {
 		}
 	}
 
-	save(loanAccount: LoanAccount, remarks?: string) :any{
+	save(toStage: string) :any{
         /* Calls all business policies associated with save */
-		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
+		this.stage = toStage;
+        let pmBeforeUpdate:PolicyManager<LoanProcess>  = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LeadProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
+        let pmAfterUpdate:PolicyManager<LoanProcess>  = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3);
 	}
 
-	update(loanAccount: LoanAccount, remarks?: string): any {
+	proceed(toStage: string): any {
         /* Calls all business policies assocaited with proceed */
-
-        plainToClass
-
-		return this.individualLoanRepo.updateIndividualLoan(loanAccount);
+        this.stage = toStage;
+        let pmBeforeUpdate:PolicyManager<LoanProcess>  = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeProceed', LeadProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
+        let pmAfterUpdate:PolicyManager<LoanProcess>  = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterProceed', LeadProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        let obs4 = EnrollmentProcessFactory.beforeProceedCustomer(this.loanAccount.applicantCustomer);
+        return Observable.concat(obs1, obs2, obs3, obs4);
 	}
 
     static get(id: number): Observable<LoanProcess> {
@@ -74,15 +86,15 @@ export class LoanProcess {
             )
     }
 
-    getCustomerId(id: number): Observable<LoanProcess> {
-        return EnrollmentProcessFactory.fromCustomer(this.customer).get(id)
-            .map(
-                (value) => {
-                    this.loanAccount.loanCustomer = value;
-                    return this;
-                }
-            )
-    }
+    // getCustomerId(id: number): Observable<LoanProcess> {
+    //     return EnrollmentProcessFactory.fromCustomer(this.customer).get(id)
+    //         .map(
+    //             (value) => {
+    //                 this.loanAccount.loanCustomer = value;
+    //                 return this;
+    //             }
+    //         )
+    // }
 
     static getProcessConfig() {
         return loanProcessConfig;

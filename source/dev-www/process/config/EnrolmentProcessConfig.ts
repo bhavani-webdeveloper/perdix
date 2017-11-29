@@ -4,20 +4,7 @@ let config = {
             onNew: {
                 "defaults": [
                     {
-                        "name": "SampleSimplePolicy",
-                        "arguments": {
-                            "name": "sasdf"
-                        }
-                    },
-                    {
-                        "name": "SampleMultiPolicy",
-                        "arguments": {
-                            "testargs": {
-                                "shahal": "tharique"
-                            }
-                        }
-                    }, {
-                        "name": "LoadRelatedCustomerData",
+                        "name": "LoadNewCustomerData",
                         "arguments": null
                     }
                 ]
@@ -33,7 +20,7 @@ let config = {
             beforeProceed: {
                 "defaults": [
                     {
-                        "name": "preSaveCustomerPolicy",
+                        "name": "PreSaveCustomerPolicy",
                         "arguments": null
                     }
                 ]
