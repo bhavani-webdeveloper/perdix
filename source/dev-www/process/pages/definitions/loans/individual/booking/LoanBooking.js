@@ -481,7 +481,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                         if(model.postDatedTransactionNotAllowed) {
                             if (customerSignatureDate.diff(cbsdate, "days") <0) {
-                                PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to CBS date", 5000);
+                                PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to system date", 5000);
                                 return false;
                             }
                         }
