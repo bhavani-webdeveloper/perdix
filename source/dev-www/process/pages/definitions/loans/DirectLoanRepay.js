@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils) {
+    "Groups", "AccountingUtils","Queries", "Enrollment", "Files", "elementsUtils", "Utils",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils,Queries, Enrollment, Files, elementsUtils, Utils) {
 
         function backToLoansList() {
             try {
