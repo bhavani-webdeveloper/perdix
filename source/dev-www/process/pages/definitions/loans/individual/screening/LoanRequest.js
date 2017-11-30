@@ -1666,7 +1666,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             },
                             {
                                 key: "loanAccount.collateral[].hypothecatedToBank",
-                                title:"HYPOTHECATED_TO_KINARA",
+                                title:"HYPOTHECATED_TO_BANK",
                                 type: "string",
                             },
                             {
@@ -2000,7 +2000,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 {
                     key: "loanAccount.estimatedEmi",
                     type: "amount",
-                    title: "ESTIMATED_KINARA_EMI",
+                    title: "ESTIMATED_BANK_EMI",
                     readonly:true
                 },
                 {
@@ -2065,7 +2065,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 {
                     key: "loanAccount.estimatedEmi",
                     type: "amount",
-                    title: "ESTIMATED_KINARA_EMI",
+                    title: "ESTIMATED_BANK_EMI",
                     readonly:true
                 },
                 {

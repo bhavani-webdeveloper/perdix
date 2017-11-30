@@ -6,6 +6,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
+                    model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     $log.info("ViewLoans initialiized");
                 },
                 offline: false,
@@ -88,14 +89,14 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                 {
                                     name: "Repay",
                                     desc: "",
-                                    fn: function(item, index){
+                                    fn: function(item, model){
                                         $state.go('Page.Engine', {
                                             pageName: 'loans.LoanRepay',
                                             pageId: [item.accountNumber,item.urnNo].join(".")
                                         })
                                     },
-                                    isApplicable: function(item, index){
-                                        return true;
+                                    isApplicable: function(item, model){
+                                        return false;
                                     }
                                 },
                                 {

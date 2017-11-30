@@ -67,7 +67,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                         },
                         getActions: function(){
                             return [
-                                {
+                                /*{
                                     name: "View Details",
                                     desc: "",
                                     fn: function(item, index){
@@ -82,7 +82,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         //}
                                         return true;
                                     }
-                                },
+                                },*/
                                 {
                                     name: "Repay",
                                     desc: "",
