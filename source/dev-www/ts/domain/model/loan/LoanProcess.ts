@@ -7,14 +7,15 @@ import {ILoanRepository} from "./ILoanRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
+import {EnrolmentProcess} from "../customer/EnrolmentProcess";
 import Customer = require("../customer/Customer");
 import LoanProcessFactory = require("./LoanProcessFactory");
 import {PolicyManager} from "../../shared/PolicyManager";
 import {LeadProcess} from "../lead/LeadProcess";
 import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
 import EnrolmentProcessFactory = require("../customer/EnrolmentProcessFactory");
-
-
+import Utils = require("../../shared/Utils");
+import * as _ from 'lodash';
 
 
 
@@ -87,15 +88,21 @@ export class LoanProcess {
             )
     }
 
-    // getCustomerId(id: number): Observable<LoanProcess> {
-    //     return EnrollmentProcessFactory.fromCustomer(this.customer).get(id)
-    //         .map(
-    //             (value) => {
-    //                 this.loanAccount.loanCustomer = value;
-    //                 return this;
-    //             }
-    //         )
-    // }
+    getCustomerRelation(customer: Customer, coCustomers: Array<Customer>): Customer {
+        if(customer) {
+            let index = _.findIndex(coCustomers, function(cust) {
+                return customer.id == cust.id;
+            })
+            if (index == -1) {return new Customer();}
+            return coCustomers[index];
+        } else {
+            return new Customer();
+        }
+        
+    }
+
+  
+  
 
     static getProcessConfig() {
         return loanProcessConfig;

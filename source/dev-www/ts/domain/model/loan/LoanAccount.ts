@@ -220,13 +220,13 @@ class LoanAccount {
     private _loanCustomer: Customer;
 
     @Type(() => Customer)
-    applicantCustomer: Customer;
+    applicantCustomer: Customer = [];
 
     @Type(() => Customer)
-    coApplicantCustomers: Customer[];
+    coApplicantCustomers: Customer[] = [];
 
     @Type(() => Customer)
-    guarantorCustomers: Customer[];
+    guarantorCustomers: Customer[] = [];
 
 
     get loanCustomer(): Customer {
@@ -237,6 +237,34 @@ class LoanAccount {
         this._loanCustomer = value;
         this.customerId = value.id;
         this.urnNo = value.urnNo;
+    }
+
+    public setRelatedCustomerWithRelation(customer: Customer, relation: string): LoanAccount {
+        switch (relation.toUpperCase()) {
+            case 'APPLICANT':
+                this.applicantCustomer = customer;
+                break;
+
+            case 'COAPPLICANT':
+            case 'CO-APPLICANT':
+                if(!_.isArray(this.coApplicantCustomers)) {
+                    this.coApplicantCustomers = [];
+                }
+                this.coApplicantCustomers.push(customer);
+                break;
+
+            case 'GUARANTOR':
+                this.guarantorCustomers.push(customer);
+                break;
+
+            default:
+                break;
+        }
+        // let lcr = new LoanCustomerRelation();
+        // lcr.relation = relation;
+        // this.loanCustomerRelations.push(lcr);
+
+        return this;
     }
 
     public setRelatedCustomer(customer: Customer): LoanAccount{

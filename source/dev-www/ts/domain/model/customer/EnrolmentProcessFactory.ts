@@ -45,18 +45,7 @@ class EnrolmentProcessFactory {
   }
 
 
-  static fromCustomerID(id: number): Observable<EnrolmentProcess> {
-      let enrollmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
-      return enrollmentRepo.getCustomerById(id)
-            .map(
-                (value: Object) => {
-                    let ep:EnrolmentProcess = new EnrolmentProcess();
-                    //noinspection TypeScriptValidateTypes
-                    ep.customer = plainToClass(Customer, Utils.toJSObj(value));
-                    return ep;
-                }
-            )
-  }
+
 
 
 

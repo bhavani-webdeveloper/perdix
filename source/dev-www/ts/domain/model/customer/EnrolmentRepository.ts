@@ -1,5 +1,6 @@
 
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
+import {EnrolmentProcess} from "./EnrolmentProcess";
 import Customer = require("./Customer");
 import {Observable} from "@reactivex/rxjs";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
@@ -15,11 +16,9 @@ export class EnrolmentRepository implements IEnrolmentRepository {
         this.enrolmentService = AngularResourceService.getInstance().getNGService('Enrollment');
     }
 
-    getCustomerById(id: any): Observable<Customer> {
-        return Observable.fromPromise(this.enrolmentService.getCustomerById({id: id}).$promise)
-            .map((value) => {
-                return plainToClass(Customer, Utils.toJSObj(value));
-            });
+    getCustomerById(id: any): Observable<EnrolmentProcess> {
+        let customerPromise = this.enrolmentService.getCustomerById({id: id}).$promise;
+        return Observable.fromPromise(customerPromise);
     }
 
 }

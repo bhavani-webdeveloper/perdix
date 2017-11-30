@@ -5,6 +5,7 @@ import RepositoryFactory = require('../../shared/RepositoryFactory');
 import Customer = require("./Customer");
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
+import Utils = require("../../shared/Utils");
 import {plainToClass} from "class-transformer";
 
 
@@ -53,6 +54,21 @@ export class EnrolmentProcess {
                     return this;
                 }
             )
+    }
+
+    static fromCustomerID(id: number): Observable<EnrolmentProcess> {
+      let enrolmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
+      return enrolmentRepo.getCustomerById(id)
+        .map(
+            (value: Object) => {
+                let obj:Object = Utils.toJSObj(value);
+                let ep:EnrolmentProcess = new EnrolmentProcess();
+                let cs:Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
+                ep.customer = cs;
+
+                return ep;
+            }
+        )
     }
 
     static getProcessConfig() {

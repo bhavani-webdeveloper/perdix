@@ -1,8 +1,8 @@
 
 import {Observable} from "@reactivex/rxjs";
-import Customer = require("./Customer");
+import {EnrolmentProcess} from "./EnrolmentProcess";
 
 export interface IEnrolmentRepository {
 
-	getCustomerById(id: number): Observable<Customer>;
+	getCustomerById(id: number): Observable<EnrolmentProcess>;
 }

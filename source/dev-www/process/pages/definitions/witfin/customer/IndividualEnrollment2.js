@@ -1,4 +1,5 @@
-define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrollmentProcess, AngularResourceService) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrolmentProcess, AngularResourceService) {
+    EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
         pageUID: "witfin.customer.IndividualEnrollment2",
         pageType: "Engine",
@@ -87,6 +88,60 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
 
 
+                }
+            }
+            var overridesFields = function(bundlePageObj) {
+                return {
+                    "KYC.customerSearch": {
+                        type: "lov",
+                        key: "customer.id",
+                        onSelect: function(valueObj, model, context){
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+
+                            var enrolmentDetails = {
+                                'customerId': model.customer.id,
+                                'customerClass': model._bundlePageObj.pageClass,
+                                'firstName': model.customer.firstName
+                            };
+
+                            if (_.hasIn(model, 'customer.id')){
+                                BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                            }
+                            
+                            EnrolmentProcess.fromCustomerID(valueObj.id)
+                                
+                                .subscribe(function(customer){
+                                    
+                                    if(bundlePageObj.pageClass === 'applicant') {
+                                       model.customer = model.loanProcess.loanAccount.setRelatedCustomerWithRelation(customer.customer, "Applicant").applicantCustomer; 
+                                    }
+                                    if(bundlePageObj.pageClass === 'co-applicant') {
+                                       
+                                        model.customer = model.loanProcess.getCustomerRelation(customer.customer, model.loanProcess.loanAccount.setRelatedCustomerWithRelation(customer.customer, "Co-Applicant").coApplicantCustomers);
+                                    }
+
+                                    if(bundlePageObj.pageClass === 'gurantor') {
+                                       
+                                        model.customer = model.loanProcess.getCustomerRelation(customer.customer, model.loanProcess.loanAccount.setRelatedCustomerWithRelation(customer.customer, "Guarantor").guarantorCustomers);
+                                    }
+                                    PageHelper.showProgress("customer-load", "Done..", 5000);
+
+                                }, function(err) {
+                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                });
+                            // Enrollment.getCustomerById({id: valueObj.id})
+                            //         .$promise
+                            //         .then(function(res){
+                            //             PageHelper.showProgress("customer-load", "Done..", 5000);
+                            //             model.customer = Utils.removeNulls(res, true);
+                            //             model.customer.identityProof = "Pan Card";
+                            //             model.customer.addressProof= "Aadhar Card";
+                            //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                            //         }, function(httpRes){
+                            //             PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                            //         })
+                        }
+                    }
                 }
             }
             var getIncludes = function (model) {
@@ -245,7 +300,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.currentStage = bundleModel.currentStage;
                      self = this;
                     var formRequest = {
-                        "overrides": "",
+                        "overrides": overridesFields(bundlePageObj),
                         "includes": getIncludes (model),
                         "excludes": [
                             "KYC.addressProofSameAsIdProof",
@@ -279,21 +334,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     else {
                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
                     }
-                   
-                        model.loanProcess = bundleModel.loanProcess;
-                        model.customer = bundleModel.loanProcess.loanAccount.applicantCustomer;
                         
-                        if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                            model.customer.enterprise = {};
+                        model.loanProcess = bundleModel.loanProcess;
+                        if(bundlePageObj.pageClass === 'applicant') {
+                            model.customer = bundleModel.loanProcess.loanAccount.applicantCustomer;
                         }
+                        if(bundlePageObj.pageClass === 'co-applicant') {
+                            model.customer = model.loanProcess.getCustomerRelation(model.customer,  bundleModel.loanProcess.loanAccount.coApplicantCustomers);
+                            // model.customer = bundleModel.loanProcess.loanAccount.coApplicantCustomers;
+                        }
+                        if(bundlePageObj.pageClass === 'gurantor') {
+                            model.customer = model.loanProcess.getCustomerRelation(model.customer,  bundleModel.loanProcess.loanAccount.guarantorCustomers);
+                            // model.customer = bundleModel.loanProcess.loanAccount.coApplicantCustomers;
+                        }
+                        
+                        
+                        // if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                        //     model.customer.enterprise = {};
+                        // }
 
                         model = Utils.removeNulls(model,true);
                         
                         BundleManager.pushEvent("on-customer-load", {name: "11"})
 
-                    if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                            model.customer.enterprise = {};
-                        }
+                        // if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                        //     model.customer.enterprise = {};
+                        // }
 
                     
 
