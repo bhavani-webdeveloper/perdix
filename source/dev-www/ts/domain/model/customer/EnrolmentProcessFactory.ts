@@ -37,6 +37,13 @@ class EnrolmentProcessFactory {
     return pm.applyPolicies();
   }
 
+  static beforeSaveEnrolment(obj: Customer): Observable<EnrolmentProcess> {
+    let ep = new EnrolmentProcess();
+    ep.customer = obj;
+    let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentPolicyFactory.getInstance(), 'beforeSave', EnrolmentProcess.getProcessConfig());
+    return pm.applyPolicies();
+  }
+
 
   static fromCustomerID(id: number): Observable<EnrolmentProcess> {
       let enrollmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);

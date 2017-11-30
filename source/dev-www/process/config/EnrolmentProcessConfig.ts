@@ -25,6 +25,14 @@ let config = {
                     }
                 ]
             },
+            beforeSave: {
+                "defaults": [
+                    {
+                        "name": "LoadEnrolmentCustomerDataPolicy",
+                        "arguments": null
+                    }
+                ]
+            },
         },
 
         'command': {

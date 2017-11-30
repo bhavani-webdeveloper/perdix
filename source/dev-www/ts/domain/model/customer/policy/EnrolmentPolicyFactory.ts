@@ -2,6 +2,7 @@ import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../shared/IPolicy";
 import {LoadNewCustomerData} from "./LoadNewCustomerData";
 import {PreSaveCustomerPolicy} from "./PreSaveCustomerPolicy";
+import {LoadEnrolmentCustomerDataPolicy} from "./LoadEnrolmentCustomerDataPolicy";
 
 export class EnrolmentPolicyFactory implements IPolicyFactory{
 
@@ -24,6 +25,8 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
                 return obj;
             case 'PreSaveCustomerPolicy':
                 return new PreSaveCustomerPolicy();
+            case 'LoadEnrolmentCustomerDataPolicy':
+                return new LoadEnrolmentCustomerDataPolicy();
             default:
                 return null;
 

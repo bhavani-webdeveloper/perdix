@@ -241,25 +241,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
 
-                    var branch1 = formHelper.enum('branch_id').data;
-                    var allowedBranch = [];
-                    for (var i = 0; i < branch1.length; i++) {
-                        if ((branch1[i].name) == SessionStore.getBranch()) {
-                            allowedBranch.push(branch1[i]);
-                            break;
-                        }
-                    }
-                    var allowedCentres = [];
-                    var centres = SessionStore.getCentres();
-                    var centreName = [];
-
-                    if(centres && centres.length)
-                    {
-                        for (var i = 0; i < centres.length; i++) {
-                         centreName.push(centres[i].id);
-                         allowedCentres.push(centres[i]);
-                        }
-                    }
 
                     model.currentStage = bundleModel.currentStage;
                      self = this;
@@ -298,140 +279,89 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     else {
                         self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
                     }
-                    // else {
+                   
                         model.loanProcess = bundleModel.loanProcess;
                         model.customer = bundleModel.loanProcess.loanAccount.applicantCustomer;
-                        // console.log(model.customer)
-                        // model.customer = model.customer || {};
+                        
                         if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                             model.customer.enterprise = {};
                         }
 
-                        // model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
-
-                        // model.customer.centreId = centreName[0];
-                        // model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
-
-                        //model.branchId = SessionStore.getBranchId() + '';
-                        // model.customer.date = model.customer.date || Utils.getCurrentDate();
-                        // model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
                         model = Utils.removeNulls(model,true);
-                        //model.customer.kgfsName = SessionStore.getBranch();
-                        // model.customer.identityProof = model.customer.identityProof || "Pan Card";
-                        // model.customer.addressProof= model.customer.addressProof || "Aadhar Card";
-                        // model.customer.customerType = 'Individual';
+                        
                         BundleManager.pushEvent("on-customer-load", {name: "11"})
-
-                        // if(!model.customer.expenditures){
-                        //     model.customer.expenditures = [];
-                        //     model.customer.expenditures.push({
-                        //         "expenditureSource": "Monthly Declared Household expenses",
-                        //         "frequency": "Monthly"
-                        //     });
-                        // }
-
-
-                        // if(!model.customer.familyMembers){
-                        //     model.customer.familyMembers = [
-                        //         {
-                        //             'relationShip': 'self'
-                        //         }
-                        //     ]
-                        // }
-
-                       
-                    // }
-
 
                     if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                             model.customer.enterprise = {};
                         }
 
-                    if (_.hasIn(model, 'loanRelation')){
-                        console.log(model.loanRelation);
-                        if(model.loanRelation){
-                            if(model.loanRelation.enterpriseId)
-                            {
-                                var busId = model.loanRelation.enterpriseId;
-                                Enrollment.getCustomerById({id:busId})
-                                    .$promise
-                                    .then(function(res){
-                                        model.customer.enterprise = res.enterprise;
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                            }
-                        }
-                    }
+                    
 
 
 
                 },
 
                 preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                            // console.log("Inside preDestroy");
-                            // console.log(arguments);
-                            if (bundlePageObj){
-                                var enrolmentDetails = {
-                                    'customerId': model.customer.id,
-                                    'customerClass': bundlePageObj.pageClass,
-                                    'firstName': model.customer.firstName
-                                }
-                                // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                                BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
-                            }
-                            return $q.resolve();
-                        },
-                        eventListeners: {
-                            "test-listener": function(bundleModel, model, obj){
+                    // console.log("Inside preDestroy");
+                    // console.log(arguments);
+                    if (bundlePageObj){
+                        var enrolmentDetails = {
+                            'customerId': model.customer.id,
+                            'customerClass': bundlePageObj.pageClass,
+                            'firstName': model.customer.firstName
+                        }
+                        // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
+                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                    }
+                    return $q.resolve();
+                },
+                eventListeners: {
+                    "test-listener": function(bundleModel, model, obj){
 
-                            },
-                            "lead-loaded": function(bundleModel, model, obj){
-                                model.customer.mobilePhone = obj.mobileNo;
-                                model.customer.gender = obj.gender;
-                                model.customer.firstName = obj.leadName;
-                                model.customer.maritalStatus = obj.maritalStatus;
-                                model.customer.customerBranchId = obj.branchId;
-                                model.customer.centreId = obj.centreId;
-                                model.customer.centreName = obj.centreName;
-                                model.customer.street = obj.addressLine2;
-                                model.customer.doorNo = obj.addressLine1;
-                                model.customer.pincode = obj.pincode;
-                                model.customer.district=obj.district;
-                                model.customer.state=obj.state;
-                                model.customer.locality=obj.area;
-                                model.customer.villageName=obj.cityTownVillage;
-                                model.customer.landLineNo=obj.alternateMobileNo;
-                                model.customer.dateOfBirth=obj.dob;
-                                model.customer.age=obj.age;
-                                model.customer.gender=obj.gender;
-                                model.customer.landLineNo = obj.alternateMobileNo;
+                    },
+                    "lead-loaded": function(bundleModel, model, obj){
+                        model.customer.mobilePhone = obj.mobileNo;
+                        model.customer.gender = obj.gender;
+                        model.customer.firstName = obj.leadName;
+                        model.customer.maritalStatus = obj.maritalStatus;
+                        model.customer.customerBranchId = obj.branchId;
+                        model.customer.centreId = obj.centreId;
+                        model.customer.centreName = obj.centreName;
+                        model.customer.street = obj.addressLine2;
+                        model.customer.doorNo = obj.addressLine1;
+                        model.customer.pincode = obj.pincode;
+                        model.customer.district=obj.district;
+                        model.customer.state=obj.state;
+                        model.customer.locality=obj.area;
+                        model.customer.villageName=obj.cityTownVillage;
+                        model.customer.landLineNo=obj.alternateMobileNo;
+                        model.customer.dateOfBirth=obj.dob;
+                        model.customer.age=obj.age;
+                        model.customer.gender=obj.gender;
+                        model.customer.landLineNo = obj.alternateMobileNo;
 
 
-                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                    $log.info(model.customer.familyMembers[i].relationShip);
-                                    model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                    /*if (model.customer.familyMembers[i].relationShip == "self") {
-                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                        break;
-                                    }*/
-                                }
-                            },
-                            "origination-stage": function(bundleModel, model, obj){
-                                model.currentStage = obj
+                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                            $log.info(model.customer.familyMembers[i].relationShip);
+                            model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                            /*if (model.customer.familyMembers[i].relationShip == "self") {
+                                model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                break;
+                            }*/
                             }
                         },
-                        offline: false,
-                        getOfflineDisplayItem: function(item, index){
-                            return [
-                                item.customer.urnNo,
-                                Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                                item.customer.villageName
-                            ]
-                        },
+                        "origination-stage": function(bundleModel, model, obj){
+                            model.currentStage = obj
+                        }
+                    },
+                    offline: false,
+                    getOfflineDisplayItem: function(item, index){
+                        return [
+                            item.customer.urnNo,
+                            Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
+                            item.customer.villageName
+                        ]
+                    },
                 form: [],
 
                 schema: function() {
@@ -504,88 +434,48 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         // $q.all start
                         $q.all(fpPromisesArr).then(function(){
-                            try{
-                                // var liabilities = reqData['customer']['liabilities'];
-                                // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                //     for (var i=0; i<liabilities.length;i++){
-                                //         var l = liabilities[i];
-                                //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                //     }
-                                // }
-
-                                // var financialAssets = reqData['customer']['financialAssets'];
-                                // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                //     for (var i=0; i<financialAssets.length;i++){
-                                //         var f = financialAssets[i];
-                                //         f.amountInPaisa = f.amountInPaisa * 100;
-                                //     }
-                                // }
-                            } catch(e){
-                                $log.info("Error trying to change amount info.");
-                            }
-
-                            reqData.customer.verified = true;
-                            if (reqData.customer.hasOwnProperty('verifications')){
-                                var verifications = reqData.customer['verifications'];
-                                for (var i=0; i<verifications.length; i++){
-                                    if (verifications[i].houseNoIsVerified){
-                                        verifications[i].houseNoIsVerified=1;
-                                    }
-                                    else{
-                                        verifications[i].houseNoIsVerified=0;
-                                    }
-                                }
-                            }
-                            try{
-                                for(var i=0;i<reqData.customer.familyMembers.length;i++){
-                                    var incomes = reqData.customer.familyMembers[i].incomes;
-                                    if (incomes){
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }catch(err){
-                                console.error(err);
-                            }
+                           
+                        
+                            
 
                             EnrollmentHelper.fixData(reqData);
-                            if (reqData.customer.addressProof == 'Aadhar Card' &&
-                                !_.isNull(reqData.customer.addressProofNo)){
-                                reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
-                            }
+                            
 
                             if (preSaveOrProceed(reqData) == false){
                                 return;
                             }
-                            EnrollmentHelper.saveData(reqData)
-                                    .then(
-                                            function(res){
-                                                formHelper.resetFormValidityState(formCtrl);
-                                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                                                Utils.removeNulls(res.customer, true);
-                                                model.customer = res.customer;
-                                                if (model._bundlePageObj){
-                                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                                }
-                                            },
-                                            function(httpRes){
-                                                PageHelper.showProgress('enrolment', 'Oops. Some error', 5000);
-                                                PageHelper.showErrors(httpRes);
-                                            }
-                                    );
+                            // EnrollmentHelper.saveData(reqData)
+                            //     .then(
+                            //         function(res){
+                            //             formHelper.resetFormValidityState(formCtrl);
+                            //             PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                            //             Utils.removeNulls(res.customer, true);
+                            //             model.customer = res.customer;
+                            //             if (model._bundlePageObj){
+                            //                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                            //             }
+                            //         },
+                            //         function(httpRes){
+                            //             PageHelper.showProgress('enrolment', 'Oops. Some error', 5000);
+                            //             PageHelper.showErrors(httpRes);
+                            //         }
+                            //     );
+                            model.loanProcess.save()
+                                .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(value){
+                                        formHelper.resetFormValidityState(formCtrl);
+                                        Utils.removeNulls(value,true);
+                                        PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                        if (model._bundlePageObj){
+                                            BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                        }
+                                    }, function(err) {
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    });
                         });
                     },
                     submit: function(model, form, formName){
@@ -620,26 +510,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         // $q.all start
                         $q.all(fpPromisesArr).then(function(){
-                            try{
-                                // var liabilities = reqData['customer']['liabilities'];
-                                // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                //     for (var i=0; i<liabilities.length;i++){
-                                //         var l = liabilities[i];
-                                //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                //     }
-                                // }
-
-                                // var financialAssets = reqData['customer']['financialAssets'];
-                                // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                //     for (var i=0; i<financialAssets.length;i++){
-                                //         var f = financialAssets[i];
-                                //         f.amountInPaisa = f.amountInPaisa * 100;
-                                //     }
-                                // }
-                            } catch(e){
-                                $log.info("Error trying to change amount info.");
-                            }
+                           
 
                             reqData['enrollmentAction'] = 'PROCEED';
 
@@ -657,29 +528,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 }
                             }
-                            // try{
-                            //     for(var i=0;i<reqData.customer.familyMembers.length;i++){
-                            //         var incomes = reqData.customer.familyMembers[i].incomes;
-                            //         if (incomes){
-                            //             for(var j=0;j<incomes.length;j++){
-                            //                 switch(incomes[i].frequency){
-                            //                     case 'M': incomes[i].monthsPerYear=12; break;
-                            //                     case 'Monthly': incomes[i].monthsPerYear=12; break;
-                            //                     case 'D': incomes[i].monthsPerYear=365; break;
-                            //                     case 'Daily': incomes[i].monthsPerYear=365; break;
-                            //                     case 'W': incomes[i].monthsPerYear=52; break;
-                            //                     case 'Weekly': incomes[i].monthsPerYear=52; break;
-                            //                     case 'F': incomes[i].monthsPerYear=26; break;
-                            //                     case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                            //                     case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                            //                 }
-                            //             }
-                            //         }
-
-                            //     }
-                            // }catch(err){
-                            //     console.error(err);
-                            // }
+                            
                             if (preSaveOrProceed(reqData) == false){
                                 return;
                             }
@@ -703,6 +552,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function(err) {
                                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
                                     });
                         });

@@ -27,6 +27,14 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
+                beforeSave: {
+                    "defaults": [
+                        {
+                            "name": "LoadEnrolmentCustomerDataPolicy",
+                            "arguments": null
+                        }
+                    ]
+                },
             },
             'command': {
                 'OverlayLeadData': {}
