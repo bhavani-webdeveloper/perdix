@@ -2,11 +2,11 @@ define({
     pageUID: "loans.group.GroupApplication",
     pageType: "Engine",
     dependencies: ["$log", "LoanProcess", "irfSimpleModal", "Groups", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "LoanAccount",
     ],
 
     $pageFn: function($log, LoanProcess, irfSimpleModal, Groups, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, LoanAccount) {
 
 
         var nDays = 15;
@@ -77,9 +77,46 @@ define({
             }
         };
 
+        var activateLoans = function(jlgGroupMember) {
+            var deferred = $q.defer();
+            if(jlgGroupMember.loanAccount.accountNumber) {
+                LoanAccount.activateLoan({
+                    "accountId": jlgGroupMember.loanAccount.accountNumber
+                }, function(data) {
+                    $log.info("Inside success of activateLoan");
+                    LoanProcess.generateScheduleForSpecifiedDate({
+                            // "accountNumber": model._queue.accountNumber,
+                            "loanId": jlgGroupMember.loanAccount.id,
+                            "amount": jlgGroupMember.loanAmount,
+                            "scheduledDisbursementDate":jlgGroupMember.scheduledDisbursementDate,
+                            "firstRepaymentDate":jlgGroupMember.firstRepaymentDate
+                        })
+                        .$promise
+                        .then(function(resp) {
+                            deferred.resolve(resp);
+                        }, function(httpRes) {
+                            PageHelper.showProgress('loan-load', 'Failed to load the EMI Schedule. Try again.', 4000);
+                            PageHelper.showErrors(httpRes);
+                            deferred.reject(httpRes);
+                        });
+                }, function(res) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(res);
+                    PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
+                    deferred.reject(res);
+                });
+            }
+            return deferred;
+        }
+
         var fillNames = function(model) {
             var deferred = $q.defer();
+            var promiseArr = [];
+            promiseArr.push(deferred);
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
+                if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                    promiseArr.push(activateLoans(member));
+                }
                 Enrollment.get({
                     id: member.customerId
                 }, function(resp, headers) {
@@ -104,6 +141,7 @@ define({
                     } catch (err) {
 
                     }
+
                     if (key >= model.group.jlgGroupMembers.length - 1) {
                         deferred.resolve(model);
                     }
@@ -111,7 +149,7 @@ define({
                     deferred.reject(res);
                 });
             });
-            return deferred.promise;
+            return promiseArr;
         };
 
         var saveData = function(reqData) {
@@ -186,8 +224,7 @@ define({
                         model.group.groupRemarks = null;
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
-                            fillNames(model).then(function(m) {
-                                model = m;
+                            $q.all(fillNames(model)).then(function(m) {
                                 Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                     for (i = 0; i < resp.length; i++) {
                                         $log.info("hi");
