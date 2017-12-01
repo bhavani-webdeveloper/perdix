@@ -305,11 +305,13 @@ define({
                         "key": "group.scheduledDisbursementDate",
                         "required":true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "readonly": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }, {
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
+                        "readonly": true,
                         "required":true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
