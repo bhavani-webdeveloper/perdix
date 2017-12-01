@@ -82,11 +82,6 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LoanOriginationDashboardCtrl"
 	},{
-		name: "Page.WitfinLoanOriginationDashboard",
-		url: "/WitfinLoanOriginationDashboard",
-		templateUrl: "process/pages/templates/Page.Dashboard.html",
-		controller: "WitfinLoanOriginationDashboardCtrl"
-	},{
 		name: "Page.UserDashboard",
 		url: "/UserDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
