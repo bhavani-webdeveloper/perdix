@@ -49,7 +49,7 @@ gulp.task('fonts', function(){
         .pipe(gulp.dest(buildDirectory + '/fonts'));
 })
 
-gulp.task('assets', function(){
+gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
     return gulp.src([
         'dev-www/img/**/*',
         'dev-www/modules/**/*.' + '+(json|html)',
