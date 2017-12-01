@@ -620,6 +620,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.udf.userDefinedFieldValues.udf36",
                                 condition: "model.customer.udf.userDefinedFieldValues.udf33 == 'Aadhar Card'",
                                 //type: "qrcode",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string","null"],
+                                },
                                 onCapture: function(result, model, form) {
                                     $log.info(result); // spouse id proof
                                     var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
@@ -1138,21 +1142,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "select",
                             },
                             "cropName": {
-                                key: "customer.udf.userDefinedFieldValues.udf15",
+                                key: "customer.udf.userDefinedFieldValues.udf30",
                                 orderNo: 30,
                             },
                             "irrigated": {
                                 key: "customer.udf.userDefinedFieldValues.udf26",
                                 orderNo: 40,
                             },
+                            "nonIrrigated": {
+                                key: "customer.udf.userDefinedFieldValues.udf15",
+                                orderNo: 50,
+                            },
                             "harvestMonth": {
                                 key: "customer.udf.userDefinedFieldValues.udf27",
-                                orderNo: 50,
+                                orderNo: 60,
                                 type: "select"
                             },
                             "landArea": {
                                 key: "customer.udf.userDefinedFieldValues.udf28",
-                                orderNo: 60,
+                                orderNo: 70,
                             }
                         }
                     }
@@ -1255,6 +1263,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "nameOfRo": {
                         key: "customer.nameOfRo",
+                        readonly: true,
                     },
                     "houseVerificationPhoto": {
                         key: "customer.houseVerificationPhoto",

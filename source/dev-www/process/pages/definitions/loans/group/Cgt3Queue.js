@@ -92,6 +92,9 @@ define({
 							title: 'GROUP_ID',
 							data: 'id'
 						}, {
+                            title: 'GROUP_CODE',
+                            data: 'groupCode'
+                        }, {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
 						}, {

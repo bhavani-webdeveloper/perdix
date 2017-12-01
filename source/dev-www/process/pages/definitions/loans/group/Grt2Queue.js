@@ -92,14 +92,14 @@ define({
 							title: 'GROUP_ID',
 							data: 'id'
 						}, {
+                            title: 'GROUP_CODE',
+                            data: 'groupCode'
+                        }, {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
-						},{
-							title: 'GROUP_CODE',
-							data: 'groupCode'
 						}]
 					},
 					getActions: function() {

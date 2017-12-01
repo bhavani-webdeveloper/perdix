@@ -83,25 +83,25 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                 }]
             }, {
                 "type": "box",
-                "title": "UPLOAD_ACH_REALIZATION_REPORT",
+                "title": "UPLOAD_COLLECTION_DEMAND_",
                 "items": [{
                     "type": "fieldset",
                     "title": "UPLOAD_STATUS",
                     "items": [{
-                            "key": "ach.achDemandListFileId",
+                            "key": "ach.collectionDemandFileId",
                             "notitle": true,
                             "type": "file",
-                            "category": "ACH",
-                            "subCategory": "cat2",
+                            "category": "Collection",
+                            "subCategory": "offline",
                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             customHandle: function(file, progress, modelValue, form, model) {
                                 PageHelper.showBlockingLoader("Processing...");
                                 ACH.achDemandListUpload(file, progress)
                                     .then(
                                         function(response){
-                                            PageHelper.showProgress("ach-upload", "Upload success!", 5000);
+                                            PageHelper.showProgress("collection-demand-upload", "Upload success!", 5000);
                                         }, function(httpResponse){
-                                            PageHelper.showProgress("ach-upload", "Upload Failed!", 5000);
+                                            PageHelper.showProgress("collection-demand-upload", "Upload Failed!", 5000);
                                         }
                                     )
                                     .finally(function(){
@@ -117,7 +117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                 return ACH.getSchema().$promise;
             },
             actions: {
-                submit: function(model, form, formName) {}
+                
             }
         };
     }

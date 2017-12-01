@@ -149,6 +149,9 @@ define({
 							title: 'GROUP_ID',
 							data: 'id'
 						}, {
+                            title: 'GROUP_CODE',
+                            data: 'groupCode'
+                        }, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
 						}, {

@@ -89,7 +89,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "type":["string","null"],
                             }
                         },
-                        "BusinessOccupationDetails.agricultureDetails.cropName": {
+                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated": {
                             title: "NON_IRRIGATED_LAND",
                             "type": "string",
                             inputmode: "number",
@@ -335,19 +335,48 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "Handcart": "Handcart",
                             }
                         },
-                        "BusinessOccupationDetails.agricultureDetails.cropName": {
+                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated": {
                             title: "NON_IRRIGATED_LAND",
-                            inputmode: "number",
-                            numberType: "tel",
                             "type": "string",
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(angular.isUndefined(value) || value == null) 
+                                        true;
+                                    else {
+                                        var patt = /^(\d*)\.{0,1}(\d*)$/;
+                                        return patt.test(value);
+                                    }                                    
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "only numbers are allowed."
+                            },
                             schema:{
                                 "type":["string","null"],
                             }
                         },
                         "BusinessOccupationDetails.agricultureDetails.irrigated": {
                             title: "IRRIGATED_LAND",
-                            inputmode: "number",
-                            numberType: "tel",
+                            "type": "string",
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(angular.isUndefined(value) || value == null) 
+                                        true;
+                                    else {
+                                        var patt = /^(\d*)\.{0,1}(\d*)$/;
+                                        return patt.test(value);
+                                    }                                    
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "only numbers are allowed."
+                            },
+                            schema:{
+                                "type":["string","null"],
+                            }
+                        },
+                        "BusinessOccupationDetails.agricultureDetails.cropName": {
+                            title: "CROP_NAME",
                             "type": "string",
                             schema:{
                                 "type":["string","null"],
@@ -457,6 +486,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 "No": "No",
                                 "NA" : "NA",
                             }
+                        },
+                        "HouseVerification.nameOfRo": {
+                            orderNo: 1,
                         },
                         "HouseVerification.HouseDetails.buildType" : {
                             required:true,
@@ -708,7 +740,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails",
                         "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
                         "BusinessOccupationDetails.agricultureDetails.landOwnership",
-                        "BusinessOccupationDetails.agricultureDetails.cropName",
+                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated",
                         "BusinessOccupationDetails.agricultureDetails.irrigated",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
                         //"BusinessOccupationDetails.agricultureDetails.landArea",
@@ -812,6 +844,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         // "familyDetails.additionalDetails.privateHospitalTreatment",
                         // "familyDetails.additionalDetails.householdFinanceRelatedDecision",
                         "HouseVerification",
+                        "HouseVerification.nameOfRo",
                         "HouseVerification.HouseDetails",
                         "HouseVerification.HouseDetails.HouseOwnership",
                         "HouseVerification.HouseDetails.landLordName",//drinkingwater
@@ -875,8 +908,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails",
                         "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
                         "BusinessOccupationDetails.agricultureDetails.landOwnership",
-                        "BusinessOccupationDetails.agricultureDetails.cropName",
+                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated",
                         "BusinessOccupationDetails.agricultureDetails.irrigated",
+                        "BusinessOccupationDetails.agricultureDetails.cropName",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
                         "BusinessOccupationDetails.agricultureDetails.landArea",
                         "loanInformation",

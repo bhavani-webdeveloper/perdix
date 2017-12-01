@@ -63,6 +63,9 @@ define({
                             title: 'Group ID',
                             data: 'jlgGroup.id'
                         }, {
+                            title: 'GROUP_CODE',
+                            data: 'jlgGroup.groupCode'
+                        }, {
                             title: 'Group Name',
                             data: 'jlgGroup.groupName'
                         }]

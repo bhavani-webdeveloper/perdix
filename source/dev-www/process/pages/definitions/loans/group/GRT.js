@@ -1090,6 +1090,18 @@ define({
                         irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
                         return;
                     }
+                    if(model.siteCode == 'saija') {
+                        var cbsdate = SessionStore.getCBSDate();
+                        if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
+                            return false;
+                        }
+
+                        if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                            PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
+                            return false;
+                        }
+                    }
 
                     PageHelper.showLoader();
                     irfProgressMessage.pop('GRT-proceed', 'Working...');

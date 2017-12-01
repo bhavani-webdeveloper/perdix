@@ -552,6 +552,21 @@ define({
                                 "readonly": true,
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
+                                "key": "group.jlgGroupMembers[].getDSCData",
+                                "type": "button",
+                                "title": "VIEW_DSC_RESPONSE",
+                                "icon": "fa fa-eye",
+                                "style": "btn-primary",
+                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                "onClick": function(model, formCtrl, form, event) {
+                                    console.log(form);
+                                    console.warn(event);
+                                    var i = event['arrayIndex'];
+                                    console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
+                                    var dscId = model.group.jlgGroupMembers[i].dscId;
+                                    showDscData(dscId);
+                                }
+                            }, {
                                 "key": "group.jlgGroupMembers[].requestDSCOverride",
                                 "type": "button",
                                 "title": "REQUEST_DSC_OVERRIDE",
@@ -596,21 +611,6 @@ define({
                                         PageHelper.showErrors(resp);
                                     });
                                 },
-                            }, {
-                                "key": "group.jlgGroupMembers[].getDSCData",
-                                "type": "button",
-                                "title": "VIEW_DSC_RESPONSE",
-                                "icon": "fa fa-eye",
-                                "style": "btn-primary",
-                                // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
-                                "onClick": function(model, formCtrl, form, event) {
-                                    console.log(form);
-                                    console.warn(event);
-                                    var i = event['arrayIndex'];
-                                    console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
-                                    var dscId = model.group.jlgGroupMembers[i].dscId;
-                                    showDscData(dscId);
-                                }
                             }, {
                                 "key": "group.jlgGroupMembers[].removeMember",
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",

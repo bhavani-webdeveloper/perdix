@@ -1,6 +1,6 @@
 irf.models.factory('LoanProcess',[
-"$resource","$httpParamSerializer","BASE_URL","searchResource",
-function($resource,$httpParamSerializer,BASE_URL,searchResource){
+"$resource","$httpParamSerializer","BASE_URL","searchResource", "Upload", "$q", "PageHelper",
+function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, PageHelper){
     var endpoint = BASE_URL + '/api/loanaccounts';
     /*
     * GET /api/loanaccounts/reverse/{transactionId}/{transactionName} will translate into
@@ -8,7 +8,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
     *
     * */
 
-    return $resource(endpoint, null, {
+    var res = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint+'/:action/:param1/:param2'
@@ -133,6 +133,30 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/generateScheduleForSpecifiedDate',
             isArray:true
-        }
+        },
     });
+
+    res.collectiondemandOfflineUpload = function(file, progress, opts) {
+        var deferred = $q.defer();
+        reqData = {
+            "file": file
+        };
+        Upload.upload({
+            url: endpoint + '/collectiondemand/offlineUpload',
+            data: reqData
+        }).then(function(resp){
+            // TODO handle success
+            console.log(resp);
+            PageHelper.showProgress("page-init", "Upload Successfull.", 5000);
+            deferred.resolve(resp);
+
+        }, function(errResp){
+            // TODO handle error
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    };
+
+    return res;
 }]);
