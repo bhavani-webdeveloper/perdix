@@ -54,6 +54,7 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
         'dev-www/img/**/*',
         'dev-www/modules/**/*.' + '+(json|html)',
         'dev-www/process/**/*.' + '+(json|html|css)',
+        'dev-www/process/config/**/*',
         'dev-www/process/pages/definitions/**/*',
         'dev-www/css/fonts/**/*',
         'dev-www/js/vendor/**/*',
