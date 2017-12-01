@@ -506,7 +506,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     });
                     model.loanAccount.applicant = params.customer.urnNo;              
                 }
-                model.applicant.id = params.customer.id;
+                model.applicant= params.customer;
             },
             "lead-loaded": function(bundleModel, model, obj) {
                 model.lead = obj;
