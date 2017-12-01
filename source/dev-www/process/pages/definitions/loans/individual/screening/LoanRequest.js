@@ -399,6 +399,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             model.currentStage = bundleModel.currentStage;
             model.siteCode = SessionStore.getGlobalSetting("siteCode");
             model.customer=model.customer || {};
+            model.applicant=model.applicant||{};
             model.review = model.review|| {};
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
