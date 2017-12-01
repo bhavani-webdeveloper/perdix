@@ -293,6 +293,15 @@
                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                   ]
                },
+               "loanPurpose3":{
+                  "title":"loanPurpose3",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","CreditCommitteeReview","SanctionInput"
+                  ]
+               },
                "fixedIntrestRate": {
                   "title": "moratorium period in days",
                   "type": "number",
