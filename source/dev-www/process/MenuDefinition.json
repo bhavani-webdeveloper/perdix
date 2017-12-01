@@ -20,6 +20,7 @@
             ]
         },
         "Page/LeadDashboard",
+        "Page/witfinLeadDashboard",
         "Page/LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard",
         {
