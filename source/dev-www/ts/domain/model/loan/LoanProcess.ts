@@ -28,7 +28,7 @@ export class LoanProcess {
     customer: Customer;
     individualLoanRepo: ILoanRepository;
 
-    private _loanCustomerEnrolmentProcess: EnrolmentProcess;
+    loanCustomerEnrolmentProcess: EnrolmentProcess;
     applicantEnrolmentProcess: EnrolmentProcess;
     coApplicantsEnrolmentProcesses: EnrolmentProcess[] = [];
     guarantorsEnrolmentProcesses: EnrolmentProcess[] = [];
@@ -37,16 +37,15 @@ export class LoanProcess {
         this.individualLoanRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess);
     }
 
-    get loanCustomerEnrolmentProcess(): EnrolmentProcess {
-        return this._loanCustomerEnrolmentProcess;
-    }
 
-    set loanCustomerEnrolmentProcess(value: EnrolmentProcess) {
-        this._loanCustomerEnrolmentProcess = value;
-        this.loanAccount.customerId = value.customer.id;
-        this.loanAccount.urnNo = value.customer.urnNo;
-    }
-
+    /**
+     * Sets a new enrolment process as relation to the customer. Internally calls the refresh API to update the loanAccount
+     * accordingly.
+     *
+     * @param enrolmentProcess
+     * @param relation
+     * @returns {LoanProcess}
+     */
     public setRelatedCustomerWithRelation(enrolmentProcess: EnrolmentProcess, relation: LoanCustomerRelationTypes): LoanProcess {
         switch (relation) {
             case LoanCustomerRelationTypes.APPLICANT:
@@ -64,13 +63,34 @@ export class LoanProcess {
                 this.guarantorsEnrolmentProcesses.push(enrolmentProcess);
                 break;
 
+            case LoanCustomerRelationTypes.LOAN_CUSTOMER:
+                this.loanCustomerEnrolmentProcess = enrolmentProcess;
+                break;
             default:
                 break;
         }
 
+        this.refreshRelatedCustomers();
+
         return this;
     }
 
+    /**
+     * Traverse through all the sub enrolment process and update the customer id to loanInput. This
+     * function should be triggered on every customer / save / update.
+     *
+     */
+    public refreshRelatedCustomers(){
+
+    }
+
+    /**
+     * Removes any related customers from the process. Internally calls refreshRelatedCustomers to update
+     * the values in LoanAccount.
+     *
+     * @param customerId
+     * @param relation
+     */
     public removeRelatedEnrolmentProcess(customerId: number, relation: LoanCustomerRelationTypes) {
         if (relation == LoanCustomerRelationTypes.APPLICANT &&
             this.applicantEnrolmentProcess.customer &&
@@ -84,7 +104,13 @@ export class LoanProcess {
             let index = _.findIndex(this.coApplicantsEnrolmentProcesses, function(ep){
                 return ep.customer && (ep.customer.id == customerId);
             })
+        } else if (relation == LoanCustomerRelationTypes.LOAN_CUSTOMER &&
+            this.loanCustomerEnrolmentProcess.customer &&
+            this.loanCustomerEnrolmentProcess.customer.id == customerId){
+            this.loanCustomerEnrolmentProcess = null;
         }
+
+        this.refreshRelatedCustomers();
     }
 
     public setRelatedCustomer(enrolmentProcess: EnrolmentProcess): LoanProcess {

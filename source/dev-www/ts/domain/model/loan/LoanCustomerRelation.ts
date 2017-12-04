@@ -2,7 +2,8 @@
 export enum LoanCustomerRelationTypes {
     APPLICANT = 'Applicant',
     CO_APPLICANT = 'Co-Applicant',
-    GUARANTOR = 'Guarantor'
+    GUARANTOR = 'Guarantor',
+    LOAN_CUSTOMER = 'Customer'
 }
 
 export class LoanCustomerRelation {

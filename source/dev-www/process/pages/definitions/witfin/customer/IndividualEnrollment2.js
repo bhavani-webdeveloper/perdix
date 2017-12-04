@@ -14,7 +14,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var branch = SessionStore.getBranch();
             var pageParams = {
                 readonly: true
-            }
+            };
 
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
@@ -95,47 +95,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         key: "customer.id",
                         onSelect: function (valueObj, model, context) {
                             PageHelper.showProgress('customer-load', 'Loading customer...');
-
-                            var enrolmentDetails = {
-                                'customerId': model.customer.id,
-                                'customerClass': model._bundlePageObj.pageClass,
-                                'firstName': model.customer.firstName
-                            };
-
-                            if (_.hasIn(model, 'customer.id')) {
-                                BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
-                            }
-
                             EnrolmentProcess.fromCustomerID(valueObj.id)
-
-                                .subscribe(function (customer) {
-
-                                    if (bundlePageObj.pageClass === 'applicant') {
-                                        model.customer = model.loanProcess.setRelatedCustomerWithRelation(customer.customer, "Applicant").applicantEnrolmentProcess;
-                                    }
-                                    if (bundlePageObj.pageClass === 'co-applicant') {
-                                        model.customer = model.loanProcess.getCustomerRelation(customer.customer, model.loanProcess.loanAccount.setRelatedCustomerWithRelation(customer.customer, "Co-Applicant").coApplicantCustomers);
-                                    }
-
-                                    if (bundlePageObj.pageClass === 'gurantor') {
-                                        model.customer = model.loanProcess.getCustomerRelation(customer.customer, model.loanProcess.loanAccount.setRelatedCustomerWithRelation(customer.customer, "Guarantor").guarantorCustomers);
-                                    }
-                                    PageHelper.showProgress("customer-load", "Done..", 5000);
-
-                                }, function (err) {
-                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                });
-                            // Enrollment.getCustomerById({id: valueObj.id})
-                            //         .$promise
-                            //         .then(function(res){
-                            //             PageHelper.showProgress("customer-load", "Done..", 5000);
-                            //             model.customer = Utils.removeNulls(res, true);
-                            //             model.customer.identityProof = "Pan Card";
-                            //             model.customer.addressProof= "Aadhar Card";
-                            //             BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                            //         }, function(httpRes){
-                            //             PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                            //         })
+                                .finally(function(){
+                                })
+                                .subscribe(function(enrolmentProcess){
+                                    model.loanProcess.removeRelatedEnrolmentProcess(model.customer.id, model.loanCustomerRelationType);
+                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+                                })
                         }
                     }
                 }

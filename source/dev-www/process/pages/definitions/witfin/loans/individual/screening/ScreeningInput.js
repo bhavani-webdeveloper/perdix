@@ -1,5 +1,11 @@
-define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanProcessFactory"], function(LoanProcess, LoanFactory) {
-    LoanProcess = LoanProcess["LoanProcess"];
+define(["perdix/domain/model/loan/LoanProcess",
+    "perdix/domain/model/loan/LoanProcessFactory",
+    'perdix/domain/model/customer/EnrolmentProcess',
+    "perdix/domain/model/loan/LoanCustomerRelation",
+    ], function(LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
+    var LoanProcess = LoanProcess["LoanProcess"];
+    var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
+    var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
@@ -90,6 +96,38 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                         }
                     }
                     return out;
+                },
+                "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
+                    var deferred = $q.defer();
+                    var model = null;
+                    var loanProcess = bundleModel.loanProcess;
+
+                    switch (definition.pageClass){
+                        case 'co-applicant':
+                            /* TODO Add new coApplicant to loan process and return the model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                        case 'guarantor':
+                            /* TODO Add new guarantor to loan process and return model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.GUARANTOR);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                    }
+                    deferred.resolve(model);
+                    return deferred.promise;
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
@@ -191,7 +229,8 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                                     $this.bundlePages.push({
                                         pageClass: "applicant",
                                         model: {
-                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess
+                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                            loanProcess: loanProcess
                                         }
                                     });
                                 }
@@ -200,7 +239,8 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                                     $this.bundlePages.push({
                                         pageClass: "business",
                                         model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
                                         }
                                     });
                                 }
@@ -214,6 +254,13 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
 
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }

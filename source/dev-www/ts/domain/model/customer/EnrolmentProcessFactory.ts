@@ -19,7 +19,7 @@ import {Customer} from "./Customer";
  */
 
 
-class EnrolmentProcessFactory {
+export class EnrolmentProcessFactory {
 
     static enrolmentPolicyFactory:EnrolmentPolicyFactory = EnrolmentPolicyFactory.getInstance();
     static enrolmentProcessConfig:any = EnrolmentProcess.getProcessConfig();
@@ -52,7 +52,19 @@ class EnrolmentProcessFactory {
         return pm.applyPolicies();
     }
 
+    static createFromCustomerID(id){
+        let enrolmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
+        return enrolmentRepo.getCustomerById(id)
+            .map(
+                (value: Object) => {
+                    let obj: Object = Utils.toJSObj(value);
+                    let ep: EnrolmentProcess = new EnrolmentProcess();
+                    let cs: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
+                    ep.customer = cs;
+                    return ep;
+                }
+            )
+    }
+
 
 }
-
-export = EnrolmentProcessFactory;

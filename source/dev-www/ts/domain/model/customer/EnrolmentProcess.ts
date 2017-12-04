@@ -1,51 +1,52 @@
 ///<amd-dependency path="perdixConfig/EnrolmentProcessConfig" name="enrolmentProcessConfig"/>
 
-import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
+import {RepositoryIdentifiers} from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
 import Utils = require("../../shared/Utils");
 import {plainToClass} from "class-transformer";
 import {PolicyManager} from "../../shared/PolicyManager";
-import EnrolmentProcessFactory = require("./EnrolmentProcessFactory");
 import {Customer, CustomerTypes} from "./Customer";
+import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
+import {EnrolmentProcessFactory} from "./EnrolmentProcessFactory";
 
 
 declare var enrolmentProcessConfig: Object;
 
 export class EnrolmentProcess {
-	remarks: string;
-	stage: string;
+    remarks: string;
+    stage: string;
     customer: Customer;
     enrolmentRepo: IEnrolmentRepository;
 
-    constructor(){
-    	this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
-	}
+    constructor() {
+        this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
+    }
 
-	loanProcessAction(actionName: string): boolean {
-		switch(actionName) {
-			case "SAVE":
-				// var loanProcess = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess)
-				// loanProcess.createIndividualLoan();
-				return true;
-			default:
-				return false;
-		}
-	}
+    loanProcessAction(actionName: string): boolean {
+        switch (actionName) {
+            case "SAVE":
+                // var loanProcess = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess)
+                // loanProcess.createIndividualLoan();
+                return true;
+            default:
+                return false;
+        }
+    }
 
-	save() :any{
+    save(): any {
         /* Calls all business policies associated with save */
-		// return this.enrolmentRepo.updateIndividualLoan(loanAccount);
-	}
+        // return this.enrolmentRepo.updateIndividualLoan(loanAccount);
+    }
 
-	update(): any {
+    update(): any {
         /* Calls all business policies assocaited with proceed */
 
         // plainToClass
 
-		// return this.enrolmentRepo.updateIndividualLoan(loanAccount);
-	}
+        // return this.enrolmentRepo.updateIndividualLoan(loanAccount);
+    }
 
     get(id: number): Observable<EnrolmentProcess> {
         return this.enrolmentRepo.getCustomerById(id)
@@ -58,7 +59,7 @@ export class EnrolmentProcess {
             )
     }
 
-    static createNewProcess(customerType:CustomerTypes = CustomerTypes.INDIVIDUAL): Observable<EnrolmentProcess>{
+    static createNewProcess(customerType: CustomerTypes = CustomerTypes.INDIVIDUAL): Observable<EnrolmentProcess> {
         let ep = new EnrolmentProcess();
         ep.customer = new Customer();
         ep.customer.customerType = customerType;
@@ -67,18 +68,11 @@ export class EnrolmentProcess {
     }
 
     static fromCustomerID(id: number): Observable<EnrolmentProcess> {
-      let enrolmentRepo: IEnrolmentRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
-      return enrolmentRepo.getCustomerById(id)
-        .map(
-            (value: Object) => {
-                let obj:Object = Utils.toJSObj(value);
-                let ep:EnrolmentProcess = new EnrolmentProcess();
-                let cs:Customer = <Customer>plainToClass<Customer, Object>(Customer, obj);
-                ep.customer = cs;
-
-                return ep;
-            }
-        )
+        return EnrolmentProcessFactory.createFromCustomerID(id)
+            .flatMap((enrolmentProcess) => {
+                let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(enrolmentProcess, EnrolmentPolicyFactory.getInstance(), 'onLoad', EnrolmentProcess.getProcessConfig());
+                return pm.applyPolicies();
+            })
     }
 
     static getProcessConfig() {

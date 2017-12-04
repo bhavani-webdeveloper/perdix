@@ -112,7 +112,7 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                         }
                         deferred.resolve(pageObj);
                     } catch (e) {
-                        BundleLog.error(e);
+                        BundleLog.error("Error initializing page", e);
                         pageObj.error = true;
                     }
                 }, function(err){
@@ -345,25 +345,33 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.addTab = function(index, e) {
         e && e.preventDefault();
         var definition = $scope.addTabMenu[index];
-        BundleManager.createPageObject(definition, null, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
-            var openPage = pageObj
-            var insertIndex = -1;
-            for (var i = 0; i < $scope.pages.length; i++) {
-                if ($scope.pages[i].definition == definition) {
-                    insertIndex = i+1;
-                }
-            };
-            if (insertIndex > -1) {
-                $scope.pages.splice(insertIndex, 0, openPage);
-            } else {
-                $scope.pages.push(openPage);
-            }
-            ++definition.openPagesCount;
-            if (definition.maximum <= definition.openPagesCount) {
-                BundleLog.debug($scope.addTabMenu.splice(index, 1));
-            }
-        })
+        var p1 = null;
 
+        if ($scope.bundlePage.onAddNewTab){
+            p1 = $scope.bundlePage.onAddNewTab(definition, $scope.bundleModel);
+        }
+
+        $q.when(p1)
+            .then(function(model){
+                BundleManager.createPageObject(definition, model, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
+                    var openPage = pageObj
+                    var insertIndex = -1;
+                    for (var i = 0; i < $scope.pages.length; i++) {
+                        if ($scope.pages[i].definition == definition) {
+                            insertIndex = i+1;
+                        }
+                    };
+                    if (insertIndex > -1) {
+                        $scope.pages.splice(insertIndex, 0, openPage);
+                    } else {
+                        $scope.pages.push(openPage);
+                    }
+                    ++definition.openPagesCount;
+                    if (definition.maximum <= definition.openPagesCount) {
+                        BundleLog.debug($scope.addTabMenu.splice(index, 1));
+                    }
+                })
+            });
         //BundleManager.initializePageUI(openPage);
     };
 
