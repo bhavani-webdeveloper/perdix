@@ -247,7 +247,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                         PageHelper.hideLoader();
                                     })
                                     .subscribe(function(value){
-                                       $state.go('Page.LeadDashboard', null);
+                                       $state.go('Page.witfinLeadDashboard', null);
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
