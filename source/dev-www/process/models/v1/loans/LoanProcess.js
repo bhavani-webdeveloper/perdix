@@ -146,8 +146,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             data: reqData
         }).then(function(resp){
             // TODO handle success
-            console.log(resp);
-            PageHelper.showProgress("page-init", "Upload Successfull.", 5000);
+            console.log(resp);            
             deferred.resolve(resp);
 
         }, function(errResp){

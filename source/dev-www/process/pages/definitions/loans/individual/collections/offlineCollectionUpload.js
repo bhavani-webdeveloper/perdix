@@ -43,11 +43,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.offlineCollect
                             "subCategory": "cat2",
                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             customHandle: function(file, progress, modelValue, form, model) {
+                                PageHelper.clearErrors();
                                 PageHelper.showBlockingLoader("Processing...");
                                 LoanProcess.collectiondemandOfflineUpload(file, progress)
                                     .then(
                                         function(response){
-                                            PageHelper.showProgress("collection-upload", "Upload success!", 5000);
+                                            if (response && response.data.length > 0 && response.data[0].errorMessage){
+                                                if(response.data[0].errorMessage == "sucessfully save collection demand")
+                                                    PageHelper.showProgress("collection-upload", "Upload success!", 5000);
+                                                else 
+                                                    PageHelper.showErrors({data:{error: response.data[0].errorMessage}});
+                                            }
                                         }, function(httpResponse){
                                             PageHelper.showProgress("Collection-upload", "Upload Failed!", 5000);
                                         }
