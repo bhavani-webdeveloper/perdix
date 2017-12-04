@@ -7,7 +7,6 @@ import DisbursementSchedule = require("./DisbursementSchedule");
 import Guarantor = require("./Guarantor");
 import JewelLoanDetails = require("./JewelLoanDetails");
 import LoanCentre = require("./LoanCentre");
-import LoanCustomerRelation = require("./LoanCustomerRelation");
 import LoanDocument = require("./LoanDocument");
 import LoanInsurance = require("./LoanInsurance");
 import LoanMitigant = require("./LoanMitigant");
@@ -17,6 +16,8 @@ import TelecallingDetail = require("./TelecallingDetail");
 import VehicleLoanDetails = require("./VehicleLoanDetails");
 import Customer = require("../customer/Customer");
 import * as _ from 'lodash';
+import {EnrolmentProcess} from "../customer/EnrolmentProcess";
+import {LoanCustomerRelation, LoanCustomerRelationTypes} from "./LoanCustomerRelation";
 
 //vehicleDTOs
 
@@ -217,86 +218,7 @@ class LoanAccount {
     nominees: Nominee[];
 
 
-    private _loanCustomer: Customer;
 
-    @Type(() => Customer)
-    applicantCustomer: Customer = [];
-
-    @Type(() => Customer)
-    coApplicantCustomers: Customer[] = [];
-
-    @Type(() => Customer)
-    guarantorCustomers: Customer[] = [];
-
-
-    get loanCustomer(): Customer {
-        return this._loanCustomer;
-    }
-
-    set loanCustomer(value: Customer) {
-        this._loanCustomer = value;
-        this.customerId = value.id;
-        this.urnNo = value.urnNo;
-    }
-
-    public setRelatedCustomerWithRelation(customer: Customer, relation: string): LoanAccount {
-        switch (relation.toUpperCase()) {
-            case 'APPLICANT':
-                this.applicantCustomer = customer;
-                break;
-
-            case 'COAPPLICANT':
-            case 'CO-APPLICANT':
-                if(!_.isArray(this.coApplicantCustomers)) {
-                    this.coApplicantCustomers = [];
-                }
-                this.coApplicantCustomers.push(customer);
-                break;
-
-            case 'GUARANTOR':
-                this.guarantorCustomers.push(customer);
-                break;
-
-            default:
-                break;
-        }
-        // let lcr = new LoanCustomerRelation();
-        // lcr.relation = relation;
-        // this.loanCustomerRelations.push(lcr);
-
-        return this;
-    }
-
-    public setRelatedCustomer(customer: Customer): LoanAccount{
-        let index = _.findIndex(this.loanCustomerRelations, function(lcr){
-            return lcr.customerId==customer.id;
-        });
-
-        if (index == -1) {return this;}
-
-        let lcr: LoanCustomerRelation = this.loanCustomerRelations[index];
-        let relation = lcr.relation.toUpperCase();
-
-
-        switch (relation){
-            case 'APPLICANT':
-                this.applicantCustomer = customer;
-                break;
-
-            case 'COAPPLICANT':
-            case 'CO-APPLICANT':
-                this.coApplicantCustomers.push(customer);
-                break;
-
-            case 'GUARANTOR':
-                this.guarantorCustomers.push(customer);
-                break;
-
-            default:
-                break;
-        }
-        return this;
-    }
 
     public static createFromJSON(data:any) {
 

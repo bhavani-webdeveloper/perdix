@@ -105,8 +105,8 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess.loanAccount;
-                                loanAccount.applicantCustomer.customerId = loanAccount.customerId;
-                                
+                                loanAccount.applicantEnrolmentProcess.customerId = loanAccount.customerId;
+
                                 if (loanAccount.currentStage != 'Screening'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
@@ -116,7 +116,7 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        loanRelation: loanAccount.applicantCustomer
+                                        loanRelation: loanAccount.applicantEnrolmentProcess
                                     }
                                 });
 
@@ -141,7 +141,7 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                                         });
                                     }
                                 }
-                                
+
 
                                 $this.bundlePages.push({
                                     pageClass: 'business',
@@ -183,9 +183,42 @@ define(["perdix/domain/model/loan/LoanProcess", "perdix/domain/model/loan/LoanPr
                             });
 
                     } else {
-                        var loanProcess = LoanFactory.newLoanProcess()
+                        var loanProcess = LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
+
+                                if (loanProcess.applicantEnrolmentProcess){
+                                    $this.bundlePages.push({
+                                        pageClass: "applicant",
+                                        model: {
+                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess
+                                        }
+                                    });
+                                }
+
+                                if (loanProcess.loanCustomerEnrolmentProcess) {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
+                                        }
+                                    });
+                                }
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
                                 deferred.resolve();
                             });
                     }

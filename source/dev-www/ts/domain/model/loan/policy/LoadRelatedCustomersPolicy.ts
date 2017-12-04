@@ -8,6 +8,8 @@ import {ObjectFactory} from "../../../shared/ObjectFactory";
 import Customer = require("../../customer/Customer");
 import {LoanProcess} from "../LoanProcess";
 import * as _ from 'lodash';
+import {EnrolmentProcess} from "../../customer/EnrolmentProcess";
+import {LoanCustomerRelationTypes} from "../LoanCustomerRelation";
 
 
 /**
@@ -36,8 +38,8 @@ export class LoadRelatedCustomersPolicy extends IPolicy<LoanProcess> {
                         if (lcr.customerId!=null){
                             let obs1 = this.enrolmentRepo.getCustomerById(lcr.customerId)
                                 .map(
-                                    (customer: Customer) => {
-                                        loanProcess.loanAccount.setRelatedCustomer(customer);
+                                    (customer: EnrolmentProcess) => {
+                                        loanProcess.setRelatedCustomer(customer);
                                         return customer;
                                     }
                                 );
@@ -49,8 +51,8 @@ export class LoadRelatedCustomersPolicy extends IPolicy<LoanProcess> {
                 if (_.hasIn(loanProcess, "loanAccount.customerId")){
                     let obs2 = this.enrolmentRepo.getCustomerById(loanProcess.loanAccount.customerId)
                         .map(
-                            (customer: Customer) => {
-                                loanProcess.loanAccount.loanCustomer = customer;
+                            (customer: EnrolmentProcess) => {
+                                loanProcess.loanCustomerEnrolmentProcess = customer;
                                 return customer;
                             }
                         );

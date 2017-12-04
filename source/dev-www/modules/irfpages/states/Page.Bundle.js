@@ -529,7 +529,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         var initialData = $scope.bundlePage.bundlePages; // $scope.bundlePage.bundlePages - initial data
                         if (initialData && initialData.length) {
                             for (i in initialData) {
-                                var iData = _.cloneDeep(initialData[i]);
+                                var iData = initialData[i];
                                 var bDef = bundleDefinitionMap[iData.pageClass];
 
                                 var p = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName).then(function(pageObj) {

@@ -2,11 +2,13 @@
 
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
-import Customer = require("./Customer");
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
 import Utils = require("../../shared/Utils");
 import {plainToClass} from "class-transformer";
+import {PolicyManager} from "../../shared/PolicyManager";
+import EnrolmentProcessFactory = require("./EnrolmentProcessFactory");
+import {Customer, CustomerTypes} from "./Customer";
 
 
 declare var enrolmentProcessConfig: Object;
@@ -54,6 +56,14 @@ export class EnrolmentProcess {
                     return this;
                 }
             )
+    }
+
+    static createNewProcess(customerType:CustomerTypes = CustomerTypes.INDIVIDUAL): Observable<EnrolmentProcess>{
+        let ep = new EnrolmentProcess();
+        ep.customer = new Customer();
+        ep.customer.customerType = customerType;
+        let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentProcessFactory.enrolmentPolicyFactory, 'onNew', EnrolmentProcessFactory.enrolmentProcessConfig);
+        return pm.applyPolicies();
     }
 
     static fromCustomerID(id: number): Observable<EnrolmentProcess> {

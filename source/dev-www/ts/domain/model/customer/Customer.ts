@@ -26,9 +26,13 @@ import SupplierDetail = require("./SupplierDetail");
 import Udf = require("./Udf");
 import Verification = require("./Verification");
 
+export enum CustomerTypes {
+    INDIVIDUAL = "Individual",
+    ENTERPRISE = "Enterprise"
+}
 
 
-class Customer {
+export class Customer {
     aadhaarNo: string;
     addressInLocalLanguage: string;
     addressProof: string;
@@ -73,7 +77,7 @@ class Customer {
     customerBankId: number;
     customerBranchId: number;
     customerStatus: string;
-    customerType: string;
+    customerType: CustomerTypes;
     customerWalkinToBusiness: string;
     date: string;
     dateOfBirth: string;
@@ -297,6 +301,3 @@ class Customer {
 
 
 }
-
-
-export = Customer;

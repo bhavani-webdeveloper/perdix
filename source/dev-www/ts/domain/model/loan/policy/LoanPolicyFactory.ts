@@ -6,6 +6,7 @@ import {SampleMultiPolicy} from "./SampleMultiPolicy";
 import {LoadRelatedCustomerData} from './LoadRelatedCustomerData';
 
 import {LoadRelatedCustomersPolicy} from "./LoadRelatedCustomersPolicy";
+import {DefaultRelatedCustomersPolicy} from "./DefaultRelatedCustomersPolicy";
 export class LoanPolicyFactory implements IPolicyFactory{
 
     private static _instance:LoanPolicyFactory = null;
@@ -31,6 +32,9 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return obj;
             case 'LoadRelatedCustomersPolicy':
                 obj = new LoadRelatedCustomersPolicy();
+                return obj;
+            case 'DefaultRelatedCustomersPolicy':
+                obj = new DefaultRelatedCustomersPolicy();
                 return obj;
             case 'LoadRelatedCustomerData':
                 return new LoadRelatedCustomerData();

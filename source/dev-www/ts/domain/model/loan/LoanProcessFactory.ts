@@ -30,11 +30,12 @@ class LoanProcessFactory {
         return null;
     }
 
-    static newLoanProcess(): Observable<LoanProcess> {
-        let lp: LoanProcess = new LoanProcess();
-        lp.loanAccount = new LoanAccount();
-        let pm: PolicyManager<LoanProcess> = new PolicyManager<LoanProcess>(lp, LoanPolicyFactory.getInstance(), 'onNew', LoanProcess.getProcessConfig());
-        return pm.applyPolicies();
+    static createNew(): Observable<LoanProcess>{
+        return Observable.defer(() => {
+            let lp: LoanProcess = new LoanProcess();
+            lp.loanAccount = new LoanAccount();
+            return Observable.of(lp);
+        });
     }
 }
 

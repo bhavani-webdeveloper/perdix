@@ -6,21 +6,14 @@ define(["require", "exports"], function (require, exports) {
                 onNew: {
                     "defaults": [
                         {
-                            "name": "SampleSimplePolicy",
+                            "name": "DefaultRelatedCustomersPolicy",
                             "arguments": {
-                                "name": "sasdf"
+                                "applicant": true,
+                                "coApplicant": false,
+                                "guarantor": false,
+                                "loanCustomer": true,
+                                "loanCustomerType": "Enterprise"
                             }
-                        },
-                        {
-                            "name": "SampleMultiPolicy",
-                            "arguments": {
-                                "testargs": {
-                                    "shahal": "tharique"
-                                }
-                            }
-                        }, {
-                            "name": "LoadRelatedCustomerData",
-                            "arguments": null
                         }
                     ]
                 },
