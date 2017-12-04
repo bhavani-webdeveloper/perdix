@@ -16,7 +16,8 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
             "Page/Engine/loans.individual.collections.CreditValidationQueue",
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
             "Page/Engine/loans.individual.collections.DepositStage",
-            "Page/Engine/loans.individual.collections.MonthlyDemandList"
+            "Page/Engine/loans.individual.collections.MonthlyDemandList",
+            "Page/Engine/loans.individual.collections.offlineCollectionUpload"
         ]
     };
 
