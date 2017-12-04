@@ -222,7 +222,11 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
         freezeAccount: {
             method: 'GET',
             url: BASE_URL + '/api/loanaccounts/freeze/:accountId'
-        }
+        },
+        findTransactionForReversal: {
+            method: 'GET',
+            url: endpoint + '/findtransactionforreversal/{accountNo}'
+        },
     });
 
     resource.getRepaymentScheduleDownloadURL = function(accountNumber) {

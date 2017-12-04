@@ -49,7 +49,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                         },
                         search: function(inputModel, form, model) {
                             var deferred = $q.defer();
-                            LoanAccount.getTransactionForReversal({accountId: (inputModel.accountId || model.repayment.accountId), "accountNo": (inputModel.accountId || model.repayment.accountId)}).$promise
+                            LoanAccount.findTransactionForReversal({accountNo: (inputModel.accountId || model.repayment.accountId)}).$promise
                             .then(function(resp) {
                                 deferred.resolve({
                                     "headers": {
