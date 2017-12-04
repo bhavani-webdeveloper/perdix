@@ -3,7 +3,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
     function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager) {
         var formRepository = {}
 
-        formRepository['IndividualEnrollment'] = { 
+        formRepository['IndividualEnrollment'] = {
             "CustomerInformation": {
                 "type": "box",
                 "title": "CUSTOMER_INFORMATION",
@@ -176,7 +176,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title: "SPOUSE_LOAN_CONSENT"
                     }
                 }
-            },            
+            },
             "ContactInformation": {
                 "type": "box",
                 orderNo: 20,
@@ -489,7 +489,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.identityProofNo",
                                 type:"barcode",
                                 condition: "model.customer.identityProof !== 'Aadhar Card' && model.customer.identityProof !== 'Pan Card' && model.customer.identityProof !== 'Passport'",
-                                // "pattern": ".*", 
+                                // "pattern": ".*",
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
@@ -539,7 +539,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.addressProof == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
-                                    "type": ["string","null"], 
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -771,9 +771,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
                                         model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                                         model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                    } 
+                                    }
                                     else {
-                                        if (model.customer.familyMembers[form.arrayIndex].customerId) 
+                                        if (model.customer.familyMembers[form.arrayIndex].customerId)
                                             return;
 
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
@@ -872,7 +872,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 30,
                                 key: "customer.familyMembers[].familyMemberFirstName",
                                 condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
-                                title: "FAMILY_MEMBER_FULL_NAME"                             
+                                title: "FAMILY_MEMBER_FULL_NAME"
                             },
                             "gender": {
                                 key: "customer.familyMembers[].gender",
@@ -1494,7 +1494,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             }
         };
 
-        formRepository['LeadGeneration'] = { 
+        formRepository['LeadGeneration'] = {
             "leadProfile":{
                     "type": "box",
                     "title": "LEAD_PROFILE",
@@ -1503,7 +1503,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             key: "lead.branchName",
                             type: "select",
                             readonly: true
-                        }, 
+                        },
                         "centerName": {
                             key: "lead.centreName",
                             type: "lov",
@@ -1558,7 +1558,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             key: "lead.id",
                             condition: "model.lead.id",
                             readonly: true
-                        }, 
+                        },
                         "urnNo":{
                             key: "lead.urnNo",
                             condition: "model.lead.urnNo",
@@ -1573,7 +1573,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //         "leadName":{
                         //             key: "lead.leadName",
                         //             title: "APPLICANT_NAME"
-                        //         }, 
+                        //         },
                         //         "customerType":{
                         //             key: "lead.customerType",
                         //             type: "select",
@@ -1582,7 +1582,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                 "Enterprise": "Individual and Enterprise"
                         //             }
 
-                        //         }, 
+                        //         },
                         //         "enterpriseDetails":{
                         //             type: "fieldset",
                         //             title: "ENTERPRISE_DETAILS",
@@ -1590,28 +1590,28 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //             items: {
                         //                 "businessName":{
                         //                     key: "lead.businessName"
-                        //                 }, 
+                        //                 },
                         //                 "companyRegistered":{
                         //                     key: "lead.companyRegistered",
                         //                     type: "radios",
                         //                     enumCode: "decisionmaker"
-                        //                 }, 
+                        //                 },
                         //                 "businessType":{
                         //                     key: "lead.businessType",
                         //                     type: "select",
                         //                     enumCode: "businessType"
-                        //                 }, 
+                        //                 },
                         //                 "businessActivity":{
                         //                     key: "lead.businessActivity",
                         //                     //title:"BUSINESS_LINE",
                         //                     type: "select",
                         //                     enumCode: "businessActivity",
                         //                     parentEnumCode: "businessType"
-                        //                 }, 
+                        //                 },
                         //                 "companyOperatingSince":{
                         //                     key: "lead.companyOperatingSince",
                         //                     type: "date"
-                        //                 }, 
+                        //                 },
                         //                 "ownership":{
                         //                     key: "lead.ownership",
                         //                     type: "select",
@@ -1625,7 +1625,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                     "Rental": "Rental",
                         //                 }*/
 
-                        //                 }, 
+                        //                 },
                         //                 "individalDetails":{
                         //                     type: "fieldset",
                         //                     title: "INDIVIDUAL_DETAILS",
@@ -1633,7 +1633,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                         "gender": {
                         //                             key: "lead.gender",
                         //                             type: "radios"
-                        //                         }, 
+                        //                         },
                         //                         "dob":{
                         //                             key: "lead.dob",
                         //                             type: "date",
@@ -1642,7 +1642,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                                     model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                         //                                 }
                         //                             }
-                        //                         }, 
+                        //                         },
                         //                         "age":{
                         //                             key: "lead.age",
                         //                             type: "number",
@@ -1655,7 +1655,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                                     }
                         //                                 }
                         //                             }
-                        //                         }, 
+                        //                         },
                         //                         "maritalStatus": {
                         //                             key: "lead.maritalStatus",
                         //                             type: "select",
@@ -1667,7 +1667,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                                 "SEPARATED": "SEPARATED",
                         //                                 "WIDOW(ER)": "WIDOW(ER)",
                         //                             }*/
-                        //                         }, 
+                        //                         },
                         //                         "educationStatus":{
                         //                             key: "lead.educationStatus",
                         //                             type: "select",
@@ -1693,7 +1693,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                 "gender": {
                         //                     key: "lead.gender",
                         //                     type: "radios"
-                        //                 }, 
+                        //                 },
                         //                 "dob": {
                         //                     key: "lead.dob",
                         //                     type: "date",
@@ -1702,7 +1702,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                         //                         }
                         //                     }
-                        //                 }, 
+                        //                 },
                         //                 "age": {
                         //                     key: "lead.age",
                         //                     type: "number",
@@ -1715,7 +1715,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                             }
                         //                         }
                         //                     }
-                        //                 }, 
+                        //                 },
                         //                 "maritalStatus":{
                         //                     key: "lead.maritalStatus",
                         //                     type: "select",
@@ -1727,7 +1727,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                     "SEPARATED": "SEPARATED",
                         //                     "WIDOW(ER)": "WIDOW(ER)",
                         //                 }*/
-                        //                 }, 
+                        //                 },
                         //                 "educationStatus":{
                         //                     key: "lead.educationStatus",
                         //                     type: "select",
@@ -1750,18 +1750,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //             items: {
                         //                 "mobileNo":{
                         //                     key: "lead.mobileNo",
-                        //                 }, 
+                        //                 },
                         //                 "alternateMobileNo":{
                         //                     key: "lead.alternateMobileNo",
-                        //                 }, 
+                        //                 },
                         //                 "addressLine1":{
                         //                     key: "lead.addressLine1",
                         //                     "title": "DOOR_NO"
-                        //                 }, 
+                        //                 },
                         //                 "addressLine2":{
                         //                     key: "lead.addressLine2",
                         //                     "title": "STREET"
-                        //                 }, 
+                        //                 },
                         //                 "pincode":{
                         //                     key: "lead.pincode",
                         //                     type: "lov",
@@ -1795,19 +1795,19 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         //                             item.district + ', ' + item.state
                         //                         ];
                         //                     }
-                        //                 }, 
+                        //                 },
                         //                 "area":{
                         //                     "key": "lead.area",
                         //                     "readonly": true
-                        //                 }, 
+                        //                 },
                         //                 "cityTownVillage":{
                         //                     "key": "lead.cityTownVillage",
                         //                     "readonly": true
-                        //                 }, 
+                        //                 },
                         //                 "district":{
                         //                     "key": "lead.district",
                         //                     "readonly": true
-                        //                 }, 
+                        //                 },
                         //                 "state":{
                         //                     "key": "lead.state",
                         //                     "readonly": true
@@ -1828,7 +1828,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         pattern: "^[a-zA-Z\. ]+$",
                                     },
                                     validationMessage: {202 : "Only alphabets and space are allowed."},
-                                }, 
+                                },
                                 "customerTypeString": {
                                     key: "lead.customerTypeString",
                                     type: "select",
@@ -1838,7 +1838,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     },
                                    readonly:true
 
-                                }, 
+                                },
                                 "enterpriseDetails": {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
@@ -1847,18 +1847,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "businessName":{
                                             key: "lead.businessName",
                                             required: false,
-                                        }, 
+                                        },
                                         "companyRegistered":{
                                             key: "lead.companyRegistered",
                                             type: "radios",
                                             enumCode: "decisionmaker"
-                                        }, 
+                                        },
                                         "businessType":{
                                             key: "lead.businessType",
                                             required: false,
                                             type: "select",
                                             enumCode: "businessType"
-                                        }, 
+                                        },
                                         "businessActivity":{
                                             key: "lead.businessActivity",
                                         //title:"BUSINESS_LINE",
@@ -1866,11 +1866,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             type: "select",
                                             enumCode: "businessActivity",
                                             parentEnumCode: "businessType"
-                                        }, 
+                                        },
                                         "companyOperatingSince":{
                                             key: "lead.companyOperatingSince",
                                             type: "date"
-                                        }, 
+                                        },
                                         "ownership":{
                                             key: "lead.ownership",
                                             type: "select",
@@ -1883,7 +1883,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                 "Leased": "Leased",
                                                 "Rental": "Rental",
                                             }*/
-                                        }, 
+                                        },
                                         "individualDetails": {
                                             type: "fieldset",
                                             title: "INDIVIDUAL_DETAILS",
@@ -1891,7 +1891,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                 "gender":{
                                                     key: "lead.gender",
                                                     type: "radios"
-                                                }, 
+                                                },
                                                 "dob":{
                                                     key: "lead.dob",
                                                     type: "date",
@@ -1900,7 +1900,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                                         }
                                                     }
-                                                }, 
+                                                },
                                                 "age":{
                                                     key: "lead.age",
                                                     type: "number",
@@ -1913,7 +1913,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                             }
                                                         }
                                                     }
-                                                }, 
+                                                },
                                                 "maritalStatus":{
                                                     key: "lead.maritalStatus",
                                                     type: "select",
@@ -1925,7 +1925,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                         "SEPARATED": "SEPARATED",
                                                         "WIDOW(ER)": "WIDOW(ER)",
                                                     }*/
-                                                }, 
+                                                },
                                                 "educationStatus":{
                                                     key: "lead.educationStatus",
                                                     type: "select",
@@ -1951,7 +1951,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "gender":{
                                             key: "lead.gender",
                                             type: "radios"
-                                        }, 
+                                        },
                                         "dob":{
                                             key: "lead.dob",
                                             type: "date",
@@ -1960,7 +1960,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                     model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                                 }
                                             }
-                                        }, 
+                                        },
                                         "age":{
                                             key: "lead.age",
                                             type: "number",
@@ -1973,7 +1973,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                     }
                                                 }
                                             }
-                                        }, 
+                                        },
                                         "maritalStatus":{
                                             key: "lead.maritalStatus",
                                             type: "select",
@@ -1985,7 +1985,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                 "SEPARATED": "SEPARATED",
                                                 "WIDOW(ER)": "WIDOW(ER)",
                                             }*/
-                                        }, 
+                                        },
                                         "educationStatus":{
                                             key: "lead.educationStatus",
                                             type: "select",
@@ -2003,7 +2003,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             type: "select",
                                             enumCode: "lead_primary_occupation",
                                             /*titleMap: {
-                                                
+
                                             }*/
                                         },
                                         "leadCategory":{
@@ -2011,7 +2011,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             type: "select",
                                             enumCode: "lead_category",
                                             /*titleMap: {
-                                                
+
                                             }*/
                                         },
                                         "licenseType":{
@@ -2019,7 +2019,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             type: "select",
                                             enumCode: "licence_type",
                                             /*titleMap: {
-                                                
+
                                             }*/
                                         }
 
@@ -2033,23 +2033,23 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     items: {
                                         "mobileNo":{
                                             key: "lead.mobileNo",
-                                        }, 
+                                        },
                                         "alternateMobileNo":{
                                             key: "lead.alternateMobileNo",
-                                        }, 
+                                        },
                                         "addressLine1":{
                                             key: "lead.addressLine1",
                                             "title": "DOOR_NO"
-                                        }, 
+                                        },
                                         "addressLine2":{
                                             key: "lead.addressLine2",
                                             "title": "STREET"
-                                        }, 
+                                        },
                                         "pincode":{
                                             key: "lead.pincode",
                                             type: "lov",
                                             fieldType: "number",
-                                            
+
                                             inputMap: {
                                                 "pincode": "lead.pincode",
                                                 "district": {
@@ -2078,19 +2078,19 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                     item.district + ', ' + item.state
                                                 ];
                                             }
-                                        }, 
+                                        },
                                         "area":{
                                             "key": "lead.area",
                                             "readonly": true
-                                        }, 
+                                        },
                                         "cityTownVillage":{
                                             "key": "lead.cityTownVillage",
                                             "readonly": true
-                                        }, 
+                                        },
                                         "district":{
                                             "key": "lead.district",
                                             "readonly": true
-                                        }, 
+                                        },
                                         "state":{
                                             "key": "lead.state",
                                             "readonly": true
@@ -2114,7 +2114,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "key":"lead.referredBy",
                             "condition":"model.lead.leadSource=='Existing Customer Referral'",
                             "type": "lov",
-                            
+
                             "lovonly": true,
                             // initialize: function(model, form, parentModel, context) {
 
@@ -2131,11 +2131,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "inputMap": {
                                 "firstName": {
                                     "key": "lead.customerFirstName"
-                                    
+
                                 },
                                 "urnNo": {
                                     "key": "lead.urnNo",
-                                    
+
                                 },
                                 "branchId": {
                                     "key": "lead.branchId",
@@ -2145,7 +2145,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                                 "centreName": {
                                     "key": "lead.centreName",
-                                   
+
                                     "type": "string",
                                     "readonly": true,
 
@@ -2196,7 +2196,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                             },
                             "outputMap": {
-                                
+
                                 "firstName":"lead.referredBy"
                             },
                             "searchHelper": formHelper,
@@ -2225,7 +2225,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 ];
                             },
                             onSelect: function(valueObj, model, context){
-                              
+
                             }
 
                         },
@@ -2255,9 +2255,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "onChange": function(modelValue, form, model) {
                                     if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                                         model.lead.leadStatus = "Reject";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '< 1 month') {
                                         model.lead.leadStatus = "Screening";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '> 1 month' ) {
                                         model.lead.leadStatus = "FollowUp";
                                     } else {
                                         model.lead.leadStatus = "Incomplete";
@@ -2295,52 +2295,53 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             // type: "select",
                             // enumCode: "lead_amount_requested",
                             condition: "model.lead.interestedInProduct==='YES'",
-                            
-                        }, 
+
+                        },
                         "loanPurpose1":{
                             key: "lead.loanPurpose1",
                             condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
                             enumCode: "vehicle_loan_purpose"
                                 /*titleMap: {
-                                    
+
                                 }*/
-                        }, 
+                        },
                         "loanPurpose2":{
                             key: "lead.loanPurpose2",
                             condition: "model.lead.interestedInProduct==='YES' && model.lead.loanPurpose1 == 'Personal Loan'",
                             type: "select",
                             enumCode: "vehicle_loan_sub_purpose"
                                 /*titleMap: {
-                                    
+
 
                                 }*/
-                        }, 
+                        },
                         "productRequiredBy":{
                             key: "lead.productRequiredBy",
                             type: "select",
                             condition: "model.lead.interestedInProduct==='YES'",
-                            titleMap: {
-                                "In this week": "In this week",
-                                "In this month": "In this month",
-                                "Next 2 -3 months": "Next 2 -3 months",
-                                "Next 4-6 months": "Next 4-6 months",
+                            enumCode: "lead_product_required_by",
+                            // titleMap: {
+                            //     "In this week": "In this week",
+                            //     "In this month": "In this month",
+                            //     "Next 2 -3 months": "Next 2 -3 months",
+                            //     "Next 4-6 months": "Next 4-6 months",
 
-                            },
+                            // },
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, 
+                        },
                         "screeningDate":{
                             key: "lead.screeningDate",
                             condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
                             type: "date",
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, 
+                        },
                         "followUpDate":{
                             key: "lead.followUpDate",
                             condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                             type: "date",
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, 
+                        },
                         "productEligibility":{
                             type: "fieldset",
                             condition: "model.lead.interestedInProduct==='YES'",
@@ -2353,7 +2354,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     onChange: "actions.changeStatus(modelValue, form, model)",
                                 }
                             }
-                        }, 
+                        },
                         "productRejectionReason":{
                             type: "fieldset",
                             title: "PRODUCT_REJECTION_REASON",
@@ -2372,7 +2373,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "Too many documents": "Too many documents",
                                         "Interested only for cash collection": "Interested only for cash collection"
                                     }
-                                }, 
+                                },
                                 "productRejectReason":{
                                     key: "lead.productRejectReason",
                                     type: "select",
@@ -2383,11 +2384,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "Not Kinara's target segment": "Not Kinara's target segment",
                                         "Not having proper documents": "Not having proper documents",
                                     }
-                                }, 
+                                },
                                 "additionalRemarks":{
                                     key: "lead.additionalRemarks",
                                 }, }
-                        }, 
+                        },
                         "leadStatus":{
                             type: "fieldset",
                             title: "LEAD_STATUS",
@@ -2462,7 +2463,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //             type: "amount",
                 //             required: false,
                 //             condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
-                //         }, 
+                //         },
                 //         "loanPurpose1":{
                 //             key: "lead.loanPurpose1",
                 //             condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
@@ -2476,7 +2477,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //                     "LineOfCredit": "LineOfCredit",
 
                 //                 }*/
-                //         }, 
+                //         },
                 //         "productRequiredBy":{
                 //             key: "lead.productRequiredBy",
                 //             type: "select",
@@ -2490,19 +2491,19 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
                 //             },
                 //             onChange: "actions.changeStatus(modelValue, form, model)"
-                //         }, 
+                //         },
                 //         "screeningDate":{
                 //             key: "lead.screeningDate",
                 //             condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
                 //             type: "date",
                 //             onChange: "actions.changeStatus(modelValue, form, model)"
-                //         }, 
+                //         },
                 //         "followUpDate":{
                 //             key: "lead.followUpDate",
                 //             condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                 //             type: "date",
                 //             onChange: "actions.changeStatus(modelValue, form, model)"
-                //         }, 
+                //         },
                 //         "productEligibility":{
                 //             type: "fieldset",
                 //             condition: "model.lead.interestedInProduct==='YES'",
@@ -2515,7 +2516,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //                     onChange: "actions.changeStatus(modelValue, form, model)",
                 //                 }
                 //             }
-                //         }, 
+                //         },
                 //         "productRejectReason":{
                 //             type: "fieldset",
                 //             title: "PRODUCT_REJECTION_REASON",
@@ -2526,7 +2527,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //                     type: "select",
                 //                     condition: "model.lead.interestedInProduct==='NO'",
                 //                     enumCode: "leadRejectReasonOfCustomer",
-                //                 }, 
+                //                 },
                 //                 "productRejectReason":{
                 //                     key: "lead.productRejectReason",
                 //                     type: "select",
@@ -2534,9 +2535,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //                     enumCode: "leadRejectReasonByFieldOfficer",
                 //                 }, {
                 //                     key: "lead.additionalRemarks",
-                //                 }, 
+                //                 },
                 //             }
-                //         }, 
+                //         },
                 //         "leadStatus":{
                 //             type: "fieldset",
                 //             title: "LEAD_STATUS",
@@ -2574,11 +2575,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     key: "lead.leadInteractions1[].interactionDate",
                                     type: "date",
                                     readonly: true,
-                                }, 
+                                },
                                 "loanOfficerId":{
                                     key: "lead.leadInteractions1[].loanOfficerId",
                                     readonly: true,
-                                }, 
+                                },
                                 "typeOfInteraction":{
                                     key: "lead.leadInteractions1[].typeOfInteraction",
                                     type: "select",
@@ -2587,15 +2588,15 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "Call": "Call",
                                         "Visit": "Visit",
                                     },
-                                }, 
+                                },
                                 "customerResponse":{
                                     key: "lead.leadInteractions1[].customerResponse",
                                     readonly: true,
-                                }, 
+                                },
                                 "additionalRemarks":{
                                     key: "lead.leadInteractions1[].additionalRemarks",
                                     readonly: true,
-                                }, 
+                                },
                                 "location":{
                                     "key": "lead.leadInteractions1[].location",
                                     readonly: true,
@@ -2603,14 +2604,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "latitude": "latitude",
                                     "longitude": "longitude",
                                     "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction == 'Visit'",
-                                    }, 
+                                    },
                                     "picture":{
                                     "key": "lead.leadInteractions1[].picture",
                                     readonly: true,
                                     "type": "file",
                                     "fileType": "image/*",
                                     "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction === 'Visit'",
-                                }, 
+                                },
                             }
                        }
                     }
@@ -2634,11 +2635,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     key: "lead.leadInteractions[].interactionDate",
                                     type: "date",
                                     readonly: true,
-                                }, 
+                                },
                                 "loanOfficerId":{
                                     key: "lead.leadInteractions[].loanOfficerId",
                                     readonly: true,
-                                }, 
+                                },
                                 "typeOfInteraction":{
                                     key: "lead.leadInteractions[].typeOfInteraction",
                                     type: "select",
@@ -2646,26 +2647,26 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "Call": "Call",
                                         "Visit": "Visit",
                                     },
-                                }, 
+                                },
                                 "customerResponse":{
                                     key: "lead.leadInteractions[].customerResponse",
-                                }, 
+                                },
                                 "additionalRemarks":{
                                     key: "lead.leadInteractions[].additionalRemarks",
-                                }, 
+                                },
                                 "location":{
                                     "key": "lead.leadInteractions[].location",
                                     "type": "geotag",
                                     "latitude": "latitude",
                                         "longitude": "longitude",
                                     "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction == 'Visit'",
-                                }, 
+                                },
                                 "picture":{
                                     "key": "lead.leadInteractions[].picture",
                                     "type": "file",
                                     "fileType": "image/*",
                                     "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction === 'Visit'",
-                                }, 
+                                },
                             }
                         }
                     }
@@ -2678,7 +2679,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "save":{
                             "type": "save",
                             "title": "Offline Save"
-                        }, 
+                        },
                         "submit":{
                             "type": "submit",
                             "title": "Submit"
@@ -3664,7 +3665,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-            
+
             "actionBox": {
                 "type": "actionbox",
                 "items": {
@@ -3895,7 +3896,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.identityProofNo",
                                 type:"qrcode",
                                 condition: "model.customer.identityProof !== 'Aadhar Card' && model.customer.identityProof !== 'Pan Card' && model.customer.identityProof !== 'Passport'",
-                                // "pattern": ".*", 
+                                // "pattern": ".*",
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
@@ -3945,7 +3946,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.addressProof == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
-                                    "type": ["string","null"], 
+                                    "type": ["string","null"],
                                 },
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
@@ -4047,7 +4048,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         // "remove": null,
                         "title": "ADDITIONAL_KYC",
                         "items": {
-                           
+
                             "kyc1ProofType": {
                                 key: "customer.additionalKYCs[].kyc1ProofType",
                                 type: "select",
@@ -4142,7 +4143,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "date"
                             }
                         }
-                          
+
                     },
                 }
             },
@@ -4323,7 +4324,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 numberType: "tel"
                             },
                             "whatsAppMobileNoOption":{
-                                
+
                                 "key": "customer.whatsAppMobileNoOption",
                                 // "condition": "model.currentStage=='Screening'",
                                 "title": "CHOOSE_WHATSAPP_NO",
@@ -4388,7 +4389,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 50,
                                 key:"customer.landmark"
                             },
-                            
+
                             "pincode":{
                                 key: "customer.pincode",
                                 orderNo: 60,
@@ -4472,7 +4473,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "mailingPostoffice":{
                                 key:"customer.mailingPostoffice"
                             },
-                            
+
                             "mailingPincode":{
                                 key: "customer.mailingPincode",
                                 type: "lov",
@@ -4536,8 +4537,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             }
                         }
                     }
-                    
-       
+
+
                 }
             },
             "householdeDetails": {
@@ -4680,12 +4681,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 "type": "select",
                                 required: true,
                                 "title": "EXPENSE_TYPE"
-                            }, 
+                            },
                             "annualExpenses":{
                                 "key": "customer.expenditures[].annualExpenses",
                                 "type": "amount",
                                 "title": "AMOUNT"
-                            }, 
+                            },
                             "frequency":{
                                 "key": "customer.expenditures[].frequency",
                                 "type": "select",
@@ -4697,7 +4698,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 }
             },
 
-            
+
             "householdLiablities": {
                 type:"box",
                 title:"HOUSEHOLD_LIABILITIES",
@@ -4818,12 +4819,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "previousRentDetails": {
                                 key:"customer.previousRentDetails",
                                 title: "PREVIOUS_RENT_DEATLS",
-                                condition: "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"                                
+                                condition: "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"
                             }
                         }
                     }
                 }
-               
+
             },
             "trackDetails": {
                 type: "box",
@@ -4941,7 +4942,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "save":{
                         "type": "save",
                         "title": "Offline Save"
-                    }, 
+                    },
                     "submit":{
                         "type": "submit",
                         "title": "Submit"
@@ -4954,7 +4955,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "BusinessLiabilities": {
                 type: "box",
                 title: "BUSINESS_LIABILITIES",
-                
+
                 items: {
                     "liabilities": {
                         key: "customer.liabilities",
@@ -5045,7 +5046,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "enterpriseAssets": {
                 type: "box",
                 title: "ASSET_DETAILS",
-                
+
                 items: {
                     "enterpriseAssets": {
                         key: "customer.enterpriseAssets",
@@ -5114,7 +5115,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "bankAccounts":{
                 type: "box",
                 title: "BANK_ACCOUNTS",
-                
+
                 items: {
                     "customerBankAccounts":{
                         key: "customer.customerBankAccounts",
@@ -5276,8 +5277,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "noOfEmiChequeBounced":{
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true, 
-                                        //maximum:99,                                     
+                                        required:true,
+                                        //maximum:99,
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                     "bankStatementPhoto":{
@@ -5439,7 +5440,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type:"fieldset",
                                 title:"CUSTOMER_RESIDENTIAL_ADDRESS",
                                 items: {
-                                    
+
                                     "doorNo":{
                                         key:"customer.doorNo"
                                     },
@@ -5452,7 +5453,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "landmark":{
                                         key:"customer.landmark"
                                     },
-                                    
+
                                     "pincode":{
                                         key: "customer.pincode",
                                         type: "lov",
@@ -5532,7 +5533,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     "mailingPostoffice":{
                                         key:"customer.mailingPostoffice"
                                     },
-                                    
+
                                     "mailingPincode":{
                                         key: "customer.mailingPincode",
                                         type: "lov",
@@ -5598,7 +5599,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             }
                         }
                     },
-                },   
+                },
             }
         };
 
@@ -5662,7 +5663,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "loanAccount.vehicleLoanDetails.bankReferenceNumber",
                         title: "BANK_REFERENCE_NUMBER",
                         inputmode: "number",
-                        numberType: "tel"  
+                        numberType: "tel"
                     }
                 }
             },
@@ -5770,7 +5771,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title: "ODOMETER",
                         type:"radios",
                         enumCode:"vehicle_odometer"
-                       
+
                     },
                     "usedFor": {
                         key: "loanAccount.vehicleLoanDetails.usedFor",
@@ -6525,26 +6526,26 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     for(var i=0; i<configKeys.length;i++) {
                        var _k = jsonPath(model, configKeys[i])[0];
                        var configObject = jsonPath(configFile[configKeys[i]], _k)[0];
-                      
+
                        if(_.hasIn(configObject, "excludes")) {
                         configObject.excludes.map(function(v) {
                             excludes.push(v);
                         });
-                        
+
                        }
                        if(_.hasIn(configObject, "overrides")) {
                         overrides = _.merge(overrides, configObject.overrides);
                        }
-                       
+
                     }
                 }
 
-               
+
                 // for(var i=0; i< requestParam.length; i++) {
-                    
+
 
                 //      if(_.hasIn(configFile[requestParam[i]], "excludes")) {
-                        
+
                 //         // configFile[requestParam[i]].excludes.map(function(v) {
                 //         //     excludes.push(v);
                 //         // });
@@ -6557,9 +6558,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 //      if(_.hasIn(configFile[requestParam[i]], "overrides")) {
                 //          overrides = _.merge(overrides, configFile[requestParam[i]].overrides);
                 //      }
-                    
+
                 // }
-                
+
                 var getKeyString = function(parentKey, key) {
                     if (!parentKey || parentKey === "") {
                         return key;
@@ -6577,7 +6578,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     var _defn, _key, _items;
                     var _parentKey = parent ? parent : "";
                     for (var itr = 0; itr < keylist.length; itr++) {
-                        _key = getKeyString(_parentKey, keylist[itr]);                       
+                        _key = getKeyString(_parentKey, keylist[itr]);
                         if ((main && includes.indexOf(_key) === -1) || excludes.indexOf(_key) > -1) {
                             //if this is the outermost level of form definition, then include is mandatory
                             //All the excludes are not processed.

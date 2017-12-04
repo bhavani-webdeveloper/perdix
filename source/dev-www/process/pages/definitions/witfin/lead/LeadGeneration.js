@@ -101,14 +101,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                 "subTitle": "Lead",
                 initialize: function(model, form, formCtrl) {
 
-                    LeadProcess.createNewProcess()
-                        .subscribe(function(value){
-                            model.leadProcess = value;
-                            model.lead = model.leadProcess.lead;
-                        });
-
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
-
 
                     var self = this;
                     var formRequest = {
@@ -134,10 +127,14 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 })
 
                             });
-                    }
-                    else {
-                        this.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
-                        console.log(this.form);
+                    } else {
+                        LeadProcess.createNewProcess()
+                            .subscribe(function(value){
+                                model.leadProcess = value;
+                                model.lead = model.leadProcess.lead;
+                                self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                            });
+
                     }
                     //this.form.push(actionbox);
 
@@ -158,11 +155,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                 actions: {
                     changeStatus: function(modelValue, form, model) {
 
-                        if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                         if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                             model.lead.leadStatus = "Reject";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '< 1 month') {
                             model.lead.leadStatus = "Screening";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '> 1 month' ) {
                             model.lead.leadStatus = "FollowUp";
                         } else {
                             model.lead.leadStatus = "Incomplete";
@@ -182,19 +179,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     submit: function(model, form, formName) {
                         $log.info("Inside submit()");
                         PageHelper.showLoader();
-                        model.lead.productCategory = "Asset";
-                        model.lead.productSubCategory = "Loan";
-                        $log.warn(model);
-                        var sortFn = function(unordered) {
-                            var out = {};
-                            Object.keys(unordered).sort().forEach(function(key) {
-                                out[key] = unordered[key];
-                            });
-                            return out;
-                        };
-                        if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
-                            model.lead.customerType = model.lead.customerTypeString;
-                        }
+
                         var reqData = _.cloneDeep(model);
                         var centres = formHelper.enum('centre').data;
                         for (var i = 0; i < centres.length; i++) {
@@ -203,51 +188,25 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                             }
                         }
                         if (reqData.lead.id) {
-
-                            if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
-                                model.leadProcess.save()
+                            model.leadProcess.proceed()
                                 .finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                                    .subscribe(function(value){
-                                       $state.go('Page.witfinLeadDashboard', null);
-                                    }, function(err) {
-                                        PageHelper.showErrors(err);
-                                        PageHelper.hideLoader();
-                                    });
-                                // leadProcessTs.followUp(reqData)
-                                //     .finally(function(){
-                                //         PageHelper.hideLoader();
-                                //     })
-                                //     .subscribe(
-                                //         function(data){
-                                //         $state.go('Page.LeadDashboard', null);
-                                //     },
-                                //     function(err) {
-                                //         PageHelper.showErrors(err);
-                                //         PageHelper.hideLoader();
-                                //     }
-                                // )
-
-                            } else {
-                                model.leadProcess.save()
-                                .finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                                    .subscribe(function(value){
-                                       $state.go('Page.witfinLeadDashboard', null);
-                                    }, function(err) {
-                                        PageHelper.showErrors(err);
-                                        PageHelper.hideLoader();
-                                    });
-                            }
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(leadProcess){
+                                    console.log(leadProcess);
+                                    console.log("COMPLETED SHAHAL2");
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
                         } else {
                             model.leadProcess.proceed()
                                 .finally(function(){
                                         PageHelper.hideLoader();
                                     })
-                                    .subscribe(function(value){
-                                       $state.go('Page.witfinLeadDashboard', null);
+                                    .subscribe(function(leadProcess){
+                                        console.log(leadProcess);
+                                        console.log("COMPLETED SHAHAL2");
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();

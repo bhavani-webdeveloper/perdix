@@ -61,8 +61,10 @@ export class PolicyManager<T> {
         let pObj = this.policyConfig['policies']['default'][this.policyStage];
         let policies = [];
 
-        for (let entry of pObj["defaults"]) {
-            policies.push(entry);
+        if(_.hasIn(pObj, 'defaults')) {
+            for (let entry of pObj["defaults"]) {
+                policies.push(entry);
+            }
         }
 
         if (_.hasIn(pObj, 'overrides') && _.isArray(pObj.overrides)) {
@@ -71,14 +73,18 @@ export class PolicyManager<T> {
                     let shouldConsiderPolicy = Utils.evalInContext(this.obj, entry['expr']);
                     if (!shouldConsiderPolicy) continue;
 
-                    for (let pToAdd of entry['add']) {
-                        policies.push(pToAdd);
+                    if(_.hasIn(entry, 'add')) {
+                        for (let pToAdd of entry['add']) {
+                            policies.push(pToAdd);
+                        }
                     }
 
-                    for (let pToRemove of entry['remove']) {
-                        _.remove(policies, function (policy) {
-                            return policy.name === pToRemove.name;
-                        })
+                    if(_.hasIn(entry, 'remove')) {
+                        for (let pToRemove of entry['remove']) {
+                            _.remove(policies, function (policy) {
+                                return policy.name === pToRemove.name;
+                            })
+                        }
                     }
                 }
             }

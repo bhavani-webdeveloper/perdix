@@ -46,6 +46,34 @@ let config = {
                         }
                     }
                 ]
+            },
+            "beforeProceed": {
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.lead.productRequiredBy == '> 1 month'",
+                        "add": [
+                            {
+                                "name": "LeadFollowupPolicy",
+                                "arguments": {
+                                    "stageForFollowup": "Inprocess"
+                                }
+                            }
+                        ]
+
+                    }, {
+                        "type": "expr",
+                        "expr": "this.lead.productRequiredBy == '< 1 month'",
+                        "add": [
+                            {
+                                "name": "LeadScreeningPolicy",
+                                "arguments": {
+                                    "stageForScreening": "ReadyForScreening"
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         },
         'command': {
