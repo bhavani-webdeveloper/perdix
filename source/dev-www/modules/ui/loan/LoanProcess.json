@@ -20,6 +20,7 @@
             "loanPurpose1": {
                 "key": "loanAccount.loanPurpose1",
                 "type": "lov",
+                "resolver": "LoanPurpose1LOVConfiguration",
                 "autolov": true,
                 "title": "LOAN_PURPOSE_1",
                 "bindMap": {},
