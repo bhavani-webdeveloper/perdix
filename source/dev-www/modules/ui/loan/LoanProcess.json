@@ -1,0 +1,110 @@
+{
+    "PreliminaryInformation":{
+        "type": "box",
+        "title": "PRELIMINARY_INFORMATION",
+        "orderNo": 10,
+        "items": {
+            "linkedAccountNumber": {
+                "key": "loanAccount.linkedAccountNumber",
+                "title": "LINKED_ACCOUNT_NUMBER",
+                "type": "lov",
+                "autolov": true,
+                "searchHelper": {
+                    "newOffline": {}
+                }
+            },
+            "npa": {
+                "key": "loanAccount.npa",
+                "title": "IS_NPA"
+            },
+            "loanPurpose1": {
+                "key": "loanAccount.loanPurpose1",
+                "type": "lov",
+                "autolov": true,
+                "title": "LOAN_PURPOSE_1",
+                "bindMap": {},
+                "outputMap": {
+                    "purpose1": "loanAccount.loanPurpose1"
+                },
+                "searchHelper": {
+                    "newOffline": {}
+                }
+            },
+            "loanPurpose2": {
+                "key": "loanAccount.loanPurpose2",
+                "type": "lov",
+                "autolov": true,
+                "title": "LOAN_PURPOSE_2",
+                "bindMap": {},
+                "outputMap": {
+                    "purpose2": "loanAccount.loanPurpose2"
+                },
+                "searchHelper": {
+                    "newOffline": {}
+                }
+            },
+            "loanAmountRequested": {
+                "key": "loanAccount.loanAmountRequested",
+                "type": "amount",
+                "required": true,
+                "title": "REQUESTED_LOAN_AMOUNT"
+            },
+            "frequencyRequested": {
+                "key": "loanAccount.frequencyRequested",
+                "type": "select",
+                "title": "FREQUENCY_REQUESTED",
+                "enumCode": "frequency"
+            },
+            "tenureRequested": {
+                "key": "loanAccount.tenureRequested",
+                "required": true,
+                "type": "number",
+                "title": "TENURE_REQUESETED"
+            },
+            "expectedInterestRate": {
+                "key": "loanAccount.expectedInterestRate",
+                "type": "number",
+                "title": "EXPECTED_INTEREST_RATE"
+            },
+            "expectedEmi": {
+                "key": "loanAccount.expectedEmi",
+                "type": "amount",
+                "title": "ESTIMATED_KINARA_EMI",
+                "readonly": true
+            },
+            "emiRequested": {
+                "key": "loanAccount.emiRequested",
+                "required": true,
+                "type": "amount",
+                "title": "EMI_REQUESTED"
+            },
+            "emiPaymentDateRequested": {
+                "key": "loanAccount.emiPaymentDateRequested",
+                "type": "select",
+                "titleMap": {
+                    "5th": "5th",
+                    "10th": "10th",
+                    "15th": "15th"
+                },
+                "title": "EMI_PAYMENT_DATE_REQUESTED"
+            },
+            "collectionPaymentType": {
+                "key": "loanAccount.collectionPaymentType",
+                "required": true,
+                "title": "MODE_OF_REPAYMENT",
+                "type": "select",
+                "titleMap": {
+                    "ACH": "ACH",
+                    "PDC": "PDC",
+                    "Others": "Others"
+                }
+            },
+            "expectedPortfolioInsurancePremium": {
+                "key": "loanAccount.expectedPortfolioInsurancePremium",
+                "title": "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
+                "readonly": true
+            }
+        }
+
+    }
+}
