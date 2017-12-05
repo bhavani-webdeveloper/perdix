@@ -204,7 +204,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+									pageName: "witfin.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

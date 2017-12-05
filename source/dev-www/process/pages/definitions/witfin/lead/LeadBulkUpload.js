@@ -30,7 +30,7 @@ define({
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
                         Lead.leadBulkUpload(file, progress).then(function(resp){
-                            $state.go('Page.LeadDashboard', null);
+                            $state.go('Page.witfinLeadDashboard', null);
                         });
                     }
                 }]

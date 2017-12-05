@@ -127,8 +127,8 @@ define({
                     }
 
                     LeadHelper.AssignLead(reqData).then(function(resp) {
-                        $state.go('Page.LeadDashboard', null);
-                    });   
+                        $state.go('Page.witfinLeadDashboard', null);
+                    });
                 }
             }
         };

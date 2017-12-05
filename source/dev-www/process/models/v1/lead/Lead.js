@@ -53,10 +53,6 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			return {
 				"lead.currentStage": {
 					"Inprocess": {
-						"excludes": [
-						"productDetails",
-						"leadInteractions"
-						],
 						"overrides": {
 							"leadProfile": {
 								"readonly": true
@@ -67,7 +63,7 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 						"excludes": [
 						"productDetails"
 						]
-					},  
+					},
 				},
 				"siteCode": {
 					"sambandh": {
@@ -76,8 +72,8 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 						]
 					}
 				}
-				
-				
+
+
 			}
 		}
 		return resource;

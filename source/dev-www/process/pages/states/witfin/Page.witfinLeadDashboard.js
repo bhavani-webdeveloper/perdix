@@ -11,7 +11,7 @@ irf.pages.controller("witfinLeadDashboardCtrl", ['$log', '$scope', 'PagesDefinit
                 "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.lead.LeadRejectedQueue",
                 "Page/Engine/witfin.lead.LeadBulkUpload",
-                "Page/Engine/witfin.lead.leadAssignmentPendingQueue"
+                "Page/Engine/witfin.lead.LeadAssignmentPendingQueue"
             ]
         };
 
@@ -27,7 +27,7 @@ irf.pages.controller("witfinLeadDashboardCtrl", ['$log', '$scope', 'PagesDefinit
                 }
             }
 
-            var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.leadAssignmentPendingQueue"];
+            var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadAssignmentPendingQueue"];
             var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadFollowUpQueue"];
             var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.IncompleteLeadQueue"];
             var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.ReadyForScreeningQueue"];

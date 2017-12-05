@@ -1,5 +1,5 @@
 define({
-    pageUID: "witfin.lead.leadAssignmentPendingQueue",
+    pageUID: "witfin.lead.LeadAssignmentPendingQueue",
     pageType: "Engine",
     dependencies:["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -170,7 +170,7 @@ define({
 									return false;
 								}
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadReassign",
+									pageName: "witfin.lead.LeadReassign",
 									pageData: items
 								});
 							},

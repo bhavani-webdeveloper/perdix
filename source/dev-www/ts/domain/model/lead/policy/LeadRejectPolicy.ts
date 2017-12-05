@@ -6,15 +6,15 @@ import {ObjectFactory} from "../../../shared/ObjectFactory";
 import Utils = require("../../../shared/Utils");
 import {LeadProcess} from "../LeadProcess";
 
-export interface LeadFollowupPolicyArgs {
-    stageForFollowup: string;
+export interface LeadRejectPolicyArgs {
+    stageForRejection: string;
 }
 
-export class LeadFollowupPolicy implements LeadPolicy<LeadFollowupPolicyArgs> {
+export class LeadRejectPolicy implements LeadPolicy<LeadRejectPolicyArgs> {
 
-    args: LeadFollowupPolicyArgs;
+    args: LeadRejectPolicyArgs;
 
-    setArguments(args: LeadFollowupPolicyArgs ) {
+    setArguments(args: LeadRejectPolicyArgs ) {
         this.args = args;
     }
 
@@ -22,7 +22,7 @@ export class LeadFollowupPolicy implements LeadPolicy<LeadFollowupPolicyArgs> {
 
         return Observable.defer(()=>{
             if (leadProcess.lead) {
-                leadProcess.stage = this.args.stageForFollowup;
+                leadProcess.stage = this.args.stageForRejection;
             }
             return Observable.of(leadProcess);
         })

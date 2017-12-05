@@ -119,7 +119,7 @@ define({
 						    centreName.push(centres[i].centreName);
 					    }
 				    }
-				    
+
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
 						'centreName': centreName[0],
@@ -211,7 +211,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+									pageName: "witfin.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

@@ -235,11 +235,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadGeneration', {
+								entityManager.setModel('witfin.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "customer.IndividualEnrollment3",
+									pageName: "witfin.customer.IndividualEnrollment3",
 									pageData: {
 										lead_id: item.id
 									}
@@ -254,11 +254,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadReject', {
+								entityManager.setModel('witfin.lead.LeadReject', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadReject",
+									pageName: "witfin.lead.LeadReject",
 									pageId: item.id
 								});
 							},

@@ -51,7 +51,19 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.lead.productRequiredBy == '> 1 month'",
+                        "expr": "this.lead.interestedInProduct == 'NO' || this.lead.eligibleForProduct == 'NO'",
+                        "add": [
+                            {
+                                "name": "LeadRejectPolicy",
+                                "arguments": {
+                                    "stageForRejection": "Inprocess"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.lead.interestedInProduct == 'Yes' && this.lead.productRequiredBy == '> 1 month'",
                         "add": [
                             {
                                 "name": "LeadFollowupPolicy",
@@ -61,9 +73,10 @@ let config = {
                             }
                         ]
 
-                    }, {
+                    },
+                    {
                         "type": "expr",
-                        "expr": "this.lead.productRequiredBy == '< 1 month'",
+                        "expr": "this.lead.interestedInProduct == 'Yes' && this.lead.productRequiredBy == '< 1 month'",
                         "add": [
                             {
                                 "name": "LeadScreeningPolicy",
@@ -73,6 +86,7 @@ let config = {
                             }
                         ]
                     }
+
                 ]
             }
         },

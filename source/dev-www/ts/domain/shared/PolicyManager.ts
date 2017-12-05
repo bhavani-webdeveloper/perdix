@@ -67,6 +67,7 @@ export class PolicyManager<T> {
             }
         }
 
+
         if (_.hasIn(pObj, 'overrides') && _.isArray(pObj.overrides)) {
             for (let entry of pObj["overrides"]) {
                 if (entry.type == 'expr') {

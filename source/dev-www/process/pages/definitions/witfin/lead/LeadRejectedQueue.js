@@ -119,7 +119,7 @@ define({
 						    centreName.push(centres[i].centreName);
 					    }
 				    }
-				    
+
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
 						'currentStage': "Inprocess",
@@ -206,11 +206,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadGeneration', {
+								entityManager.setModel('witfin.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+									pageName: "witfin.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},
