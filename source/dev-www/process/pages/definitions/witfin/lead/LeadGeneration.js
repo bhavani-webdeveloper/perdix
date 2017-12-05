@@ -193,8 +193,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                     PageHelper.hideLoader();
                                 })
                                 .subscribe(function(leadProcess){
-                                    console.log(leadProcess);
-                                    console.log("COMPLETED SHAHAL2");
+                                    $state.go('Page.witfinLeadDashboard', null);
                                 }, function(err) {
                                     PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
@@ -205,8 +204,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                         PageHelper.hideLoader();
                                     })
                                     .subscribe(function(leadProcess){
-                                        console.log(leadProcess);
-                                        console.log("COMPLETED SHAHAL2");
+                                        $state.go('Page.witfinLeadDashboard', null);
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();

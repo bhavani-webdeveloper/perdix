@@ -44,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
                     "overrides": [
                         {
                             "type": "expr",
-                            "expr": "this.lead.interestedInProduct == 'NO' || this.lead.eligibleForProduct == 'NO'",
+                            "expr": "this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'NO' || this.lead.eligibleForProduct == 'NO'",
                             "add": [
                                 {
                                     "name": "LeadRejectPolicy",
@@ -56,7 +56,7 @@ define(["require", "exports"], function (require, exports) {
                         },
                         {
                             "type": "expr",
-                            "expr": "this.lead.interestedInProduct == 'Yes' && this.lead.productRequiredBy == '> 1 month'",
+                            "expr": "this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'YES' && this.lead.productRequiredBy == '> 1 month'",
                             "add": [
                                 {
                                     "name": "LeadFollowupPolicy",
