@@ -369,7 +369,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							searchHelper: formHelper,
 							search: function(inputModel, form, model) {
 								var deferred = $q.defer();
-								Queries.getBankAccountsByPartner("Kinara").then(
+								Queries.getBankAccountsByPartner("KGFS").then(
 									function(res) {
 										$log.info("hi this is sponser!!!");
 										$log.info(res);

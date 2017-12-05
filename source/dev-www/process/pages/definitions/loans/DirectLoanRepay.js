@@ -160,7 +160,26 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                         },
                         "repayment.repaymentDate",
                         {
+                            "key": "repayment.instrument",
+                            "type": "select",
+                            "required": true,
+                            "titleMap": [{
+                                name: "Cash",
+                                value: "CASH"
+                            }, {
+                                "name": "Cheque",
+                                "value": "CHQ"
+                            }, {
+                                "name": "NEFT",
+                                "value": "NEFT"
+                            }, {
+                                "name": "RTGS",
+                                "value": "RTGS"
+                            }]
+                        },
+                        {
                             key: "repayment.cashCollectionRemark",
+                            condition:"model.repayment.instrument=='CASH'",
                             type:"select",
                             required:true,
                             enumCode:"Cash_collection_remarks"
@@ -171,25 +190,6 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
                         },
                         {
-                            "key": "repayment.instrument",
-                            "type": "select",
-                            "required": true,
-                            "titleMap": [{
-                                    name: "Cash",
-                                    value: "CASH"
-                                }, {
-                                    "name": "Cheque",
-                                    "value": "CHQ"
-                                }, {
-                                    "name": "NEFT",
-                                    "value": "NEFT"
-                                }, {
-                                    "name": "RTGS",
-                                    "value": "RTGS"
-                                }
-
-                            ]
-                        }, {
                             key: "repayment.reference",
                             title: "CHEQUE_NUMBER",
                             "schema": {
