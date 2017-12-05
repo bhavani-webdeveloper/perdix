@@ -105,6 +105,327 @@
                 "readonly": true
             }
         }
-
+    },
+    "LoanCustomerRelations": {
+        "type": "box",
+        "title": "LOAN_CUSTOMER_RELATIONS",
+        "orderNo": 20,
+        "items": {
+            "loanCustomerRelations": {
+                "type": "array",
+                "add": null,
+                "remove": null,
+                "startEmpty": true,
+                "title": "LOAN_CUSTOMER_RELATIONS",
+                "items": {
+                    "customerId": {
+                        "key": "loanAccount.loanCustomerRelations[].customerId",
+                        "title": "CUSTOMER_ID",
+                        "readonly": true
+                    },
+                    "urn": {
+                        "key": "loanAccount.loanCustomerRelations[].urn",
+                        "title": "URN_NO",
+                        "readonly": true
+                    },
+                    "name": {
+                        "key": "loanAccount.loanCustomerRelations[].name",
+                        "title": "NAME",
+                        "readonly": true
+                    },
+                    "relation": {
+                        "key": "loanAccount.loanCustomerRelations[].relation",
+                        "readonly": true,
+                        "title": "RELATIONSHIP"
+                    },
+                    "relationshipWithApplicant": {
+                        "key": "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                        "title": "RELATIONSHIP_WITH_APPLICATION",
+                        "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                        "required": true,
+                        "type": "select",
+                        "enumCode": "relation"
+                    }
+                }
+            }
+        }
+    },
+    "DeductionsFromLoan": {
+        "type": "box",
+        "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+        "items": {
+            "expectedProcessingFeePercentage": {
+                "key": "loanAccount.expectedProcessingFeePercentage",
+                "type": "number",
+                "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE"
+            },
+            "expectedCommercialCibilCharge": {
+                "key": "loanAccount.expectedCommercialCibilCharge",
+                "type": "amount",
+                "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE"
+            },
+            "estimatedEmi": {
+                "key": "loanAccount.estimatedEmi",
+                "type": "amount",
+                "title": "EXPECTED_SECURITY_EMI",
+                "readonly": true
+            }
+        }
+    },
+    "LoanDocuments": {
+        "type": "box",
+        "title": "LOAN_DOCUMENTS",
+        "items": {
+            "loanDocuments": {
+                "type": "array",
+                "key": "loanAccount.loanDocuments",
+                "view": "fixed",
+                "startEmpty": true,
+                "title": "LOAN_DOCUMENT",
+                "items": {
+                    "document": {
+                        "key": "loanAccount.loanDocuments[].document",
+                        "title": "DOCUMENT_NAME",
+                        "type": "string",
+                        "required": true
+                    },
+                    "documentId": {
+                        "title": "Upload",
+                        "key": "loanAccount.loanDocuments[].documentId",
+                        "required": true,
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "using": "scanner"
+                    }
+                }
+            }
+        }
+    },
+    "AdditionalLoanInformation": {
+        "type": "box",
+        "title": "ADDITIONAL_LOAN_INFORMATION",
+        "items": {
+            "estimatedDateOfCompletion":{
+                "key": "loanAccount.estimatedDateOfCompletion",
+                "type": "date",
+                "title": "ESTIMATED_DATE_OF_COMPLETION"
+            },
+            "productCategory":{
+                "key": "loanAccount.productCategory",
+                "title": "PRODUCT_TYPE",
+                "enumCode": "loan_product_category"
+            },
+            "customerSignDateExpected":{
+                "key": "loanAccount.customerSignDateExpected",
+                "type": "date",
+                "title": "CUSTOMER_SIGN_DATE_EXPECTED"
+            },
+            "proposedHires":{
+                "key": "loanAccount.proposedHires",
+                "type": "string",
+                "required": true,
+                "title": "PROPOSED_HIRES"
+            },
+            "percentageIncreasedIncome":{
+                "key": "loanAccount.percentageIncreasedIncome",
+                "type": "number",
+                "title": "PERCENTAGE_INCREASED_INCOME"
+            },
+            "percentageInterestSaved":{
+                "key": "loanAccount.percentageInterestSaved",
+                "type": "number",
+                "title": "PERCENTAGE_INTEREST_SAVED"
+            }
+        }
+    },
+    "CollateralInformation": {
+        "type": "box",
+        "title": "COLLATERAL_INFORMATION",
+        "items": {
+            "collateral": {
+                "key": "loanAccount.collateral",
+                "type": "array",
+                "startEmpty": true,
+                "title": "COLLATERAL_DETAILS",
+                "items": {
+                    "collateralDescription": {
+                        "key": "loanAccount.collateral[].collateralDescription",
+                        "title": "MACHINE",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "collateralValue": {
+                        "key": "loanAccount.collateral[].collateralValue",
+                        "title": "PURCHASE_PRICE",
+                        "required": true,
+                        "type": "number"
+                    },
+                    "expectedIncome": {
+                        "key": "loanAccount.collateral[].expectedIncome",
+                        "title": "EXPECTED_INCOME",
+                        "required": true,
+                        "type": "number"
+                    },
+                    "collateralType": {
+                        "key": "loanAccount.collateral[].collateralType",
+                        "title": "MACHINE_TYPE",
+                        "required": true,
+                        "type": "select",
+                        "enumCode": "collateral_type"
+                    },
+                    "manufacturer": {
+                        "key": "loanAccount.collateral[].manufacturer",
+                        "title": "MANFACTURE_NAME",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "modelNo": {
+                        "key": "loanAccount.collateral[].modelNo",
+                        "title": "MACHINE_MODEL",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "serialNo": {
+                        "key": "loanAccount.collateral[].serialNo",
+                        "title": "SERIAL_NO",
+                        "type": "string"
+                    },
+                    "expectedPurchaseDate": {
+                        "key": "loanAccount.collateral[].expectedPurchaseDate",
+                        "title": "EXPECTED_PURCHASE_DATE",
+                        "required": true,
+                        "type": "date",
+                        "minDate": "2017-09-08"
+                    },
+                    "machineAttachedToBuilding": {
+                        "key": "loanAccount.collateral[].machineAttachedToBuilding",
+                        "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                        "type": "select",
+                        "required": true,
+                        "enumCode": "decisionmaker"
+                    },
+                    "hypothecatedToBank": {
+                        "key": "loanAccount.collateral[].hypothecatedToBank",
+                        "title": "HYPOTHECATED_TO_KINARA",
+                        "required": true,
+                        "enumCode": "decisionmaker",
+                        "type": "select"
+                    },
+                    "electricityAvailable": {
+                        "key": "loanAccount.collateral[].electricityAvailable",
+                        "title": "ELECTRICITY_AVAIALBLE",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "required": true
+                    },
+                    "spaceAvailable": {
+                        "key": "loanAccount.collateral[].spaceAvailable",
+                        "title": "SPACE_AVAILABLE",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "required": true
+                    },
+                    "collateral1FilePath": {
+                        "key": "loanAccount.collateral[].collateral1FilePath",
+                        "title": "MACHINE_QUOTATION",
+                        "category": "Loan",
+                        "required": true,
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    }
+                }
+            }
+        }
+    },
+    "LoanRecommendation": {
+        "type": "box",
+        "title": "LOAN_RECOMMENDATION",
+        "items": {
+            "loanAmount": {
+                "key": "loanAccount.loanAmount",
+                "type": "amount",
+                "required": true,
+                "title": "LOAN_AMOUNT"
+            },
+            "tenure": {
+                "key": "loanAccount.tenure",
+                "title": "DURATION_IN_MONTHS",
+                "required": true
+            },
+            "interestRate": {
+                "key": "loanAccount.interestRate",
+                "type": "number",
+                "required": true,
+                "title": "INTEREST_RATE"
+            },
+            "estimatedEmi": {
+                "key": "loanAccount.estimatedEmi",
+                "type": "amount",
+                "title": "ESTIMATED_KINARA_EMI",
+                "readonly": true
+            },
+            "processingFeePercentage": {
+                "key": "loanAccount.processingFeePercentage",
+                "type": "number",
+                "required": true,
+                "title": "PROCESSING_FEES_IN_PERCENTAGE"
+            },
+            "securityEmiRequired": {
+                "key": "loanAccount.securityEmiRequired",
+                "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "enumCode": "decisionmaker",
+                "type": "select",
+                "title": "SECURITY_EMI_REQUIRED",
+                "required": true
+            },
+            "commercialCibilCharge": {
+                "key": "loanAccount.commercialCibilCharge",
+                "type": "amount",
+                "title": "COMMERCIAL_CIBIL_CHARGE"
+            }
+        }
+    },
+    "LoanSanction": {
+        "type": "box",
+        "title": "LOAN_SANCTION",
+        "items": {
+            "sanctionDate": {
+                "key": "loanAccount.sanctionDate",
+                "type": "date",
+                "title": "SANCTION_DATE"
+            },
+            "numberOfDisbursements": {
+                "key": "loanAccount.numberOfDisbursements",
+                "title": "NUM_OF_DISBURSEMENTS"
+            },
+            "disbursementSchedules": {
+                "key": "loanAccount.disbursementSchedules",
+                "title": "DISBURSEMENT_SCHEDULES",
+                "add": null,
+                "remove": null,
+                "items": {
+                    "trancheNumber": {
+                        "key": "loanAccount.disbursementSchedules[].trancheNumber",
+                        "title": "TRANCHE_NUMBER",
+                        "readonly": true
+                    },
+                    "disbursementAmount": {
+                        "key": "loanAccount.disbursementSchedules[].disbursementAmount",
+                        "title": "DISBURSEMENT_AMOUNT",
+                        "type": "amount"
+                    },
+                    "tranchCondition": {
+                        "key": "loanAccount.disbursementSchedules[].tranchCondition",
+                        "type": "lov",
+                        "autolov": true,
+                        "title": "TRANCHE_CONDITION"
+                    }
+                }
+            }
+        }
     }
 }
