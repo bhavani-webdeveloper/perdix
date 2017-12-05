@@ -220,7 +220,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.ScreeningInput",
+									pageName: "witfin.loans.individual.screening.ScreeningInput",
 									pageData: {
 										lead_id: item.id
 									}
@@ -239,7 +239,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "witfin.customer.IndividualEnrollment3",
+									pageName: "witfin.customer.IndividualEnrollment2",
 									pageData: {
 										lead_id: item.id
 									}

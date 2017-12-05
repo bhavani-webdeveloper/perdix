@@ -1,9 +1,14 @@
-abstract class LOVElementConfiguration extends UIElementConfiguration{
+import {UIElementConfiguration} from '../UIElementConfiguration';
+import Utils = require("../../../domain/shared/Utils");
+
+export abstract class LOVElementConfiguration extends UIElementConfiguration{
     protected elementType: string = 'lov';
     protected abstract outputMap: Object;
-    protected abstract searchHelper: any;
+    protected searchHelper: any = Utils.getFormHelper();
     protected abstract search: Function;
     protected abstract getListDisplayItem: Function;
     protected abstract onSelect: Function;
-    protected abstract lovOnly: string;
+    protected abstract lovonly: boolean;
+    protected abstract autolov: boolean;
+
 }

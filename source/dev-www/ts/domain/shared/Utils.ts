@@ -1,4 +1,5 @@
 ///<amd-dependency path="moment" name="moment"/>
+import AngularResourceService = require("../../infra/api/AngularResourceService");
 /**
  * Created by shahalpk on 21/11/17.
  */
@@ -26,6 +27,10 @@ class Utils {
 
     static getCurrentDate():string {
         return moment().format('YYYY-MM-DD');
+    }
+
+    static getFormHelper():any {
+        return AngularResourceService.getInstance().getNGService("formHelper");
     }
 
 }

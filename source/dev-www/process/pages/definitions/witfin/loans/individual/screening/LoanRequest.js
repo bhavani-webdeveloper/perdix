@@ -1,18 +1,18 @@
 define([],function(){
-     
+
     return {
         pageUID: "witfin.loans.individual.screening.LoanRequest",
         pageType: "Engine",
         dependencies: ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "$injector"],
+"BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor","UIRepository", "$injector"],
 
     $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, $injector) {
+    BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector) {
         var branch = SessionStore.getBranch();
-        
-        
+
+
         var self;
         var validateForm = function(formCtrl){
             formCtrl.scope.$broadcast('schemaFormValidate');
@@ -418,111 +418,21 @@ define([],function(){
                         }
                     }
                 }
-                
+
             }
         }
 
         var getIncludes = function (model) {
-                
+
                 return [
                     "PreliminaryInformation",
                     "PreliminaryInformation.linkedAccountNumber",
-                    
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose2",
                     "PreliminaryInformation.loanAmountRequested",
-                    "PreliminaryInformation.loanToValue",
-                    "PreliminaryInformation.section1",
-                    "loanCustomerRelations",
-                    "loanCustomerRelations.loanCustomerRelations",
-                    "loanCustomerRelations.loanCustomerRelations.customerId",
-                    "loanCustomerRelations.loanCustomerRelations.urn",
-                    "loanCustomerRelations.loanCustomerRelations.name",
-                    "loanCustomerRelations.loanCustomerRelations.relation",
-                    "loanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
-                    "DeductionsFromLoanamount",
-                    "DeductionsFromLoanamount.expectedProcessingFeePercentage",
-                    "DeductionsFromLoanamount.expectedCommercialCibilCharge",
-                    "DeductionsFromLoanamount.estimatedEmi",
-                    "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
-                    "LoanMitigants.deviationParameter.mitigants",
-                    "LoanMitigants.deviationParameter.mitigants.mitigationSection",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantNameSection",
-                    "LoanDocuments",
-                    "LoanDocuments.loanDocuments",
-                    "LoanDocuments.loanDocuments.document",
-                    "LoanDocuments.loanDocuments.documentId",
-                    "NewAssetDetails",
-                    "NewAssetDetails.assetDetails",
-                    "NewAssetDetails.assetDetails.collateralDescription",
-                    "NewAssetDetails.assetDetails.collateralValue",
-                    "NewAssetDetails.assetDetails.expectedIncome",
-                    "NewAssetDetails.assetDetails.collateralType",
-                    "NewAssetDetails.assetDetails.manufacturer",
-                    "NewAssetDetails.assetDetails.modelNo",
-                    "NewAssetDetails.assetDetails.serialNo",
-                    "NewAssetDetails.assetDetails.expectedPurchaseDate",
-                    "NewAssetDetails.assetDetails.machineAttachedToBuilding",
-                    "NewAssetDetails.assetDetails.hypothecatedToBank",
-                    "NewAssetDetails.assetDetails.electricityAvailable",
-                    "NewAssetDetails.assetDetails.spaceAvailable",
-                    "NewAssetDetails.assetDetails.collateral1FilePath",
-                    "LoanRecomendation",
-                    "LoanRecomendation.loanAmount",
-                    "LoanRecomendation.tenure",
-                    "LoanRecomendation.interestRate",
-                    "LoanRecomendation.estimatedEmi",
-                    "LoanRecomendation.processingFeePercentage",
-                    "LoanRecomendation.estimatedEmi",
-                    "LoanRecomendation.securityEmiRequired",
-                    "LoanRecomendation.commercialCibilCharge",
-                    "LoanSanction",
-                    "LoanSanction.DisbursementDetails",
-                    "LoanSanction.DisbursementDetails.sanctionDate",
-                    "LoanSanction.DisbursementDetails.numberOfDisbursements",
-                    "LoanSanction.DisbursementDetails.disbursementSchedules",
-                    "LoanSanction.DisbursementDetails.disbursementSchedules.trancheNumber",
-                    "LoanSanction.DisbursementDetails.disbursementSchedules.disbursementAmount",
-                    "LoanSanction.DisbursementDetails.disbursementSchedules.tranchCondition",
-                    "IRR",
-                    "IRR.frequencyRequested",
-                    "IRR.tenureRequested",
-                    "IRR.dsaPayout",
-                    "IRR.estimatedEmi",
-                    
-                    "postReview",
-                    "postReview.postReview",
-                    "postReview.screeningAction",
-                    "postReview.rejectsection",
-                    "postReview.rejectsection.remarks",
-                    "postReview.rejectsection.rejectReason",
-                    "postReview.rejectsection.rejectButton",
-                    "postReview.holdsection",
-                    "postReview.holdsection.remarks",
-                    "postReview.holdsection.holdButton",
-                    "postReview.sendbackSection",
-                    "postReview.sendbackSection.remarks",
-                    "postReview.sendbackSection.targetStage",
-                    "postReview.sendbackSection.sendBackButton",
-                    "postReview.proceedsection",
-                    "postReview.proceedsection.REMARKS",
-                    "postReview.proceedsection.proceedButton",
-                    "postReview.valuator",
-                    "rejectReason",
-                    "rejectReason.rejectSection",
-                    "rejectReason.rejectSection.rejectReason",
-                    "revertReject",
-                    "revertReject.remarks",
-                    "revertReject.rejectReason",
-                    "revertReject.targetStage",
-                    "revertReject.sendBackButton",
-                    "actionBox",
-                    "actionBox.saveButton"
-
-                    
+                    "PreliminaryInformation.loanToValue"
                 ];
-                 
+
             }
         return {
             "type": "schema-form",
@@ -530,109 +440,7 @@ define([],function(){
             "subTitle": "BUSINESS",
             initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                  // AngularResourceService.getInstance().setInjector($injector);
-                
-                
-                model.currentStage = bundleModel.currentStage;
-                model.customer=model.customer || {};
-                model.review = model.review|| {};
-                model.temp=model.temp||{}
-                if (_.hasIn(model, 'loanAccount')){
-                    $log.info('Printing Loan Account');
-                    $log.info(model.loanAccount);
-                } else {
-                    model.customer = model.customer || {};
-                    model.customer.customerType = "Enterprise";
-                    model.loanAccount = {};
-                    model.loanAccount.loanCustomerRelations = [];
-                    // model.loanAccount.frequency = 'M';
-                    model.loanAccount.isRestructure = false;
-                    model.loanAccount.documentTracking = "PENDING";
-                    model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
-                    /* END OF TEMP CODE */
-                }
-                if (bundlePageObj){
-                    model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                }
 
-
-                /* Deviations and Mitigations grouping */
-                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
-                    var loanMitigantsGrouped = {};
-                    for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
-                        var item = model.loanAccount.loanMitigants[i];
-                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
-                            loanMitigantsGrouped[item.parameter] = [];
-                        }
-                        loanMitigantsGrouped[item.parameter].push(item);
-                    }
-                    model.loanMitigantsByParameter = [];
-                    _.forOwn(loanMitigantsGrouped, function(mitigants, key){
-                        var chosenMitigants = "<ul>";
-
-                        for (var i=0; i<mitigants.length; i++){
-                            chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
-                        }
-                        chosenMitigants = chosenMitigants + "</ul>";
-                        model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
-                    })
-                }
-                /* End of Deviations and Mitigations grouping */
-
-                if (_.hasIn(model, 'loanAccount')){
-                    $log.info('Printing Loan Account');
-                    IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
-                    .$promise
-                    .then(function (resp){
-                        model.loanSummary = resp;
-                        if(model.loanSummary && model.loanSummary.length)
-                        {
-                            for(i=0;i<model.loanSummary.length;i++)
-                            {
-                                if(model.loanSummary[i].postStage=="Rejected")
-                                {
-                                    if(model.currentStage=='Rejected')
-                                    {
-                                        model.review.preStage = model.loanSummary[i].preStage;
-                                        model.review.targetStage = model.loanSummary[i].preStage;
-                                    }
-                                }
-                            }
-                        }
-                    },function (errResp){
-
-                    });
-                }
-
-                if (_.hasIn(model, 'loanAccount')){
-                    Enrollment.getCustomerById({id:model.loanAccount.customerId})
-                        .$promise
-                        .then(function(res){
-                            model.customer = res;
-                        });
-                }
-
-                if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
-                    model.loanAccount.loanCustomerRelations!=null &&
-                    model.loanAccount.loanCustomerRelations.length > 0) {
-                    var lcr = model.loanAccount.loanCustomerRelations;
-                    var idArr = [];
-                    for (var i=0;i<lcr.length;i++){
-                        idArr.push(lcr[i].customerId);
-                    }
-                    Queries.getCustomerBasicDetails({'ids': idArr})
-                        .then(function(result){
-                            if (result && result.ids){
-                                for (var i = 0; i < lcr.length; i++) {
-                                    var cust = result.ids[lcr[i].customerId];
-                                    if (cust) {
-                                        lcr[i].name = cust.first_name;
-                                    }
-                                }
-                            }
-                        });
-                }
-
-                BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
                 self = this;
                 var formRequest = {
                     "overrides": "",
@@ -641,7 +449,12 @@ define([],function(){
                         ""
                     ]
                 };
-                self.form = IrfFormRequestProcessor.getFormDefinition('LoanRequest', formRequest, configFile(), model);
+                var p1 = UIRepository.getLoanProcessUIRepository().$promise;
+
+                p1.then(function(repo) {
+                    self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                })
+
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -2681,7 +2494,7 @@ define([],function(){
                         PageHelper.showProgress("update-loan", "Working...");
 
                         //
-                        
+
 
                         IndividualLoan.update(reqData)
                             .$promise
@@ -2760,7 +2573,7 @@ define([],function(){
                                 //  )
                                 // var subscribe = result.subscribe(
                                 //     function(res) {
-                                        
+
                                 //         model.loanAccount = res.loanAccount;
                                 //         if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
                                 //             for(i in model.temp.loanCustomerRelations){
@@ -2784,15 +2597,15 @@ define([],function(){
                                 //         }
                                 //     },
                                 //     function(err) {
-                                        
+
                                 //         PageHelper.showErrors(err);
                                 //         PageHelper.hideLoader();
                                 //         BundleManager.updateOffline();
                                 //     }
                                 // )
-                                
-                                
-                                
+
+
+
                                 // IndividualLoan.create(reqData)
                                 //     .$promise
                                 //     .then(function(res){
@@ -3715,16 +3528,16 @@ define([],function(){
 //                     }
 //                 }
 //             }
-            
+
 //         }
 //     }
 
 //     var getIncludes = function (model) {
-            
+
 //             return [
 //                 "PreliminaryInformation",
 //                 "PreliminaryInformation.linkedAccountNumber",
-                
+
 //                 "PreliminaryInformation.loan",
 //                 "PreliminaryInformation.loanPurpose2",
 //                 "PreliminaryInformation.loanAmountRequested",
@@ -3787,7 +3600,7 @@ define([],function(){
 //                 "IRR.tenureRequested",
 //                 "IRR.dsaPayout",
 //                 "IRR.estimatedEmi",
-                
+
 //                 "postReview",
 //                 "postReview.postReview",
 //                 "postReview.screeningAction",
@@ -3817,9 +3630,9 @@ define([],function(){
 //                 "actionBox",
 //                 "actionBox.saveButton"
 
-                
+
 //             ];
-             
+
 //         }
 //     return {
 //         "type": "schema-form",

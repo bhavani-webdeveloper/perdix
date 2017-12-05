@@ -6505,9 +6505,16 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
         return {
             getFormDefinition: function (formName, formRequest, configFile, model) {
                 var form = [],
-                    keys;
-                if (Object.keys(formRepository).indexOf(formName) === -1)
-                    return form;
+                    keys, formRepo;
+                var resolvers = []
+                if(typeof formName === 'string') {
+                    if (Object.keys(formRepository).indexOf(formName) === -1)
+                        return form;
+                    formRepo = formRepository[formName];
+                } else {
+                    formRepo = formName;
+                }
+
                 if (!formRequest || !_.isObject(formRequest)) {
                     return form;
                 }
@@ -6523,6 +6530,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     var configKeys = Object.keys(configFile)
                     for (var i = 0; i < configKeys.length; i++) {
                         var _k = jsonPath(model, configKeys[i])[0];
+                        if (!_k){
+                            continue;
+                        }
                         var configObject = jsonPath(configFile[configKeys[i]], _k)[0];
 
                         if (_.hasIn(configObject, "excludes")) {
@@ -6538,26 +6548,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
 
-
-                // for(var i=0; i< requestParam.length; i++) {
-
-
-                //      if(_.hasIn(configFile[requestParam[i]], "excludes")) {
-
-                //         // configFile[requestParam[i]].excludes.map(function(v) {
-                //         //     excludes.push(v);
-                //         // });
-
-                //         configFile[requestParam[i]].excludes.reduce(function(acc, curval) {
-                //             excludes.push(curval);
-                //         })
-
-                //      }
-                //      if(_.hasIn(configFile[requestParam[i]], "overrides")) {
-                //          overrides = _.merge(overrides, configFile[requestParam[i]].overrides);
-                //      }
-
-                // }
 
                 var getKeyString = function (parentKey, key) {
                     if (!parentKey || parentKey === "") {
@@ -6575,7 +6565,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     var keylist = Object.keys(repo);
                     var _defn, _key, _items;
                     var _parentKey = parent ? parent : "";
+
                     for (var itr = 0; itr < keylist.length; itr++) {
+
                         _key = getKeyString(_parentKey, keylist[itr]);
                         if ((main && includes.indexOf(_key) === -1) || excludes.indexOf(_key) > -1) {
                             //if this is the outermost level of form definition, then include is mandatory
@@ -6588,6 +6580,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         } else {
                             _defn = _.merge({}, repo[keylist[itr]]);
                         }
+
+                        /**
+                         * Check for resolves in the element. If so, attach data to element.
+                         */
+                        if(_.hasIn(_defn, 'resolver')) {
+                            var obj = {
+                                'resolver':_defn.resolver,
+                                'item': _defn
+                            };
+                            resolvers.push(obj);
+                        }
                         if (_defn.items) {
 
                             _items = _.merge({}, _defn.items);
@@ -6596,10 +6599,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             constructForm(_items, _defn.items, _key, true);
                         }
                         form.push(_defn);
+
                     }
                     form.sort(orderFormItems);
                 }
-                constructForm(formRepository[formName], form, undefined, true);
+
+
+                constructForm(formRepo, form, undefined, true);
+                _.forEach(resolvers, function(val, key) {
+                    var resolver = val.resolver;
+                    var pageDefPath = "perdix/ui/configresolver/" + val.item.type + "/" + resolver;
+                        require([pageDefPath], function(tsObject) {
+                            var obj = new tsObject[resolver]();
+                            _.defaults(val.item, obj);
+                        },function(err){
+                            $log.info("[REQUIRE] Error loading page(" + pageDefPath + ")");
+                            $log.error(err)
+                        });
+                });
+
                 return form;
             }
         }
