@@ -13,10 +13,20 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
 
+	var getCustomerProfilePageUrl = function() {
+		if (siteCode == 'sambandh') {
+			return "Page/Engine/customer.IndividualEnrollment3";
+		}  else if (siteCode == 'saija') {
+			return "Page/Engine/customer.IndividualEnrollmentStage2";
+		} else {
+			return "Page/Engine/customer360.CustomerProfile";
+		} 
+	}
+
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
-			(siteCode == 'sambandh' || siteCode == 'saija') ? "Page/Engine/customer.IndividualEnrollment3" : "Page/Engine/customer360.CustomerProfile",
+			getCustomerProfilePageUrl(),
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
@@ -340,6 +350,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollment3']) {
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollment3'].onClick = function(event, menu) {
+				menu.stateParams.pageId = $scope.customerId;
+				return $q.resolve(menu);
+			};
+		}
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollmentStage2']) {
+			$scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollmentStage2'].onClick = function(event, menu) {
 				menu.stateParams.pageId = $scope.customerId;
 				return $q.resolve(menu);
 			};

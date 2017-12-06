@@ -228,10 +228,16 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, model){
-								if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+								if(model.siteCode == 'sambandh') {
 									$state.go("Page.Engine",{
 										pageName:"customer.IndividualEnrollment3",
 										pageId:item.id
+									});
+								} else if(model.siteCode == 'saija') {
+									$state.go("Page.Engine",{
+										pageName:"customer.IndividualEnrollment3",
+										pageId:item.id,
+										pageData: {currentStage: item.currentStage}
 									});
 								} else {
 									$state.go("Page.Engine",{
@@ -301,6 +307,22 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							},
 							isApplicable: function(item, model){
 								return model.siteCode === "KGFS";
+							}
+						},
+						{
+							name: "Edit Customer",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, model){
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "customer.IndividualEnrollmentStage2",
+									pageId: item.id,
+									pageData: {currentStage: item.currentStage}
+								});
+							},
+							isApplicable: function(item, model){
+								return (model.siteCode === "saija" && item.currentStage === 'Stage02');
 							}
 						}
 					];

@@ -266,314 +266,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 };
             } else if (model.siteCode == "saija"){
                 return {
-                        "KYC.additionalKYCs.kyc1ProofType": {
-                            title: "MY CUSTOM TITLE"
-                        },
-                        "CustomerInformation.centreId" : {
-                            "title": "CENTRE",
-                        },
-                        "CustomerInformation.spouseFirstName" : {
-                            "required": true
-                        },
-                        "CustomerInformation.spouseDateOfBirth": {
-                            "required": true,
-                        },
-                        "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
-                            "required": true,
-                        },
-                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
-                            "enumCode": "years_of_business",
-                            "title": "AGE_OF_ENTERPRISE"
-                        },
-                        "BusinessOccupationDetails.businessDetails.workPeriod" : {
-                            enumCode: "bsns_in_current_addrss_since",
-                            title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-                            type: "select",
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.businessDetails.businessVillage": {
-                            title: "BUSINESS_REGISTRATION_NUMBER"
-                        },
-                        "BusinessOccupationDetails.businessDetails.businessLandmark": {
-                            title: "WORK_LOCATION",
-                            type: "select",
-                            titleMap: {
-                                "Shop": "Shop",
-                                "Homebased": "Homebased",
-                                "Market": "Market",
-                                "Others": "Others"
-                            }
-                        },
-                        "BusinessOccupationDetails.businessDetails.businessPincode": {
-                            title: "BUSINESS_GROWTH",
-                            type: "select",
-                            titleMap: {
-                                "Normal": "Normal",
-                                "Poor": "Poor",
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.businessDetails.businessPhone": {
-                            title: "INCHARGE_WHEN_YOU_ARE_NOT_AVAILABLE",
-                            type: "string",
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.businessDetails.workPlaceType" : {
-                            title: "WORK_PLACE_OWNERSHIP",
-                        },
-                        "BusinessOccupationDetails.businessDetails.workPlaceBuildType" : {
-                            "titleMap": {
-                                "Concrete": "Concrete",
-                                "Semi-Concrete": "Semi-Concrete",
-                                "Kuccha": "Kuccha",
-                                "Handcart": "Handcart",
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated": {
-                            title: "NON_IRRIGATED_LAND",
-                            "type": "string",
-                            "$validators": {
-                                validVaue: function (value) {
-                                    if(angular.isUndefined(value) || value == null) 
-                                        true;
-                                    else {
-                                        var patt = /^(\d*)\.{0,1}(\d*)$/;
-                                        return patt.test(value);
-                                    }                                    
-                                }
-                            },
-                            "validationMessage": {
-                               "validVaue": "only numbers are allowed."
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.irrigated": {
-                            title: "IRRIGATED_LAND",
-                            "type": "string",
-                            "$validators": {
-                                validVaue: function (value) {
-                                    if(angular.isUndefined(value) || value == null) 
-                                        true;
-                                    else {
-                                        var patt = /^(\d*)\.{0,1}(\d*)$/;
-                                        return patt.test(value);
-                                    }                                    
-                                }
-                            },
-                            "validationMessage": {
-                               "validVaue": "only numbers are allowed."
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.cropName": {
-                            title: "CROP_NAME",
-                            "type": "string",
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.harvestMonth": {
-                            title: "HARVEST_MONTH",
-                            "type": "select",
-                            "titleMap": {
-                                "Jan":"Jan",
-                                "Feb":"Feb",
-                                "Mar":"Mar",
-                                "Apr":"Apr",
-                                "May":"May",
-                                "Jun":"Jun",
-                                "Jul":"Jul",
-                                "Aug":"Aug",
-                                "Sep":"Sep",
-                                "Oct":"Oct",
-                                "Nov":"Nov",
-                                "Dec":"Dec"
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.landOwnership": {
-                             titleMap: {
-                                "Rented/Leased":"Rented/Leased",
-                                "Owned":"Owned",
-                            }
-                        },
-                        "BusinessOccupationDetails.agricultureDetails.landArea": {
-                            title: "LAND_LOCATION",
-                            "type": "select",
-                            titleMap: {
-                                "Within Village": "Within Village",
-                                "Outside Village": "Outside Village",
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "HouseVerification.HouseDetails.HouseOwnership" : {
-                            required:true,
-                            enumCode: "house_ownership",
-                        },
-                        "familyDetails.familyMembers": {
-                            onArrayAdd : function (value, form, model, formCtrl, event) {
-                                if((model.customer.familyMembers.length -1) === 0){
-                                    model.customer.familyMembers[0].relationShip = 'self';
-                                    model.customer.familyMembers[0].gender = model.customer.gender;
-                                    model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
-                                    model.customer.familyMembers[0].age = model.customer.age;
-                                    model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
-                                    model.customer.familyMembers[0].mobilePhone = model.customer.mobilePhone;
-                                }
-                            }
-                        },
-                        "familyDetails.familyMembers.healthStatus" : {
-                            titleMap: {
-                                "GOOD": "Healthy",
-                                "BAD": "UnHealthy"
-                            },
-                        },
-                        "familyDetails.familyMembers.incomes.monthsPerYear" : {
-                            required:true,
-                            "$validators": {
-                                validVaue: function (value) {
-                                    if(value < 1 || value > 12) {
-                                            return false;
-                                    }
-                                    return true;
-                                }
-                            },
-                            "validationMessage": {
-                               "validVaue": "range is between 1 to 12"
-                            }
-                        },
-                        "familyDetails.familyMembers.contributionToExpenditure" : {
-                            required:true,
-                        },
-                        "familyDetails.additionalDetails.medicalCondition" : {
-                            title: "FAMILY_MEDICAL_CONDITION_QUESTION",
-                            required:true,
-                            "type": "radios",
-                            "titleMap": {
-                                "Yes": "Yes",
-                                "No": "No",
-                            }
-                        },
-                        "familyDetails.additionalDetails.privateHospitalTreatment" : {
-                            title: "HOSPITAL_TREATMENT_QUESTION",
-                            required:true,
-                            "type": "radios",
-                            "titleMap": {
-                                "Yes": "Yes",
-                                "No": "No",
-                                "NA" : "NA",
-                            }
-                        },
-                        "familyDetails.additionalDetails.householdFinanceRelatedDecision" : {
-                             title: "HOUSEHOLD_FINANCE_DECISION_QUESTION",
-                            "type": "radios",
-                            "titleMap": {
-                                "Yes": "Yes",
-                                "No": "No",
-                                "NA" : "NA",
-                            }
-                        },
-                        "HouseVerification.nameOfRo": {
-                            orderNo: 1,
-                        },
-                        "HouseVerification.HouseDetails.buildType" : {
-                            required:true,
-                        },
-                        "HouseVerification.HouseDetails.landLordName":{
-                            title: "NO_OF_ROOMS",
-                            required:true,
-                            "type": "select",
-                            "titleMap": {
-                                "1": "1",
-                                "2": "2",
-                                "3": "3",
-                                "4": "4",
-                                ">4": ">4",
-                            }
-                        },
-                        "HouseVerification.HouseDetails.HouseVerification": {
-                            title: "HOUSE_CONDITION",
-                            required:true,
-                            "type": "radios",
-                            "titleMap": {
-                                "Good": "Good",
-                                "Average": "Average",
-                                "Poor": "Poor",
-                            }
-                        },
-                        "HouseVerification.HouseDetails.durationOfStay": {
-                            title: "TOILET_FACILITY",
-                            required:true,
-                            "type": "select",
-                            order: 100,
-                            "titleMap": {
-                                "Own toilet": "Own toilet",
-                                "Shared/public": "Shared/public",
-                                "None/open space": "None/open space",
-                            },
-                            schema:{
-                                "type":["string","null"],
-                            }
-                        },
-                        "HouseVerification.houseVerificationPhoto": {
-                            required:true,
-                        },
-                        "Expenditures1.expenditures.expendituresSection.expenditureSource" : {
-                            required: true,
-                        },
-                        "assets.financialAssets.instrumentType" : {
-                            required:false,
-                        },
-                        "assets.financialAssets.nameOfInstitution" : {
-                            required:false,
-                        },
-                        "assets.financialAssets.instituteType" : {
-                            required:false,
-                        },
-                        "assets.financialAssets.amountInPaisa" : {
-                            required:false,
-                        },
-                        "assets.financialAssets.frequencyOfDeposite" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.loanType" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.loanSource" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.instituteName" : {
-                            required:false,
-                            type: "select",
-                            enumCode: "loan_source_institutes",
-                        },
-                        "Liabilities1.liabilities.loanAmountInPaisa" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.installmentAmountInPaisa" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.frequencyOfInstallment" : {
-                            required:false,
-                        },
-                        "Liabilities1.liabilities.liabilityLoanPurpose" : {
-                            required:false,
-                        },
-
+                    "CustomerInformation.centreId" : {
+                        "title": "CENTRE",
+                    },
+                    "CustomerInformation.spouseFirstName" : {
+                        "required": true
+                    },
+                    "CustomerInformation.spouseDateOfBirth": {
+                        "required": true,
+                    },
+                    "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                        "required": true,
+                    },
                 };
             }
         }
@@ -668,6 +372,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "familyDetails.familyMembers.maritalStatus",
                         "familyDetails.familyMembers.mobilePhone",
                         "familyDetails.familyMembers.healthStatus",
+                        "familyDetails.familyMembers.gender_readonly",
+                        "familyDetails.familyMembers.age_readonly",
+                        "familyDetails.familyMembers.dateOfBirth_readonly",
+                        "familyDetails.familyMembers.maritalStatus_readonly",
+                        "familyDetails.familyMembers.mobilePhone_readonly",
                         "familyDetails.familyMembers.incomes",
                         "familyDetails.familyMembers.incomes.incomeSource",
                         "familyDetails.familyMembers.incomes.incomeEarned",
@@ -821,101 +530,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerPermanentAddress.mailingPincode",
                         "ContactInformation.CustomerPermanentAddress.mailingState",
                         "ContactInformation.CustomerPermanentAddress.landLordName",
-                        "familyDetails",
-                        "familyDetails.familyMembers",
-                        "familyDetails.familyMembers.customerId",
-                        "familyDetails.familyMembers.familyMemberFirstName",
-                        "familyDetails.familyMembers.relationShip",
-                        "familyDetails.familyMembers.gender",
-                        "familyDetails.familyMembers.age",
-                        "familyDetails.familyMembers.dateOfBirth",
-                        "familyDetails.familyMembers.educationStatus",
-                        "familyDetails.familyMembers.maritalStatus",
-                        "familyDetails.familyMembers.mobilePhone",
-                        "familyDetails.familyMembers.healthStatus",
-                        "familyDetails.familyMembers.contributionToExpenditure",
-                        "familyDetails.familyMembers.incomes",
-                        "familyDetails.familyMembers.incomes.incomeSource",
-                        "familyDetails.familyMembers.incomes.incomeEarned",
-                        "familyDetails.familyMembers.incomes.frequency",
-                        "familyDetails.familyMembers.incomes.monthsPerYear",
-                        "familyDetails.additionalDetails",
-                        // "familyDetails.additionalDetails.medicalCondition",
-                        // "familyDetails.additionalDetails.privateHospitalTreatment",
-                        // "familyDetails.additionalDetails.householdFinanceRelatedDecision",
-                        "HouseVerification",
-                        "HouseVerification.nameOfRo",
-                        "HouseVerification.HouseDetails",
-                        "HouseVerification.HouseDetails.HouseOwnership",
-                        "HouseVerification.HouseDetails.landLordName",//drinkingwater
-                        "HouseVerification.HouseDetails.HouseVerification",//waterfilter
-                        //"HouseVerification.HouseDetails.Toilet",//is toilet available
-                        "HouseVerification.HouseDetails.durationOfStay",//toilet facility
-                        "HouseVerification.HouseDetails.buildType",
-                        "HouseVerification.latitude",
-                        "HouseVerification.houseVerificationPhoto",
-                        "Liabilities1",
-                        "Liabilities1.liabilities",
-                        "Liabilities1.liabilities.loanType",
-                        "Liabilities1.liabilities.loanSource",
-                        "Liabilities1.liabilities.instituteName",
-                        "Liabilities1.liabilities.loanAmountInPaisa",
-                        "Liabilities1.liabilities.installmentAmountInPaisa",
-                        "Liabilities1.liabilities.startDate",
-                        "Liabilities1.liabilities.maturityDate",
-                        "Liabilities1.liabilities.frequencyOfInstallment",
-                        "Liabilities1.liabilities.liabilityLoanPurpose",
-                        "assets",
-                        "assets.physicalAssets",
-                        "assets.physicalAssets.assetType",
-                        "assets.physicalAssets.ownedAssetDetails",
-                        "assets.physicalAssets.numberOfOwnedAsset",
-                        "assets.physicalAssets.ownedAssetValue",
-                        "assets.financialAssets",
-                        "assets.financialAssets.instrumentType",
-                        "assets.financialAssets.nameOfInstitution",
-                        "assets.financialAssets.ownedBy",
-                        "assets.financialAssets.insuranceType",
-                        "assets.financialAssets.instituteType",
-                        "assets.financialAssets.amountInPaisa",
-                        "assets.financialAssets.frequencyOfDeposite",
-                        "assets.financialAssets.startDate",
-                        "assets.financialAssets.maturityDate",
-                        "Expenditures1",
-                        "Expenditures1.expenditures",
-                        "Expenditures1.expenditures.expendituresSection",
-                        "Expenditures1.expenditures.expendituresSection.expenditureSource",
-                        "Expenditures1.expenditures.expendituresSection.customExpenditureSource",
-                        "Expenditures1.expenditures.expendituresSection.frequencySection",
-                        "Expenditures1.expenditures.expendituresSection.frequencySection.frequency",
-                        "Expenditures1.expenditures.expendituresSection.annualExpensesSection",
-                        "Expenditures1.expenditures.expendituresSection.annualExpensesSection.annualExpenses",
-                        "BusinessOccupationDetails",
-                        "BusinessOccupationDetails.customerOccupationType",
-                        "BusinessOccupationDetails.businessDetails",
-                        "BusinessOccupationDetails.businessDetails.relationshipWithBusinessOwner",
-                        "BusinessOccupationDetails.businessDetails.business/employerName",
-                        //"BusinessOccupationDetails.businessDetails.businessRegNo",
-                        "BusinessOccupationDetails.businessDetails.businessVillage",
-                        "BusinessOccupationDetails.businessDetails.businessLandmark",
-                        "BusinessOccupationDetails.businessDetails.businessPincode",
-                        "BusinessOccupationDetails.businessDetails.businessPhone",
-                        "BusinessOccupationDetails.businessDetails.ageOfEnterprise",
-                        "BusinessOccupationDetails.businessDetails.workPeriod",
-                        "BusinessOccupationDetails.businessDetails.workPlaceType",
-                        "BusinessOccupationDetails.businessDetails.workPlaceBuildType",
-                        // "BusinessOccupationDetails.businessDetails.WorkPlaceOthers",
-                        "BusinessOccupationDetails.agricultureDetails",
-                        "BusinessOccupationDetails.agricultureDetails.relationwithFarmer",
-                        "BusinessOccupationDetails.agricultureDetails.landOwnership",
-                        "BusinessOccupationDetails.agricultureDetails.nonIrrigated",
-                        "BusinessOccupationDetails.agricultureDetails.irrigated",
-                        "BusinessOccupationDetails.agricultureDetails.cropName",
-                        "BusinessOccupationDetails.agricultureDetails.harvestMonth",
-                        "BusinessOccupationDetails.agricultureDetails.landArea",
-                        "loanInformation",
-                        "loanInformation.requestedLoanAmount",
-                        "loanInformation.requestedLoanPurpose",
                         "actionbox",
                         "actionbox.submit",
                         "actionbox.save",
@@ -945,7 +559,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     "includes": getIncludes (model),
                     "excludes": [
                         "KYC.addressProofSameAsIdProof",
-                    ]
+                    ],
                 };
 
                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -1000,6 +614,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 Enrollment.getCustomerById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
+                    if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage != resp.currentStage) {
+                        irfProgressMessage.pop("enrollment","Customer data is in different stage", 5000);
+                        $state.go("Page.Engine",{
+                            pageName:"CustomerSearch",
+                            pageId:null
+                        });
+                    }
                     if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
@@ -1081,7 +702,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         $log.warn("Invalid Data, returning false");
                         return false;
                     }
-                    if(model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                    var selfAvailable = false;
+                    if (model.customer.familyMembers) {
+                        for (var idx = 0; idx < model.customer.familyMembers.length; idx++ ) {
+                             if (model.customer.familyMembers[idx].relationShip == "self")
+                            {
+                                selfAvailable = true;
+                                break;
+                            }
+                        }
+                        if(!selfAvailable) {
+                            irfProgressMessage.pop('enrollment-submit', 'Self information in Family Details section is mandatory to proceed.', 5000);
+                            return false; 
+                        }
+                    }
+                    if(model.siteCode != 'saija' && modelmodelmodel.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
                         var spouseInfoReq = true;
                         for (var idx = 0; idx < model.customer.familyMembers.length; idx++ ) {
                              if (model.customer.familyMembers[idx].relationShip == "Husband" || 
@@ -1097,7 +733,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             return false;
                         }
                     }
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 
@@ -1126,37 +761,39 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
                     reqData.customer.verified = true;
                     try {
-                        for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
-                            var incomes = reqData.customer.familyMembers[i].incomes;
-                            for (var j = 0; j < incomes.length; j++) {
-                                switch (incomes[i].frequency) {
-                                    case 'M':
-                                        incomes[i].monthsPerYear = 12;
-                                        break;
-                                    case 'Monthly':
-                                        incomes[i].monthsPerYear = 12;
-                                        break;
-                                    case 'D':
-                                        incomes[i].monthsPerYear = 365;
-                                        break;
-                                    case 'Daily':
-                                        incomes[i].monthsPerYear = 365;
-                                        break;
-                                    case 'W':
-                                        incomes[i].monthsPerYear = 52;
-                                        break;
-                                    case 'Weekly':
-                                        incomes[i].monthsPerYear = 52;
-                                        break;
-                                    case 'F':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
-                                    case 'Fornightly':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
-                                    case 'Fortnightly':
-                                        incomes[i].monthsPerYear = 26;
-                                        break;
+                        if (reqData.customer.familyMembers) {
+                            for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                                var incomes = reqData.customer.familyMembers[i].incomes;
+                                for (var j = 0; j < incomes.length; j++) {
+                                    switch (incomes[i].frequency) {
+                                        case 'M':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'Monthly':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'D':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'Daily':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'W':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'Weekly':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'F':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fornightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fortnightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                    }
                                 }
                             }
                         }

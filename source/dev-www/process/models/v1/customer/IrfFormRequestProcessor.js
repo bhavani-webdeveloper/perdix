@@ -762,9 +762,20 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "relationShip": {
                                 key: "customer.familyMembers[].relationShip",
                                 orderNo: 10,
+                                condition: "model.customer.familyMembers[form.arrayIndex].relationShip != 'self'",
                                 type: "select",
                                 title: "T_RELATIONSHIP",
                                 "onChange": function (modelValue, form, model, formCtrl, event) {
+                                    if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
+
+                                        for (var index = 0; index < model.customer.familyMembers.length; index++) {
+                                            if(index != form.arrayIndex && model.customer.familyMembers[index].relationShip == 'self'){
+                                                model.customer.familyMembers[form.arrayIndex].relationShip = undefined;
+                                                Utils.alert("self relationship is already selected");
+                                                return;
+                                            }
+                                        }
+                                    }
                                     if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
                                         model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
@@ -877,6 +888,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "gender": {
                                 key: "customer.familyMembers[].gender",
                                 orderNo: 40,
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                 type: "radios",
                                 title: "T_GENDER"
                             },
@@ -884,6 +896,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.familyMembers[].age",
                                 orderNo: 50,
                                 title: "AGE",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                 type: "number",
                                 "onChange": function (modelValue, form, model, formCtrl, event) {
                                     if (model.customer.familyMembers[form.arrayIndex].age > 0) {
@@ -899,6 +912,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.familyMembers[].dateOfBirth",
                                 orderNo: 60,
                                 type: "date",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                 title: "T_DATEOFBIRTH",
                                 "onChange": function (modelValue, form, model, formCtrl, event) {
                                     if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -915,12 +929,112 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "maritalStatus": {
                                 orderNo: 80,
                                 key: "customer.familyMembers[].maritalStatus",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                 type: "select",
                                 title: "T_MARITAL_STATUS"
                             },
                             "mobilePhone": {
                                 orderNo: 90,
                                 key: "customer.familyMembers[].mobilePhone",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
+                                inputmode: "number",
+                                numberType: "tel",
+                            },
+                            "healthStatus": {
+                                orderNo: 100,
+                                key: "customer.familyMembers[].healthStatus",
+                                type: "radios",
+                                titleMap: {
+                                    "GOOD": "GOOD",
+                                    "BAD": "BAD"
+                                },
+                            },
+                            "contributionToExpenditure": {
+                                orderNo: 110,
+                                key: "customer.familyMembers[].contributionToExpenditure",
+                                type: "amount",
+                            },
+                            "incomes": {
+                                key: "customer.familyMembers[].incomes",
+                                orderNo: 120,
+                                type: "array",
+                                startEmpty: false,
+                                items: {
+                                    "incomeSource": {
+                                        key: "customer.familyMembers[].incomes[].incomeSource",
+                                        type: "select"
+                                    },
+                                    "incomeEarned": {
+                                        key: "customer.familyMembers[].incomes[].incomeEarned",
+                                        type: "amount",
+                                    },
+                                    "frequency": {
+                                        key: "customer.familyMembers[].incomes[].frequency",
+                                        type: "select"
+                                    },
+                                    "monthsPerYear": {
+                                        key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                        "title": "MONTHS_PER_YEAR",
+                                    }
+                                }
+                            },
+                            "gender_readonly": {
+                                key: "customer.familyMembers[].gender",
+                                orderNo: 40,
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip == 'self'",
+                                readonly: true,
+                                type: "radios",
+                                title: "T_GENDER"
+                            },
+                            "age_readonly": {
+                                key: "customer.familyMembers[].age",
+                                orderNo: 50,
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip == 'self'",
+                                readonly: true,
+                                title: "AGE",
+                                type: "number",
+                                "onChange": function (modelValue, form, model, formCtrl, event) {
+                                    if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                        if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                        } else {
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                        }
+                                    }
+                                }
+                            },
+                            "dateOfBirth_readonly": {
+                                key: "customer.familyMembers[].dateOfBirth",
+                                orderNo: 60,
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip == 'self'",
+                                readonly: true,
+                                type: "date",
+                                title: "T_DATEOFBIRTH",
+                                "onChange": function (modelValue, form, model, formCtrl, event) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
+                            },
+                            "educationStatus": {
+                                key: "customer.familyMembers[].educationStatus",
+                                orderNo: 70,
+                                type: "select",
+                                title: "T_EDUCATION_STATUS"
+                            },
+                            "maritalStatus_readonly": {
+                                orderNo: 80,
+                                key: "customer.familyMembers[].maritalStatus",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip == 'self'",
+                                readonly: true,
+                                type: "select",
+                                title: "T_MARITAL_STATUS"
+                            },
+                            "mobilePhone_readonly": {
+                                orderNo: 90,
+                                key: "customer.familyMembers[].mobilePhone",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip == 'self'",
+                                readonly: true,
                                 inputmode: "number",
                                 numberType: "tel",
                             },
@@ -6528,6 +6642,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 var includes = formRequest.includes || [];
                 var excludes = formRequest.excludes || [];
                 var overrides = formRequest.overrides || {};
+                var options = formRequest.options || {};
 
                 if (_.isObject(configFile)) {
                     var configKeys = Object.keys(configFile)
@@ -6546,6 +6661,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         }
                         if (_.hasIn(configObject, "overrides")) {
                             overrides = _.merge(overrides, configObject.overrides);
+                        }
+                        if (_.hasIn(configObject, "options")) {
+                            options = _.merge(options, configObject.options);
                         }
 
                     }
@@ -6607,6 +6725,43 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     form.sort(orderFormItems);
                 }
 
+
+                var getPropertyFromFormRepo = function(path) {
+                    var arr = path.split('.')
+                    var obj = formRepo;
+                    if (arr.length > 1) arr = arr.join('.items.').split('.');
+                    while (arr.length) {
+                        obj = obj[arr.shift()];
+                    }
+                    return obj;
+                }
+
+                var processItems = function(items) {
+                    var transformedItems = [];
+                    var tmp;
+                    for (var i = 0; i < items.length; i++) {
+                        if (_.isString(items[i])) {
+                            tmp = getPropertyFromFormRepo(items[i]);
+                            if(tmp) {
+                                if(tmp.items) {
+                                   tmp.items = processItems(tmp.items);
+                                } 
+                                transformedItems.push(tmp);
+                            }
+                        } else if (_.isObject(items[i])){
+                            if(items[i].items) {
+                                items[i].items = processItems(items[i].items);
+                            }
+                            transformedItems.push(items[i]);
+                        }
+                    }
+                    return transformedItems;
+                }
+
+                if(options.additions && _.isArray(options.additions)) {
+                    var additionalFields = processItems(options.additions);                
+                    form = form.concat(additionalFields);
+                }
 
                 constructForm(formRepo, form, undefined, true);
                 _.forEach(resolvers, function(val, key) {
