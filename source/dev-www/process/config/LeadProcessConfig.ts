@@ -63,7 +63,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'YES' && this.lead.leadStatus == 'FollowUP'",
+                        "expr": "(this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'YES') && this.lead.leadStatus == 'FollowUp'",
                         "add": [
                             {
                                 "name": "LeadFollowupPolicy",
@@ -76,7 +76,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.lead.interestedInProduct && this.lead.interestedInProduct == 'YES' && this.lead.leadStatus == 'Screening'",
+                        "expr": "(this.lead.interestedInProduct && this.lead.interestedInProduct == 'YES') && this.lead.leadStatus == 'Screening'",
                         "add": [
                             {
                                 "name": "LeadScreeningPolicy",
