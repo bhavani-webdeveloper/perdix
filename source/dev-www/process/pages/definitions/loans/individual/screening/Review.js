@@ -20,12 +20,9 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 						model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
 					}
 
-					model.loanSummary.push({
-						createdDate: moment().format("YYYY-MM-DD[T]hh:mm:ss[Z]"),
-						isCurrentStage: true,
-						_conversationExpand: true,
-						id: 9
-					});
+					var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
+					model.loanSummary[currentStage].isCurrentStage = true;
+					model.loanSummary[currentStage]._conversationExpand = true;					
 				}).finally(PageHelper.hideLoader);
 			}
 		},
@@ -45,23 +42,29 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 				if (item.isCurrentStage) {
 					item._titleHtml = '';
 				} else {
-					item._titleHtml = '<b>'+item.userId+'</b> ';
+					item._titleHtml = '<div class="row"><div class="col-sm-2"><small>User ID</small><br><strong>'+item.userId+'</strong></div> ';
+					item._titleHtml += '<div class="col-sm-2"><small>Action</small><br><strong>';
 					if (item.action == 'SAVE') {
-						item._titleHtml += 'saved ';
+						item._titleHtml += 'Saved';
 					} else {
-						item._titleHtml += 'moved from <b>'+item.preStage+'</b> to ';
+						item._titleHtml += 'Proceed';
 					}
-					item._titleHtml += '<b>'+item.postStage+'</b>, took <b>'+item._timeSpent+'</b>';
+					item._titleHtml += '</strong></div>';
+					item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+item.preStage+'</strong></div>';
+					item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+item.postStage+'</strong></div>';
+					item._titleHtml += '<div class="col-sm-2"><small>Time taken</small><br><strong>'+item._timeSpent+'</strong></div>';
+					item._titleHtml += '<div class="col-sm-2"></div>';
 				}
 				item._bodyHtml = '<div class="row"><div class="col-sm-4">Loan Amount: <b>'+irfCurrencyFilter(item.loanAmount)+'</b></div>';
 				item._bodyHtml += '<div class="col-sm-4">Interest Rate: <b>'+item.interestRate+'</b></div>';
 				item._bodyHtml += '<div class="col-sm-4">Tenure: <b>'+item.tenure+'</b></div></div>';
 				if (item.status)
 					item._bodyHtml += '<b>Status:</b> '+item.status+'<br>';
-				item._footerHtml = '<b>Remarks:</b> <div style="white-space: pre-wrap;">'+(item.remarks?item.remarks:'--')+'</div><hr>';
-				
-				item._footerHtml += '<a href="" style="display: inherit;text-align: center;" ng-if="!model.loanSummary['+index+']._conversationExpand" ng-click="model.loanSummary['+index+']._conversationExpand=true" class="color-theme">{{\'VIEW_CONVERSATION\'|translate}}</a>'
-					+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
+				item._footerHtml = '<b>Remarks:</b> <div style="white-space: pre-wrap;">'+(item.remarks?item.remarks:'--')+'</div>';
+				if (item.action == 'PROCEED') {
+					item._footerHtml += '<hr><a href="" style="display: inherit;text-align: center;" ng-if="!model.loanSummary['+index+']._conversationExpand" ng-click="model.loanSummary['+index+']._conversationExpand=true" class="color-theme">{{\'VIEW_CONVERSATION\'|translate}}</a>'
+						+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
+				}
 
 				return moment(item.createdDate, "YYYY-MM-DD[T]hh:mm:ss[Z]");
 			}

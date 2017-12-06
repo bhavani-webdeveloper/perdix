@@ -1,7 +1,6 @@
 irf.models.factory('Messaging', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "$q",
     function($resource, $httpParamSerializer, BASE_URL, searchResource, $q) {
-        //var endpoint = BASE_URL + '/api/_refs';
-        var endpoint = 'http://localhost/configuration/management/server-ext/messaging/';
+        var endpoint = irf.MANAGEMENT_BASE_URL + '/server-ext/messaging/';
 
         var res = $resource(endpoint, null, {
             getMessages: searchResource({
