@@ -15,6 +15,7 @@ define({
         form:[
             {
                 "type":"box",
+                "overrideType": "default-view",
                 "readonly":true,
                 "title":"Invoice vs Cash",
                 "colClass":"col-sm-12",
@@ -35,6 +36,7 @@ define({
             },
             {
                 "type":"box",
+                "overrideType": "default-view",
                 "readonly":true,
                 "title":"Bank Vs NonBank",
                 "colClass":"col-sm-12",
@@ -59,6 +61,7 @@ define({
             {
                 "type":"box",
                 "readonly":true,
+                "overrideType": "default-view",
                 "title":"Buyer Summary",
                 "colClass":"col-sm-12",
                 "items":[
@@ -134,6 +137,7 @@ define({
             {
                 "type":"box",
                 "readonly":true,
+                "overrideType": "default-view",
                 "colClass": "col-sm-12",
                 "title":"BANK_ACCOUNT_DETAILS",
                 "items":[

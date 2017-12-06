@@ -53,6 +53,7 @@ define({
                 "type":"box",
                 "readonly":true,
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"PRELIMINARY_LOAN_INFORMATION",
                 "items":[
                     {
@@ -119,6 +120,7 @@ define({
                 "type":"box",
                 "readonly":true,
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"Additional Loan Info",
                 "items":[
                     {
@@ -169,6 +171,7 @@ define({
                 "type":"box",
                 "readonly":true,
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"Deduction From Loan Amount",
                 "items":[
                     {
@@ -207,6 +210,7 @@ define({
                 "type":"box",
                 "readonly":true,
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"Asset Purchase Detail",
                 "items":[
                     {
@@ -281,6 +285,7 @@ define({
                 "type":"box",
                 "readonly":true,
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"Nominee Detail",
                 "items":[
                     {
@@ -322,11 +327,21 @@ define({
                         ]
                     }
                 ]
-            },
-            {
+            },{
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "DEVIATION_AND_MITIGATIONS",
+                "condition": "model.currentStage != 'ScreeningReview'",
+                "items": [{
+                    "type": "section",
+                    "colClass": "col-sm-12",
+                    "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td><td>{{ rowData["Deviation"] }}</td><td><ul class="list-unstyled"><li ng-repeat="m in rowData.ListOfMitigants"><input type="checkbox" ng-checked="item.checked"> {{ m }}</li></ul></td></tr></tbody></table>'
+                }]
+            },{
                 "type":"box",
                 "colClass":"col-sm-12",
                 "readonly":true,
+                "overrideType": "default-view",
                 "title":"Deviations and Mitigations",
                 "items":[
                     {
@@ -337,6 +352,7 @@ define({
             {
                 "type":"box",
                 "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title":"Loan Recommendation",
                 "items":[
                     {
@@ -394,6 +410,7 @@ define({
             {
                 "type":"box",
                 "colClass":"col-sm-12",
+                "overrideType": "default-view",
                 "title":"Post Review Decision",
                 "items":[
                     {
@@ -404,6 +421,41 @@ define({
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;    
+        },
+        eventListeners: {
+            "_scoresApplicant": function(bundleModel, model, params) {
+                model._scores = params;
+                model.deviationDetails = model._scores[12];
+                    for (var i=0;i< model.deviationDetails.data.length; i++){
+                        var d = model.deviationDetails.data[i];
+                        if (d.Mitigant && d.Mitigant.length!=00){
+                            if (d.Mitigant && d.Mitigant!=null){
+                                d.ListOfMitigants = d.Mitigant.split("|");
+                            }
+
+                            if (d.ChosenMitigant && d.ChosenMitigant!=null){
+                            d.ChosenMitigants = d.ChosenMitigant.split("|")
+                            }
+
+                        }
+                    }
+
+                model.deviationParameter = [];
+                    for (var i=0;i< model.deviationDetails.data.length; i++){
+                        var d = model.deviationDetails.data[i];
+                        model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
+                        delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
+                        delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
+                        model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
+                        if (d.Mitigant && d.Mitigant.length!=00){
+                            d.ListOfMitigants = d.Mitigant.split("|");
+                            for (var j =0; j < d.ListOfMitigants.length; j++) {
+                                model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
+                            }
+                        }
+                    }
+                model.additional = {};
+               }
         },
         actions: {}
     }

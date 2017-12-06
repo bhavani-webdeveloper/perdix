@@ -182,9 +182,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 			},
 			eventListeners: {
 				"scoring-loaded":function(pageObj, bundleModel, params){
-                        BundleManager.broadcastEvent("psychometScore", params[14].sections);
+                        BundleManager.broadcastEvent("_scoresApplicant", params);
                        /* bundleModel.psychometricScores=params[14].sections;
-*/                }
+*/                },
+
 			}            
 		}    
 

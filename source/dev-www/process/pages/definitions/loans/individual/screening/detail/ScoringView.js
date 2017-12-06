@@ -259,9 +259,10 @@ define({
             }
         });
 
-        form.push({
+       /* form.push({
             "type": "box",
-                "colClass": "col-sm-12 table-box",
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
                 "title": "Business Summary",
                 "readonly": true,
                 "items": [
@@ -282,7 +283,7 @@ define({
                         ]
                     }
                 ]
-        })
+        })*/
 
         // form.push({
         //     "type": "box",
@@ -334,7 +335,7 @@ define({
         
         form.push({
             type: "box",
-            colClass: "col-sm-12 table-box",
+            colClass: "col-sm-12",
             title: "SCORES",
             items: [
                 {
@@ -481,9 +482,9 @@ define({
         });
 
         // for (i in model.psychometricScores) {
-            form.push({
+            /*form.push({
                 type: "box",
-                colClass: "col-sm-12 table-box",
+                colClass: "col-sm-12",
                 title: "Psychometric Scores",
                 condition: "model.currentStage != 'ScreeningReview'",
                 items: [
@@ -605,7 +606,7 @@ define({
         for (var i=0;i<model.pl.household.length; i++){
             form.push({
                 type: "box",
-                colClass: "col-sm-12 table-box",
+                colClass: "col-sm-12",
                 title: "Household P&L Statement - " + model.houseHoldPL[i].relation_detail,
                 condition: "model.currentStage != 'ScreeningReview'",
                 items: [
@@ -616,7 +617,7 @@ define({
                     }
                 ]
             });    
-        }
+        }*/
 
         // form.push({
         //     type: "box",
@@ -649,218 +650,7 @@ define({
         // }
         
         
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "BUSINESS_PL",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html:
-'<table class="table">'+
-    '<colgroup>'+
-        '<col width="30%"> <col width="40%"> <col width="30%"> <col width="10%">'+
-    '</colgroup>'+
-    '<tbody>'+
-        '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
-        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | irfCurrency}}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | irfCurrency}}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | irfCurrency}}</td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | irfCurrency}}</td> <td>{{model.pl.business.purchasesPCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | irfCurrency}}</th> <th></th> </tr>'+
-        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | irfCurrency}}</strong></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>'+
-        '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
-        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
-        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
-        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
-    '</tbody>'+
-'</table>'
-                }
-            ]
-        });
-
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "BALANCE_SHEET",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-               
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    "html":
-'<table class="table table-striped">'+
-    '<colgroup><col width="25%">'+
-        '<col width="25%"><col width="25%"><col width="25%">'+
-    '</colgroup>'+
-    '<thead>'+
-        '<tr><th colspan="2">Assets</th><th colspan="2">Liabilities</th></tr>'+
-    '</thead>'+
-    '<tbody>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr>'+
-        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | irfCurrency}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | irfCurrency}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | irfCurrency}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities | irfCurrency}}</td></tr>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
-        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
-    '</tbody>'+
-'</table>'
-                }
-            ]
-        });
-
-        var cashFlowDetailsTable = "<irf-simple-summary-table irf-table-def='model.cashFlowDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.cashFlowDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: cashFlowDetailsTable
-                }
-            ]
-        });
-
-        var purchaseDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.purchaseDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.purchaseDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: purchaseDetailsTable
-                }
-            ]
-        });
-
-        var items = [];
-        if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
-            for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
-                items.push({
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.liabilitiesSummary.subgroups[' + i +'].summary["Name"]}} - {{model.liabilitiesSummary.subgroups[' + i +'].summary["Relation"]}}</h3> \
-                        <irf-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-simple-summary-table>\
-                        <strong>Total EMI </strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Monthly Installment"] | irfCurrency}} <br />\
-                        <strong>Total Outstanding Loan Amount</strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Outstanding Loan Amount"] | irfCurrency}}\
-                        <hr>\
-                        '
-                });
-            }    
-        }
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.liabilitiesSummary.title,
-            items: items
-        });
-
-        var opexDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.opexDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.opexDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: opexDetailsTable
-                }
-            ]
-        });
-
-        var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.machineryDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: machineryDetailsTable
-                }
-            ]
-        });        
-
-        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.businessBankStmtSummary.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: businessBankStmtSummaryTable
-                }
-            ]
-        });
-
-        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.personalBankStmtSummary.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: personalBankStmtSummaryTable
-                }
-            ]
-        });
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "BANK_ACCOUNTS",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
-                }
-            ]
-        });
-
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "DEVIATION_AND_MITIGATIONS",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"><col width="30%"><col width="30"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th><th>Chosen Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td><td><ol><li ng-repeat="m in rowData.ChosenMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
-                }
-            ]
-        });
+        
 
         // form.push({
         //     type: "box",
