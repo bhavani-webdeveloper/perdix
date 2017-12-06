@@ -428,7 +428,7 @@ define([],function(){
                     "PreliminaryInformation",
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.loan",
-                    "PreliminaryInformation.loanPurpose2",
+                    "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.loanToValue"
                 ];

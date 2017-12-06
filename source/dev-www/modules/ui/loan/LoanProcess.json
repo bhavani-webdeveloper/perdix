@@ -7,7 +7,6 @@
             "linkedAccountNumber": {
                 "key": "loanAccount.linkedAccountNumber",
                 "title": "LINKED_ACCOUNT_NUMBER",
-                "resolver":"LoanPurpose1LOVConfiguration",
                 "type": "lov",
                 "autolov": true,
                 "searchHelper": {
@@ -23,6 +22,7 @@
                 "type": "lov",
                 "autolov": true,
                 "title": "LOAN_PURPOSE_1",
+                "resolver":"LoanPurpose1LOVConfiguration",
                 "bindMap": {},
                 "outputMap": {
                     "purpose1": "loanAccount.loanPurpose1"
