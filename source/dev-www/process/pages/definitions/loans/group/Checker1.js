@@ -128,6 +128,10 @@ return {
                 "key": "group.groupName",
                 "title": "GROUP_NAME",
                 readonly: true,
+            },{
+                "key": "group.groupCode",
+                "title": "GROUP_CODE",
+                readonly: true,
             }, {
                 "key": "group.branchId",
                 "title": "BRANCH_NAME",
@@ -245,8 +249,8 @@ return {
                             "title": "HOUSE_LOCATION",
                             "key": "group.jlgGroupMembers[].customer.latitude",
                             "type": "geotag",
-                            "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
-                            "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                            "latitude": "group.jlgGroupMembers[].customer.latitude",
+                            "longitude": "group.jlgGroupMembers[].customer.longitude"
                         }, {
                             "title": "ADDRESS_PROOF",
                             "key": "group.jlgGroupMembers[].customer.addressProof",
@@ -667,8 +671,8 @@ return {
                                 "title": "HOUSE_LOCATION",
                                 "key": "group.jlgGroupMembers[].customer.latitude",
                                 "type": "geotag",
-                                "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
-                                "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                                "latitude": "group.jlgGroupMembers[].customer.latitude",
+                                "longitude": "group.jlgGroupMembers[].customer.longitude"
                             }, {
                                 "title": "ADDRESS_PROOF",
                                 "key": "group.jlgGroupMembers[].customer.addressProof",
@@ -964,6 +968,16 @@ return {
                         "latitude": "group.cgt1Latitude",
                         "longitude": "group.cgt1Longitude",
                         "readonly": true
+                    },{
+                        "key": "group.cgtDate1",
+                        "title": "CGT_1_START_DATE",
+                        "type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtEndDate1",
+                        "title": "CGT_1_END_DATE",
+                        "type": "date",
+                        "readonly": true
                     }]
                 }, {
                     "type": "section",
@@ -990,6 +1004,16 @@ return {
                         "type": "geotag",
                         "latitude": "group.cgt2Latitude",
                         "longitude": "group.cgt2Longitude",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtDate2",
+                        "title": "CGT_2_START_DATE",
+                        "type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtEndDate2",
+                        "title": "CGT_2_END_DATE",
+                        "type": "date",
                         "readonly": true
                     }]
                 }, {
@@ -1018,6 +1042,16 @@ return {
                         "latitude": "group.cgt3Latitude",
                         "longitude": "group.cgt3Longitude",
                         "readonly": true
+                    },{
+                        "key": "group.cgtDate3",
+                        "title": "CGT_3_START_DATE",
+                        "type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtEndDate3",
+                        "title": "CGT_3_END_DATE",
+                        "type": "date",
+                        "readonly": true
                     }]
                 }, {
                     "type": "section",
@@ -1045,6 +1079,16 @@ return {
                         "type": "geotag",
                         "latitude": "group.grtLatitude",
                         "longitude": "group.grtLongitude",
+                        "readonly": true
+                    },{
+                        "key": "group.grtDate",
+                        "title": "GRT_START_DATE",
+                        "type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.grtEndDate",
+                        "title": "GRT_END_DATE",
+                        "type": "date",
                         "readonly": true
                     }]
                 }]

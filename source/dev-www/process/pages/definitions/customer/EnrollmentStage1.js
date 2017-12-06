@@ -31,14 +31,40 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             $log.info(formHelper.enum('bank'));
 
             if ($stateParams.pageData) {
-                model.customer.familyEnrollmentId = $stateParams.pageData.enrollmentId;
-                model.customer.parentCustomerId = $stateParams.pageData.customerId;
-                model.customer.dateOfBirth = $stateParams.pageData.dateOfBirth;
-                model.customer.educationStatus = $stateParams.pageData.educationStatus;
-                model.customer.firstName = $stateParams.pageData.familyMemberFirstName;
-                model.customer.gender = $stateParams.pageData.gender;
-                model.customer.maritalStatus = $stateParams.pageData.maritalStatus;
-                model.customer.mobilePhone = $stateParams.pageData.mobilePhone;
+                 $log.info($stateParams.pagedata);
+                 var family=$stateParams.pageData;
+                model.customer.familyEnrollmentId = family.familydata.enrollmentId;
+                model.customer.parentCustomerId = family.familydata.customerId;
+                model.customer.dateOfBirth = family.familydata.dateOfBirth;
+                model.customer.educationStatus = family.familydata.educationStatus;
+                model.customer.firstName = family.familydata.familyMemberFirstName;
+                model.customer.gender = family.familydata.gender;
+                model.customer.maritalStatus = family.familydata.maritalStatus;
+                model.customer.mobilePhone = family.familydata.mobilePhone;
+                model.customer.expenditures = family.expenditures;
+                model.customer.doorNo=family.doorNo;
+                model.customer.street=family.street;
+                model.customer.locality=family.locality;
+                model.customer.villageName=family.villageName;
+                model.customer.postOffice=family.postOffice;
+                model.customer.district=family.district;
+                model.customer.pincode=family.pincode;
+                model.customer.state=family.state;
+                model.customer.stdCode=family.stdCode;
+                model.customer.landLineNo=family.landLineNo;
+                model.customer.mobilePhone=family.mobilePhone;
+                model.customer.mailSameAsResidence=family.mailSameAsResidence;
+                model.customer.mailingDoorNo=family.mailingDoorNo;
+                model.customer.mailingStreet=family.mailingStreet;
+                model.customer.mailingLocality=family.mailingLocality;
+                model.customer.mailingPostoffice=family.mailingPostoffice;
+                model.customer.mailingDistrict=family.mailingDistrict;
+                model.customer.mailingPincode=family.mailingPincode;
+                model.customer.mailingState=family.mailingState;
+                model.customer.latitude=family.latitude;
+                model.customer.longitude=family.longitude;
+                model.customer.houseVerificationPhoto=family.houseVerificationPhoto;
+
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }

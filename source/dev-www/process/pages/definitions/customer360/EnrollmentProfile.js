@@ -679,11 +679,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         condition:"model.customer.currentStage=='Completed'&& model.customer.familyMembers[arrayIndex].enrolled== 0",
                         title:"ENROLL_AS_CUSTOMER",
                         onClick: function(model, formCtrl,context) {
+                            model.family={};
+                            model.family=model.customer;
+                            model.family.familydata=model.customer.familyMembers[context.arrayIndex];
                             //pageId:model.customer.familyMembers[context.arrayIndex].enrollmentId,
                                 $state.go("Page.Engine", {
                                     pageName: "ProfileInformation",
                                     pageId:undefined,
-                                    pageData:model.customer.familyMembers[context.arrayIndex]
+                                    pageData:model.family
+                                    //pageData:model.customer.familyMembers[context.arrayIndex]
                                 });
                         }
                     },

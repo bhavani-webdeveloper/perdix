@@ -128,6 +128,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.firstName",
+                                "readonly":true,
                                 title: "FULL_NAME"
                             },
 
@@ -138,6 +139,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.age",
+                                "readonly":true,
                                 title: "AGE",
                                 type: "number",
                                 "onChange": function(modelValue, form, model) {
@@ -151,6 +153,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }
                             }, {
                                 key: "customer.dateOfBirth",
+                                "readonly":true,
                                 type: "date",
                                 "onChange": function(modelValue, form, model) {
                                     if (model.customer.dateOfBirth) {
@@ -160,6 +163,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.fatherFirstName",
+                                "readonly":true,
                                 title: "FATHER_FULL_NAME"
                             },
                             {
@@ -226,7 +230,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 },
                                 "customer.stdCode",
                                 "customer.landLineNo",
-                                "customer.mobilePhone",
+                                {
+                                    key:"customer.mobilePhone",
+                                    "readonly":true
+                                },
+                                //"customer.mobilePhone",
                                 "customer.mailSameAsResidence"
                             ]
                         }, {

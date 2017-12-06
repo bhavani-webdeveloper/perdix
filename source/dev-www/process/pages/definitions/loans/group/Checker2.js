@@ -133,6 +133,10 @@ return {
                 "key": "group.groupName",
                 "title": "GROUP_NAME",
                 readonly: true,
+            },{
+                "key": "group.groupCode",
+                "title": "GROUP_CODE",
+                readonly: true,
             }, {
                 "key": "group.branchId",
                 "title": "BRANCH_NAME",
@@ -247,8 +251,8 @@ return {
                         "title": "HOUSE_LOCATION",
                         "key": "group.jlgGroupMembers[].customer.latitude",
                         "type": "geotag",
-                        "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
-                        "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                        "latitude": "group.jlgGroupMembers[].customer.latitude",
+                        "longitude": "group.jlgGroupMembers[].customer.longitude"
                     }, {
                         "title": "ADDRESS_PROOF",
                         "key": "group.jlgGroupMembers[].customer.addressProof",
@@ -665,8 +669,8 @@ return {
                         "title": "HOUSE_LOCATION",
                         "key": "group.jlgGroupMembers[].customer.latitude",
                         "type": "geotag",
-                        "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
-                        "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                        "latitude": "group.jlgGroupMembers[].customer.latitude",
+                        "longitude": "group.jlgGroupMembers[].customer.longitude"
                     }, {
                         "title": "ADDRESS_PROOF",
                         "key": "group.jlgGroupMembers[].customer.addressProof",

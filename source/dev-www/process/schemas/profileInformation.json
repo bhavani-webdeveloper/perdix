@@ -561,7 +561,7 @@
                                         "incomeEarned": {
                                             "type": ["integer","null"],
                                             "title": "INCOME_EARNED",
-                                            "minimum": 1,
+                                            "minimum": 0,
                                             "maximum": 100000000
                                         },
                                         "incomeSource": {
