@@ -132,7 +132,7 @@
          },
          "loanPurpose2": {
             "type":["string", "null"],
-            "title":"LOAN_SUB_PROCESS"
+            "title":"LOAN_SUB_PURPOSE"
          },
          "currentDate": {
             "type": ["string", "null"],
@@ -141,12 +141,12 @@
          "branchName": {
             "type": ["string", "null"],
             "title": "HUB_NAME",
-            "enumCode": "branch" 
+            "enumCode": "branch"
          },
          "branchId": {
             "type": "number",
             "title": "HUB_NAME",
-            "enumCode": "branch_id" 
+            "enumCode": "branch_id"
          },
          "centreName": {
             "type": "string",
@@ -291,7 +291,7 @@
          "maritalStatus": {
             "type": ["string", "null"],
             "title": "MARITAL_STATUS"
-           
+
          },
          "customerType": {
             "type": ["string", "null"],

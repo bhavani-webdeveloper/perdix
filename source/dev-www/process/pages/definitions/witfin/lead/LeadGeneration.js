@@ -21,6 +21,22 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     },
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
+                    },
+                    "productDetails.screeningDate": {
+                        "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
+                    },
+                    "productDetails.followUpDate": {
+                        "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='FollowUp')",
+                    },
+                    "leadInteractions.leadInteractions.typeOfInteraction": {
+                        onChange: function (value, form, model) {
+                            model.lead.leadInteractions[form.arrayIndex].customerResponse = '';
+                            model.lead.leadInteractions[form.arrayIndex].additionalRemarks = '';
+                            if(value === 'Call') {
+                                model.lead.leadInteractions[form.arrayIndex].location = '';
+                                model.lead.leadInteractions[form.arrayIndex].picture = '';
+                            }
+                        }
                     }
 
                 }

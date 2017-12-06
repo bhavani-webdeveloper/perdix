@@ -2231,12 +2231,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "agentName": {
                         "key": "lead.agentName",
-                        "condition": "model.lead.leadSource=='Buying/Selling Agent'"
+                        "condition": "model.lead.leadSource=='Buying/Selling Agent'",
+                        "type":"select"
 
                     },
                     "dealerName": {
                         "key": "lead.dealerName",
-                        "condition": "model.lead.leadSource=='Dealer'"
+                        "condition": "model.lead.leadSource=='Dealer'",
+                        "type":"select"
                     }
 
                 }
@@ -2332,15 +2334,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "screeningDate": {
                         key: "lead.screeningDate",
-                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
-                        type: "date",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
+                        type: "date"
+
                     },
                     "followUpDate": {
                         key: "lead.followUpDate",
-                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
-                        type: "date",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
+                        type: "date"
+
                     },
                     "productEligibility": {
                         type: "fieldset",
@@ -2647,13 +2647,16 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 titleMap: {
                                     "Call": "Call",
                                     "Visit": "Visit",
-                                },
+                                }
+
                             },
                             "customerResponse": {
                                 key: "lead.leadInteractions[].customerResponse",
+                                type: "select"
                             },
                             "additionalRemarks": {
                                 key: "lead.leadInteractions[].additionalRemarks",
+                                type: "select"
                             },
                             "location": {
                                 "key": "lead.leadInteractions[].location",
