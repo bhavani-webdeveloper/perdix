@@ -32,6 +32,7 @@ class Lead {
     udf: Udf;
     district: string;
     dob: string;
+    age: number;
     educationStatus: string;
     eligibleForProduct: string;
     followUpDate: string;
@@ -67,7 +68,7 @@ class Lead {
     state: string;
     udfId: number;
     version: number;
-    
+
     public getLead() {
         return "Lead Here!";
     }
