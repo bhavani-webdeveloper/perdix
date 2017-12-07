@@ -3804,17 +3804,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         orderNo: 10,
                         "type": "lov",
                         "lovonly": true,
-                        // initialize: function(model, form, parentModel, context) {
-                        //     model.customerBranchId = parentModel.customer.customerBranchId;
-                        //     model.centreId = parentModel.customer.centreId;
-                        //     var centreCode = formHelper.enum('centre').data;
-
-                        //     var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                        //     if(centreName && centreName.length > 0) {
-                        //         model.centreName = centreName[0].name;
-                        //     }
-
-                        // },
+                        initialize: function(model, form, parentModel, context) {
+                            model.customerBranchId = parentModel.customer.customerBranchId;
+                            model.centreId = parentModel.customer.centreId;
+                        },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
