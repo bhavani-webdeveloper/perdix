@@ -2417,20 +2417,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "lead.loanPurpose1",
                         condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                         type: "select",
-                        enumCode: "vehicle_loan_purpose"
+                        enumCode: "loan_purpose_1"
                         /*titleMap: {
 
                          }*/
                     },
                     "loanPurpose2": {
                         key: "lead.loanPurpose2",
-                        condition: "model.lead.interestedInProduct==='YES' && model.lead.loanPurpose1 == 'Personal Loan'",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         type: "select",
-                        enumCode: "vehicle_loan_sub_purpose"
-                        /*titleMap: {
-
-
-                         }*/
+                        enumCode: "loan_purpose_2",
+                        parentEnumCode: "loan_purpose_1",
+                        parentValueExpr:"model.lead.loanPurpose1"
                     },
                     "productRequiredBy": {
                         key: "lead.productRequiredBy",
