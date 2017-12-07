@@ -40,7 +40,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             },
                             validationMessage: {202 : "Only alphabets and space are allowed."},
                         },
-                        "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                        "ContactInformation.mobilePhone" : {
                             "required": false
                         },
                         "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
@@ -275,9 +275,26 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
                     },
-                    "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                    "ContactInformation.mobilePhone" : {
                         "required": true,
                     },
+                    "KYC.addressProof1.addressProof": {
+                        readonly : true,
+                    },
+                    "AdditionalKYC.additionalKYCs": {
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                    },
+                    "ContactInformation.CustomerResidentialAddress": {
+                        "orderNo": 21
+                    },
+                    "ContactInformation.CustomerPermanentAddress": {
+                        "orderNo": 22
+                    },
+                    "ContactInformation.CustomerResidentialAddress" : {
+                        condition: "!model.customer.udf.userDefinedFieldValues.udf37"
+                    }, 
                 };
             }
         }
@@ -349,8 +366,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerResidentialAddress.pincode",
                         "ContactInformation.CustomerResidentialAddress.state",
                         "ContactInformation.CustomerResidentialAddress.stdCode",
-                        "ContactInformation.CustomerResidentialAddress.landLineNo",
-                        "ContactInformation.CustomerResidentialAddress.mobilePhone",
+                        "ContactInformation.landLineNo",
+                        "ContactInformation.mobilePhone",
                         "ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
                         "ContactInformation.CustomerPermanentAddress",
                         "ContactInformation.CustomerPermanentAddress.mailingDoorNo",
@@ -491,7 +508,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "KYC.IdentityProof1.identityProofNo3",
                         "KYC.IdentityProof1.idProofIssueDate",
                         "KYC.IdentityProof1.idProofValidUptoDate",
-                        "KYC.IdentityProof1.addressProofSameAsIdProof",
+                        //"KYC.IdentityProof1.addressProofSameAsIdProof",
                         "KYC.addressProof1",
                         "KYC.addressProof1.addressProof",
                         "KYC.addressProof1.addressProofImageId",
@@ -506,6 +523,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "KYC.spouseIdProof.udf34",
                         "KYC.spouseIdProof.udf36",
                         "KYC.spouseIdProof.udf36_1",
+                        "AdditionalKYC",
+                        "AdditionalKYC.additionalKYCs",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber1",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber2",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber3",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofType",
+                        "AdditionalKYC.additionalKYCs.kyc1ImagePath",
+                        "AdditionalKYC.additionalKYCs.kyc1IssueDate",
+                        "AdditionalKYC.additionalKYCs.kyc1ValidUptoDate",
                         "ContactInformation",
                         "ContactInformation.CustomerResidentialAddress",
                         "ContactInformation.CustomerResidentialAddress.doorNo",
@@ -517,9 +544,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerResidentialAddress.pincode",
                         "ContactInformation.CustomerResidentialAddress.state",
                         "ContactInformation.CustomerResidentialAddress.stdCode",
-                        "ContactInformation.CustomerResidentialAddress.landLineNo",
-                        "ContactInformation.CustomerResidentialAddress.mobilePhone",
-                        "ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
+                        "ContactInformation.landLineNo",
+                        "ContactInformation.mobilePhone",
+                        //"ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
                         "ContactInformation.CustomerResidentialAddress.landLordName",
                         "ContactInformation.CustomerPermanentAddress",
                         "ContactInformation.CustomerPermanentAddress.mailingDoorNo",
@@ -530,6 +557,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "ContactInformation.CustomerPermanentAddress.mailingPincode",
                         "ContactInformation.CustomerPermanentAddress.mailingState",
                         "ContactInformation.CustomerPermanentAddress.landLordName",
+                        "ContactInformation.CustomerPermanentAddress.residenceSameAsMail",
                         "actionbox",
                         "actionbox.submit",
                         "actionbox.save",
@@ -549,6 +577,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 model = Utils.removeNulls(model, true);
                 model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
                 model.customer.customerType = model.customer.customerType || 'Individual';
+                if(model.siteCode == 'saija') {
+                    model.customer.addressProof = model.customer.addressProof || "Aadhar Card";
+                    model.customer.mailSameAsResidence = false;
+                }
                 var centres = SessionStore.getCentres();
                 if(centres && centres.length > 0){
                     model.customer.centreId = model.customer.centreId || centres[0].id;
@@ -636,6 +668,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             model.customer.udf.userDefinedFieldValues.udf1 === true
                             || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
                     }
+                    if(model.customer.udf && model.customer.udf.userDefinedFieldValues && 
+                        model.customer.udf.userDefinedFieldValues.udf37 && SessionStore.getGlobalSetting('siteCode') == 'saija') {
+                        model.customer.udf.userDefinedFieldValues.udf37 = model.customer.udf.userDefinedFieldValues.udf37 == 'true' ? true : false;
+                    }
                     deferred.resolve(model);
                     PageHelper.hideLoader();
                 },function(resp){
@@ -704,7 +740,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     }
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var selfAvailable = false;
-                    if (model.customer.familyMembers) {
+                    if (model.siteCode != 'saija' && model.customer.familyMembers && model.customer.familyMembers.length > 0) {
                         for (var idx = 0; idx < model.customer.familyMembers.length; idx++ ) {
                              if (model.customer.familyMembers[idx].relationShip == "self")
                             {
@@ -717,6 +753,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             return false; 
                         }
                     }
+
                     if(model.siteCode != 'saija' && modelmodelmodel.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
                         var spouseInfoReq = true;
                         for (var idx = 0; idx < model.customer.familyMembers.length; idx++ ) {

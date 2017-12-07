@@ -207,6 +207,21 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model['customer']['mailingState'] = model['customer']['state'];
         }
 
+        if (SessionStore.getGlobalSetting('siteCode') == 'saija') {
+            model.customer.mailSameAsResidence = false;
+            if(model.customer.udf && model.customer.udf.userDefinedFieldValues
+            && model.customer.udf.userDefinedFieldValues.udf37 == true) {
+                model['customer']['doorNo'] = model['customer']['mailingDoorNo']; 
+                model['customer']['street'] = model['customer']['mailingStreet'];
+                model['customer']['locality'] = model['customer']['mailingLocality'];
+                model['customer']['postOffice'] = model['customer']['mailingPostoffice'];
+                model['customer']['district'] = model['customer']['mailingDistrict'];
+                model['customer']['pincode'] = model['customer']['mailingPincode'];
+                model['customer']['state'] = model['customer']['mailingState'];
+                model['customer']['villageName'] = model['customer']['mailingVillageName'];
+            }
+        }
+
         if(model.customer.addressProofSameAsIdProof){
 
             model.customer.addressProof=_.clone(model.customer.identityProof);
@@ -358,43 +373,91 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         // "co":""
         // "lm":"" landmark
         var aadhaarData = parseAadhaar(result.text);
-        $log.info(aadhaarData);
-        // model.customer.aadhaarNo = aadhaarData.uid;
-        model.customer.firstName = aadhaarData.name;
-        model.customer.gender = aadhaarData.gender;
-        model.customer.doorNo = aadhaarData.house;
-        model.customer.street = aadhaarData.street;
-        model.customer.locality = aadhaarData.loc;
-        model.customer.villageName = aadhaarData.vtc;
-        model.customer.district = aadhaarData.dist;
-        model.customer.state = aadhaarData.state;
-        model.customer.pincode = aadhaarData.pc;
-        model.customer.postOffice = aadhaarData.po;
-        if (aadhaarData.dob) {
-            $log.debug('aadhaarData dob: ' + aadhaarData.dob);
-            if (!isNaN(aadhaarData.dob.substring(2, 3))) {
-                model.customer.dateOfBirth = aadhaarData.dob;
-            } else {
-                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+
+        if(SessionStore.getGlobalSetting('siteCode') != 'saija') {
+
+            $log.info(aadhaarData);
+            // model.customer.aadhaarNo = aadhaarData.uid;
+            model.customer.firstName = aadhaarData.name;
+            model.customer.gender = aadhaarData.gender;
+            model.customer.doorNo = aadhaarData.house;
+            model.customer.street = aadhaarData.street;
+            model.customer.locality = aadhaarData.loc;
+            model.customer.villageName = aadhaarData.vtc;
+            model.customer.district = aadhaarData.dist;
+            model.customer.state = aadhaarData.state;
+            model.customer.pincode = aadhaarData.pc;
+            model.customer.postOffice = aadhaarData.po;
+            if (aadhaarData.dob) {
+                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                    model.customer.dateOfBirth = aadhaarData.dob;
+                } else {
+                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                }
+                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            } else if (aadhaarData.yob) {
+                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+                model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
             }
-            $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
-            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-        } else if (aadhaarData.yob) {
-            $log.debug('aadhaarData yob: ' + aadhaarData.yob);
-            model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
-            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-        }
-        if (!model.customer.identityProof && !model.customer.identityProofNo
-            && !model.customer.addressProof && !model.customer.addressProofNo) {
-            model.customer.addressProofSameAsIdProof = true;
-        }
-        if (!model.customer.identityProof && !model.customer.identityProofNo) {
-            model.customer.identityProof = 'Aadhar card';
-            model.customer.identityProofNo = aadhaarData.uid;
-        }
-        if (!model.customer.addressProof && !model.customer.addressProofNo) {
-            model.customer.addressProof = 'Aadhar card';
-            model.customer.addressProofNo = aadhaarData.uid;
+            if (!model.customer.identityProof && !model.customer.identityProofNo
+                && !model.customer.addressProof && !model.customer.addressProofNo) {
+                model.customer.addressProofSameAsIdProof = true;
+            }
+            if (!model.customer.identityProof && !model.customer.identityProofNo) {
+                model.customer.identityProof = 'Aadhar card';
+                model.customer.identityProofNo = aadhaarData.uid;
+            }
+            if (!model.customer.addressProof && !model.customer.addressProofNo) {
+                model.customer.addressProof = 'Aadhar card';
+                model.customer.addressProofNo = aadhaarData.uid;
+            }
+        } else {
+
+            $log.info(aadhaarData);
+            // model.customer.aadhaarNo = aadhaarData.uid;
+            model.customer.firstName = aadhaarData.name;
+            model.customer.gender = aadhaarData.gender;
+            // model.customer.doorNo = aadhaarData.house;//
+            // model.customer.street = aadhaarData.street;//
+            // model.customer.locality = aadhaarData.loc;//
+            // model.customer.villageName = aadhaarData.vtc;
+            // model.customer.district = aadhaarData.dist;//
+            // model.customer.state = aadhaarData.state;//
+            // model.customer.pincode = aadhaarData.pc;//
+            // model.customer.postOffice = aadhaarData.po;//
+
+            model['customer']['mailingDoorNo'] = aadhaarData.house;
+            model['customer']['mailingStreet'] = aadhaarData.street;
+            model['customer']['mailingLocality'] = aadhaarData.loc;
+            model['customer']['mailingPostoffice'] = aadhaarData.po;
+            model['customer']['mailingDistrict'] = aadhaarData.dist;
+            model['customer']['mailingPincode'] = aadhaarData.pc;
+            model['customer']['mailingState'] = aadhaarData.state;
+
+            model.customer.mailingVillageName = aadhaarData.vtc;
+
+            if (aadhaarData.dob) {
+                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                    model.customer.dateOfBirth = aadhaarData.dob;
+                } else {
+                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                }
+                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            } else if (aadhaarData.yob) {
+                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+                model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            }
+            
+            if (!model.customer.addressProof && !model.customer.addressProofNo) {
+                model.customer.addressProof = 'Aadhar Card';
+                model.customer.addressProofNo = aadhaarData.uid;
+            }
         }
         return aadhaarData;
     };

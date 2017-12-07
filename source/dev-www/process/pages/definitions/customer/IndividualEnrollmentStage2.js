@@ -20,6 +20,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "KYC": {
                         "readonly": customReadonly
                     },
+                    "AdditionalKYC": {
+                        "readonly": customReadonly
+                    },
                     "CustomerInformation.centreId" : {
                         "title": "CENTRE",
                     },
@@ -29,9 +32,23 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
                     },
-                    "ContactInformation.CustomerResidentialAddress.mobilePhone" : {
+                    "ContactInformation.mobilePhone" : {
                         "required": true,
                     },
+                    "AdditionalKYC.additionalKYCs": {
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                    },
+                    "ContactInformation.CustomerResidentialAddress": {
+                        "orderNo": 21
+                    },
+                    "ContactInformation.CustomerPermanentAddress": {
+                        "orderNo": 22
+                    },
+                    "ContactInformation.CustomerResidentialAddress" : {
+                        condition: "!model.customer.udf.userDefinedFieldValues.udf37"
+                    }, 
                     "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
                         "enumCode": "years_of_business",
                         "title": "AGE_OF_ENTERPRISE"
@@ -359,7 +376,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "KYC.IdentityProof1.identityProofNo3",
                         "KYC.IdentityProof1.idProofIssueDate",
                         "KYC.IdentityProof1.idProofValidUptoDate",
-                        "KYC.IdentityProof1.addressProofSameAsIdProof",
+                        //"KYC.IdentityProof1.addressProofSameAsIdProof",
                         "KYC.addressProof1",
                         "KYC.addressProof1.addressProof",
                         "KYC.addressProof1.addressProofImageId",
@@ -374,6 +391,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "KYC.spouseIdProof.udf34",
                         "KYC.spouseIdProof.udf36",
                         "KYC.spouseIdProof.udf36_1",
+                        "AdditionalKYC",
+                        "AdditionalKYC.additionalKYCs",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber1",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber2",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofNumber3",
+                        "AdditionalKYC.additionalKYCs.kyc1ProofType",
+                        "AdditionalKYC.additionalKYCs.kyc1ImagePath",
+                        "AdditionalKYC.additionalKYCs.kyc1IssueDate",
+                        "AdditionalKYC.additionalKYCs.kyc1ValidUptoDate",
                         "ContactInformation",
                         "ContactInformation.CustomerResidentialAddress",
                         "ContactInformation.CustomerResidentialAddress.doorNo",
@@ -385,9 +412,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "ContactInformation.CustomerResidentialAddress.pincode",
                         "ContactInformation.CustomerResidentialAddress.state",
                         "ContactInformation.CustomerResidentialAddress.stdCode",
-                        "ContactInformation.CustomerResidentialAddress.landLineNo",
-                        "ContactInformation.CustomerResidentialAddress.mobilePhone",
-                        "ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
+                        "ContactInformation.landLineNo",
+                        "ContactInformation.mobilePhone",
+                        //"ContactInformation.CustomerResidentialAddress.mailSameAsResidence",
                         "ContactInformation.CustomerResidentialAddress.landLordName",
                         "ContactInformation.CustomerPermanentAddress",
                         "ContactInformation.CustomerPermanentAddress.mailingDoorNo",
@@ -398,6 +425,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "ContactInformation.CustomerPermanentAddress.mailingPincode",
                         "ContactInformation.CustomerPermanentAddress.mailingState",
                         "ContactInformation.CustomerPermanentAddress.landLordName",
+                        "ContactInformation.CustomerPermanentAddress.residenceSameAsMail",
                         "familyDetails",
                         "familyDetails.familyMembers",
                         "familyDetails.familyMembers.customerId",
@@ -496,6 +524,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "BusinessOccupationDetails.agricultureDetails.cropName",
                         "BusinessOccupationDetails.agricultureDetails.harvestMonth",
                         "BusinessOccupationDetails.agricultureDetails.landArea",
+                        "bankAccounts",
+                        "bankAccounts.customerBankAccounts",
+                        "bankAccounts.customerBankAccounts.ifscCode",
+                        "bankAccounts.customerBankAccounts.customerBankName",
+                        "bankAccounts.customerBankAccounts.customerBankBranchName",
+                        "bankAccounts.customerBankAccounts.customerNameAsInBank",
+                        "bankAccounts.customerBankAccounts.accountNumber",
+                        "bankAccounts.customerBankAccounts.accountType",
+                        "bankAccounts.customerBankAccounts.bankStatementDocId",
                         "loanInformation",
                         "loanInformation.requestedLoanAmount",
                         "loanInformation.requestedLoanPurpose",
@@ -604,6 +641,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         model.customer.udf.userDefinedFieldValues.udf1 =
                             model.customer.udf.userDefinedFieldValues.udf1 === true
                             || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+                    }
+                    if(model.customer.udf && model.customer.udf.userDefinedFieldValues && 
+                        model.customer.udf.userDefinedFieldValues.udf37 && SessionStore.getGlobalSetting('siteCode') == 'saija') {
+                        model.customer.udf.userDefinedFieldValues.udf37 = model.customer.udf.userDefinedFieldValues.udf37 == 'true' ? true : false;
                     }
                     deferred.resolve(model);
                     PageHelper.hideLoader();

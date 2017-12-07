@@ -1,6 +1,6 @@
 irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager",
-    function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager) {
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager", "CustomerBankBranch",
+    function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager, CustomerBankBranch) {
         var formRepository = {}
 
         formRepository['IndividualEnrollment'] = {
@@ -182,22 +182,26 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 orderNo: 20,
                 "title": "CONTACT_INFORMATION",
                 "items": {
+                    "mobilePhone": {
+                        orderNo: 10,
+                        key: "customer.mobilePhone",
+                        inputmode: "number",
+                        numberType: "tel"
+                    },
+                    "landLineNo": {
+                        orderNo: 20,
+                        key: "customer.landLineNo",
+                        inputmode: "number",
+                        numberType: "tel",
+                        schema: {
+                            "minLength": 0,
+                        }
+                    },
                     "CustomerResidentialAddress": {
                         type: "fieldset",
+                        orderNo: 30,
                         title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                         items: {
-                            "mobilePhone": {
-                                orderNo: 10,
-                                key: "customer.mobilePhone",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
-                            "landLineNo": {
-                                orderNo: 20,
-                                key: "customer.landLineNo",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
                             "doorNo": {
                                 orderNo: 30,
                                 key: "customer.doorNo",
@@ -305,13 +309,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "landLordName": {
                                 "title": "IF_HOUSE_RENTED_NAME_OF_LANDLORD",
                                 orderNo: 111,
-                                key: "customer.udf.userDefinedFieldValues.udf2",
+                                key: "customer.udf.userDefinedFieldValues.udf6",
                                 "type": "string",
+                                schema: {
+                                    type: ['string', 'null']
+                                }
                             },
                         }
                     },
                     "CustomerPermanentAddress": {
                         type: "fieldset",
+                        orderNo: 40,
                         title: "CUSTOMER_PERMANENT_ADDRESS",
                         condition: "!model.customer.mailSameAsResidence",
                         items: {
@@ -323,8 +331,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 20,
                                 key: "customer.mailingStreet",
                             },
-                            "mailingPincode": {
+                             "mailingPostoffice": {
                                 orderNo: 30,
+                                key: "customer.mailingPostoffice",
+                            },
+                            "mailingPincode": {
+                                orderNo: 40,
                                 key: "customer.mailingPincode",
                                 type: "lov",
                                 fieldType: "string",
@@ -381,14 +393,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "mailingLocality": {
-                                orderNo: 40,
+                                orderNo: 50,
                                 readonly: true,
                                 key: "customer.mailingLocality",
                             },
-                            "mailingPostoffice": {
-                                orderNo: 50,
-                                key: "customer.mailingPostoffice",
-                            },
+                           
                             "mailingDistrict": {
                                 orderNo: 60,
                                 readonly: true,
@@ -407,6 +416,15 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 71,
                                 key: "customer.udf.userDefinedFieldValues.udf38",
                                 "type": "string",
+                            },
+                            "residenceSameAsMail": {
+                                orderNo: 80,
+                                key: "customer.udf.userDefinedFieldValues.udf37",
+                                title: "RESIDENCE_ADDRESS_SAME_AS_PERMANANT",
+                                type: "checkbox",
+                                schema: {
+                                    "type": ["boolean", "null"],
+                                },
                             },
                         }
                     }
@@ -648,8 +666,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "additionalKYCs": {
                         "key": "customer.additionalKYCs",
                         "type": "array",
-                        "add": null,
-                        "remove": null,
                         "title": "ADDITIONAL_KYC",
                         "items": {
                             "kyc1ProofType": {
@@ -1514,9 +1530,205 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-            "Liabilities1": {
+            "bankAccounts": {
                 type: "box",
                 orderNo: 100,
+                title: "BANK_ACCOUNTS",
+                items: {
+                    "customerBankAccounts": {
+                        key: "customer.customerBankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                            modelValue.bankStatements = [];
+                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                            var noOfMonthsToDisplay = 6;
+                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                                modelValue.bankStatements.push({
+                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                                });
+                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                            }
+                        },
+                        items: {
+                            "ifscCode": {
+                                key: "customer.customerBankAccounts[].ifscCode",
+                                type: "lov",
+                                lovonly: true,
+                                required: true,
+                                inputMap: {
+                                    "ifscCode": {
+                                        "key": "customer.customerBankAccounts[].ifscCode"
+                                    },
+                                    "bankName": {
+                                        "key": "customer.customerBankAccounts[].customerBankName"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function (inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.bankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function (data, index) {
+                                    return [
+                                        data.ifscCode,
+                                        data.branchName,
+                                        data.bankName
+                                    ];
+                                }
+                            },
+                            "customerBankName": {
+                                key: "customer.customerBankAccounts[].customerBankName",
+                                required: true,
+                                readonly: true
+                            },
+                            "customerBankBranchName": {
+                                key: "customer.customerBankAccounts[].customerBankBranchName",
+                                required: true,
+                                readonly: true
+                            },
+                            "customerNameAsInBank": {
+                                key: "customer.customerBankAccounts[].customerNameAsInBank"
+                            },
+                            "accountNumber": {
+                                key: "customer.customerBankAccounts[].accountNumber",
+                                type: "password",
+                                inputmode: "number",
+                                numberType: "tel"
+                            },
+                            "confirmedAccountNumber": {
+                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                inputmode: "number",
+                                numberType: "tel"
+                            },
+                            "accountType": {
+                                key: "customer.customerBankAccounts[].accountType",
+                                type: "select"
+                            },
+                            "bankingSince": {
+                                key: "customer.customerBankAccounts[].bankingSince",
+                                type: "date",
+                                title: "BANKING_SINCE"
+                            },
+                            "netBankingAvailable": {
+                                key: "customer.customerBankAccounts[].netBankingAvailable",
+                                type: "select",
+                                title: "NET_BANKING_AVAILABLE",
+                                enumCode: "decisionmaker"
+                            },
+                            "sanctionedAmount": {
+                                key: "customer.customerBankAccounts[].sanctionedAmount",
+                                condition: "model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
+                                type: "amount",
+                                required: true,
+                                title: "OUTSTANDING_BALANCE"
+                            },
+                            "limit": {
+                                key: "customer.customerBankAccounts[].limit",
+                                type: "amount"
+                            },
+                            "bankStatementDocId": {
+                                key: "customer.customerBankAccounts[].bankStatementDocId",
+                                type: "file",
+                                title: "BANK_STATEMENT_UPLOAD",
+                                fileType: "application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF",
+                                using: "scanner"
+                            },
+                            "bankStatements": {
+                                key: "customer.customerBankAccounts[].bankStatements",
+                                type: "array",
+                                title: "STATEMENT_DETAILS",
+                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                                titleExprLocals: {moment: window.moment},
+                                startEmpty: true,
+                                items: {
+                                    "startMonth": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
+                                        type: "date",
+                                        title: "START_MONTH"
+                                    },
+                                    "totalDeposits": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
+                                        type: "amount",
+                                        calculator: true,
+                                        creditDebitBook: true,
+                                        onDone: function (result, model, context) {
+                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
+                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
+                                        },
+                                        title: "TOTAL_DEPOSITS"
+                                    },
+                                    "totalWithdrawals": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
+                                        type: "amount",
+                                        title: "TOTAL_WITHDRAWALS"
+                                    },
+                                    "balanceAsOn15th": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
+                                        type: "amount",
+                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
+                                    },
+                                    "noOfChequeBounced": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
+                                        type: "amount",
+                                        //maximum:99,
+                                        required: true,
+                                        title: "NO_OF_CHEQUE_BOUNCED"
+                                    },
+                                    "noOfEmiChequeBounced": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
+                                        type: "amount",
+                                        required: true,
+                                        //maximum:99,
+                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                                    },
+                                    "bankStatementPhoto": {
+                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                        type: "file",
+                                        required: true,
+                                        title: "BANK_STATEMENT_UPLOAD",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
+                                    },
+                                }
+                            },
+                            "isDisbersementAccount": {
+                                key: "customer.customerBankAccounts[].isDisbersementAccount",
+                                type: "radios",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                }, {
+                                    value: false,
+                                    name: "No"
+                                }]
+                            }
+                        }
+                    }
+                }
+            },
+            "Liabilities1": {
+                type: "box",
+                orderNo: 110,
                 title: "T_LIABILITIES",
                 items: {
                     "liabilities": {
@@ -1571,7 +1783,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "loanInformation": {
                 "type": "box",
-                orderNo: 110,
+                orderNo: 120,
                 "title": "LOAN_INFORMATION",
                 "items": {
                     "requestedLoanAmount": {
@@ -1593,7 +1805,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "actionbox": {
                 "type": "actionbox",
-                orderNo: 120,
+                orderNo: 130,
                 //"condition": "model.customer.id",
                 "items": {
                     "submit": {

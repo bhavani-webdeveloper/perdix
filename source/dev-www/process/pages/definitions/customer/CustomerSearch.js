@@ -41,6 +41,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
                 	},
                 	{
                 		key: "lastName",
+                		condition: "model.siteCode != 'saija'"
                 	},
                 	{
                 		key: "kyc_no", 

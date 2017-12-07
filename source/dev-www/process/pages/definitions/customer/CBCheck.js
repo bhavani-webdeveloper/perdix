@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 		"subTitle": "CUSTOMER_SEARCH",
 		initialize: function (model, form, formCtrl) {
 			model.branchName = SessionStore.getCurrentBranch().branchId;
+			model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			$log.info("search-CustomerCBCheck got initialized");
 		},
 		definition: {
@@ -25,6 +26,9 @@ irf.pageCollection.factory(irf.page("CBCheck"),
 					},
 					"lastName": {
 						"title": "LASTNAME",
+						"x-schema-form": {
+							condition: "model.siteCode != 'saija'",
+						},
 						"type": "string"
 					},
 					"kycNumber": {
