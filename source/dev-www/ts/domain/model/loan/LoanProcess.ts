@@ -163,8 +163,7 @@ export class LoanProcess {
         let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
         let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
-
-        return Observable.concat(obs1, obs2, obs3);
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     proceed(toStage: string): any {
@@ -175,7 +174,7 @@ export class LoanProcess {
         let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
         let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterProceed', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
-        return Observable.concat(obs1, obs2, obs3);
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     static get(id: number): Observable<LoanProcess> {

@@ -62,7 +62,7 @@ export class LeadProcess implements CanApplyPolicy {
         let obs2 = this.leadRepo.updateLead(this);
         let pmAfterUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
-        return Observable.concat(obs1, obs2, obs3);
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     proceed(toStage: string): Observable<LeadProcess>{
@@ -84,7 +84,7 @@ export class LeadProcess implements CanApplyPolicy {
         let obs2 = this.leadRepo.updateLead(this);
         let pmAfterUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory.getInstance(), 'afterSendBack', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
-        return Observable.concat(obs1, obs2, obs3);
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     followUp(reqData: any): Observable<LeadProcess> {

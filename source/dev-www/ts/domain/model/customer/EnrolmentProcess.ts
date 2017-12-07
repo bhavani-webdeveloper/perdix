@@ -40,7 +40,7 @@ export class EnrolmentProcess {
         // return this.enrolmentRepo.updateIndividualLoan(loanAccount);
     }
 
-    update(): any {
+    proceed(): any {
         /* Calls all business policies assocaited with proceed */
 
         // plainToClass

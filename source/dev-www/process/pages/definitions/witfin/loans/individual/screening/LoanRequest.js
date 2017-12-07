@@ -143,17 +143,17 @@ define([],function(){
                         return deferred.promise;
                     },
                     save: function(model, formCtrl, form, $event){
-                        PageHelper.showProgress('enrolment', 'Updating Loan');
+                        /* Loan SAVE */
+                        PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-
+                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
@@ -182,8 +182,7 @@ define([],function(){
                     },
                     reject: function(model, formCtrl, form, $event){
 
-                    },
-
+                    }
                 }
             };
 

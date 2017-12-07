@@ -433,13 +433,11 @@
     "actionbox": {
         "type": "actionbox",
         "items": {
-            "submit": {
-                "type": "submit",
-                "title": "SUBMIT"
-            },
             "save": {
-                "type": "save",
-                "title": "OFFLINE_SAVE"
+                "type": "button",
+                "icon": "fa fa-circle-o",
+                "title": "SAVE",
+                "onClick": "actions.save(model, formCtrl, form, $event)"
             }
         }
     }
