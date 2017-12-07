@@ -35,6 +35,7 @@ export enum CustomerTypes {
 export class Customer {
     aadhaarNo: string;
     addressInLocalLanguage: string;
+    accomodation_type: string;
     addressProof: string;
     addressProofImageId: string;
     addressProofIssueDate: string;

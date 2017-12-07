@@ -459,7 +459,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             //             PageHelper.showErrors(httpRes);
                             //         }
                             //     );
-                            model.loanProcess.save()
+                             model.enrolmentProcess.save()
                                 .finally(function () {
                                     PageHelper.hideLoader();
                                 })
@@ -516,7 +516,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         $q.all(fpPromisesArr).then(function () {
 
 
-                            reqData['enrollmentAction'] = 'PROCEED';
+                            reqData['EnrollmentAction'] = 'PROCEED';
 
 
                             // PreProceed Policy
@@ -536,7 +536,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             if (preSaveOrProceed(reqData) == false) {
                                 return;
                             }
-                            EnrollmentHelper.fixData(reqData);
                             PageHelper.showProgress('enrolment', 'Updating Customer');
                             // EnrollmentHelper.proceedData(reqData).then(function(resp){
                             //     formHelper.resetFormValidityState(form);
@@ -546,7 +545,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             // }, function(err) {
                             //     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                             // });
-                            model.loanProcess.proceed()
+                            model.enrolmentProcess.save()
                                 .finally(function () {
                                     PageHelper.hideLoader();
                                 })

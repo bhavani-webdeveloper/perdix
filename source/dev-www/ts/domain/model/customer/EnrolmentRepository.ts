@@ -21,4 +21,9 @@ export class EnrolmentRepository implements IEnrolmentRepository {
         return Observable.fromPromise(customerPromise);
     }
 
+    updateEnrollment(reqData: Object): Observable<EnrolmentProcess> {
+        let promise = this.enrolmentService.updateEnrollment(reqData).$promise;
+        return Observable.fromPromise(promise);
+    }
+
 }

@@ -18,6 +18,7 @@ export class EnrolmentProcess {
     remarks: string;
     stage: string;
     customer: Customer;
+    enrollmentAction: string;
     enrolmentRepo: IEnrolmentRepository;
 
     constructor() {
@@ -36,16 +37,23 @@ export class EnrolmentProcess {
     }
 
     save(): any {
-        /* Calls all business policies associated with save */
-        // return this.enrolmentRepo.updateIndividualLoan(loanAccount);
+        this.enrollmentAction = 'SAVE';
+        let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeSave', EnrolmentProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.enrolmentRepo.updateEnrollment(this);
+        let pmAfterUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'afterSave', EnrolmentProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     proceed(): any {
-        /* Calls all business policies assocaited with proceed */
-
-        // plainToClass
-
-        // return this.enrolmentRepo.updateIndividualLoan(loanAccount);
+        this.enrollmentAction = 'PROCEED';
+        let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeProceed', EnrolmentProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.enrolmentRepo.updateEnrollment(this);
+        let pmAfterUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'afterProceed', EnrolmentProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
     }
 
     get(id: number): Observable<EnrolmentProcess> {

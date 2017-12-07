@@ -12,6 +12,7 @@ import Expenditure = require("../Expenditure");
 import {EnrolmentProcess} from "../EnrolmentProcess";
 import * as _ from 'lodash';
 import Utils = require("../../../shared/Utils");
+import {CustomerTypes} from "../Customer";
 
 
 
@@ -36,9 +37,9 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
             () => {
                 try {
                     let observables = [];
-                    
 
-                   
+
+
                     let fm: FamilyMember = new FamilyMember();
                     let exp = new Expenditure();
                     // let fm = new loanProcess.loanAccount.applicantCustomer.familyMembers();
@@ -47,9 +48,9 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
                     exp.frequency = 'Monthly';
                     enrolmentProcess.customer.familyMembers.push(fm);
                     enrolmentProcess.customer.expenditures.push(exp)
-                    
-                    
-                    
+
+
+
 
                     let branch1 = formHelperData.getBranchId();
                     let allowedBranch = [];
@@ -72,19 +73,19 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
                     }
                     enrolmentProcess.customer.centreId = centreName[0];
                     enrolmentProcess.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
-                    
+
                     enrolmentProcess.customer.customerBranchId = enrolmentProcess.customer.customerBranchId || allowedBranch[0].value;
 
 
                     enrolmentProcess.customer.date = enrolmentProcess.customer.date || Utils.getCurrentDate();
-                    
+
 
 
                     enrolmentProcess.customer.nameOfRo = enrolmentProcess.customer.nameOfRo || activeSession.getLoginname();
-                    enrolmentProcess.customer.customerType = 'Individual';
+                    enrolmentProcess.customer.customerType = CustomerTypes.INDIVIDUAL;
                     enrolmentProcess.customer.identityProof = enrolmentProcess.customer.identityProof || "Pan Card";
                     enrolmentProcess.customer.addressProof= enrolmentProcess.customer.addressProof || "Aadhar Card";
-                    
+
                     // return Observable.merge(observables, 5)
                     //     .concatAll()
                     //     .last()
@@ -98,7 +99,7 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
                     console.error(err);
                     return Observable.of(enrolmentProcess);
                 }
-                
+
             }
         )
     }

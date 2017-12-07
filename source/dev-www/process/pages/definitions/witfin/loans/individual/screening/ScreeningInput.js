@@ -221,7 +221,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
-                        var loanProcess = LoanProcess.createNewProcess()
+                        LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
 
