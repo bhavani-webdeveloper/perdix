@@ -80,7 +80,10 @@ define([],function(){
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
-                    "LoanDocuments.loanDocuments.documentId"
+                    "LoanDocuments.loanDocuments.documentId",
+                    "actionbox",
+                    "actionbox.submit",
+                    "actionbox.save"
 
                 ];
 
@@ -140,7 +143,20 @@ define([],function(){
                         return deferred.promise;
                     },
                     save: function(model, formCtrl, form, $event){
+                        PageHelper.showProgress('enrolment', 'Updating Loan');
+                        model.loanProcess.save()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
 
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     },
                     holdButton: function(model, formCtrl, form, $event){
 
@@ -150,7 +166,19 @@ define([],function(){
 
                     },
                     proceed: function(model, formCtrl, form, $event){
-
+                        PageHelper.showProgress('enrolment', 'Updating Loan');
+                        model.loanProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     },
                     reject: function(model, formCtrl, form, $event){
 

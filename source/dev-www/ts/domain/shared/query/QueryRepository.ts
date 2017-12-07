@@ -15,4 +15,8 @@ export class QueryRepository implements IQueryRepository{
         return RxObservable.fromPromise(this.queryService.getAllLoanPurpose1());
     }
 
+    getAllLoanPurpose2(model: string): Observable<any> {
+        return RxObservable.fromPromise(this.queryService.getAllLoanPurpose2(model));
+    }
+
 }

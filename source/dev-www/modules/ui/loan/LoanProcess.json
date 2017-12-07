@@ -22,11 +22,11 @@
                 "type": "lov",
                 "autolov": true,
                 "title": "LOAN_PURPOSE_1",
-                "resolver":"LoanPurpose1LOVConfiguration",
                 "bindMap": {},
                 "outputMap": {
                     "purpose1": "loanAccount.loanPurpose1"
                 },
+                "resolver":"LoanPurpose1LOVConfiguration",
                 "searchHelper": {
                     "newOffline": {}
                 }
@@ -40,6 +40,7 @@
                 "outputMap": {
                     "purpose2": "loanAccount.loanPurpose2"
                 },
+                "resolver":"LoanPurpose2LOVConfiguration",
                 "searchHelper": {
                     "newOffline": {}
                 }
@@ -70,7 +71,7 @@
             "expectedEmi": {
                 "key": "loanAccount.expectedEmi",
                 "type": "amount",
-                "title": "ESTIMATED_KINARA_EMI",
+                "title": "ESTIMATED_EMI",
                 "readonly": true
             },
             "emiRequested": {
@@ -426,6 +427,19 @@
                         "title": "TRANCHE_CONDITION"
                     }
                 }
+            }
+        }
+    },
+    "actionbox": {
+        "type": "actionbox",
+        "items": {
+            "submit": {
+                "type": "submit",
+                "title": "SUBMIT"
+            },
+            "save": {
+                "type": "save",
+                "title": "OFFLINE_SAVE"
             }
         }
     }
