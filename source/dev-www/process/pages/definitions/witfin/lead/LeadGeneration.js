@@ -37,6 +37,12 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 model.lead.leadInteractions[form.arrayIndex].picture = '';
                             }
                         }
+                    },
+                    "sourceDetails.agentName": {
+                        "condition": "model.lead.leadSource=='Buying/Selling Agent'"
+                    },
+                    "sourceDetails.dealerName": {
+                        "condition": "model.lead.leadSource=='Dealer'"
                     }
 
                 }

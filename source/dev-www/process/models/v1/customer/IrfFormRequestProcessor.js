@@ -2345,13 +2345,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "agentName": {
                         "key": "lead.agentName",
-                        "condition": "model.lead.leadSource=='Buying/Selling Agent'",
                         "type":"select"
 
                     },
                     "dealerName": {
                         "key": "lead.dealerName",
-                        "condition": "model.lead.leadSource=='Dealer'",
                         "type":"select"
                     }
 
@@ -6743,7 +6741,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             if(tmp) {
                                 if(tmp.items) {
                                    tmp.items = processItems(tmp.items);
-                                } 
+                                }
                                 transformedItems.push(tmp);
                             }
                         } else if (_.isObject(items[i])){
@@ -6757,7 +6755,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 }
 
                 if(options.additions && _.isArray(options.additions)) {
-                    var additionalFields = processItems(options.additions);                
+                    var additionalFields = processItems(options.additions);
                     form = form.concat(additionalFields);
                 }
 
