@@ -46,14 +46,6 @@ define({
 							"title": "CITY/_TOWN_VILLAGE",
 							"type": "string"
 						},
-						"followUpDate": {
-							"title": "FOLLOWUP_DATE",
-							"type": "string",
-							"x-schema-form": {
-								"type": "date",
-								"screenFilter": true
-							}
-						},
 						"centre": {
 							"title": "CENTRE",
 							"type": "string",
@@ -125,8 +117,6 @@ define({
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
-						'leadStatus': "Reject",
-						'followUpDate': searchOptions.followUpDate,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
@@ -183,12 +173,6 @@ define({
 						}, {
 							title: 'Business Name',
 							data: 'businessName'
-						}, {
-							title: 'Lead Status',
-							data: 'leadStatus'
-						}, {
-							title: 'Follow Up Date',
-							data: 'followUpDate'
 						}, {
 							title: 'Address Line1',
 							data: 'addressLine1'

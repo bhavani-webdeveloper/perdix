@@ -194,9 +194,6 @@ define({
 							title: 'Business Name',
 							data: 'businessName'
 						}, {
-							title: 'Lead Status',
-							data: 'leadStatus'
-						},{
 							title: 'Screening Date',
 							data: 'screeningDate'
 						}, {

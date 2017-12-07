@@ -102,8 +102,7 @@ define({
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
-							item.pincode,
-							item.mobileNo
+							item.pincode
 						]
 					},
 					getTableConfig: function() {
@@ -135,9 +134,6 @@ define({
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
-						},{
-							title: 'Mobile No',
-							data: 'mobileNo'
 						}]
 					},
 					getActions: function() {

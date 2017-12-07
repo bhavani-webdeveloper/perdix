@@ -110,6 +110,8 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                 },
                 actions: {
                     submit: function(model, form, formName) {
+                        PageHelper.showProgress('enrolment', 'Assigning Lead');
+                        PageHelper.showLoader();
                         $log.info("Inside submit()");
                         $log.warn(model.lead);
 
@@ -120,6 +122,9 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                            $log.info(model.customer.branchId);
                         }
                         leadRepo.assignLead(reqData)
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
                             .subscribe(function(val) {
                                 $state.go('Page.witfinLeadDashboard', null);
                             }, function(err) {

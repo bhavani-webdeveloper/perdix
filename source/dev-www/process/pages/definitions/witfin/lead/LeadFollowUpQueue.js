@@ -126,7 +126,6 @@ define({
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
-						'leadStatus': "FollowUp",
 						'followUpDate': searchOptions.followUpDate,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
@@ -184,9 +183,6 @@ define({
 						}, {
 							title: 'Business Name',
 							data: 'businessName'
-						}, {
-							title: 'Lead Status',
-							data: 'leadStatus'
 						}, {
 							title: 'Follow Up Date',
 							data: 'followUpDate'
