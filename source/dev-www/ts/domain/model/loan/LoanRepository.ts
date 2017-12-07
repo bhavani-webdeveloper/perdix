@@ -9,8 +9,10 @@ import {Observable} from "@reactivex/rxjs";
 class LoanRepository implements ILoanRepository {
 
 	private individualLoanService: any;
+    private loanService: any;
 	constructor() {
 		this.individualLoanService = AngularResourceService.getInstance().getNGService('IndividualLoan');
+        this.loanService = AngularResourceService.getInstance().getNGService('LoanProcess');
 	}
 	getIndividualLoan(id: number):Observable<any> {
 		let observable = Ro.fromPromise(this.individualLoanService.get({id: id}).$promise);
@@ -105,6 +107,10 @@ class LoanRepository implements ILoanRepository {
 	loanConfirmationUpload(file: any, progress: any): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.ConfirmationUpload(file, progress).$promise);
 	}
+
+    loanViewAccount(urn: any): Observable<any> {
+        return Ro.fromPromise(this.loanService.viewLoanAccount({urn: urn}).$promise);
+    }
 
 }
 

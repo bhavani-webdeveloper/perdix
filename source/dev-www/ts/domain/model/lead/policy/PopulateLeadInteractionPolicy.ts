@@ -1,3 +1,4 @@
+
 import {LeadPolicy} from "./LeadPolicy";
 import {Observable} from "@reactivex/rxjs";
 import LeadInteraction = require("../LeadInteraction");
@@ -6,10 +7,10 @@ import {ObjectFactory} from "../../../shared/ObjectFactory";
 import Utils = require("../../../shared/Utils");
 import {LeadProcess} from "../LeadProcess";
 
+
 export interface PopulateLeadInteractionPolicyArgs {
     NoOfInteractions: string;
 }
-
 export class PopulateLeadInteractionPolicy implements LeadPolicy<PopulateLeadInteractionPolicyArgs> {
 
     args: PopulateLeadInteractionPolicyArgs;

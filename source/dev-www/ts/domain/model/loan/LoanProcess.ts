@@ -8,7 +8,7 @@ import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
 import {EnrolmentProcess} from "../customer/EnrolmentProcess";
-import Customer = require("../customer/Customer");
+import { Customer } from '../customer/Customer';
 import LoanProcessFactory = require("./LoanProcessFactory");
 import {PolicyManager} from "../../shared/PolicyManager";
 import {LeadProcess} from "../lead/LeadProcess";

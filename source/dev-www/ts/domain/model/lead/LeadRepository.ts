@@ -26,6 +26,10 @@ class LeadRepository implements ILeadRepository {
 		return Ro.fromPromise(this.leadService.updateLead(reqData).$promise);
 	}
 
+    assignLead(reqData: Object): Observable<any> {
+        return Ro.fromPromise(this.leadService.assignLead(reqData).$promise);
+    }
+
 }
 
 export = LeadRepository;

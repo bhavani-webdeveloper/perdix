@@ -11,6 +11,7 @@ export interface ISession {
     getBranch(): string;
     getCenters(): Array<any>;
     getLoginname(): string;
+    getSystemDateFormat(): string;
 }
 
 export abstract class NeedsAngularInjector {
@@ -53,5 +54,9 @@ export class UserSession extends NeedsAngularInjector implements ISession {
 
     getLoginname(): string {
         return this.getInjector().getLoginname();
+    }
+
+    getSystemDateFormat(): string {
+        return 'YYYY-MM-DD';
     }
 }

@@ -6,6 +6,7 @@ import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {LeadScreeningPolicy} from "./LeadScreeningPolicy";
 import {LeadFollowupPolicy} from "./LeadFollowupPolicy";
 import {LeadRejectPolicy} from "./LeadRejectPolicy";
+import {LeadDerivedColumnsPolicy} from "./LeadDerivedColumnsPolicy";
 export class LeadPolicyFactory implements IPolicyFactory {
 
     private static _instance:LeadPolicyFactory = null;
@@ -34,6 +35,8 @@ export class LeadPolicyFactory implements IPolicyFactory {
                 return new LeadFollowupPolicy();
             case 'LeadRejectPolicy':
                 return new LeadRejectPolicy();
+            case 'LeadDerivedColumnsPolicy':
+                return new LeadDerivedColumnsPolicy();
             default:
             	return null;
 
