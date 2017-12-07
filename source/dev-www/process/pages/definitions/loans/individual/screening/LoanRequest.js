@@ -2784,6 +2784,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             },
 
             proceed: function(model, formCtrl, form, $event){
+                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
+                $log.info(DedupeEnabled);
+
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
                 var nextStage = null;
@@ -2941,42 +2944,44 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         mandatoryPromises.push(p2);
 
                         // Dedupe call
-                        var p3 =Queries.getDedupeDetails({
-                            "ids" : dedupeCustomerIdArray
-                        }).then(function(d){
-                            console.log(d);
+                        if (DedupeEnabled == 'Y') {
+                                var p3 =Queries.getDedupeDetails({
+                                "ids" : dedupeCustomerIdArray
+                            }).then(function(d){
+                                console.log(d);
 
-                            if (d.length != dedupeCustomerIdArray.length) {
-                                PageHelper.showProgress("dedupe-status", "Not all customers have done dedupe", 5000);
-                                mandatoryToProceedLoan['Dedupe'] = false;
-                                return;
-                            }
-
-                            for (var i=0;i<d.length;i++){
-                                var item = d[i];
-                                if (item.status != 'finished'){
-                                    if (item.status == 'failed') {
-                                        PageHelper.showProgress("dedupe-status", "Dedupe has failed. Please Contact IT", 5000);
-                                    } else {
-                                        PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);  
-                                    }
+                                if (d.length != dedupeCustomerIdArray.length) {
+                                    PageHelper.showProgress("dedupe-status", "Not all customers have done dedupe", 5000);
                                     mandatoryToProceedLoan['Dedupe'] = false;
-                                    break;
+                                    return;
                                 }
-                            }
 
-                            for (var i=0; i< d.length; i++){
-                                item = d[i];
-                                if (item.duplicate_above_threshold_count != null && item.duplicate_above_threshold_count > 0) {
-                                    reqData.stage = 'Dedupe';
-                                    break;
+                                for (var i=0;i<d.length;i++){
+                                    var item = d[i];
+                                    if (item.status != 'finished'){
+                                        if (item.status == 'failed') {
+                                            PageHelper.showProgress("dedupe-status", "Dedupe has failed. Please Contact IT", 5000);
+                                        } else {
+                                            PageHelper.showProgress("dedupe-status", "Dedupe process is not completed for all the customers. Please save & try after some time", 5000);
+                                        }
+                                        mandatoryToProceedLoan['Dedupe'] = false;
+                                        break;
+                                    }
                                 }
-                            }
-                        })
 
-                        mandatoryPromises.push(p3);
+                                for (var i=0; i< d.length; i++){
+                                    item = d[i];
+                                    if (item.duplicate_above_threshold_count != null && item.duplicate_above_threshold_count > 0) {
+                                        reqData.stage = 'Dedupe';
+                                        break;
+                                    }
+                                }
+                            })
 
+                            mandatoryPromises.push(p3);
+                        }
                     }
+
                     if (reqData.loanAccount.currentStage == 'Sanction'){
                         /* Auto population of Loan Collateral */
                         var p1 = Enrollment.getCustomerById({id:model.loanAccount.customerId})
