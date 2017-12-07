@@ -16,6 +16,10 @@ let config = {
                         "arguments": {
 
                         }
+                    },
+                    {
+                        "name":"LeadDerivedColumnsPolicy",
+                        "arguments": {}
                     }
 
                 ],

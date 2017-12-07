@@ -16,6 +16,10 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "PopulateLeadInteractionPolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "LeadDerivedColumnsPolicy",
+                            "arguments": {}
                         }
                     ],
                     "overrides": [
