@@ -240,6 +240,7 @@ function($log, $state, irfNavigator, $stateParams, Audit, PageHelper, $q, elemen
                     "key": "manual_issue.assignee_det[0].assignee_id",
                     "type": "lov",
                     "lovonly": true,
+                    "required": true,
                     "title": "RESPONSIBILITY",
                     "inputMap": {
                         "branch_id": "branch_id",
