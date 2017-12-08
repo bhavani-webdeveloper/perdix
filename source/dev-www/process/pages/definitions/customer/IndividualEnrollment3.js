@@ -282,9 +282,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         readonly : true,
                     },
                     "AdditionalKYC.additionalKYCs": {
-                        "add": null,
-                        "remove": null,
-                        "view": "fixed",
+                        schema: {
+                            maxItems: 1
+                        }
                     },
                     "ContactInformation.CustomerResidentialAddress": {
                         "orderNo": 21

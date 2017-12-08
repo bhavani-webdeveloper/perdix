@@ -6,6 +6,7 @@ define({
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
 
         return {
             "type": "search-list",
@@ -56,10 +57,25 @@ define({
                         };
                     },
                     getColumns: function() {
+                        var branchList = formHelper.enum('branch_id').data;
+                        var branches = {}
+                        for (var i = 0; i < branchList.length; i++) {
+                            branches[branchList[i].value] = branchList[i].name;
+                        }
+                        var centreList = formHelper.enum('centre').data;
+                        var centres = {}
+                        for (var i = 0; i < centreList.length; i++) {
+                            centres[centreList[i].field3] = centreList[i].name;
+                        }
                         return [{
                             title: 'URN',
                             data: 'jlgGroupMember.urnNo'
-                        }, {
+                        }, 
+                        // {
+                        //     title: 'GROUP_MEMBER_NAME',
+                        //     data: 'jlgGroupMember.urnNo'
+                        // }, 
+                        {
                             title: 'Group ID',
                             data: 'jlgGroup.id'
                         }, {
@@ -68,6 +84,28 @@ define({
                         }, {
                             title: 'Group Name',
                             data: 'jlgGroup.groupName'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'jlgGroup.branchId',
+                            render: function(data, type, full, meta) {
+                                if(data){
+                                    return branches[data];
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
+                        }, {
+                            title: 'CENTRE_CODE',
+                            data: 'jlgGroupMember.centreCode',
+                            render: function(data, type, full, meta) {
+                                if(data){
+                                    return centres[data];
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
                         }]
                     },
                     getActions: function() {
@@ -76,35 +114,49 @@ define({
                             desc: "",
                             fn: function(item, index) {
                                 PageHelper.showLoader();
-                                var remarks = window.prompt("Enter Remarks", "");
-                                if (remarks) {
-                                    irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                    Groups.post({
-                                        service: "overridedsc",
-                                        urnNo: item.jlgGroupMember.urnNo,
-                                        groupCode: item.jlgGroup.groupCode,
-                                        productCode: item.jlgGroup.productCode,
-                                        remarks: remarks
-                                    }, {}, function(resp, headers) {
-                                        $log.info(resp);
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                        $state.go('Page.Engine', {
-                                            pageName: "loans.group.DscOverrideQueue"
-                                        },{
-                                            reload: true,
-                                            inherit: false,
-                                            notify: true
-                                        });
-                                    }, function(resp) {
-                                        $log.error(resp);
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                        PageHelper.showErrors(resp);
-                                    });
-                                } else {
-                                    PageHelper.hideLoader();
-                                }
+
+                                // var remarks = window.prompt("Enter Remarks", "");
+                                // if (remarks) {
+                                //     irfProgressMessage.pop("dsc-override", "Performing DSC Override");
+                                //     Groups.post({
+                                //         service: "overridedsc",
+                                //         urnNo: item.jlgGroupMember.urnNo,
+                                //         groupCode: item.jlgGroup.groupCode,
+                                //         productCode: item.jlgGroup.productCode,
+                                //         remarks: remarks
+                                //     }, {}, function(resp, headers) {
+                                //         $log.info(resp);
+                                //         PageHelper.hideLoader();
+                                //         irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                //         $state.go('Page.Engine', {
+                                //             pageName: "loans.group.DscOverrideQueue"
+                                //         },{
+                                //             reload: true,
+                                //             inherit: false,
+                                //             notify: true
+                                //         });
+                                //     }, function(resp) {
+                                //         $log.error(resp);
+                                //         PageHelper.hideLoader();
+                                //         irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
+                                //         PageHelper.showErrors(resp);
+                                //     });
+                                // } else {
+                                //     PageHelper.hideLoader();
+                                // }
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "loans.group.DSCOverride",
+                                    pageId: item.dscIntegration.id,
+                                    pageData: {
+                                        jlgGroup: item.jlgGroup,
+                                        jlgGroupMember: item.jlgGroupMember,
+                                    }, 
+                                }, {
+                                    state: "Page.Engine",
+                                    pageName: "loans.group.DscOverrideQueue",
+                                });
+
                             },
                             isApplicable: function(item, index) {
                                 return true;

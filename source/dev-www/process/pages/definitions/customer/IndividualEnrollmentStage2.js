@@ -36,9 +36,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "required": true,
                     },
                     "AdditionalKYC.additionalKYCs": {
-                        "add": null,
-                        "remove": null,
-                        "view": "fixed",
+                        schema: {
+                            maxItems: 1
+                        }
                     },
                     "ContactInformation.CustomerResidentialAddress": {
                         "orderNo": 21
