@@ -11,11 +11,14 @@ define({
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                var self = this;
+
                 model.bundleModel = bundleModel;
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
+                    BundleManager.pushEvent('rel_to_business', model._bundlePageObj, model.customer);
                     /* Machin Details*/
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
                     model.totalValue = 0;
@@ -43,10 +46,33 @@ define({
                         model.REFERENCE_CHECK_RESPONSE = 'positive';
                     }
 
+
+                    if (self.form[self.form.length-1].title != "VIEW_UPLOADS") {
+                        var fileForms = [{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            /*fileType: "application/pdf",*/
+                            "preview": "pdf",
+                            "using": "scanner"
+                        }];
+                        //
+                        self.form.push({
+                            "type": "box",
+                            "colClass": "col-sm-12",
+                            "readonly": true,
+                            "overrideType": "default-view",
+                            "title": "VIEW_UPLOADS",
+                            "items": [{
+                                "type": "section",
+                                "html": '<sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator>',
+                                "items": fileForms
+                            }]
+                        });
+                    }
                 });
-
-
-
             },
             form: [{
                 "type": "box",
@@ -514,47 +540,6 @@ define({
                         getActions: function() {
                             return [];
                         }
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "VIEW_UPLOADS",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            /*fileType: "application/pdf",*/
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "title": "PURCHASE_BILLS"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "customer.customerBankAccounts[].bankStatementDocId",
-                            "type": "file",
-                            "notitle": true,
-                            /* fileType:"application/pdf",*/
-                            "preview": "pdf",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "IDENTITYPROOF",
-                            "using": "scanner"
-                        }, {
-                            "title": "BANK_STATEMENT_UPLOAD"
-                        }]
-
                     }]
                 }]
             }],

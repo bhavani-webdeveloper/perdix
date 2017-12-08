@@ -37,7 +37,11 @@ define({
 					};
 
 					/*Auto_Custom fields -- START */
-
+					/*Present Address*/
+					model.customer_address_html = model.customer.doorNo.concat(model.customer.street, model.customer.pincode, model.customer.district, model.customer.state);
+					/*VIEW UPLOADS SECTION*/
+					model.addressProof ='KYC-' + model.customer.addressProof ;
+					model.identityProof='KYC-' + model.customer.identityProof;
 					/*Family fields*/
 					model.custom_fields.family_fields.family_member_count = model.customer.familyMembers.length;
 					model.custom_fields.family_fields.dependent_family_member = 0;
@@ -178,15 +182,9 @@ define({
 							"key": "customer.email",
 							"title": "EMAIL"
 						}, {
-							"key": "",
+							"key": "customer_address_html",
 							"title": "Present Address",
-							"type": "html",
-							"html": '<p>{{model.customer.doorNo}}<br>' +
-								'{{model.customer.street}}<br>' +
-								'{{model.customer.pincode}}<br>' +
-								'{{model.customer.district}}<br>' +
-								'{{model.customer.state}}<br>' +
-								'</p>'
+							"type": "html"
 						}]
 					}, {
 						"type": "grid",
@@ -311,26 +309,38 @@ define({
 				"overrideType": "default-view",
 				"title": "RELATIONSHIP_TO_BUSINESS",
 				"items": [{
-					"type": "grid",
-					"orientation": "horizontal",
-					"items": [{
-						"type": "grid",
-						"orientation": "vertical",
-						"items": [{
-							"key": "customer.enterpriseCustomerRelations[].relationshipType",
-							"title": "RELATIONSHIP_TO_BUSINESS"
+					"type": "tableview",
+					"key": "enterpriseCustomerRelations",
+					"transpose": true,
+					"title": "",
+					"selectable": false,
+					"editable": false,
+					"tableConfig": {
+						"searching": false,
+						"paginate": false,
+						"pageLength": 10,
+					},
+					getColumns: function() {
+						return [{
+							"title": "RELATIONSHIP_TO_BUSINESS RELATIONSHIP_TO_BUSINESS",
+							"data": "relationshipType"
 						}, {
-							"key": "",
-							"title": "EXPERIENCE_IN_BUSINESS"
+							"title": "EXPERIENCE_IN_BUSINESS RELATIONSHIP_TO_BUSINESS",
+							"data": "experienceInBusiness"
+
 						}, {
-							"key": "customer.enterpriseCustomerRelations[].businessInvolvement",
-							"title": "BUSINESS_INVOLVEMENT"
+							"title": "BUSINESS_INVOLVEMENT",
+							"data": "businessInvolvement"
 						}, {
-							"key": "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
-							"title": "Partner of any other Business"
-						}]
-					}]
+							"title": "PARTNER_OF_ANY_OTHER_COMPANY",
+							"data": "partnerOfAnyOtherCompany"
+						}];
+					},
+					getActions: function() {
+						return [];
+					}
 				}]
+
 			}, {
 				"type": "box",
 				"readonly": true,
@@ -796,8 +806,8 @@ define({
 				}]
 			}, {
 				"type": "box",
+				"readonly": true,
 				"colClass": "col-sm-12",
-				"overrideType": "default-view",
 				"title": "VIEW_UPLOADS",
 				"items": [{
 					"type": "grid",
@@ -809,15 +819,11 @@ define({
 							"key": "customer.identityProofImageId",
 							"type": "file",
 							"notitle": true,
-							/*"fileType":"application/pdf",*/
 							"preview": "pdf",
 							"using": "scanner"
 						}, {
-							"key": "customer.identityProofNo",
-							"type": "barcode",
-							onCapture: function(result, model, form) {
-								model.customer.identityProofNo = result.text;
-							}
+							"type": "section",
+							"html": '<div style="text-align:center">KYC - PAN Card</div>'
 						}]
 					}, {
 						"type": "grid",
@@ -826,16 +832,12 @@ define({
 							"key": "customer.addressProofImageId",
 							"type": "file",
 							"notitle": true,
-							/*fileType:"application/pdf",*/
 							"preview": "pdf",
 							"using": "scanner"
 						}, {
-							"key": "customer.addressProofNo",
-							"type": "barcode",
-							onCapture: function(result, model, form) {
-								model.customer.addressProofNo = result.text;
-							}
-						}]
+							"key": "addressProof",
+						}
+						]
 					}, {
 						"type": "grid",
 						"orientation": "vertical",
@@ -845,6 +847,10 @@ define({
 							"type": "file",
 							"fileType": "image/*"
 						}]
+					},{
+						"type": "grid",
+						"orientation": "vertical",
+						"items": []
 					}]
 				}]
 			}],
@@ -877,6 +883,10 @@ define({
 						$log.info(model.household)
 							/*}*/
 					}
+				},
+				"business_customer": function(bundleModel, model, params) {
+					model.enterpriseCustomerRelations = params.enterpriseCustomerRelations;
+					$log.info(model.enterpriseCustomerRelations)
 				}
 			},
 			actions: {}
