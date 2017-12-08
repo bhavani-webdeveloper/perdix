@@ -117,6 +117,7 @@ return {
 	            {
 	                "type": "array",
 	                "key": "group.jlgGroupMembers",
+	                "condition": "model.group && model.group.jlgGroupMembers",
 	                "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
 	                "add": null,
 	                remove: null,
