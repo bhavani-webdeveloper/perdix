@@ -1,15 +1,15 @@
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, Enrollment, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
+    function ($log, Enrollment, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
+              PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
-            initialize: function(model, form, formCtrl) {
+            initialize: function (model, form, formCtrl) {
 
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
@@ -38,7 +38,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     Lead.get({
                             id: leadId
                         },
-                        function(res) {
+                        function (res) {
                             _.assign(model.lead, res);
                             if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
                                 model.lead.customerTypeString = model.lead.customerType;
@@ -65,94 +65,239 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 }
             },
             offline: true,
-            getOfflineDisplayItem: function(item, index) {
+            getOfflineDisplayItem: function (item, index) {
                 return [
                     item.lead.leadName
                 ]
             },
 
             form: [{
-                    "type": "box",
-                    "title": "LEAD_PROFILE",
-                    "items": [{
-                            key: "lead.branchName",
-                            type: "select",
-                            "readonly": true
-                        }, {
-                            key: "lead.centreName",
-                            type: "lov",
-                            autolov: true,
-                            bindMap: {},
-                            required: true,
-                            searchHelper: formHelper,
-                            search: function(inputModel, form, model, context) {
-                                var centres = SessionStore.getCentres();
-                                $log.info("hi");
-                                $log.info(centres);
+                "type": "box",
+                "title": "LEAD_PROFILE",
+                "items": [{
+                    key: "lead.branchName",
+                    type: "select",
+                    "readonly": true
+                }, {
+                    key: "lead.centreName",
+                    type: "lov",
+                    autolov: true,
+                    bindMap: {},
+                    required: true,
+                    searchHelper: formHelper,
+                    search: function (inputModel, form, model, context) {
+                        var centres = SessionStore.getCentres();
+                        $log.info("hi");
+                        $log.info(centres);
 
-                                var centreCode = formHelper.enum('centre').data;
-                                var out = [];
-                                if (centres && centres.length) {
-                                    for (var i = 0; i < centreCode.length; i++) {
-                                        for (var j = 0; j < centres.length; j++) {
-                                            if (centreCode[i].value == centres[j].id) {
-                                                out.push({
-                                                    name: centreCode[i].name,
-                                                    id: centreCode[i].value
-                                                })
-                                            }
-                                        }
+                        var centreCode = formHelper.enum('centre').data;
+                        var out = [];
+                        if (centres && centres.length) {
+                            for (var i = 0; i < centreCode.length; i++) {
+                                for (var j = 0; j < centres.length; j++) {
+                                    if (centreCode[i].value == centres[j].id) {
+                                        out.push({
+                                            name: centreCode[i].name,
+                                            id: centreCode[i].value
+                                        })
                                     }
                                 }
-                                return $q.resolve({
-                                    headers: {
-                                        "x-total-count": out.length
-                                    },
-                                    body: out
-                                });
-                            },
-                            onSelect: function(valueObj, model, context) {
-                                model.lead.centreName = valueObj.name;
-                                model.lead.centreId = valueObj.id;
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.name
-                                ];
                             }
-                        },
-                        /*{
-                                                   key: "lead.centreId",
-                                                   type: "select",
-                                                   parentEnumCode: "branch_id",
-                                                   parentValueExpr: "model.lead.branchId",
-                                                   screenFilter: true
-                                               },*/
-                        {
-                            key: "lead.id",
-                            condition: "model.lead.id",
-                            readonly: true
-                        }, {
-                            key: "lead.urnNo",
-                            condition: "model.lead.urnNo",
-                            readonly: true
-                        },
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
+                    },
+                    onSelect: function (valueObj, model, context) {
+                        model.lead.centreName = valueObj.name;
+                        model.lead.centreId = valueObj.id;
+                    },
+                    getListDisplayItem: function (item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                },
+                    /*{
+                     key: "lead.centreId",
+                     type: "select",
+                     parentEnumCode: "branch_id",
+                     parentValueExpr: "model.lead.branchId",
+                     screenFilter: true
+                     },*/
+                    {
+                        key: "lead.id",
+                        condition: "model.lead.id",
+                        readonly: true
+                    }, {
+                        key: "lead.urnNo",
+                        condition: "model.lead.urnNo",
+                        readonly: true
+                    },
 
-                        {
+                    {
+                        type: "fieldset",
+                        condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
+                        title: "LEAD_DETAILS",
+                        items: [{
+                            key: "lead.customerType",
+                            type: "select",
+                            titleMap: {
+                                "Individual": "Individual",
+                                "Enterprise": "Individual and Enterprise"
+                            }
+                        }, {
                             type: "fieldset",
-                            condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
-                            title: "LEAD_DETAILS",
+                            title: "ENTERPRISE_DETAILS",
+                            condition: "model.lead.customerType === 'Enterprise'",
                             items: [{
-                                    key: "lead.customerType",
-                                    type: "select",
-                                    titleMap: {
-                                        "Individual": "Individual",
-                                        "Enterprise": "Individual and Enterprise"
+                                "key": "lead.customerId",
+                                "title": "CHOOSE_EXISTING_BUSINESS",
+                                "type": "lov",
+                                "lovonly": true,
+                                initialize: function (model, form, parentModel, context) {
+                                    model.branchId = parentModel.lead.branchName;
+                                    model.centreName = parentModel.lead.centreName;
+                                },
+                                "inputMap": {
+                                    "firstName": {
+                                        "key": "lead.customerFirstName"
+                                    },
+                                    "urnNo": {
+                                        "key": "lead.urnNo",
+                                    },
+                                    "branchId": {
+                                        "key": "lead.branchName",
+                                        "type": "select",
+                                        "screenFilter": true,
+                                        "readonly": true
+                                    },
+                                    "centreName": {
+                                        "key": "lead.centreName",
+                                        "type": "string",
+                                        "readonly": true
+                                    },
+                                },
+                                "searchHelper": formHelper,
+                                "search": function (inputModel, form, model) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var branches = formHelper.enum('branch_id').data;
+                                    var branchName;
+                                    for (var i = 0; i < branches.length; i++) {
+                                        if (branches[i].code == inputModel.customerBranchId)
+                                            branchName = branches[i].name;
                                     }
-                                }, {
+                                    var promise = Enrollment.search({
+                                        'branchName': branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                        'centreId': model.lead.centreId,
+                                        'customerType': "enterprise",
+                                        'urnNo': inputModel.urnNo
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function (data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    Enrollment.getCustomerById({
+                                        id: valueObj.id
+                                    })
+                                        .$promise
+                                        .then(function (res) {
+                                            PageHelper.showProgress("customer-load", "Done..", 5000);
+                                            model.lead.customerId = res.id;
+                                            model.lead.businessName = res.firstName;
+                                            model.lead.alternateMobileNo = res.mobilePhone;
+                                            model.lead.location = res.latitude;
+                                            model.lead.ownership = res.enterprise.ownership
+                                            model.lead.companyOperatingSince = res.enterprise.companyOperatingSince;
+                                            model.lead.companyRegistered = res.enterprise.companyRegistered;
+                                            model.lead.businessType = res.enterprise.businessType;
+                                            model.lead.businessActivity = res.enterprise.businessActivity;
+                                            model.lead.enterpriseCustomerRelations = res.enterpriseCustomerRelations;
+
+
+                                            model.lead.mobileNo = null;
+                                            model.lead.gender = null;
+                                            model.lead.leadName = null;
+                                            model.lead.maritalStatus=null;
+                                            model.lead.landLineNo=null;
+                                            model.lead.dob=null;
+                                            model.lead.addressLine1=null;
+                                            model.lead.addressLine2=null;
+                                            model.lead.pincode=null;
+                                            model.lead.district=null;
+                                            model.lead.state=null;
+                                            model.lead.area=null;
+                                            model.lead.cityTownVillage=null;
+                                            model.lead.applicantCustomerId = null;
+
+                                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                            model.lead.educationStatus = null;
+
+
+                                        }, function (httpRes) {
+                                            PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                        })
+                                }
+
+                            }, {
+                                key: "lead.businessName",
+                                "condition": "model.lead.customerId",
+                                "readonly": true
+                            }, {
+                                key: "lead.businessName",
+                                "condition": "!model.lead.customerId",
+                                // "readonly": true
+                            }, {
+                                key: "lead.companyRegistered",
+                                type: "radios",
+                                enumCode: "decisionmaker"
+                            }, {
+                                key: "lead.businessType",
+                                type: "select",
+                                enumCode: "businessType"
+                            }, {
+                                key: "lead.businessActivity",
+                                //title:"BUSINESS_LINE",
+                                type: "select",
+                                enumCode: "businessActivity",
+                                parentEnumCode: "businessType",
+                                parentValueExpr: "model.lead.businessType",
+                            }, {
+                                key: "lead.companyOperatingSince",
+                                type: "date"
+                            }, {
+                                key: "lead.ownership",
+                                type: "select",
+                                enumCode: "ownership",
+
+                                /*titleMap: {
+                                 "Owned": "Owned",
+                                 "Own house without registration": "Own house without registration",
+                                 "Family Property": "Family Property",
+                                 "Leased": "Leased",
+                                 "Rental": "Rental",
+                                 }*/
+
+                            }]
+                        }, {
+                            type: "fieldset",
+                            title: "INDIVIDUAL_DETAILS",
+                            items: [
+                                {
                                     "key": "lead.applicantCustomerId",
                                     "title": "CHOOSE_EXISTING_APPLICANT",
                                     "type": "lov",
+                                    "condition": "model.lead.customerId==null", /* Dont show if an existing business is selected */
                                     // "autolov": true,
                                     "lovonly": true,
                                     initialize: function(model, form, parentModel, context) {
@@ -177,10 +322,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             "type": "string",
                                             "readonly": true,
                                         },
-                                    },
-                                    "outputMap": {
-                                        "id": "lead.applicantCustomerId",
-                                        "firstName": "lead.firstName"
                                     },
                                     "searchHelper": formHelper,
                                     "search": function(inputModel, form,model) {
@@ -239,583 +380,472 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                 model.lead.educationStatus = f.educationStatus;
                                             }, function(httpRes){
                                                 PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                        })
+                                            })
 
-                                     }
+                                    }
 
-                                }, {
-                                    key: "lead.leadName",
-                                    title: "APPLICANT_NAME",
-                                    "condition": "model.lead.applicantCustomerId",
-                                    "readonly": true,
-                                }, {
-                                    key: "lead.leadName",
-                                    title: "APPLICANT_NAME",
-                                    "condition": "!model.lead.applicantCustomerId"
-                                }, {
-                                    type: "fieldset",
-                                    title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.customerType === 'Enterprise'",
-                                    items: [{
-                                        "key": "lead.customerId",
-                                        "title": "CHOOSE_EXISTING_BUSINESS",
-                                        "type": "lov",
-                                        "lovonly": true,
-                                        initialize: function(model, form, parentModel, context) {
-                                            model.branchId = parentModel.lead.branchName;
-                                            model.centreName = parentModel.lead.centreName;
-                                        },
-                                        "inputMap": {
-                                            "firstName": {
-                                                "key": "lead.customerFirstName"
-                                            },
-                                            "urnNo": {
-                                                "key": "lead.urnNo",
-                                            },
-                                            "branchId": {
-                                                "key": "lead.branchName",
-                                                "type": "select",
-                                                "screenFilter": true,
-                                                "readonly": true
-                                            },
-                                            "centreName": {
-                                                "key": "lead.centreName",
-                                                "type": "string",
-                                                "readonly": true
-                                            },
-                                        },
-                                        "outputMap": {
-                                            "id": "lead.customerId",
-                                            "firstName": "lead.firstName",
-                                        },
-                                        "searchHelper": formHelper,
-                                        "search": function(inputModel, form, model) {
-                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                            var branches = formHelper.enum('branch_id').data;
-                                            var branchName;
-                                            for (var i = 0; i < branches.length; i++) {
-                                                if (branches[i].code == inputModel.customerBranchId)
-                                                    branchName = branches[i].name;
-                                            }
-                                            var promise = Enrollment.search({
-                                                'branchName': branchName || SessionStore.getBranch(),
-                                                'firstName': inputModel.firstName,
-                                                'centreId': model.lead.centreId,
-                                                'customerType': "enterprise",
-                                                'urnNo': inputModel.urnNo
-                                            }).$promise;
-                                            return promise;
-                                        },
-                                        getListDisplayItem: function(data, index) {
-                                            return [
-                                                [data.firstName, data.fatherFirstName].join(' | '),
-                                                data.id,
-                                                data.urnNo
-                                            ];
-                                        },
-                                        onSelect: function(valueObj, model, context) {
-                                              Enrollment.getCustomerById({id: valueObj.id})
-                                            .$promise
-                                            .then(function(res){
-                                                PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                model.lead.businessName = res.firstName;
-                                                model.lead.alternateMobileNo=res.mobilePhone;
-                                                model.lead.location =res.latitude;
-                                                model.lead.ownership =res.enterprise.ownership
-                                                model.lead.companyOperatingSince =res.enterprise.companyOperatingSince;
-                                                model.lead.companyRegistered =res.enterprise.companyRegistered;
-                                                model.lead.businessType =res.enterprise.businessType;
-                                                model.lead.businessActivity=res.enterprise.businessActivity;
-
-                                            }, function(httpRes){
-                                                PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                        })
+                                },
+                                {
+                                    "key": "lead.applicantCustomerId",
+                                    "title": "CHOOSE_RELATED_CUSTOMER",
+                                    "type": "lov",
+                                    "lovonly": true,
+                                    "condition": "model.lead.customerId!=null",
+                                    "searchHelper": formHelper,
+                                    search: function (inputModel, form, model) {
+                                        var deferred = $q.defer();
+                                        var linkedIds = [];
+                                        var out = [];
+                                        for (i = 0; i < model.lead.enterpriseCustomerRelations.length; i++) {
+                                            linkedIds.push(model.lead.enterpriseCustomerRelations[i].linkedToCustomerId);
                                         }
-
-                                    }, {
-                                        key: "lead.businessName",
-                                        "condition":"model.lead.customerId",
-                                        "readonly": true
-                                    }, {
-                                        key: "lead.businessName",
-                                        "condition":"!model.lead.customerId",
-                                        // "readonly": true
-                                    }, {
-                                        key: "lead.companyRegistered",
-                                        type: "radios",
-                                        enumCode: "decisionmaker"
-                                    }, {
-                                        key: "lead.businessType",
-                                        type: "select",
-                                        enumCode: "businessType"
-                                    }, {
-                                        key: "lead.businessActivity",
-                                        //title:"BUSINESS_LINE",
-                                        type: "select",
-                                        enumCode: "businessActivity",
-                                        parentEnumCode: "businessType",
-                                        parentValueExpr:"model.lead.businessType",
-                                    }, {
-                                        key: "lead.companyOperatingSince",
-                                        type: "date"
-                                    }, {
-                                        key: "lead.ownership",
-                                        type: "select",
-                                        enumCode: "ownership",
-
-                                        /*titleMap: {
-                                            "Owned": "Owned",
-                                            "Own house without registration": "Own house without registration",
-                                            "Family Property": "Family Property",
-                                            "Leased": "Leased",
-                                            "Rental": "Rental",
-                                        }*/
-
-                                    }, {
-                                        type: "fieldset",
-                                        title: "INDIVIDUAL_DETAILS",
-                                        items: [{
-                                            key: "lead.gender",
-                                            type: "radios"
-                                        }, {
-                                            key: "lead.dob",
-                                            type: "date",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dob) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                }
+                                        ;
+                                        Queries.getCustomerBasicDetails({
+                                            "ids": linkedIds
+                                        }).then(function (data) {
+                                            console.log(data);
+                                            for (i = 0; i < model.lead.enterpriseCustomerRelations.length; i++) {
+                                                out.push(data.ids[model.lead.enterpriseCustomerRelations[i].linkedToCustomerId]);
                                             }
-                                        }, {
-                                            key: "lead.age",
-                                            type: "number",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.age > 0) {
-                                                    if (model.lead.dob) {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                    } else {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                            var result = {
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            };
+                                            deferred.resolve(result);
+                                        });
+                                        return deferred.promise;
+                                    },
+                                    getListDisplayItem: function (data, index) {
+                                        $log.info(data);
+                                        return [
+                                            data.first_name,
+                                            data.urn_no,
+                                            data.mobile_phone
+                                        ];
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        Enrollment.getCustomerById({
+                                            id: valueObj.id
+                                        })
+                                            .$promise
+                                            .then(function (res) {
+                                                $log.info(res);
+                                                for (i = 0; i < res.familyMembers.length; i++) {
+                                                    if (res.familyMembers[i].relationShip == "self") {
+                                                        var educationStatus = res.familyMembers[i].educationStatus;
+                                                        break;
                                                     }
                                                 }
-                                            }
-                                        }, {
-                                            key: "lead.maritalStatus",
-                                            type: "select",
-                                            enumCode: "marital_status",
-                                            /*titleMap: {
-                                                "MARRIED": "MARRIED",
-                                                "UNMARRIED": "UNMARRIED",
-                                                "DIVORCED": "DIVORCED",
-                                                "SEPARATED": "SEPARATED",
-                                                "WIDOW(ER)": "WIDOW(ER)",
-                                            }*/
-                                        }, {
-                                            key: "lead.educationStatus",
-                                            type: "select",
-                                            enumCode: "education",
-                                            /* titleMap: {
-                                                 "Below SSLC": "Below SSLC",
-                                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                                 "More than post graduation": "MoreThanPostGraduation",
-                                             }*/
-                                        }]
-                                    }]
-                                },
-
-                                {
-                                    type: "fieldset",
-                                    title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'",
-                                    items: [{
-                                        key: "lead.gender",
-                                        type: "radios"
-                                    }, {
-                                        key: "lead.dob",
-                                        type: "date",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.dob) {
+                                                PageHelper.showProgress("customer-load", "Done..", 5000);
+                                                model.lead.applicantCustomerId = valueObj.id;
+                                                model.lead.leadName = res.firstName;
+                                                model.lead.gender = res.gender;
+                                                model.lead.dob = res.dateOfBirth;
+                                                model.lead.maritalStatus = res.maritalStatus;
                                                 model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.age",
-                                        type: "number",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.age > 0) {
-                                                if (model.lead.dob) {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                } else {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                }
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.maritalStatus",
-                                        type: "select",
-                                        enumCode: "marital_status",
-                                        /*titleMap: {
-                                            "MARRIED": "MARRIED",
-                                            "UNMARRIED": "UNMARRIED",
-                                            "DIVORCED": "DIVORCED",
-                                            "SEPARATED": "SEPARATED",
-                                            "WIDOW(ER)": "WIDOW(ER)",
-                                        }*/
-                                    }, {
-                                        key: "lead.educationStatus",
-                                        type: "select",
-                                        enumCode: "education",
-                                        /* titleMap: {
-                                             "Below SSLC": "Below SSLC",
-                                             "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                             "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                             "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                             "More than post graduation": "MoreThanPostGraduation",
-                                         }*/
-                                    }]
+                                                model.lead.educationStatus = educationStatus;
+                                            }, function (httpRes) {
+                                                PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                            })
+                                    }
                                 },
-
                                 {
-                                    type: "fieldset",
-                                    title: "CONTACT_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
-                                    items: [{
-                                        key: "lead.mobileNo",
-                                    }, {
-                                        key: "lead.alternateMobileNo",
-                                    }, {
-                                        key: "lead.addressLine1",
-                                        "title": "DOOR_NO"
-                                    }, {
-                                        key: "lead.addressLine2",
-                                        "title": "STREET"
-                                    }, {
-                                        key: "lead.pincode",
-                                        type: "lov",
-                                        fieldType: "number",
-                                        autolov: true,
-                                        inputMap: {
-                                            "pincode": "lead.pincode",
-                                            "district": {
-                                                key: "lead.district"
-                                            },
-                                            "state": {
-                                                key: "lead.state"
-                                            }
-                                        },
-                                        outputMap: {
-                                            "division": "lead.area",
-                                            "region": "lead.cityTownVillage",
-                                            "pincode": "lead.pincode",
-                                            "district": "lead.district",
-                                            "state": "lead.state"
-
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model) {
-                                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.division + ', ' + item.region,
-                                                item.pincode,
-                                                item.district + ', ' + item.state
-                                            ];
+                                key: "lead.leadName",
+                                title: "APPLICANT_NAME",
+                                "condition": "model.lead.applicantCustomerId",
+                                "readonly": true,
+                            }, {
+                                key: "lead.leadName",
+                                title: "APPLICANT_NAME",
+                                "condition": "!model.lead.applicantCustomerId"
+                            }, {
+                                key: "lead.gender",
+                                type: "radios"
+                            }, {
+                                key: "lead.dob",
+                                type: "date",
+                                "onChange": function (modelValue, form, model) {
+                                    if (model.lead.dob) {
+                                        model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
+                            }, {
+                                key: "lead.age",
+                                type: "number",
+                                "onChange": function (modelValue, form, model) {
+                                    if (model.lead.age > 0) {
+                                        if (model.lead.dob) {
+                                            model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                        } else {
+                                            model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                         }
-                                    }, {
-                                        "key": "lead.area",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.cityTownVillage",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.district",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.state",
-                                        "readonly": true
-                                    }]
-                                },
-                            ]
+                                    }
+                                }
+                            }, {
+                                key: "lead.maritalStatus",
+                                type: "select",
+                                enumCode: "marital_status",
+                                /*titleMap: {
+                                 "MARRIED": "MARRIED",
+                                 "UNMARRIED": "UNMARRIED",
+                                 "DIVORCED": "DIVORCED",
+                                 "SEPARATED": "SEPARATED",
+                                 "WIDOW(ER)": "WIDOW(ER)",
+                                 }*/
+                            }, {
+                                key: "lead.educationStatus",
+                                type: "select",
+                                enumCode: "education",
+                                /* titleMap: {
+                                 "Below SSLC": "Below SSLC",
+                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                 "More than post graduation": "MoreThanPostGraduation",
+                                 }*/
+                            }]
                         }, {
                             type: "fieldset",
-                            condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
-                            title: "LEAD_DETAILS",
+                            title: "CONTACT_DETAILS",
+                            condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
                             items: [{
-                                    key: "lead.leadName",
-                                    title: "APPLICANT_NAME",
-                                    schema: {
-                                        pattern: "^[a-zA-Z\. ]+$",
+                                key: "lead.mobileNo",
+                            }, {
+                                key: "lead.alternateMobileNo",
+                            }, {
+                                key: "lead.addressLine1",
+                                "title": "DOOR_NO"
+                            }, {
+                                key: "lead.addressLine2",
+                                "title": "STREET"
+                            }, {
+                                key: "lead.pincode",
+                                type: "lov",
+                                fieldType: "number",
+                                autolov: true,
+                                inputMap: {
+                                    "pincode": "lead.pincode",
+                                    "district": {
+                                        key: "lead.district"
                                     },
-                                    validationMessage: {
-                                        202: "Only alphabets and space are allowed."
-                                    },
-                                }, {
-                                    key: "lead.customerTypeString",
-                                    type: "select",
-                                    titleMap: {
-                                        "Individual": "Individual",
-                                        "Enterprise": "Individual and Enterprise"
-                                    },
-                                    readonly: true
-
-                                }, {
-                                    type: "fieldset",
-                                    title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.customerTypeString === 'Enterprise'",
-                                    items: [{
-                                        key: "lead.businessName",
-                                        required: false,
-                                    }, {
-                                        key: "lead.companyRegistered",
-                                        type: "radios",
-                                        enumCode: "decisionmaker"
-                                    }, {
-                                        key: "lead.businessType",
-                                        required: false,
-                                        type: "select",
-                                        enumCode: "businessType"
-                                    }, {
-                                        key: "lead.businessActivity",
-                                        //title:"BUSINESS_LINE",
-                                        required: false,
-                                        type: "select",
-                                        enumCode: "businessActivity",
-                                        parentEnumCode: "businessType"
-                                    }, {
-                                        key: "lead.companyOperatingSince",
-                                        type: "date"
-                                    }, {
-                                        key: "lead.ownership",
-                                        type: "select",
-                                        enumCode: "ownership",
-
-                                        /*titleMap: {
-                                            "Owned": "Owned",
-                                            "Own house without registration": "Own house without registration",
-                                            "Family Property": "Family Property",
-                                            "Leased": "Leased",
-                                            "Rental": "Rental",
-                                        }*/
-
-                                    }, {
-                                        type: "fieldset",
-                                        title: "INDIVIDUAL_DETAILS",
-                                        items: [{
-                                            key: "lead.gender",
-                                            type: "radios"
-                                        }, {
-                                            key: "lead.dob",
-                                            type: "date",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dob) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                }
-                                            }
-                                        }, {
-                                            key: "lead.age",
-                                            type: "number",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.age > 0) {
-                                                    if (model.lead.dob) {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                    } else {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                    }
-                                                }
-                                            }
-                                        }, {
-                                            key: "lead.maritalStatus",
-                                            type: "select",
-                                            enumCode: "marital_status",
-                                            /*titleMap: {
-                                                "MARRIED": "MARRIED",
-                                                "UNMARRIED": "UNMARRIED",
-                                                "DIVORCED": "DIVORCED",
-                                                "SEPARATED": "SEPARATED",
-                                                "WIDOW(ER)": "WIDOW(ER)",
-                                            }*/
-                                        }, {
-                                            key: "lead.educationStatus",
-                                            type: "select",
-                                            enumCode: "education",
-                                            /* titleMap: {
-                                                 "Below SSLC": "Below SSLC",
-                                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                                 "More than post graduation": "MoreThanPostGraduation",
-                                             }*/
-                                        }]
-                                    }]
+                                    "state": {
+                                        key: "lead.state"
+                                    }
                                 },
+                                outputMap: {
+                                    "division": "lead.area",
+                                    "region": "lead.cityTownVillage",
+                                    "pincode": "lead.pincode",
+                                    "district": "lead.district",
+                                    "state": "lead.state"
 
-                                {
-                                    type: "fieldset",
-                                    title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.customerTypeString === 'Individual'",
-                                    items: [{
-                                        key: "lead.gender",
-                                        type: "radios"
-                                    }, {
-                                        key: "lead.dob",
-                                        type: "date",
-                                        "onChange": function(modelValue, form, model) {
+                                },
+                                searchHelper: formHelper,
+                                search: function (inputModel, form, model) {
+                                    return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
+                                }
+                            }, {
+                                "key": "lead.area",
+                                "readonly": true
+                            }, {
+                                "key": "lead.cityTownVillage",
+                                "readonly": true
+                            }, {
+                                "key": "lead.district",
+                                "readonly": true
+                            }, {
+                                "key": "lead.state",
+                                "readonly": true
+                            }]
+                        },]
+                    }, {
+                        type: "fieldset",
+                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        title: "LEAD_DETAILS",
+                        items: [{
+                            key: "lead.leadName",
+                            title: "APPLICANT_NAME",
+                            schema: {
+                                pattern: "^[a-zA-Z\. ]+$",
+                            },
+                            validationMessage: {
+                                202: "Only alphabets and space are allowed."
+                            },
+                        }, {
+                            key: "lead.customerTypeString",
+                            type: "select",
+                            titleMap: {
+                                "Individual": "Individual",
+                                "Enterprise": "Individual and Enterprise"
+                            },
+                            readonly: true
+
+                        }, {
+                            type: "fieldset",
+                            title: "ENTERPRISE_DETAILS",
+                            condition: "model.lead.customerTypeString === 'Enterprise'",
+                            items: [{
+                                key: "lead.businessName",
+                                required: false,
+                            }, {
+                                key: "lead.companyRegistered",
+                                type: "radios",
+                                enumCode: "decisionmaker"
+                            }, {
+                                key: "lead.businessType",
+                                required: false,
+                                type: "select",
+                                enumCode: "businessType"
+                            }, {
+                                key: "lead.businessActivity",
+                                //title:"BUSINESS_LINE",
+                                required: false,
+                                type: "select",
+                                enumCode: "businessActivity",
+                                parentEnumCode: "businessType"
+                            }, {
+                                key: "lead.companyOperatingSince",
+                                type: "date"
+                            }, {
+                                key: "lead.ownership",
+                                type: "select",
+                                enumCode: "ownership",
+
+                                /*titleMap: {
+                                 "Owned": "Owned",
+                                 "Own house without registration": "Own house without registration",
+                                 "Family Property": "Family Property",
+                                 "Leased": "Leased",
+                                 "Rental": "Rental",
+                                 }*/
+
+                            }, {
+                                type: "fieldset",
+                                title: "INDIVIDUAL_DETAILS",
+                                items: [{
+                                    key: "lead.gender",
+                                    type: "radios"
+                                }, {
+                                    key: "lead.dob",
+                                    type: "date",
+                                    "onChange": function (modelValue, form, model) {
+                                        if (model.lead.dob) {
+                                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                        }
+                                    }
+                                }, {
+                                    key: "lead.age",
+                                    type: "number",
+                                    "onChange": function (modelValue, form, model) {
+                                        if (model.lead.age > 0) {
                                             if (model.lead.dob) {
-                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                            } else {
+                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                             }
                                         }
-                                    }, {
-                                        key: "lead.age",
-                                        type: "number",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.age > 0) {
-                                                if (model.lead.dob) {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                } else {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                }
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.maritalStatus",
-                                        type: "select",
-                                        enumCode: "marital_status",
-                                        /*titleMap: {
-                                            "MARRIED": "MARRIED",
-                                            "UNMARRIED": "UNMARRIED",
-                                            "DIVORCED": "DIVORCED",
-                                            "SEPARATED": "SEPARATED",
-                                            "WIDOW(ER)": "WIDOW(ER)",
-                                        }*/
-                                    }, {
-                                        key: "lead.educationStatus",
-                                        type: "select",
-                                        enumCode: "education",
-                                        /* titleMap: {
-                                             "Below SSLC": "Below SSLC",
-                                             "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                             "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                             "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                             "More than post graduation": "MoreThanPostGraduation",
-                                         }*/
-                                    }]
-                                },
+                                    }
+                                }, {
+                                    key: "lead.maritalStatus",
+                                    type: "select",
+                                    enumCode: "marital_status",
+                                    /*titleMap: {
+                                     "MARRIED": "MARRIED",
+                                     "UNMARRIED": "UNMARRIED",
+                                     "DIVORCED": "DIVORCED",
+                                     "SEPARATED": "SEPARATED",
+                                     "WIDOW(ER)": "WIDOW(ER)",
+                                     }*/
+                                }, {
+                                    key: "lead.educationStatus",
+                                    type: "select",
+                                    enumCode: "education",
+                                    /* titleMap: {
+                                     "Below SSLC": "Below SSLC",
+                                     "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                     "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                     "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                     "More than post graduation": "MoreThanPostGraduation",
+                                     }*/
+                                }]
+                            }]
+                        },
 
-                                {
-                                    type: "fieldset",
-                                    title: "CONTACT_DETAILS",
-                                    condition: "model.lead.customerTypeString === 'Individual'||model.lead.customerTypeString === 'Enterprise'",
-                                    items: [{
-                                        key: "lead.mobileNo",
-                                    }, {
-                                        key: "lead.alternateMobileNo",
-                                    }, {
-                                        key: "lead.addressLine1",
-                                        "title": "DOOR_NO"
-                                    }, {
-                                        key: "lead.addressLine2",
-                                        "title": "STREET"
-                                    }, {
-                                        key: "lead.pincode",
-                                        type: "lov",
-                                        fieldType: "number",
-                                        autolov: true,
-                                        inputMap: {
-                                            "pincode": "lead.pincode",
-                                            "district": {
-                                                key: "lead.district"
-                                            },
-                                            "state": {
-                                                key: "lead.state"
-                                            }
-                                        },
-                                        outputMap: {
-                                            "division": "lead.area",
-                                            "region": "lead.cityTownVillage",
-                                            "pincode": "lead.pincode",
-                                            "district": "lead.district",
-                                            "state": "lead.state"
-
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model) {
-                                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.division + ', ' + item.region,
-                                                item.pincode,
-                                                item.district + ', ' + item.state
-                                            ];
+                            {
+                                type: "fieldset",
+                                title: "INDIVIDUAL_DETAILS",
+                                condition: "model.lead.customerTypeString === 'Individual'",
+                                items: [{
+                                    key: "lead.gender",
+                                    type: "radios"
+                                }, {
+                                    key: "lead.dob",
+                                    type: "date",
+                                    "onChange": function (modelValue, form, model) {
+                                        if (model.lead.dob) {
+                                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                         }
-                                    }, {
-                                        "key": "lead.area",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.cityTownVillage",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.district",
-                                        "readonly": true
-                                    }, {
-                                        "key": "lead.state",
-                                        "readonly": true
-                                    }]
-                                },
-                            ]
-                        }
-                    ]
-                },
+                                    }
+                                }, {
+                                    key: "lead.age",
+                                    type: "number",
+                                    "onChange": function (modelValue, form, model) {
+                                        if (model.lead.age > 0) {
+                                            if (model.lead.dob) {
+                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                            } else {
+                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                            }
+                                        }
+                                    }
+                                }, {
+                                    key: "lead.maritalStatus",
+                                    type: "select",
+                                    enumCode: "marital_status",
+                                    /*titleMap: {
+                                     "MARRIED": "MARRIED",
+                                     "UNMARRIED": "UNMARRIED",
+                                     "DIVORCED": "DIVORCED",
+                                     "SEPARATED": "SEPARATED",
+                                     "WIDOW(ER)": "WIDOW(ER)",
+                                     }*/
+                                }, {
+                                    key: "lead.educationStatus",
+                                    type: "select",
+                                    enumCode: "education",
+                                    /* titleMap: {
+                                     "Below SSLC": "Below SSLC",
+                                     "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                     "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                     "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                     "More than post graduation": "MoreThanPostGraduation",
+                                     }*/
+                                }]
+                            },
+
+                            {
+                                type: "fieldset",
+                                title: "CONTACT_DETAILS",
+                                condition: "model.lead.customerTypeString === 'Individual'||model.lead.customerTypeString === 'Enterprise'",
+                                items: [{
+                                    key: "lead.mobileNo",
+                                }, {
+                                    key: "lead.alternateMobileNo",
+                                }, {
+                                    key: "lead.addressLine1",
+                                    "title": "DOOR_NO"
+                                }, {
+                                    key: "lead.addressLine2",
+                                    "title": "STREET"
+                                }, {
+                                    key: "lead.pincode",
+                                    type: "lov",
+                                    fieldType: "number",
+                                    autolov: true,
+                                    inputMap: {
+                                        "pincode": "lead.pincode",
+                                        "district": {
+                                            key: "lead.district"
+                                        },
+                                        "state": {
+                                            key: "lead.state"
+                                        }
+                                    },
+                                    outputMap: {
+                                        "division": "lead.area",
+                                        "region": "lead.cityTownVillage",
+                                        "pincode": "lead.pincode",
+                                        "district": "lead.district",
+                                        "state": "lead.state"
+
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model) {
+                                        return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    }
+                                }, {
+                                    "key": "lead.area",
+                                    "readonly": true
+                                }, {
+                                    "key": "lead.cityTownVillage",
+                                    "readonly": true
+                                }, {
+                                    "key": "lead.district",
+                                    "readonly": true
+                                }, {
+                                    "key": "lead.state",
+                                    "readonly": true
+                                }]
+                            },
+                        ]
+                    }
+                ]
+            },
 
                 {
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
                     items: [{
-                            key: "lead.interestedInProduct",
-                            title: "INTERESTED_IN_LOAN_PRODUCT",
-                            type: "select",
-                            required: true,
-                            enumCode: "decisionmaker",
-                            "onChange": function(modelValue, form, model) {
-                                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
-                                        model.lead.leadStatus = "Reject";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
-                                        model.lead.leadStatus = "Screening";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
-                                        model.lead.leadStatus = "FollowUp";
-                                    } else {
-                                        model.lead.leadStatus = "Incomplete";
-                                    }
-                                    /* if (model.lead.interestedInProduct === 'YES') {
-                                         model.lead.productCategory = "Asset";
-                                         model.lead.productSubCategory = "Loan";
-                                     }*/
-                                }
-                                //onChange: "actions.changeStatus(modelValue, form, model)",
-                        },
+                        key: "lead.interestedInProduct",
+                        title: "INTERESTED_IN_LOAN_PRODUCT",
+                        type: "select",
+                        required: true,
+                        enumCode: "decisionmaker",
+                        "onChange": function (modelValue, form, model) {
+                            if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                model.lead.leadStatus = "Reject";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                model.lead.leadStatus = "Screening";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                                model.lead.leadStatus = "FollowUp";
+                            } else {
+                                model.lead.leadStatus = "Incomplete";
+                            }
+                            /* if (model.lead.interestedInProduct === 'YES') {
+                             model.lead.productCategory = "Asset";
+                             model.lead.productSubCategory = "Loan";
+                             }*/
+                        }
+                        //onChange: "actions.changeStatus(modelValue, form, model)",
+                    },
                         /*{
-                                               key: "lead.productCategory",
-                                               condition: "model.lead.interestedInProduct==='YES'",
-                                               readonly: true,
-                                                type: "select",
+                         key: "lead.productCategory",
+                         condition: "model.lead.interestedInProduct==='YES'",
+                         readonly: true,
+                         type: "select",
 
-                                                "Liability": "Liability",
-                                                    "others": "others"
-                                                    "investment": "investment"
-                                                titleMap: {
-                                                    "Asset": "Asset",
-                                                }
-                                           }, {
-                                               key: "lead.productSubCategory",
-                                               condition: "model.lead.interestedInProduct==='YES'",
-                                               readonly: true,
-                                               /* type: "select",
-                                                titleMap: {
-                                                    "Loan": "Loan",
-                                                }
-                                           },*/
+                         "Liability": "Liability",
+                         "others": "others"
+                         "investment": "investment"
+                         titleMap: {
+                         "Asset": "Asset",
+                         }
+                         }, {
+                         key: "lead.productSubCategory",
+                         condition: "model.lead.interestedInProduct==='YES'",
+                         readonly: true,
+                         /* type: "select",
+                         titleMap: {
+                         "Loan": "Loan",
+                         }
+                         },*/
                         {
                             key: "lead.loanAmountRequested",
                             type: "amount",
@@ -825,13 +855,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
                             enumCode: "loan_purpose_1"
-                                /*titleMap: {
-                                    "AssetPurchase": "AssetPurchase",
-                                    "WorkingCapital": "WorkingCapital",
-                                    "BusinessDevelopment": "BusinessDevelopment",
-                                    "LineOfCredit": "LineOfCredit",
+                            /*titleMap: {
+                             "AssetPurchase": "AssetPurchase",
+                             "WorkingCapital": "WorkingCapital",
+                             "BusinessDevelopment": "BusinessDevelopment",
+                             "LineOfCredit": "LineOfCredit",
 
-                                }*/
+                             }*/
                         }, {
                             key: "lead.productRequiredBy",
                             type: "select",
@@ -893,7 +923,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 }
                             }, {
                                 key: "lead.additionalRemarks",
-                            }, ]
+                            },]
                         }, {
                             type: "fieldset",
                             title: "LEAD_STATUS",
@@ -902,11 +932,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 //type: "select",
                                 readonly: true,
                                 /*titleMap: {
-                                    "Screening": "Screening",
-                                    "FollowUp": "FollowUp",
-                                    "Incomplete": "Incomplete",
-                                    "Reject": "Reject"
-                                },*/
+                                 "Screening": "Screening",
+                                 "FollowUp": "FollowUp",
+                                 "Incomplete": "Incomplete",
+                                 "Reject": "Reject"
+                                 },*/
                                 onChange: "actions.changeStatus(modelValue, form, model)"
                             }]
                         }
@@ -916,49 +946,49 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     title: "PRODUCT_DETAILS",
                     condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                     items: [{
-                            key: "lead.interestedInProduct",
-                            title: "INTERESTED_IN_LOAN_PRODUCT",
-                            type: "select",
-                            required: false,
-                            enumCode: "decisionmaker",
-                            "onChange": function(modelValue, form, model) {
-                                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
-                                        model.lead.leadStatus = "Reject";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
-                                        model.lead.leadStatus = "Screening";
-                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
-                                        model.lead.leadStatus = "FollowUp";
-                                    } else {
-                                        model.lead.leadStatus = "Incomplete";
-                                    }
-                                    /* if (model.lead.interestedInProduct === 'YES') {
-                                         model.lead.productCategory = "Asset";
-                                         model.lead.productSubCategory = "Loan";
-                                     }*/
-                                }
-                                //onChange: "actions.changeStatus(modelValue, form, model)",
-                        },
+                        key: "lead.interestedInProduct",
+                        title: "INTERESTED_IN_LOAN_PRODUCT",
+                        type: "select",
+                        required: false,
+                        enumCode: "decisionmaker",
+                        "onChange": function (modelValue, form, model) {
+                            if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                model.lead.leadStatus = "Reject";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                model.lead.leadStatus = "Screening";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                                model.lead.leadStatus = "FollowUp";
+                            } else {
+                                model.lead.leadStatus = "Incomplete";
+                            }
+                            /* if (model.lead.interestedInProduct === 'YES') {
+                             model.lead.productCategory = "Asset";
+                             model.lead.productSubCategory = "Loan";
+                             }*/
+                        }
+                        //onChange: "actions.changeStatus(modelValue, form, model)",
+                    },
                         /*{
-                                               key: "lead.productCategory",
-                                               condition: "model.lead.interestedInProduct==='YES'",
-                                               readonly: true,
-                                                type: "select",
+                         key: "lead.productCategory",
+                         condition: "model.lead.interestedInProduct==='YES'",
+                         readonly: true,
+                         type: "select",
 
-                                                "Liability": "Liability",
-                                                    "others": "others"
-                                                    "investment": "investment"
-                                                titleMap: {
-                                                    "Asset": "Asset",
-                                                }
-                                           }, {
-                                               key: "lead.productSubCategory",
-                                               condition: "model.lead.interestedInProduct==='YES'",
-                                               readonly: true,
-                                               /* type: "select",
-                                                titleMap: {
-                                                    "Loan": "Loan",
-                                                }
-                                           },*/
+                         "Liability": "Liability",
+                         "others": "others"
+                         "investment": "investment"
+                         titleMap: {
+                         "Asset": "Asset",
+                         }
+                         }, {
+                         key: "lead.productSubCategory",
+                         condition: "model.lead.interestedInProduct==='YES'",
+                         readonly: true,
+                         /* type: "select",
+                         titleMap: {
+                         "Loan": "Loan",
+                         }
+                         },*/
                         {
                             key: "lead.loanAmountRequested",
                             type: "amount",
@@ -970,13 +1000,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             type: "select",
                             required: false,
                             enumCode: "loan_purpose_1"
-                                /*titleMap: {
-                                    "AssetPurchase": "AssetPurchase",
-                                    "WorkingCapital": "WorkingCapital",
-                                    "BusinessDevelopment": "BusinessDevelopment",
-                                    "LineOfCredit": "LineOfCredit",
+                            /*titleMap: {
+                             "AssetPurchase": "AssetPurchase",
+                             "WorkingCapital": "WorkingCapital",
+                             "BusinessDevelopment": "BusinessDevelopment",
+                             "LineOfCredit": "LineOfCredit",
 
-                                }*/
+                             }*/
                         }, {
                             key: "lead.productRequiredBy",
                             type: "select",
@@ -1026,7 +1056,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 enumCode: "leadRejectReasonByFieldOfficer",
                             }, {
                                 key: "lead.additionalRemarks",
-                            }, ]
+                            },]
                         }, {
                             type: "fieldset",
                             title: "LEAD_STATUS",
@@ -1035,11 +1065,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                 //type: "select",
                                 readonly: true,
                                 /*titleMap: {
-                                    "Screening": "Screening",
-                                    "FollowUp": "FollowUp",
-                                    "Incomplete": "Incomplete",
-                                    "Reject": "Reject"
-                                },*/
+                                 "Screening": "Screening",
+                                 "FollowUp": "FollowUp",
+                                 "Incomplete": "Incomplete",
+                                 "Reject": "Reject"
+                                 },*/
                                 onChange: "actions.changeStatus(modelValue, form, model)"
                             }]
                         }
@@ -1090,7 +1120,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             "type": "file",
                             "fileType": "image/*",
                             "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction === 'Visit'",
-                        }, ]
+                        },]
                     }]
                 },
 
@@ -1135,7 +1165,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             "type": "file",
                             "fileType": "image/*",
                             "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction === 'Visit'",
-                        }, ]
+                        },]
                     }]
                 },
 
@@ -1152,12 +1182,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 },
             ],
 
-            schema: function() {
+            schema: function () {
                 return Lead.getLeadSchema().$promise;
             },
 
             actions: {
-                changeStatus: function(modelValue, form, model) {
+                changeStatus: function (modelValue, form, model) {
 
                     if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                         model.lead.leadStatus = "Reject";
@@ -1169,7 +1199,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                         model.lead.leadStatus = "Incomplete";
                     }
                 },
-                preSave: function(model, form, formName) {
+                preSave: function (model, form, formName) {
                     var deferred = $q.defer();
                     if (model.lead.leadName) {
                         deferred.resolve();
@@ -1180,14 +1210,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     return deferred.promise;
                 },
 
-                submit: function(model, form, formName) {
+                submit: function (model, form, formName) {
                     $log.info("Inside submit()");
                     model.lead.productCategory = "Asset";
                     model.lead.productSubCategory = "Loan";
                     $log.warn(model);
-                    var sortFn = function(unordered) {
+                    var sortFn = function (unordered) {
                         var out = {};
-                        Object.keys(unordered).sort().forEach(function(key) {
+                        Object.keys(unordered).sort().forEach(function (key) {
                             out[key] = unordered[key];
                         });
                         return out;
@@ -1205,23 +1235,23 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                     if (reqData.lead.id) {
 
                         if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
-                            LeadHelper.followData(reqData).then(function(resp) {
+                            LeadHelper.followData(reqData).then(function (resp) {
                                 $state.go('Page.LeadDashboard', null);
                             });
                         } else {
-                            LeadHelper.proceedData(reqData).then(function(resp) {
+                            LeadHelper.proceedData(reqData).then(function (resp) {
                                 $state.go('Page.LeadDashboard', null);
-                            }, function(err) {
+                            }, function (err) {
                                 PageHelper.showErrors(err);
                                 // Utils.removeNulls(resp.lead, true);
                                 // model.lead = resp.lead;
                             });
                         }
                     } else {
-                        LeadHelper.saveData(reqData).then(function(res) {
-                            LeadHelper.proceedData(res).then(function(resp) {
+                        LeadHelper.saveData(reqData).then(function (res) {
+                            LeadHelper.proceedData(res).then(function (resp) {
                                 $state.go('Page.LeadDashboard', null);
-                            }, function(err) {
+                            }, function (err) {
                                 PageHelper.showErrors(err);
                                 // Utils.removeNulls(resp.lead, true);
                                 // model.lead = resp.lead;
