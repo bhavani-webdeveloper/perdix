@@ -676,7 +676,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     {
                         key:"customer.familyMembers[].enroll",
                         type:"button",
-                        condition:"model.customer.currentStage=='Completed'&& model.customer.familyMembers[arrayIndex].enrolled== 0",
+                        condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' ) ",
                         title:"ENROLL_AS_CUSTOMER",
                         onClick: function(model, formCtrl,context) {
                             model.family={};
@@ -1040,10 +1040,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key:"customer.caste",
+                    "required":true,
                     type:"select"
                 },
                 {
                     key:"customer.language",
+                    "required":true,
                     type:"select"
                 },
                 {

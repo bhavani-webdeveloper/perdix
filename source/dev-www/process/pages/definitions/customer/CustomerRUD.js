@@ -1004,10 +1004,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     },
                     {
                         key:"customer.caste",
+                        "required":true,
                         type:"select"
                     },
                     {
                         key:"customer.language",
+                        "required":true,
                         type:"select"
                     },
                     {
@@ -1071,7 +1073,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         key: "customer.date",
                         type:"date"
                     },
-                    "customer.place"
+                    {
+                        key:"customer.place",
+                        "required":true
+                    }
                 ]
             },
                     {

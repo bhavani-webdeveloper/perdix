@@ -52,7 +52,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.state=family.state;
                 model.customer.stdCode=family.stdCode;
                 model.customer.landLineNo=family.landLineNo;
-                model.customer.mobilePhone=family.mobilePhone;
                 model.customer.mailSameAsResidence=family.mailSameAsResidence;
                 model.customer.mailingDoorNo=family.mailingDoorNo;
                 model.customer.mailingStreet=family.mailingStreet;

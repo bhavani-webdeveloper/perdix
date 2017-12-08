@@ -11,6 +11,16 @@ define({
 
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            model.group.cgtDate11 = moment(model.group.cgtDate1).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate11 = moment(model.group.cgtEndDate1).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtDate12 = moment(model.group.cgtDate2).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate12 = moment(model.group.cgtEndDate2).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtDate13 = moment(model.group.cgtDate3).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate13 = moment(model.group.cgtEndDate3).format("DD-MM-YYYY HH:mm:ss");
+            model.group.grtDate1 = moment(model.group.grtDate).format("DD-MM-YYYY HH:mm:ss");
+            model.group.grtEndDate1 = moment(model.group.grtEndDate).format("DD-MM-YYYY HH:mm:ss");
+
+            $log.info(model);
         };
 
         var validateForm = function(formCtrl) {
@@ -385,7 +395,7 @@ return {
                                 }, {
                                     "title": "LOAN_AMOUNT",
                                     "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                    "type": "amount"
+                                    //"type": "amount"
                                 },{
                                     "title": "LOAN_CYCLE",
                                     "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
@@ -777,7 +787,7 @@ return {
                             }, {
                                 "title": "LOAN_AMOUNT",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                "type": "amount"
+                                //"type": "amount"
                             }, {
                                 "title": "TENURE",
                                 "key": "group.jlgGroupMembers[].loanAccount.tenure",
@@ -969,14 +979,14 @@ return {
                         "longitude": "group.cgt1Longitude",
                         "readonly": true
                     },{
-                        "key": "group.cgtDate1",
+                        "key": "group.cgtDate11",
                         "title": "CGT_1_START_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     },{
-                        "key": "group.cgtEndDate1",
+                        "key": "group.cgtEndDate11",
                         "title": "CGT_1_END_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     }]
                 }, {
@@ -1006,14 +1016,14 @@ return {
                         "longitude": "group.cgt2Longitude",
                         "readonly": true
                     },{
-                        "key": "group.cgtDate2",
+                        "key": "group.cgtDate12",
                         "title": "CGT_2_START_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     },{
-                        "key": "group.cgtEndDate2",
+                        "key": "group.cgtEndDate12",
                         "title": "CGT_2_END_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     }]
                 }, {
@@ -1043,14 +1053,14 @@ return {
                         "longitude": "group.cgt3Longitude",
                         "readonly": true
                     },{
-                        "key": "group.cgtDate3",
+                        "key": "group.cgtDate13",
                         "title": "CGT_3_START_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     },{
-                        "key": "group.cgtEndDate3",
+                        "key": "group.cgtEndDate13",
                         "title": "CGT_3_END_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     }]
                 }, {
@@ -1081,14 +1091,14 @@ return {
                         "longitude": "group.grtLongitude",
                         "readonly": true
                     },{
-                        "key": "group.grtDate",
+                        "key": "group.grtDate1",
                         "title": "GRT_START_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     },{
-                        "key": "group.grtEndDate",
+                        "key": "group.grtEndDate1",
                         "title": "GRT_END_DATE",
-                        "type": "date",
+                        //"type": "date",
                         "readonly": true
                     }]
                 }]
