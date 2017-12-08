@@ -543,6 +543,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     model.loanAccount.applicant = params.customer.urnNo;
                 }
                 model.applicant = params.customer;
+                model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
             },
             "lead-loaded": function(bundleModel, model, obj) {
                 model.lead = obj;
@@ -900,6 +901,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         "htmlClass": "alert alert-warning",
                         "condition": "!model.loanAccount.customerId",
                         "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
                     }
                 ]
             },
