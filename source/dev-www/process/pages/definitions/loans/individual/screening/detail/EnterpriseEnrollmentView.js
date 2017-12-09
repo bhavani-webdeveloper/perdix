@@ -54,7 +54,62 @@ define({
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
-                            /*fileType: "application/pdf",*/
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        },{
+                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
+                            "notitle": true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
                         }];
@@ -63,11 +118,13 @@ define({
                             "type": "box",
                             "colClass": "col-sm-12",
                             "readonly": true,
-                            "overrideType": "default-view",
+                            "overrideType": "default-view",/*
+                            "htmlClass":"width:100% overflow:scroll",*/
                             "title": "VIEW_UPLOADS",
                             "items": [{
                                 "type": "section",
-                                "html": '<sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator>',
+                                "htmlClass":"inline",
+                                "html": '<div style="display:inline; overflow-x:scroll;"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
                                 "items": fileForms
                             }]
                         });
