@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				maximum: 1
 			}, {
 				pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-				title: 'COAPPLICANT',
+				title: 'CO_APPLICANT',
 				pageClass: 'co-applicant',
 				minimum: 1,
 				maximum: 1
@@ -33,13 +33,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				maximum: 1
 			}, {
 				pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
-				title: 'BUSINESS_FINANCE',
+				title: 'Business Financials',
 				pageClass: 'business-finance',
 				minimum: 1,
 				maximum: 1
 			}, {
 				pageName: 'loans.individual.screening.detail.LoanApplicationView',
-				title: 'LOAN_RECOMMEDATION',
+				title: 'Loan Recommendation',
 				pageClass: 'loan_recommendation',
 				minimum: 1,
 				maximum: 1
