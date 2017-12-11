@@ -25,7 +25,7 @@ define({
 						case 'co-applicant':
 							model.bundleModel.coApplicants.push(res);
 							break;
-						case 'guarantors':
+						case 'guarantor':
 							model.bundleModel.guarantors.push(res);
 							break;
 					};
@@ -37,6 +37,8 @@ define({
 						'bank_fields': {},
 						'cibil': {}
 					};
+
+
 
 					/*Auto_Custom fields -- START */
 					/*Present Address*/
@@ -775,7 +777,7 @@ define({
 				"colClass": "col-sm-12",
 				"title": "Psychometric Scores",
 				"readonly": true,
-				"condition": "model.bundlePageObj.pageClass != 'guarantors' ",
+				"condition": "model.bundlePageObj.pageClass != 'guarantor' ",
 				"items": [{
 					"key": "",
 					"title": "psychometric score"
@@ -812,7 +814,7 @@ define({
 				"colClass": "col-sm-12",
 				"readonly": true,
 				"title": "Household P&L Statement",
-				"condition": "model.bundlePageObj.pageClass != 'guarantors' ",
+				"condition": "model.bundlePageObj.pageClass != 'guarantor' ",
 				"items": [{
 					"type": "section",
 					"colClass": "col-sm-12",
@@ -837,8 +839,8 @@ define({
 				"colClass": "col-sm-12",
 				"overrideType": "default-view",
 				"readonly": true,
-				"title": "Refrrence Check",
-				"condition": "model.bundlePageObj.pageClass != 'guarantors' ",
+				"title": "Reference Check",
+				"condition": "model.bundlePageObj.pageClass != 'guarantor' && model.customer.verifications.length !=0",
 				"items": [{
 					"type": "grid",
 					"orientation": "horizontal",
@@ -847,7 +849,7 @@ define({
 						"orientation": "vertical",
 						"items": [{
 							"key": "custom_fields.REFERENCE_CHECK_RESPONSE",
-							"title": "Reference Check Responses"
+							"title": "Reference Check Responses",
 						}]
 					}]
 				}, {
