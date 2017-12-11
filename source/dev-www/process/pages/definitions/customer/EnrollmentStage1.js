@@ -41,7 +41,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.gender = family.familydata.gender;
                 model.customer.maritalStatus = family.familydata.maritalStatus;
                 model.customer.mobilePhone = family.familydata.mobilePhone;
-                
                 model.customer.doorNo=family.doorNo;
                 model.customer.street=family.street;
                 model.customer.locality=family.locality;
@@ -60,8 +59,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.mailingDistrict=family.mailingDistrict;
                 model.customer.mailingPincode=family.mailingPincode;
                 model.customer.mailingState=family.mailingState;
-                
-
+                if(family.familydata.maritalStatus=='MARRIED' && family.familydata.relationShip=='Wife'){
+                    model.customer.spouseFirstName=family.firstName;
+                    model.customer.udf.userDefinedFieldValues.udf33=family.udf.userDefinedFieldValues.udf33;
+                    model.customer.udf.userDefinedFieldValues.udf34=family.udf.userDefinedFieldValues.udf34;
+                    model.customer.udf.userDefinedFieldValues.udf35=family.udf.userDefinedFieldValues.udf35;
+                    model.customer.udf.userDefinedFieldValues.udf36=family.udf.userDefinedFieldValues.udf36;
+                }
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
