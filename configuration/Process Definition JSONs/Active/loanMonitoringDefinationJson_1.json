@@ -879,9 +879,9 @@
                                 "LUCLegalRecovery"
                             ]
                         },
-                        "isAssetDelivered": {
-                            "title": "isAssetDelivered",
-                            "type": "boolean",
+                        "isAssetNotDelivered": {
+                            "title": "isAssetNotDelivered",
+                            "type": "string",
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
