@@ -136,6 +136,51 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 }
                             ];
                         }
+
+                        if(model.customer.parentCustomerId)
+                        {
+                            if(!model.customer.houseVerificationPhoto){
+                                Enrollment.get({
+                                        id: model.customer.parentCustomerId
+                                    },
+                                    function(res1) {
+                                    model.customer.latitude = model.customer.latitude||res1.latitude;
+                                    model.customer.longitude = model.customer.longitude||res1.longitude;
+                                    model.customer.houseVerificationPhoto = model.customer.houseVerificationPhoto||res1.houseVerificationPhoto;
+                                    model.customer.expenditures =model.customer.expenditures|| res1.expenditures;
+                                    model.customer.financialAssets=model.customer.financialAssets||res1.financialAssets;
+                                    model.customer.physicalAssets=model.customer.physicalAssets||res1.physicalAssets;
+                                    model.customer.liabilities=model.customer.liabilities||res1.liabilities;
+                                    model.customer.verifications=res1.verifications;
+                                    model.customer.addressInLocalLanguage=model.customer.addressInLocalLanguage||res1.addressInLocalLanguage;
+                                    model.customer.religion=model.customer.religion||res1.religion;
+                                    model.customer.caste=model.customer.caste||res1.caste;
+                                    model.customer.language=model.customer.language||res1.language;
+                                    model.customer.udf.userDefinedFieldValues.udf3=model.customer.udf.userDefinedFieldValues.udf3||res1.udf.userDefinedFieldValues.udf3;
+                                    model.customer.udf.userDefinedFieldValues.udf2=model.customer.udf.userDefinedFieldValues.udf2||res1.udf.userDefinedFieldValues.udf2;
+                                    model.customer.udf.userDefinedFieldValues.udf4=model.customer.udf.userDefinedFieldValues.udf4||res1.udf.userDefinedFieldValues.udf4;
+                                    model.customer.udf.userDefinedFieldValues.udf5=model.customer.udf.userDefinedFieldValues.udf5||res1.udf.userDefinedFieldValues.udf5;
+                                    model.customer.udf.userDefinedFieldValues.udf31=model.customer.udf.userDefinedFieldValues.udf31||res1.udf.userDefinedFieldValues.udf31;
+                                    model.customer.udf.userDefinedFieldValues.udf32=model.customer.udf.userDefinedFieldValues.udf32||res1.udf.userDefinedFieldValues.udf32;
+                                    model.customer.udf.userDefinedFieldValues.udf6=model.customer.udf.userDefinedFieldValues.udf6||res1.udf.userDefinedFieldValues.udf6;
+
+
+                                    for(i in res1.familyMembers){
+                                        for(j in model.customer.familyMembers){
+                                             var family=model.customer.familyMembers[j]
+                                            if(res1.familyMembers[i].familyMemberFirstName==family.familyMemberFirstName){
+                                                if(!family.incomes)
+                                                {
+                                                   family.incomes=res1.familyMembers[i].incomes;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    });
+
+                            }
+                        }
                         model = Utils.removeNulls(model,true);
 
                         PageHelper.hideLoader();

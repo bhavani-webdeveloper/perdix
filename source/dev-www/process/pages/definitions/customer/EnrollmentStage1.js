@@ -41,7 +41,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.gender = family.familydata.gender;
                 model.customer.maritalStatus = family.familydata.maritalStatus;
                 model.customer.mobilePhone = family.familydata.mobilePhone;
-                model.customer.expenditures = family.expenditures;
+                
                 model.customer.doorNo=family.doorNo;
                 model.customer.street=family.street;
                 model.customer.locality=family.locality;
@@ -60,9 +60,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.mailingDistrict=family.mailingDistrict;
                 model.customer.mailingPincode=family.mailingPincode;
                 model.customer.mailingState=family.mailingState;
-                model.customer.latitude=family.latitude;
-                model.customer.longitude=family.longitude;
-                model.customer.houseVerificationPhoto=family.houseVerificationPhoto;
+                
 
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -678,7 +676,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         model = EnrollmentHelper.fixData(model);
                         model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                         $stateParams.confirmExit = false;
-                        irfNavigator.goBack();
+                        $state.go("Page.Engine", {
+                        pageName: 'CustomerSearch',
+                        });
                     });
                 }
             },
