@@ -173,8 +173,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 			eventListeners: {
 				"scoring-loaded": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("_scoresApplicant", params);
-					/* bundleModel.psychometricScores=params[14].sections;
-					 */
+					BundleManager.broadcastEvent("financial-summary", params);
 				},
 				"rel_to_business": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("business_customer", params);

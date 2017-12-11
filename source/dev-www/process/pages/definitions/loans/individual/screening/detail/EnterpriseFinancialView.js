@@ -1,11 +1,8 @@
 define({
 	pageUID: "loans.individual.screening.detail.EnterpriseFinancialView",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource"
-	],
-	$pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource) {
+	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter"],
+	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter) {
 		return {
 			"type": "schema-form",
 			"title": "ENTERPRISE_FINANCIAL_VIEW",
@@ -19,37 +16,67 @@ define({
 			},
 			form: [{
 				"type": "section",
-				"html": '<h3>SECTION 1: CASH FLOW SUMMARY</h4>'
+				"html": `
+<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
+<div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
+`
 			}, {
 				"type": "box",
 				"overrideType": "default-view",
 				"readonly": true,
-				"title": "Invoice vs Cash",
+				"title": "Section 1 Cash Flow Summary",
 				"colClass": "col-sm-12",
 				"items": [{
 					type: "tableview",
-					key: "cashFlowDetails.data",
-					notitle: true,
+					key: "summary.cashFlowDetails.data",
+					title: "Invoice Vs Cash",
 					transpose: true,
-					selectable: false,
-					paginate: false,
-					searching: false,
 					getColumns: function() {
 						return [{
-							"notitle": true,
-							"data": "Month"
+							"title": "  ",
+							"data": "Month",
+							render: function(data, type, full, meta) {
+								if (data) return '<strong>'+data+'</strong>';
+								if (_.isObject(full.data)) {
+									if (full.data[this.data] == 'Avg. Total By Buyer') {
+										full.data[this.data] = 'Average';
+									}
+									return '<strong>'+full.data[this.data]+'</strong>';
+								}
+							}
 						}, {
 							"title": "Invoice",
-							"data": "Invoice Sales Amount"
+							"data": "Invoice Sales Amount",
+							render: function(data, type, full, meta) {
+								if (data) return irfCurrencyFilter(data);
+								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
+								else return irfCurrencyFilter('0');
+							}
 						}, {
 							"title": "Cash",
-							"data": "Cash Sales Amount"
+							"data": "Cash Sales Amount",
+							render: function(data, type, full, meta) {
+								if (data) return irfCurrencyFilter(data);
+								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
+								else return irfCurrencyFilter('0');
+							}
 						}, {
 							"title": "Scrap",
-							"data": "Revenue from Scrap Amount"
+							"data": "Revenue from Scrap Amount",
+							render: function(data, type, full, meta) {
+								if (data) return irfCurrencyFilter(data);
+								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
+								else return irfCurrencyFilter('0');
+							}
 						}, {
 							"title": "Total",
-							"data": "Revenue from Sales Amount"
+							"data": "Revenue from Sales Amount",
+							render: function(data, type, full, meta) {
+								if (data) return irfCurrencyFilter(data);
+								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
+								else return irfCurrencyFilter('0');
+							}
 						}];
 					}
 				}]
@@ -211,9 +238,6 @@ define({
 					}]
 				}]
 			}, {
-				"type": "section",
-				"html": '<h3>Section 2 : Profit & Loss'
-			}, {
 				"type": "box",
 				"colClass": "col-sm-12",
 				"items": [{
@@ -255,9 +279,6 @@ define({
 						'</table>'
 				}]
 			}, {
-				"type": "section",
-				"html": "<h3>SECTION 3 : BALANCESHEET"
-			}, {
 				"type": "box",
 				"colClass": "col-sm-12",
 				"notitle": true,
@@ -296,8 +317,17 @@ define({
 				return Enrollment.getSchema().$promise;
 			},
 			eventListeners: {
-				"_scoresApplicant": function(bundleModel, model, params) {
-					model.financeData = params;
+				"financial-summary": function(bundleModel, model, params) {
+					var cashFlowDetails = _.cloneDeep(params[15]);
+					cashFlowDetails.data.pop();
+					model.summary = {
+						cashFlowDetails: cashFlowDetails,
+						bankAccountDetails: params[10],
+						businessBankStmtSummary: params[16],
+						businessPL: params[8]
+					};
+
+
 					model.cashFlowDetails = params[15];
 					model.bankAccountDetails = params[10];
 					model.business_bank_statement = params[16];
@@ -378,6 +408,10 @@ define({
 					model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
 
 
+				},
+				"business_customer": function(bundleModel, model, params) {
+					model.business = params;
+					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
 				}
 			},
 			actions: {}
