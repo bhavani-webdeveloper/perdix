@@ -180,6 +180,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				},
 				"rel_to_business": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("business_customer", params);
+				},
+				"liability_summary":function(pageObj,bundleModel,params){
+					BundleManager.broadcastEvent("_liability",params);
 				}
 
 			}

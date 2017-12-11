@@ -47,7 +47,10 @@ define({
                     }
 
 
-                    if (self.form[self.form.length-1].title != "VIEW_UPLOADS") {
+                    model.businessName = model.customer.verifications[0].businessName;
+
+
+                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
                         var fileForms = [{
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
@@ -56,7 +59,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -64,7 +67,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -72,7 +75,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -80,7 +83,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -88,7 +91,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -96,7 +99,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -104,7 +107,7 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        },{
+                        }, {
                             "key": "customer.rawMaterialExpenses[].invoiceDocId",
                             "notitle": true,
                             "category": "Loan",
@@ -118,12 +121,13 @@ define({
                             "type": "box",
                             "colClass": "col-sm-12",
                             "readonly": true,
-                            "overrideType": "default-view",/*
-                            "htmlClass":"width:100% overflow:scroll",*/
+                            "overrideType": "default-view",
+                            /*
+                                                        "htmlClass":"width:100% overflow:scroll",*/
                             "title": "VIEW_UPLOADS",
                             "items": [{
                                 "type": "section",
-                                "htmlClass":"inline",
+                                "htmlClass": "inline",
                                 "html": '<div style="display:inline; overflow-x:scroll;"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
                                 "items": fileForms
                             }]
@@ -147,7 +151,7 @@ define({
                             "key": "customer.enterprise.id",
                             "title": "Entity ID"
                         }, {
-                            "key": "customer.enterprise.businessName",
+                            "key": "businessName",
                             "title": "Business Name"
                         }, {
                             "key": "customer.enterprise.businessType",
@@ -159,7 +163,7 @@ define({
                             "key": "customer.enterprise.businessSector",
                             "title": "Business Sector"
                         }, {
-                            "key": "customer.enterprise.businessSubSector",
+                            "key": "customer.enterprise.businessSubsector",
                             "title": "Business Subsector"
                         }, {
                             "key": "customer.enterprise.referredBy",
@@ -169,7 +173,7 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "",
+                            "key": "customer.urnNo",
                             "title": "URN"
                         }, {
                             "key": "customer.enterprise.businessConstitution",
@@ -181,10 +185,10 @@ define({
                             "key": "customer.enterprise.ownership",
                             "title": "Premises Ownership"
                         }, {
-                            "key": "Customer.enterpriseUserDefinedFieldValues.YEARS_OF_BUSINESS_PRESENT_AREA",
+                            "key": "customer.enterprise.businessInPresentAreaSince",
                             "title": "Operating Since"
                         }, {
-                            "key": "",
+                            "key": "customer.enterprise.anyPartnerOfPresentBusiness",
                             "title": "Has anyone else been a partner of your present business ?"
                         }]
 
@@ -222,11 +226,15 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.latitude",
-                            "notitle": true,
-                            "type": "geotag",
-                            "latitude": "customer.latitude",
-                            "longitude": "customer.longitude"
+                            "type": "section",
+                            "html": '<div style="float:right"></div>',
+                            "items": [{
+                                "key": "customer.latitude",
+                                "notitle": true,
+                                "type": "geotag",
+                                "latitude": "customer.latitude",
+                                "longitude": "customer.longitude"
+                            }]
                         }]
                     }]
                 }]
@@ -260,8 +268,24 @@ define({
                             "title": "Registered Date",
                             "data": "registeredDate"
                         }, {
-                            "title": "Expriy Date",
+                            "title": "Registration Validity",
                             "data": "expiryDate",
+                        }, {
+                            "title": "REGISTRATION_DOCUMENT",
+                            "data": "documentId",
+                            /*"type":"file",
+                            "required": true,
+                            "category":"CustomerEnrollment",
+                            "subCategory":"REGISTRATIONDOCUMENT",
+                            "fileType":"application/pdf",
+                            "using": "scanner"*/
+
+                            render: function(data, type, full, meta) {
+                                return '<div ng-href:"full.documentId">Download</div>'
+                            }
+
+
+
                         }];
                     },
                     getActions: function() {
@@ -353,8 +377,13 @@ define({
                                 "title": "Purchase Year",
                                 "data": "machinePurchasedYear"
                             }, {
-                                "title": "New Mahcine",
-                                "data": "isTheMachineNew"
+                                "title": "New/Old",
+                                "data": "isTheMachineNew",
+                                render: function(data, type, full, meta) {
+                                    if (full.isTheMachineNew == 'YES')
+                                        return 'NEW';
+                                    return 'OLD'
+                                }
                             }, {
                                 "title": "Purchase Price",
                                 "data": "purchasePrice"

@@ -17,6 +17,7 @@ define({
 					id: model.customerId
 				}).$promise.then(function(res) {
 					model.customer = res;
+					model.firstName = res.firstName;
 					switch (bundlePageObj.pageClass) {
 						case 'applicant':
 							model.bundleModel.applicant = res;
@@ -33,15 +34,16 @@ define({
 						'family_fields': {},
 						'liability_fields': {},
 						'household_fields': {},
-						'bank_fields': {}
+						'bank_fields': {},
+						'cibil': {}
 					};
 
 					/*Auto_Custom fields -- START */
 					/*Present Address*/
-					model.customer_address_html = model.customer.doorNo.concat(model.customer.street, model.customer.pincode, model.customer.district, model.customer.state);
+					model.customer_address_html = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
 					/*VIEW UPLOADS SECTION*/
-					model.addressProof ='KYC-' + model.customer.addressProof ;
-					model.identityProof='KYC-' + model.customer.identityProof;
+					model.addressProof = 'KYC-' + model.customer.addressProof;
+					model.identityProof = 'KYC-' + model.customer.identityProof;
 					/*Family fields*/
 					model.custom_fields.family_fields.family_member_count = model.customer.familyMembers.length;
 					model.custom_fields.family_fields.dependent_family_member = 0;
@@ -56,13 +58,16 @@ define({
 						}
 					});
 					/*Liability fields*/
+					BundleManager.pushEvent('liability_summary', model._bundlePageObj, model.customer.liabilities);
 					model.custom_fields.liability_fields.active_loans = model.customer.liabilities.length;
 					model.custom_fields.liability_fields.total_monthly_installment = 0;
+					model.custom_fields.liability_fields.outstandingAmount = 0;
 					model.custom_fields.liability_fields.loan_from_bank = 0;
 					model.custom_fields.liability_fields.loan_from_NBFC_MFI = 0;
 					model.custom_fields.liability_fields.loan_from_others = 0;
 					_.each(model.customer.liabilities, function(liability) {
 						model.custom_fields.liability_fields.total_monthly_installment += liability.installmentAmountInPaisa;
+						model.custom_fields.liability_fields.outstandingAmount += liability.outstandingAmountInPaisa;
 						switch (liability.loanSource) {
 							case "BANK":
 								model.custom_fields.liability_fields.loan_from_bank += liability.loanAmountInPaisa;
@@ -121,6 +126,15 @@ define({
 						customerId: model.customerId
 					}).$promise.then(function(res) {
 						model.cibil_highmark = res;
+						model.custom_fields.cibil.cibil_score = model.cibil_highmark.cibil.cibilScore[0].score;
+						model.custom_fields.cibil.active_accounts = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].totalAccounts;
+						model.custom_fields.cibil.overdue_accounts = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
+						model.custom_fields.cibil.sanctioned_Amount = model.cibil_highmark.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
+						model.custom_fields.cibil.current_balance = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].currentBalance;
+						model.custom_fields.cibil.amount_overdue = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].amountOverDue;
+						/*for(i=0;i<=model.cibil_highmark.cibil.cibilScore.length;i++){
+							model.custom_fields.cibil.cibil_score += model.cibil_highmark.cibil.cibilScore[i].score;
+						}*/
 					});
 
 					/*Household fields */
@@ -140,6 +154,30 @@ define({
 					}
 
 					/*Auto_Custom field -- END*/
+					/*if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+						var fileForms = [{
+							"key": "customer.rawMaterialExpenses[].invoiceDocId",
+							"notitle": true,
+							"category": "Loan",
+							"subCategory": "DOC1",
+							"type": "file",
+							"preview": "pdf",
+							"using": "scanner"
+						}];
+						//
+						self.form.push({
+							"type": "box",
+							"colClass": "col-sm-12",
+							"readonly": true,
+							"overrideType": "default-view",
+							"title": "VIEW_UPLOADS",
+							"items": [{
+								"type": "section",
+								"html": '<sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator>',
+								"items": fileForms
+							}]
+						});
+					}*/
 
 				});
 			},
@@ -183,8 +221,7 @@ define({
 							"title": "EMAIL"
 						}, {
 							"key": "customer_address_html",
-							"title": "Present Address",
-							"type": "html"
+							"title": "Present Address"
 						}]
 					}, {
 						"type": "grid",
@@ -204,9 +241,11 @@ define({
 							"key": "customer.maritalStatus"
 						}, {
 							"key": "customer.spouseFirstName",
-							"title": "SPOUSE_FULL_NAME"
+							"title": "SPOUSE_FULL_NAME",
+							"condition": "model.customer.maritalStatus == 'MARRIED' "
 						}, {
-							"key": "customer.spouseDateOfBirth"
+							"key": "customer.spouseDateOfBirth",
+							"condition": "model.customer.maritalStatus == 'MARRIED' "
 						}]
 					}, {
 						"type": "grid",
@@ -269,19 +308,39 @@ define({
 						getColumns: function() {
 							return [{
 								"title": "FULL_NAME",
-								"data": "familyMemberFirstName"
+								"data": "",
+								render: function(data, type, full, meta) {
+									/*if (full.relationShip=="self")
+										return customer.firstName;*/
+									return full.familyMemberFirstName;
+								}
 							}, {
 								"title": "RELATIONSHIP",
-								"data": "relationShip"
+								"data": "relationShip",
+								render: function(data, type, full, meta) {
+									if (full.relationShip != null)
+										return full.relationShip;
+									return "NA";
+								}
 							}, {
 								"title": "T_EDUCATION_STATUS",
-								"data": "educationStatus"
+								"data": "educationStatus",
+								render: function(data, type, full, meta) {
+									if (full.educationStatus != null)
+										return full.educationStatus;
+									return "NA";
+								}
 							}, {
 								"title": "ANNUAL_EDUCATION_FEE",
-								"data": "anualEducationFee"
+								"data": "anualEducationFee",
+								render: function(data, type, full, meta) {
+									if (full.anualEducationFee != null)
+										return full.anualEducationFee;
+									return "NA";
+								}
 							}, {
 								"title": "INCOME_SOURCE",
-								"data": "familyMemberFirstName",
+								"data": "",
 								render: function(data, type, full, meta) {
 									if (full.incomes[0])
 										return full.incomes[0].incomeSource;
@@ -289,7 +348,7 @@ define({
 								}
 							}, {
 								"title": "INCOME",
-								"data": "familyMemberFirstName",
+								"data": "",
 								render: function(data, type, full, meta) {
 									if (full.incomes[0])
 										return full.incomes[0].incomeEarned;
@@ -361,7 +420,7 @@ define({
 							"key": "custom_fields.liability_fields.total_monthly_installment",
 							"title": "Total monthly instalments"
 						}, {
-							"key": "",
+							"key": "custom_fields.liability_fields.outstandingAmount",
 							"title": "OUTSTANDING_AMOUNT"
 						}]
 
@@ -388,7 +447,7 @@ define({
 					"items": [{
 						"type": "tableview",
 						"key": "customer.liabilities",
-						"title": "",
+						"notitle": true,
 						"transpose": true,
 						"selectable": false,
 						"editable": false,
@@ -414,34 +473,55 @@ define({
 								"data": "outstandingAmountInPaisa",
 								"title": "OUTSTANDING_AMOUNT"
 							}, {
-								"title": "START_DATE",
-								"data": "startDate"
-							}, {
-								"title": "MATURITY_DATE",
-								"data": "maturityDate"
-							}, {
-								"data": "noOfInstalmentPaid",
-								"type": "number",
-								"title": "NO_OF_INSTALLMENT_PAID"
-							}, {
-								"title": "Frequency of Instalments",
-								"data": "frequencyOfInstallment"
-							}, {
 								"title": "Loan_Purpose",
 								"data": "liabilityLoanPurpose"
 
-							}, {
-								"data": "interestOnly",
-								"title": "INTEREST_ONLY"
-							}, {
-								"data": "interestRate",
-								"type": "number",
-								"title": "RATE_OF_INTEREST"
 							}];
 						},
 						getActions: function() {
 							return [];
 						}
+					}, {
+						"type": "expandablesection",
+						"items": [{
+							"type": "tableview",
+							"key": "customer.liabilities",
+							"title": "",
+							"transpose": true,
+							"selectable": false,
+							"editable": false,
+							"tableConfig": {
+								"searching": false,
+								"paginate": false,
+								"pageLength": 10,
+							},
+							getColumns: function() {
+								return [{
+									"title": "START_DATE",
+									"data": "startDate"
+								}, {
+									"title": "MATURITY_DATE",
+									"data": "maturityDate"
+								}, {
+									"data": "noOfInstalmentPaid",
+									"type": "number",
+									"title": "NO_OF_INSTALLMENT_PAID"
+								}, {
+									"title": "Frequency of Instalments",
+									"data": "frequencyOfInstallment"
+								}, {
+									"data": "interestOnly",
+									"title": "INTEREST_ONLY"
+								}, {
+									"data": "interestRate",
+									"type": "number",
+									"title": "RATE_OF_INTEREST"
+								}];
+							},
+							getActions: function() {
+								return [];
+							}
+						}]
 					}]
 				}]
 			}, {
@@ -509,100 +589,129 @@ define({
 				"title": "BANK ACCOUNT DETAILS",
 				"condition": "model.customer.customerBankAccounts.length != 0",
 				"items": [{
-					"type": "grid",
-					"orientation": "horizontal",
-					"items": [{
 						"type": "grid",
-						"orientation": "vertical",
+						"orientation": "horizontal",
 						"items": [{
-							"key": "custom_fields.bank_fields.avg_deposit",
-							"title": "Average Monthly Deposit",
-							"type": "amount"
+							"type": "grid",
+							"orientation": "vertical",
+							"items": [{
+								"key": "custom_fields.bank_fields.avg_deposit",
+								"title": "Average Monthly Deposit",
+								"type": "amount"
+							}, {
+								"key": "custom_fields.bank_fields.avg_withdrawals",
+								"title": "Average Monthly Withdrawals",
+								"type": "amount"
+							}, {
+								"key": "",
+								"title": "Average Monthly Balances",
+								"type": "amount"
+							}]
 						}, {
-							"key": "custom_fields.bank_fields.avg_withdrawals",
-							"title": "Average Monthly Withdrawals",
-							"type": "amount"
-						}, {
-							"key": "",
-							"title": "Average Monthly Balances",
-							"type": "amount"
+							"type": "grid",
+							"orientation": "vertical",
+							"items": [{
+								"key": "custom_fields.bank_fields.tot_accounts",
+								"title": "Total no of Account"
+							}, {
+								"key": "custom_fields.bank_fields.tot_checque_bounce",
+								"title": "Total no of Cheque Bounce"
+							}, {
+								"key": "custom_fields.bank_fields.tot_EMI_bounce",
+								"title": "Total no EMI Bounce"
+							}]
 						}]
 					}, {
-						"type": "grid",
-						"orientation": "vertical",
+						"type": "expandablesection",
 						"items": [{
-							"key": "custom_fields.bank_fields.tot_accounts",
-							"title": "Total no of Account"
+							"type": "tableview",
+							"key": "customer.customerBankAccounts",
+							"notitle": true,
+							"transpose": true,
+							"selectable": false,
+							"editable": false,
+							"tableConfig": {
+								"searching": false,
+								"paginate": false,
+								"pageLength": 10,
+							},
+							getColumns: function() {
+								return [{
+									"title": "Bank Name",
+									"data": "customerBankName"
+								}, {
+									"title": "Branch Name",
+									"data": "customerBankBranchName"
+								}, {
+									"title": "IFSC Code",
+									"data": "ifscCode"
+								}, {
+									"title": "Account Number",
+									"data": "accountNumber",
+									"type": "password",
+									"inputmode": "number",
+									"numberType": "tel"
+								}, {
+									"title": "Average Bank Balance",
+									"data": ""
+								}, {
+									"title": "Average Bank Deposit",
+									"data": ""
+								}];
+							},
+							getActions: function() {
+								return [];
+							}
 						}, {
-							"key": "custom_fields.bank_fields.tot_checque_bounce",
-							"title": "Total no of Cheque Bounce"
-						}, {
-							"key": "custom_fields.bank_fields.tot_EMI_bounce",
-							"title": "Total no EMI Bounce"
-						}]
-					}]
-				}, {
-					"type": "expandablesection",
-					"items": [{
-						"type": "tableview",
-						"key": "customer.customerBankAccounts",
-						"title": "",
-						"transpose": true,
-						"selectable": false,
-						"editable": false,
-						"tableConfig": {
-							"searching": false,
-							"paginate": false,
-							"pageLength": 10,
-						},
-						getColumns: function() {
-							return [{
-								"title": "Bank Name",
-								"data": "customerBankName"
-							}, {
-								"title": "Branch Name",
-								"data": "customerBankBranchName"
-							}, {
-								"title": "IFSC Code",
-								"data": "ifscCode"
-							}, {
-								"title": "Account Name",
-								"data": "customerNameAsInBank"
-							}, {
-								"title": "Account Number",
-								"data": "accountNumber",
-								"type": "password",
-								"inputmode": "number",
-								"numberType": "tel"
-							}, {
-								"title": "Account Type",
-								"data": "accountType"
-							}, {
-								"title": "BANKING_SINCE",
-								"data": "bankingSince"
+							"type": "expandablesection",
+							"items": [{
+								"type": "tableview",
+								"key": "customer.customerBankAccounts",
+								"title": "",
+								"transpose": true,
+								"selectable": false,
+								"editable": false,
+								"tableConfig": {
+									"searching": false,
+									"paginate": false,
+									"pageLength": 10,
+								},
+								getColumns: function() {
+									return [{
+										"title": "Account Name",
+										"data": "customerNameAsInBank"
+									}, {
+										"title": "Account Type",
+										"data": "accountType"
+									}, {
+										"title": "BANKING_SINCE",
+										"data": "bankingSince"
 
-							}, {
-								"title": "NET_BANKING_AVAILABLE",
-								"data": "netBankingAvailable"
-							}, {
-								"title": "Limit",
-								"data": "limit"
-							}, {
-								"data": "bankStatements[].bankStatementPhoto",
-								"type": "file",
-								"required": true,
-								"title": "BANK_STATEMENT_UPLOAD",
-								"fileType": "application/pdf",
-								"category": "CustomerEnrollment",
-								"subCategory": "IDENTITYPROOF",
-								"using": "scanner"
-							}];
-						},
-						getActions: function() {
-							return [];
-						}
-					}]
-				}]
+									}, {
+										"title": "NET_BANKING_AVAILABLE",
+										"data": "netBankingAvailable"
+									}, {
+										"title": "Limit",
+										"data": "limit"
+									}, {
+										"data": "bankStatements[].bankStatementPhoto",
+										"type": "file",
+										"required": true,
+										"title": "BANK_STATEMENT_UPLOAD",
+										"fileType": "application/pdf",
+										"category": "CustomerEnrollment",
+										"subCategory": "IDENTITYPROOF",
+										"using": "scanner"
+									}];
+								},
+								getActions: function() {
+									return [];
+								}
+							}]
+						}]
+					}
+
+				]
 			}, {
 				"type": "box",
 				"colClass": "col-sm-12",
@@ -616,22 +725,22 @@ define({
 						"type": "grid",
 						"orientation": "vertical",
 						"items": [{
-							"key": "cibil_highmark.Cibil.cibilScore[].score",
+							"key": "custom_fields.cibil.cibil_score",
 							"title": "CIBIL Score"
 						}, {
-							"key": "",
+							"key": "custom_fields.cibil.active_accounts",
 							"title": "Active Accounts"
 						}, {
-							"key": "cibil_highmark.Cibil.cibilLoanSummaryInfo[].overDueAccounts",
+							"key": "custom_fields.cibil.overdue_accounts",
 							"title": "Overdue Accounts"
 						}, {
-							"key": "",
+							"key": "custom_fields.cibil.sanctioned_Amount",
 							"title": "Sanctioned Amount"
 						}, {
-							"key": "cibil_highmark.Cibil.cibilLoanSummaryInfo[].currentBalance",
+							"key": "custom_fields.cibil.current_balance",
 							"title": "Current Balance"
 						}, {
-							"key": "cibil_highmark.Cibil.cibilLoanSummaryInfo[].amountOverDue",
+							"key": "custom_fields.cibil.amount_overdue",
 							"title": "Overdue Balance"
 						}, {
 							"key": "",
@@ -665,59 +774,63 @@ define({
 				"type": "box",
 				"colClass": "col-sm-12",
 				"title": "Psychometric Scores",
+				"readonly": true,
 				"condition": "model.bundlePageObj.pageClass != 'guarantors' ",
 				"items": [{
-					"type": "section",
-					"colClass": "col-sm-12",
-					"html": '<div ng-init="_scores=model.psychometricScores">' +
-						'<table class="table table-responsive">' +
-						'<tbody style="border:0px;">' +
-						'<tr>' +
-						'<th>Parameter Name</th>' +
-						'<th>Cut Off Score</th>' +
-						'<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>' +
-						'</tr>' +
-						'<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">' +
-						'<td >{{key}}</td>' +
-						'<td >{{value["Cut Off Score"]}}</td>' +
-						'<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>' +
-						'<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>' +
-						'<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">' +
-						'<td ng-style = "{\'font-weight\': \'bold\'}">{{key}}</td>' +
-						'<td ></td>' +
-						'<td ng-repeat-start="_score in _scores"></td>' +
-						'<td ng-repeat-end > {{_score.summary[key]}}</td></tr>' +
-						'</tbody>' +
-						'</table>' +
-						'</div>'
+					"key": "",
+					"title": "psychometric score"
+				}, {
+					"type": "expandablesection",
+					"items": [{
+						"type": "section",
+						"colClass": "col-sm-12",
+						"html": '<div ng-init="_scores=model.psychometricScores">' +
+							'<table class="table table-responsive">' +
+							'<tbody style="border:0px;">' +
+							'<tr>' +
+							'<th>Parameter Name</th>' +
+							'<th>Cut Off Score</th>' +
+							'<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>' +
+							'</tr>' +
+							'<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">' +
+							'<td >{{key}}</td>' +
+							'<td >{{value["Cut Off Score"]}}</td>' +
+							'<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>' +
+							'<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>' +
+							'<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">' +
+							'<td ng-style = "{\'font-weight\': \'bold\'}">{{key}}</td>' +
+							'<td ></td>' +
+							'<td ng-repeat-start="_score in _scores"></td>' +
+							'<td ng-repeat-end > {{_score.summary[key]}}</td></tr>' +
+							'</tbody>' +
+							'</table>' +
+							'</div>'
+					}]
 				}]
 			}, {
 				"type": "box",
 				"colClass": "col-sm-12",
+				"readonly": true,
 				"title": "Household P&L Statement",
 				"condition": "model.bundlePageObj.pageClass != 'guarantors' ",
 				"items": [{
 					"type": "section",
 					"colClass": "col-sm-12",
-					"html": /*'<div ng-repeat="i in model.household.length" >'+*/ '<div ng-init="household = model.household">' +
-						'<table class="table">' +
+					"html": '<div ng-init="household = model.household[' + 2 + ']">' + '<table class="table">' +
 						'<colgroup>' +
 						'<col width="30%"> <col width="40%"> <col width="30%">' +
 						'</colgroup>' +
 						'<tbody>' +
-						'<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>' +
-						'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness}}</td> </tr>' +
-						'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
-						'<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>' +
-						'<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>' +
-						'<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
-						'<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
+						'<tr class="table-sub-header" ng-click="expanded=!expanded"> <th><a ng-href="">{{"INCOME" | translate}}</a></th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>' +
+						'<tr ng-show="expanded"> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
+						'<tr ng-show="expanded"> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
+						'<tr ng-show="expanded"> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>' +
+						'<tr class="table-sub-header" ng-click="Eexpanded=!Eexpanded"> <th><a ng-href="">{{"EXPENSES" | translate}}</a></th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>' +
+						'<tr ng-show="Eexpanded"> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
+						'<tr ng-show="Eexpanded"> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
 						'<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>' +
 						'</tbody>' +
-						'</table>' +
-						'</div>'
-						/*+
-							'</div>'*/
+						'</table>' + '</div>'
 				}]
 			}, {
 				"type": "box",
@@ -810,48 +923,62 @@ define({
 				"colClass": "col-sm-12",
 				"title": "VIEW_UPLOADS",
 				"items": [{
-					"type": "grid",
-					"orientation": "horizontal",
+					"type": "section",
+					"html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
 					"items": [{
-						"type": "grid",
-						"orientation": "vertical",
-						"items": [{
-							"key": "customer.identityProofImageId",
-							"type": "file",
-							"notitle": true,
-							"preview": "pdf",
-							"using": "scanner"
+							"type": "grid",
+							"orientation": "vertical",
+							"items": [{
+								"key": "customer.identityProofImageId",
+								"type": "file",
+								"notitle": true,
+								"preview": "pdf",
+								"using": "scanner"
+							}, {
+								"type": "section",
+								"html": '<div style="text-align:center">KYC - PAN Card</div>'
+							}]
 						}, {
-							"type": "section",
-							"html": '<div style="text-align:center">KYC - PAN Card</div>'
-						}]
-					}, {
-						"type": "grid",
-						"orientation": "vertical",
-						"items": [{
-							"key": "customer.addressProofImageId",
-							"type": "file",
-							"notitle": true,
-							"preview": "pdf",
-							"using": "scanner"
+							"type": "grid",
+							"orientation": "vertical",
+							"items": [{
+								"key": "customer.addressProofImageId",
+								"type": "file",
+								"notitle": true,
+								"preview": "pdf",
+								"using": "scanner"
+							}, {
+								"type": "section",
+								"html": '<div style="text-align:center">KYC - Aadhar</div>'
+							}]
 						}, {
-							"key": "addressProof",
+							"type": "grid",
+							"orientation": "vertical",
+							"items": [{
+								"key": "customer.houseVerificationPhoto",
+								"notitle": true,
+								"type": "file",
+								"fileType": "image/*"
+							}, {
+								"type": "section",
+								"html": '<div style="text-align:center">House</div>'
+							}]
 						}
-						]
-					}, {
-						"type": "grid",
-						"orientation": "vertical",
-						"items": [{
-							"key": "customer.houseVerificationPhoto",
-							"notitle": true,
-							"type": "file",
-							"fileType": "image/*"
-						}]
-					},{
-						"type": "grid",
-						"orientation": "vertical",
-						"items": []
-					}]
+						/*, {
+												"type": "grid",
+												"orientation": "vertical",
+												"items": [{
+													"key": "customer.latitude",
+													"notitle": true,
+													"type": "geotag",
+													"latitude": "customer.latitude",
+													"longitude": "customer.longitude"
+												}, {
+													"type": "section",
+													"html": '<div style="text-align:center">House Location</div>'
+												}]
+											}*/
+					]
 				}]
 			}],
 
@@ -866,27 +993,22 @@ define({
 					model.household = [];
 
 					if (model.houseHoldPL && model.houseHoldPL.length) {
-						/*for (var i=0; i<model.houseHoldPL.length; i++){*/
-						model.household.push({
-							/*
-												income : model.houseHoldPL[0].data[0]['Total Incomes'],*/
-							salaryFromBusiness: model.houseHoldPL[0].data[0]['Salary from business'],
-							otherIncomeSalaries: model.houseHoldPL[0].data[0]['Other Income/salaries'],
-							familyMemberIncomes: model.houseHoldPL[0].data[0]['Family Member Incomes'],
-							/*
-												Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],*/
-							declaredEducationExpense: model.houseHoldPL[0].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
-							emiHouseholdLiabilities: model.houseHoldPL[0].data[0]['EMI\'s of household liabilities'],
-							netHouseholdIncome: model.houseHoldPL[0].data[0]['Net Household Income']
-
-						});
-						$log.info(model.household)
-							/*}*/
+						for (var i = 0; i < model.houseHoldPL.length; i++) {
+							model.household.push({
+								income: model.houseHoldPL[i].data[0]['Total Incomes'],
+								salaryFromBusiness: model.houseHoldPL[i].data[0]['Salary from business'],
+								otherIncomeSalaries: model.houseHoldPL[i].data[0]['Other Income/salaries'],
+								familyMemberIncomes: model.houseHoldPL[i].data[0]['Family Member Incomes'],
+								Expenses: model.houseHoldPL[i].data[0]['Total Expenses'],
+								declaredEducationExpense: model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+								emiHouseholdLiabilities: model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
+								netHouseholdIncome: model.houseHoldPL[i].data[0]['Net Household Income']
+							})
+						}
 					}
 				},
 				"business_customer": function(bundleModel, model, params) {
 					model.enterpriseCustomerRelations = params.enterpriseCustomerRelations;
-					$log.info(model.enterpriseCustomerRelations)
 				}
 			},
 			actions: {}
