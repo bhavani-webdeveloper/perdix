@@ -17,7 +17,12 @@ define({
 
 
             var managementScore = model.scoreDetails[0];
-            if (_.isArray(managementScore.sections)) {
+            var res1 =model.scoreDetails[0].sections[0].data;
+            model.management_Data=[res1[1],res1[2],res1[4],res1[6],res1[7]];
+
+            var res2=model.scoreDetails[1].data;
+            model.business_data=[res2[0],res2[1],res2[3],res2[4],res2[5],res2[8]];
+            /*if (_.isArray(managementScore.sections)) {
                 var count = managementScore.sections.length;
                 var spacePct = 75 / count;
 
@@ -25,7 +30,7 @@ define({
                 for (var i = 0; i < managementScore.sections.length; i++) managementScore.values[i] = i;
                 managementScore.colorPct = spacePct / 5;
                 managementScore.valuePct = spacePct * 4 / 5;
-            }
+            }*/
 
             model.sectorDetails = res[5];
             model.subSectorDetails = res[6];
@@ -138,42 +143,6 @@ define({
             model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
             model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
-            /* Scoring Sections */
-
-            /* Populate seperate scoring section for ScreeningReview screen */
-            // model.screeningScoreDetails = {
-            //     columns: [
-            //         {
-            //             "title": "Parameter",
-            //             "data": "Parameter"
-            //         },
-            //         {
-            //             "title": "Actual Value",
-            //             "data": "Actual Value"
-            //         },
-            //         {
-            //             "title": "ParameterScore",
-            //             "data": "ParameterScore"
-            //         }
-            //     ],
-            //     data: []
-            // };
-            // // debugger;
-            // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
-            //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
-            //     _.forEach(score1Data, function(data){
-            //         data["Actual Value"] = data["Applicant"];
-            //         delete data.Applicant;
-            //         delete data["Co-Applicant"];
-            //     });
-
-            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
-            // }
-            // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
-            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
-            // }
-
-            // debugger;
 
 
             for (var i = 0; i < model.deviationDetails.data.length; i++) {
@@ -281,42 +250,50 @@ define({
                         htmlClass: "row",
                         items: [{
                             type: "section",
-                            htmlClass: "col-sm-12",
+                            htmlClass: "col-sm-6",
                             title: model.scoreDetails[0].title,
                             html: '<div ng-init="_score=model.scoreDetails[0]">' +
-                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>' +
+                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} </h3>' +
                                 '<table class="table">' +
                                 '<colgroup>' +
-                                '<col width="25%">' +
-                                '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">' +
-                                '<col width="{{_score.valuePct}}%" ng-repeat-end>' +
+                                '<col width="50%">' +
+                                '<col width="40%">' +
+                                '<col width="10%">' +
                                 '</colgroup>' +
                                 '<tbody>' +
                                 '<tr>' +
                                 '<th>Parameter Name</th>' +
-                                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
+                                '<th>Actual Value</th>' +
+                                '<th>Status </th>'+
                                 '</tr>' +
-                                '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">' +
+                                '<tr ng-repeat="data in model.management_Data" ng-init="parameterIndex=$index">' +
                                 '<td>{{data.Parameter}}</td>' +
-                                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
-                                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
+                                '<td >{{_score.sections[0].data[parameterIndex].Applicant}}</td>'+
+                                '<td > <span class="square-color-box" style="background:{{_score.sections[0].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
+                                '</tr>' +
+                                '<tr>'+
+                                '<td>{{"TOTAL" |translate}}</td><td>({{model.totalScores.data[0][_score.title]}})</td><td></td>'+
+                                '</tr>'+
                                 '</tbody>' +
                                 '</table>' +
                                 '</div>'
                         }, {
-                            type: "section",
-                            htmlClass: "col-sm-12",
-                            title: model.scoreDetails[1].title,
-                            html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "title": "model.scoreDetails[1].title",
+                            "html": '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
                                 '<table class="table">' +
-                                '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>' +
+                                '<colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup>' +
                                 '<tbody>' +
-                                '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>' +
-                                '<tr ng-repeat="data in model.scoreDetails[1].data">' +
+                                '<tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr>' +
+                                '<tr ng-repeat="data in model.business_data">' +
                                 '<td>{{ data.Parameter }}</td>' +
-                                '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>' +
                                 '<td>{{ data["Actual Value"] }}</td>' +
+                                '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>' +
                                 '</tr>' +
+                                '<tr>'+
+                                '<td>{{"TOTAL" |translate}}</td><td>({{model.totalScores.data[0][_score.title]}})</td><td></td>'+
+                                '</tr>'+
                                 '</tbody>' +
                                 '</table>'
                         }]
@@ -328,13 +305,14 @@ define({
                             htmlClass: "col-sm-6",
                             condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[2].title,
-                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[2].title }} </h3><table class="table"><colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup>'+
+                            '<tbody><tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td>{{ data["Actual Value"] }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td></tr><tr><td>{{"TOTAL"|translate}}</td><td>({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</td><td></td></tr></tbody></table>'
                         }, {
                             type: "section",
                             htmlClass: "col-sm-6",
                             condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[3].title,
-                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[3].title }} </h3><table class="table"><colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td>{{ data["Actual Value"] }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td></tr><tr><td>{{"TOTAL"|translate}}</td><td>({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</td><td></td></tr></tbody></table>'
                         }]
                     }
 
@@ -352,12 +330,12 @@ define({
                         '<col width="15%"><col width="15%"><col width="15%"><col width="15%"><col width="15%"><col width="10%">' +
                         '</colgroup>' +
                         '<tbody>' +
-                        '<tr><th>{{"Category"|translate}}</th><th ng-repeat="i in model.lia_category">{{i}}</th><th>{{"Current Application"|translate}}</th><th>{{"Status"|translate}}</th></tr>' +
-                        '<tr><td>{{"Disbursed Amount"|translate}}</td><td ng-repeat="i in model.lia_disbursed_amount">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Tenure"|translate}}</td><td ng-repeat="i in model.lia_tenure">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"No. of EMI Paid"|translate}}</td><td ng-repeat="i in model.lia_emiPaid">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Total Outstanding Amount"|translate}}</td><td ng-repeat="i in model.lia_outstanding">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Loan Product"|translate}}</td><td ng-repeat="i in model.lia_product">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
+                        '<tr><th>{{"Category"|translate}}</th><th ng-repeat="i in model.lia_category track by $index">{{i}}</th><th>{{"Current Application"|translate}}</th><th>{{"Status"|translate}}</th></tr>' +
+                        '<tr><td>{{"Disbursed Amount"|translate}}</td><td ng-repeat="i in model.lia_disbursed_amount track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
+                        '<tr><td>{{"Tenure"|translate}}</td><td ng-repeat="i in model.lia_tenure track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
+                        '<tr><td>{{"No. of EMI Paid"|translate}}</td><td ng-repeat="i in model.lia_emiPaid track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
+                        '<tr><td>{{"Total Outstanding Amount"|translate}}</td><td ng-repeat="i in model.lia_outstanding track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
+                        '<tr><td>{{"Loan Product"|translate}}</td><td ng-repeat="i in model.lia_product track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
                         '</tbody>' +
                         '</table>'
                 }]
