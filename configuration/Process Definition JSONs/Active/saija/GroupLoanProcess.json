@@ -858,6 +858,20 @@
                         "GRT", "GRT2",
                         "LoanDisbursement"
                      ]
+                  },
+                  "dscOverrideRequestRemarks": {
+                     "title": "dscOverrideRequestRemarks",
+                     "type": "string",
+                     "captureStages": [
+                        "DSC"
+                     ]
+                  },
+                  "dscOverrideRequestFileId": {
+                     "title": "dscOverrideRequestFileId",
+                     "type": "string",
+                     "captureStages": [
+                        "DSC"
+                     ]
                   }
                }
             }

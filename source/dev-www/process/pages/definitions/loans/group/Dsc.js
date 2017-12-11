@@ -279,7 +279,8 @@ define({
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
                                 "key": "group.jlgGroupMembers[].dscOverrideRemarks",
-                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'\
+                                 || model.group.jlgGroupMembers[arrayIndex].dscStatus == 'DSC_OVERRIDE_REQUEST_REJECTED'",
                                 "title": "DSC_OVERRIDE_REMARKS",
                                 "readonly": true,
                             }, {
@@ -301,7 +302,7 @@ define({
                             }, {
                                 "key": "group.jlgGroupMembers[].dscOverrideRequestFileId",
                                 "category": "Group",
-                                "subCategory": "APPLICATION",
+                                "subCategory": "DSCREQUESTDOCUMENT",
                                 "title": "REQUEST_DSC_OVERRIDE_FILE",
                                 "type": "file",
                                 "fileType": "application/pdf",
@@ -584,7 +585,8 @@ define({
                                 "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
                             }, {
                                 "key": "group.jlgGroupMembers[].dscOverrideRemarks",
-                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                                "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'\
+                                 || model.group.jlgGroupMembers[arrayIndex].dscStatus == 'DSC_OVERRIDE_REQUEST_REJECTED'",
                                 "title": "DSC_OVERRIDE_REMARKS",
                                 "readonly": true,
                             }, {
@@ -621,7 +623,7 @@ define({
                             }, {
                                 "key": "group.jlgGroupMembers[].dscOverrideRequestFileId",
                                 "category": "Group",
-                                "subCategory": "APPLICATION",
+                                "subCategory": "DSCREQUESTDOCUMENT",
                                 "title": "REQUEST_DSC_OVERRIDE_FILE",
                                 "type": "file",
                                 "fileType": "application/pdf",

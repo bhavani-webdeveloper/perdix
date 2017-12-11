@@ -13,7 +13,7 @@ define({
             model.group.tenure = parseInt(model.group.tenure);
         };
 
-        var doDSCOverride = function(model) {
+        var doDSCOverride = function(model, dscOverrideAction) {
         	PageHelper.showLoader();
         	PageHelper.clearErrors();
             if (model.group.dscOverrideRemarks) {
@@ -23,7 +23,8 @@ define({
                     urnNo: model.jlgGroupMember.urnNo,
                     groupCode: model.group.groupCode,
                     productCode: model.group.productCode,
-                    remarks: model.group.dscOverrideRemarks
+                    remarks: model.group.dscOverrideRemarks,
+                    action: dscOverrideAction
                 }, {}, function(resp, headers) {
                     $log.info(resp);
                     PageHelper.hideLoader();
@@ -379,7 +380,7 @@ return {
 		                        "readonly":true,
 		                        "key": "group.jlgGroupMembers[].dscOverrideRequestFileId",
 		                        "category": "Group",
-                                "subCategory": "APPLICATION",
+                                "subCategory": "DSCREQUESTDOCUMENT",
                                 "title": "REQUEST_DSC_OVERRIDE_FILE",
                                 "type": "file",
                                 "fileType": "application/pdf",
@@ -471,12 +472,12 @@ return {
             $log.info("Inside submit()");
             if(!validateForm(formCtrl)) 
                 return;
-            doDSCOverride(model);
+            doDSCOverride(model, "reject");
         },
         approve: function(model, formCtrl, form) {
             if(!validateForm(formCtrl)) 
                 return;
-            doDSCOverride(model);
+            doDSCOverride(model, "approve");
         }
     }
 }}});
