@@ -903,7 +903,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         return;
                     }
 
-                    (!model.customer.$fingerprintquality) {
+                    if(!model.customer.$fingerprintquality) {
                         elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
                         return;
                     }
