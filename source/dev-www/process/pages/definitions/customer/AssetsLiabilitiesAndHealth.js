@@ -29,6 +29,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         return model;
     };
 
+
     return {
         "id": "AssetsAndLiabilities",
         "type": "schema-form",
@@ -40,6 +41,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             $stateParams.confirmExit = true;
             $log.info("I got initialized");
             $log.info($stateParams);
+
+            
 
             if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
 
@@ -134,7 +137,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             ];
                         }
                         model = Utils.removeNulls(model,true);
-
+                        
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
 
@@ -152,6 +155,10 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 );
             }
 
+            Queries.getGlobalSettings("BiometricQuality").then(function(result) {
+                model.customer.BiometricQuality = result;
+            });
+            
             model.isFPEnrolled = function(fingerId){
                 //$log.info("Inside isFPEnrolled: " + BiometricService.getFingerTF(fingerId) + " :"  + fingerId);
                 if (model.customer[BiometricService.getFingerTF(fingerId)]!=null || (typeof(model.customer.$fingerprint)!='undefined' && typeof(model.customer.$fingerprint[fingerId])!='undefined' && model.customer.$fingerprint[fingerId].data!=null )) {
@@ -686,6 +693,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
+                                model.customer.$fingerprintquality = EnrollmentHelper.checkBiometricQuality(model);
+                                $log.info(data);
                             }, function(reason){
                                 console.log(reason);
                             })
@@ -849,6 +858,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 PageHelper.showLoader();
 
                 var out = model.customer.$fingerprint;
+                var BiometricQuality = model.customer.BiometricQuality;
+
                 var fpPromisesArr = [];
                 for (var key in out) {
                     if (out.hasOwnProperty(key) && out[key].data!=null) {
@@ -889,6 +900,11 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         });
                         PageHelper.hideLoader();
 
+                        return;
+                    }
+
+                    (!model.customer.$fingerprintquality) {
+                        elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
                         return;
                     }
 

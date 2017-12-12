@@ -42,6 +42,25 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         return model;
     };
 
+    var checkBiometricQuality= function(model){
+        var myObj = model.customer.$fingerprint;
+        var BiometricQuality = model.customer.BiometricQuality;
+        var quality= true;
+        if (myObj && BiometricQuality) {
+            for (i = 0; i < 10; i++) {
+                var obj = myObj[Object.keys(myObj)[i]];
+                if (obj.quality < BiometricQuality) {
+                    PageHelper.showProgress('validate-error', obj.fingerId + " " + ' quality is less than the required quality' + " " + BiometricQuality, 5000);
+                    quality = false;
+                    break;
+                }
+            }
+        }
+        return quality;
+    }
+
+
+
     var validateData = function(model) {
         PageHelper.clearErrors();
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues) {
