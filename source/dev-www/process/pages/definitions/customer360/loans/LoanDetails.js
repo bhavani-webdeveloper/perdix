@@ -47,6 +47,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
+                        model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0; 
 
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                             LoanAccount.get({
@@ -576,19 +577,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRaised",
-                        "title": "TOTAL_INTEREST_RAISED",
+                        "title": "TOTAL_PENAL_INTEREST_RAISED",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRepaid",
-                        "title": "TOTAL_INTEREST_REPAID",
+                        "title": "TOTAL_PENAL_INTEREST_REPAID",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestDue",
-                        "title": "TOTAL_INTEREST_DUE",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
                         "required":false,
                         "type": "number"
                     },
@@ -606,19 +607,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.totalDemandRaised",
-                        "title": "TOTAL_INTEREST_RAISED",
+                        "title": "TOTAL_DEMAND_RAISED",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalRepaid",
-                        "title": "TOTAL_INTEREST_REPAID",
+                        "title": "TOTAL_DEMAND_REPAID",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalDemandDue",
-                        "title": "TOTAL_INTEREST_DUE",
+                        "title": "TOTAL_DEMAND_DUE",
                         "required":false,
                         "type": "number"
                     },
@@ -725,6 +726,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }, {
                             "key": "loanAccount.frequency",
                             "required":false,
+                            "enumCode":"loan_product_frequency",
                             "type": "select"
                         },{
                             "key":"loanAccount.expectedInterestRate",
@@ -973,13 +975,15 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 }
                             }, {
                                 key: "loanAccount.securityEmi",
+                                "title": "SECURITY_EMI",
                                 "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
                                     getSanctionedAmount(model);
                                 }
                             }, {
-                                key: "loanAccount.processingFeeInPaisa",
+                                key: "loanAccount.processingFee",
+                                "title": "PROCESSING_FEE",
                                 "required":false,
                                 type: "amount"
                             }, {
@@ -1180,6 +1184,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "REPAYMENT_SCHEDULE",
+                    condition: "model.siteCode != 'sambandh'",
                     "htmlClass": "text-danger",
                     "items": [{
                             "type": "fieldset",
@@ -1714,7 +1719,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },{
                         "title": "Agreement File Download",
                         "key": "loanAccount.bcAccount.agreementFileId",
-                        "condition": "model.loanAccount.loanType == 'JLG'",
+                        "condition": "model.loanAccount.loanType == 'JLG' && model.loanAccount.bcAccount",
                         "type": "file",
                         "fileType": "*/*",
                         "category": "Loan",
@@ -1731,13 +1736,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "type": "button",
                         "title": "REPAYMENT_SCHEDULE_REPORT",
                         "fieldHtmlClass": "pull-right"
-                    }, {
-                        "type": "submit",
-                        "title": "SUBMIT"
-                    }]
+                    },]
                 },{
                     "type": "actionbox",
-                    "condition": "model.loanAccount.loanType == 'JLG'",
+                    "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode=='KGFS'",
                     "items": [{
                         "type": "button",
                         "title": "REPAYMENT_SCHEDULE_REPORT",
@@ -1783,7 +1785,22 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             GroupProcess.getLoanPrint(repaymentInfo, opts);
                         }
                     }]
-                }
+                },
+                {
+                    "type": "actionbox",
+                    "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode != 'KGFS'",
+                    "items": [{
+                        "type": "button",
+                        "title": "REPAYMENT_SCHEDULE_REPORT",
+                        "onClick": function(model, form, schemaForm, event) {
+                            var url = LoanAccount.getRepaymentScheduleDownloadURL(model.cbsLoan.accountId);
+                            Utils.downloadFile(url);
+                            // LoanAccount.downloadScheduleInCSV({accountNumber:model.cbsLoan.accountId}).$promise.then(function(responseData){
+                            //     Utils.downloadFile(responseData);
+                            // });
+                        }
+                    }]
+                }, 
             ],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;

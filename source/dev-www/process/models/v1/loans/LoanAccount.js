@@ -221,7 +221,8 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
         },
         freezeAccount: {
             method: 'GET',
-            url: BASE_URL + '/api/loanaccounts/freeze/:accountId'
+            url: BASE_URL + '/api/loanaccounts/freeze/:accountId',
+            transformResponse: []
         },
         findTransactionForReversal: {
             method: 'GET',

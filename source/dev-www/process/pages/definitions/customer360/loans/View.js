@@ -114,6 +114,10 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'sambandh') {
+                                            return false;
+                                        }
                                         return true;
                                     }
                                 },
@@ -133,7 +137,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     name: "FREEZE_ACCOUNT",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: 'loans.UnmarkNPA',
+                                            pageName: 'loans.FreezeAccount',
                                             pageId: [item.accountNumber,item.partner].join(".")
                                         })
                                     },
