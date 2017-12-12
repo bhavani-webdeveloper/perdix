@@ -184,6 +184,21 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }
     }
 
+    var checkBiometricQuality= function(model){
+        var myObj = model.customer.$fingerprint;
+        var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+        var quality= true;
+        for (i = 0; i < 10; i++) {
+            var obj = myObj[Object.keys(myObj)[i]];
+            if (obj.quality < BiometricQuality) {
+                PageHelper.showProgress('validate-error', obj.fingerId +" "+ ' quality is less than the required quality' +" "+ BiometricQuality, 5000);
+                quality= false;
+                break;
+            }
+        }
+        return quality;
+    }
+
     var fixData = function(model){
         /* TODO Validations */
 

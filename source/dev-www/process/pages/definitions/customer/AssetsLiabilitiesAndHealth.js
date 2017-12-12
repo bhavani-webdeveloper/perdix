@@ -40,6 +40,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
         return model;
     };
 
+
     return {
         "id": "AssetsAndLiabilities",
         "type": "schema-form",
@@ -733,6 +734,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
+                                model.customer.$fingerprintquality = EnrollmentHelper.checkBiometricQuality(model);
+                                $log.info(data);
                             }, function(reason){
                                 console.log(reason);
                             })
@@ -1008,6 +1011,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 PageHelper.showLoader();
 
                 var out = model.customer.$fingerprint;
+                var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+
                 var fpPromisesArr = [];
                 for (var key in out) {
                     if (out.hasOwnProperty(key) && out[key].data!=null) {
@@ -1048,6 +1053,11 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         });
                         PageHelper.hideLoader();
 
+                        return;
+                    }
+
+                    (!model.customer.$fingerprintquality) {
+                        elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
                         return;
                     }
 
