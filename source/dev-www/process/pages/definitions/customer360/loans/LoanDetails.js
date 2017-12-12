@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal",
-    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal) {
+ ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator",
+    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -1184,7 +1184,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "REPAYMENT_SCHEDULE",
-                    condition: "model.siteCode != 'sambandh'",
                     "htmlClass": "text-danger",
                     "items": [{
                             "type": "fieldset",
@@ -1727,8 +1726,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }]
                 }, {
                     "type": "actionbox",
-                    "condition": "model.loanAccount.loanType != 'JLG'",
+                    "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode == 'KGFS'",
                     "items": [{
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
+                    }, {
                         "type": "button",
                         "title": "DOWNLOAD_ALL_DOCS",
                         "fieldHtmlClass": "pull-right"
@@ -1737,7 +1742,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "title": "REPAYMENT_SCHEDULE_REPORT",
                         "fieldHtmlClass": "pull-right"
                     },]
-                },{
+                }, {
+                    "type": "actionbox",
+                    "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode != 'KGFS'",
+                    "items": [{
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
+                    },]
+                }, {
                     "type": "actionbox",
                     "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode=='KGFS'",
                     "items": [{
@@ -1784,6 +1799,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             };
                             GroupProcess.getLoanPrint(repaymentInfo, opts);
                         }
+                    }, {
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
                     }]
                 },
                 {
@@ -1791,13 +1812,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode != 'KGFS'",
                     "items": [{
                         "type": "button",
-                        "title": "REPAYMENT_SCHEDULE_REPORT",
-                        "onClick": function(model, form, schemaForm, event) {
-                            var url = LoanAccount.getRepaymentScheduleDownloadURL(model.cbsLoan.accountId);
-                            Utils.downloadFile(url);
-                            // LoanAccount.downloadScheduleInCSV({accountNumber:model.cbsLoan.accountId}).$promise.then(function(responseData){
-                            //     Utils.downloadFile(responseData);
-                            // });
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
                         }
                     }]
                 }, 
