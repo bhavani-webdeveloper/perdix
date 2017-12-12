@@ -92,6 +92,7 @@ define({
 					});
 
 					/*Bank fields*/
+					model.custom_fields.bank_fields.bankStatements = [];
 					model.custom_fields.bank_fields.total_Deposit = 0;
 					model.custom_fields.bank_fields.total_Withdrawals = 0;
 					model.custom_fields.bank_fields.avg_deposit = 0;
@@ -103,6 +104,7 @@ define({
 					model.custom_fields.bank_fields.total_bankstatement = 0;
 					_.each(model.customer.customerBankAccounts, function(account) {
 						_.each(account.bankStatements, function(bankslips) {
+							model.custom_fields.bank_fields.bankStatements.push(bankslips);
 							model.custom_fields.bank_fields.total_Deposit += bankslips.totalDeposits;
 							model.custom_fields.bank_fields.total_Withdrawals += bankslips.totalWithdrawals;
 							model.custom_fields.bank_fields.total_bankstatement++;
@@ -238,16 +240,16 @@ define({
 							"title": "FATHER_FULL_NAME",
 						}, {
 							"key": "customer.motherName",
-							"title": "MOTHER_FULL_NAME"
+							"title": "MOTHER'S FULL NAME"
 						}, {
 							"key": "customer.maritalStatus"
 						}, {
 							"key": "customer.spouseFirstName",
 							"title": "SPOUSE_FULL_NAME",
-							"condition": "model.customer.maritalStatus == 'MARRIED' "
+							"condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED'"
 						}, {
 							"key": "customer.spouseDateOfBirth",
-							"condition": "model.customer.maritalStatus == 'MARRIED' "
+							"condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' "
 						}]
 					}, {
 						"type": "grid",
@@ -275,10 +277,10 @@ define({
 						"orientation": "vertical",
 						"items": [{
 							"key": "custom_fields.family_fields.family_member_count",
-							"title": "NO_OF_FAM_MEM"
+							"title": "No. Of Family Member's"
 						}, {
 							"key": "custom_fields.family_fields.dependent_family_member",
-							"title": "NO_OF_DEP_MEM"
+							"title": "No. Of Dependent Family Member's"
 						}]
 					}, {
 						"type": "grid",
@@ -286,11 +288,11 @@ define({
 						"items": [{
 							"key": "custom_fields.family_fields.total_household_income",
 							"type": "amount",
-							"title": "TOT_HOUSE_INCOME"
+							"title": "Total Household Income"
 						}, {
 							"key": "customer.financialSummaries[].householdExpenses",
 							"type": "amount",
-							"title": "DEC_HOUSE_EXP"
+							"title": "Declared Household Expenditure"
 						}]
 					}]
 				}, {
@@ -656,14 +658,42 @@ define({
 								"title": "Limit",
 								"data": "limit"
 							}, {
-								"data": "bankStatements[].bankStatementPhoto",
-								"type": "file",
-								"required": true,
-								"title": "BANK_STATEMENT_UPLOAD",
-								"fileType": "application/pdf",
-								"category": "CustomerEnrollment",
-								"subCategory": "IDENTITYPROOF",
-								"using": "scanner"
+
+								"title": "Bank Statement's",
+								"data": "",
+								render: function(data, type, full, meta) {
+									var title = [];
+									var url = [];
+									for (i = 0; i < full.bankStatements.length; i++) {
+										url.push(irf.BASE_URL + "/" + full.bankStatements[i].bankStatementPhoto);
+										title.push(moment(full.bankStatements[i].startMonth).format('MMMM YYYY'));
+									}
+									//return '<div  ng-repeat = "i in ' + full.bankStatements + 'track by $index"  ><p><a  href="' + url + '[$index] ">' + title + '[$index]</a></p></div>'
+									return '<div >' +
+										'<table class="table table-responsive">' +
+										'<tbody >' +
+										'<tr>' +
+										'<td><a  href="' + url[0] + '">' + title[0] + '</a></td>' +
+										'</tr>' +
+										'<tr>' +
+										'<td><a  href="' + url[1] + '">' + title[1] + '</a></td>' +
+										'</tr>' +
+										'<tr>' +
+										'<td><a  href="' + url[2] + '">' + title[2] + '</a></td>' +
+										'</tr>' +
+										'<tr>' +
+										'<td><a  href="' + url[3] + '">' + title[3] + '</a></td>' +
+										'</tr>' +
+										'<tr>' +
+										'<td><a  href="' + url[4] + '">' + title[4] + '</a></td>' +
+										'</tr>' +
+										'<tr>' +
+										'<td><a  href="' + url[5] + '">' + title[5] + '</a></td>' +
+										'</tr>' +
+										'</tbody>' +
+										'</table>' +
+										'</div>'
+								}
 							}];
 						},
 						getActions: function() {
@@ -1099,7 +1129,7 @@ define({
 							}
 							break;
 						case 'guarantor':
-							if (params.enterpriseCustomerRelations[gua_cnt]) {
+							if (params.enterpriseCustomerRelations[model.gua_cnt]) {
 								model.enterpriseCustomerRelations.push(params.enterpriseCustomerRelations[model.gua_cnt]);
 								model.gua_cnt++;
 							}

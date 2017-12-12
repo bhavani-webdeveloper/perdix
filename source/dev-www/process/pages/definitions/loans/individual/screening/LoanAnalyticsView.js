@@ -45,7 +45,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				maximum: 1
 			}, {
 				pageName: 'loans.individual.screening.detail.ScoringView',
-				title: 'SUMMARY',
+				title: 'SCORING',
 				pageClass: 'scoring_view',
 				minimum: 1,
 				maximum: 1

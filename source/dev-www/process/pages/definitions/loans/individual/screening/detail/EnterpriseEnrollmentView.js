@@ -258,20 +258,20 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            "title": "Registration Type",
+                            "title": "Ragistration Type",
                             "data": "registrationType"
                         }, {
-                            "title": "Registration Number",
+                            "title": "Ragistration Number",
                             "data": "registrationNumber"
 
                         }, {
-                            "title": "Registered Date",
+                            "title": "Ragistered Date",
                             "data": "registeredDate"
                         }, {
-                            "title": "Registration Validity",
+                            "title": "Ragistration Validity",
                             "data": "expiryDate",
                         }, {
-                            "title": "REGISTRATION_DOCUMENT",
+                            "title": "Ragistration Document",
                             "data": "documentId",
                             /*"type":"file",
                             "required": true,
@@ -281,7 +281,8 @@ define({
                             "using": "scanner"*/
 
                             render: function(data, type, full, meta) {
-                                return '<div ng-href:"full.documentId">Download</div>'
+                                var url=irf.BASE_URL+"/"+full.documentId;
+                                return '<a href="'+url+'">Download</a>'
                             }
 
 
