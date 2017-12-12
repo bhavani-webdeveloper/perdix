@@ -21,7 +21,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "customer.photoImageId",
                         type: "file",
                         fileType: "image/*",
-                        // "offline": true
+                        "offline": true
                     },
                     "customerBranchId": {
                         orderNo: 30,
@@ -454,7 +454,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "identityProofImageId": {
                                 key: "customer.identityProofImageId",
                                 type: "file",
-                                fileType: "application/pdf",
+                                offline: true,
+                                fileType:"application/pdf",
                                 using: "scanner"
                             },
                             "identityProofReverseImageId": {
@@ -542,7 +543,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "file",
                                 fileType: "application/pdf",
                                 using: "scanner",
-                                //"offline": true
+                                "offline": true
                             },
                             "addressProofReverseImageId": {
                                 key: "customer.addressProofReverseImageId",
@@ -618,6 +619,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "file",
                                 fileType: "application/pdf",
                                 using: "scanner",
+                                offline: true,
                             },
                             "udf35": {
                                 key: "customer.udf.userDefinedFieldValues.udf35",
@@ -676,8 +678,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "kyc1ImagePath": {
                                 key: "customer.additionalKYCs[].kyc1ImagePath",
                                 type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner"
+                                fileType:"application/pdf",
+                                using: "scanner",
+                                offline: true
                             },
                             "kyc1ProofNumber": {
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
