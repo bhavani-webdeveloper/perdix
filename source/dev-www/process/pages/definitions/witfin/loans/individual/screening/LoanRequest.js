@@ -147,6 +147,12 @@ define([],function(){
                     },
                     save: function(model, formCtrl, form, $event){
                         /* Loan SAVE */
+                        if (!model.loanAccount.id){
+                            model.loanAccount.isRestructure = false;
+                            model.loanAccount.documentTracking = "PENDING";
+                            model.loanAccount.psychometricCompleted = "NO";
+
+                        }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {

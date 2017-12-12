@@ -117,19 +117,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         ]
                                     },
                                     {
-                                        "type": "box",
-                                        "orderNo": 1,
-                                        "title": "BUSINESS_INFORMATION",
-                                        "items": [
-                                            ""
-                                        ]
-                                    },
-                                    {
                                         "targetID": "BusinessInformation",
                                         "items": [
                                             {
-                                                "key": "customer.firstName2",
-                                                "title":"SHAHAL_NAME",
+                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null",
+                                                "type": "section",
+                                                "htmlClass": "alert alert-warning",
+                                                "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
                                                 "orderNo": 10
                                             }
                                         ]
@@ -167,6 +161,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             })
                             .then(function(enrolmentProcess){
                                 if (!enrolmentProcess){
+                                    /* IF no enrolment present, reset to applicant */
+                                    model.customer.firstName = params.customer.firstName;
                                     return;
                                 }
                                 $log.info("Inside customer loaded of applicant-updated");
@@ -203,24 +199,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     submit: function(model, form, formName){
                         PageHelper.showLoader();
-                        var p1;
-                        if (!model.customer.id){
-                            p1 = model.enrolmentProcess.save().toPromise();
-                        }
 
-                        $q.when(p1)
-                            .then(function(){
-                                return model.enrolmentProcess.proceed()
-                                    .toPromise();
-
-                            })
-                            .then(function(response){
-
-                            })
+                        model.enrolmentProcess.save()
                             .finally(function(){
-
+                                PageHelper.hideLoader();
                             })
+                            .subscribe(function(){
+                                model.loanProcess.refreshRelatedCustomers();
+                            })
+
+                    },
+                    proceed: function(model, form){
+
                     }
+
                 }
             };
         }

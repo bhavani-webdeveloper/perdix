@@ -25,8 +25,14 @@ class LoanRepository implements ILoanRepository {
 		return Ro.fromPromise(this.individualLoanService.search().$promise);
 	}
 
-	create(reqData: any): Observable<any> {
-		return Ro.fromPromise(this.individualLoanService.create(reqData).$promise);
+	create(loanProcess: any): Observable<any> {
+		return Ro.fromPromise(this.individualLoanService.create(loanProcess).$promise)
+            .map( (obj:any) => {
+                let loanAccount:LoanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, obj.loanAccount);
+                _.merge(loanProcess.loanAccount, loanAccount);
+                return loanProcess;
+            })
+
 	}
 
 	update(loanProcess: LoanProcess): Observable<any> {

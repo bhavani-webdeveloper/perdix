@@ -201,7 +201,13 @@ export class LoanProcess {
         this.loanProcessAction = "SAVE";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.individualLoanRepo.update(this);
+        let obs2 = null;
+        if (this.loanAccount.id){
+            obs2 = this.individualLoanRepo.update(this);
+        } else {
+            obs2 = this.individualLoanRepo.create(this);
+        }
+
         let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
