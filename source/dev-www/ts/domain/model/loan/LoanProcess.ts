@@ -14,6 +14,7 @@ import {PolicyManager} from "../../shared/PolicyManager";
 import {LeadProcess} from "../lead/LeadProcess";
 import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
 import EnrolmentProcessFactory = require("../customer/EnrolmentProcessFactory");
+import LoanCenter = require("./LoanCentre");
 import Utils = require("../../shared/Utils");
 import * as _ from 'lodash';
 import {LoanCustomerRelationTypes, LoanCustomerRelation} from "./LoanCustomerRelation";
@@ -84,15 +85,21 @@ export class LoanProcess {
      */
     public refreshRelatedCustomers(){
         /* Loan customer */
+        let lc = new LoanCenter();
         if (_.hasIn(this.loanCustomerEnrolmentProcess, 'customer.id')) {
             this.loanAccount.customerId = this.loanCustomerEnrolmentProcess.customer.id;
             this.loanAccount.urnNo = this.loanCustomerEnrolmentProcess.customer.urnNo;
+
+            lc.centreId = this.loanCustomerEnrolmentProcess.customer.centreId;
+            this.loanAccount.loanCentre = lc;
         }
 
         this.loanAccount.loanCustomerRelations = this.loanAccount.loanCustomerRelations || [];
 
         if (_.hasIn(this.applicantEnrolmentProcess, 'customer.id')) {
             this.loanAccount.applicant = this.applicantEnrolmentProcess.customer.urnNo;
+            lc.centreId = this.applicantEnrolmentProcess.customer.centreId;
+            this.loanAccount.loanCentre = lc;
 
             let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
                 return item.customerId == this.applicantEnrolmentProcess.customer.id;
@@ -204,7 +211,7 @@ export class LoanProcess {
     save(): any {
         /* Calls all business policies associated with save */
         this.loanProcessAction = "SAVE";
-        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LeadProcess.getProcessConfig());
+        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LoanProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = null;
         if (this.loanAccount.id){
@@ -213,7 +220,7 @@ export class LoanProcess {
             obs2 = this.individualLoanRepo.create(this);
         }
 
-        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
+        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LoanProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
     }
@@ -222,10 +229,10 @@ export class LoanProcess {
         /* Calls all business policies assocaited with proceed */
         this.stage = toStage;
         this.loanProcessAction = "PROCEED";
-        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeProceed', LeadProcess.getProcessConfig());
+        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeProceed', LoanProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.individualLoanRepo.update(this);
-        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterProceed', LeadProcess.getProcessConfig());
+        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterProceed', LoanProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
     }

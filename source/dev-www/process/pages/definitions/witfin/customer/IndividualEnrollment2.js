@@ -97,6 +97,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress('customer-load', 'Loading customer...');
                             EnrolmentProcess.fromCustomerID(valueObj.id)
                                 .finally(function(){
+                                    PageHelper.showProgress('customer-load', 'Done.', 5000);
                                 })
                                 .subscribe(function(enrolmentProcess){
                                     /* Updating the loan process */

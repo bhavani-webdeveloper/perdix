@@ -22,15 +22,7 @@ let config = {
                         "arguments": null
                     }
                 ]
-            },
-            beforeProceed: {
-                "defaults": [
-                    {
-                        "name": "preSaveCustomerPolicy",
-                        "arguments": null
-                    }
-                ]
-            },
+            }
         },
 
         'command': {

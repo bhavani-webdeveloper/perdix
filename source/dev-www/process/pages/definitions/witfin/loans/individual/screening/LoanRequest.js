@@ -105,7 +105,41 @@ define([],function(){
                         "includes": getIncludes (model),
                         "excludes": [
                             ""
-                        ]
+                        ],
+                        "options": {
+                            "additions": [
+                                {
+                                    "type": "box",
+                                    "title": "POST_REVIEW",
+                                    "condition": "model.loanAccount.id",
+                                    "items": [{
+                                        key: "review.action",
+                                        type: "radios",
+                                        titleMap: {
+                                            "REJECT": "REJECT",
+                                            "SEND_BACK": "SEND_BACK",
+                                            "PROCEED": "PROCEED",
+                                            "HOLD": "HOLD"
+                                        }
+                                    }, {
+                                        type: "section",
+                                        condition: "model.review.action=='PROCEED'",
+                                        items: [{
+                                            title: "REMARKS",
+                                            key: "review.remarks",
+                                            type: "textarea",
+                                            required: true
+                                        }, {
+                                            key: "review.proceedButton",
+                                            type: "button",
+                                            title: "PROCEED",
+                                            onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                        }]
+
+                                    }]
+                                }
+                            ]
+                        }
                     };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
@@ -166,6 +200,7 @@ define([],function(){
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
+
                     },
                     holdButton: function(model, formCtrl, form, $event){
 

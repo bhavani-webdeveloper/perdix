@@ -21,7 +21,7 @@
         },
         "Page/LeadDashboard",
         "Page/witfinLeadDashboard",
-        "Page/LoanOriginationDashboard",
+        "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard",
         {
             "title": "INDIVIDUAL_LOANS",
@@ -74,7 +74,7 @@
                 "Page/ReferenceCodeDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
-                "Page/Adhoc/bank.Survey.SurveyDashboard" 
+                "Page/Adhoc/bank.Survey.SurveyDashboard"
             ]
         },
         {

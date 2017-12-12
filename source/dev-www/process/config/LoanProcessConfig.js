@@ -24,15 +24,7 @@ define(["require", "exports"], function (require, exports) {
                             "arguments": null
                         }
                     ]
-                },
-                beforeProceed: {
-                    "defaults": [
-                        {
-                            "name": "preSaveCustomerPolicy",
-                            "arguments": null
-                        }
-                    ]
-                },
+                }
             },
             'command': {
                 'OverlayLeadData': {}
