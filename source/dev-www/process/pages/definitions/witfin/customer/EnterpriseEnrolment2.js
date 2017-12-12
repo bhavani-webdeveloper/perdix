@@ -145,7 +145,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 eventListeners: {
                     "applicant-updated": function(bundleModel, model, params){
                         $log.info("inside applicant-updated of EnterpriseEnrolment2");
-
                         /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
                         Queries.getEnterpriseCustomerId(params.customer.id)
                             .then(function(response){
@@ -174,7 +173,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 /* Setting for the current page */
                                 model.enrolmentProcess = enrolmentProcess;
                                 model.customer = enrolmentProcess.customer;
+
+                                /* Setting enterprise customer relation on the enterprise customer */
+                                model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                             })
+                    },
+                    "co-applicant-updated": function(bundleModel, model, params){
+                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                    },
+                    "guarantor-updated": function(bundleModel, model, params){
+                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                     }
                 },
                 form: [

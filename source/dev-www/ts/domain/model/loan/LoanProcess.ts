@@ -89,6 +89,8 @@ export class LoanProcess {
             this.loanAccount.urnNo = this.loanCustomerEnrolmentProcess.customer.urnNo;
         }
 
+        this.loanAccount.loanCustomerRelations = this.loanAccount.loanCustomerRelations || [];
+
         if (_.hasIn(this.applicantEnrolmentProcess, 'customer.id')) {
             this.loanAccount.applicant = this.applicantEnrolmentProcess.customer.urnNo;
 
@@ -100,6 +102,7 @@ export class LoanProcess {
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = this.applicantEnrolmentProcess.customer.id;
                 lcr.relation = LoanCustomerRelationTypes.APPLICANT;
+                this.loanAccount.loanCustomerRelations.push(lcr);
             }
         }
 
@@ -115,6 +118,7 @@ export class LoanProcess {
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = coApplicant.customer.id;
                 lcr.relation = LoanCustomerRelationTypes.CO_APPLICANT;
+                this.loanAccount.loanCustomerRelations.push(lcr);
             }
         }
 
@@ -130,6 +134,7 @@ export class LoanProcess {
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = guarantor.customer.id;
                 lcr.relation = LoanCustomerRelationTypes.GUARANTOR;
+                this.loanAccount.loanCustomerRelations.push(lcr);
             }
         }
     }

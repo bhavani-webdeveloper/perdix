@@ -10,6 +10,8 @@ import {PolicyManager} from "../../shared/PolicyManager";
 import {Customer, CustomerTypes} from "./Customer";
 import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
 import {EnrolmentProcessFactory} from "./EnrolmentProcessFactory";
+import EnterpriseCustomerRelation = require("./EnterpriseCustomerRelation");
+import {LoanProcess} from "../loan/LoanProcess";
 
 
 declare var enrolmentProcessConfig: Object;
@@ -65,6 +67,54 @@ export class EnrolmentProcess {
                     return this;
                 }
             )
+    }
+
+    public refreshEnterpriseCustomerRelations(loanProcess: LoanProcess): void{
+        /* Loan customer */
+
+        this.customer.enterpriseCustomerRelations = this.customer.enterpriseCustomerRelations || [];
+
+        if (_.hasIn(loanProcess.applicantEnrolmentProcess, 'customer.id')) {
+            loanProcess.loanAccount.applicant = loanProcess.applicantEnrolmentProcess.customer.urnNo;
+
+            let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
+                return item.linkedToCustomerId == loanProcess.applicantEnrolmentProcess.customer.id;
+            });
+
+            /* @TODO Code to insert to enterprise customer relations */
+        }
+
+        for (let coApplicant:EnrolmentProcess of loanProcess.coApplicantsEnrolmentProcesses){
+
+            /* Need details on coBorrower */
+
+            let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
+                return item.linkedToCustomerId == coApplicant.customer.id;
+            });
+        }
+
+        for (let guarantor:EnrolmentProcess of loanProcess.guarantorsEnrolmentProcesses){
+
+            /* Need details on coBorrower */
+
+            let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
+                return item.linkedToCustomerId == guarantor.customer.id;
+            });
+        }
+    }
+
+    addEnterpriseCustomerRelation(customer: Customer){
+        let i = _.findIndex(this.customer.enterpriseCustomerRelations, function(item){
+            return item.linkedToCustomerId == customer.id;
+        })
+        if (i != -1){
+            return;
+        }
+
+        let ecr:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
+        ecr.linkedToCustomerId = customer.id;
+        this.customer.enterpriseCustomerRelations = this.customer.enterpriseCustomerRelations || [];
+        this.customer.enterpriseCustomerRelations.push(ecr);
     }
 
     static createNewProcess(customerType: CustomerTypes = CustomerTypes.INDIVIDUAL): Observable<EnrolmentProcess> {
