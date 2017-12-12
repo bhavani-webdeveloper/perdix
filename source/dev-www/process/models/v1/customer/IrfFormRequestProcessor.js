@@ -397,7 +397,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 readonly: true,
                                 key: "customer.mailingLocality",
                             },
-                           
+
                             "mailingDistrict": {
                                 orderNo: 60,
                                 readonly: true,
@@ -4173,52 +4173,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "identityProofNo": {
                                 key: "customer.identityProofNo",
-                                type: "qrcode",
-                                condition: "model.customer.identityProof == 'Aadhar Card'",
-                                schema: {
-                                    "pattern": "^[2-9]{1}[0-9]{11}$",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.identityProofNo = result.text;
-                                }
-                            },
-                            "identityProofNo1": {
-                                key: "customer.identityProofNo",
-                                type: "qrcode",
-                                condition: "model.customer.identityProof == 'Pan Card'",
-                                schema: {
-                                    "pattern": "[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.identityProofNo = result.text;
-                                }
-                            },
-                            "identityProofNo2": {
-                                key: "customer.identityProofNo",
-                                type: "qrcode",
-                                condition: "model.customer.identityProof == 'Passport'",
-                                schema: {
-                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.identityProofNo = result.text;
-                                }
-                            },
-                            "identityProofNo3": {
-                                key: "customer.identityProofNo",
-                                type: "qrcode",
-                                condition: "model.customer.identityProof !== 'Aadhar Card' && model.customer.identityProof !== 'Pan Card' && model.customer.identityProof !== 'Passport'",
-                                // "pattern": ".*",
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.identityProofNo = result.text;
-                                }
+                                type: "string"
                             },
                             "idProofIssueDate": {
                                 key: "customer.idProofIssueDate",
@@ -4229,8 +4184,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "date"
                             },
                             "addressProofSameAsIdProof": {
-                                key: "customer.addressProofSameAsIdProof",
-                                condition: "model.customer.identityProof != 'Pan Card'"
+                                key: "customer.addressProofSameAsIdProof"
                             }
                         }
                     },
@@ -4260,42 +4214,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "addressProofNo": {
                                 key: "customer.addressProofNo",
-                                type: "barcode",
-                                condition: "model.customer.addressProof == 'Aadhar Card'",
-                                schema: {
-                                    "pattern": "^[2-9]{1}[0-9]{11}$",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.addressProofNo = result.text;
-                                }
-                            },
-                            "addressProofNo1": {
-                                key: "customer.addressProofNo",
-                                type: "barcode",
-                                condition: "model.customer.addressProof == 'Passport'",
-                                schema: {
-                                    "pattern": "^([A-PR-WY]){1}([1-9]){1}([0-9]){5}([1-9]){1}$",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.addressProofNo = result.text;
-                                }
-                            },
-                            "addressProofNo2": {
-                                key: "customer.addressProofNo",
-                                type: "barcode",
-                                condition: "model.customer.addressProof !== 'Aadhar Card' && model.customer.addressProof !== 'Passport'",
-                                schema: {
-                                    "pattern": ".*",
-                                    "type": ["string", "null"],
-                                },
-                                onCapture: function (result, model, form) {
-                                    $log.info(result);
-                                    model.customer.addressProofNo = result.text;
-                                }
+                                type: "string"
                             },
                             "addressProofIssueDate": {
                                 key: "customer.addressProofIssueDate",
@@ -4304,7 +4223,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "addressProofValidUptoDate": {
                                 key: "customer.addressProofValidUptoDate",
                                 type: "date"
-                            },
+                            }
                         }
                     },
                     "spouseIdProof": {
@@ -4468,6 +4387,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "personalInformation": {
                 "type": "box",
                 "title": "PERSONAL_INFORMATION",
+                "orderNo": 20,
                 "items": {
                     "customerBranchId": {
                         key: "customer.customerBranchId",
@@ -4623,6 +4543,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "ContactInformation": {
                 type: "box",
+                "orderNo": 30,
                 "title": "CONTACT_INFORMATION",
                 "items": {
                     "contracInfo": {
@@ -4861,6 +4782,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "householdeDetails": {
                 "type": "box",
+                "orderNo": 40,
                 "title": "FAMILY_SELF_DETAILS",
                 //"condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 "items": {
@@ -5015,11 +4937,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-
-
             "householdLiablities": {
                 type: "box",
                 title: "HOUSEHOLD_LIABILITIES",
+                "orderNo": 60,
                 items: {
                     "liabilities": {
                         key: "customer.liabilities",
@@ -5106,6 +5027,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "householdVerification": {
                 "type": "box",
+                "orderNo": 70,
                 "title": "T_HOUSE_VERIFICATION",
                 items: {
                     "householdDetails": {
@@ -5147,6 +5069,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             "trackDetails": {
                 type: "box",
                 title: "TRACK_DETAILS",
+                "orderNo": 80,
                 items: {
                     "vehiclesOwned": {
                         key: "customer.vehiclesOwned",
@@ -5167,6 +5090,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             },
             "reference": {
                 "type": "box",
+                "orderNo": 90,
                 "title": "REFERENCES",
                 "items": {
                     "verifications": {
@@ -5267,364 +5191,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             }
-        };
-
-        formRepository['EnterpriseEnrollment2'] = {
-            "BusinessLiabilities": {
-                type: "box",
-                title: "BUSINESS_LIABILITIES",
-
-                items: {
-                    "liabilities": {
-                        key: "customer.liabilities",
-                        type: "array",
-                        startEmpty: true,
-                        title: "LIABILITIES",
-                        items: {
-                            "loanType": {
-                                key: "customer.liabilities[].loanType",
-                                type: "select",
-                                enumCode: "liability_loan_type"
-                            },
-                            "loanSource": {
-                                key: "customer.liabilities[].loanSource",
-                                type: "select",
-                                enumCode: "loan_source"
-                            },
-                            //"customer.liabilities[].instituteName",
-                            "loanAmountInPaisa": {
-                                key: "customer.liabilities[].loanAmountInPaisa",
-                                type: "amount"
-                            },
-                            "installmentAmountInPaisa": {
-                                key: "customer.liabilities[].installmentAmountInPaisa",
-                                type: "amount"
-                            },
-                            "outstandingAmountInPaisa": {
-                                key: "customer.liabilities[].outstandingAmountInPaisa",
-                                type: "amount",
-                                title: "OUTSTANDING_AMOUNT"
-                            },
-                            "startDate": {
-                                key: "customer.liabilities[].startDate",
-                                type: "date"
-                            },
-                            "maturityDate": {
-                                key: "customer.liabilities[].maturityDate",
-                                type: "date"
-                            },
-                            "noOfInstalmentPaid": {
-                                key: "customer.liabilities[].noOfInstalmentPaid",
-                                type: "number",
-                                title: "NO_OF_INSTALLMENT_PAID"
-                            },
-                            "frequencyOfInstallment": {
-                                key: "customer.liabilities[].frequencyOfInstallment",
-                                type: "select"
-                            },
-                            "liabilityLoanPurpose": {
-                                key: "customer.liabilities[].liabilityLoanPurpose",
-                                /*type:"select",
-                                 enumCode: "loan_purpose_1"*/
-                            },
-                            "interestOnly": {
-                                key: "customer.liabilities[].interestOnly",
-                                type: "radios",
-                                title: "INTEREST_ONLY",
-                                enumCode: "decisionmaker"
-                            },
-                            "interestRate": {
-                                key: "customer.liabilities[].interestRate",
-                                type: "number",
-                                title: "RATE_OF_INTEREST"
-                            },
-                            "proofDocuments": {
-                                key: "customer.liabilities[].proofDocuments",
-                                title: "DOCUMENTS",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner"
-                            }
-
-                            /*{
-                             key:"customer.liabilities[].interestExpense",
-                             title:"INTEREST_EXPENSE"
-                             },
-                             {
-                             key:"customer.liabilities[].principalExpense",
-                             title:"PRINCIPAL_EXPENSE"
-                             }*/
-                        }
-                    }
-                }
-            },
-
-            "enterpriseAssets": {
-                type: "box",
-                title: "ASSET_DETAILS",
-
-                items: {
-                    "enterpriseAssets": {
-                        key: "customer.enterpriseAssets",
-                        type: "array",
-                        startEmpty: true,
-                        title: "VEHICLE_INFORMATION",
-                        items: {
-                            "assetType": {
-                                key: "customer.enterpriseAssets[].assetType",
-                                orderNo: 10,
-                                type: "select"
-                            },
-                            "endUse": {
-                                key: "customer.enterpriseAssets[].endUse",
-                                orderNo: 20,
-                            },
-                            //"customer.liabilities[].instituteName",
-                            "natureOfUse": {
-                                key: "customer.enterpriseAssets[].natureOfUse",
-                                orderNo: 30,
-                            },
-                            "manufacturer": {
-                                key: "customer.enterpriseAssets[].manufacturer",
-                                orderNo: 40,
-                            },
-                            "make": {
-                                key: "customer.enterpriseAssets[].make",
-                                orderNo: 50,
-                            },
-                            "assetCategory": {
-                                key: "customer.enterpriseAssets[].assetCategory",
-                                orderNo: 60,
-                            },
-                            "vehicleMakeModel": {
-                                key: "customer.enterpriseAssets[].vehicleMakeModel",
-                                orderNo: 70,
-                            },
-                            "manufactureDate": {
-                                key: "customer.enterpriseAssets[].manufactureDate",
-                                orderNo: 80,
-                                type: "date"
-                            },
-                            "details": {
-                                key: "customer.enterpriseAssets[].details",
-                                orderNo: 90,
-                                type: "select",
-                                enumCode: "business_asset_description"
-                            },
-                            "subDetails": {
-                                key: "customer.enterpriseAssets[].subDetails",
-                                orderNo: 100,
-                                type: "select"
-                            },
-                            "assetregistrationNumber": {
-                                key: "customer.enterpriseAssets[].assetregistrationNumber",
-                                orderNo: 110,
-                            },
-                            "valueOfAsset": {
-                                key: "customer.enterpriseAssets[].valueOfAsset",
-                                orderNo: 120,
-                            }
-                        }
-                    }
-                }
-            },
-            "bankAccounts": {
-                type: "box",
-                title: "BANK_ACCOUNTS",
-                items: {
-                    "customerBankAccounts": {
-                        key: "customer.customerBankAccounts",
-                        type: "array",
-                        title: "BANK_ACCOUNTS",
-                        startEmpty: true,
-                        onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
-                            modelValue.bankStatements = [];
-                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
-                            var noOfMonthsToDisplay = 6;
-                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
-                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
-                                modelValue.bankStatements.push({
-                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
-                                });
-                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
-                            }
-                        },
-                        items: {
-                            "ifscCode": {
-                                key: "customer.customerBankAccounts[].ifscCode",
-                                type: "lov",
-                                lovonly: true,
-                                required: true,
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "customer.customerBankAccounts[].ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "customer.customerBankAccounts[].customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
-                                    }
-                                },
-                                outputMap: {
-                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
-                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
-                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
-                                },
-                                searchHelper: formHelper,
-                                search: function (inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
-                                },
-                                getListDisplayItem: function (data, index) {
-                                    return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
-                                    ];
-                                }
-                            },
-                            "customerBankName": {
-                                key: "customer.customerBankAccounts[].customerBankName",
-                                required: true,
-                                readonly: true
-                            },
-                            "customerBankBranchName": {
-                                key: "customer.customerBankAccounts[].customerBankBranchName",
-                                required: true,
-                                readonly: true
-                            },
-                            "customerNameAsInBank": {
-                                key: "customer.customerBankAccounts[].customerNameAsInBank"
-                            },
-                            "accountNumber": {
-                                key: "customer.customerBankAccounts[].accountNumber",
-                                type: "password",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
-                            "confirmedAccountNumber": {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
-                            "accountType": {
-                                key: "customer.customerBankAccounts[].accountType",
-                                type: "select"
-                            },
-                            "bankingSince": {
-                                key: "customer.customerBankAccounts[].bankingSince",
-                                type: "date",
-                                title: "BANKING_SINCE"
-                            },
-                            "netBankingAvailable": {
-                                key: "customer.customerBankAccounts[].netBankingAvailable",
-                                type: "select",
-                                title: "NET_BANKING_AVAILABLE",
-                                enumCode: "decisionmaker"
-                            },
-                            "sanctionedAmount": {
-                                key: "customer.customerBankAccounts[].sanctionedAmount",
-                                condition: "model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
-                                type: "amount",
-                                required: true,
-                                title: "OUTSTANDING_BALANCE"
-                            },
-                            "limit": {
-                                key: "customer.customerBankAccounts[].limit",
-                                type: "amount"
-                            },
-                            "bankStatementDocId": {
-                                key: "customer.customerBankAccounts[].bankStatementDocId",
-                                type: "file",
-                                title: "BANK_STATEMENT_UPLOAD",
-                                fileType: "application/pdf",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            },
-                            "bankStatements": {
-                                key: "customer.customerBankAccounts[].bankStatements",
-                                type: "array",
-                                title: "STATEMENT_DETAILS",
-                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
-                                titleExprLocals: {moment: window.moment},
-                                startEmpty: true,
-                                items: {
-                                    "startMonth": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
-                                        type: "date",
-                                        title: "START_MONTH"
-                                    },
-                                    "totalDeposits": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
-                                        type: "amount",
-                                        calculator: true,
-                                        creditDebitBook: true,
-                                        onDone: function (result, model, context) {
-                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
-                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
-                                        },
-                                        title: "TOTAL_DEPOSITS"
-                                    },
-                                    "totalWithdrawals": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
-                                        type: "amount",
-                                        title: "TOTAL_WITHDRAWALS"
-                                    },
-                                    "balanceAsOn15th": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
-                                        type: "amount",
-                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
-                                    },
-                                    "noOfChequeBounced": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
-                                        type: "amount",
-                                        //maximum:99,
-                                        required: true,
-                                        title: "NO_OF_CHEQUE_BOUNCED"
-                                    },
-                                    "noOfEmiChequeBounced": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
-                                        type: "amount",
-                                        required: true,
-                                        //maximum:99,
-                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                                    },
-                                    "bankStatementPhoto": {
-                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
-                                        type: "file",
-                                        required: true,
-                                        title: "BANK_STATEMENT_UPLOAD",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    },
-                                }
-                            },
-                            "isDisbersementAccount": {
-                                key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "radios",
-                                titleMap: [{
-                                    value: true,
-                                    name: "Yes"
-                                }, {
-                                    value: false,
-                                    name: "No"
-                                }]
-                            }
-                        }
-                    }
-                }
-            },
         };
 
         formRepository['crAppraisal'] = {
@@ -6916,7 +6482,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         if (_defn.items) {
 
                             _items = _.merge({}, _defn.items);
-                            _defn.items = [];
+
+                            if (_defn.itemAdditions){
+                                _defn.items = _defn.itemAdditions;
+                            } else {
+                                _defn.items = [];
+                            }
 
                             constructForm(_items, _defn.items, _key, true);
                         }
@@ -6950,8 +6521,17 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 transformedItems.push(tmp);
                             }
                         } else if (_.isObject(items[i])){
+
                             if(items[i].items) {
                                 items[i].items = processItems(items[i].items);
+                            }
+
+                            if (items[i].targetID) {
+                                tmp = getPropertyFromFormRepo(items[i].targetID);
+                                if (tmp.items){
+                                    tmp.itemAdditions = tmp.itemAdditions || [];
+                                    tmp.itemAdditions = _.concat([], items[i].items);
+                                }
                             }
                             transformedItems.push(items[i]);
                         }
@@ -6965,6 +6545,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 }
 
                 constructForm(formRepo, form, undefined, true);
+
                 _.forEach(resolvers, function(val, key) {
                     var resolver = val.resolver;
                     var pageDefPath = "perdix/ui/configresolver/" + val.item.type + "/" + resolver;

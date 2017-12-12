@@ -306,39 +306,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
-                    "new-enrolment": function(pageObj, bundleModel, params){
-                        switch (pageObj.pageClass){
-                            case 'applicant':
-                                $log.info("New applicant");
-                                bundleModel.applicant = params.customer;
-                                BundleManager.broadcastEvent("new-applicant", params);
-                                break;
-                            case 'co-applicant':
-                                $log.info("New co-applicant");
-                                if (!_.hasIn(bundleModel, 'coApplicants')) {
-                                    bundleModel.coApplicants = [];
-                                }
-                                BundleManager.broadcastEvent("new-co-applicant", params);
-                                bundleModel.coApplicants.push(params.customer);
-                                break;
-                            case 'guarantor':
-                                $log.info("New guarantor");
-                                if (!_.hasIn(bundleModel, 'guarantors')){
-                                    bundleModel.guarantors = [];
-                                }
-                                bundleModel.guarantors.push(params.guarantor);
-                                BundleManager.broadcastEvent('new-guarantor', params);
-                                break;
-                            case 'business':
-                                $log.info("New Business Enrolment");
-                                bundleModel.business = params.customer;
-                                BundleManager.broadcastEvent("new-business", params);
-                                break;
-                            default:
-                                $log.info("Unknown page class");
-                                break;
-
-                        }
+                    "applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("applicant-updated", obj);
                     },
                     "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
                         if (enrolmentDetails.customerId){

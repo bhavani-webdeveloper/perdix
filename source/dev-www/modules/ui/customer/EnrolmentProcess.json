@@ -1,0 +1,326 @@
+{
+    "BusinessInformation": {
+        "type": "box",
+        "title": "BUSINESS_INFORMATION",
+        "orderNo": 20,
+        "items": {
+            "firstName": {
+                "key": "customer.firstName",
+                "title":"ENTITY_NAME"
+            }
+        }
+    },
+    "BusinessLiabilities": {
+        "type": "box",
+        "title": "BUSINESS_LIABILITIES",
+        "orderNo": 200,
+        "items": {
+            "liabilities": {
+                "key": "customer.liabilities",
+                "type": "array",
+                "startEmpty": true,
+                "title": "LIABILITIES",
+                "items": {
+                    "loanType": {
+                        "key": "customer.liabilities[].loanType",
+                        "type": "select",
+                        "enumCode": "liability_loan_type"
+                    },
+                    "loanSource": {
+                        "key": "customer.liabilities[].loanSource",
+                        "type": "select",
+                        "enumCode": "loan_source"
+                    },
+                    "loanAmountInPaisa": {
+                        "key": "customer.liabilities[].loanAmountInPaisa",
+                        "type": "amount"
+                    },
+                    "installmentAmountInPaisa": {
+                        "key": "customer.liabilities[].installmentAmountInPaisa",
+                        "type": "amount"
+                    },
+                    "outstandingAmountInPaisa": {
+                        "key": "customer.liabilities[].outstandingAmountInPaisa",
+                        "type": "amount",
+                        "title": "OUTSTANDING_AMOUNT"
+                    },
+                    "startDate": {
+                        "key": "customer.liabilities[].startDate",
+                        "type": "date"
+                    },
+                    "maturityDate": {
+                        "key": "customer.liabilities[].maturityDate",
+                        "type": "date"
+                    },
+                    "noOfInstalmentPaid": {
+                        "key": "customer.liabilities[].noOfInstalmentPaid",
+                        "type": "number",
+                        "title": "NO_OF_INSTALLMENT_PAID"
+                    },
+                    "frequencyOfInstallment": {
+                        "key": "customer.liabilities[].frequencyOfInstallment",
+                        "type": "select"
+                    },
+                    "liabilityLoanPurpose": {
+                        "key": "customer.liabilities[].liabilityLoanPurpose"
+                    },
+                    "interestOnly": {
+                        "key": "customer.liabilities[].interestOnly",
+                        "type": "radios",
+                        "title": "INTEREST_ONLY",
+                        "enumCode": "decisionmaker"
+                    },
+                    "interestRate": {
+                        "key": "customer.liabilities[].interestRate",
+                        "type": "number",
+                        "title": "RATE_OF_INTEREST"
+                    },
+                    "proofDocuments": {
+                        "key": "customer.liabilities[].proofDocuments",
+                        "title": "DOCUMENTS",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    }
+                }
+            }
+        }
+    },
+    "EnterpriseAssets": {
+        "type": "box",
+        "title": "ASSET_DETAILS",
+        "orderNo": 400,
+        "items": {
+            "enterpriseAssets": {
+                "key": "customer.enterpriseAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "VEHICLE_INFORMATION",
+                "items": {
+                    "assetType": {
+                        "key": "customer.enterpriseAssets[].assetType",
+                        "orderNo": 10,
+                        "type": "select"
+                    },
+                    "endUse": {
+                        "key": "customer.enterpriseAssets[].endUse",
+                        "orderNo": 20
+                    },
+                    "natureOfUse": {
+                        "key": "customer.enterpriseAssets[].natureOfUse",
+                        "orderNo": 30
+                    },
+                    "manufacturer": {
+                        "key": "customer.enterpriseAssets[].manufacturer",
+                        "orderNo": 40
+                    },
+                    "make": {
+                        "key": "customer.enterpriseAssets[].make",
+                        "orderNo": 50
+                    },
+                    "assetCategory": {
+                        "key": "customer.enterpriseAssets[].assetCategory",
+                        "orderNo": 60
+                    },
+                    "vehicleMakeModel": {
+                        "key": "customer.enterpriseAssets[].vehicleMakeModel",
+                        "orderNo": 70
+                    },
+                    "manufactureDate": {
+                        "key": "customer.enterpriseAssets[].manufactureDate",
+                        "orderNo": 80,
+                        "type": "date"
+                    },
+                    "details": {
+                        "key": "customer.enterpriseAssets[].details",
+                        "orderNo": 90,
+                        "type": "select",
+                        "enumCode": "business_asset_description"
+                    },
+                    "subDetails": {
+                        "key": "customer.enterpriseAssets[].subDetails",
+                        "orderNo": 100,
+                        "type": "select"
+                    },
+                    "assetregistrationNumber": {
+                        "key": "customer.enterpriseAssets[].assetregistrationNumber",
+                        "orderNo": 110
+                    },
+                    "valueOfAsset": {
+                        "key": "customer.enterpriseAssets[].valueOfAsset",
+                        "orderNo": 120
+                    }
+                }
+            }
+        }
+    },
+    "BankAccounts": {
+        "type": "box",
+        "title": "BANK_ACCOUNTS",
+        "orderNo": 500,
+        "items": {
+            "customerBankAccounts": {
+                "key": "customer.customerBankAccounts",
+                "type": "array",
+                "title": "BANK_ACCOUNTS",
+                "startEmpty": true,
+                "items": {
+                    "ifscCode": {
+                        "key": "customer.customerBankAccounts[].ifscCode",
+                        "type": "lov",
+                        "lovonly": true,
+                        "required": true,
+                        "inputMap": {
+                            "ifscCode": {
+                                "key": "customer.customerBankAccounts[].ifscCode"
+                            },
+                            "bankName": {
+                                "key": "customer.customerBankAccounts[].customerBankName"
+                            },
+                            "branchName": {
+                                "key": "customer.customerBankAccounts[].customerBankBranchName"
+                            }
+                        },
+                        "outputMap": {
+                            "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                            "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                            "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
+                        },
+                        "searchHelper": {
+                            "newOffline": {}
+                        }
+                    },
+                    "customerBankName": {
+                        "key": "customer.customerBankAccounts[].customerBankName",
+                        "required": true,
+                        "readonly": true
+                    },
+                    "customerBankBranchName": {
+                        "key": "customer.customerBankAccounts[].customerBankBranchName",
+                        "required": true,
+                        "readonly": true
+                    },
+                    "customerNameAsInBank": {
+                        "key": "customer.customerBankAccounts[].customerNameAsInBank"
+                    },
+                    "accountNumber": {
+                        "key": "customer.customerBankAccounts[].accountNumber",
+                        "type": "password",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "confirmedAccountNumber": {
+                        "key": "customer.customerBankAccounts[].confirmedAccountNumber",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "accountType": {
+                        "key": "customer.customerBankAccounts[].accountType",
+                        "type": "select"
+                    },
+                    "bankingSince": {
+                        "key": "customer.customerBankAccounts[].bankingSince",
+                        "type": "date",
+                        "title": "BANKING_SINCE"
+                    },
+                    "netBankingAvailable": {
+                        "key": "customer.customerBankAccounts[].netBankingAvailable",
+                        "type": "select",
+                        "title": "NET_BANKING_AVAILABLE",
+                        "enumCode": "decisionmaker"
+                    },
+                    "sanctionedAmount": {
+                        "key": "customer.customerBankAccounts[].sanctionedAmount",
+                        "condition": "model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
+                        "type": "amount",
+                        "required": true,
+                        "title": "OUTSTANDING_BALANCE"
+                    },
+                    "limit": {
+                        "key": "customer.customerBankAccounts[].limit",
+                        "type": "amount"
+                    },
+                    "bankStatementDocId": {
+                        "key": "customer.customerBankAccounts[].bankStatementDocId",
+                        "type": "file",
+                        "title": "BANK_STATEMENT_UPLOAD",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "using": "scanner"
+                    },
+                    "bankStatements": {
+                        "key": "customer.customerBankAccounts[].bankStatements",
+                        "type": "array",
+                        "title": "STATEMENT_DETAILS",
+                        "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                        "titleExprLocals": {},
+                        "startEmpty": true,
+                        "items": {
+                            "startMonth": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].startMonth",
+                                "type": "date",
+                                "title": "START_MONTH"
+                            },
+                            "totalDeposits": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].totalDeposits",
+                                "type": "amount",
+                                "calculator": true,
+                                "creditDebitBook": true,
+                                "title": "TOTAL_DEPOSITS"
+                            },
+                            "totalWithdrawals": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
+                                "type": "amount",
+                                "title": "TOTAL_WITHDRAWALS"
+                            },
+                            "balanceAsOn15th": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
+                                "type": "amount",
+                                "title": "BALENCE_AS_ON_REQUESTED_EMI_DATE"
+                            },
+                            "noOfChequeBounced": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
+                                "type": "amount",
+                                "required": true,
+                                "title": "NO_OF_CHEQUE_BOUNCED"
+                            },
+                            "noOfEmiChequeBounced": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
+                                "type": "amount",
+                                "required": true,
+                                "title": "NO_OF_EMI_CHEQUE_BOUNCED"
+                            },
+                            "bankStatementPhoto": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                "type": "file",
+                                "required": true,
+                                "title": "BANK_STATEMENT_UPLOAD",
+                                "fileType": "application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF",
+                                "using": "scanner"
+                            }
+                        }
+                    },
+                    "isDisbersementAccount": {
+                        "key": "customer.customerBankAccounts[].isDisbersementAccount",
+                        "type": "radios",
+                        "titleMap": [
+                            {
+                                "value": true,
+                                "name": "Yes"
+                            },
+                            {
+                                "value": false,
+                                "name": "No"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

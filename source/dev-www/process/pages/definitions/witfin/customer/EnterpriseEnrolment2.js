@@ -1,16 +1,19 @@
-define([], function() {
+define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+    EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
 
     return {
         pageUID: "witfin.customer.EnterpriseEnrolment2",
         pageType: "Engine",
         dependencies: ["$log", "$q","Enrollment","IrfFormRequestProcessor", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter", "$injector"],
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter", "$injector", "UIRepository"],
 
         $pageFn: function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector) {
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository) {
 
             var getIncludes = function (model) {
                 return [
+                    "BusinessInformation",
+                    "BusinessInformation.firstName",
                     "BusinessLiabilities",
                     "BusinessLiabilities.liabilities",
                     "BusinessLiabilities.liabilities.loanType",
@@ -26,30 +29,30 @@ define([], function() {
                     "BusinessLiabilities.liabilities.interestOnly",
                     "BusinessLiabilities.liabilities.interestRate",
                     "BusinessLiabilities.liabilities.proofDocuments",
-                    "enterpriseAssets",
-                    "enterpriseAssets.enterpriseAssets",
-                    "enterpriseAssets.enterpriseAssets.assetType",
-                    "enterpriseAssets.enterpriseAssets.endUse",
-                    "enterpriseAssets.enterpriseAssets.natureOfUse",
-                    "enterpriseAssets.enterpriseAssets.manufacturer",
-                    "enterpriseAssets.enterpriseAssets.make",
-                    "enterpriseAssets.enterpriseAssets.assetCategory",
-                    "enterpriseAssets.enterpriseAssets.vehicleMakeModel",
-                    "enterpriseAssets.enterpriseAssets.manufactureDate",
-                    "enterpriseAssets.enterpriseAssets.details",
-                    "enterpriseAssets.enterpriseAssets.subDetails",
-                    "enterpriseAssets.enterpriseAssets.assetregistrationNumber",
-                    "enterpriseAssets.enterpriseAssets.valueOfAsset",
-                    "bankAccounts",
-                    "bankAccounts.customerBankAccounts",
-                    "bankAccounts.customerBankAccounts.bankStatements",
-                    "bankAccounts.customerBankAccounts.bankStatements.startMonth",
-                    "bankAccounts.customerBankAccounts.bankStatements.totalDeposits",
-                    "bankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
-                    "bankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
-                    "bankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
-                    "bankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
-                    "bankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto"
+                    "EnterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets",
+                    "EnterpriseAssets.enterpriseAssets.assetType",
+                    "EnterpriseAssets.enterpriseAssets.endUse",
+                    "EnterpriseAssets.enterpriseAssets.natureOfUse",
+                    "EnterpriseAssets.enterpriseAssets.manufacturer",
+                    "EnterpriseAssets.enterpriseAssets.make",
+                    "EnterpriseAssets.enterpriseAssets.assetCategory",
+                    "EnterpriseAssets.enterpriseAssets.vehicleMakeModel",
+                    "EnterpriseAssets.enterpriseAssets.manufactureDate",
+                    "EnterpriseAssets.enterpriseAssets.details",
+                    "EnterpriseAssets.enterpriseAssets.subDetails",
+                    "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
+                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",
+                    "BankAccounts",
+                    "BankAccounts.customerBankAccounts",
+                    "BankAccounts.customerBankAccounts.bankStatements",
+                    "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto"
 
                 ];
             }
@@ -79,30 +82,63 @@ define([], function() {
                 "title": "ENTITY_ENROLLMENT",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    model.currentStage = bundleModel.currentStage;
-
-                    var branch = SessionStore.getBranch();
-                    var centres = SessionStore.getCentres();
-                    var centreName = [];
-                    var allowedCentres = [];
-                    if (centres && centres.length) {
-                        for (var i = 0; i < centres.length; i++) {
-                            centreName.push(centres[i].id);
-                            allowedCentres.push(centres[i]);
-                        }
+                    // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+                    if (bundlePageObj) {
+                        model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
 
+                    /* Setting data recieved from Bundle */
+                    model.loanCustomerRelationType = "Customer";
+                    model.currentStage = bundleModel.currentStage;
+                    /* End of setting data recieved from Bundle */
+
+
+                    /* Setting data for the form */
+                    model.customer = model.enrolmentProcess.customer;
+                    /* End of setting data for the form */
+
+                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
-                    var formRequest = {
-                        "overrides": "",
-                        "includes": getIncludes(model),
-                        "excludes": [
-                            "",
-                        ]
-                    };
-
-
-                    this.form = IrfFormRequestProcessor.getFormDefinition('EnterpriseEnrollment2', formRequest, configFile(), model);
+                    p1.then(function(repo){
+                        var formRequest = {
+                            "overrides": "",
+                            "includes": getIncludes(model),
+                            "excludes": [],
+                            "options": {
+                                "additions": [
+                                    {
+                                        "type": "actionbox",
+                                        "orderNo": 1000,
+                                        "items": [
+                                            {
+                                                "type": "submit",
+                                                "title": "SUBMIT"
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        "type": "box",
+                                        "orderNo": 1,
+                                        "title": "BUSINESS_INFORMATION",
+                                        "items": [
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "targetID": "BusinessInformation",
+                                        "items": [
+                                            {
+                                                "key": "customer.firstName2",
+                                                "title":"SHAHAL_NAME",
+                                                "orderNo": 10
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        };
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                    })
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index){
@@ -112,7 +148,39 @@ define([], function() {
                         item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
                     ]
                 },
-                eventListeners: {},
+                eventListeners: {
+                    "applicant-updated": function(bundleModel, model, params){
+                        $log.info("inside applicant-updated of EnterpriseEnrolment2");
+
+                        /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
+                        Queries.getEnterpriseCustomerId(params.customer.id)
+                            .then(function(response){
+                                if (!response || !response.customer_id){
+                                    return false;
+                                }
+
+                                if (response.customer_id == model.customer.id){
+                                    return false;
+                                }
+
+                                return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
+                            })
+                            .then(function(enrolmentProcess){
+                                if (!enrolmentProcess){
+                                    return;
+                                }
+                                $log.info("Inside customer loaded of applicant-updated");
+                                if (model.customer.id) {
+                                    model.loanProcess.removeRelatedEnrolmentProcess(model.customer.id, 'Customer');
+                                }
+                                model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+
+                                /* Setting for the current page */
+                                model.enrolmentProcess = enrolmentProcess;
+                                model.customer = enrolmentProcess.customer;
+                            })
+                    }
+                },
                 form: [
 
                 ],
@@ -131,44 +199,27 @@ define([], function() {
                         return deferred.promise;
                     },
                     save: function(model, formCtrl, formName){
-                        $log.info("Inside save()");
-                        formCtrl.scope.$broadcast('schemaFormValidate');
 
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-                            return false;
-                        }
-
-                        PageHelper.showProgress('enrolment','Saving..');
-                        EnrollmentHelper.saveData(reqData).then(function(resp){
-                            formHelper.resetFormValidityState(formCtrl);
-                            PageHelper.showProgress('enrolment', 'Done.', 5000);
-                            Utils.removeNulls(resp.customer, true);
-                            model.customer = resp.customer;
-                            if (model._bundlePageObj){
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                            }
-                        }, function(httpRes){
-                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(httpRes);
-                        });
                     },
                     submit: function(model, form, formName){
-                        $log.info("Inside submit()");
-                        $log.warn(model);
-                        PageHelper.showProgress('enrolment','Updating...', 2000);
-                        EnrollmentHelper.proceedData(reqData).then(function(resp){
-                            formHelper.resetFormValidityState(form);
-                            PageHelper.showProgress('enrolmet','Done.', 5000);
-                            Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
-                            if (model._bundlePageObj){
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                            }
-                        }, function(httpRes){
-                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                            PageHelper.showErrors(httpRes);
-                        });
+                        PageHelper.showLoader();
+                        var p1;
+                        if (!model.customer.id){
+                            p1 = model.enrolmentProcess.save().toPromise();
+                        }
+
+                        $q.when(p1)
+                            .then(function(){
+                                return model.enrolmentProcess.proceed()
+                                    .toPromise();
+
+                            })
+                            .then(function(response){
+
+                            })
+                            .finally(function(){
+
+                            })
                     }
                 }
             };

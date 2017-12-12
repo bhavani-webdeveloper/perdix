@@ -1,12 +1,13 @@
 
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {EnrolmentProcess} from "./EnrolmentProcess";
-import Customer = require("./Customer");
+
 import {Observable} from "@reactivex/rxjs";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {RxObservable} from "../../shared/RxObservable";
 import {plainToClass} from "class-transformer";
 import Utils = require("../../shared/Utils");
+import {Customer} from "./Customer";
 
 export class EnrolmentRepository implements IEnrolmentRepository {
 
@@ -21,9 +22,14 @@ export class EnrolmentRepository implements IEnrolmentRepository {
         return Observable.fromPromise(customerPromise);
     }
 
-    updateEnrollment(reqData: Object): Observable<EnrolmentProcess> {
-        let promise = this.enrolmentService.updateEnrollment(reqData).$promise;
-        return Observable.fromPromise(promise);
+    updateEnrollment(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
+        let promise = this.enrolmentService.updateEnrollment(enrolmentProcess).$promise;
+        return Observable.fromPromise(promise)
+            .map((obj: any) => {
+                let customer: Customer = <Customer>plainToClass<Customer, Object>(Customer, obj.customer);
+                _.merge(enrolmentProcess.customer, customer);
+                return enrolmentProcess;
+            });
     }
 
 }

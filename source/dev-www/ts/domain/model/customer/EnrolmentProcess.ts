@@ -40,7 +40,7 @@ export class EnrolmentProcess {
         this.enrollmentAction = 'SAVE';
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeSave', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.enrolmentRepo.updateEnrollment(this);
+        let obs2 = this.enrolmentRepo.updateEnrollment(this)
         let pmAfterUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'afterSave', EnrolmentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -50,7 +50,7 @@ export class EnrolmentProcess {
         this.enrollmentAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'beforeProceed', EnrolmentProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.enrolmentRepo.updateEnrollment(this);
+        let obs2 = this.enrolmentRepo.updateEnrollment(this)
         let pmAfterUpdate:PolicyManager<EnrolmentProcess>  = new PolicyManager(this, EnrolmentPolicyFactory.getInstance(), 'afterProceed', EnrolmentProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();

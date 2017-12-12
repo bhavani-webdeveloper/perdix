@@ -24,9 +24,11 @@ declare var loanProcessConfig: Object;
 export class LoanProcess {
     remarks: string;
     stage: string;
+    loanProcessAction: string;
     public loanAccount: LoanAccount;
     customer: Customer;
     individualLoanRepo: ILoanRepository;
+
 
     loanCustomerEnrolmentProcess: EnrolmentProcess;
     applicantEnrolmentProcess: EnrolmentProcess;
@@ -81,7 +83,55 @@ export class LoanProcess {
      *
      */
     public refreshRelatedCustomers(){
+        /* Loan customer */
+        if (_.hasIn(this.loanCustomerEnrolmentProcess, 'customer.id')) {
+            this.loanAccount.customerId = this.loanCustomerEnrolmentProcess.customer.id;
+            this.loanAccount.urnNo = this.loanCustomerEnrolmentProcess.customer.urnNo;
+        }
 
+        if (_.hasIn(this.applicantEnrolmentProcess, 'customer.id')) {
+            this.loanAccount.applicant = this.applicantEnrolmentProcess.customer.urnNo;
+
+            let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
+                return item.customerId == this.applicantEnrolmentProcess.customer.id;
+            });
+
+            if (aIndex == -1){
+                let lcr:LoanCustomerRelation = new LoanCustomerRelation();
+                lcr.customerId = this.applicantEnrolmentProcess.customer.id;
+                lcr.relation = LoanCustomerRelationTypes.APPLICANT;
+            }
+        }
+
+        for (let coApplicant:EnrolmentProcess of this.coApplicantsEnrolmentProcesses){
+
+            /* Need details on coBorrower */
+
+            let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
+                return item.customerId == coApplicant.customer.id;
+            });
+
+            if (aIndex == -1){
+                let lcr:LoanCustomerRelation = new LoanCustomerRelation();
+                lcr.customerId = coApplicant.customer.id;
+                lcr.relation = LoanCustomerRelationTypes.CO_APPLICANT;
+            }
+        }
+
+        for (let guarantor:EnrolmentProcess of this.guarantorsEnrolmentProcesses){
+
+            /* Need details on coBorrower */
+
+            let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
+                return item.customerId == guarantor.customer.id;
+            });
+
+            if (aIndex == -1){
+                let lcr:LoanCustomerRelation = new LoanCustomerRelation();
+                lcr.customerId = guarantor.customer.id;
+                lcr.relation = LoanCustomerRelationTypes.GUARANTOR;
+            }
+        }
     }
 
     /**
@@ -144,23 +194,14 @@ export class LoanProcess {
         return this;
     }
 
-    loanProcessAction(actionName: string): boolean {
-        switch (actionName) {
-            case "SAVE":
-                // var loanProcess = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess)
-                // loanProcess.createIndividualLoan();
-                return true;
-            default:
-                return false;
-        }
-    }
 
-    save(toStage: string): any {
+
+    save(): any {
         /* Calls all business policies associated with save */
-        this.stage = toStage;
+        this.loanProcessAction = "SAVE";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
+        let obs2 = this.individualLoanRepo.update(this);
         let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -169,9 +210,10 @@ export class LoanProcess {
     proceed(toStage: string): any {
         /* Calls all business policies assocaited with proceed */
         this.stage = toStage;
+        this.loanProcessAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeProceed', LeadProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.individualLoanRepo.updateIndividualLoan(this);
+        let obs2 = this.individualLoanRepo.update(this);
         let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterProceed', LeadProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();

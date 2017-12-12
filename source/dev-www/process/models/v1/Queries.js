@@ -202,7 +202,7 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        /* If partner code is passed, the Bank accounts of corresponding Partners alone will returned, else 
+        /* If partner code is passed, the Bank accounts of corresponding Partners alone will returned, else
            partner code is NOT PASSED then all the accounts eligible for LOAN REPAYMENT is returned.
          */
         resource.getBankAccountsByPartnerForLoanRepay = function(partnerCode) {
@@ -708,7 +708,22 @@ irf.models.factory('Queries', [
                 }
             }, deferred.reject);
             return deferred.promise;
-        }
+        };
+
+        resource.getEnterpriseCustomerId = function(individualCustomerId){
+            var deferred = $q.defer();
+            var request = {};
+            request.individualCustomerId = individualCustomerId;
+            resource.getResult("enterpriseCustomer", request)
+                .then(function(response){
+                    if (response && _.isArray(response.results) && response.results.length > 0) {
+                        deferred.resolve(response.results[0]);
+                    } else {
+                        deferred.resolve(null);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        };
 
 
         return resource;

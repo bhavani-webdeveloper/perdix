@@ -2,9 +2,11 @@ import { ILoanRepository } from './ILoanRepository';
 
 import { RxObservable as Ro} from '../../shared/RxObservable';
 
-import LoanProcess = require('./LoanProcess');
 import AngularResourceService = require('../../../infra/api/AngularResourceService');
 import {Observable} from "@reactivex/rxjs";
+import LoanAccount = require("./LoanAccount");
+import {plainToClass} from "class-transformer";
+import {LoanProcess} from "./LoanProcess";
 
 class LoanRepository implements ILoanRepository {
 
@@ -23,13 +25,17 @@ class LoanRepository implements ILoanRepository {
 		return Ro.fromPromise(this.individualLoanService.search().$promise);
 	}
 
-	createIndividualLoan(reqData: any): Observable<any> {
-
+	create(reqData: any): Observable<any> {
 		return Ro.fromPromise(this.individualLoanService.create(reqData).$promise);
 	}
 
-	updateIndividualLoan(reqData: any): Observable<any> {
-		return Ro.fromPromise(this.individualLoanService.update(reqData).$promise);
+	update(loanProcess: LoanProcess): Observable<any> {
+		return Ro.fromPromise(this.individualLoanService.update(loanProcess).$promise)
+            .map((obj:any) => {
+                let loanAccount:LoanAccount = <LoanAccount>plainToClass<LoanAccount, Object>(LoanAccount, obj.loanAccount);
+                _.merge(loanProcess.loanAccount, loanAccount);
+                return loanProcess;
+            });
 	}
 
 	closeIndividualLoan(): Observable<any> {

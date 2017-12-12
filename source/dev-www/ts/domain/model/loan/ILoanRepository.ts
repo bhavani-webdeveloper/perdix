@@ -7,8 +7,8 @@ export interface ILoanRepository {
 	getIndividualLoan(id: number): Observable<any>;
 
 	searchIndividualLoan(): Observable<any>;
-	createIndividualLoan(reqData: any): Observable<any>;
-	updateIndividualLoan(reqData: any): Observable<any>;
+	create(reqData: any): Observable<any>;
+	update(reqData: any): Observable<any>;
 	closeIndividualLoan(): Observable<any>;
 	getLoanDefinition(): Observable<any>;
 	loanDisburse(): Observable<any>;

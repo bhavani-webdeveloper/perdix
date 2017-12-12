@@ -8,6 +8,10 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getLoanProcessUIRepository: {
             method: 'GET',
             url: 'modules/ui/loan/LoanProcess.json'
+        },
+        getEnrolmentProcessUIRepository: {
+            method: "GET",
+            url: 'modules/ui/customer/EnrolmentProcess.json'
         }
 
     });

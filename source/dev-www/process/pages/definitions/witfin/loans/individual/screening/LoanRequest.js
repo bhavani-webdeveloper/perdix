@@ -96,6 +96,9 @@ define([],function(){
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
 
+                    /* Setting data recieved from Bundle */
+                    model.loanAccount = model.loanProcess.loanAccount;
+
                     self = this;
                     var formRequest = {
                         "overrides": "",
