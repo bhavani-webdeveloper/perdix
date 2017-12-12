@@ -10,9 +10,6 @@ define({
 			initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
 				model.bundlePageObj = bundlePageObj;
 				model.bundleModel = bundleModel;
-				model.custom_fields = {
-					'bank_fields': {}
-				};
 			},
 			form: [{
 				"type": "section",
@@ -29,56 +26,52 @@ define({
 				"colClass": "col-sm-12",
 				"items": [{
 					type: "tableview",
-					key: "summary.cashFlowDetails.data",
+					key: "summary.cashFlowDetails.invoiceCash.tableData",
 					title: "Invoice Vs Cash",
 					transpose: true,
 					getColumns: function() {
 						return [{
-							"title": "  ",
-							"data": "Month",
+							"title": "Month",
+							"data": "month",
 							render: function(data, type, full, meta) {
-								if (data) return '<strong>'+data+'</strong>';
-								if (_.isObject(full.data)) {
-									if (full.data[this.data] == 'Avg. Total By Buyer') {
-										full.data[this.data] = 'Average';
-									}
-									return '<strong>'+full.data[this.data]+'</strong>';
-								}
+								return '<strong>'+data+'</strong>';
 							}
 						}, {
 							"title": "Invoice",
-							"data": "Invoice Sales Amount",
-							render: function(data, type, full, meta) {
-								if (data) return irfCurrencyFilter(data);
-								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
-								else return irfCurrencyFilter('0');
+							"data": "invoice",
+							"render": function(data, type, full, meta) {
+								return irfCurrencyFilter(data);
 							}
 						}, {
 							"title": "Cash",
-							"data": "Cash Sales Amount",
-							render: function(data, type, full, meta) {
-								if (data) return irfCurrencyFilter(data);
-								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
-								else return irfCurrencyFilter('0');
+							"data": "cash",
+							"render": function(data, type, full, meta) {
+								return irfCurrencyFilter(data);
 							}
 						}, {
 							"title": "Scrap",
-							"data": "Revenue from Scrap Amount",
-							render: function(data, type, full, meta) {
-								if (data) return irfCurrencyFilter(data);
-								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
-								else return irfCurrencyFilter('0');
+							"data": "scrap",
+							"render": function(data, type, full, meta) {
+								return irfCurrencyFilter(data);
 							}
 						}, {
 							"title": "Total",
-							"data": "Revenue from Sales Amount",
-							render: function(data, type, full, meta) {
-								if (data) return irfCurrencyFilter(data);
-								if (_.isObject(full.data)) return irfCurrencyFilter(full.data[this.data] || '0');
-								else return irfCurrencyFilter('0');
+							"data": "total",
+							"render": function(data, type, full, meta) {
+								return irfCurrencyFilter(data);
 							}
 						}];
 					}
+				}, {
+					"type": "section",
+					"html": `
+<div class="">
+	<nvd3
+		data="model.summary.cashFlowDetails.graphData"
+		options="model.summary.cashFlowDetails.graphOptions"
+		config="{refreshDataOnly:true, deepWatchData: false}"
+	></nvd3>
+</div>`
 				}]
 			}, {
 				"type": "box",
@@ -107,7 +100,7 @@ define({
 						"type": "grid",
 						"orientation": "vertical",
 						"items": [{
-							"key": "custom_fields.bank_fields.total_avg_Deposit",
+							"key": "bankAccountSummary.total_avg_deposit",
 							"title": "Average Monthly Deposit"
 						}, {
 							"key": "",
@@ -120,13 +113,13 @@ define({
 						"type": "grid",
 						"orientation": "vertical",
 						"items": [{
-							"key": "custom_fields.bank_fields.toal_account",
+							"key": "bankAccountSummary.total_account",
 							"title": "Total no of Account"
 						}, {
-							"key": "custom_fields.bank_fields.tot_checque_bounce",
+							"key": "bankAccountSummary.total_cheque_bounces",
 							"title": "Total no of Cheque Bounce"
 						}, {
-							"key": "custom_fields.bank_fields.tot_EMI_bounce",
+							"key": "bankAccountSummary.total_EMI_bounces",
 							"title": "Total no EMI Bounce"
 						}]
 					}]
@@ -134,7 +127,7 @@ define({
 					"type": "section",
 					"items": [{
 						"type": "tableview",
-						"key": "bankAccountDetails.BankAccounts",
+						"key": "bankAccounts",
 						"title": "",
 						"selectable": false,
 						"transpose": true,
@@ -198,7 +191,7 @@ define({
 					"type": "section",
 					"items": [{
 						"type": "tableview",
-						"key": "business_bank_statement.data",
+						"key": "businessBankStmtSummary",
 						"title": "",
 						"selectable": false,
 						"transpose": true,
@@ -249,32 +242,32 @@ define({
 						'</colgroup>' +
 						'<tbody>' +
 						'<tr ng-style = "{\'font-weight\': \'bold\'}"><td></td><td></td><td>{{"AMOUNT" | translate}}</td><td>{{"Total" | translate}}</td><td></td></tr>' +
-						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"INCOME" | translate}}</td><td></td><td></td><td>{{model.pl.business.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>' +
-						'<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | irfCurrency}}</td><td></td> <td>{{model.pl.business.invoicePCT}}</td> </tr>' +
-						'<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | irfCurrency}}</td><td></td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>' +
-						'<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | irfCurrency}}</td><td></td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>' +
+						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"INCOME" | translate}}</td><td></td><td></td><td>{{model.businessPL.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>' +
+						'<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.businessPL.invoice | irfCurrency}}</td><td></td> <td>{{model.businessPL.invoicePCT}}</td> </tr>' +
+						'<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.businessPL.cashRevenue | irfCurrency}}</td><td></td> <td>{{model.businessPL.cashRevenuePCT}}</td> </tr>' +
+						'<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.businessPL.scrapIncome | irfCurrency}}</td><td></td> <td>{{model.businessPL.scrapIncomePCT }}</td> </tr>' +
 						'<tr class="dotted"> <th></th> <th></th> <th></th> <th></th> <th></th> </tr>' +
-						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"PURCHASES" | translate}}</td><td></td><td></td><td>{{model.pl.business.purchases | irfCurrency}}</td><td></td></tr>' +
+						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"PURCHASES" | translate}}</td><td></td><td></td><td>{{model.businessPL.purchases | irfCurrency}}</td><td></td></tr>' +
 
 						'<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.p1.business.purchase_invoice | irfCurrency}}</td><td></td> <td></td><td>{{model.p1.business.purchase_invoice_pct}}</td> </tr>' +
 						'<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.p1.business.purchase_cash | irfCurrency}}</td><td></td><td></td> <td>{{model.p1.business.purchase_cash_pct}}</td> </tr>' +
 
-						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | irfCurrency}}</td> <td></td> </tr>' +
-						'<tr ng-repeat="items in model._opex.data"><td></td><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td></td><td>{{items["% of Avg Monthly Revenue"]}}</td></tr>' +
+						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.businessPL.Opex | irfCurrency}}</td> <td></td> </tr>' +
+						'<tr ng-repeat="items in model._opex"><td></td><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td></td><td>{{items["% of Avg Monthly Revenue"]}}</td></tr>' +
 
-						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <th>{{"TOTAL EXPANSES" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | irfCurrency}}</th> <th></th> </tr>' +
-						'<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | irfCurrency}}</strong></td><td></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>' +
+						'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <th>{{"TOTAL EXPANSES" | translate}}</th> <th></th> <th>{{model.businessPL.grossIncome | irfCurrency}}</th> <th></th> </tr>' +
+						'<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.businessPL.EBITDA | irfCurrency}}</strong></td><td></td> <td>{{model.businessPL.EBITDA_PCT }}</td> </tr>' +
 						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></th> <th></th> <th></th> </tr>' +
-						'<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> <td></td> </tr>' +
+						'<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.businessPL.businessLiabilities | irfCurrency}}</td> <td></td> </tr>' +
 						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"><td>{{"NET INCOME"}}</td><td></td><td></td><td></td><td></td></tr>' +
-						'<tr> <td></td><td>{{"NET_INCOME" | translate}}</td> <td>{{model.pl.business.netIncome | irfCurrency}}</td> <td></td><td></td> </tr>' +
+						'<tr> <td></td><td>{{"NET_INCOME" | translate}}</td> <td>{{model.businessPL.netIncome | irfCurrency}}</td> <td></td><td></td> </tr>' +
 
 						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"><td>{{"HOUSEHOLD NET INCOME"}}</td><td></td><td></td><td></td><td></td></tr>' +
-						'<tr> <td></td><td>{{"HOUSEHOLD NET INCOME" | translate}}</td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td><td></td><td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>' +
+						'<tr> <td></td><td>{{"HOUSEHOLD NET INCOME" | translate}}</td><td>{{model.businessPL.netBusinessIncome | irfCurrency}}</td><td></td><td>{{model.businessPL.netBusinessIncomePCT }}</td> </tr>' +
 
 						'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"KINARA_EMI" | translate}}</td><td></td><td></td> <td></td> </tr>' +
 
-						'<tr><td></td><td>Kinara EMI</td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td><td></td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>' +
+						'<tr><td></td><td>Kinara EMI</td><td>{{model.businessPL.finalKinaraEmi | irfCurrency}}</td><td></td> <td>{{model.businessPL.finalKinaraEmiPCT }}</td> </tr>' +
 						'</tbody>' +
 						'</table>'
 				}]
@@ -318,96 +311,160 @@ define({
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {
-					var cashFlowDetails = _.cloneDeep(params[15]);
-					cashFlowDetails.data.pop();
+					model.cashflowDetails = params[15].data;
+					var invoiceCashTableData = [];
+					var invoiceCashGraphData = [{
+						"key": "Invoice",
+						"color": "midnightblue",
+						"values": []
+					}, {
+						"key": "Cash",
+						"color": "firebrick",
+						"values": []
+					}, {
+						"key": "Scrap",
+						"color": "limegreen",
+						"values": []
+					}];
+					for (i = 0; i < model.cashflowDetails.length - 1; i++) {
+						var d = model.cashflowDetails[i];
+						var x = {};
+						if (_.isObject(d.data)) {
+							if (d.data["Month"] == "Avg. Total By Buyer") {
+								x.month = "Average";
+							} else {
+								x.month = d.data["Month"];
+							}
+							x.invoice = d.data["Invoice Sales Amount"] || 0;
+							x.cash = d.data["Cash Sales Amount"] || 0;
+							x.scrap = d.data["Revenue from Scrap Amount"] || 0;
+							x.total = d.data["Revenue from Sales Amount"] || 0;
+						} else {
+							x.month = d["Month"];
+							x.invoice = d["Invoice Sales Amount"] || 0;
+							x.cash = d["Cash Sales Amount"] || 0;
+							x.scrap = d["Revenue from Scrap Amount"] || 0;
+							x.total = d["Revenue from Sales Amount"] || 0;
+							invoiceCashGraphData[0].values.push({
+								"x": x.month,
+								"y": x.invoice,
+								"series": 0
+							});
+							invoiceCashGraphData[1].values.push({
+								"x": x.month,
+								"y": x.cash,
+								"series": 1
+							});
+							invoiceCashGraphData[2].values.push({
+								"x": x.month,
+								"y": x.scrap,
+								"series": 2
+							});
+						}
+						invoiceCashTableData.push(x);
+					}
+					var buyerSummaryTableData = [];
+					var buyerSummaryGraphData = [];
+					_.forOwn(model.cashflowDetails[model.cashflowDetails.length - 1].data, function(v, k) {
+						for (i in model.cashflowDetails)
+						if (k == "Month") {
+							//
+						} else {
+
+						}
+					});
 					model.summary = {
-						cashFlowDetails: cashFlowDetails,
-						bankAccountDetails: params[10],
-						businessBankStmtSummary: params[16],
-						businessPL: params[8]
+						"cashFlowDetails": {
+							"invoiceCash": {
+								"tableData": invoiceCashTableData,
+								"graphData": invoiceCashGraphData,
+								"graphOptions": {
+									"chart": {
+										"type": "multiBarChart",
+										"height": 250,
+										"duration": 500,
+										"stacked": false
+									}
+								}
+							},
+							"buyerSummary": {
+								"tableData": buyerSummaryTableData,
+								"graphData": buyerSummaryGraphData,
+								"graphOptions": {
+									"chart": {
+										"type": "pieChart",
+										"height": 250,
+										"duration": 500,
+										"stacked": false
+									}
+								}
+							}
+						}
 					};
 
+					model.businessBankStmtSummary = params[16].data;
+					model._opex = params[21].data;
 
-					model.cashFlowDetails = params[15];
-					model.bankAccountDetails = params[10];
-					model.business_bank_statement = params[16];
-					model.businessPL = params[8];
-					model.purchaseDetails = params[18];
-					model._opex = params[21];
-					model.balanceSheet = params[9];
-
-					/*Bank Account Fielsa*/
-					model.custom_bank_statement = [];
-					model.custom_fields.bank_fields.total_avg_Deposit = 0;
-					model.custom_fields.bank_fields.toal_account = model.bankAccountDetails.BankAccounts.length;
-
-					model.custom_fields.bank_fields.total_avg_withdrawals = 0;
-					model.custom_fields.bank_fields.avg_bal_EMI_date;
-					model.custom_fields.bank_fields.tot_checque_bounce = 0;
-					model.custom_fields.bank_fields.tot_EMI_bounce = 0;
-					_.each(model.bankAccountDetails.BankAccounts, function(account) {
-						model.custom_fields.bank_fields.total_avg_Deposit += account['Average Bank Deposit'];
-						model.custom_fields.bank_fields.tot_checque_bounce += account['Total Cheque Bounced(Non EMI)'];
-						model.custom_fields.bank_fields.tot_EMI_bounce += account['Total EMI Bounced'];
+					model.bankAccounts = params[10].BankAccounts;
+					model.bankAccountSummary = {
+						"total_avg_deposit": 0;
+						"total_account": model.bankAccounts.length;
+						"total_avg_withdrawals": 0;
+						"total_cheque_bounces": 0;
+						"total_EMI_bounces": 0;
+					};
+					_.each(model.bankAccounts, function(account) {
+						model.bankAccountSummary.total_avg_deposit += account['Average Bank Deposit'];
+						model.bankAccountSummary.total_cheque_bounces += account['Total Cheque Bounced(Non EMI)'];
+						model.bankAccountSummary.total_EMI_bounces += account['Total EMI Bounced'];
 					});
 
-
-					model.pl = {
-						business: {}
+					var bpl = params[8].data[0];
+					model.businessPL = {
+						"scrapIncome": bpl['Scrap or any business related income'];
+						"scrapIncomePCT": bpl['Scrap or any business related income pct'];
+						"totalBusinessIncome": bpl['Total Business Revenue'];
+						"purchases": bpl['Purchases'];
+						"purchasesPCT": bpl['Purchases pct'];
+						"grossIncome": bpl['Gross Income'];
+						"Opex": bpl['Opex'];
+						"EBITDA": bpl['EBITDA'];
+						"EBITDA_PCT": bpl['EBITDA pct'];
+						"businessLiabilities": bpl['Business Liabilities'];
+						"netBusinessIncome": bpl['Net Business Income'];
+						"netBusinessIncomePCT": bpl['Net Business Income pct'];
+						"kinaraEmi": bpl['Kinara EMI'];
+						"kinaraEmiPCT": bpl['Kinara EMI pct'];
+						"netIncome": bpl['Net Income'];
+						"finalKinaraEmi": bpl['Final Kinara EMI'];
+						"finalKinaraEmiPCT": bpl['Final Kinara EMI pct'];
 					};
-					/*
-										model.p1.business.purchase_invoice=model.purchaseDetails.data[0]['Invoice Sales Amount'];
-										model.p1.business.purchase_invoice_pct=model.purchaseDetails.data[0]['Invoice (%)'];
-										model.p1.business.purchase_cash=model.purchaseDetails.data[0]['Cash Sales Amount'];
-										model.p1.business.purchase_cash_pct=model.purchaseDetails.data[0]['Cash (%)'];*/
-					model.pl.business.invoice /*= model.businessPL.data[0]['Invoice']*/ ;
-					model.pl.business.invoicePCT /*= model.businessPL.data[0]['Invoice pct']*/ ;
-					model.pl.business.cashRevenue /*= model.businessPL.data[0]['Cash']*/ ;
-					model.pl.business.cashRevenuePCT /*= model.businessPL.data[0]['Cash pct']*/ ;
-					model.pl.business.scrapIncome = model.businessPL.data[0]['Scrap or any business related income'];
-					model.pl.business.scrapIncomePCT = model.businessPL.data[0]['Scrap or any business related income pct'];
-					model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Total Business Revenue'];
-					model.pl.business.purchases = model.businessPL.data[0]['Purchases'];
-					model.pl.business.purchasesPCT = model.businessPL.data[0]['Purchases pct'];
-					model.pl.business.grossIncome = model.businessPL.data[0]['Gross Income'];
-					model.pl.business.Opex = model.businessPL.data[0]['Opex'];
-					model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
-					model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
-					model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
-					model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
-					model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
-					model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
-					model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
-					model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
-					model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
-					model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
-
 
 					/* Populate values for Balance Sheet */
-					model.assetsAndLiabilities = {};
-					model.assetsAndLiabilities.cashInBank = model.balanceSheet.data[0]['Cash in bank'];
-					model.assetsAndLiabilities.payables = model.balanceSheet.data[0]['Payables'];
-					model.assetsAndLiabilities.accountsReceivable = model.balanceSheet.data[0]['Accounts receivables'];
-					model.assetsAndLiabilities.shortTermDebts = model.balanceSheet.data[0]['Short-term debts '];
-					model.assetsAndLiabilities.rawMaterial = model.balanceSheet.data[0]['Raw material'];
-					model.assetsAndLiabilities.currentPortionOfLongTermDeb = model.balanceSheet.data[0]['Current portion of long-term debt'];
-					model.assetsAndLiabilities.workInProgress = model.balanceSheet.data[0]['Work in progress'];
-					model.assetsAndLiabilities.finishedGoods = model.balanceSheet.data[0]['Finished goods'];
-					model.assetsAndLiabilities.totalCurrentAssets = model.balanceSheet.data[0]['Total current assets'];
-					model.assetsAndLiabilities.totalCurrentLiabilities = model.balanceSheet.data[0]['Total current liabilities'];
-					model.assetsAndLiabilities.machinery = model.balanceSheet.data[0]['Machinery'];
-					model.assetsAndLiabilities.longTermDebt = model.balanceSheet.data[0]['Long-term debt'];
-					model.assetsAndLiabilities.land = model.balanceSheet.data[0]['Land'];
-					model.assetsAndLiabilities.ownCapital = model.balanceSheet.data[0]['Own capital'];
-					model.assetsAndLiabilities.building = model.balanceSheet.data[0]['Building'];
-					model.assetsAndLiabilities.vehicle = model.balanceSheet.data[0]['Vehicle'];
-					model.assetsAndLiabilities.furnitureAndFixtures = model.balanceSheet.data[0]['Furniture & Fixtures'];
-					model.assetsAndLiabilities.totalFixedAssets = model.balanceSheet.data[0]['Total fixed assets'];
-					model.assetsAndLiabilities.totalLengTermLiabilities = model.balanceSheet.data[0]['Total long-term liabilities'];
-					model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
-					model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
-
-
+					var bs = params[9].data[0];
+					model.assetsAndLiabilities = {
+						"cashInBank": bs['Cash in bank'];
+						"payables": bs['Payables'];
+						"accountsReceivable": bs['Accounts receivables'];
+						"shortTermDebts": bs['Short-term debts '];
+						"rawMaterial": bs['Raw material'];
+						"currentPortionOfLongTermDeb": bs['Current portion of long-term debt'];
+						"workInProgress": bs['Work in progress'];
+						"finishedGoods": bs['Finished goods'];
+						"totalCurrentAssets": bs['Total current assets'];
+						"totalCurrentLiabilities": bs['Total current liabilities'];
+						"machinery": bs['Machinery'];
+						"longTermDebt": bs['Long-term debt'];
+						"land": bs['Land'];
+						"ownCapital": bs['Own capital'];
+						"building": bs['Building'];
+						"vehicle": bs['Vehicle'];
+						"furnitureAndFixtures": bs['Furniture & Fixtures'];
+						"totalFixedAssets": bs['Total fixed assets'];
+						"totalLengTermLiabilities": bs['Total long-term liabilities'];
+						"totalAssets": bs['Total Assets'];
+						"totalLiabilities": bs['Total Liabilities'];
+					};
 				},
 				"business_customer": function(bundleModel, model, params) {
 					model.business = params;
