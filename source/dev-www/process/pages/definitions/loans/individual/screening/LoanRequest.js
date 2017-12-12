@@ -412,7 +412,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
                 if(model.currentStage=='Screening' || model.currentStage=='Application') {
-                    model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi || 0;
+                    if(model.loanAccount.estimatedEmi){
+                        model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
+                    } else {
+                        computeEstimatedEMI(model);
+                    }
                 }
             } else {
                 model.customer = model.customer || {};
@@ -2610,7 +2614,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                                     model.loanAccount = res.loanAccount;
                                     if(model.currentStage=='Screening' || model.currentStage=='Application') {
-                                        model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi || 0;
+                                        if(model.loanAccount.estimatedEmi){
+                                            model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
+                                        } else {
+                                            computeEstimatedEMI(model);
+                                        }
                                     }
                                     if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
                                         for(i in model.temp.loanCustomerRelations){
