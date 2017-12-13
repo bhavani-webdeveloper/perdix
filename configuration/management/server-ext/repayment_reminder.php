@@ -1,0 +1,47 @@
+<?php
+// http://devkinara.perdix.in:8081/management/server-ext/repayment_reminder.php?fromDate=03-09-2016&noOfDays=2
+include_once("bootload.php");
+use Illuminate\Database\Capsule\Manager as DB;
+use EllipseSynergie\ApiResponse\Contracts\Response;
+use Illuminate\Validation\Rule;
+use App\Models\RepaymentReminder;
+
+$response = get_response_obj();
+
+// Get value 
+$queryString = $_SERVER['QUERY_STRING'];
+// $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+$query = [];
+parse_str($queryString, $query);
+
+// Get DB names from env file
+$bi_db = $settings['bi_db']['database'];
+$db = $settings['db']['database'];
+
+
+$fromDate = date("Y-m-d", strtotime($query['fromDate'])); 
+$toDate = date("Y-m-d", strtotime("{$fromDate} +{$query['noOfDays']} days")); // Get today from fromDate
+$futTable = "fut__".strtoupper(date("dMY", strtotime($toDate)));
+
+$details = [];
+// Fetching the repayment details depends on the given date range
+try { 
+	$conversationMessage = DB::table("$bi_db.$futTable as fut")
+	->join("$db.loan_accounts as l", 'l.account_number', '=', 'fut.ACCOUNT_NO')
+	->join("$db.customer as c", 'c.id', '=', 'l.customer_id')
+	->whereBetween('fut.INSTALLMENT_DATE', [$fromDate, $toDate])
+	->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date')
+	->havingRaw("(select count(account_number) from repayment_reminder where account_number = `fut`.`ACCOUNT_NO` and installment_date = `fut`.`INSTALLMENT_DATE`) = 0")->get();
+	
+	$details = json_encode($conversationMessage->toArray());
+	$details = json_decode($details, true);
+	RepaymentReminder::insert($details);
+	$response->setStatusCode(200)->json($details);
+	exit();
+} catch(\Illuminate\Database\QueryException $ex){ 
+  $response->setStatusCode(500);
+  exit();
+}
+$response->setStatusCode(200)->json($details);
+?>
+
