@@ -67,8 +67,8 @@ define({
 					"html": `
 <div class="">
 	<nvd3
-		data="model.summary.cashFlowDetails.graphData"
-		options="model.summary.cashFlowDetails.graphOptions"
+		data="model.summary.cashFlowDetails.invoiceCash.graphData"
+		options="model.summary.cashFlowDetails.invoiceCash.graphOptions"
 		config="{refreshDataOnly:true, deepWatchData: false}"
 	></nvd3>
 </div>`
@@ -407,11 +407,11 @@ define({
 
 					model.bankAccounts = params[10].BankAccounts;
 					model.bankAccountSummary = {
-						"total_avg_deposit": 0;
-						"total_account": model.bankAccounts.length;
-						"total_avg_withdrawals": 0;
-						"total_cheque_bounces": 0;
-						"total_EMI_bounces": 0;
+						"total_avg_deposit": 0,
+						"total_account": model.bankAccounts.length,
+						"total_avg_withdrawals": 0,
+						"total_cheque_bounces": 0,
+						"total_EMI_bounces": 0
 					};
 					_.each(model.bankAccounts, function(account) {
 						model.bankAccountSummary.total_avg_deposit += account['Average Bank Deposit'];
@@ -421,49 +421,49 @@ define({
 
 					var bpl = params[8].data[0];
 					model.businessPL = {
-						"scrapIncome": bpl['Scrap or any business related income'];
-						"scrapIncomePCT": bpl['Scrap or any business related income pct'];
-						"totalBusinessIncome": bpl['Total Business Revenue'];
-						"purchases": bpl['Purchases'];
-						"purchasesPCT": bpl['Purchases pct'];
-						"grossIncome": bpl['Gross Income'];
-						"Opex": bpl['Opex'];
-						"EBITDA": bpl['EBITDA'];
-						"EBITDA_PCT": bpl['EBITDA pct'];
-						"businessLiabilities": bpl['Business Liabilities'];
-						"netBusinessIncome": bpl['Net Business Income'];
-						"netBusinessIncomePCT": bpl['Net Business Income pct'];
-						"kinaraEmi": bpl['Kinara EMI'];
-						"kinaraEmiPCT": bpl['Kinara EMI pct'];
-						"netIncome": bpl['Net Income'];
-						"finalKinaraEmi": bpl['Final Kinara EMI'];
-						"finalKinaraEmiPCT": bpl['Final Kinara EMI pct'];
+						"scrapIncome": bpl['Scrap or any business related income'],
+						"scrapIncomePCT": bpl['Scrap or any business related income pct'],
+						"totalBusinessIncome": bpl['Total Business Revenue'],
+						"purchases": bpl['Purchases'],
+						"purchasesPCT": bpl['Purchases pct'],
+						"grossIncome": bpl['Gross Income'],
+						"Opex": bpl['Opex'],
+						"EBITDA": bpl['EBITDA'],
+						"EBITDA_PCT": bpl['EBITDA pct'],
+						"businessLiabilities": bpl['Business Liabilities'],
+						"netBusinessIncome": bpl['Net Business Income'],
+						"netBusinessIncomePCT": bpl['Net Business Income pct'],
+						"kinaraEmi": bpl['Kinara EMI'],
+						"kinaraEmiPCT": bpl['Kinara EMI pct'],
+						"netIncome": bpl['Net Income'],
+						"finalKinaraEmi": bpl['Final Kinara EMI'],
+						"finalKinaraEmiPCT": bpl['Final Kinara EMI pct']
 					};
 
 					/* Populate values for Balance Sheet */
 					var bs = params[9].data[0];
 					model.assetsAndLiabilities = {
-						"cashInBank": bs['Cash in bank'];
-						"payables": bs['Payables'];
-						"accountsReceivable": bs['Accounts receivables'];
-						"shortTermDebts": bs['Short-term debts '];
-						"rawMaterial": bs['Raw material'];
-						"currentPortionOfLongTermDeb": bs['Current portion of long-term debt'];
-						"workInProgress": bs['Work in progress'];
-						"finishedGoods": bs['Finished goods'];
-						"totalCurrentAssets": bs['Total current assets'];
-						"totalCurrentLiabilities": bs['Total current liabilities'];
-						"machinery": bs['Machinery'];
-						"longTermDebt": bs['Long-term debt'];
-						"land": bs['Land'];
-						"ownCapital": bs['Own capital'];
-						"building": bs['Building'];
-						"vehicle": bs['Vehicle'];
-						"furnitureAndFixtures": bs['Furniture & Fixtures'];
-						"totalFixedAssets": bs['Total fixed assets'];
-						"totalLengTermLiabilities": bs['Total long-term liabilities'];
-						"totalAssets": bs['Total Assets'];
-						"totalLiabilities": bs['Total Liabilities'];
+						"cashInBank": bs['Cash in bank'],
+						"payables": bs['Payables'],
+						"accountsReceivable": bs['Accounts receivables'],
+						"shortTermDebts": bs['Short-term debts '],
+						"rawMaterial": bs['Raw material'],
+						"currentPortionOfLongTermDeb": bs['Current portion of long-term debt'],
+						"workInProgress": bs['Work in progress'],
+						"finishedGoods": bs['Finished goods'],
+						"totalCurrentAssets": bs['Total current assets'],
+						"totalCurrentLiabilities": bs['Total current liabilities'],
+						"machinery": bs['Machinery'],
+						"longTermDebt": bs['Long-term debt'],
+						"land": bs['Land'],
+						"ownCapital": bs['Own capital'],
+						"building": bs['Building'],
+						"vehicle": bs['Vehicle'],
+						"furnitureAndFixtures": bs['Furniture & Fixtures'],
+						"totalFixedAssets": bs['Total fixed assets'],
+						"totalLengTermLiabilities": bs['Total long-term liabilities'],
+						"totalAssets": bs['Total Assets'],
+						"totalLiabilities": bs['Total Liabilities']
 					};
 				},
 				"business_customer": function(bundleModel, model, params) {
