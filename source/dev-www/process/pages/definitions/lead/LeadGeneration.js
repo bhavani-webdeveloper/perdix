@@ -432,20 +432,31 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                             .$promise
                                             .then(function (res) {
                                                 $log.info(res);
-                                                for (i = 0; i < res.familyMembers.length; i++) {
-                                                    if (res.familyMembers[i].relationShip == "self") {
-                                                        var educationStatus = res.familyMembers[i].educationStatus;
+                                                model.lead.mobileNo = res.mobilePhone;
+                                                model.lead.gender = res.gender;
+                                                model.lead.leadName = res.firstName;
+                                                model.lead.maritalStatus=res.maritalStatus;
+                                                model.lead.landLineNo=res.landLineNo;
+                                                model.lead.dob=res.dateOfBirth;
+                                                model.lead.addressLine1=res.doorNo;
+                                                model.lead.addressLine2=res.street;
+                                                model.lead.pincode=res.pincode;
+                                                model.lead.district=res.district;
+                                                model.lead.state=res.state;
+                                                model.lead.area=res.locality;
+                                                model.lead.cityTownVillage=res.villageName;
+                                                model.lead.applicantCustomerId = res.id;
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                }
+                                                for (var i=0;i<res.familyMembers.length; i++){
+                                                    var f = res.familyMembers[i];
+                                                    if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                                                        selfExist = true;
                                                         break;
                                                     }
                                                 }
-                                                PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                model.lead.applicantCustomerId = valueObj.id;
-                                                model.lead.leadName = res.firstName;
-                                                model.lead.gender = res.gender;
-                                                model.lead.dob = res.dateOfBirth;
-                                                model.lead.maritalStatus = res.maritalStatus;
-                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                model.lead.educationStatus = educationStatus;
+                                                model.lead.educationStatus = f.educationStatus;
                                             }, function (httpRes) {
                                                 PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                                             })
