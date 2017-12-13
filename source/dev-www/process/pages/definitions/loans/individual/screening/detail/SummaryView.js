@@ -641,6 +641,7 @@ define({
                             score_name: scoreName
                         }).$promise;
                         onSuccessPromise.then(function(res) {
+                            BundleManager.pushEvent('scoring-loaded', model._bundlePageObj, res);
                             prepareData(res, model);
                             model.$prepared = true;
                             prepareDataDeferred.resolve();
