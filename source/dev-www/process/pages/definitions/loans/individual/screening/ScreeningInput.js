@@ -167,6 +167,7 @@ function (
                                         if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
                                             applicant = cust;
                                             urnNos.push(cust.urn);
+                                            res.applicantId=cust.customerId;
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);
                                             urnNos.push(cust.urn);

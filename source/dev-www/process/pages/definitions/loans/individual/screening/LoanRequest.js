@@ -486,6 +486,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     .$promise
                     .then(function(res){
                         model.customer = res;
+
+                    });
+            }
+
+            if (model.loanAccount.applicantId){
+                $log.info(model.loanAccount.applicantId);
+                Enrollment.getCustomerById({id:model.loanAccount.applicantId})
+                    .$promise
+                    .then(function(res){
+                        model.applicant = res;
+                        model.applicant.age1 = moment().diff(moment(model.applicant.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     });
             }
 
