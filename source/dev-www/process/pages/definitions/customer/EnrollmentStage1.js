@@ -267,6 +267,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
     return {
         fixData: fixData,
         saveData: saveData,
+        checkBiometricQuality:checkBiometricQuality,
         proceedData: proceedData,
         validateData: validateData,
         parseAadhaar: parseAadhaar,
