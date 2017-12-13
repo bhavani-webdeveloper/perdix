@@ -2,10 +2,10 @@ define({
 	pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource"
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource","filterFilter", "irfCurrencyFilter"
 	],
 	$pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource) {
+		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource,filterFilter, irfCurrencyFilter) {
 		return {
 			"type": "schema-form",
 			"title": "INDIVIDUAL_ENROLLMENT",
@@ -187,6 +187,13 @@ define({
 			},
 
 			form: [{
+                "type": "section",
+                "html": `
+<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
+<div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
+`
+            },{
 				"type": "box",
 				"readonly": true,
 				"colClass": "col-sm-12",
@@ -339,7 +346,7 @@ define({
 								"data": "anualEducationFee",
 								render: function(data, type, full, meta) {
 									if (full.anualEducationFee != null)
-										return full.anualEducationFee;
+										return irfCurrencyFilter(full.anualEducationFee);
 									return "NA";
 								}
 							}, {
@@ -355,7 +362,7 @@ define({
 								"data": "",
 								render: function(data, type, full, meta) {
 									if (full.incomes[0])
-										return full.incomes[0].incomeEarned;
+										return irfCurrencyFilter(full.incomes[0].incomeEarned);
 									return "NA";
 								}
 							}];
@@ -471,12 +478,21 @@ define({
 							}, {
 								"title": "loan Amount",
 								"data": "loanAmountInPaisa",
+								render:function(data,type,full,meta){
+									return irfCurrencyFilter(full.loanAmountInPaisa)
+								}
 							}, {
 								"title": "Instalment Amount",
-								"data": "installmentAmountInPaisa"
+								"data": "installmentAmountInPaisa",
+								render:function(data,type,full,meta){
+									return irfCurrencyFilter(full.installmentAmountInPaisa)
+								}
 							}, {
 								"data": "outstandingAmountInPaisa",
-								"title": "OUTSTANDING_AMOUNT"
+								"title": "OUTSTANDING_AMOUNT",
+								render:function(data,type,full,meta){
+									return irfCurrencyFilter(full.outstandingAmountInPaisa)
+								}
 							}, {
 								"title": "Loan_Purpose",
 								"data": "liabilityLoanPurpose"
@@ -1136,7 +1152,13 @@ define({
 							break;
 					};
 
-				}
+				},
+				"business_customer": function(bundleModel, model, params) {
+                    model.business = params;
+                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                        value: model.business.centreId
+                    })[0].name;
+                }
 			},
 			actions: {}
 		}

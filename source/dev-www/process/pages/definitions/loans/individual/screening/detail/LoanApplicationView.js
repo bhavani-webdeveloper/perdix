@@ -17,6 +17,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
+                    BundleManager.pushEvent('loan_Data_loanAppView', model._bundlePageObj, model.customer);
                 });
 
             },
@@ -266,7 +267,6 @@ define({
                 }, {
                     "type": "box",
                     "colClass": "col-sm-12",
-                    "overrideType": "default-view",
                     "title": "Loan Recommendation",
                     "items": [{
                         "type": "grid",

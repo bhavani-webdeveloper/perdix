@@ -1,11 +1,11 @@
 define({
-    pageUID: "loans.individual.screening.detail.ScoringView",
+    pageUID: "loans.individual.screening.detail.SummaryView",
     pageType: "Engine",
     dependencies: ["$log", "$q", "Enrollment", 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
-        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "Scoring", "AuthTokenHelper", "BundleManager"
+        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "Scoring", "AuthTokenHelper", "BundleManager", "filterFilter", "irfCurrencyFilter"
     ],
     $pageFn: function($log, $q, Enrollment, SchemaResource, PageHelper, formHelper, elementsUtils,
-        irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, Scoring, AuthTokenHelper, BundleManager) {
+        irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, Scoring, AuthTokenHelper, BundleManager, filterFilter, irfCurrencyFilter) {
 
         var branch = SessionStore.getBranch();
         var scoreName;
@@ -17,12 +17,12 @@ define({
 
 
             var managementScore = model.scoreDetails[0];
-            var res1 =model.scoreDetails[0].sections[0].data;
-            model.management_Data=[res1[1],res1[2],res1[4],res1[6],res1[7]];
+            var res1 = model.scoreDetails[0].sections[0].data;
+            model.management_Data = [res1[1], res1[2], res1[4], res1[6], res1[7]];
 
-            var res2=model.scoreDetails[1].data;
-            model.business_data=[res2[0],res2[1],res2[3],res2[4],res2[5],res2[8]];
-            /*if (_.isArray(managementScore.sections)) {
+            var res2 = model.scoreDetails[1].data;
+            model.business_data = [res2[0], res2[1], res2[3], res2[4], res2[5], res2[8]];
+            if (_.isArray(managementScore.sections)) {
                 var count = managementScore.sections.length;
                 var spacePct = 75 / count;
 
@@ -30,10 +30,13 @@ define({
                 for (var i = 0; i < managementScore.sections.length; i++) managementScore.values[i] = i;
                 managementScore.colorPct = spacePct / 5;
                 managementScore.valuePct = spacePct * 4 / 5;
-            }*/
+            }
 
             model.sectorDetails = res[5];
+            model.secData = model.sectorDetails.data[0];
+
             model.subSectorDetails = res[6];
+            model.subsecData = model.subSectorDetails.data[0];
             model.houseHoldPL = res[7].sections;
             model.businessPL = res[8];
             model.balanceSheet = res[9];
@@ -50,9 +53,7 @@ define({
             model.liabilitiesSummary = res[19];
             model.machineryDetails = res[20];
             model.opexDetails = res[21];
-
-
-            /* BundleManager.broadcastEvent('psychometScore', model.psychometricScores);*/
+            model._opex = res[21].data;
 
             model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
             _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -85,6 +86,12 @@ define({
                 household: [],
                 business: {}
             };
+
+            
+
+            
+
+
             // model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
             // model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
             // model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
@@ -143,6 +150,42 @@ define({
             model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
             model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
+            /* Scoring Sections */
+
+            /* Populate seperate scoring section for ScreeningReview screen */
+            // model.screeningScoreDetails = {
+            //     columns: [
+            //         {
+            //             "title": "Parameter",
+            //             "data": "Parameter"
+            //         },
+            //         {
+            //             "title": "Actual Value",
+            //             "data": "Actual Value"
+            //         },
+            //         {
+            //             "title": "ParameterScore",
+            //             "data": "ParameterScore"
+            //         }
+            //     ],
+            //     data: []
+            // };
+            // // debugger;
+            // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
+            //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
+            //     _.forEach(score1Data, function(data){
+            //         data["Actual Value"] = data["Applicant"];
+            //         delete data.Applicant;
+            //         delete data["Co-Applicant"];
+            //     });
+
+            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
+            // }
+            // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
+            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
+            // }
+
+            // debugger;
 
 
             for (var i = 0; i < model.deviationDetails.data.length; i++) {
@@ -236,6 +279,132 @@ define({
                     bsRight.push(item)
                 }
             });
+            form.push({
+                "type": "section",
+                "html": `
+<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
+<div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
+`
+            })
+
+            form.push({
+                "type": "box",
+                "overrideType": "default-view",
+                "colClass": "col-sm-12 ",
+                "title": "Business Summary",
+                "readonly": true,
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            /*"key":"loanAccount.enterpriseId",*/
+                            "key": "loanAccount.enrollmentId",
+                            "title": "Entity ID"
+                        }, {
+                            "key": "customer_detail.applicant.id",
+                            "title": "Applicant ID"
+                        }, {
+                            "key": "customer_detail.coApplicants.id[0]",
+                            "title": "Co-Applicant ID"
+                        }, {
+                            "key": "customer_detail.coApplicants.id[1]",
+                            "title": "Co-Applicant ID"
+                        }, {
+                            "key": "customer_detail.guarantors.id[0]",
+                            "title": "Guarantor ID"
+                        }, {
+                            "key": "",
+                            "title": "Enterprise Name"
+                        }, {
+                            "key": "loanAccount.productCategory",
+                            "title": "Loan Product"
+                        }, {
+                            "key": "loanAccount.loanAmountRequested",
+                            "title": "Loan Amount Requested"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.urnNo",
+                            "title": "URN"
+                        }, {
+                            "key": "customer_detail.applicant.urn",
+                            "title": "URN"
+                        }, {
+                            "key": "customer_detail.coApplicants.urn[0]",
+                            "title": "URN"
+                        }, {
+                            "key": "customer_detail.coApplicants.urn[1]",
+                            "title": "URN"
+                        }, {
+                            "key": "customer_detail.guarantors.urn[0]",
+                            "title": "URN"
+                        }, {
+                            "key": "customer.firstName",
+                            "title": "Applicant Name"
+                        }, {
+                            "key": "loanAccount.tenureRequested",
+                            "title": "Tenure of Loan"
+                        }, {
+                            "key": "loanAccount.expectedInterestRate",
+                            "title": "Rate of Interest"
+                        }]
+                    }]
+                }]
+            })
+
+            // form.push({
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "title": "SCORING_DETAILS",
+            //     "condition": "model.currentStage=='ScreeningReview'",
+            //     "items": [
+            //         {
+            //             type:"tableview",
+            //             key:"ScoreDetails[0].Parameters",
+            //             // title:"SCORING_DETAILS",
+            //             selectable: false,
+            //             paginate: false,
+            //             searching: false,
+            //             getColumns: function(){
+            //                 return [{
+            //                     title: 'PARAMETER',
+            //                     data: 'ParameterName'
+            //                 }, {
+            //                     title: 'VALUE',
+            //                     data: 'UserInput'
+            //                 }, {
+            //                     title: 'SCORE',
+            //                     data: 'ParamterScore'
+            //                 },{
+            //                     title: 'RESULT',
+            //                     data: 'ParameterPassStatus'
+            //                 }]
+            //             }
+            //         },
+            //         {
+            //             type:"fieldset",
+            //             title:"",
+            //             items:[
+            //                 {
+            //                     "key":"ScoreDetails[0].OverallWeightedScore",
+            //                     "title":"TOTAL_SCREENING_SCORE",
+            //                     readonly:true
+            //                 },
+            //                 {
+            //                     "key":"ScoreDetails[0].OverallPassStatus",
+            //                     "title":"OVERALL_PASS_STATUS",
+            //                     readonly:true
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // });
 
             form.push({
                 type: "box",
@@ -250,50 +419,43 @@ define({
                         htmlClass: "row",
                         items: [{
                             type: "section",
-                            htmlClass: "col-sm-6",
+                            htmlClass: "col-sm-12",
                             title: model.scoreDetails[0].title,
                             html: '<div ng-init="_score=model.scoreDetails[0]">' +
-                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} </h3>' +
+                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>' +
                                 '<table class="table">' +
                                 '<colgroup>' +
-                                '<col width="50%">' +
-                                '<col width="40%">' +
-                                '<col width="10%">' +
+                                '<col width="25%">' +
+                                '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">' +
+                                '<col width="{{_score.valuePct}}%" ng-repeat-end>' +
                                 '</colgroup>' +
                                 '<tbody>' +
                                 '<tr>' +
                                 '<th>Parameter Name</th>' +
-                                '<th>Actual Value</th>' +
-                                '<th>Status </th>'+
+                                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
                                 '</tr>' +
                                 '<tr ng-repeat="data in model.management_Data" ng-init="parameterIndex=$index">' +
                                 '<td>{{data.Parameter}}</td>' +
-                                '<td >{{_score.sections[0].data[parameterIndex].Applicant}}</td>'+
-                                '<td > <span class="square-color-box" style="background:{{_score.sections[0].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
-                                '</tr>' +
-                                '<tr>'+
-                                '<td>{{"TOTAL" |translate}}</td><td>({{model.totalScores.data[0][_score.title]}})</td><td></td>'+
-                                '</tr>'+
+                                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
+                                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
                                 '</tbody>' +
                                 '</table>' +
                                 '</div>'
                         }, {
                             "type": "section",
-                            "htmlClass": "col-sm-6",
+                            "htmlClass": "col-sm-12",
                             "title": "model.scoreDetails[1].title",
                             "html": '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
                                 '<table class="table">' +
-                                '<colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup>' +
+                                '<colgroup><col width="35%"><col width="10%"><col width="35%"></colgroup>' +
                                 '<tbody>' +
                                 '<tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr>' +
                                 '<tr ng-repeat="data in model.business_data">' +
                                 '<td>{{ data.Parameter }}</td>' +
-                                '<td>{{ data["Actual Value"] }}</td>' +
                                 '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>' +
+
+                                '<td>{{ data["Actual Value"] }}</td>' +
                                 '</tr>' +
-                                '<tr>'+
-                                '<td>{{"TOTAL" |translate}}</td><td>({{model.totalScores.data[0][_score.title]}})</td><td></td>'+
-                                '</tr>'+
                                 '</tbody>' +
                                 '</table>'
                         }]
@@ -305,43 +467,122 @@ define({
                             htmlClass: "col-sm-6",
                             condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[2].title,
-                            html: '<h3>{{ model.scoreDetails[2].title }} </h3><table class="table"><colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup>'+
-                            '<tbody><tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td>{{ data["Actual Value"] }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td></tr><tr><td>{{"TOTAL"|translate}}</td><td>({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</td><td></td></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                         }, {
                             type: "section",
                             htmlClass: "col-sm-6",
                             condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[3].title,
-                            html: '<h3>{{ model.scoreDetails[3].title }} </h3><table class="table"><colgroup><col width="50%"><col width="40%"><col width="10%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td>{{ data["Actual Value"] }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td></tr><tr><td>{{"TOTAL"|translate}}</td><td>({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</td><td></td></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                         }]
                     }
 
                 ]
             })
+
             form.push({
                 "type": "box",
                 "colClass": "col-sm-12",
-                "readonly": true,
-                "title": "Existing Customer Loan Status",
+                "readonly":true,
+                "title": "Sector -SubSector Compare",
+                "condition": "model.currentStage!='ScreeningReview'",
                 "items": [{
                     "type": "section",
-                    "html": '<table class="table table-responsive">' +
-                        '<colgroup><col width="15%">' +
-                        '<col width="15%"><col width="15%"><col width="15%"><col width="15%"><col width="15%"><col width="10%">' +
-                        '</colgroup>' +
-                        '<tbody>' +
-                        '<tr><th>{{"Category"|translate}}</th><th ng-repeat="i in model.lia_category track by $index">{{i}}</th><th>{{"Current Application"|translate}}</th><th>{{"Status"|translate}}</th></tr>' +
-                        '<tr><td>{{"Disbursed Amount"|translate}}</td><td ng-repeat="i in model.lia_disbursed_amount track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Tenure"|translate}}</td><td ng-repeat="i in model.lia_tenure track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"No. of EMI Paid"|translate}}</td><td ng-repeat="i in model.lia_emiPaid track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Total Outstanding Amount"|translate}}</td><td ng-repeat="i in model.lia_outstanding track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '<tr><td>{{"Loan Product"|translate}}</td><td ng-repeat="i in model.lia_product track by $index">{{i}}</td><td>{{"NA"|translate}}</td><td>{{"NA"|translate}}</td></tr>' +
-                        '</tbody>' +
-                        '</table>'
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "type": "section",
+                        "html": '<div><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th>Sector</th><th>Fabrication</th></tr></tbody></table></div>'
+                    }, {
+                        "type": "grid",
+                        "overrideType":"default-view",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "secData['No of total loans']",
+                                "title": "Total no. of Loans"
+                            }, /*{
+                                "key": "",
+                                "title": "Minimum Loan Size"
+                            }, {
+                                "key": "",
+                                "title": "Maximum Loan Size"
+                            },*/ {
+                                "key": "secData['Average Loan Size']|irfCurrency",
+                                "title": "Average Loan Size"
+                            }, {
+                                "key": "secData['No of Loans with cheque bounce']",
+                                "title": "No. of loans with cheque bounce"
+                            }, {
+                                "key": "secData['Average Loan Size of Cheque Bounce accounts']",
+                                "title": "Avg loan size of cheque bounce accounts"
+                            }, {
+                                "key": "secData['No of loans as NPA']",
+                                "title": "No. of loans as NPA"
+                            }, {
+                                "key": "secData['Average Loan Size of NPA accounts']",
+                                "title": "Avg loan size of NPA accounts"
+                            }]
+                        }]
+                    }]
+
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "type": "section",
+                        "html": '<div><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th>Sub-Sector</th><th>Tools and Dyes</th></tr></tbody></table></div>'
+
+                    }, {
+                        "type": "grid",
+                        "overrideType":"default-view",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "subsecData['No of total loans']",
+                                "title": "Total no. of Loans"
+                            }, /*{
+                                "key": "",
+                                "title": "Minimum Loan Size"
+                            }, {
+                                "key": "",
+                                "title": "Maximum Loan Size"
+                            },*/ {
+                                "key": "subsecData['Average Loan Size']",
+                                "title": "Average Loan Size"
+                            }, {
+                                "key": "subsecData['No of Loans with cheque bounce']",
+                                "title": "No. of loans with cheque bounce"
+                            }, {
+                                "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
+                                "title": "Avg loan size of cheque bounce accounts"
+                            }, {
+                                "key": "subsecData['No of loans as NPA']",
+                                "title": "No. of loans as NPA"
+                            }, {
+                                "key": "subsecData['Average Loan Size of NPA accounts']",
+                                "title": "Avg loan size of NPA accounts"
+                            }]
+                        }]
+                    }]
+
+
                 }]
-            })
+            });
 
-
+            form.push({
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title":"Operating Expenses",
+                "condition": "model.currentStage!='ScreeningReview'",
+                "items": [{
+                    "type":"section",
+                    "html":'<table class="table"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><tbody><tr ng-style = "{\'font-weight\': \'bold\'}"><td>Expenditure Source</td><td>Monthly Expense</td><td>% of Avg Monthly Revenue</td></tr><tr ng-repeat="items in model._opex"><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td>{{items["% of Avg Monthly Revenue"]}}</td></tr></tbody></table>'
+                }]
+            });
 
             return form;
         }; // END OF prepareForms()
@@ -354,14 +595,16 @@ define({
             "title": "",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-
                 prepareDataDeferred = $q.defer();
                 prepareDataPromise = prepareDataDeferred.promise;
 
                 model.currentStage = bundleModel.currentStage;
                 model.ScoreDetails = [];
                 model.customer = {};
-                model.customer_detail=bundleModel.customer_detail;
+
+                /*Business Summary*/
+                model.customer_detail = bundleModel.customer_detail;
+                model.loanAccount = bundleModel.loanAccount;
                 var $this = this;
                 var deferred = $q.defer();
 
@@ -398,8 +641,6 @@ define({
                             score_name: scoreName
                         }).$promise;
                         onSuccessPromise.then(function(res) {
-                            /*Event Generation , to be received at Bundle page loanAnalyticsView */
-                            BundleManager.pushEvent('scoring-loaded', model._bundlePageObj, res);
                             prepareData(res, model);
                             model.$prepared = true;
                             prepareDataDeferred.resolve();
@@ -452,24 +693,11 @@ define({
                 "loan-account-loaded": function(bundleModel, pageModel, eventModel) {
                     pageModel.loanAccount = eventModel.loanAccount;
                 },
-                "_liability": function(bundleModel, model, params) {
-                    model.liabilities = params;
-                    model.lia_disbursed_amount = [];
-                    model.lia_tenure = [];
-                    model.lia_emiPaid = [];
-                    model.lia_outstanding = [];
-                    model.lia_product = [];
-                    model.lia_category = [];
-
-                    for (var i = 0; i < model.liabilities.length; i++) {
-                        model.lia_category.push("Loan" + (i + 1));
-                        model.lia_disbursed_amount.push(model.liabilities[i].loanAmountInPaisa);
-                        model.lia_tenure.push(model.liabilities[i].tenure);
-                        model.lia_emiPaid.push(model.liabilities[i].noOfInstalmentPaid);
-                        model.lia_outstanding.push(model.liabilities[i].outstandingAmountInPaisa);
-                        model.lia_product.push(model.liabilities[i].loanSource);
-
-                    }
+                "business_customer": function(bundleModel, model, params) {
+                    model.business = params;
+                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                        value: model.business.centreId
+                    })[0].name;
                 }
             },
             actions: {

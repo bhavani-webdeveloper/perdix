@@ -67,54 +67,6 @@ define({
                             "type": "file",
                             "preview": "pdf",
                             "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
                         }];
                         //
                         self.form.push({
@@ -281,8 +233,8 @@ define({
                             "using": "scanner"*/
 
                             render: function(data, type, full, meta) {
-                                var url=irf.BASE_URL+"/"+full.documentId;
-                                return '<a href="'+url+'">Download</a>'
+                                var url = irf.BASE_URL + "/" + full.documentId;
+                                return '<a href="' + url + '">Download</a>'
                             }
 
 
@@ -400,17 +352,34 @@ define({
                             return [];
                         }
                     }, {
-                        "key": "customer.fixedAssetsMachinaries[].machineImage",
-                        "title": "MACHINE_IMAGE",
-                        "required": true,
-                        "category": "Loan",
-                        "subCategory": "DOC1",
-                        "type": "file",
-                        /*
-                                                        "fileType":"application/pdf",*/
-                        "preview": "pdf",
-                        "using": "scanner"
-                    }]
+                            "type": "section",
+                            "html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
+                            "items": [{
+                                    "key": "machineDocs[0].machineImage",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    "type": "file",
+                                    "fileType": "image/*",
+                                    "using": "scanner"
+                                }, {
+                                    "key": "machineDocs[1].machineImage",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    "type": "file",
+                                    "fileType": "image/*",
+                                    "using": "scanner"
+                                }, {
+                                    "key": "machineDocs[2].machineImage",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    "type": "file",
+                                    "fileType": "image/*",
+                                    "using": "scanner"
+                                }]
+                        }]
                 }]
             }, {
                 "type": "box",
@@ -632,6 +601,28 @@ define({
             }],
             schema: function() {
                 return Enrollment.getSchema().$promise;
+            },
+            eventListeners: {
+                "_machineImages": function(bundleModel, model, params) {
+                    model.machineDocs = params.fixedAssetsMachinaries;
+
+
+                    /*={
+                        img_arr:[],
+                        mach_bills:[]
+                    }*/
+
+                    /* for(i=0;i<params.fixedAssetsMachinaries.length;i++){
+                        if(params.fixedAssetsMachinaries[i].machineImage!=null)
+                       // machineDocs.img_arr.push(irf.BASE_URL + "/" + params.fixedAssetsMachinaries[i].machineImage);
+                        model.machineDocs.img_arr.push(params.fixedAssetsMachinaries[i].machineImage);
+                        if(params.fixedAssetsMachinaries[i].machineBillsDocId!=null)
+                        //machineDocs.mach_bills.push(irf.BASE_URL + "/" + params.fixedAssetsMachinaries[i].machineBillsDocId)
+                    model.machineDocs.mach_bills.push(params.fixedAssetsMachinaries[i].machineBillsDocId)
+                    
+                    }
+*/
+                }
             },
             actions: {}
         }
