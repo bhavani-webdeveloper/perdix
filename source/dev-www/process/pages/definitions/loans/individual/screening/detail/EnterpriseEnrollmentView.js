@@ -642,7 +642,7 @@ define({
                 },
                 "_scoresApplicant": function(bundleModel, model, params) {
                     model.psi=params[2].data[5];
-                    psi['Actual Value']/psi.ParameterScore
+                    model.psi['Actual Value']/psi.ParameterScore
                 }
             },
             actions: {}
