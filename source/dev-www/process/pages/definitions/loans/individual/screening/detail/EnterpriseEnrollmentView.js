@@ -34,7 +34,7 @@ define({
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
                     model.totalValue = 0;
-                    model.proxyScore = ""
+                    model.proxyScore = model.psi;
                     model.hypothecatedToKinara = 0;
                     model.totalHypothecatedValue = 0;
                     _.each(model.customer.fixedAssetsMachinaries, function(machine) {
@@ -451,8 +451,12 @@ define({
                     "type": "grid",
                     "orientation": "horizontal",
                     "items": [{
-                        "key": "proxyScore",
+                        "type":"grid",
+                        "orientation":"vertical",
+                        "items":[{
+                        "key": "psi",
                         "title": "Proxy Indicator Score"
+                    }]
                     }]
                 }, {
                     "type": "expandablesection",
@@ -641,8 +645,9 @@ define({
 */
                 },
                 "_scoresApplicant": function(bundleModel, model, params) {
-                    model.psi=params[2].data[5];
-                    model.psi['Actual Value']/psi.ParameterScore
+                    var psi={};
+                    psi=params[2].data[5];
+                    model.psi=psi['Actual Value']/psi.ParameterScore
                 }
             },
             actions: {}
