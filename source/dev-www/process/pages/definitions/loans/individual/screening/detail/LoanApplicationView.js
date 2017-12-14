@@ -32,8 +32,8 @@ define({
                     }
                 }
                 /*Deviation checkbox chosendata*/
-                model.chosenData = [];
-
+                
+/*
                 model.isChecked = function(id) {
                     var match = false;
                     for (var i = 0; i < model.chosenData.length; i++) {
@@ -42,19 +42,17 @@ define({
                         }
                     }
                     return match;
-                };
+                };*/
 
-                model.sync = function(bool, item) {
+                model.updateChosenMitigants = function(bool, item,index) {
                     if (bool) {
                         // add item
-                        model.chosenData.push(item);
-                        $log.info(model.chosenData + "kishanAdded");
+                        model.deviationParameter[index].ChosenMitigant.push(item);
                     } else {
                         // remove item
-                        for (var i = 0; i < model.chosenData.length; i++) {
-                            if (model.chosenDataata[i].id == item.id) {
-                                model.chosenData.splice(i, 1);
-                                $log.info(model.chosenData + "kishanDeleted");
+                        for (var i = 0; i < model.deviationParameter[index].ChosenMitigant.length; i++) {
+                            if (model.deviationParameter[index].ChosenMitigant[i].mitigantName == item.mitigantName) {
+                                model.deviationParameter[index].ChosenMitigant.splice(i, 1);
                             }
                         }
                     }
@@ -339,9 +337,10 @@ define({
                             '<td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td>' +
                             '<td>{{ rowData["Deviation"] }}</td>' +
                             '<td><ul class="list-unstyled">' +
-                            '<li ng-repeat="m in rowData.mitigants" id="{{m.mitigantName}}">' +
-                            '<input type="checkbox" ng-change="sync(bool, m)" ng-model="bool" ng-checked="isChecked(m.mitigantName)"> {{ m.mitigantName }}' +
+                            '<li ng-repeat="m in rowData.mitigants " id="{{m.mitigantName}}">' +
+                            '<input type="checkbox"  ng-model="bool" ng-change="model.updateChosenMitigants(bool,m,$parent.$index)"> {{ m.mitigantName }}' +
                             '</li></ul></td></tr></tbody></table>'
+                           // ng-change="sync(bool, m)"   ng-checked="isChecked(m.mitigantName)
                     }]
                 }, {
                     "type": "box",
@@ -421,18 +420,19 @@ define({
                     }
 
                     model.deviationParameter = [];
+                    model.myvar=0;
                     for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
                         model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
                         delete model.deviationParameter[model.deviationParameter.length - 1].ListOfMitigants;
                         delete model.deviationParameter[model.deviationParameter.length - 1].Mitigant;
                         model.deviationParameter[model.deviationParameter.length - 1].mitigants = [];
+                        model.deviationParameter[model.deviationParameter.length-1].ChosenMitigant=[];
                         if (d.Mitigant && d.Mitigant.length != 00) {
                             d.ListOfMitigants = d.Mitigant.split("|");
                             for (var j = 0; j < d.ListOfMitigants.length; j++) {
                                 model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
-                                    mitigantName: d.ListOfMitigants[j],
-                                    selected: false
+                                    mitigantName: d.ListOfMitigants[j]
                                 });
                             }
                         }
