@@ -110,8 +110,8 @@ function (
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1
+                            minimum: 0,
+                            maximum: 0
                         },
                         {
                             pageName: 'loans.individual.screening.Review',
