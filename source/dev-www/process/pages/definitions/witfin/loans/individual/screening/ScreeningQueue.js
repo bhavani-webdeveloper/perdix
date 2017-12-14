@@ -1,7 +1,7 @@
 define({
     pageUID: "witfin.loans.individual.screening.ScreeningQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"]
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();

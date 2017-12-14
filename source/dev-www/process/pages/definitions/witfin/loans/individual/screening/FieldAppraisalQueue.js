@@ -1,7 +1,7 @@
 define({
 	pageUID: "witfin.loans.individual.screening.FieldAppraisalQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"]
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
     	return {
 			"type": "search-list",
@@ -45,7 +45,7 @@ define({
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                     "status": 
+	                     "status":
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -82,7 +82,7 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
-	                    'villageName':searchOptions.villageName,	                    
+	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,

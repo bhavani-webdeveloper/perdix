@@ -1,7 +1,7 @@
 define({
 	 pageUID: "witfin.loans.individual.screening.ScreeningReviewQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"]
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
     	var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
@@ -73,7 +73,7 @@ define({
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                     "status": 
+	                     "status":
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -99,7 +99,7 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'status':searchOptions.status,                   
+	                    'status':searchOptions.status,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
@@ -200,7 +200,7 @@ define({
     }
 })
 
-// irf.pageCollection.factory(irf.page("witfin.loans.individual.screening.ScreeningReviewQueue"), 
+// irf.pageCollection.factory(irf.page("witfin.loans.individual.screening.ScreeningReviewQueue"),
 // 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 // 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 // 		var branch = SessionStore.getBranch();
@@ -273,7 +273,7 @@ define({
 // 	                        "title": "PIN_CODE",
 // 	                        "type": "string"
 // 	                    },
-// 	                     "status": 
+// 	                     "status":
 // 	                    {
 //                             "type":"string",
 //                             "title":"STATUS",
@@ -299,7 +299,7 @@ define({
 // 	                    'applicantName':searchOptions.applicantName,
 // 	                    'area':searchOptions.area,
 // 	                    'villageName':searchOptions.villageName,
-// 	                    'status':searchOptions.status,                   
+// 	                    'status':searchOptions.status,
 // 	                    'customerName': searchOptions.businessName,
 // 	                    'page': pageOpts.pageNo,
 // 	                    'per_page': pageOpts.itemsPerPage,
