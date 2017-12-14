@@ -529,12 +529,13 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     }
                     initPromise.then(function(){
                         $scope.bundlePage.bundleDefinition = bundleDefinition;
+                        var initialData = $scope.bundlePage.bundlePages || []; // $scope.bundlePage.bundlePages - initial data
+
                         var bundleDefinitionMap = _.keyBy(bundleDefinition, function(o){
-                            o.openPagesCount = 0;
+                            o.openPagesCount = $filter('filter')(initialData, {"pageClass": o.pageClass}, true).length;
                             return o.pageClass;
                         });
 
-                        var initialData = $scope.bundlePage.bundlePages; // $scope.bundlePage.bundlePages - initial data
                         if (initialData && initialData.length) {
                             for (i in initialData) {
                                 var iData = initialData[i];
