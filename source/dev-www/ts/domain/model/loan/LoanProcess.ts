@@ -176,9 +176,12 @@ export class LoanProcess {
     }
 
     public setRelatedCustomer(enrolmentProcess: EnrolmentProcess): LoanProcess {
-        let index = _.findIndex(this.loanAccount.loanCustomerRelations, function (lcr) {
-            return lcr.customerId == enrolmentProcess.customer.id;
-        });
+        let index = -1;
+        if(_.hasIn(enrolmentProcess, "customer")) {
+            index = _.findIndex(this.loanAccount.loanCustomerRelations, function (lcr) {
+                return lcr.customerId == enrolmentProcess.customer.id;
+            });
+        }
 
         if (index == -1) {
             return this;

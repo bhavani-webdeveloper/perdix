@@ -36,7 +36,7 @@ export class LoadRelatedCustomersPolicy extends IPolicy<LoanProcess> {
                 if (_.hasIn(loanProcess, "loanAccount.loanCustomerRelations") || _.isArray(loanProcess.loanAccount.loanCustomerRelations)){
                     for (let lcr of loanProcess.loanAccount.loanCustomerRelations){
                         if (lcr.customerId!=null){
-                            let obs1 = this.enrolmentRepo.getCustomerById(lcr.customerId)
+                            let obs1 = EnrolmentProcess.fromCustomerID(lcr.customerId)
                                 .map(
                                     (customer: EnrolmentProcess) => {
                                         loanProcess.setRelatedCustomer(customer);
@@ -49,7 +49,7 @@ export class LoadRelatedCustomersPolicy extends IPolicy<LoanProcess> {
                 }
 
                 if (_.hasIn(loanProcess, "loanAccount.customerId")){
-                    let obs2 = this.enrolmentRepo.getCustomerById(loanProcess.loanAccount.customerId)
+                    let obs2 = EnrolmentProcess.fromCustomerID(loanProcess.loanAccount.customerId)
                         .map(
                             (customer: EnrolmentProcess) => {
                                 loanProcess.loanCustomerEnrolmentProcess = customer;
