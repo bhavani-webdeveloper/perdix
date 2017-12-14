@@ -13,6 +13,54 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
+
+                /*Asset details*/
+                if (model.loanAccount.collateral.length!=0) {
+                    model.asset_details = {
+                        "collateralDescription": model.loanAccount.collateral[0].collateralDescription,
+                        "collateralValue": model.loanAccount.collateral[0].collateralValue,
+                        "expectedIncome": model.loanAccount.collateral[0].expectedIncome,
+                        "collateralType": model.loanAccount.collateral[0].collateralType,
+                        "manufacturer": model.loanAccount.collateral[0].manufacturer,
+                        "modelNo": model.loanAccount.collateral[0].modelNo,
+                        "serialNo": model.loanAccount.collateral[0].serialNo,
+                        "expectedPurchaseDate": model.loanAccount.collateral[0].expectedPurchaseDate,
+                        "machineAttachedToBuilding": model.loanAccount.collateral[0].machineAttachedToBuilding,
+                        "hypothecatedToBank": model.loanAccount.collateral[0].hypothecatedToBank,
+                        "electricityAvailable": model.loanAccount.collateral[0].electricityAvailable,
+                        "spaceAvailable": model.loanAccount.collateral[0].spaceAvailable
+                    }
+                }
+                /*Deviation checkbox chosendata*/
+                model.chosenData = [];
+
+                model.isChecked = function(id) {
+                    var match = false;
+                    for (var i = 0; i < model.chosenData.length; i++) {
+                        if (model.chosenData[i].id == id) {
+                            match = true;
+                        }
+                    }
+                    return match;
+                };
+
+                model.sync = function(bool, item) {
+                    if (bool) {
+                        // add item
+                        model.chosenData.push(item);
+                        $log.info(model.chosenData + "kishanAdded");
+                    } else {
+                        // remove item
+                        for (var i = 0; i < model.chosenData.length; i++) {
+                            if (model.chosenDataata[i].id == item.id) {
+                                model.chosenData.splice(i, 1);
+                                $log.info(model.chosenData + "kishanDeleted");
+                            }
+                        }
+                    }
+                };
+
+
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -84,7 +132,7 @@ define({
                             "orientation": "vertical",
                             "items": [{
                                 "key": "loanAccount.frequencyRequested",
-                                "title": "Requested Freequency"
+                                "title": "Requested Frequency"
                             }, {
                                 "key": "loanAccount.tenureRequested",
                                 "title": "Requested Tenure"
@@ -120,7 +168,7 @@ define({
                                 "title": "Product Type"
                             }, {
                                 "key": "loanAccount.customerSignDateExpected",
-                                "title": "Expected Customer Signed Date"
+                                "title": "Expected customer sign date"
                             }]
                         }, {
                             "type": "grid",
@@ -171,6 +219,9 @@ define({
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
                     "title": "Asset Purchase Detail",
+                    /*
+                                        "condition":"model.loanAccount.loanPurpose1==model.asset_Details.Assetpurchase"*/
+                    "condition":"model.loanAccount.collateral.length!=0",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -178,44 +229,44 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "loanAccount.collateral[0].collateralDescription",
+                                "key": "asset_details.collateralDescription",
                                 "title": "Machine"
                             }, {
-                                "key": "loanAccount.collateral[0].collateralValue",
+                                "key": "asset_details.collateralValue",
                                 "title": "Purchase Price"
                             }, {
-                                "key": "loanAccount.collateral[0].expectedIncome",
+                                "key": "asset_details.expectedIncome",
                                 "title": "Expected Income"
                             }, {
-                                "key": "loanAccount.collateral[0].collateralType",
+                                "key": "asset_details.collateralType",
                                 "title": "Machine Type"
                             }, {
-                                "key": "loanAccount.collateral[0].manufacturer",
+                                "key": "asset_details.manufacturer",
                                 "title": "Manufacturer Name"
                             }, {
-                                "key": "loanAccount.collateral[0].modelNo",
+                                "key": "asset_details.modelNo",
                                 "title": "Machine Model"
                             }]
                         }, {
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "loanAccount.collateral[0].serialNo",
+                                "key": "asset_details.serialNo",
                                 "title": "Serial No"
                             }, {
-                                "key": "loanAccount.collateral[0].expectedPurchaseDate",
+                                "key": "asset_details.expectedPurchaseDate",
                                 "title": "Expected Purchase Date"
                             }, {
-                                "key": "loanAccount.collateral[0].machineAttachedToBuilding",
+                                "key": "asset_details.machineAttachedToBuilding",
                                 "title": "Machine Permanently Fixed To Building"
                             }, {
-                                "key": "loanAccount.collateral[0].hypothecatedToBank",
+                                "key": "asset_details.hypothecatedToBank",
                                 "title": "Wheter Hypothecated To Kinara"
                             }, {
-                                "key": "loanAccount.collateral[0].electricityAvailable",
+                                "key": "asset_details.electricityAvailable",
                                 "title": "Electricity Available"
                             }, {
-                                "key": "loanAccount.collateral[0].spaceAvailable",
+                                "key": "asset_details.spaceAvailable",
                                 "title": "Space Available"
                             }]
                         }]
@@ -254,7 +305,27 @@ define({
                             }]
                         }]
                     }]
-                }, {
+                },
+                /*{
+                                   "type": "box",
+                                   "colClass": "col-sm-12",
+                                   "title": "DEVIATION_AND_MITIGATIONS",
+                                   "condition": "model.currentStage != 'ScreeningReview'",
+                                   "items": [{
+                                       "type": "section",
+                                       "colClass": "col-sm-12",
+                                       "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>'+
+                                       '<tr ng-repeat="rowData in model.deviationDetails.data">'+
+                                       '<td>{{ rowData["Parameter"] }}</td>'+
+                                       '<td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td>'+
+                                       '<td>{{ rowData["Deviation"] }}</td>'+
+                                       '<td><ul class="list-unstyled">'+
+                                       '<li ng-repeat="m in rowData.ListOfMitigants">'+
+                                       '<input type="checkbox" ng-checked="m.selected"> {{ m }}'+
+                                       '</li></ul></td></tr></tbody></table>'
+                                   }]
+                               }*/
+                {
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "DEVIATION_AND_MITIGATIONS",
@@ -262,7 +333,15 @@ define({
                     "items": [{
                         "type": "section",
                         "colClass": "col-sm-12",
-                        "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td><td>{{ rowData["Deviation"] }}</td><td><ul class="list-unstyled"><li ng-repeat="m in rowData.ListOfMitigants"><input type="checkbox" ng-checked="item.checked"> {{ m }}</li></ul></td></tr></tbody></table>'
+                        "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
+                            '<tr ng-repeat="rowData in model.deviationParameter">' +
+                            '<td>{{ rowData["Parameter"] }}</td>' +
+                            '<td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td>' +
+                            '<td>{{ rowData["Deviation"] }}</td>' +
+                            '<td><ul class="list-unstyled">' +
+                            '<li ng-repeat="m in rowData.mitigants" id="{{m.mitigantName}}">' +
+                            '<input type="checkbox" ng-change="sync(bool, m)" ng-model="bool" ng-checked="isChecked(m.mitigantName)"> {{ m.mitigantName }}' +
+                            '</li></ul></td></tr></tbody></table>'
                     }]
                 }, {
                     "type": "box",
@@ -322,16 +401,21 @@ define({
                 "_scoresApplicant": function(bundleModel, model, params) {
                     model._scores = params;
                     model.deviationDetails = model._scores[12];
+
                     for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
+                        /*  d.newData=[];*/
                         if (d.Mitigant && d.Mitigant.length != 00) {
                             if (d.Mitigant && d.Mitigant != null) {
                                 d.ListOfMitigants = d.Mitigant.split("|");
                             }
 
-                            if (d.ChosenMitigant && d.ChosenMitigant != null) {
-                                d.ChosenMitigants = d.ChosenMitigant.split("|")
-                            }
+                            /*for(var i=0;i<d.ListOfMitigants.length;i++){
+                                d.newData[i]={
+                                    id:d.ListOfMitigants[i],
+                                    selected:false
+                                }
+                            }*/
 
                         }
                     }
@@ -347,11 +431,13 @@ define({
                             d.ListOfMitigants = d.Mitigant.split("|");
                             for (var j = 0; j < d.ListOfMitigants.length; j++) {
                                 model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
-                                    mitigantName: d.ListOfMitigants[j]
+                                    mitigantName: d.ListOfMitigants[j],
+                                    selected: false
                                 });
                             }
                         }
                     }
+
                     model.additional = {};
                 }
             },

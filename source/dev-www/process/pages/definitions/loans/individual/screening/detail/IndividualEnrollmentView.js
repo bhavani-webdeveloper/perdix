@@ -782,8 +782,15 @@ define({
 				"readonly": true,
 				"condition": "model.bundlePageObj.pageClass != 'guarantor' ",
 				"items": [{
-					"key": "",
-					"title": "psychometric score"
+					"type":"section",
+					"html":'<table class="table table-responsive">' +
+							'<colgroup>' +
+							'<col width="30%"> <col width="30%"> <col width="30%">' +
+							'</colgroup>' +
+							'<tbody>'+
+							'<tr><td>Psychometric Score</td>'+
+							'<td>Passed {{model.psy_data.passOutOf}} out of {{model.psy_data.psyTotalPara}} parameters</td>'+
+							'<td>{{model.psy_data.summary["Total Score"]}}</td></tr></tbody></table>'
 				}, {
 					"type": "expandablesection",
 					"items": [{
@@ -1110,6 +1117,15 @@ define({
 							model.psy_coapp_count++
 								break;
 					};
+					model.psy_data.passOutOf=0;
+					model.psy_data.psyTotalPara=0;
+                     _.forEach(model.psy_data.data, function(data){
+                          model.psy_data.psyTotalPara++;
+                     	if(data.color_hexadecimal =="#50D050"){
+                            model.psy_data.passOutOf++;
+                     	}
+             });
+
 					if (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant') {
 						model.household_data.data[0]['Total Incomes'] = model.household_data.data[0]['Salary from business'] + model.household_data.data[0]['Other Income/salaries'] + model.household_data.data[0]['Family Member Incomes'];
 						model.household_data.data[0]['Total Expenses'] = model.household_data.data[0]['Expenses Declared or based on the educational expense whichever is higher'] + model.household_data.data[0]['EMI\'s of household liabilities'];
@@ -1151,15 +1167,12 @@ define({
 							}
 							break;
 					};
-
-				},
-				"business_customer": function(bundleModel, model, params) {
-                    model.business = params;
+					model.business = params;
                     model.business.centreName = filterFilter(formHelper.enum('centre').data, {
                         value: model.business.centreId
                     })[0].name;
-                }
-			},
+
+				}			},
 			actions: {}
 		}
 	}

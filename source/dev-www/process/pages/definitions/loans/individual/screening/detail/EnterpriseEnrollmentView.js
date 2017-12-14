@@ -19,7 +19,19 @@ define({
                 }).$promise.then(function(res) {
                     model.customer = res;
                     BundleManager.pushEvent('rel_to_business', model._bundlePageObj, model.customer);
+                    /*CBREPORT*/
+
+                model.CB_REPORT_DATA={
+                    "bureau":model.customer.enterpriseBureauDetails[0].bureau,
+                    "doubtful":model.customer.enterpriseBureauDetails[0].doubtful,
+                    "loss":model.customer.enterpriseBureauDetails[0].loss,
+                    "fileId":model.customer.enterpriseBureauDetails[0].fileId,
+                    "specialMentionAccount":model.customer.enterpriseBureauDetails[0].specialMentionAccount,
+                    "standard":model.customer.enterpriseBureauDetails[0].standard,
+                    "subStandard":model.customer.enterpriseBureauDetails[0].subStandard
+                }
                     /* Machin Details*/
+
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
                     model.totalValue = 0;
                     model.proxyScore = ""
@@ -194,7 +206,7 @@ define({
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "RAGISTRATION_DETAILS",
+                "title": "Registration Detials",
                 "readonly": true,
                 "items": [{
                     "type": "tableview",
@@ -278,7 +290,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "MACHINERY_DETAILS",
+                "title": "Machinery/Stocks/Non-Machinery Asset Detials",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -394,32 +406,37 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.enterpriseBureauDetails[].bureau",
+                            "key": "CB_REPORT_DATA.bureau",
                             "title": "Bureau"
                         }, {
-                            "key": "customer.enterpriseBureauDetails[].doubtful",
+                            "key": "CB_REPORT_DATA.doubtful",
                             "title": "Doubtful Account"
                         }, {
-                            "key": "customer.enterpriseBureauDetails[].loss",
+                            "key": "CB_REPORT_DATA.loss",
                             "title": "Loss Accounts"
-                        }, {
-                            "key": "customer.enterpriseBureauDetails[].fileId",
-                            "title": "CB_Report",
+                        },{"key": "CB_REPORT_DATA.fileId",
+                            "title": "CB Report",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
                             "type": "file",
-                            "fileType": "application/pdf",
-                            "using": "scanner"
-                        }]
+                            "preview": "pdf",
+                            "using": "scanner"} /*{
+                            "type":"section",
+                            "title":"CB Report",
+                            "items":[]
+                            
+                        }*/]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.enterpriseBureauDetails[].specialMentionAccount",
+                            "key": "CB_REPORT_DATA.specialMentionAccount",
                             "title": "Special Mention Accounts"
                         }, {
-                            "key": "customer.enterpriseBureauDetails[].standard",
+                            "key": "CB_REPORT_DATA.standard",
                             "title": "Standard Accounts"
                         }, {
-                            "key": "customer.enterpriseBureauDetails[].subStandard",
+                            "key": "CB_REPORT_DATA.subStandard",
                             "title": "Sub-Standard Accounts"
                         }]
                     }]
@@ -519,7 +536,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "Refrrence Check",
+                "title": "Reference Check",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -622,6 +639,10 @@ define({
                     
                     }
 */
+                },
+                "_scoresApplicant": function(bundleModel, model, params) {
+                    model.psi=params[2].data[5];
+                    psi['Actual Value']/psi.ParameterScore
                 }
             },
             actions: {}

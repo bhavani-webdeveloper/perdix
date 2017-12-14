@@ -202,32 +202,6 @@ define({
                 }
             }
 
-            model.deviationParameter = [];
-            for (var i = 0; i < model.deviationDetails.data.length; i++) {
-                var d = model.deviationDetails.data[i];
-                model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
-                delete model.deviationParameter[model.deviationParameter.length - 1].ListOfMitigants;
-                delete model.deviationParameter[model.deviationParameter.length - 1].Mitigant;
-                model.deviationParameter[model.deviationParameter.length - 1].mitigants = [];
-                if (d.Mitigant && d.Mitigant.length != 00) {
-                    d.ListOfMitigants = d.Mitigant.split("|");
-                    for (var j = 0; j < d.ListOfMitigants.length; j++) {
-                        model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
-                            mitigantName: d.ListOfMitigants[j]
-                        });
-                    }
-
-                }
-            }
-            model.additional = {};
-            model.additional = {
-                deviations: {
-                    deviationParameter: model.deviationParameter,
-                    scoreName: scoreName
-                }
-            };
-            BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
-
             $log.info("Karthik here");
             $log.info(model.additional);
 
