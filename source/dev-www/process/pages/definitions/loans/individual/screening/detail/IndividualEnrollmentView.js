@@ -2,10 +2,10 @@ define({
 	pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource","filterFilter", "irfCurrencyFilter"
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "filterFilter", "irfCurrencyFilter"
 	],
 	$pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource,filterFilter, irfCurrencyFilter) {
+		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, filterFilter, irfCurrencyFilter) {
 		return {
 			"type": "schema-form",
 			"title": "INDIVIDUAL_ENROLLMENT",
@@ -36,7 +36,7 @@ define({
 						'household_fields': {},
 						'bank_fields': {},
 						'cibil': {},
-						'customer_address':{}
+						'customer_address': {}
 					};
 
 
@@ -187,13 +187,13 @@ define({
 			},
 
 			form: [{
-                "type": "section",
-                "html": `
+				"type": "section",
+				"html": `
 <div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
 <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
 <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
 `
-            },{
+			}, {
 				"type": "box",
 				"readonly": true,
 				"colClass": "col-sm-12",
@@ -478,19 +478,19 @@ define({
 							}, {
 								"title": "loan Amount",
 								"data": "loanAmountInPaisa",
-								render:function(data,type,full,meta){
+								render: function(data, type, full, meta) {
 									return irfCurrencyFilter(full.loanAmountInPaisa)
 								}
 							}, {
 								"title": "Installment Amount",
 								"data": "installmentAmountInPaisa",
-								render:function(data,type,full,meta){
+								render: function(data, type, full, meta) {
 									return irfCurrencyFilter(full.installmentAmountInPaisa)
 								}
 							}, {
 								"data": "outstandingAmountInPaisa",
 								"title": "OUTSTANDING_AMOUNT",
-								render:function(data,type,full,meta){
+								render: function(data, type, full, meta) {
 									return irfCurrencyFilter(full.outstandingAmountInPaisa)
 								}
 							}, {
@@ -782,15 +782,15 @@ define({
 				"readonly": true,
 				"condition": "model.bundlePageObj.pageClass != 'guarantor' ",
 				"items": [{
-					"type":"section",
-					"html":'<table class="table table-responsive">' +
-							'<colgroup>' +
-							'<col width="30%"> <col width="30%"> <col width="30%">' +
-							'</colgroup>' +
-							'<tbody>'+
-							'<tr><td>Psychometric Score</td>'+
-							'<td>Passed {{model.psy_data.passOutOf}} out of {{model.psy_data.psyTotalPara}} parameters</td>'+
-							'<td>{{model.psy_data.summary["Total Score"]}}</td></tr></tbody></table>'
+					"type": "section",
+					"html": '<table class="table table-responsive">' +
+						'<colgroup>' +
+						'<col width="30%"> <col width="30%"> <col width="30%">' +
+						'</colgroup>' +
+						'<tbody>' +
+						'<tr><td>Psychometric Score</td>' +
+						'<td>Passed {{model.psy_data.passOutOf}} out of {{model.psy_data.psyTotalPara}} parameters</td>' +
+						'<td>{{model.psy_data.summary["Total Score"]}}</td></tr></tbody></table>'
 				}, {
 					"type": "expandablesection",
 					"items": [{
@@ -1118,15 +1118,15 @@ define({
 								break;
 					};
 					if (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant') {
-					model.psy_data.passOutOf=0;
-					model.psy_data.psyTotalPara=0;
-                     _.forEach(model.psy_data.data, function(data){
-                          model.psy_data.psyTotalPara++;
-                     	if(data.color_hexadecimal =="#50D050"){
-                            model.psy_data.passOutOf++;
-                     	}
-             });
-                 }
+						model.psy_data.passOutOf = 0;
+						model.psy_data.psyTotalPara = 0;
+						_.forEach(model.psy_data.data, function(data) {
+							model.psy_data.psyTotalPara++;
+							if (data.color_hexadecimal == "#50D050") {
+								model.psy_data.passOutOf++;
+							}
+						});
+					}
 
 					if (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant') {
 						model.household_data.data[0]['Total Incomes'] = model.household_data.data[0]['Salary from business'] + model.household_data.data[0]['Other Income/salaries'] + model.household_data.data[0]['Family Member Incomes'];
@@ -1148,7 +1148,7 @@ define({
 
 
 				},
-				"customer-business": function(bundleModel, model, params) {
+				"business_customer": function(bundleModel, model, params) {
 					model.enterpriseCustomerRelations = [];
 					model.coApp_cnt = 1
 					model.gua_cnt = 3;
@@ -1170,11 +1170,12 @@ define({
 							break;
 					};
 					model.business = params;
-                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
-                        value: model.business.centreId
-                    })[0].name;
+					model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+						value: model.business.centreId
+					})[0].name;
 
-				}			},
+				}
+			},
 			actions: {}
 		}
 	}

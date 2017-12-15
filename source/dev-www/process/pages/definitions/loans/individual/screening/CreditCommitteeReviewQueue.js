@@ -183,12 +183,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.CreditCommitteeReview', {
+								/*entityManager.setModel('loans.individual.screening.CreditCommitteeReview', {
 									_request: item
-								});
+								});*/
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "loans.individual.screening.CreditCommitteeReview",
+									pageName: "loans.individual.screening.LoanAnalyticsView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',

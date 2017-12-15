@@ -183,12 +183,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.CentralRiskReview', {
+								/*entityManager.setModel('loans.individual.screening.CentralRiskReview', {
 									_request: item
-								});
+								});*/
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "loans.individual.screening.CentralRiskReview",
+									pageName: "loans.individual.screening.LoanAnalyticsView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',

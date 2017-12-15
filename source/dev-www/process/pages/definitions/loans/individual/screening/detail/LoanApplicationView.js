@@ -15,7 +15,7 @@ define({
                 model.loanAccount = bundleModel.loanAccount;
 
                 /*Asset details*/
-                if (model.loanAccount.collateral.length!=0) {
+                if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = {
                         "collateralDescription": model.loanAccount.collateral[0].collateralDescription,
                         "collateralValue": model.loanAccount.collateral[0].collateralValue,
@@ -32,19 +32,19 @@ define({
                     }
                 }
                 /*Deviation checkbox chosendata*/
-                
-/*
-                model.isChecked = function(id) {
-                    var match = false;
-                    for (var i = 0; i < model.chosenData.length; i++) {
-                        if (model.chosenData[i].id == id) {
-                            match = true;
-                        }
-                    }
-                    return match;
-                };*/
 
-                model.updateChosenMitigants = function(bool, item,index) {
+                /*
+                                model.isChecked = function(id) {
+                                    var match = false;
+                                    for (var i = 0; i < model.chosenData.length; i++) {
+                                        if (model.chosenData[i].id == id) {
+                                            match = true;
+                                        }
+                                    }
+                                    return match;
+                                };*/
+
+                model.updateChosenMitigants = function(bool, item, index) {
                     if (bool) {
                         // add item
                         model.deviationParameter[index].ChosenMitigant.push(item);
@@ -219,7 +219,7 @@ define({
                     "title": "Asset Purchase Detail",
                     /*
                                         "condition":"model.loanAccount.loanPurpose1==model.asset_Details.Assetpurchase"*/
-                    "condition":"model.loanAccount.collateral.length!=0",
+                    "condition": "model.loanAccount.collateral.length!=0",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -340,7 +340,7 @@ define({
                             '<li ng-repeat="m in rowData.mitigants " id="{{m.mitigantName}}">' +
                             '<input type="checkbox"  ng-model="bool" ng-change="model.updateChosenMitigants(bool,m,$parent.$index)"> {{ m.mitigantName }}' +
                             '</li></ul></td></tr></tbody></table>'
-                           // ng-change="sync(bool, m)"   ng-checked="isChecked(m.mitigantName)
+                            // ng-change="sync(bool, m)"   ng-checked="isChecked(m.mitigantName)
                     }]
                 }, {
                     "type": "box",
@@ -420,14 +420,14 @@ define({
                     }
 
                     model.deviationParameter = [];
-                    model.myvar=0;
+                    model.myvar = 0;
                     for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
                         model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
                         delete model.deviationParameter[model.deviationParameter.length - 1].ListOfMitigants;
                         delete model.deviationParameter[model.deviationParameter.length - 1].Mitigant;
                         model.deviationParameter[model.deviationParameter.length - 1].mitigants = [];
-                        model.deviationParameter[model.deviationParameter.length-1].ChosenMitigant=[];
+                        model.deviationParameter[model.deviationParameter.length - 1].ChosenMitigant = [];
                         if (d.Mitigant && d.Mitigant.length != 00) {
                             d.ListOfMitigants = d.Mitigant.split("|");
                             for (var j = 0; j < d.ListOfMitigants.length; j++) {

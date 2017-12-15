@@ -163,12 +163,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.ApplicationReview', {
+								/*entityManager.setModel('loans.individual.screening.ApplicationReview', {
 									_request: item
-								});
+								});*/
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "loans.individual.screening.ApplicationReview",
+									pageName: "loans.individual.screening.LoanAnalyticsView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
