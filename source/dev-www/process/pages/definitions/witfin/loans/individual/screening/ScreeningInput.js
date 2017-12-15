@@ -10,8 +10,8 @@ define(["perdix/domain/model/loan/LoanProcess",
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
-        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager"],
-        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
                 "title": "SCREENING",
@@ -143,14 +143,14 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
-                                var loanAccount = loanProcess.loanAccount;
-                                loanAccount.applicantEnrolmentProcess.customerId = loanAccount.customerId;
+                               var loanAccount = loanProcess;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.currentStage != 'Screening'){
+                                if (loanAccount.loanAccount.currentStage != 'Screening'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
@@ -159,7 +159,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        loanRelation: loanAccount.applicantEnrolmentProcess
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
                                     }
                                 });
 
@@ -173,7 +174,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-
                                 if(_.hasIn(loanAccount, 'guarantorCustomers')) {
                                     for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
                                         $this.bundlePages.push({
@@ -186,40 +186,37 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                $this.bundlePages.push({
+                                 $this.bundlePages.push({
                                     pageClass: 'business',
                                     model: {
-                                        loanRelation: {customerId:loanAccount.customerId}
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
                                     }
                                 });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
-                                        loanAccount: loanAccount
+                                        loanProcess: loanProcess
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanAccount
-                                    }
-                                });
 
-                                $this.bundlePages.push({
+
+                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
-                                        loanAccount: loanAccount
+                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanAccount
-                                    }
-                                });
+                               $this.bundlePages.push({
+                                        pageClass: 'loan-review',
+                                        model: {
+                                            loanAccount: loanProcess.loanAccount,
+                                        }
+                                    });
+
 
                                 deferred.resolve();
 
