@@ -22,7 +22,7 @@ irf.models.factory('LUC',
 			},
 
 		});
-
+		
 		return resource;
 	}
 ]);

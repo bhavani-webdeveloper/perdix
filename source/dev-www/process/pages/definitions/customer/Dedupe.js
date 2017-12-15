@@ -13,7 +13,7 @@ function(IndividualLoan, $log, $state, Enrollment, EnrollmentHelper, SessionStor
                 angular.forEach(model.loanAccount.loanCustomerRelations, function(item, index) {
                             dedupeCustomerIdArray.push(item.customerId);
                 });
-                dedupeCustomerIdArray.push(model.loanAccount.customerId)
+                dedupeCustomerIdArray.push(model.loanAccount.customerId);
 
                 var dedupeIds;
 

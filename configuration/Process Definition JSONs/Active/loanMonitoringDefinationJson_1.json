@@ -17,6 +17,14 @@
         ]
     },{
         "order": 3,
+        "code": "LUCReview",
+        "name": "LUC Review",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 4,
         "code": "LUCEscalate",
         "name": "LUC Escalate",
         "stageType": "CAPTURE",
@@ -24,7 +32,7 @@
             "WM"
         ]
     },{
-        "order": 4,
+        "order": 5,
         "code": "LUCLegalRecovery",
         "name": "LUC Legal and Recovery",
         "stageType": "CAPTURE",
@@ -56,6 +64,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -66,6 +75,7 @@
                            "title": "Centre Id",
                            "type": "number",
                            "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -76,6 +86,7 @@
                             "title": "Branch Name",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -89,6 +100,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -101,6 +113,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -111,6 +124,7 @@
                             "title": "loanPurposeCategory",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -123,6 +137,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -135,6 +150,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -145,6 +161,7 @@
                             "title": "loanAmount",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -155,6 +172,7 @@
                             "title": "Disbursement Date",
                             "type": "date",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -167,6 +185,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -177,6 +196,7 @@
                             "title": "amountUtilizedForAssetsPurchase",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -187,6 +207,7 @@
                             "title": "percentage",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -197,6 +218,7 @@
                             "title": "totalCreationAssetValue",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -207,6 +229,7 @@
                             "title": "isAssetsOrdered",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -219,6 +242,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -231,6 +255,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -241,6 +266,7 @@
                             "title": "lucRescheduled",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -251,6 +277,7 @@
                             "title": "lucRescheduleReason",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -261,6 +288,7 @@
                             "title": "lucRescheduledDate",
                             "type": "date",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -271,6 +299,7 @@
                             "title": "lucEscalated",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -283,6 +312,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -293,6 +323,7 @@
                             "title": "loanId",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -303,6 +334,7 @@
                             "title": "accountNumber",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -313,6 +345,7 @@
                             "title": "customerId",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -325,6 +358,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -337,6 +371,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -347,6 +382,7 @@
                             "title": "socialImpactDetailsId",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -359,6 +395,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -371,6 +408,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -383,6 +421,7 @@
                             "minLength": 1,
                             "maxLength": 350,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -395,6 +434,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -405,6 +445,7 @@
                             "title": "lucDate",
                             "type": "date",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -417,6 +458,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -427,6 +469,7 @@
                             "title": "loanAmountUsed",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -439,6 +482,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -451,6 +495,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -462,6 +507,7 @@
                             "title": "amountUsedPercentage",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -473,6 +519,7 @@
                             "title": "intendedPurposeAmount",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -484,6 +531,7 @@
                             "title": "intendedPurposePercentage",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -495,6 +543,7 @@
                             "title": "nonIntendedPurposeAmount",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -506,6 +555,7 @@
                             "title": "nonIntendedPurposePercentage",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -518,6 +568,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -528,6 +579,7 @@
                             "title": "repayedDebitAmount",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -538,6 +590,7 @@
                             "title": "monthlyInterestForDebit",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -550,6 +603,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -560,6 +614,7 @@
                             "title": "remainingAmountUtilizedOn",
                             "type": "date",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -572,6 +627,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -582,6 +638,7 @@
                             "title": "udf1",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -592,6 +649,7 @@
                             "title": "udf1",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -602,6 +660,7 @@
                             "title": "udf1",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -612,6 +671,7 @@
                             "title": "udf4",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -622,6 +682,7 @@
                             "title": "udf5",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -632,6 +693,7 @@
                             "title": "udf6",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -642,6 +704,7 @@
                             "title": "udf7",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -652,6 +715,7 @@
                             "title": "udf8",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -662,6 +726,7 @@
                             "title": "udf9",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -672,6 +737,7 @@
                             "title": "udf10",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -682,6 +748,7 @@
                             "title": "udf11",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -692,6 +759,7 @@
                             "title": "udf12",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -702,6 +770,7 @@
                             "title": "udf13",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -712,6 +781,7 @@
                             "title": "udf14",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -722,6 +792,7 @@
                             "title": "udf15",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -732,6 +803,7 @@
                             "title": "udf16",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -742,6 +814,7 @@
                             "title": "udf17",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -752,6 +825,7 @@
                             "title": "udf18",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -762,6 +836,7 @@
                             "title": "udf19",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -772,6 +847,7 @@
                             "title": "udf20",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -782,6 +858,7 @@
                             "title": "photoImageId1",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -792,6 +869,7 @@
                             "title": "photoImageId2",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -802,6 +880,7 @@
                             "title": "photoImageId3",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -813,6 +892,7 @@
                             "title": "photoImageId4",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -823,6 +903,7 @@
                             "title": "photoImageId5",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -833,6 +914,7 @@
                             "title": "isBiometricDone",
                             "type": "boolean",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -843,6 +925,7 @@
                             "title": "centreId",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -853,6 +936,7 @@
                             "title": "presentOutStandingLoanAmount",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -863,6 +947,7 @@
                             "title": "numberOfInstallmentsDue",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -873,6 +958,7 @@
                             "title": "statusOfLoanAccount",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -883,6 +969,7 @@
                             "title": "isAssetNotDelivered",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -893,6 +980,7 @@
                             "title": "careOf",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -903,6 +991,7 @@
                             "title": "doorNo",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -913,6 +1002,7 @@
                             "title": "street",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -923,6 +1013,7 @@
                             "title": "postOffice",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -933,6 +1024,7 @@
                             "title": "landmark",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -943,6 +1035,7 @@
                             "title": "pincode",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -953,6 +1046,7 @@
                             "title": "area",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -963,6 +1057,7 @@
                             "title": "villageName",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -973,6 +1068,7 @@
                             "title": "district",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -983,6 +1079,7 @@
                             "title": "state",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -993,6 +1090,7 @@
                             "title": "isMailingAddress",
                             "type": "boolean",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1003,6 +1101,7 @@
                             "title": "mobilePhone",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1013,6 +1112,7 @@
                             "title": "isPrimaryNumber",
                             "type": "boolean",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1023,6 +1123,7 @@
                             "title": "nonIntendedSubpurpose",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1033,6 +1134,7 @@
                             "title": "lucRescheduledRemarks",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1043,6 +1145,7 @@
                             "title": "lucEscalatedRemarks",
                             "type": "string",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1065,6 +1168,7 @@
                             "title": "totalNumberOfMen",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1075,6 +1179,7 @@
                             "title": "averageSalaryOfMen",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1085,6 +1190,7 @@
                             "title": "menPartTimeEmployee",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1095,6 +1201,7 @@
                             "title": "menFullTimeEmployee",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1107,6 +1214,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1117,6 +1225,7 @@
                             "title": "noOfFirstJobsMen",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1127,6 +1236,7 @@
                             "title": "totalNumberOfWomen",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1137,6 +1247,7 @@
                             "title": "averageSalaryOfWomen",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1147,6 +1258,7 @@
                             "title": "womenPartTimeEmployee",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1157,6 +1269,7 @@
                             "title": "womenFullTimeEmployee",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1169,6 +1282,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1179,6 +1293,7 @@
                             "title": "noOfFirstJobsWomen",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1189,6 +1304,7 @@
                             "title": "preLoanMonthlyRevenue",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1199,6 +1315,7 @@
                             "title": "preLoanMonthlyNetIncome",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1209,6 +1326,7 @@
                             "title": "preLoanProprietorSalary",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1219,6 +1337,7 @@
                             "title": "preLoanNumberOfCustomersOrBuyers",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1229,6 +1348,7 @@
                             "title": "postLoanMonthlyRevenue",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1239,6 +1359,7 @@
                             "title": "postLoanMonthlyNetIncome",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1249,6 +1370,7 @@
                             "title": "postLoanProprietorSalary",
                             "type": "number",
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1259,6 +1381,7 @@
                             "title": "postLoanNumberOfCustomersOrBuyers",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1269,6 +1392,7 @@
                             "title": "noOfJobsAdded",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1279,6 +1403,7 @@
                             "title": "noOfWomenInAddedJobs",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1289,6 +1414,7 @@
                             "title": "noOfMenInAddedJobs",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1299,6 +1425,7 @@
                             "title": "noOfFreshersInAddedJobs",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1309,6 +1436,7 @@
                             "title": "avgSalaryOfNewJoinees",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1333,6 +1461,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1345,6 +1474,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1355,6 +1485,7 @@
                             "title": "year",
                             "type": "date",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1367,6 +1498,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1379,6 +1511,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1391,6 +1524,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1401,6 +1535,7 @@
                             "title": "hypothecationLabelBeenApplied",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1411,6 +1546,7 @@
                             "title": "companyNameInOriginalInvoice",
                             "type": "number",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1421,6 +1557,7 @@
                             "title": "udf1",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1431,6 +1568,7 @@
                             "title": "udf2",
                             "type": "string",
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1443,6 +1581,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1467,6 +1606,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1479,6 +1619,7 @@
                             "minLength": 1,
                             "maxLength": 4,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",
@@ -1491,6 +1632,7 @@
                             "minLength": 1,
                             "maxLength": 100,
                              "captureStages": [
+                                "LUCReview",
                                 "LUCSchedule",
                                 "LUCEscalate",
                                 "LUCReschedule",

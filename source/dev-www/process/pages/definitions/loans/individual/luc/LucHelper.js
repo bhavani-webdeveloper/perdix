@@ -13,8 +13,16 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 irfProgressMessage.pop('luc-update', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
                 if (res.loanMonitoringDetails.lucDone == 'Yes') {
-                    res.stage="Completed";
-                } 
+                    if (res.loanMonitoringDetails.nonIntendedPurposeAmount > 0) {
+                            if (res.loanMonitoringDetails.currentStage == "LUCReview") {
+                                res.stage = "Completed";
+                            } else {
+                                res.stage = "LUCReview";
+                            }
+                    } else if(res.loanMonitoringDetails.nonIntendedPurposeAmount == 0) {   
+                        res.stage="Completed";    
+                    }   
+                }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('luc-update', 'Done. luc updated with ID: ' + res.loanMonitoringDetails.id, 5000);
@@ -45,6 +53,13 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 }else if(res.loanMonitoringDetails.currentStage == "LUCLegalRecovery") 
                 {
                     res.stage="LUCEscalate";
+                }else if(res.loanMonitoringDetails.currentStage == "LUCReview") 
+                {
+                    if (res.loanMonitoringDetails.udf5 == "LUCSchedule") {
+                        res.stage = "LUCSchedule";
+                    } else if (res.loanMonitoringDetails.udf5 == "LUCReschedule") {
+                        res.stage = "LUCReschedule";
+                    }
                 }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
@@ -71,7 +86,7 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 PageHelper.showLoader();
                 irfProgressMessage.pop('Go Back', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
-                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule")
+                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule" || res.loanMonitoringDetails.currentStage == "LUCReviewe")
                 {
                     res.stage="LUCEscalate";
                 } 

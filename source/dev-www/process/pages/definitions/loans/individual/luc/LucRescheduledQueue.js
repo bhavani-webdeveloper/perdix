@@ -9,7 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 				$log.info("luc Schedule Queue got initialized");
 			},
 			definition: {
-				title: "SEARCH CUSTOMER",
+				title: "SEARCH LUC",
 				searchForm: [
 					"*"
 				],

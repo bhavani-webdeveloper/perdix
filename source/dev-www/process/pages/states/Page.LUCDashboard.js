@@ -8,6 +8,7 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 			"items": [
 				"Page/Engine/loans.individual.luc.LucScheduleQueue",
 				"Page/Engine/loans.individual.luc.LucRescheduledQueue",
+				"Page/Engine/loans.individual.luc.LucReviewQueue",
 				"Page/Engine/loans.individual.luc.LucRiskQueue",
 				"Page/Engine/loans.individual.luc.LucLegalRecoveryQueue",
 				"Page/Engine/loans.individual.luc.LucCompletedQueue"
@@ -61,6 +62,25 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 					lrqMenu.data = response.headers['x-total-count'];
 				}, function() {
 					lrqMenu.data = '-';
+				});
+			}
+
+			var lrwqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucReviewQueue"];
+			if (lrwqMenu) {
+				LUC.search({
+					'accountNumber': '',
+					'currentStage':"LUCReview",
+					'centreId': centreId[0],
+					'monitoringType':"LUC",
+					'branchName': branch.branchName,
+					'page': 1,
+					'per_page': 1,
+					'applicantName': '',
+					'businessName': '',
+				}).$promise.then(function(response, headerGetter) {
+					lrwqMenu.data = response.headers['x-total-count'];
+				}, function() {
+					lrwqMenu.data = '-';
 				});
 			}
 
