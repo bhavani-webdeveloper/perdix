@@ -778,6 +778,42 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
+			    "payeeName":{
+                  "title":"payeeName",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+			    "payeeMobileNumber":{
+                  "title":"payeeMobileNumber",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+			    "payeeAddress":{
+                  "title":"payeeAddress",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+			    "assignedTo":{
+                  "title":"assignedTo",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
                "expectedCommercialCibilCharge":{
                   "title":"Expected Commercial Cibil Charge",
                   "type":"number",
