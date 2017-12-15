@@ -12,6 +12,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Bundle/witfin.loans.individual.screening.ScreeningInput",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
+                "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
             ]
@@ -62,6 +63,24 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     srqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     srqMenu.data = '-';
+                });
+            }
+
+            var prqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
+            if (prqMenu) {
+                IndividualLoan.search({
+                    'stage': 'VehicleValidation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    prqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    prqMenu.data = '-';
                 });
             }
 /*

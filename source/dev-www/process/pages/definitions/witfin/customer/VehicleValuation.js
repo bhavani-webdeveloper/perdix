@@ -397,7 +397,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
 
     var getIncludes = function (model) {
-            
+
             return [
                 "primaryInfo",
                 "primaryInfo.registrationNumber",
@@ -544,7 +544,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "actionbox",
                 "actionbox.submit",
                 "actionbox.save"
-            ];    
+            ];
         }
     return {
         "type": "schema-form",
@@ -559,105 +559,107 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             .$promise
                             .then(
                                 function(res){
+                                    model.loanAccount = res;
                                     console.log(res);
+
                                 });
 
-            // model.temp=model.temp||{}
-            // if (_.hasIn(model, 'loanAccount')){
-            //     $log.info('Printing Loan Account');
-            //     $log.info(model.loanAccount);
-            // } else {
-            //     model.customer = model.customer || {};
-            //     model.customer.customerType = "Enterprise";
-            //     model.loanAccount = {};
-            //     model.loanAccount.loanCustomerRelations = [];
-            //     // model.loanAccount.frequency = 'M';
-            //     model.loanAccount.isRestructure = false;
-            //     model.loanAccount.documentTracking = "PENDING";
-            //     model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
-            //     /* END OF TEMP CODE */
-            // }
-            // if (bundlePageObj){
-            //     model._bundlePageObj = _.cloneDeep(bundlePageObj);
-            // }
+            model.temp=model.temp||{}
+            if (_.hasIn(model, 'loanAccount')){
+                $log.info('Printing Loan Account');
+                $log.info(model.loanAccount);
+            } else {
+                model.customer = model.customer || {};
+                model.customer.customerType = "Enterprise";
+                model.loanAccount = {};
+                model.loanAccount.loanCustomerRelations = [];
+                // model.loanAccount.frequency = 'M';
+                model.loanAccount.isRestructure = false;
+                model.loanAccount.documentTracking = "PENDING";
+                model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
+                /* END OF TEMP CODE */
+            }
+            if (bundlePageObj){
+                model._bundlePageObj = _.cloneDeep(bundlePageObj);
+            }
 
 
-            // /* Deviations and Mitigations grouping */
-            // if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
-            //     var loanMitigantsGrouped = {};
-            //     for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
-            //         var item = model.loanAccount.loanMitigants[i];
-            //         if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
-            //             loanMitigantsGrouped[item.parameter] = [];
-            //         }
-            //         loanMitigantsGrouped[item.parameter].push(item);
-            //     }
-            //     model.loanMitigantsByParameter = [];
-            //     _.forOwn(loanMitigantsGrouped, function(mitigants, key){
-            //         var chosenMitigants = "<ul>";
+            /* Deviations and Mitigations grouping */
+            if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                var loanMitigantsGrouped = {};
+                for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                    var item = model.loanAccount.loanMitigants[i];
+                    if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                        loanMitigantsGrouped[item.parameter] = [];
+                    }
+                    loanMitigantsGrouped[item.parameter].push(item);
+                }
+                model.loanMitigantsByParameter = [];
+                _.forOwn(loanMitigantsGrouped, function(mitigants, key){
+                    var chosenMitigants = "<ul>";
 
-            //         for (var i=0; i<mitigants.length; i++){
-            //             chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
-            //         }
-            //         chosenMitigants = chosenMitigants + "</ul>";
-            //         model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
-            //     })
-            // }
-            // /* End of Deviations and Mitigations grouping */
+                    for (var i=0; i<mitigants.length; i++){
+                        chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
+                    }
+                    chosenMitigants = chosenMitigants + "</ul>";
+                    model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
+                })
+            }
+            /* End of Deviations and Mitigations grouping */
 
-            // if (_.hasIn(model, 'loanAccount')){
-            //     $log.info('Printing Loan Account');
-            //     IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
-            //     .$promise
-            //     .then(function (resp){
-            //         model.loanSummary = resp;
-            //         if(model.loanSummary && model.loanSummary.length)
-            //         {
-            //             for(i=0;i<model.loanSummary.length;i++)
-            //             {
-            //                 if(model.loanSummary[i].postStage=="Rejected")
-            //                 {
-            //                     if(model.currentStage=='Rejected')
-            //                     {
-            //                         model.review.preStage = model.loanSummary[i].preStage;
-            //                         model.review.targetStage = model.loanSummary[i].preStage;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     },function (errResp){
+            if (_.hasIn(model, 'loanAccount')){
+                $log.info('Printing Loan Account');
+                IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                .$promise
+                .then(function (resp){
+                    model.loanSummary = resp;
+                    if(model.loanSummary && model.loanSummary.length)
+                    {
+                        for(i=0;i<model.loanSummary.length;i++)
+                        {
+                            if(model.loanSummary[i].postStage=="Rejected")
+                            {
+                                if(model.currentStage=='Rejected')
+                                {
+                                    model.review.preStage = model.loanSummary[i].preStage;
+                                    model.review.targetStage = model.loanSummary[i].preStage;
+                                }
+                            }
+                        }
+                    }
+                },function (errResp){
 
-            //     });
-            // }
+                });
+            }
 
-            // if (_.hasIn(model, 'loanAccount')){
-            //     Enrollment.getCustomerById({id:model.loanAccount.customerId})
-            //         .$promise
-            //         .then(function(res){
-            //             model.customer = res;
-            //         });
-            // }
+            if (_.hasIn(model, 'loanAccount')){
+                Enrollment.getCustomerById({id:model.loanAccount.customerId})
+                    .$promise
+                    .then(function(res){
+                        model.customer = res;
+                    });
+            }
 
-            // if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
-            //     model.loanAccount.loanCustomerRelations!=null &&
-            //     model.loanAccount.loanCustomerRelations.length > 0) {
-            //     var lcr = model.loanAccount.loanCustomerRelations;
-            //     var idArr = [];
-            //     for (var i=0;i<lcr.length;i++){
-            //         idArr.push(lcr[i].customerId);
-            //     }
-            //     Queries.getCustomerBasicDetails({'ids': idArr})
-            //         .then(function(result){
-            //             if (result && result.ids){
-            //                 for (var i = 0; i < lcr.length; i++) {
-            //                     var cust = result.ids[lcr[i].customerId];
-            //                     if (cust) {
-            //                         lcr[i].name = cust.first_name;
-            //                     }
-            //                 }
-            //             }
-            //         });
-            // }
+            if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                model.loanAccount.loanCustomerRelations!=null &&
+                model.loanAccount.loanCustomerRelations.length > 0) {
+                var lcr = model.loanAccount.loanCustomerRelations;
+                var idArr = [];
+                for (var i=0;i<lcr.length;i++){
+                    idArr.push(lcr[i].customerId);
+                }
+                Queries.getCustomerBasicDetails({'ids': idArr})
+                    .then(function(result){
+                        if (result && result.ids){
+                            for (var i = 0; i < lcr.length; i++) {
+                                var cust = result.ids[lcr[i].customerId];
+                                if (cust) {
+                                    lcr[i].name = cust.first_name;
+                                }
+                            }
+                        }
+                    });
+            }
 
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
             self = this;
@@ -889,7 +891,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
         },
         form: [
-        
+
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;

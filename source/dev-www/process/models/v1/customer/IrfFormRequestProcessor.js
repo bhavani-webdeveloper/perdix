@@ -2689,26 +2689,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.productRejectReason",
                                 type: "select",
                                 condition: "model.lead.interestedInProduct==='NO'",
-                                titleMap: {
-                                    "Has many running loans": "Has many running loans",
-                                    "Available from banks": "Available from banks",
-                                    "Not planned for now": "Not planned for now",
-                                    "Available from banks": "Available from banks",
-                                    "Interest rate is not satisfactory": "Interest rate is not satisfactory",
-                                    "Too many documents": "Too many documents",
-                                    "Interested only for cash collection": "Interested only for cash collection"
-                                }
+                                enumCode: "lead_eligibility_reject_reason"
                             },
                             "productRejectReason": {
                                 key: "lead.productRejectReason",
                                 type: "select",
                                 condition: "model.lead.eligibleForProduct ==='NO'",
-                                titleMap: {
-                                    "High Interest rate": "High Interest rate",
-                                    "Negative": "Negative",
-                                    "Not Kinara's target segment": "Not Kinara's target segment",
-                                    "Not having proper documents": "Not having proper documents",
-                                }
+                                enumCode:"lead_reject_reason"
                             },
                             "additionalRemarks": {
                                 key: "lead.additionalRemarks",
@@ -4017,12 +4004,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "key": "customer.id",
                         "title": "CUSTOMER_SEARCH",
                         orderNo: 10,
-                        "type": "lov",
                         "lovonly": true,
-                        initialize: function(model, form, parentModel, context) {
-                            model.customerBranchId = parentModel.customer.customerBranchId;
-                            model.centreId = parentModel.customer.centreId;
-                        },
+                        // initialize: function(model, form, parentModel, context) {
+                        //     model.customerBranchId = parentModel.customer.customerBranchId;
+                        //     model.centreId = parentModel.customer.centreId;
+                        //     var centreCode = formHelper.enum('centre').data;
+
+                        //     var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                        //     if(centreName && centreName.length > 0) {
+                        //         model.centreName = centreName[0].name;
+                        //     }
+
+                        // },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -5843,8 +5836,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "insurancePolicyType": {
                         key: "loanAccount.vehicleLoanDetails.insurancePolicyType",
-                        title: "INSURANCE_POLICY_TYPE",
-                        type: "select"
+                        title: "INSURANCE_POLICY_TYPE"
+                        // type: "select"
                     }
                 }
             },
