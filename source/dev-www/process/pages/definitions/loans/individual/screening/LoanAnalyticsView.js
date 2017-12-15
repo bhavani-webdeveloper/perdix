@@ -12,43 +12,57 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				title: 'APPLICANT',
 				pageClass: 'applicant',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 10
 			}, {
 				pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
 				title: 'CO_APPLICANT',
 				pageClass: 'co-applicant',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 20
 			}, {
 				pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
 				title: 'GUARANTOR',
 				pageClass: 'guarantor',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 30
 			}, {
 				pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
 				title: 'BUSINESS',
 				pageClass: 'business',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 40
 			}, {
 				pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
 				title: 'Business Financials',
 				pageClass: 'business-finance',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 50
 			}, {
 				pageName: 'loans.individual.screening.detail.LoanApplicationView',
 				title: 'Loan Recommendation',
 				pageClass: 'loan_recommendation',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 60
+			}, {
+				pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
+				title: 'LOAN_REQUEST',
+				pageClass: 'loan-request',
+				minimum: 1,
+				maximum: 1,
+				order: 65
 			}, {
 				pageName: 'loans.individual.screening.detail.SummaryView',
 				title: 'Summary',
 				pageClass: 'summary',
 				minimum: 1,
-				maximum: 1
+				maximum: 1,
+				order: 70
 			}],
 			"bundlePages": [],
 			"offline": false,
@@ -168,6 +182,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'loan_recommendation',
 							model: {
 								customerId: res.customerId
+							}
+						});
+
+						$this.bundlePages.push({ // TODO: remove once LoanApplicationView is completed
+							pageClass: 'loan-request',
+							model: {
+								loanAccount: res
 							}
 						});
 
