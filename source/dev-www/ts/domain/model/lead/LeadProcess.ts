@@ -65,7 +65,7 @@ export class LeadProcess implements CanApplyPolicy {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    proceed(toStage: string): Observable<LeadProcess>{
+    proceed(): Observable<LeadProcess>{
         // this.stage = toStage;
         this.leadAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<LeadProcess>  = new PolicyManager(this, LeadPolicyFactory.getInstance(), 'beforeProceed', LeadProcess.getProcessConfig());

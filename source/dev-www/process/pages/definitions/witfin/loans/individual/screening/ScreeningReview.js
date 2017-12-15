@@ -238,54 +238,6 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             });
 
-                        } else {
-                            LoanProcessts.createNewProcess()
-                            .subscribe(function(loanProcess){
-                                bundleModel.loanProcess = loanProcess;
-
-                                if (loanProcess.applicantEnrolmentProcess){
-                                    $this.bundlePages.push({
-                                        pageClass: "applicant",
-                                        model: {
-                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
-                                }
-
-                                if (loanProcess.loanCustomerEnrolmentProcess) {
-                                    $this.bundlePages.push({
-                                        pageClass: "business",
-                                        model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
-                                }
-
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-request',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'cbview',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
-
-                                deferred.resolve();
-                            });
                         }
                         return deferred.promise;
                     },

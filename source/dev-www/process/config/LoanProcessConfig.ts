@@ -22,6 +22,22 @@ let config = {
                         "arguments": null
                     }
                 ]
+            },
+            afterSave: {
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='Screening'",
+                        "add": [
+                            {
+                                "name": "LoadStageRelatedPolicy",
+                                "arguments": {
+                                    "stage":"Completed"
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         },
 

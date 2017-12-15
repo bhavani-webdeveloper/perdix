@@ -7,6 +7,7 @@ import {LoadRelatedCustomerData} from './LoadRelatedCustomerData';
 
 import {LoadRelatedCustomersPolicy} from "./LoadRelatedCustomersPolicy";
 import {DefaultRelatedCustomersPolicy} from "./DefaultRelatedCustomersPolicy";
+import {LoadStageRelatedPolicy} from './LoadStageRelatedPolicy';
 export class LoanPolicyFactory implements IPolicyFactory{
 
     private static _instance:LoanPolicyFactory = null;
@@ -38,6 +39,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return obj;
             case 'LoadRelatedCustomerData':
                 return new LoadRelatedCustomerData();
+            case 'LoadStageRelatedPolicy':
+                return new LoadStageRelatedPolicy();
             default:
                 return null;
         }

@@ -6,6 +6,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanProcess = LoanProcess["LoanProcess"];
     var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
+
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
@@ -144,7 +145,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess.loanAccount;
                                 loanAccount.applicantEnrolmentProcess.customerId = loanAccount.customerId;
+                                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                                        var _leadId = $stateParams.pageData['lead_id'];
+                                        loanProcess.loanAccount.leadId = _leadId;
 
+                                    }
                                 if (loanAccount.currentStage != 'Screening'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
@@ -224,7 +229,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
+                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
+                                    var _leadId = $stateParams.pageData['lead_id'];
+                                    loanProcess.loanAccount.leadId = _leadId;
+
+                                    }
                                 if (loanProcess.applicantEnrolmentProcess){
                                     $this.bundlePages.push({
                                         pageClass: "applicant",
@@ -301,6 +311,45 @@ define(["perdix/domain/model/loan/LoanProcess",
                 eventListeners: {
                     "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
+                    },
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        console.log("custome rloaded :: " + params.customer.firstName);
+                        if (pageObj.pageClass =='applicant'){
+                            BundleManager.broadcastEvent("applicant-updated", params.customer);
+                        }
+                    },
+                    "new-enrolment": function(pageObj, bundleModel, params){
+                        switch (pageObj.pageClass){
+                            case 'applicant':
+                                $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
+                                break;
+                            case 'co-applicant':
+                                $log.info("New co-applicant");
+                                if (!_.hasIn(bundleModel, 'coApplicants')) {
+                                    bundleModel.coApplicants = [];
+                                }
+                                BundleManager.broadcastEvent("new-co-applicant", params);
+                                bundleModel.coApplicants.push(params.customer);
+                                break;
+                            case 'guarantor':
+                                $log.info("New guarantor");
+                                if (!_.hasIn(bundleModel, 'guarantors')){
+                                    bundleModel.guarantors = [];
+                                }
+                                bundleModel.guarantors.push(params.guarantor);
+                                break;
+                            case 'business':
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
+                                break;
+                            default:
+                                $log.info("Unknown page class");
+                                break;
+
+                        }
                     },
                     "new-loan": function(pageObj, bundleModel, params){
                         $log.info("Inside new-loan of CBCheck");
