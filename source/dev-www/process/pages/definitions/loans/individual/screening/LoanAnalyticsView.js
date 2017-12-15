@@ -43,7 +43,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				pageClass: 'loan_recommendation',
 				minimum: 1,
 				maximum: 1
-			},{
+			}, {
 				pageName: 'loans.individual.screening.detail.SummaryView',
 				title: 'Summary',
 				pageClass: 'summary',
@@ -87,15 +87,15 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 						bundleModel.guarantors = [];
 						bundleModel.business = {};
 						bundleModel.urnNos = [];
-						bundleModel.customer_detail={
-							applicant:{},
-							coApplicants:{
-								id:[],
-								urn:[]
+						bundleModel.customer_detail = {
+							applicant: {},
+							coApplicants: {
+								id: [],
+								urn: []
 							},
-							guarantors:{
-								id:[],
-								urn:[]
+							guarantors: {
+								id: [],
+								urn: []
 							}
 						}
 						var customerIds = {
@@ -109,7 +109,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								bundleModel.urnNos.push(cust.urn);
 								customerIds.applicant = cust.customerId;
 								bundleModel.customer_detail.applicant.id = cust.customerId;
-								bundleModel.customer_detail.applicant.urn=cust.urn;
+								bundleModel.customer_detail.applicant.urn = cust.urn;
 							} else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
 								bundleModel.urnNos.push(cust.urn);
 								customerIds.coApplicants.push(cust.customerId);
@@ -122,8 +122,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								bundleModel.customer_detail.guarantors.urn.push(cust.urn);
 							}
 						}
-                        
-                       
+
+
 
 						$this.bundlePages.push({
 							pageClass: 'applicant',
@@ -181,14 +181,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								}
 							}
 						});*/
-						 $this.bundlePages.push({
+						$this.bundlePages.push({
 							pageClass: 'summary',
 							model: {
 								cbModel: {
 									customerId: res.customerId,
 									loanId: bundleModel.loanId,
 									scoreName: 'RiskScore3',
-									customerDetail:bundleModel.customer_detail
+									customerDetail: bundleModel.customer_detail
 								}
 							}
 						});
@@ -202,26 +202,15 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				return deferred.promise;
 			},
 			eventListeners: {
-				"scoring-loaded": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("_scoresApplicant", params);
+				"summaryView_financial-summary": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("financial-summary", params);
 				},
-				"rel_to_business": function(pageObj, bundleModel, params) {
+				"business-customer": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("business_customer", params);
 				},
-				"liability_summary": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("_liability", params);
-				},
-				
-				"loan_Data_loanAppView": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("_machineImages", params);
-				},
-				
-				/*"customer_detail": function(pageObj, bundleModel, bundleModel.customer_detail) {
-					BundleManager.broadcastEvent("_customer_detail",bundleModel.customer_detail );
+				"loanRequest_customer": function(pageObj, bundleModel, params) {
+					BundleManager.broadcastEvent("customer_loanRequest", params);
 				}
-*/
-
 			}
 		}
 

@@ -63,7 +63,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    BundleManager.pushEvent('loan_Data_loanAppView', model._bundlePageObj, model.customer);
+                    BundleManager.pushEvent('loanRequest_customer', model._bundlePageObj, model.customer);
                 });
 
             },
@@ -397,7 +397,7 @@ define({
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             eventListeners: {
-                "_scoresApplicant": function(bundleModel, model, params) {
+                "financial-summary": function(bundleModel, model, params) {
                     model._scores = params;
                     model.deviationDetails = model._scores[12];
 

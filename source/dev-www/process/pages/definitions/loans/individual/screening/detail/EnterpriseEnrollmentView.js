@@ -18,7 +18,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    BundleManager.pushEvent('rel_to_business', model._bundlePageObj, model.customer);
+                    BundleManager.pushEvent('business-customer', model._bundlePageObj, model.customer);
 
                     /*Address*/
                     model.business_address_html = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
@@ -663,27 +663,10 @@ define({
                 return Enrollment.getSchema().$promise;
             },
             eventListeners: {
-                "_machineImages": function(bundleModel, model, params) {
+                "customer_loanRequest": function(bundleModel, model, params) {
                     model.machineDocs = params.fixedAssetsMachinaries;
-
-
-                    /*={
-                        img_arr:[],
-                        mach_bills:[]
-                    }*/
-
-                    /* for(i=0;i<params.fixedAssetsMachinaries.length;i++){
-                        if(params.fixedAssetsMachinaries[i].machineImage!=null)
-                       // machineDocs.img_arr.push(irf.BASE_URL + "/" + params.fixedAssetsMachinaries[i].machineImage);
-                        model.machineDocs.img_arr.push(params.fixedAssetsMachinaries[i].machineImage);
-                        if(params.fixedAssetsMachinaries[i].machineBillsDocId!=null)
-                        //machineDocs.mach_bills.push(irf.BASE_URL + "/" + params.fixedAssetsMachinaries[i].machineBillsDocId)
-                    model.machineDocs.mach_bills.push(params.fixedAssetsMachinaries[i].machineBillsDocId)
-                    
-                    }
-*/
                 },
-                "_scoresApplicant": function(bundleModel, model, params) {
+                "financial-summary": function(bundleModel, model, params) {
                     var psi={};
                     psi=params[2].data[5];
                     model.psi=psi['Actual Value']/psi.ParameterScore
