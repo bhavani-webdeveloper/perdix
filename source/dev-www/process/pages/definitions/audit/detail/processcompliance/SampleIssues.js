@@ -6,6 +6,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             var tempIssueDetails = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
+                $log.info(id);
+                $log.info("id");
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
                 if (issue.options.type == "dropdown") {
                     for (j in issue.options.type_of_issue_options) {
@@ -16,8 +18,9 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 });
                                 return false;
                             }
+                            $log.info(tempIssueDetails);
                             tempIssueDetails.push(id);
-                        } else if (!(issue.options.type_of_issue_options[j].option_id == id.option_id) && !id.deviation) {
+                        } else if ((issue.options.type_of_issue_options[j].option_id == id.option_id) == null && id.deviation == "") {
                             for (var i = id.length - 1; i <= 0; i--) {
                                 id.splice(i, 1);
                             }
@@ -97,6 +100,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 var formDetails = [];
 
                 var processSampleIssues = function(response) {
+                    $log.info(response);
+                    $log.info("response");
                     model.processCompliance = response;
                     var sampleColumnsConfig = null;
                     for (i in master.sampling_columns_config) {
@@ -167,6 +172,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     }
                     var issueDetailsForm = [];
                     var processIssuesForm = function(issue, i) {
+                        $log.info(issue);
+                        $log.info("issue");
                         issueDetailsForm.push({
                             "type": "section",
                             "html": '<div><strong>' + (i + 1) + '.</strong> <span>' + master.typeofissues[issue.type_of_issue_id].description + '</span></div>'
@@ -276,14 +283,34 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 ];
                             }
                         }, {
+                            "key": "sample.issue_details[" + i + "].spot_fixed",
+                            "type": "checkbox",
+                            "condition": model.siteCode = "KGFS" && model.sample.issue_details[form.arrayIndex].spot_fixed == "0",
+                            "fullwidth": true,
+                            "schema": {
+                                "default": false
+                            },
+                            "title": "SPOT_FIX"
+                        }, {
                             "type": "section",
                             "html": '<hr>'
                         });
                     };
+
                     model.sample.issue_details = model.sample.issue_details || [];
                     // existing issues from sample
                     var issuesDataMap = {};
                     for (i = 0; i < model.sample.issue_details.length; i++) {
+                        // sorting attandent question code
+
+                        // _.sortBy(model.sample.issue_details, function(k) {
+                        //     return k.option_id;
+                        // });
+                        // _.sortBy(model.sample.issue_details, [function(k)  {
+                        //     $log.info(k)
+                        //     $log.info("k")
+                        //     return k.option_id;
+                        // }]);
                         processIssuesForm(master.autosampling_typeofissue_sets[model.sample.issue_details[i].type_of_issue_id], i);
                         issuesDataMap[model.sample.issue_details[i].type_of_issue_id] = true;
                     }
@@ -384,19 +411,16 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             actions: {
                 submit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
-                    // if (model.siteCode = "kinara"){
-                    //     if(!validateKinara(model.sample)){
-                    //     return;
-                    //   } 
-                    // } 
-                    // if (model.siteCode = "KGFS"){
-                    //     if(!validateKgfs(model.sample)){
-                    //     return;
-                    //   } 
-                    // }
-                    if (!validateKgfs(model.sample)) {
+                    if (model.siteCode = "kinara"){
+                        if(!validateKinara(model.sample)){
                         return;
-                    }
+                      } 
+                    } 
+                    if (model.siteCode = "KGFS"){
+                        if(!validateKgfs(model.sample)){
+                        return;
+                      } 
+                    }                   
                     model.sample.status = "0";
                     if (model.$isOffline) {
                         PageHelper.showLoader();
