@@ -247,7 +247,7 @@ define({
 							"title": "FATHER_FULL_NAME",
 						}, {
 							"key": "customer.motherName",
-							"title": "MOTHER'S FULL NAME"
+							"title": "Mother's Full Nmae"
 						}, {
 							"key": "customer.maritalStatus"
 						}, {
@@ -430,7 +430,7 @@ define({
 							"title": "No of Active Loans"
 						}, {
 							"key": "custom_fields.liability_fields.total_monthly_installment",
-							"title": "Total monthly instalments"
+							"title": "Total Monthly Instalments"
 						}, {
 							"key": "custom_fields.liability_fields.outstandingAmount",
 							"title": "OUTSTANDING_AMOUNT"
@@ -482,7 +482,7 @@ define({
 									return irfCurrencyFilter(full.loanAmountInPaisa)
 								}
 							}, {
-								"title": "Instalment Amount",
+								"title": "Installment Amount",
 								"data": "installmentAmountInPaisa",
 								render:function(data,type,full,meta){
 									return irfCurrencyFilter(full.installmentAmountInPaisa)
@@ -494,7 +494,7 @@ define({
 									return irfCurrencyFilter(full.outstandingAmountInPaisa)
 								}
 							}, {
-								"title": "Loan_Purpose",
+								"title": "Loan Purpose",
 								"data": "liabilityLoanPurpose"
 
 							}, {
@@ -508,7 +508,7 @@ define({
 								"type": "number",
 								"title": "NO_OF_INSTALLMENT_PAID"
 							}, {
-								"title": "Frequency of Instalments",
+								"title": "Frequency of Installments",
 								"data": "frequencyOfInstallment"
 							}, {
 								"data": "interestOnly",
@@ -572,7 +572,7 @@ define({
 								"data": "registeredOwner"
 
 							}, {
-								"title": "VALUE_OF_THE_ASSET",
+								"title": "Asset Value",
 								"data": "ownedAssetValue"
 							}];
 						},

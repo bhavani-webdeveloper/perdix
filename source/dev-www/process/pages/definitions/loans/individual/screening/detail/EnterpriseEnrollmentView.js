@@ -19,6 +19,10 @@ define({
                 }).$promise.then(function(res) {
                     model.customer = res;
                     BundleManager.pushEvent('rel_to_business', model._bundlePageObj, model.customer);
+
+                    /*Address*/
+                    model.business_address_html = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
+                    
                     /*CBREPORT*/
 
                 model.CB_REPORT_DATA={
@@ -116,7 +120,7 @@ define({
                             "title": "Entity ID"
                         }, {
                             "key": "businessName",
-                            "title": "Business Name"
+                            "title": "Company Name"
                         }, {
                             "key": "customer.enterprise.businessType",
                             "title": "Business Type"
@@ -178,13 +182,16 @@ define({
                             "title": "Phone 2"
                         }, {
                             "key": "customer.distanceFromBranch",
-                            "title": "DISTANCE_FROM_BRANCH"
+                            "title": "Distance From Hub"
                         }, {
                             "key": "customer.enterprise.businessInPresentAreaSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_AREA"
                         }, {
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
+                        },{
+                            "key":"business_address_html",
+                            "title":"Address of Business"
                         }]
                     }, {
                         "type": "grid",
@@ -222,20 +229,20 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            "title": "Ragistration Type",
+                            "title": "Registration Type",
                             "data": "registrationType"
                         }, {
-                            "title": "Ragistration Number",
+                            "title": "Registration Number",
                             "data": "registrationNumber"
 
                         }, {
-                            "title": "Ragistered Date",
+                            "title": "Registered Date",
                             "data": "registeredDate"
                         }, {
-                            "title": "Ragistration Validity",
+                            "title": "Registration Validity",
                             "data": "expiryDate",
                         }, {
-                            "title": "Ragistration Document",
+                            "title": "Registration Document",
                             "data": "documentId",
                             /*"type":"file",
                             "required": true,
@@ -274,7 +281,7 @@ define({
                             "title": "No Of Male Employees"
                         }, {
                             "key": "customer.enterprise.noOfMaleEmployees",
-                            "title": "No Of Female Employees"
+                            "title": "No. of Female Employees"
                         }]
                     }, {
                         "type": "grid",
@@ -299,20 +306,20 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "machine_count",
-                            "title": "Total No Of Machinery"
+                            "title": "Total no. of machinery"
                         }, {
                             "key": "totalValue",
-                            "title": "Total Value Of Machinery"
+                            "title": "Total value of machinery"
                         }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
                             "key": "hypothecatedToKinara",
-                            "title": "No Of Machinery Hypothecated To Kinara"
+                            "title": "No. of machinery hypothecated to Kinara"
                         }, {
                             "key": "totalHypothecatedValue",
-                            "title": "Value Of Machinery hypothecated to Kinara"
+                            "title": "Value of machinery hypothecated to Kinara"
                         }]
                     }]
                 }, {
@@ -333,10 +340,10 @@ define({
                                 "title": "Machine Type",
                                 "data": "machineType"
                             }, {
-                                "title": "Manufacturer Name",
+                                "title": "Manufacturer",
                                 "data": "manufacturerName"
                             }, {
-                                "title": "Model No",
+                                "title": "Model No.",
                                 "data": "machineModel",
                             }, {
                                 "title": "Purchase Year",
@@ -358,6 +365,9 @@ define({
                             }, {
                                 "title": "Source",
                                 "data": "fundingSource"
+                            },{
+                                "title":"Hypothecated to",
+                                "data":"hypothecatedTo"
                             }];
                         },
                         getActions: function() {
@@ -365,6 +375,7 @@ define({
                         }
                     }, {
                             "type": "section",
+                            "title":"Machine Photos",
                             "html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
                             "items": [{
                                     "key": "machineDocs[0].machineImage",
@@ -391,6 +402,38 @@ define({
                                     "fileType": "image/*",
                                     "using": "scanner"
                                 }]
+                        },{
+                            "type": "section",
+                            "title":"Machine Bills",
+                            "html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
+                            "items": [{
+                                    "key": "machineDocs[0].machineBillsDocId",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    //"type": "file",
+                                    /*"fileType": "image/*",*/
+                                    "preview":"pdf",
+                                    "using": "scanner"
+                                }, {
+                                    "key": "machineDocs[1].machineBillsDocId",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    /*"type": "file",
+                                    "fileType": "image/*",*/
+                                    "preview":"pdf",
+                                    "using": "scanner"
+                                }, {
+                                    "key": "machineDocs[2].machineBillsDocId",
+                                    "notitle": true,
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    /*"type": "file",
+                                    "fileType": "image/*",*/
+                                    "preview":"pdf",
+                                    "using": "scanner"
+                                }]
                         }]
                 }]
             }, {
@@ -414,18 +457,14 @@ define({
                         }, {
                             "key": "CB_REPORT_DATA.loss",
                             "title": "Loss Accounts"
-                        },{"key": "CB_REPORT_DATA.fileId",
+                        },{
+                            "key": "CB_REPORT_DATA.fileId",
                             "title": "CB Report",
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "preview": "pdf",
-                            "using": "scanner"} /*{
-                            "type":"section",
-                            "title":"CB Report",
-                            "items":[]
-                            
-                        }*/]
+                            "using": "scanner"}]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
@@ -474,38 +513,38 @@ define({
                                 "title": "Bribe Offered"
                             }, {
                                 "key": "customer.shopOrganized",
-                                "title": "ShopShed Organized"
+                                "title": "Shop Shed Organized"
                             }, {
                                 "key": "customer.isIndustrialArea",
                                 "title": "In Industrial Area"
                             }, {
                                 "key": "customer.customerAttitudeToKinara",
-                                "title": "Customer Attitude to Kinara"
+                                "title": "Customer Attitude To Kinara"
                             }, {
                                 "key": "customer.bookKeepingQuality",
                                 "title": "Book Keeping Quality"
                             }, {
                                 "key": "customer.challengingChequeBounce",
-                                "title": "Challenging Cheque"
+                                "title": "Challenging Cheque Bounce/Fess Charge/Policies"
                             }, {
                                 "key": "customer.allMachinesAreOperational",
-                                "title": "All Machine Operational"
+                                "title": "All Machines Operational"
                             }, {
                                 "key": "customer.employeeSatisfaction",
                                 "title": "Employee Satisfaction"
                             }, {
                                 "key": "customer.politicalOrPoliceConnections",
-                                "title": "Political Police Connection"
+                                "title": "Political Police Connections"
                             }]
                         }, {
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
                                 "key": "customer.multipleProducts",
-                                "title": "Multiple Products (More then 3)"
+                                "title": "Multiple Products (more than 3)"
                             }, {
                                 "key": "customer.multipleBuyers",
-                                "title": "Multiple Buyers (More then 3)"
+                                "title": "Multiple Buyers (more than 3)"
                             }, {
                                 "key": "customer.seasonalBusiness",
                                 "title": "Seasonal Business"
@@ -514,19 +553,19 @@ define({
                                 "title": "Income Stability"
                             }, {
                                 "key": "customer.utilisationOfBusinessPremises",
-                                "title": "Utilization of Business Premises"
+                                "title": "Utilization Of Business Premises"
                             }, {
                                 "key": "customer.approachForTheBusinessPremises",
-                                "title": "Approach for the Business Premises"
+                                "title": "Approach For The Business Premises"
                             }, {
                                 "key": "customer.safetyMeasuresForEmployees",
-                                "title": "Safety measures for the Employees"
+                                "title": "Safety Measures For Employees"
                             }, {
                                 "key": "customer.childLabours",
                                 "title": "Child Labourers"
                             }, {
                                 "key": "customer.isBusinessEffectingTheEnvironment",
-                                "title": "Is the Business affecting Environment"
+                                "title": "Is the Business Effecting Environment"
                             }, {
                                 "key": "customer.stockMaterialManagement",
                                 "title": "Stock Material Management"
@@ -607,7 +646,7 @@ define({
                                 "title": "Payment Terms",
                                 "data": "paymentTerms"
                             }, {
-                                "title": "Payment Mode",
+                                "title": "Mode of Payment",
                                 "data": "modeOfPayment"
                             }, {
                                 "title": "Customer Response",
