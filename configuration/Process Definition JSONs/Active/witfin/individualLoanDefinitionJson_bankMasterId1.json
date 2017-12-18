@@ -1083,6 +1083,241 @@
                }
             }
          },
+         "nominees":{
+            "title":"Nominee Details",
+            "type":"array",
+            "maxItems":null,
+            "items":{
+               "type":"object",
+               "required":[
+
+               ],
+               "properties":{
+                  "nomineeFirstName":{
+                     "title":"Nominee First Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeMiddleName":{
+                     "title":"Nominee Middle Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeLastName":{
+                     "title":"Nominee Last Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeRelationship":{
+                     "title":"Nominee Relationship",
+                     "type":"string",
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"relation"
+                  },
+                  "nomineeDoorNo":{
+                     "title":"Nominee Door No",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeStreet":{
+                     "title":"Nominee Street",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeLocality":{
+                     "title":"Nominee Locality",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeDistrict":{
+                     "title":"Nominee District",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"district"
+                  },
+                  "nomineeState":{
+                     "title":"Nominee State",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineePincode":{
+                     "title":"nomineePincode",
+                     "type":"string",
+                     "minimum":6,
+                     "maximum":6,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "nomineeDOB":{
+                     "title":"Nominee DOB",
+                     "type":"string",
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
+                     ]
+                  },
+                  "nomineeGender":{
+                     "title":"Nominee Gender",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"gender"
+                  },
+                  "nomineeMinor":{
+                     "title":"Nominee Minor",
+                     "type":"boolean",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianTitle":{
+                     "title":"Guardian Title",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianFirstName":{
+                     "title":"Guardian First Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianMiddleName":{
+                     "title":"Guardian Middle Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianLastName":{
+                     "title":"Guardian Last Name",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianRelationWithMinor":{
+                     "title":"Guardian Relation With Minor",
+                     "type":"string",
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"relationship"
+                  },
+                  "guardianDOB":{
+                     "title":"Guardian DOB",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianDoorNo":{
+                     "title":"Guardian Door No",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianStreet":{
+                     "title":"Guardian Street",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianLocality":{
+                     "title":"Guardian Locality",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianDistrict":{
+                     "title":"Guardian District",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"district"
+                  },
+                  "guardianState":{
+                     "title":"Guardian State",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                       "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianPincode":{
+                     "title":"Guardian Pincode",
+                     "type":"string",
+                     "minimum":6,
+                     "maximum":6,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                  },
+                  "guardianGender":{
+                     "title":"Guardian Gender",
+                     "type":"string",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ],
+                     "refCodeCategory":"gender"
+                  }
+               }
+            }
+         },
          "guarantor":{
             "title":"Guarantor Details",
             "type":"array",

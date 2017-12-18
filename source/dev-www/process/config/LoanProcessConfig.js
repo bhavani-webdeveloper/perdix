@@ -25,6 +25,14 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
+                beforeSave: {
+                    "defaults": [
+                        {
+                            "name": "MandatoryFieldsPolicy",
+                            "arguments": null
+                        }
+                    ]
+                },
                 afterSave: {
                     "overrides": [
                         {

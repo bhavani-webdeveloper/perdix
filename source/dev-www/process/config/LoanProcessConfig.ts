@@ -23,6 +23,14 @@ let config = {
                     }
                 ]
             },
+            beforeSave: {
+                "defaults": [
+                    {
+                        "name":"MandatoryFieldsPolicy",
+                        "arguments": null
+                    }
+                ]
+            },
             afterSave: {
                 "overrides": [
                     {
