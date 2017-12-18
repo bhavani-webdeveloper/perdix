@@ -1,8 +1,8 @@
 define({
 	pageUID: "loans.individual.screening.detail.EnterpriseFinancialView",
 	pageType: "Engine",
-	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig"],
-	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig) {
+	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC"],
+	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC) {
 		var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
 		}
@@ -17,7 +17,7 @@ define({
 				self = this;
 
 self.renderForm = function() {
-	var buyerSummaryColumns = [{
+	var buyerDetailsColumns = [{
 		"title": "Buyer",
 		"data": "buyer",
 		render: function(data, type, full, meta) {
@@ -26,7 +26,7 @@ self.renderForm = function() {
 	}];
 	_.forOwn(model.summary.cashFlowDetails.buyerSummary.tableData[0], function(v, k) {
 		if (k != "buyer" && k != "percentage") {
-			buyerSummaryColumns.push({
+			buyerDetailsColumns.push({
 				"title": _.capitalize(k),
 				"data": k,
 				"className": "text-right",
@@ -125,7 +125,7 @@ self.renderForm = function() {
 								"data": "buyer"
 							}, {
 								"title": "Amount",
-								"data": "amount",
+								"data": "average",
 								"className": "text-right",
 								"render": function(data, type, full, meta) {
 									return irfCurrencyFilter(data);
@@ -161,7 +161,7 @@ self.renderForm = function() {
 				"type": "expandablesection",
 				"items": [{
 					"type": "tableview",
-					"key": "summary.cashFlowDetails.buyerSummary.tableData",
+					"key": "summary.cashFlowDetails.buyerDetails.tableData",
 					"notitle": true,
 					"tableConfig": {
 						"ordering": false,
@@ -172,31 +172,27 @@ self.renderForm = function() {
 						"scrollX": true
 					},
 					getColumns: function() {
-						return buyerSummaryColumns;
+						return buyerDetailsColumns;
 					}
+				}, {
+					"type": "section",
+					"html": `
+<div class="">
+	<nvd3
+		data="model.summary.cashFlowDetails.buyerDetails.graphData"
+		options="model.summary.cashFlowDetails.buyerDetails.graphOptions"
+		config="{refreshDataOnly:true, deepWatchData: false}"
+	></nvd3>
+</div>`
 				}]
 			}]
 		}]
 	}, {
 		"type": "box",
-		"overrideType": "default-view",
-		"readonly": true,
-		"title": "Bank Vs NonBank",
-		"colClass": "col-sm-12",
-		"items": []
-	}, {
-		"type": "box",
-		"readonly": true,
-		"overrideType": "default-view",
-		"title": "Buyer Summary",
-		"colClass": "col-sm-12",
-		"items": []
-	}, {
-		"type": "box",
 		"readonly": true,
 		"overrideType": "default-view",
 		"colClass": "col-sm-12",
-		"title": "BANK_ACCOUNT_DETAILS",
+		"title": "Bank Statement Summary",
 		"items": [{
 			"type": "grid",
 			"orientation": "horizontal",
@@ -228,109 +224,52 @@ self.renderForm = function() {
 				}]
 			}]
 		}, {
-			"type": "section",
+			"type": "expandablesection",
 			"items": [{
 				"type": "tableview",
-				"key": "bankAccounts",
-				"title": "",
-				"selectable": false,
+				"key": "business.customerBankAccounts",
+				"notitle": true,
 				"transpose": true,
-				"editable": false,
-				"tableConfig": {
-					"searching": false,
-					"paginate": false,
-					"pageLength": 10
-				},
 				getColumns: function() {
 					return [{
 						"title": "Bank Name",
-						"data": "Bank Name"
+						"data": "customerBankName",
+						"render": function(data, type, full, meta) {
+							return '<strong>'+data+'</strong>';
+						}
 					}, {
 						"title": "Branch Name",
-						"data": "",
-						render: function(data, type, full, meta) {
-							if (!full.branchName)
-								return "NA";
-							return full.branchName
-						}
-
+						"data": "customerBankBranchName"
 					}, {
-						"title": "IFSC Code",
-						"data": "IFS Code"
+						"title": "IFS Code",
+						"data": "ifscCode"
 					}, {
 						"title": "Account Holder Name",
-						"data": "Account Holder Name"
+						"data": "customerNameAsInBank"
 					}, {
 						"title": "Account Number",
-						"data": "Account Number"
+						"data": "accountNumber"
 					}, {
 						"title": "Account Type",
-						"data": "Account Type"
+						"data": "accountType"
 					}, {
 						"title": "Banking Since",
-						"data": "",
-						render: function(data, type, full, meta) {
-							if (!full.Banking_Since)
-								return "NA";
-							return full.Banking_Since
-						}
+						"data": "bankingSince"
 					}, {
 						"title": "Net Banking Available",
-						"data": "",
-						render: function(data, type, full, meta) {
-							if (!full.Net_Banking_Available)
-								return "NA";
-							return full.Net_Banking_Available
-						}
+						"data": "netBankingAvailable"
 					}, {
 						"title": "Limit",
-						"data": "Limit"
-					}];
-				},
-				getActions: function() {
-					return [];
-				}
-			}]
-		}, {
-			"type": "section",
-			"items": [{
-				"type": "tableview",
-				"key": "businessBankStmtSummary",
-				"title": "",
-				"selectable": false,
-				"transpose": true,
-				"editable": false,
-				"tableConfig": {
-					"searching": false,
-					"paginate": false,
-					"pageLength": 10
-				},
-				getColumns: function() {
-					return [{
-						"notitle": true,
-						"data": "data.Month"
+						"data": "limit"
 					}, {
-						"notitle": true,
-						"data": "",
-						render: function(data, type, full, meta) {
-							return '<div class="dotted"></div>'
+						"title": "Bank Statement",
+						"data": "bankStatements",
+						"render": function(data, type, full, meta) {
+							return data.reduce(function(r, o) {
+								return r+'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+o.bankStatementPhoto+'">'+moment(o.startMonth).format('MMMM YYYY')+'</a><br>'
+							}, '');
 						}
-					}, {
-						"title": "Average Bank Balance",
-						"data": "data.Average Bank Balance"
-					}, {
-						"title": "Average Bank Deposits",
-						"data": "data.Average Bank Deposits"
-					}, {
-						"title": "No of EMI Bounces",
-						"data": "data.No of EMI Bounces"
-					}, {
-						"title": "No of non EMI Bounces",
-						"data": "data.No of non EMI Bounces"
 					}];
-				},
-				getActions: function() {
-					return [];
 				}
 			}]
 		}]
@@ -471,6 +410,7 @@ self.renderForm = function() {
 
 					var buyerSummaryTableData = [];
 					var buyerSummaryGraphData = [];
+					var buyerDetailsGraphData = [];
 					var buyerColumnCount = 0;
 					for (var i = 1; i < cfd.columns.length; i++) {
 						if (cfd.columns[i].data == "Amount") {
@@ -487,21 +427,32 @@ self.renderForm = function() {
 							"x": cfd.columns[i].title,
 							"color": randomColor()
 						});
+						buyerDetailsGraphData.push({
+							"key": cfd.columns[i].title,
+							"color": randomColor()
+						});
 					}
-					for (i in cfd.data) {
+					for (i = 0; i < cfd.data.length; i++) {
 						var d = cfd.data[i];
 						if (_.isObject(d.data)) {
 							d = d.data;
 						}
 						var key = d["Month"];
 						if (key == "Avg. Total By Buyer")
-							key = "amount";
+							key = "average";
 						if (key == "Percentage on Average Monthly Revenue")
 							key = "percentage";
 						for (j = 0; j < buyerColumnCount; j++) {
-							buyerSummaryTableData[j][key] = d[cfd.columns[j+1].data];
+							buyerSummaryTableData[j][key] = d[cfd.columns[j+1].data] || 0;
 							if (key == "percentage" && j < buyerColumnCount - 1) {
 								buyerSummaryGraphData[j]["y"] = buyerSummaryTableData[j][key];
+							} else if (key != "percentage" && key != "average" && j < buyerColumnCount - 1) {
+								buyerDetailsGraphData[j].values = buyerDetailsGraphData[j].values || new Array(cfd.data.length - 2);
+								buyerDetailsGraphData[j].values[i] = {
+									"x": key,
+									"y": Number(buyerSummaryTableData[j][key]),
+									"series": i
+								};
 							}
 						}
 					}
@@ -533,26 +484,21 @@ self.renderForm = function() {
 										"legendPosition": "right"
 									}
 								}
+							},
+							"buyerDetails": {
+								"tableData": buyerSummaryTableData,
+								"graphData": buyerDetailsGraphData,
+								"graphOptions": {
+									"chart": {
+										"type": "multiBarChart",
+										"height": 250,
+										"duration": 500,
+										"stacked": false
+									}
+								}
 							}
 						}
 					};
-
-					model.businessBankStmtSummary = params[16].data;
-					model._opex = params[21].data;
-
-					model.bankAccounts = params[10].BankAccounts;
-					model.bankAccountSummary = {
-						"total_avg_deposit": 0,
-						"total_account": model.bankAccounts.length,
-						"total_avg_withdrawals": 0,
-						"total_cheque_bounces": 0,
-						"total_EMI_bounces": 0
-					};
-					_.each(model.bankAccounts, function(account) {
-						model.bankAccountSummary.total_avg_deposit += account['Average Bank Deposit'];
-						model.bankAccountSummary.total_cheque_bounces += account['Total Cheque Bounced(Non EMI)'];
-						model.bankAccountSummary.total_EMI_bounces += account['Total EMI Bounced'];
-					});
 
 					var bpl = params[8].data[0];
 					model.businessPL = {
@@ -605,6 +551,21 @@ self.renderForm = function() {
 				"business_customer": function(bundleModel, model, params) {
 					model.business = params;
 					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
+
+					for (i = 0; i < model.business.customerBankAccounts.length; i++) {
+						var acc = model.business.customerBankAccounts[i];
+					}
+
+					model.business.summary = {
+						"bankStatementSummary": {
+							"averageMonthlyDeposit": 0,
+							"averageMonthlyWithdrawals": 0,
+							"averageMonthlyBalance": 0,
+							"totalAccounts": model.business.customerBankAccounts.length,
+							"totalChequeBounces": 0,
+							"totalEMIBounces": 0
+						}
+					}
 				}
 			},
 			actions: {}
