@@ -1056,7 +1056,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         return;
                     }
 
-                    (!model.customer.$fingerprintquality) {
+                    if(!model.customer.$fingerprintquality) {
                         elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
                         return;
                     }

@@ -178,6 +178,8 @@ define({
                                 ]
                             }    
                     },
+
+
                     "loanMonitoringDetails.currentStage": {
                         "Completed": {
                             "overrides": {
@@ -192,7 +194,28 @@ define({
                                 }
                             }
                         }
-                    }
+                    },
+                    "loanMonitoringDetails.siteCode":{  
+                       "KGFS":{  
+                            "overrides":{  
+                                "LoanUtilisation.AssetPurchase.numberOfAssetsDelivered":{ 
+                                  "required":false 
+                                 },
+                               "LoanUtilisation.AssetPurchase.amountUtilizedForAssetsPurchase":{ 
+                                 "required":false  
+                                },
+                                "LoanUtilisation.AssetPurchase.percentage":{  
+                                  "required":false 
+                                },
+                                "LoanUtilisation.AssetPurchase.totalCreationAssetValue":{  
+                                  "required":false 
+                                },
+                                "LoanUtilisation.AssetPurchase.isAssetsOrdered":{  
+                                   "required":false 
+                                }
+                            }
+                        }
+                    }    
                 }
             }
 
@@ -211,6 +234,8 @@ define({
                     }
                     model = Utils.removeNulls(model, true);
                     $log.info("luc page got initiated");
+
+                    model.loanMonitoringDetails.siteCode = SessionStore.getGlobalSetting("siteCode");
 
                     var self = this;
                     var formRequest = {

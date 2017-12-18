@@ -59,7 +59,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 model.customer.mailingDistrict=family.mailingDistrict;
                 model.customer.mailingPincode=family.mailingPincode;
                 model.customer.mailingState=family.mailingState;
-                if(family.familydata.maritalStatus=='MARRIED' && family.familydata.relationShip=='Wife'){
+                if(family.familydata.maritalStatus=='MARRIED' && (family.familydata.relationShip=='Wife'||family.familydata.relationShip=='Husband')){
                     model.customer.spouseFirstName=family.firstName;
                     model.customer.udf.userDefinedFieldValues.udf33=family.udf.userDefinedFieldValues.udf33;
                     model.customer.udf.userDefinedFieldValues.udf34=family.udf.userDefinedFieldValues.udf34;

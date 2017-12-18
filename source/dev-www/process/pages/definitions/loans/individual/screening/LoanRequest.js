@@ -2019,7 +2019,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 {
                     "key": "loanAccount.securityEmiRequired",
                     "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                    'enumCode': "decisionmaker",
+                    'enumCode': "DECISIONMAKER",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
                     // readonly:true,
