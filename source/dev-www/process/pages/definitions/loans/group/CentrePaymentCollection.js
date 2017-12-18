@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","PagesDefinition",
+"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,PagesDefinition ){
+	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator ){
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -41,15 +41,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	                    model.customerBranchId = branch1[i].value;
 	                }
 	            }
-				if (!model.$$STORAGE_KEY$$) {
-					model.collected = 0;
-					$timeout(function() {
-						model.groupCollectionDemand = [];
-					});
-				} else {
-					formCtrl.disabled = true;
-					model._mode = 'VIEW';
-				}
+			
+				model.collected = 0;
+				$timeout(function() {
+					model.groupCollectionDemand = [];
+				});
+			
 				if (model._storedData && model._storedData.collectionDate) {
 					var cDate = moment(model._storedData.collectionDate);
 					model._storedData.formatedCollectionDate = SessionStore.getFormatedDate(cDate);
@@ -62,10 +59,43 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				$log.info("I got initialized");
 			}
 		},
+		offlineInitialize: function (model, form, formCtrl) {
+			if (model.$$STORAGE_KEY$$) {
+				//formCtrl.disabled = true;
+				model._mode = 'VIEW';
+				// model.groupCollectionDemand = [];
+				// var collectionDemands = model._storedData.collectionDemands;
+				// var centreDemands = $filter('filter')(collectionDemands, {centreId: model.collectionDemandSummary.centreId}, true);
+				// var totalToBeCollected = 0;
+				// var groups = {};
+				// if(!centreDemands || centreDemands.length <= 0) {
+				// 	model.collectionDemandSummary.collectionExist = false;
+				// 	PM.pop('collection-demand', 'No Collection available for the selected Centre. Try a different centre.', 5000);
+				// 	return;
+				// }
+				// model.collectionDemandSummary.collectionExist = true;
+				// _.each(centreDemands, function(v,k){
+				// 	v.amountPaid = v.installmentAmount;
+				// 	if (v.totalToBeCollected > v.installmentAmount) {
+				// 		v.amountPaid = v.totalToBeCollected;
+				// 		v.overdue = true;
+				// 	}
+				// 	totalToBeCollected += v.amountPaid;
+				// 	if (!v.groupCode) v.groupCode = 'Individual Loans';
+				// 	if (!groups[v.groupCode]) groups[v.groupCode] = [];
+				// 	groups[v.groupCode].push(v);
+				// });
+				// _.each(groups, function(v,k){
+				// 	var d = {groupCode:k, collectiondemand:v};
+				// 	model.groupCollectionDemand.push(d);
+				// });
+				// model.totalToBeCollected = model.collected = totalToBeCollected;
+			}
+		},
 		offline: true,
 		getOfflineDisplayItem: function(item, index){
 			return [
-				'Centre: '+item["collectionDemandSummary"]["centreId"] + ' - ' + item["collectionDemandSummary"]["demandDate"],
+				'Centre: ' + item["collectionDemandSummary"]["centreName"] + ' (' +item["collectionDemandSummary"]["centreId"] + ') - ' + item["collectionDemandSummary"]["demandDate"],
 				'Total: '+item["totalToBeCollected"],
 				'Collected: '+item["collected"]
 			]
@@ -92,27 +122,81 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						{
 							"key":"collectionDemandSummary.demandDate",
 							"type": "date",
-							"readonly": false
+							"condition": "model._mode!=='VIEW'",
+							"readonly": true
 						},
 						{
-							"key":"collectionDemandSummary.centreId",
-							"type":"select",
+							"key":"collectionDemandSummary.demandDate",
+							"type": "date",
+							"condition": "model._mode == 'VIEW'",
+							"readonly": true,
+						},
+						{
+							"key":"collectionDemandSummary.centreName",
 							"title": "CENTRE",
-							"enumCode": "usercentre",
-							filter: {
-								"parentCode": "branch_id"
-							},
-							parentEnumCode:"branch_id",
-							parentValueExpr:"model.customerBranchId",
+							type: "lov",
 							"condition": "model._mode!=='VIEW'",
-							"onChange": function(modelValue, form, model) {
-								model.totalToBeCollected = 0;
-								model.collected = 0;
+		                    autolov: true,
+		                    lovonly: true,
+		                    bindMap: {},
+		                    required: true,
+		                    searchHelper: formHelper,
+		                    "inputMap": {
+	                            "centreName": {
+	                                "key": "collectionDemandSummary.centreName",
+	                                "title": "CENTRE"
+	                            },
+	                        },
+	                        initialize: function(model, form, parentModel, context) {
+	                            //model.centreName = parentModel.collectionDemandSummary.centreName;
+	                        },
+		                    search: function (inputModel, form, model, context) {
+		                        var centres = SessionStore.getCentres();
+		                        $log.info("hi");
+		                        $log.info(centres);
+
+		                        var centreCode = formHelper.enum('usercentre').data;
+		                        var out = [];
+		                        if (centres && centres.length) {
+		                            for (var i = 0; i < centreCode.length; i++) {
+		                                for (var j = 0; j < centres.length; j++) {
+		                                	if(inputModel.centreName && !centres[j].centreName.toLowerCase().includes(inputModel.centreName.toLowerCase())){
+		                                		continue;
+		                                	}
+		                                    if (centreCode[i].value == centres[j].id) {
+		                                        out.push({
+		                                            name: centreCode[i].name,
+		                                            id: centreCode[i].value
+		                                        })
+		                                    }
+		                                }
+		                            }
+		                        }
+		                        return $q.resolve({
+		                            headers: {
+		                                "x-total-count": out.length
+		                            },
+		                            body: out
+		                        });
+		                    },
+		                    onSelect: function (valueObj, model, context) {
+		                        model.collectionDemandSummary.centreName = valueObj.name;
+		                        model.collectionDemandSummary.centreId = valueObj.id;
+		                        delete model.collectionDemandSummary.photoOfCentre;
+		                        delete model.collectionDemandSummary.latitude;
+		                        delete model.collectionDemandSummary.longitude;
+		                        model.collected = 0;
 								model.groupCollectionDemand = [];
 								var collectionDemands = model._storedData.collectionDemands;
-								var centreDemands = $filter('filter')(collectionDemands, {centreId:modelValue}, true);
+								var centreDemands = $filter('filter')(collectionDemands, {centreId: model.collectionDemandSummary.centreId}, true);
 								var totalToBeCollected = 0;
 								var groups = {};
+								if(!centreDemands || centreDemands.length <= 0) {
+									model.collectionDemandSummary.collectionExist = false;
+									PM.pop('collection-demand', 'No Collection available for the selected Centre. Try a different centre.', 5000);
+									return;
+								}
+								model.collectionDemandSummary.collectionExist = true;
 								_.each(centreDemands, function(v,k){
 									v.amountPaid = v.installmentAmount;
 									if (v.totalToBeCollected > v.installmentAmount) {
@@ -129,12 +213,32 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									model.groupCollectionDemand.push(d);
 								});
 								model.totalToBeCollected = model.collected = totalToBeCollected;
-							}
+		                    },
+		                    getListDisplayItem: function (item, index) {
+		                        return [
+		                            item.name
+		                        ];
+		                    }
+						},
+						{
+							"key":"collectionDemandSummary.centreName",
+							"title": "CENTRE",
+							"readonly": true,
+							"condition": "model._mode == 'VIEW'",
 						},
 						{
 							"key": "collectionDemandSummary.photoOfCentre",
 							"type": "file",
 							"fileType": "image/*",
+							"condition": "model._mode!=='VIEW'",
+							"offline": true
+						},
+						{
+							"key": "collectionDemandSummary.photoOfCentre",
+							"type": "file",
+							"condition": "model._mode == 'VIEW'",
+							"fileType": "image/*",
+							readonly: true,
 							"offline": true
 						},
 						{
@@ -160,9 +264,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centreId",
+			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
+				"condition": "model._mode!=='VIEW'",
 				"fullwidth": true,
 				"onChange": function(modelValue, form, model) {
 					_.each(model.groupCollectionDemand, function(value, key){
@@ -176,6 +281,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"key": "groupCollectionDemand",
 				"add": null,
 				"remove": null,
+				"type": "array",
+				"condition": "model._mode!=='VIEW' && model.groupCollectionDemand",
 				"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
 				"items": [
 					{
@@ -183,7 +290,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
 						"add": null,
 						"remove": null,
-						"view": "fixed",
+						"type": "array",
+						"condition": "model._mode==='VIEW' && model.groupCollectionDemand[arrayIndex].collectiondemand",
 						"fieldHtmlClass": "no-border",
 						"items": [
 							{
@@ -237,23 +345,30 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._mode==='VIEW'",
+			"condition": "model._mode==='VIEW' && model.groupCollectionDemand",
 			"readonly": true,
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
+				"condition": "model._mode==='VIEW'",
 				"fullwidth": true
 			},
 			{
 				"key": "groupCollectionDemand",
 				"add": null,
+				"condition": "model._mode==='VIEW' && model.groupCollectionDemand",
 				"remove": null,
+				"view": "fixed",
+				"type": "array",
 				"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
 				"items": [
 					{
 						"key": "groupCollectionDemand[].collectiondemand",
+						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
 						"add": null,
 						"remove": null,
+						"type": "array",
 						"view": "fixed",
+						"condition": "model._mode==='VIEW' && model.groupCollectionDemand[arrayIndex].collectiondemand",
 						"fieldHtmlClass": "no-border",
 						"items": [
 							{
@@ -263,9 +378,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"type": "section",
 									"htmlClass": "col-xs-5",
 									"items": [{
-										"key": "groupCollectionDemand[].collectiondemand[].customerName",
-										"readonly": true,
-										"notitle": true
+										"type": "section",
+										"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].totalToBeCollected|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (with overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
 									}]
 								},{
 									"type": "section",
@@ -273,7 +387,24 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									"items": [{
 										"key": "groupCollectionDemand[].collectiondemand[].amountPaid",
 										"type": "amount",
-										"notitle": true
+										"notitle": true,
+										"onChange": function(modelValue, form, model){
+											var demand = model.groupCollectionDemand[form.arrayIndexes[0]].collectiondemand[form.arrayIndexes[1]];
+											demand.error = '';
+											if (demand.amountPaid > demand.totalToBeCollected) {
+												demand.error = "No advance payment allowed";
+												return;
+											}
+											var collected = 0;
+											var l1 = model.groupCollectionDemand.length;
+											for(i=0;i<l1;i++){
+												var l2=model.groupCollectionDemand[i].collectiondemand.length;
+												for(j=0;j<l2;j++){
+													collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
+												}
+											}
+											model.collected = collected;
+										}
 									}]
 								},{
 									"type": "section",
@@ -288,10 +419,117 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					}
 				]
 			}]
-		},{
+		}, {
 			"type": "box",
 			"title": "COLLECTION",
-			"condition": "model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId",
+			"condition": "model._mode==='VIEW' && model.collectionDemandSummary",
+			"readonly": true,
+			"items": [
+				{
+					"key": "totalToBeCollected",
+					"title": "TO_COLLECT",
+					"type": "amount",
+					"readonly": true
+				},
+				{
+					"key": "collected",
+					"title": "COLLECTED",
+					"type": "amount",
+					"readonly": true
+				},
+				{
+					"type": "fieldset",
+					"title": "DENOMINATIONS",
+					"condition": "model._mode==='VIEW'",
+					"readonly": true,
+					"items": [{
+						"type": "section",
+						"htmlClass": "row",
+						"items": [{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationThousand",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationFiveHundred",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationHundred",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "row",
+						"items": [{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationFifty",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationTwenty",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationTen",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "row",
+						"items": [{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationFive",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationTwo",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationOne",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						}]
+					},
+					{
+						key:"collectionDemandSummary._denominationTotal",
+						title:"TOTAL",
+						"type": "amount",
+						readonly:true
+					}]
+				}
+			]
+		}, {
+			"type": "box",
+			"title": "COLLECTION",
+			"condition": "model._mode!=='VIEW' && model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
 			"items": [
 				{
 					"key": "totalToBeCollected",
@@ -391,97 +629,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"type": "amount",
 						readonly:true
 					}]
-				},
-				{
-					"type": "fieldset",
-					"title": "DENOMINATIONS",
-					"condition": "model._mode==='VIEW'",
-					"readonly": true,
-					"items": [{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationThousand",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFiveHundred",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationHundred",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFifty",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTwenty",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTen",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFive",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTwo",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationOne",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},
-					{
-						key:"collectionDemandSummary._denominationTotal",
-						title:"TOTAL",
-						"type": "amount",
-						readonly:true
-					}]
 				}
 			]
-		},{
+		}, {
 			"type": "actionbox",
 			"items": [{
 				"type": "save",
@@ -670,12 +820,14 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					var cds = model.collectionDemandSummary;
 					var gcd = model.groupCollectionDemand;
 					var cd = [];
+					var cdIds = [];
 					if (cds && gcd && gcd.length) {
 						cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD') + "T00:00:00Z";
 						_.each(gcd, function(group, gk){
 							_.each(group.collectiondemand, function(v,k){
 								if (v.amountPaid) {
 									cd.push(v);
+									cdIds.push(v.id);
 								}
 							});
 						});
@@ -725,6 +877,33 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							function(response){
 								$log.info(response);
 								PM.pop('collection-demand', 'Collection Submitted Successfully', 3000);
+								if(model.$$STORAGE_KEY$$) {
+									formHelper.newOffline.deleteOffline($stateParams.pageName, model);
+								}
+								var modidifiedCollectionData = [], modifiedCollectionDemand = [];
+								var _offlineKey = formCtrl.$name+"Download" + "__" + SessionStore.getBranch();
+								var localStorageCollectionData = StorageService.retrieveJSON(_offlineKey);
+								if(localStorageCollectionData) {
+									for(var index = 0; index < localStorageCollectionData.length; index++) {
+										if(requestObj.collectionDemandSummary.demandDate == 
+											localStorageCollectionData[index].collectionDate) {
+											var _collectionDemandStored = localStorageCollectionData[index].collectionDemands;
+											for (var i =0; i < _collectionDemandStored.length; i++) {
+												if(cdIds.indexOf(_collectionDemandStored[i].id) == -1) {
+													modifiedCollectionDemand.push(_collectionDemandStored[i]);
+												}
+											}
+											if (modifiedCollectionDemand.length == 0){
+												continue;
+											}
+											localStorageCollectionData[index].collectionDemands = modifiedCollectionDemand;
+										}
+										modidifiedCollectionData.push(localStorageCollectionData[index]);
+									}
+									StorageService.storeJSON(model._offlineKey, modidifiedCollectionData);
+									if (modifiedCollectionDemand.length == 0) irfNavigator.goBack();
+								}
+
 							},
 							function(errorResponse){
 								$log.error(errorResponse);
@@ -748,6 +927,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"title": "CENTRE",
 							"type": "number"
 						},
+						"centreName": {
+		                    "type": ["string","null"],
+		                    "title": "CENTRE",
+		                },
 						"allAttendance": {
 							"title": "ALL_ATTENDANCE",
 							"type": "boolean"
