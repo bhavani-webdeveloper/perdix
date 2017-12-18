@@ -21,6 +21,7 @@
         },
         "Page/LeadDashboard",
         "Page/witfinLeadDashboard",
+        "Page/LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard",
         {
