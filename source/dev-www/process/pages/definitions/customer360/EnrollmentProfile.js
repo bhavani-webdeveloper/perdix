@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer360.EnrollmentProfile"),
-["$log", "Enrollment", "EnrollmentHelper", "SessionStore","$state", "formHelper", "$q", "irfProgressMessage",
+["$log", "Enrollment", "EnrollmentHelper","PagesDefinition", "SessionStore","$state", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService",
-function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q, irfProgressMessage,
+function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService){
 
     var branch = SessionStore.getBranch();
@@ -84,6 +84,18 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
                     model =fixData(model);
+
+
+                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
+                        $log.info(data);
+                        $log.info(data.EditBasicCustomerInfo);
+                        if(data){
+                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+                        }
+                    },function(err){
+                        model.EditBasicCustomerInfo= true;
+                    });
+
                     if (model.customer.currentStage==='Stage01') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
@@ -131,7 +143,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 {
                     key: "customer.fullName",
                     title: "FULL_NAME",
-                    readonly: true
+                    condition:"!model.EditBasicCustomerInfo",
+                },
+                {
+                    key: "customer.fullName",
+                    title: "FULL_NAME",
+                    readonly:true,
+                    condition:"model.EditBasicCustomerInfo",
                 },
                 {
                     key:"customer.photoImageId",
@@ -168,18 +186,30 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                 },
                 {
                     key:"customer.dateOfBirth",
+                    condition:"model.EditBasicCustomerInfo",
                     type:"date",
-                    /*onChange: function(modelValue, form, model) {
+                    readonly: true
+                },
+                {
+                    key:"customer.dateOfBirth",
+                    onChange: function(modelValue, form, model) {
                         if (model.customer.dateOfBirth) {
                             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
-                    },*/
+                    },
+                    condition:"!model.EditBasicCustomerInfo",
+                    type:"date",
+                },
+                {
+                    key: "customer.fatherFullName",
+                    condition:"model.EditBasicCustomerInfo",
+                    title: "FATHER_FULL_NAME",
                     readonly: true
                 },
                 {
                     key: "customer.fatherFullName",
+                    condition:"!model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
-                    readonly: true
                 },
                 {
                     key:"customer.maritalStatus",
@@ -277,8 +307,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore,$state, formHelper, $q
                         "customer.landLineNo",
                         {
                             "key": "customer.mobilePhone",
-                            "readonly": true
+                             condition:"model.EditBasicCustomerInfo",
+                            "readonly": true,    
                         },
+                        {
+                            "key": "customer.mobilePhone",
+                             condition:"!model.EditBasicCustomerInfo",   
+                        },
+                        
                         "customer.mailSameAsResidence"
                     ]
                 },{
