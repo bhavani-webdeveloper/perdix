@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
         	$log.info("Inside LoanBookingBundle");
 
 
@@ -91,17 +91,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                     return out;
                 },
 
-                bundleActions: [{
-                    name: "Conversation",
-                    desc: "",
-                    icon: "fa fa-comment",
-                    fn: function(bundleModel) {
-                        Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                    },
-                    isApplicable: function(bundleModel) {
-                        return true;
-                    }
-                }],
+                bundleActions: [],
 
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");

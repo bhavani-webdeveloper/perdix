@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-	"Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
-	function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
+	"Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
+	function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
 		$log.info("Inside LoanAnalyticsView");
 		return {
 			"type": "page-bundle",
@@ -66,23 +66,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 			}],
 			"bundlePages": [],
 			"offline": false,
-
-			bundleActions: [{
-				name: "Go Back",
-				desc: "",
-				icon: "fa fa-angle-left",
-				fn: function(bundleModel) {
-					$log.info("back button pressed");
-					$log.info($stateParams.pageId);
-					if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
-						var loanId = $stateParams.pageId;
-						irfNavigator.goBack();
-					}
-				},
-				isApplicable: function(bundleModel) {
-					return true;
-				}
-			}],
 			"pre_pages_initialize": function(bundleModel) {
 				$log.info("Inside pre_page_initialize");
 				var deferred = $q.defer();

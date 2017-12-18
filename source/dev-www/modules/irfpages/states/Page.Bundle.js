@@ -101,6 +101,11 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                 }
                 deferred.resolve(pageObj);
             } catch (err) {
+                if (err.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page(pageObj.pageName)+"Provider")) {
+                    $log.warn("Loading Dynamic Bundle Child page... "+pageObj.pageName);
+                } else {
+                    $log.error(err);
+                }
                 require([pageDefPath], function(pageDefObj){
                     /* Page is loaded, now bind it to pages */
                     $log.info("[REQUIRE] Done loading page(" + pageObj.pageName + ")");
