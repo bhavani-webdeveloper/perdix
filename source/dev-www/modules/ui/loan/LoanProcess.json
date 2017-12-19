@@ -242,107 +242,6 @@
             }
         }
     },
-    "CollateralInformation": {
-        "type": "box",
-        "title": "COLLATERAL_INFORMATION",
-        "items": {
-            "collateral": {
-                "key": "loanAccount.collateral",
-                "type": "array",
-                "startEmpty": true,
-                "title": "COLLATERAL_DETAILS",
-                "items": {
-                    "collateralDescription": {
-                        "key": "loanAccount.collateral[].collateralDescription",
-                        "title": "MACHINE",
-                        "required": true,
-                        "type": "string"
-                    },
-                    "collateralValue": {
-                        "key": "loanAccount.collateral[].collateralValue",
-                        "title": "PURCHASE_PRICE",
-                        "required": true,
-                        "type": "number"
-                    },
-                    "expectedIncome": {
-                        "key": "loanAccount.collateral[].expectedIncome",
-                        "title": "EXPECTED_INCOME",
-                        "required": true,
-                        "type": "number"
-                    },
-                    "collateralType": {
-                        "key": "loanAccount.collateral[].collateralType",
-                        "title": "MACHINE_TYPE",
-                        "required": true,
-                        "type": "select",
-                        "enumCode": "collateral_type"
-                    },
-                    "manufacturer": {
-                        "key": "loanAccount.collateral[].manufacturer",
-                        "title": "MANFACTURE_NAME",
-                        "required": true,
-                        "type": "string"
-                    },
-                    "modelNo": {
-                        "key": "loanAccount.collateral[].modelNo",
-                        "title": "MACHINE_MODEL",
-                        "required": true,
-                        "type": "string"
-                    },
-                    "serialNo": {
-                        "key": "loanAccount.collateral[].serialNo",
-                        "title": "SERIAL_NO",
-                        "type": "string"
-                    },
-                    "expectedPurchaseDate": {
-                        "key": "loanAccount.collateral[].expectedPurchaseDate",
-                        "title": "EXPECTED_PURCHASE_DATE",
-                        "required": true,
-                        "type": "date",
-                        "minDate": "2017-09-08"
-                    },
-                    "machineAttachedToBuilding": {
-                        "key": "loanAccount.collateral[].machineAttachedToBuilding",
-                        "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                        "type": "select",
-                        "required": true,
-                        "enumCode": "decisionmaker"
-                    },
-                    "hypothecatedToBank": {
-                        "key": "loanAccount.collateral[].hypothecatedToBank",
-                        "title": "HYPOTHECATED_TO_KINARA",
-                        "required": true,
-                        "enumCode": "decisionmaker",
-                        "type": "select"
-                    },
-                    "electricityAvailable": {
-                        "key": "loanAccount.collateral[].electricityAvailable",
-                        "title": "ELECTRICITY_AVAIALBLE",
-                        "type": "select",
-                        "enumCode": "decisionmaker",
-                        "required": true
-                    },
-                    "spaceAvailable": {
-                        "key": "loanAccount.collateral[].spaceAvailable",
-                        "title": "SPACE_AVAILABLE",
-                        "type": "select",
-                        "enumCode": "decisionmaker",
-                        "required": true
-                    },
-                    "collateral1FilePath": {
-                        "key": "loanAccount.collateral[].collateral1FilePath",
-                        "title": "MACHINE_QUOTATION",
-                        "category": "Loan",
-                        "required": true,
-                        "subCategory": "DOC1",
-                        "type": "file",
-                        "fileType": "application/pdf",
-                        "using": "scanner"
-                    }
-                }
-            }
-        }
-    },
     "LoanRecommendation": {
         "type": "box",
         "title": "LOAN_RECOMMENDATION",
@@ -451,16 +350,13 @@
                         "type": "string",
                         "required": true,
                         "inputmode": "number",
-                        "numberType": "tel",
-                        /*"schema":{
-                         "pattern":"/[1-9]{1}[0-9]{9}$/"
-                         }*/
+                        "numberType": "tel"
                     },
                     "occupation": {
                         "key": "customer.verifications[].occupation",
                         "title": "OCCUPATION",
                         "type": "select",
-                        "enumCode": "occupation",
+                        "enumCode": "occupation"
                     },
                     "address": {
                         "key": "customer.verifications[].address",
@@ -509,7 +405,6 @@
             }
         }
     },
-
     "basicDetails": {
         "type": "box",
         "title": "BASIC_DETAILS",
@@ -582,9 +477,9 @@
                                     "region": "customer.villageName",
                                     "pincode": "customer.pincode",
                                     "district": "customer.district",
-                                    "state": "customer.state",
+                                    "state": "customer.state"
                                 },
-                                "searchHelper": "formHelper",
+                                "searchHelper": "formHelper"
                                 }
                             },
                             "locality": {
@@ -601,8 +496,8 @@
                             },
                             "state": {
                                 "key": "customer.state",
-                                "readonly": true,
-                            },
+                                "readonly": true
+                            }
                         }
                     },
                     "permanentResidentAddress": {
@@ -640,7 +535,7 @@
                                     "mailingDistrict": "customer.mailingDistrict",
                                     "mailingState": "customer.mailingState"
                                 },
-                                "searchHelper": "formHelper",
+                                "searchHelper": "formHelper"
                             },
                             "mailingLocality": {
                                 "key": "customer.mailingLocality",
@@ -657,17 +552,106 @@
                         }
                     }
                 }
-            },
+            }
         },
-    }
-    "actionbox": {
-        "type": "actionbox",
+    "CollateralInformation": {
+        "type": "box",
+        "title": "COLLATERAL_INFORMATION",
         "items": {
-            "save": {
-                "type": "button",
-                "icon": "fa fa-circle-o",
-                "title": "SAVE",
-                "onClick": "actions.save(model, formCtrl, form, $event)"
+            "collateral": {
+                "key": "loanAccount.collateral",
+                "type": "array",
+                "startEmpty": true,
+                "title": "COLLATERAL_DETAILS",
+                "items": {
+                    "collateralDescription": {
+                        "key": "loanAccount.collateral[].collateralDescription",
+                        "title": "MACHINE",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "collateralValue": {
+                        "key": "loanAccount.collateral[].collateralValue",
+                        "title": "PURCHASE_PRICE",
+                        "required": true,
+                        "type": "number"
+                    },
+                    "expectedIncome": {
+                        "key": "loanAccount.collateral[].expectedIncome",
+                        "title": "EXPECTED_INCOME",
+                        "required": true,
+                        "type": "number"
+                    },
+                    "collateralType": {
+                        "key": "loanAccount.collateral[].collateralType",
+                        "title": "MACHINE_TYPE",
+                        "required": true,
+                        "type": "select",
+                        "enumCode": "collateral_type"
+                    },
+                    "manufacturer": {
+                        "key": "loanAccount.collateral[].manufacturer",
+                        "title": "MANFACTURE_NAME",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "modelNo": {
+                        "key": "loanAccount.collateral[].modelNo",
+                        "title": "MACHINE_MODEL",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "serialNo": {
+                        "key": "loanAccount.collateral[].serialNo",
+                        "title": "SERIAL_NO",
+                        "type": "string"
+                    },
+                    "expectedPurchaseDate": {
+                        "key": "loanAccount.collateral[].expectedPurchaseDate",
+                        "title": "EXPECTED_PURCHASE_DATE",
+                        "required": true,
+                        "type": "date",
+                        "minDate": "2017-09-08"
+                    },
+                    "machineAttachedToBuilding": {
+                        "key": "loanAccount.collateral[].machineAttachedToBuilding",
+                        "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                        "type": "select",
+                        "required": true,
+                        "enumCode": "decisionmaker"
+                    },
+                    "hypothecatedToBank": {
+                        "key": "loanAccount.collateral[].hypothecatedToBank",
+                        "title": "HYPOTHECATED_TO_KINARA",
+                        "required": true,
+                        "enumCode": "decisionmaker",
+                        "type": "select"
+                    },
+                    "electricityAvailable": {
+                        "key": "loanAccount.collateral[].electricityAvailable",
+                        "title": "ELECTRICITY_AVAIALBLE",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "required": true
+                    },
+                    "spaceAvailable": {
+                        "key": "loanAccount.collateral[].spaceAvailable",
+                        "title": "SPACE_AVAILABLE",
+                        "type": "select",
+                        "enumCode": "decisionmaker",
+                        "required": true
+                    },
+                    "collateral1FilePath": {
+                        "key": "loanAccount.collateral[].collateral1FilePath",
+                        "title": "MACHINE_QUOTATION",
+                        "category": "Loan",
+                        "required": true,
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner"
+                    }
+                }
             }
         }
     }

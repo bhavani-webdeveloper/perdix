@@ -1163,9 +1163,7 @@
             "maxItems":null,
             "items":{
                "type":"object",
-               "required":[
-
-               ],
+               "required":[],
                "properties":{
                   "nomineeFirstName":{
                      "title":"Nominee First Name",
