@@ -72,7 +72,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var prqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
             if (prqMenu) {
                 IndividualLoan.search({
-                    'stage': 'VehicleValidation',
+                    'stage': 'VehicleValuation',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -129,7 +129,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-
             var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue"];
             if (arqMenu) {
                 IndividualLoan.search({
@@ -148,6 +147,66 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     arqMenu.data = '-';
                 });
             }
+
+
+            var bcaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue"];
+            if (bcaqMenu) {
+                IndividualLoan.search({
+                    'stage': 'BranchCreditAppraisal',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    bcaqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    bcaqMenu.data = '-';
+                });
+            }
+
+            var hocaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue"];
+            if (hocaqMenu) {
+                IndividualLoan.search({
+                    'stage': 'HOCreditAppraisal',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    hocaqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    hocaqMenu.data = '-';
+                });
+            }
+
+            var mcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"];
+            if (mcqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ManagementCommittee',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    mcqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    mcqMenu.data = '-';
+                });
+            }
+
+
 
 
         });
