@@ -2,10 +2,10 @@ define({
 	pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "filterFilter", "irfCurrencyFilter"
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "filterFilter", "irfCurrencyFilter","Model_ELEM_FC"
 	],
 	$pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, filterFilter, irfCurrencyFilter) {
+		PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, filterFilter, irfCurrencyFilter,Model_ELEM_FC) {
 		return {
 			"type": "schema-form",
 			"title": "INDIVIDUAL_ENROLLMENT",
@@ -44,10 +44,13 @@ define({
 
 					/*Auto_Custom fields -- START */
 					/*Present Address*/
-					model.individual_custom_fields.customer_address.address = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
-					/*VIEW UPLOADS SECTION*/
-					model.addressProof = 'KYC-' + model.customer.addressProof;
-					model.identityProof = 'KYC-' + model.customer.identityProof;
+					var s1=model.customer.doorNo;
+					var s2=model.customer.street;
+					var s3=model.customer.pincode;
+					var s4=model.customer.district;
+					var s5=model.customer.state;
+					model.individual_custom_fields.customer_address.address = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ',(s4 == null ? "" : s4) , ' \n', (s5 == null ? "" : s5));
+				
 					/*Family fields*/
 					model.individual_custom_fields.family_fields.family_member_count = model.customer.familyMembers.length;
 					model.individual_custom_fields.family_fields.dependent_family_member = 0;
@@ -199,34 +202,6 @@ define({
                             }]
                         });
                     }
-
-
-
-					/*Auto_Custom field -- END*/
-					/*if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
-						var fileForms = [{
-							"key": "customer.rawMaterialExpenses[].invoiceDocId",
-							"notitle": true,
-							"category": "Loan",
-							"subCategory": "DOC1",
-							"type": "file",
-							"preview": "pdf",
-							"using": "scanner"
-						}];
-						//
-						self.form.push({
-							"type": "box",
-							"colClass": "col-sm-12",
-							"readonly": true,
-							"overrideType": "default-view",
-							"title": "VIEW_UPLOADS",
-							"items": [{
-								"type": "section",
-								"html": '<sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator>',
-								"items": fileForms
-							}]
-						});
-					}*/
 
 
 				});
@@ -418,47 +393,7 @@ define({
 						}
 					}]
 				}]
-			},/* {
-				"type": "box",
-				"readonly": true,
-				"colClass": "col-sm-12",
-				"overrideType": "default-view",
-				"title": "RELATIONSHIP_TO_BUSINESS",
-				"condition": "model.enterpriseCustomerRelations.length!=0",
-				"items": [{
-					"type": "tableview",
-					"key": "enterpriseCustomerRelations",
-					"transpose": true,
-					"title": "",
-					"selectable": false,
-					"editable": false,
-					"tableConfig": {
-						"searching": false,
-						"paginate": false,
-						"pageLength": 10,
-					},
-					getColumns: function() {
-						return [{
-							"title": "RELATIONSHIP_TO_BUSINESS",
-							"data": "relationshipType"
-						}, {
-							"title": "EXPERIENCE_IN_BUSINESS",
-							"data": "experienceInBusiness"
-
-						}, {
-							"title": "BUSINESS_INVOLVEMENT",
-							"data": "businessInvolvement"
-						}, {
-							"title": "PARTNER_OF_ANY_OTHER_COMPANY",
-							"data": "partnerOfAnyOtherCompany"
-						}];
-					},
-					getActions: function() {
-						return [];
-					}
-				}]
-
-			},*/{
+			},{
 				"type": "box",
 				"readonly": true,
 				"colClass": "col-sm-12",
@@ -756,7 +691,7 @@ define({
 									var title = [];
 									var url = [];
 									for (i = 0; i < full.bankStatements.length; i++) {
-										url.push(irf.BASE_URL + "/" + full.bankStatements[i].bankStatementPhoto);
+										url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.bankStatements[i].bankStatementPhoto);
 										title.push(moment(full.bankStatements[i].startMonth).format('MMMM YYYY'));
 									}
 									//return '<div  ng-repeat = "i in ' + full.bankStatements + 'track by $index"  ><p><a  href="' + url + '[$index] ">' + title + '[$index]</a></p></div>'
@@ -1223,7 +1158,7 @@ define({
 
 
 				},
-				"business_customer": function(bundleModel, model, params) {
+				"business-customer": function(bundleModel, model, params) {
 					model.enterpriseCustomerRelations = [];
 					model.coApp_cnt = 1
 					model.gua_cnt = 3;

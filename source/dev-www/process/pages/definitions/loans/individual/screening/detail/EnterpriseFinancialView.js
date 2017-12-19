@@ -200,7 +200,7 @@ self.renderForm = function() {
 				"type": "grid",
 				"orientation": "vertical",
 				"items": [{
-					"key": "bankAccountSummary.total_avg_deposit",
+					"key": "business.summary.bankAccountSummary.total_avg_deposit",
 					"title": "Average Monthly Deposit"
 				}, {
 					"key": "",
@@ -213,13 +213,13 @@ self.renderForm = function() {
 				"type": "grid",
 				"orientation": "vertical",
 				"items": [{
-					"key": "bankAccountSummary.total_account",
+					"key": "business.summary.bankAccountSummary.total_account",
 					"title": "Total no of Account"
 				}, {
-					"key": "bankAccountSummary.total_cheque_bounces",
+					"key": "business.summary.bankAccountSummary.total_cheque_bounces",
 					"title": "Total no of Cheque Bounce"
 				}, {
-					"key": "bankAccountSummary.total_EMI_bounces",
+					"key": "business.summary.bankAccountSummary.total_EMI_bounces",
 					"title": "Total no EMI Bounce"
 				}]
 			}]
@@ -548,7 +548,7 @@ self.renderForm = function() {
 					};
 					self.renderForm();
 				},
-				"business_customer": function(bundleModel, model, params) {
+				"business-customer": function(bundleModel, model, params) {
 					model.business = params;
 					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
 

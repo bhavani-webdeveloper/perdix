@@ -2,21 +2,23 @@ define({
     pageUID: "loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource","Model_ELEM_FC"
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource) {
-        var self = {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource,Model_ELEM_FC) {
+        return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
+                 model.loanAccount = bundleModel.loanAccount;
+                 var self = this;
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    BundleManager.pushEvent('business-customer', model._bundlePageObj, model.customer);
+                    BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
                     /*Address*/
                     model.business_address_html = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
@@ -65,7 +67,39 @@ define({
                 });
 
 
-                /*Mahcine Stack data*/
+                /*View_upload data*/
+                
+                   
+
+                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+                        var fileForms = [];
+                        for (i in model.loanAccount.loanDocuments) {
+                            fileForms.push({
+                                "key": "loanAccount.loanDocuments[" + i + "].documentId",
+                                "notitle": true,
+                                "title": model.loanAccount.loanDocuments[i].document,
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                "type": "file",
+                                "preview": "pdf"
+                            });
+                        }
+                        self.form.push({
+                            "type": "box",
+                            "colClass": "col-sm-12",
+                            "readonly": true,
+                            "overrideType": "default-view",
+                            /*
+                                                        "htmlClass":"width:100% overflow:scroll",*/
+                            "title": "VIEW_UPLOADS",
+                            "items": [{
+                                "type": "section",
+                                "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                                "items": fileForms
+                            }]
+                        });
+                    }
+                
 
             },
             form: [{
@@ -209,15 +243,9 @@ define({
                         }, {
                             "title": "Registration Document",
                             "data": "documentId",
-                            /*"type":"file",
-                            "required": true,
-                            "category":"CustomerEnrollment",
-                            "subCategory":"REGISTRATIONDOCUMENT",
-                            "fileType":"application/pdf",
-                            "using": "scanner"*/
 
                             render: function(data, type, full, meta) {
-                                var url = irf.BASE_URL + "/" + full.documentId;
+                                var url = Model_ELEM_FC.fileStreamUrl + "/" + full.documentId;
                                 return '<a href="' + url + '">Download</a>'
                             }
 
@@ -637,38 +665,6 @@ define({
                 return Enrollment.getSchema().$promise;
             },
             eventListeners: {
-                "loan-account": function(bundleModel, model, params) {
-                    model.loanAccount = params;
-
-                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
-                        var fileForms = [];
-                        for (i in model.loanAccount.loanDocuments) {
-                            fileFOrms.push({
-                                "key": "loanAccount.loanDocuments[" + i + "].documentId",
-                                "notitle": true,
-                                "title": model.loanAccount.loanDocuments[i].document,
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                "type": "file",
-                                "preview": "pdf"
-                            });
-                        }
-                        self.form.push({
-                            "type": "box",
-                            "colClass": "col-sm-12",
-                            "readonly": true,
-                            "overrideType": "default-view",
-                            /*
-                                                        "htmlClass":"width:100% overflow:scroll",*/
-                            "title": "VIEW_UPLOADS",
-                            "items": [{
-                                "type": "section",
-                                "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
-                                "items": fileForms
-                            }]
-                        });
-                    }
-                },
                 "financial-summary": function(bundleModel, model, params) {
                     var psi = {};
                     psi = params[2].data[5];
@@ -677,6 +673,5 @@ define({
             },
             actions: {}
         };
-        return self;
     }
 })

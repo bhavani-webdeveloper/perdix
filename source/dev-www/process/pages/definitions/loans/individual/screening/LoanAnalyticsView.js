@@ -45,7 +45,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 			}, {
 				pageName: 'loans.individual.screening.detail.LoanApplicationView',
 				title: 'Loan Recommendation',
-				pageClass: 'loan_recommendation',
+				pageClass: 'loan-recommendation',
 				minimum: 1,
 				maximum: 1,
 				order: 60
@@ -150,7 +150,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 						$this.bundlePages.push({
 							pageClass: 'business',
 							model: {
-								customerId: res.customerId
+								customerId: res.customerId,
+								loanAccount:res
 							}
 						});
 
@@ -162,7 +163,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 						});
 
 						$this.bundlePages.push({
-							pageClass: 'loan_recommendation',
+							pageClass: 'loan-recommendation',
 							model: {
 								customerId: res.customerId
 							}
@@ -206,14 +207,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				return deferred.promise;
 			},
 			eventListeners: {
-				"summaryView_financial-summary": function(pageObj, bundleModel, params) {
+				"financialSummary": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("financial-summary", params);
 				},
-				"business-customer": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("business_customer", params);
-				},
-				"loanRequest_customer": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("loan-account", params);
+				"business": function(pageObj, bundleModel, params) {
+					BundleManager.broadcastEvent("business-customer", params);
 				}
 			}
 		}

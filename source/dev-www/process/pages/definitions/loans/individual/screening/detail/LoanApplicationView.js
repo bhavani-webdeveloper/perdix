@@ -13,6 +13,8 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
+                BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
+                
 
                 /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
@@ -51,8 +53,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    BundleManager.pushEvent('loanRequest_customer', model._bundlePageObj, model.customer);
-                });
+                    });
 
             },
             form: [{

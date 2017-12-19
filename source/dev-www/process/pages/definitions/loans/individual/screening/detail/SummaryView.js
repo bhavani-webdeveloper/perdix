@@ -618,7 +618,7 @@ define({
                             score_name: scoreName
                         }).$promise;
                         onSuccessPromise.then(function(res) {
-                            BundleManager.pushEvent('summaryView_financial-summary', model._bundlePageObj, res);
+                            BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
                             prepareData(res, model);
                             model.$prepared = true;
                             prepareDataDeferred.resolve();
@@ -665,7 +665,7 @@ define({
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             eventListeners: {
-                "business_customer": function(bundleModel, model, params) {
+                "business-customer": function(bundleModel, model, params) {
                     model.business = params;
                     model.business.centreName = filterFilter(formHelper.enum('centre').data, {
                         value: model.business.centreId
