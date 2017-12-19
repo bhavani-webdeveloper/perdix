@@ -14,7 +14,7 @@ define({
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
-                
+
 
                 /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
@@ -34,16 +34,16 @@ define({
                     }
                 }
 
-                model.updateChosenMitigant = function(checked,item) {
+                model.updateChosenMitigant = function(checked, item) {
                     if (checked) {
                         // add item
-                        item.selected=true;
-                        $log.info( model.deviationDetails +"kishan");
+                        item.selected = true;
+                        $log.info(model.deviationDetails + "kishan");
 
                     } else {
                         // remove item
-                       item.selected=false;
-                       $log.info(model.deviationDetails+"yadav")
+                        item.selected = false;
+                        $log.info(model.deviationDetails + "yadav")
                     }
                 };
 
@@ -53,7 +53,7 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
-                    });
+                });
 
             },
             form: [{
@@ -340,7 +340,7 @@ define({
                             //'<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
                             '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
                             '</li></ul></td></tr></tbody></table>'
-                
+
                     }]
                 }, {
                     "type": "box",
@@ -420,77 +420,78 @@ define({
                                 score: item.ParameterScore,
                                 selected: false
                             };
-                            mitigants[j] =  allMitigants[mitigants[j]];
+                            mitigants[j] = allMitigants[mitigants[j]];
                         }
-                        if (item.ChosenMitigant && item.ChosenMitigant !=null) {
-                        var chosenMitigants = item.ChosenMitigant.split('|');
-                        for (j in chosenMitigants) {
-                            allMitigants[chosenMitigants[j]].selected = true;
+                        if (item.ChosenMitigant && item.ChosenMitigant != null) {
+                            var chosenMitigants = item.ChosenMitigant.split('|');
+                            for (j in chosenMitigants) {
+                                allMitigants[chosenMitigants[j]].selected = true;
+                            }
                         }
-                    }
                         model.deviationDetails.push({
                             parameter: item.Parameter,
                             score: item.ParameterScore,
                             deviation: item.Deviation,
                             mitigants: mitigants,
-                            color_english:item.color_english,
-                            color_hexadecimal:item.color_hexadecimal
+                            color_english: item.color_english,
+                            color_hexadecimal: item.color_hexadecimal
                         });
                     }
 
                     /*/*for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
                         /*  d.newData=[];*/
-                        /*if (d.Mitigant && d.Mitigant.length != 00) {
+                    /*if (d.Mitigant && d.Mitigant.length != 00) {
                             if (d.Mitigant && d.Mitigant != null) {
                                 d.ListOfMitigants = d.Mitigant.split("|");
                             }
 */
-                            /*for(var i=0;i<d.ListOfMitigants.length;i++){
-                                d.newData[i]={
-                                    id:d.ListOfMitigants[i],
-                                    selected:false
-                                }
-                            }*/
-/*
+                    /*for(var i=0;i<d.ListOfMitigants.length;i++){
+                        d.newData[i]={
+                            id:d.ListOfMitigants[i],
+                            selected:false
                         }
                     }*/
-                 /*   model.deviationParameter = [];
-                    model.myvar = 0;
-                    for (var i = 0; i < model.deviationDetails.data.length; i++) {
-                        var d = model.deviationDetails.data[i];
-                        model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
-                        delete model.deviationParameter[model.deviationParameter.length - 1].ListOfMitigants;
-                        delete model.deviationParameter[model.deviationParameter.length - 1].Mitigant;
-                        model.deviationParameter[model.deviationParameter.length - 1].mitigants = [];
-                        model.deviationParameter[model.deviationParameter.length - 1].ChosenMitigant = [];
-                        if (d.Mitigant && d.Mitigant.length != 00) {
-                            d.ListOfMitigants = d.Mitigant.split("|");
-                            for (var j = 0; j < d.ListOfMitigants.length; j++) {
-                                model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
-                                    mitigantName: d.ListOfMitigants[j],
-                                    chosen: true
-                                });
-                            }
-                        }
-                    }*/
+                    /*
+                                            }
+                                        }*/
+                    /*   model.deviationParameter = [];
+                       model.myvar = 0;
+                       for (var i = 0; i < model.deviationDetails.data.length; i++) {
+                           var d = model.deviationDetails.data[i];
+                           model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
+                           delete model.deviationParameter[model.deviationParameter.length - 1].ListOfMitigants;
+                           delete model.deviationParameter[model.deviationParameter.length - 1].Mitigant;
+                           model.deviationParameter[model.deviationParameter.length - 1].mitigants = [];
+                           model.deviationParameter[model.deviationParameter.length - 1].ChosenMitigant = [];
+                           if (d.Mitigant && d.Mitigant.length != 00) {
+                               d.ListOfMitigants = d.Mitigant.split("|");
+                               for (var j = 0; j < d.ListOfMitigants.length; j++) {
+                                   model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
+                                       mitigantName: d.ListOfMitigants[j],
+                                       chosen: true
+                                   });
+                               }
+                           }
+                       }*/
 
                     model.additional = {};
                 }
             },
             actions: {
                 submit: function(model) {
-                    // function: updateChosenMitigants // model.allMitigants is object
-                    model.loanAccount.loanMitigants = [];
-                    _.forOwn(model.allMitigants, function(v, k) {
-                        if (v.selected) {
-                            model.loanAccount.loanMitigants.push(v);
-                        }
-                    })
-                }/*,
-                updateChosenMitigants:function() {
-                    
-                }*/
+                        // function: updateChosenMitigants // model.allMitigants is object
+                        model.loanAccount.loanMitigants = [];
+                        _.forOwn(model.allMitigants, function(v, k) {
+                            if (v.selected) {
+                                model.loanAccount.loanMitigants.push(v);
+                            }
+                        })
+                    }
+                    /*,
+                                    updateChosenMitigants:function() {
+                                        
+                                    }*/
             }
         }
     }

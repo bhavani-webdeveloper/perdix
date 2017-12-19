@@ -2,18 +2,18 @@ define({
     pageUID: "loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource","Model_ELEM_FC"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC"
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource,Model_ELEM_FC) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC) {
         return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
-                 model.loanAccount = bundleModel.loanAccount;
-                 var self = this;
+                model.loanAccount = bundleModel.loanAccount;
+                var self = this;
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -21,7 +21,12 @@ define({
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
                     /*Address*/
-                    model.business_address_html = model.customer.doorNo.concat('\n', model.customer.street, '\n', model.customer.pincode, '\n ', model.customer.district, ' \n', model.customer.state);
+                    var s1 = model.customer.doorNo;
+                    var s2 = model.customer.street;
+                    var s3 = model.customer.pincode;
+                    var s4 = model.customer.district;
+                    var s5 = model.customer.state;
+                    model.business_address_html = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ', (s4 == null ? "" : s4), ' \n', (s5 == null ? "" : s5));
 
                     /*CBREPORT*/
 
@@ -68,38 +73,38 @@ define({
 
 
                 /*View_upload data*/
-                
-                   
 
-                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
-                        var fileForms = [];
-                        for (i in model.loanAccount.loanDocuments) {
-                            fileForms.push({
-                                "key": "loanAccount.loanDocuments[" + i + "].documentId",
-                                "notitle": true,
-                                "title": model.loanAccount.loanDocuments[i].document,
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                "type": "file",
-                                "preview": "pdf"
-                            });
-                        }
-                        self.form.push({
-                            "type": "box",
-                            "colClass": "col-sm-12",
-                            "readonly": true,
-                            "overrideType": "default-view",
-                            /*
-                                                        "htmlClass":"width:100% overflow:scroll",*/
-                            "title": "VIEW_UPLOADS",
-                            "items": [{
-                                "type": "section",
-                                "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
-                                "items": fileForms
-                            }]
+
+
+                if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+                    var fileForms = [];
+                    for (i in model.loanAccount.loanDocuments) {
+                        fileForms.push({
+                            "key": "loanAccount.loanDocuments[" + i + "].documentId",
+                            "notitle": true,
+                            "title": model.loanAccount.loanDocuments[i].document,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf"
                         });
                     }
-                
+                    self.form.push({
+                        "type": "box",
+                        "colClass": "col-sm-12",
+                        "readonly": true,
+                        "overrideType": "default-view",
+                        /*
+                                                    "htmlClass":"width:100% overflow:scroll",*/
+                        "title": "VIEW_UPLOADS",
+                        "items": [{
+                            "type": "section",
+                            "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                            "items": fileForms
+                        }]
+                    });
+                }
+
 
             },
             form: [{
@@ -371,64 +376,70 @@ define({
                         "type": "section",
                         "title": "Machine Photos",
                         "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
-                        "items":[{
-                       
+                        "items": [{
+
                             "key": "customer.fixedAssetsMachinaries[0].machineImage",
-                            "notitle":true,/*
-                            "title":model.customer.fixedAssetsMachinaries[0].machineType,*/
+                            "notitle": true,
+                            /*
+                                                        "title":model.customer.fixedAssetsMachinaries[0].machineType,*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
-                        },{
-                       
+                        }, {
+
                             "key": "customer.fixedAssetsMachinaries[1].machineImage",
-                            "notitle":true,/*
-                            "title":"customer.fixedAssetsMachinaries[1].machineType",*/
+                            "notitle": true,
+                            /*
+                                                        "title":"customer.fixedAssetsMachinaries[1].machineType",*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
-                        },{
-                       
+                        }, {
+
                             "key": "customer.fixedAssetsMachinaries[2].machineImage",
-                            "notitle":true,/*
-                            "title":"customer.fixedAssetsMachinaries[2].machineType",*/
+                            "notitle": true,
+                            /*
+                                                        "title":"customer.fixedAssetsMachinaries[2].machineType",*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
                         }]
-                        
-                
+
+
                     }, {
                         "type": "section",
                         "title": "Machine Bills",
-                        "condition":"model.customer.fixedAssetsMachinaries[0]!=null",
+                        "condition": "model.customer.fixedAssetsMachinaries[0]!=null",
                         "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
                         "items": [{
-                            "key": "customer.fixedAssetsMachinaries[0].machineBillsDocId",/*
-                            "title": "customer.fixedAssetsMachinaries[0].machineType",
-                            "notitle":true,*/
+                            "key": "customer.fixedAssetsMachinaries[0].machineBillsDocId",
+                            /*
+                                                        "title": "customer.fixedAssetsMachinaries[0].machineType",
+                                                        "notitle":true,*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
-                            "key": "customer.fixedAssetsMachinaries[1].machineBillsDocId",/*
-                            "title":"customer.fixedAssetsMachinaries[1].machineType",*/
-                            "notitle":true,
+                            "key": "customer.fixedAssetsMachinaries[1].machineBillsDocId",
+                            /*
+                                                        "title":"customer.fixedAssetsMachinaries[1].machineType",*/
+                            "notitle": true,
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
-                            "key": "model.customer.fixedAssetsMachinaries[2].machineBillsDocId",/*
-                            "title": "customer.fixedAssetsMachinaries[2].machineType",*/
-                            "notitle":true,
+                            "key": "model.customer.fixedAssetsMachinaries[2].machineBillsDocId",
+                            /*
+                                                        "title": "customer.fixedAssetsMachinaries[2].machineType",*/
+                            "notitle": true,
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "preview": "pdf",
@@ -459,7 +470,7 @@ define({
                             "title": "Loss Accounts"
                         }, {
                             "key": "CB_REPORT_DATA.fileId",
-                            "notitle":true,
+                            "notitle": true,
                             "title": "CB Report",
                             "category": "Loan",
                             "subCategory": "DOC1",
