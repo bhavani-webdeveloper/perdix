@@ -208,7 +208,8 @@ define({
                         type: "array",
                         add: null,
                         remove: null,
-                        title: "REMINDER_HISTORY",
+                        titleExpr: "'Reminder: ' + moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
+                        titleExprLocals: {moment: window.moment},
                         items: [{
                             key: "reminder.repaymentCurrentHistories[].reminderStatus",
                             type: "string",
@@ -236,7 +237,8 @@ define({
                     type: "array",
                     add: null,
                     remove: null,
-                    title: "3_MONTH_REMINDER_HISTORY",
+                    titleExpr: "moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate.startMonth).format('MMMM YYYY')",
+                    titleExprLocals: {moment: window.moment},
                     items: [{
                         key: "reminder.repaymentPreviousHistories[].reminderStatus",
                         type: "string",
@@ -264,7 +266,8 @@ define({
                     type: "array",
                     add: null,
                     remove: null,
-                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': ' + model.accountDetails[arrayIndex].repaymentDate : model.accountDetails[arrayIndex].repaymentType + ': ' + model.accountDetails[arrayIndex].demandDate",
+                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
+                    "titleExprLocals": {moment: window.moment},
                     items: [{
                         key: "accountDetails[].instrumnetType",
                         type: "string",
