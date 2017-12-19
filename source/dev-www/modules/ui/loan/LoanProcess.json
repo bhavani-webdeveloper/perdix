@@ -626,6 +626,44 @@
             }
         }
     },
+    "VehicleAssetViability": {
+        "type": "box",
+        "title": "VEHICLE_ASSET_VIABILITY",
+        "items": {
+            "vehicleLoanIncomes": {
+                "type": "array",
+                "title": "VEHICLE_INCOME",
+                "items": {
+                    "incomeType": {
+                        "key": "loanAccount.vehicleLoanIncomes[].incomeType",
+                        "title": "VEHICLE_INCOME_TYPE",
+                        "type": "select"
+                    },
+                    "incomeAmount": {
+                        "key": "loanAccount.vehicleLoanIncomes[].incomeAmount",
+                        "title": "VEHICLE_INCOME_AMOUNT",
+                        "type": "amount"
+                    }
+                }
+            },
+            "vehicleLoanExpenses": {
+                "type": "array",
+                "title": "VEHICLE_EXPENSE",
+                "items": {
+                    "expenseType": {
+                        "key": "loanAccount.vehicleLoanExpenses[].expenseType",
+                        "title": "VEHICLE_INCOME_TYPE",
+                        "type": "select"
+                    },
+                    "expenseAmount": {
+                        "key": "loanAccount.vehicleLoanExpenses[].expenseAmount",
+                        "title": "VEHICLE_INCOME_AMOUNT",
+                        "type": "amount"
+                    }
+                }
+            }
+        }
+    }.
     "CollateralInformation": {
         "type": "box",
         "title": "COLLATERAL_INFORMATION",
