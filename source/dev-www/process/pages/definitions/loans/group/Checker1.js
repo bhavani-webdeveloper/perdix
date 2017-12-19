@@ -681,8 +681,8 @@ return {
                                 "title": "HOUSE_LOCATION",
                                 "key": "group.jlgGroupMembers[].customer.latitude",
                                 "type": "geotag",
-                                "latitude": "group.jlgGroupMembers[].customer.latitude",
-                                "longitude": "group.jlgGroupMembers[].customer.longitude"
+                                "latitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.latitude",
+                                "longitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.longitude"
                             }, {
                                 "title": "ADDRESS_PROOF",
                                 "key": "group.jlgGroupMembers[].customer.addressProof",

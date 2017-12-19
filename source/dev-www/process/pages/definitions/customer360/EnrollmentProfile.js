@@ -49,7 +49,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
         }
-        if (model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
+        if (model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
             if (model.customer.udf.userDefinedFieldValues.udf26 === "true") {
                 model.customer.udf.userDefinedFieldValues.udf26 = true;
             }
@@ -57,6 +57,13 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 model.customer.udf.userDefinedFieldValues.udf26 = false;
             }
         }
+
+        for(i in model.customer.familyMembers){
+            if(model.customer.familyMembers[i].dateOfBirth){
+                model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+            }
+        }
+
         model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
         $log.info("After fixData");
         $log.info(model);
@@ -669,6 +676,16 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
                         title: "T_DATEOFBIRTH",
+                        onChange: function(modelValue, form, model) {
+                        if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                            model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                        },
+                    },
+                    {
+                        key: "customer.familyMembers[].age",
+                        title: "AGE",
+                        "readonly":true
                         //readonly: true
                     },
                     {
@@ -712,13 +729,12 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     {
                         key:"customer.familyMembers[].enroll",
                         type:"button",
-                        condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' ) ",
+                        condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
                         title:"ENROLL_AS_CUSTOMER",
                         onClick: function(model, formCtrl,context) {
                             model.family={};
                             model.family=model.customer;
                             model.family.familydata=model.customer.familyMembers[context.arrayIndex];
-                            //pageId:model.customer.familyMembers[context.arrayIndex].enrollmentId,
                                 $state.go("Page.Engine", {
                                     pageName: "ProfileInformation",
                                     pageId:undefined,

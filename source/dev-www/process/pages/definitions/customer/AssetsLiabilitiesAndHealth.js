@@ -855,16 +855,20 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         "remove":null,
                         "items":[
                             {
-                                key:"customer.verifications[].houseNo"
+                                key:"customer.verifications[].houseNo",
+                                "required":true,
                             },
                             {
-                                key:"customer.verifications[].houseNoIsVerified"
+                                key:"customer.verifications[].houseNoIsVerified",
+                                "required":true,
                             },
                             {
-                                key:"customer.verifications[].referenceFirstName"
+                                key:"customer.verifications[].referenceFirstName",
+                                "required":true,
                             },
                             {
                                 key:"customer.verifications[].relationship",
+                                "required":true,
                                 type:"select"
                             }
 
