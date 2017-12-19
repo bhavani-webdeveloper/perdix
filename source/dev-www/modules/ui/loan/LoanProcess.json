@@ -83,23 +83,15 @@
             "emiPaymentDateRequested": {
                 "key": "loanAccount.emiPaymentDateRequested",
                 "type": "select",
-                "titleMap": {
-                    "5th": "5th",
-                    "10th": "10th",
-                    "15th": "15th"
-                },
-                "title": "EMI_PAYMENT_DATE_REQUESTED"
+                "title": "EMI_PAYMENT_DATE_REQUESTED",
+                "enumCode": "emi_requested_datestring"
             },
             "collectionPaymentType": {
                 "key": "loanAccount.collectionPaymentType",
                 "required": true,
                 "title": "MODE_OF_REPAYMENT",
                 "type": "select",
-                "titleMap": {
-                    "ACH": "ACH",
-                    "PDC": "PDC",
-                    "Others": "Others"
-                }
+                "enumCode": "collectionPaymentType"
             },
             "expectedPortfolioInsurancePremium": {
                 "key": "loanAccount.expectedPortfolioInsurancePremium",
@@ -554,6 +546,35 @@
                 }
             }
         },
+    "VehicleRouteDetails": {
+        "type": "box",
+        "title": "VEHICLE_ROUTE_DETAILS",
+        "items": {
+            "vehicleRouteDetails": {
+                "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails",
+                "type": "array",
+                "title": "Route",
+                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeFrom . '~' . model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeTo",
+                "items": {
+                    "routeFrom": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeFrom",
+                        "title": "VEHICLE_ROUTE_FROM",
+                        "type": "string"
+                    },
+                    "routeTo": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeTo",
+                        "title": "VEHICLE_ROUTE_TO",
+                        "type": "string"
+                    },
+                    "routeVia": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeVia",
+                        "title": "VEHICLE_ROUTE_VIA",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
     "CollateralInformation": {
         "type": "box",
         "title": "COLLATERAL_INFORMATION",
