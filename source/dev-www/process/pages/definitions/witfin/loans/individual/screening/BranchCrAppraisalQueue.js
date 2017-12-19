@@ -123,7 +123,7 @@ define({
                         searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
                     return IndividualLoan.search({
-                        'stage': 'Application',
+                        'stage': 'BranchCreditAppraisal',
                         'centreCode':searchOptions.centreCode,
                         'branchName':branch,
                         'enterprisePincode':searchOptions.pincode,

@@ -1,5 +1,5 @@
 define({
-    pageUID: "witfin.loans.individual.screening.ManagementCommiteeQueue",
+    pageUID: "witfin.loans.individual.screening.ManagementCommitteeQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -13,7 +13,7 @@ define({
         }
         return {
             "type": "search-list",
-            "title": "MANAGEMENT_COMMMITEE_QUEUE",
+            "title": "MANAGEMENT_COMMMITTEE_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
@@ -123,7 +123,7 @@ define({
                         searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
                     return IndividualLoan.search({
-                        'stage': 'Application',
+                        'stage': 'ManagementCommittee',
                         'centreCode':searchOptions.centreCode,
                         'branchName':branch,
                         'enterprisePincode':searchOptions.pincode,

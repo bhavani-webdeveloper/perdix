@@ -15,6 +15,9 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
+                "Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue",
+                "Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue",
+                "Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"
             ]
         };
 
