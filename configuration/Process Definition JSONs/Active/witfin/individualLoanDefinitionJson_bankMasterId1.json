@@ -68,12 +68,11 @@
       },
       {
          "order":6,
-         "code":"CreditCommitteeReview",
-         "name":"Credit Committee Review",
+         "code":"BranchCreditAppraisal",
+         "name":"Branch Credit Appraisal",
          "stageType":"CAPTURE",
-         "authorizationCount":3,
          "sendSms":"Yes",
-         "smsCategory":"Approval",
+         "smsCategory":"BranchCreditAppraisal",
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"
@@ -81,12 +80,11 @@
       },
       {
          "order":7,
-         "code":"CreditRiskReview",
-         "name":"Credit Risk Review",
+         "code":"HOCreditAppraisal",
+         "name":"HO Credit Appraisal",
          "stageType":"CAPTURE",
-         "authorizationCount":3,
          "sendSms":"Yes",
-         "smsCategory":"Approval",
+         "smsCategory":"HOCreditAppraisal",
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"
@@ -94,11 +92,11 @@
       },
       {
          "order":8,
-         "code":"Sanction",
-         "name":"Sanction",
+         "code":"ManagementCommittee",
+         "name":"Management Committee",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"LoanBooking",
+         "smsCategory":"ManagementCommittee",
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"

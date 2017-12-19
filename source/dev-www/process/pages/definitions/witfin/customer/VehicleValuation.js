@@ -1,9 +1,11 @@
 define(
     [
-        "perdix/domain/model/loan/LoanProcess"
+        "perdix/domain/model/loan/LoanProcess",
+        "perdix/infra/helpers/NGHelper",
     ],
-    function (LoanProcess) {
+    function (LoanProcess, NGHelper) {
         LoanProcess = LoanProcess["LoanProcess"];
+        NGHelper = NGHelper["NGHelper"];
         return {
             pageUID: "witfin.customer.VehicleValuation",
             pageType: "Engine",
@@ -111,7 +113,6 @@ define(
                         "VehiclePhotoCaptures.vehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
                         "actionbox",
-                        "actionbox.submit",
                         "actionbox.save"
                     ];
                 }
@@ -121,28 +122,45 @@ define(
                     "subTitle": "BUSINESS",
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
+                        self = this;
+
                         LoanProcess.get($stateParams.pageId)
                             .toPromise()
                             .then(function(loanProcess){
                                 model.loanProcess = loanProcess;
                                 model.loanAccount = loanProcess.loanAccount;
+                                return model;
                             }, function(err){
 
                             })
-
-
-                        self = this;
-                        var p1 = UIRepository.getLoanProcessUIRepository().$promise;
-                        var formRequest = {
-                            "overrides": "",
-                            "includes": getIncludes(model),
-                            "excludes": [
-                                ""
-                            ]
-                        };
-                        p1.then(function (repo) {
-                            self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, null, model);
-                        })
+                            .then(function(){
+                                return UIRepository.getLoanProcessUIRepository().$promise;
+                            })
+                            .then(function(repo){
+                                var formRequest = {
+                                    "overrides": "",
+                                    "includes": getIncludes(model),
+                                    "excludes": [
+                                        ""
+                                    ],
+                                    "options": {
+                                        "additions": [
+                                            {
+                                                "targetID": "actionbox",
+                                                "items": [
+                                                    {
+                                                        "type": "button",
+                                                        "title": "PROCEED",
+                                                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                };
+                                self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, null, model);
+                                NGHelper.refreshUI();
+                            });
                     },
                     offline: false,
                     getOfflineDisplayItem: function (item, index) {
@@ -157,7 +175,44 @@ define(
                     schema: function () {
                         return SchemaResource.getLoanAccountSchema().$promise;
                     },
-                    actions: {}
+                    actions: {
+                        save: function(model, formCtrl, form, $event){
+                            PageHelper.showProgress('loan-process', 'Updating Loan');
+                            model.loanProcess.save()
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function (value) {
+                                    Utils.removeNulls(value, true);
+                                    PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                }, function (err) {
+                                    PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+                        },
+                        proceed: function(model, formCtrl, form, $event){
+                            PageHelper.showLoader();
+                            PageHelper.showProgress('loan-process', 'Updating Loan');
+                            model.loanProcess.proceed()
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function (value) {
+                                    Utils.removeNulls(value, true);
+                                    PageHelper.showProgress('loan-process', 'Done.', 5000);
+                                    irfNavigator.go({
+                                        state: "Page.Engine",
+                                        pageName: "witfin.lead.ReadyForScreeningQueue"
+                                    });
+                                }, function (err) {
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+
+                        }
+                    }
                 };
 
             }
