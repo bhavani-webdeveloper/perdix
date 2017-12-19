@@ -415,7 +415,7 @@ define({
                     }, {
                         "type": "section",
                         "title": "Machine Bills",
-                        "condition": "model.customer.fixedAssetsMachinaries[0]!=null",
+                        "condition": "model.customer.fixedAssetsMachinaries[0].machineBillsDocId !=null",
                         "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
                         "items": [{
                             "key": "customer.fixedAssetsMachinaries[0].machineBillsDocId",

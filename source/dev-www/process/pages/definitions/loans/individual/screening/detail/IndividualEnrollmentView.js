@@ -191,8 +191,6 @@ define({
 							"colClass": "col-sm-12",
 							"readonly": true,
 							"overrideType": "default-view",
-							/*
-							                            "htmlClass":"width:100% overflow:scroll",*/
 							"title": "View Uploads",
 							"items": [{
 								"type": "section",
@@ -730,7 +728,7 @@ define({
 					"type": "box",
 					"colClass": "col-sm-12",
 					"overrideType": "default-view",
-					"title": "CIBIL_HIGHMARK",
+					"title": "Cibil Highmark",
 					"readonly": true,
 					"items": [{
 						"type": "grid",
@@ -1040,70 +1038,7 @@ define({
 						}]
 					}]
 				}
-				/*, {
-								"type": "box",
-								"readonly": true,
-								"colClass": "col-sm-12",
-								"title": "VIEW_UPLOADS",
-								"items": [{
-									"type": "section",
-									"html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
-									"items": [{
-											"type": "grid",
-											"orientation": "vertical",
-											"items": [{
-												"key": "customer.identityProofImageId",
-												"type": "file",
-												"notitle": true,
-												"preview": "pdf",
-												"using": "scanner"
-											}, {
-												"type": "section",
-												"html": '<div style="text-align:center">KYC - PAN Card</div>'
-											}]
-										}, {
-											"type": "grid",
-											"orientation": "vertical",
-											"items": [{
-												"key": "customer.addressProofImageId",
-												"type": "file",
-												"notitle": true,
-												"preview": "pdf",
-												"using": "scanner"
-											}, {
-												"type": "section",
-												"html": '<div style="text-align:center">KYC - Aadhar</div>'
-											}]
-										}, {
-											"type": "grid",
-											"orientation": "vertical",
-											"items": [{
-												"key": "customer.houseVerificationPhoto",
-												"notitle": true,
-												"type": "file",
-												"fileType": "image/*"
-											}, {
-												"type": "section",
-												"html": '<div style="text-align:center">House</div>'
-											}]
-										}
-										/*, {
-																"type": "grid",
-																"orientation": "vertical",
-																"items": [{
-																	"key": "customer.latitude",
-																	"notitle": true,
-																	"type": "geotag",
-																	"latitude": "customer.latitude",
-																	"longitude": "customer.longitude"
-																}, {
-																	"type": "section",
-																	"html": '<div style="text-align:center">House Location</div>'
-																}]
-															}
-									]
-								}]
-							}*/
+				
 			],
 
 			schema: function() {
