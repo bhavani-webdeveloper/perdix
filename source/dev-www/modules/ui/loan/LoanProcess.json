@@ -575,6 +575,57 @@
             }
         }
     },
+    "VehicleAssetUse": {
+        "type": "box",
+        "title": "VEHICLE_ASSET_USE",
+        "items": {
+            "segment": {
+                "key": "loanAccount.vehicleLoanDetails.segment",
+                "title": "VEHICLE_SEGMENT",
+                "type": "string"
+            },
+            "subSegnment": {
+                "key": "loanAccount.vehicleLoanDetails.subSegment",
+                "title": "VEHICLE_SUB_SEGMENT",
+                "type": "string"
+            },
+            "entityType": {
+                "key": "loanAccount.vehicleLoanDetails.entityType",
+                "title": "VEHICLE_ENTITY_TYPE",
+                "type": "select"
+            },
+            "attachedwith": {
+                "key": "loanAccount.vehicleLoanDetails.attachedwith",
+                "title": "VEHICLE_ATTACHED_WITH",
+                "type": "string"
+            },
+            "attachedAddress": {
+                "key": "loanAccount.vehicleLoanDetails.attachedAddress",
+                "title": "VEHICLE_ATTACHED_WITH_ADDRESS",
+                "type": "textarea"
+            },
+            "attachedContactNumber": {
+                "key": "loanAccount.vehicleLoanDetails.attachedContactNumber",
+                "title": "VEHICLE_ATTACHED_CONTACT_NUMBER",
+                "type": "string"
+            },
+            "locationAddress": {
+                "key": "loanAccount.vehicleLoanDetails.locationAddress",
+                "title": "PARKED_LOCATION_ADDRESS",
+                "type": "textarea"
+            },
+            "locationContactName": {
+                "key": "loanAccount.vehicleLoanDetails.locationContactName",
+                "title": "PARKED_LOCATION_CONTACT_NAME",
+                "type": "string"
+            },
+            "locationContactNumber": {
+                "key": "loanAccount.vehicleLoanDetails.locationContactNumber",
+                "title": "PARKED_LOCATION_CONTACT_NUMBER",
+                "type": "string"
+            }
+        }
+    },
     "CollateralInformation": {
         "type": "box",
         "title": "COLLATERAL_INFORMATION",
