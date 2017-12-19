@@ -405,7 +405,7 @@
             }
         }
     },
-    "basicDetails": {
+    "BasicDetails": {
         "type": "box",
         "title": "BASIC_DETAILS",
         "items": {
