@@ -89,21 +89,21 @@ define({
                 },
                 getResultsPromise: function(searchOptions, pageOpts) { 
                     var branches = formHelper.enum('branch').data;
-                        var branchName = null;
-                        for (var i = 0; i < branches.length; i++) {
-                            var branch = branches[i];
-                            if (branch.code ==  searchOptions.branchName) {
-                                branchName = branch.name;
-                            }
+                    var branchName = null;
+                    for (var i = 0; i < branches.length; i++) {
+                        var branch = branches[i];
+                        if (branch.code == searchOptions.branchName) {
+                            branchName = branch.name;
                         }
-                        var centres = formHelper.enum('centre').data;
-                        var centreName = null;
-                        for (var i = 0; i < centres.length; i++) {
-                            var centre = centres[i];
-                            if (centre.code ==  searchOptions.centreName) {
-                                centreName = centre.name;
-                            }
+                    }
+                    var centres = formHelper.enum('centre').data;
+                    var centreName = null;
+                    for (var i = 0; i < centres.length; i++) {
+                        var centre = centres[i];
+                        if (centre.code == searchOptions.centreName) {
+                            centreName = centre.name;
                         }
+                    }
             
                     var promise = RepaymentReminder.query({
                         'customerUrn': searchOptions.customerUrn,
@@ -189,7 +189,7 @@ define({
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Engine", 
-                                    pageName: "loans.individual.collections.ReminderFollowUpData",
+                                    pageName: "loans.individual.collections.RepaymentReminderData",
                                     pageId: item.id,
                                 },
                                 {
@@ -198,7 +198,6 @@ define({
                                 });
                             },
                             isApplicable: function(item, index) {
-
                                 return true;
                             }
                         }];

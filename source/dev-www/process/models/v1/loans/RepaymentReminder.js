@@ -2,6 +2,7 @@ irf.models.factory('RepaymentReminder',[
 "$resource","$httpParamSerializer","BASE_URL","searchResource",
 function($resource,$httpParamSerializer,BASE_URL,searchResource){
     var endpoint = BASE_URL + '/api/repaymentreminder';
+    var endpoint1 = BASE_URL + '/api/getRepaymentAndRemindersByLoanAccount';
     
 
     return $resource(endpoint, null, {
@@ -17,5 +18,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method: 'PUT',
             url: endpoint+ '/update'
         },
+        getAccountDetails: {
+            method: 'GET',
+            url: endpoint1 + '/:accountNumber',
+            isArray: true
+        }
     });
 }]);

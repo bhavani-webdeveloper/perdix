@@ -42,8 +42,6 @@ define({
                             }
                         }
 
-                        
-
                         Queries.getLoanCustomerRelations({
                             accountNumber: model.reminder.repaymentReminderDTO.accountNumber
                         }).then(
@@ -73,6 +71,23 @@ define({
                                         model.reminder.repaymentReminderDTO.loanAmount = res.loanAmount;
                                 });
 
+                        RepaymentReminder.getAccountDetails(
+                            { 
+                                accountNumber: model.reminder.repaymentReminderDTO.accountNumber
+                             }).$promise
+                               .then(
+                                    function (res) {
+                                        $log.info(res);
+                                        model.accountDetails = [];
+                                        for(var i=0; i<res.length; i++) {
+                                            model.accountDetails.push(res[i]);
+                                        }
+                                        for(var i=0; i<model.accountDetails.length;i++){
+                                            model.accountDetails[i].installmentAmount = (model.accountDetails[i].installmentAmount/100);
+                                            model.accountDetails[i].repaymentAmountInPaisa = (model.accountDetails[i].repaymentAmountInPaisa/100);
+                                        }
+                                    }); 
+                               
                         PageHelper.hideLoader();
                     }
                 );
@@ -152,27 +167,6 @@ define({
                         }]
                     }]
                 },
-
-
-
-
-                 /*{
-                    key: "reminder.repaymentReminderDTO.coAppName",
-                    type: "string",
-                    title: "CO_APP_NAME"
-                }, {
-                    key: "reminder.repaymentReminderDTO.coApplicantNumber",
-                    type: "number",
-                    title: "CO_APPLICANT_PH_NO"
-                }, {
-                    key: "reminder.repaymentReminderDTO.guarantorName",
-                    type: "string",
-                    title: "GUARANTOR_NAME"
-                }, {
-                    key: "reminder.repaymentReminderDTO.guarantorPhoneNo",
-                    type: "number",
-                    title: "GUARNATOR_PH_NO"
-                },*/ 
                 {
                     key: "reminder.repaymentReminderDTO.loanAmount",
                     type: "number",
@@ -262,6 +256,53 @@ define({
                     }, ]
                 }]
             }, {
+                type: "box",
+                title: "REMINDER_/_REPAYMEMT_HISTORY",
+                "readonly": true,
+                items: [{
+                    key: "accountDetails",
+                    type: "array",
+                    add: null,
+                    remove: null,
+                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': ' + model.accountDetails[arrayIndex].repaymentDate : model.accountDetails[arrayIndex].repaymentType + ': ' + model.accountDetails[arrayIndex].demandDate",
+                    items: [{
+                        key: "accountDetails[].instrumnetType",
+                        type: "string",
+                        title: "INSTRUMENT_TYPE",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'"
+                    },
+                    {
+                        key: "accountDetails[].repaymentAmountInPaisa",
+                        type: "string",
+                        title: "AMOUNT",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'"
+                    },
+                    {
+                        key: "accountDetails[].installmentAmount",
+                        type: "string",
+                        title: "AMOUNT",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
+                    },
+                    {
+                        key: "accountDetails[].reference",
+                        type: "string",
+                        title: "REFERENCE",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'"
+                    },
+                    {
+                        key: "accountDetails[].interactionMode",
+                        type: "string",
+                        title: "INTERACTION_MODE",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
+                    },
+                    {
+                        key: "accountDetails[].interactionDate",
+                        type: "string",
+                        title: "INTERACTION_DATE_",
+                        condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
+                    }]
+                }]
+            }, {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
@@ -296,7 +337,6 @@ define({
                                 $log.info(res);
                                 model.reminder = res;
                                 irfNavigator.goBack();
-                                //$state.go('Page.JournalMaintenanceDashboard', null);
                             }, function(httpRes) {
                                 PageHelper.showProgress("Repayment Reminder Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
