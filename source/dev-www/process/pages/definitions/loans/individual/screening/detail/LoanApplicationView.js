@@ -31,32 +31,20 @@ define({
                         "spaceAvailable": model.loanAccount.collateral[0].spaceAvailable
                     }
                 }
-                /*Deviation checkbox chosendata*/
 
-                /*
-                                model.isChecked = function(id) {
-                                    var match = false;
-                                    for (var i = 0; i < model.chosenData.length; i++) {
-                                        if (model.chosenData[i].id == id) {
-                                            match = true;
-                                        }
-                                    }
-                                    return match;
-                                };*/
-
-                model.updateChosenMitigants = function(bool, item, index) {
-                    if (bool) {
+                model.updateChosenMitigant = function(checked,item) {
+                    if (checked) {
                         // add item
-                        model.deviationParameter[index].ChosenMitigant.push(item);
+                        item.selected=true;
+                        $log.info( model.deviationDetails +"kishan");
+
                     } else {
                         // remove item
-                        for (var i = 0; i < model.deviationParameter[index].ChosenMitigant.length; i++) {
-                            if (model.deviationParameter[index].ChosenMitigant[i].mitigantName == item.mitigantName) {
-                                model.deviationParameter[index].ChosenMitigant.splice(i, 1);
-                            }
-                        }
+                       item.selected=false;
+                       $log.info(model.deviationDetails+"yadav")
                     }
                 };
+
 
 
                 Enrollment.getCustomerById({
@@ -322,6 +310,16 @@ define({
                                        '<input type="checkbox" ng-checked="m.selected"> {{ m }}'+
                                        '</li></ul></td></tr></tbody></table>'
                                    }]
+                                   model.deviationDetails.push({
+                            parameter: item.Parameter,
+                            score: item.ParameterScore,
+                            deviation: item.Deviation,
+                            mitigants: mitigants,
+                            color_english:item.color_english,
+                            color_hexadecimal:item.color_hexadecimal
+
+                        }
+                        model.updateChosenMitigants(m.selected,m,$parent.$index)
                                }*/
                 {
                     "type": "box",
@@ -332,15 +330,16 @@ define({
                         "type": "section",
                         "colClass": "col-sm-12",
                         "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
-                            '<tr ng-repeat="rowData in model.deviationParameter">' +
-                            '<td>{{ rowData["Parameter"] }}</td>' +
-                            '<td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td>' +
-                            '<td>{{ rowData["Deviation"] }}</td>' +
+                            '<tr ng-repeat="item in model.deviationDetails">' +
+                            '<td>{{ item["parameter"] }}</td>' +
+                            '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+                            '<td>{{ item["deviation"] }}</td>' +
                             '<td><ul class="list-unstyled">' +
-                            '<li ng-repeat="m in rowData.mitigants " id="{{m.mitigantName}}">' +
-                            '<input type="checkbox"  ng-model="bool" ng-change="model.updateChosenMitigants(bool,m,$parent.$index)"> {{ m.mitigantName }}' +
+                            '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+                            //'<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                            '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
                             '</li></ul></td></tr></tbody></table>'
-                            // ng-change="sync(bool, m)"   ng-checked="isChecked(m.mitigantName)
+                
                     }]
                 }, {
                     "type": "box",
@@ -385,11 +384,17 @@ define({
                     }]
                 }, {
                     "type": "box",
+                    "title": "POST_REVIEW",
                     "colClass": "col-sm-12",
-                    "overrideType": "default-view",
-                    "title": "Post Review Decision",
                     "items": [{
-
+                        key: "review.action",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
                     }]
                 }
             ],
@@ -399,27 +404,57 @@ define({
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
                     model._scores = params;
-                    model.deviationDetails = model._scores[12];
+                    model._deviationDetails = model._scores[12].data;
 
-                    for (var i = 0; i < model.deviationDetails.data.length; i++) {
+                    model.deviationDetails = [];
+                    var allMitigants = {};
+                    model.allMitigants = allMitigants;
+                    for (i in model._deviationDetails) {
+                        var item = model._deviationDetails[i];
+                        var mitigants = item.Mitigant.split('|');
+                        for (j in mitigants) {
+                            allMitigants[mitigants[j]] = {
+                                mitigant: mitigants[j],
+                                parameter: item.Parameter,
+                                score: item.ParameterScore,
+                                selected: false
+                            };
+                            mitigants[j] =  allMitigants[mitigants[j]];
+                        }
+                        if (item.ChosenMitigant && item.ChosenMitigant !=null) {
+                        var chosenMitigants = item.ChosenMitigant.split('|');
+                        for (j in chosenMitigants) {
+                            allMitigants[chosenMitigants[j]].selected = true;
+                        }
+                    }
+                        model.deviationDetails.push({
+                            parameter: item.Parameter,
+                            score: item.ParameterScore,
+                            deviation: item.Deviation,
+                            mitigants: mitigants,
+                            color_english:item.color_english,
+                            color_hexadecimal:item.color_hexadecimal
+                        });
+                    }
+
+                    /*/*for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
                         /*  d.newData=[];*/
-                        if (d.Mitigant && d.Mitigant.length != 00) {
+                        /*if (d.Mitigant && d.Mitigant.length != 00) {
                             if (d.Mitigant && d.Mitigant != null) {
                                 d.ListOfMitigants = d.Mitigant.split("|");
                             }
-
+*/
                             /*for(var i=0;i<d.ListOfMitigants.length;i++){
                                 d.newData[i]={
                                     id:d.ListOfMitigants[i],
                                     selected:false
                                 }
                             }*/
-
+/*
                         }
-                    }
-
-                    model.deviationParameter = [];
+                    }*/
+                 /*   model.deviationParameter = [];
                     model.myvar = 0;
                     for (var i = 0; i < model.deviationDetails.data.length; i++) {
                         var d = model.deviationDetails.data[i];
@@ -432,16 +467,30 @@ define({
                             d.ListOfMitigants = d.Mitigant.split("|");
                             for (var j = 0; j < d.ListOfMitigants.length; j++) {
                                 model.deviationParameter[model.deviationParameter.length - 1].mitigants.push({
-                                    mitigantName: d.ListOfMitigants[j]
+                                    mitigantName: d.ListOfMitigants[j],
+                                    chosen: true
                                 });
                             }
                         }
-                    }
+                    }*/
 
                     model.additional = {};
                 }
             },
-            actions: {}
+            actions: {
+                submit: function(model) {
+                    // function: updateChosenMitigants // model.allMitigants is object
+                    model.loanAccount.loanMitigants = [];
+                    _.forOwn(model.allMitigants, function(v, k) {
+                        if (v.selected) {
+                            model.loanAccount.loanMitigants.push(v);
+                        }
+                    })
+                }/*,
+                updateChosenMitigants:function() {
+                    
+                }*/
+            }
         }
     }
 })

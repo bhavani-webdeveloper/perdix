@@ -213,7 +213,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 					BundleManager.broadcastEvent("business_customer", params);
 				},
 				"loanRequest_customer": function(pageObj, bundleModel, params) {
-					BundleManager.broadcastEvent("customer_loanRequest", params);
+					BundleManager.broadcastEvent("loan-account", params);
 				}
 			}
 		}

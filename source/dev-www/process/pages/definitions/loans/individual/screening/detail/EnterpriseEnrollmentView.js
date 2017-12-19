@@ -6,13 +6,11 @@ define({
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
         PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource) {
-        return {
+        var self = {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                var self = this;
-
                 model.bundleModel = bundleModel;
                 Enrollment.getCustomerById({
                     id: model.customerId
@@ -64,50 +62,17 @@ define({
 
 
                     model.businessName = model.customer.verifications[0].businessName;
-
-
-                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
-                        var fileForms = [{
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.rawMaterialExpenses[].invoiceDocId",
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }];
-                        //
-                        self.form.push({
-                            "type": "box",
-                            "colClass": "col-sm-12",
-                            "readonly": true,
-                            "overrideType": "default-view",
-                            /*
-                                                        "htmlClass":"width:100% overflow:scroll",*/
-                            "title": "VIEW_UPLOADS",
-                            "items": [{
-                                "type": "section",
-                                "htmlClass": "inline",
-                                "html": '<div style="display:inline; overflow-x:scroll;"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
-                                "items": fileForms
-                            }]
-                        });
-                    }
                 });
+
+
+                /*Mahcine Stack data*/
+
             },
             form: [{
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "BASIC_BUSINESS_INFORMATION",
+                "title": "Basic Business Information",
                 "readonly": true,
                 "items": [{
                     "type": "grid",
@@ -166,7 +131,7 @@ define({
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "CONTACT_INFO",
+                "title": "Contact Information",
                 "readonly": true,
                 "items": [{
                     "type": "grid",
@@ -269,7 +234,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "EMPLOYEE_DETAILS",
+                "title": "Employee Details",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -330,10 +295,11 @@ define({
                         "title": "",
                         "selectable": false,
                         "editable": false,
+
                         "tableConfig": {
                             "searching": false,
                             "paginate": false,
-                            "pageLength": 10,
+                            "pageLength": 10
                         },
                         getColumns: function() {
                             return [{
@@ -376,61 +342,67 @@ define({
                     }, {
                         "type": "section",
                         "title": "Machine Photos",
-                        "html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
-                        "items": [{
-                            "key": "machineDocs[0].machineImage",
-                            "notitle": true,
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                        "items":[{
+                       
+                            "key": "customer.fixedAssetsMachinaries[0].machineImage",
+                            "notitle":true,/*
+                            "title":model.customer.fixedAssetsMachinaries[0].machineType,*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
-                        }, {
-                            "key": "machineDocs[1].machineImage",
-                            "notitle": true,
+                        },{
+                       
+                            "key": "customer.fixedAssetsMachinaries[1].machineImage",
+                            "notitle":true,/*
+                            "title":"customer.fixedAssetsMachinaries[1].machineType",*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
-                        }, {
-                            "key": "machineDocs[2].machineImage",
-                            "notitle": true,
+                        },{
+                       
+                            "key": "customer.fixedAssetsMachinaries[2].machineImage",
+                            "notitle":true,/*
+                            "title":"customer.fixedAssetsMachinaries[2].machineType",*/
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
                             "fileType": "image/*",
                             "using": "scanner"
                         }]
+                        
+                
                     }, {
                         "type": "section",
                         "title": "Machine Bills",
-                        "html": '<div style="overflow-x:scroll"><sf-decorator style="float:left" ng-repeat="item in form.items" form="item"></sf-decorator></div>',
+                        "condition":"model.customer.fixedAssetsMachinaries[0]!=null",
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
                         "items": [{
-                            "key": "machineDocs[0].machineBillsDocId",
-                            "notitle": true,
+                            "key": "customer.fixedAssetsMachinaries[0].machineBillsDocId",/*
+                            "title": "customer.fixedAssetsMachinaries[0].machineType",
+                            "notitle":true,*/
                             "category": "Loan",
                             "subCategory": "DOC1",
-                            //"type": "file",
-                            /*"fileType": "image/*",*/
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
-                            "key": "machineDocs[1].machineBillsDocId",
-                            "notitle": true,
+                            "key": "customer.fixedAssetsMachinaries[1].machineBillsDocId",/*
+                            "title":"customer.fixedAssetsMachinaries[1].machineType",*/
+                            "notitle":true,
                             "category": "Loan",
                             "subCategory": "DOC1",
-                            /*"type": "file",
-                            "fileType": "image/*",*/
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
-                            "key": "machineDocs[2].machineBillsDocId",
-                            "notitle": true,
+                            "key": "model.customer.fixedAssetsMachinaries[2].machineBillsDocId",/*
+                            "title": "customer.fixedAssetsMachinaries[2].machineType",*/
+                            "notitle":true,
                             "category": "Loan",
                             "subCategory": "DOC1",
-                            /*"type": "file",
-                            "fileType": "image/*",*/
                             "preview": "pdf",
                             "using": "scanner"
                         }]
@@ -459,6 +431,7 @@ define({
                             "title": "Loss Accounts"
                         }, {
                             "key": "CB_REPORT_DATA.fileId",
+                            "notitle":true,
                             "title": "CB Report",
                             "category": "Loan",
                             "subCategory": "DOC1",
@@ -664,8 +637,37 @@ define({
                 return Enrollment.getSchema().$promise;
             },
             eventListeners: {
-                "customer_loanRequest": function(bundleModel, model, params) {
-                    model.machineDocs = params.fixedAssetsMachinaries;
+                "loan-account": function(bundleModel, model, params) {
+                    model.loanAccount = params;
+
+                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+                        var fileForms = [];
+                        for (i in model.loanAccount.loanDocuments) {
+                            fileFOrms.push({
+                                "key": "loanAccount.loanDocuments[" + i + "].documentId",
+                                "notitle": true,
+                                "title": model.loanAccount.loanDocuments[i].document,
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                "type": "file",
+                                "preview": "pdf"
+                            });
+                        }
+                        self.form.push({
+                            "type": "box",
+                            "colClass": "col-sm-12",
+                            "readonly": true,
+                            "overrideType": "default-view",
+                            /*
+                                                        "htmlClass":"width:100% overflow:scroll",*/
+                            "title": "VIEW_UPLOADS",
+                            "items": [{
+                                "type": "section",
+                                "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                                "items": fileForms
+                            }]
+                        });
+                    }
                 },
                 "financial-summary": function(bundleModel, model, params) {
                     var psi = {};
@@ -674,6 +676,7 @@ define({
                 }
             },
             actions: {}
-        }
+        };
+        return self;
     }
 })

@@ -11,6 +11,7 @@ define({
 			"title": "INDIVIDUAL_ENROLLMENT",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+				var self = this;
 				model.bundlePageObj = bundlePageObj;
 				model.bundleModel = bundleModel;
 				Enrollment.getCustomerById({
@@ -156,6 +157,50 @@ define({
 					} else {
 						model.individual_custom_fields.REFERENCE_CHECK_RESPONSE = 'positive';
 					}
+					/*VIEW UPLOADS*/
+
+                    if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+                        var fileForms = [
+							{
+								"key": "customer.identityProofImageId",
+								"type": "file",
+								"notitle": true,
+								"title":"KYC-Aadhar Card",
+								"preview": "pdf",
+								"using": "scanner"
+							},{
+						
+								"key": "customer.addressProofImageId",
+								"type": "file",
+								"notitle": true,
+								"title":"KYC-PAN Card",
+								"preview": "pdf",
+								"using": "scanner"
+							}, {
+								"key": "customer.houseVerificationPhoto",
+								"notitle": true,
+								"title":"House",
+								"type": "file",
+								"fileType": "image/*"
+							}];
+                        
+                        self.form.push({
+                            "type": "box",
+                            "colClass": "col-sm-12",
+                            "readonly": true,
+                            "overrideType": "default-view",
+                            /*
+                                                        "htmlClass":"width:100% overflow:scroll",*/
+                            "title": "View Uploads",
+                            "items": [{
+                                "type": "section",
+                                "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                                "items": fileForms
+                            }]
+                        });
+                    }
+
+
 
 					/*Auto_Custom field -- END*/
 					/*if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
@@ -182,6 +227,7 @@ define({
 							}]
 						});
 					}*/
+
 
 				});
 			},
@@ -372,7 +418,7 @@ define({
 						}
 					}]
 				}]
-			}, {
+			},/* {
 				"type": "box",
 				"readonly": true,
 				"colClass": "col-sm-12",
@@ -412,6 +458,35 @@ define({
 					}
 				}]
 
+			},*/{
+				"type": "box",
+				"readonly": true,
+				"colClass": "col-sm-12",
+				"overrideType": "default-view",
+				"title": "RELATIONSHIP_TO_BUSINESS",
+				"condition": "model.enterpriseCustomerRelations.length!=0",
+				"items": [{
+					"type":"grid",
+					"orientation":"horizontal",
+					"items":[{
+						"type":"grid",
+						"orientation":"vertical",
+						"items":[{
+							"title":"RELATIONSHIP_TO_BUSINESS",
+							"key":"enterpriseCustomerRelations[0].relationshipType"
+						},{
+							"title":"EXPERIENCE_IN_BUSINESS",
+							"key":"enterpriseCustomerRelations[0].experienceInBusiness"
+
+						},{
+							"title":"BUSINESS_INVOLVEMENT",
+							"key":"enterpriseCustomerRelations[0].businessInvolvement"
+						},{
+                            "title":"PARTNER_OF_ANY_OTHER_COMPANY",
+                            "key":"enterpriseCustomerRelations[0].partnerOfAnyOtherCompany"
+						}]
+					}]
+				}]
 			}, {
 				"type": "box",
 				"readonly": true,
@@ -1030,7 +1105,7 @@ define({
 						}
 					}]
 				}]
-			}, {
+			}/*, {
 				"type": "box",
 				"readonly": true,
 				"colClass": "col-sm-12",
@@ -1090,10 +1165,10 @@ define({
 													"type": "section",
 													"html": '<div style="text-align:center">House Location</div>'
 												}]
-											}*/
+											}
 					]
 				}]
-			}],
+			}*/],
 
 			schema: function() {
 				return Enrollment.getSchema().$promise;
