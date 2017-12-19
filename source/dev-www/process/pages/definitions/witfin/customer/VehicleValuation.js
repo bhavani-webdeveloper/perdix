@@ -1,187 +1,166 @@
-define([], function () {
-    return {
-        pageUID: "witfin.customer.VehicleValuation",
-        pageType: "Engine",
-        dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
-            'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor"],
+define(
+    [
+        "perdix/domain/model/loan/LoanProcess"
+    ],
+    function (LoanProcess) {
+        LoanProcess = LoanProcess["LoanProcess"];
+        return {
+            pageUID: "witfin.customer.VehicleValuation",
+            pageType: "Engine",
+            dependencies: ["$log", "$q", "LoanAccount", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
+                'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
+                "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository"],
 
-        $pageFn: function ($log, $q, LoanAccount, LoanProcess, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
-                           irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor) {
+            $pageFn: function ($log, $q, LoanAccount, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
+                               irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
+                               BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository) {
+                var self;
+                var getIncludes = function (model) {
 
-            var getIncludes = function (model) {
-
-                return [
-                    "primaryInfo",
-                    "primaryInfo.registrationNumber",
-                    "valuationPriliminaryInformation",
-                    "valuationPriliminaryInformation.valuationPurpose",
-                    "valuationPriliminaryInformation.valuationDate",
-                    "valuationPriliminaryInformation.valuationPlace",
-                    "valuationPriliminaryInformation.registeredOwnerName",
-                    "valuationPriliminaryInformation.proposedOwnerName",
-                    "valuationPriliminaryInformation.bankReferenceNumber",
-                    "InspectionDetails",
-                    "InspectionDetails.inspectionDate",
-                    "InspectionDetails.inspectedBy",
-                    "InspectionDetails.vehicleMoved",
-                    "InspectionDetails.inspectionLatitude",
-                    "InspectionDetails.inspectionAltitude",
-                    "InspectionDetails.engineStarted",
-                    "VehicleIdentityDetails",
-                    "VehicleIdentityDetails.make",
-                    "VehicleIdentityDetails.variant",
-                    "VehicleIdentityDetails.colour",
-                    "VehicleIdentityDetails.trailer",
-                    "VehicleIdentityDetails.chasisNo",
-                    "VehicleIdentityDetails.engineNo",
-                    "VehicleIdentityDetails.odometerReading",
-                    "VehicleIdentityDetails.estimatedReading",
-                    "VehicleIdentityDetails.transmission",
-                    "VehicleIdentityDetails.odometer",
-                    "VehicleIdentityDetails.usedFor",
-                    "RegistrationDetails",
-                    "RegistrationDetails.reRegistered",
-                    "RegistrationDetails.previousRegistrationNumber",
-                    "RegistrationDetails.registrationAsPerRcbook",
-                    "RegistrationDetails.registrationAsPerActual",
-                    "RegistrationDetails.numberPlateCOlour",
-                    "RegistrationDetails.engineNo",
-                    "RegistrationDetails.registeredAddress",
-                    "RegistrationDetails.ownerSerialNo",
-                    "RegistrationDetails.registrationDate",
-                    "RegistrationDetails.vehicleClass",
-                    "RegistrationDetails.bodyType",
-                    "RegistrationDetails.fuelUsed",
-                    "RegistrationDetails.cubicCapacity",
-                    "RegistrationDetails.makersClassification",
-                    "RegistrationDetails.seatingCapacity",
-                    "RegistrationDetails.unladenWeight",
-                    "RegistrationDetails.hypothecatedTo",
-                    "RegistrationDetails.fitnesscertifiedUpto",
-                    "permitAndTaxDetails",
-                    "permitAndTaxDetails.permitStatus",
-                    "permitAndTaxDetails.permitValidUpto",
-                    "permitAndTaxDetails.operationroute",
-                    "permitAndTaxDetails.taxPaid",
-                    "permitAndTaxDetails.taxValidUpto",
-                    "InsurenceDetails",
-                    "InsurenceDetails.insuranceCompany",
-                    "InsurenceDetails.insurancePolicyNumber",
-                    "InsurenceDetails.insuranceIdv",
-                    "InsurenceDetails.taxPaid",
-                    "InsurenceDetails.insurancevalidfrom",
-                    "InsurenceDetails.insuranceValidTo",
-                    "InsurenceDetails.insurancePolicyType",
-                    "otherRemarks",
-                    "otherRemarks.modelUnderProduction",
-                    "otherRemarks.accident",
-                    "otherRemarks.originalInvoiceValue",
-                    "otherRemarks.accidentRemarks",
-                    "otherRemarks.majorRepair",
-                    "otherRemarks.currentInvoiceValue",
-                    "otherRemarks.rcbookStatus",
-                    "pastValuations",
-                    "pastValuations.financier",
-                    "pastValuations.valuationDate",
-                    "pastValuations.valuation",
-                    "conditionOfAsset",
-                    "conditionOfAsset.engineCondition",
-                    "conditionOfAsset.engineRemarks",
-                    "conditionOfAsset.batteryCondition",
-                    "conditionOfAsset.batteryRemarks",
-                    "conditionOfAsset.chasisCondition",
-                    "conditionOfAsset.chasisRemarks",
-                    "conditionOfAsset.paintRemarks",
-                    "conditionOfAsset.upholsteryCondition",
-                    "conditionOfAsset.upholsteryRemarks",
-                    "conditionOfAsset.transimissionCondition",
-                    "conditionOfAsset.engineCondition",
-                    "conditionOfAsset.transmissionRemarks",
-                    "conditionOfAsset.electricalPartsCondition",
-                    "conditionOfAsset.electricalPartsRemarks",
-                    "conditionOfAsset.bodyCondition",
-                    "conditionOfAsset.seatingCapacity",
-                    "conditionOfAsset.suspensionCondition",
-                    "conditionOfAsset.tyreType",
-                    "conditionOfAsset.lhFrontMake",
-                    "conditionOfAsset.lhFrontCondition",
-                    "conditionOfAsset.rhFrontMake",
-                    "conditionOfAsset.rhFrontCondition",
-                    "conditionOfAsset.lhRearMake",
-                    "conditionOfAsset.lhRearCondition",
-                    "conditionOfAsset.rhRearMake",
-                    "conditionOfAsset.rhrearCondition",
-                    "conditionOfAsset.tyreRemarks",
-                    "conditionOfAsset.fogLampCondition",
-                    "conditionOfAsset.fogLampRemarks",
-                    "conditionOfAsset.gearBoxCondition",
-                    "conditionOfAsset.gearBoxremarks",
-                    "conditionOfAsset.steeringCondiiton",
-                    "conditionOfAsset.steeringRemarks",
-                    "conditionOfAsset.lightWiringCondition",
-                    "conditionOfAsset.lightWiringRemarks",
-                    "Accessories",
-                    "Accessories.powerWindowFont",
-                    "Accessories.powerWindowRear",
-                    "Accessories.powerSteering",
-                    "Accessories.airbag",
-                    "Accessories.accessories",
-                    "Accessories.accessoriesStatus",
-                    "Valuation",
-                    "Valuation.valuationRating",
-                    "Valuation.futureLife",
-                    "Valuation.currentMarketValue",
-                    "Valuation.distressValue",
-                    "photoCapture",
-                    "photoCapture.Image1",
-                    "photoCapture.Image1.photoType1",
-                    "photoCapture.Image1.photoFileId1",
-                    "photoCapture.Image1.photoRemarks1",
-                    "photoCapture.Image2",
-                    "photoCapture.Image2.photoType2",
-                    "photoCapture.Image2.photoFileId2",
-                    "photoCapture.Image2.photoRemarks2",
-                    "photoCapture.Image3",
-                    "photoCapture.Image3.photoType3",
-                    "photoCapture.Image3.photoFileId3",
-                    "photoCapture.Image3.photoRemarks3",
-                    "photoCapture.Image4",
-                    "photoCapture.Image4.photoType4",
-                    "photoCapture.Image4.photoFileId4",
-                    "photoCapture.Image4.photoRemarks4",
-                    "Recomendation",
-                    "Recomendation.recommendationStatus",
-                    "Recomendation.recommendationDate",
-                    "Recomendation.recommendationRemarks",
-                    "actionbox",
-                    "actionbox.submit",
-                    "actionbox.save"
-                ];
-            }
-            return {
-                "type": "schema-form",
-                "title": "VEHICLE_VALUATION",
-                "subTitle": "BUSINESS",
-                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {},
-                offline: false,
-                getOfflineDisplayItem: function (item, index) {
                     return [
-                        item.customer.firstName,
-                        item.customer.centreCode,
-                        item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-                    ]
-                },
-                eventListeners: {},
-                form: [],
-                schema: function () {
-                    return SchemaResource.getLoanAccountSchema().$promise;
-                },
-                actions: {}
-            };
+                        "VehiclePrimaryInfo",
+                        "VehiclePrimaryInfo.registrationNumber",
+                        "VehicleValuationPriliminaryInformation",
+                        "VehicleValuationPriliminaryInformation.valuationPurpose",
+                        "VehicleValuationPriliminaryInformation.valuationDate",
+                        "VehicleValuationPriliminaryInformation.valuationPlace",
+                        "VehicleValuationPriliminaryInformation.registeredOwnerName",
+                        "VehicleValuationPriliminaryInformation.proposedOwnerName",
+                        "VehicleValuationPriliminaryInformation.bankReferenceNumber",
+                        "VehicleInspectionDetails",
+                        "VehicleInspectionDetails.inspectionDate",
+                        "VehicleInspectionDetails.inspectedBy",
+                        "VehicleInspectionDetails.vehicleMoved",
+                        "VehicleInspectionDetails.inspectionLatitude",
+                        "VehicleInspectionDetails.inspectionAltitude",
+                        "VehicleInspectionDetails.engineStarted",
+                        "VehicleIdentityDetails",
+                        "VehicleIdentityDetails.make",
+                        "VehicleIdentityDetails.variant",
+                        "VehicleIdentityDetails.colour",
+                        "VehicleIdentityDetails.trailer",
+                        "VehicleIdentityDetails.chasisNo",
+                        "VehicleIdentityDetails.engineNo",
+                        "VehicleIdentityDetails.odometerReading",
+                        "VehicleIdentityDetails.estimatedReading",
+                        "VehicleIdentityDetails.transmission",
+                        "VehicleIdentityDetails.odometer",
+                        "VehicleIdentityDetails.usedFor",
+                        "VehicleRegistrationDetails",
+                        "VehicleRegistrationDetails.reRegistered",
+                        "VehicleRegistrationDetails.previousRegistrationNumber",
+                        "VehicleRegistrationDetails.registrationAsPerRcbook",
+                        "VehicleRegistrationDetails.registrationAsPerActual",
+                        "VehicleRegistrationDetails.numberPlateColour",
+                        "VehicleRegistrationDetails.engineNo",
+                        "VehicleRegistrationDetails.registeredAddress",
+                        "VehicleRegistrationDetails.ownerSerialNo",
+                        "VehicleRegistrationDetails.registrationDate",
+                        "VehicleRegistrationDetails.vehicleClass",
+                        "VehicleRegistrationDetails.bodyType",
+                        "VehicleRegistrationDetails.fuelUsed",
+                        "VehicleRegistrationDetails.cubicCapacity",
+                        "VehicleRegistrationDetails.makersClassification",
+                        "VehicleRegistrationDetails.seatingCapacity",
+                        "VehicleRegistrationDetails.unladenWeight",
+                        "VehicleRegistrationDetails.hypothecatedTo",
+                        "VehicleRegistrationDetails.fitnesscertifiedUpto",
+                        "VehiclePermitAndTaxDetails",
+                        "VehiclePermitAndTaxDetails.permitStatus",
+                        "VehiclePermitAndTaxDetails.permitValidUpto",
+                        "VehiclePermitAndTaxDetails.operationroute",
+                        "VehiclePermitAndTaxDetails.taxPaid",
+                        "VehiclePermitAndTaxDetails.taxValidUpto",
+                        "VehicleInsuranceDetails",
+                        "VehicleInsuranceDetails.insuranceCompany",
+                        "VehicleInsuranceDetails.insurancePolicyNumber",
+                        "VehicleInsuranceDetails.insuranceIdv",
+                        "VehicleInsuranceDetails.taxPaid",
+                        "VehicleInsuranceDetails.insurancevalidfrom",
+                        "VehicleInsuranceDetails.insuranceValidTo",
+                        "VehicleInsuranceDetails.insurancePolicyType",
+                        "VehicleOtherRemarks",
+                        "VehicleOtherRemarks.modelUnderProduction",
+                        "VehicleOtherRemarks.accident",
+                        "VehicleOtherRemarks.originalInvoiceValue",
+                        "VehicleOtherRemarks.accidentRemarks",
+                        "VehicleOtherRemarks.majorRepair",
+                        "VehicleOtherRemarks.currentInvoiceValue",
+                        "VehicleOtherRemarks.rcbookStatus",
+                        "VehiclePastValuations",
+                        "VehiclePastValuations.vehiclePastValuations",
+                        "VehiclePastValuations.vehiclePastValuations.financier",
+                        "VehiclePastValuations.vehiclePastValuations.valuationDate",
+                        "VehiclePastValuations.vehiclePastValuations.valuation",
+                        "VehicleAsset",
+                        "VehicleAsset.vehicleAssetConditions",
+                        "VehicleAsset.vehicleAssetConditions.componentType",
+                        "VehicleAsset.vehicleAssetConditions.componentCondition",
+                        "VehicleAsset.vehicleAssetConditions.componentRemarks",
+                        "VehicleAccessories",
+                        "VehicleAccessories.vehicleAccessories",
+                        "VehicleAccessories.vehicleAccessories.accessoryType",
+                        "VehicleAccessories.vehicleAccessories.accessoryStatus",
+                        "VehicleAccessories.vehicleAccessories.accessoryAvailable",
+                        "VehicleValuation",
+                        "VehicleValuation.valuationRating",
+                        "VehicleValuation.futureLife",
+                        "VehicleValuation.currentMarketValue",
+                        "VehicleValuation.distressValue",
+                        "VehiclePhotoCaptures",
+                        "VehiclePhotoCaptures.vehiclePhotoCaptures",
+                        "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
+                        "actionbox",
+                        "actionbox.submit",
+                        "actionbox.save"
+                    ];
+                }
+                return {
+                    "type": "schema-form",
+                    "title": "VEHICLE_VALUATION",
+                    "subTitle": "BUSINESS",
+                    initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+
+                        LoanProcess.get($stateParams.pageId)
+                            .toPromise()
+                            .then(function(loanProcess){
+                                model.loanProcess = loanProcess;
+                                model.loanAccount = loanProcess.loanAccount;
+                            }, function(err){
+
+                            })
+
+
+                        self = this;
+                        var p1 = UIRepository.getLoanProcessUIRepository().$promise;
+                        var formRequest = {
+                            "overrides": "",
+                            "includes": getIncludes(model),
+                            "excludes": [
+                                ""
+                            ]
+                        };
+                        p1.then(function (repo) {
+                            self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, null, model);
+                        })
+                    },
+                    offline: false,
+                    getOfflineDisplayItem: function (item, index) {
+                        return [
+                            item.customer.firstName,
+                            item.customer.centreCode,
+                            item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
+                        ]
+                    },
+                    eventListeners: {},
+                    form: [],
+                    schema: function () {
+                        return SchemaResource.getLoanAccountSchema().$promise;
+                    },
+                    actions: {}
+                };
+
+            }
 
         }
-
-    }
-});
+    });

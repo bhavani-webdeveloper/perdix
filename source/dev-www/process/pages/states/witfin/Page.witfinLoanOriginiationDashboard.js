@@ -6,7 +6,7 @@ irf.pages.controller("WitfinLoanOriginationDashboardCtrl", ['$log', '$scope', "f
 
 
         var fullDefinition = {
-            "title": "Loan Origination Dashboard",
+            "title": "LOAN_ORIGINATION_DASHBOARD",
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Bundle/witfin.loans.individual.screening.ScreeningInput",

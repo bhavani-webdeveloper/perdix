@@ -94,7 +94,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'branchName':searchOptions.branch,
-                        'stage': 'VehicleValidation',
+                        'stage': 'VehicleValuation',
                         'enterprisePincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
