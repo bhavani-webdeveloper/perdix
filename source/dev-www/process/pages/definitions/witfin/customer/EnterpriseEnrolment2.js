@@ -163,6 +163,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 if (!enrolmentProcess){
                                     /* IF no enrolment present, reset to applicant */
                                     model.customer.firstName = params.customer.firstName;
+                                    model.customer.villageName = params.customer.villageName;
+                                    model.customer.pincode = params.customer.pincode;
+                                    model.customer.area = params.customer.area;
                                     return;
                                 }
                                 $log.info("Inside customer loaded of applicant-updated");
