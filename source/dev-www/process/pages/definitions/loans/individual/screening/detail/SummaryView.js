@@ -418,7 +418,7 @@ define({
                             "title": "model.scoreDetails[1].title",
                             "html": '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
                                 '<table class="table">' +
-                                '<colgroup><col width="35%"><col width="10%"><col width="35%"></colgroup>' +
+                                '<colgroup><col width="35%"><col width="5%"><col width="35%"></colgroup>' +
                                 '<tbody>' +
                                 '<tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr>' +
                                 '<tr ng-repeat="data in model.business_data">' +
@@ -618,6 +618,7 @@ define({
                             score_name: scoreName
                         }).$promise;
                         onSuccessPromise.then(function(res) {
+                           /* var financialData = [model.ScoreDetails,res];*/
                             BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
                             prepareData(res, model);
                             model.$prepared = true;

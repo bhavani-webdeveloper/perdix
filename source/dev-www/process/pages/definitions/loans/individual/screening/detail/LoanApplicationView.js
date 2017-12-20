@@ -2,10 +2,10 @@ define({
     pageUID: "loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess"
     ],
     $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess) {
         return {
             "type": "schema-form",
             "title": "LOAN_RECOMMENDATION",
@@ -80,36 +80,43 @@ define({
 
             },
             form: [{
-                    key: "loanAccount.linkedAccountNumber",
-                    title: "LINKED_ACCOUNT_NUMBER",
-                    type: "lov",
-                    autolov: true,
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var promise = LoanProcess.viewLoanaccount({
-                            urn: model.enterprise.urnNo
-                        }).$promise;
-                        return promise;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        $log.info(item);
-                        return [
-                            item.accountId,
-                            item.glSubHead,
-                            item.amount,
-                            item.npa,
-                        ];
-                    },
-                    onSelect: function(valueObj, model, context) {
-                        model.loanAccount.npa = valueObj.npa;
-                        model.loanAccount.linkedAccountNumber = valueObj.accountId;
-                    }
-                }, {
-                    key: "loanAccount.npa",
-                    title: "IS_NPA",
-                },
-
-                {
+                "type": "section",
+                "html": '<div class="col-xs-12">'+
+                    '<div class="box no-border">'+
+                    '<div class="box-body" style="padding-right: 0">'+
+                    '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        key: "loanAccount.linkedAccountNumber",
+                        title: "LINKED_ACCOUNT_NUMBER",
+                        type: "lov",
+                        autolov: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            return LoanProcess.viewLoanaccount({
+                                urn: model.enterprise.urnNo
+                            }).$promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                        }
+                    }, {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA"
+                    }]
+                }]
+            }, {
                     "type": "box",
                     "readonly": true,
                     "colClass": "col-sm-12",

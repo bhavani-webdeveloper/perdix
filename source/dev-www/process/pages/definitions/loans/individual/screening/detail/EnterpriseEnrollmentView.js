@@ -21,13 +21,13 @@ define({
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
                     /*Address*/
-                    var s1 = model.customer.doorNo;
+                   /* var s1 = model.customer.doorNo;
                     var s2 = model.customer.street;
                     var s3 = model.customer.pincode;
                     var s4 = model.customer.district;
                     var s5 = model.customer.state;
                     model.business_address_html = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ', (s4 == null ? "" : s4), ' \n', (s5 == null ? "" : s5));
-
+*/
                     /*CBREPORT*/
 
                     model.CB_REPORT_DATA = {
@@ -42,8 +42,8 @@ define({
                         /* Machin Details*/
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
-                    model.totalValue = 0;
-                    model.proxyScore = model.psi;
+                    model.totalValue = 0;/*
+                    model.proxyScore = model.psi;*/
                     model.hypothecatedToKinara = 0;
                     model.totalHypothecatedValue = 0;
                     _.each(model.customer.fixedAssetsMachinaries, function(machine) {
@@ -94,12 +94,11 @@ define({
                         "colClass": "col-sm-12",
                         "readonly": true,
                         "overrideType": "default-view",
-                        /*
-                                                    "htmlClass":"width:100% overflow:scroll",*/
                         "title": "VIEW_UPLOADS",
+                        "condition": "model.loanAccount.loanDocuments.length != 0",
                         "items": [{
                             "type": "section",
-                            "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                            "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px;"><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
                             "items": fileForms
                         }]
                     });
@@ -193,9 +192,21 @@ define({
                         }, {
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                        }, {
-                            "key": "business_address_html",
-                            "title": "Address of Business"
+                        },{
+                            "type":"section",
+                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-20px; padding-left:100px; font-weight:bold;"><sf-decorator  form="item"></sf-decorator><div></div>',
+                            "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-12",
+                            "title": "Present Address",
+                            "html": '{{model.customer.doorNo==null? "": model.customer.doorNo}}'+','+'<br>'+
+                                '{{model.customer.street==null? "": model.customer.street}}'+','+'<br>'+
+                                '{{model.customer.pincode==null? "": model.customer.pincode}}'+','+'<br>'+
+                                '{{model.customer.district==null? "": model.customer.district}}'+','+'<br>'+
+                                '{{model.customer.state==null? "": model.customer.state}}'+'<br>'+
+                                ''
+
+                            }]
                         }]
                     }, {
                         "type": "grid",
@@ -469,14 +480,18 @@ define({
                             "key": "CB_REPORT_DATA.loss",
                             "title": "Loss Accounts"
                         }, {
+                            "type":"section",
+                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
+                            "items": [{
                             "key": "CB_REPORT_DATA.fileId",
                             "notitle": true,
                             "title": "CB Report",
                             "category": "Loan",
                             "subCategory": "DOC1",
-                            "type": "file",
-                            "preview": "pdf",
+                            "type":"file",
+                            "fileType":"application/pdf",
                             "using": "scanner"
+                        }]
                         }]
                     }, {
                         "type": "grid",
@@ -500,16 +515,9 @@ define({
                 "readonly": true,
                 "title": "Proxy Indicators",
                 "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "psi",
-                            "title": "Proxy Indicator Score"
-                        }]
-                    }]
+                    "type": "section",
+                    "htmlClass":"col-sm-12",
+                    "html": '<div style="display: table;"><div style="font-weight: bold; display: table-cell;">Proxy Indicator Score</div><div style="display: table-cell; padding-left: 40px;">{{(model.proxyScore==null || model.proxyScore==undefined) ?"-Proxy Waiting For Summary-": model.proxyScore["Actual Value"].concat("/",model.proxyScore["ParameterScore"])}}</p></div>'
                 }, {
                     "type": "expandablesection",
                     "items": [{
@@ -677,9 +685,8 @@ define({
             },
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
-                    var psi = {};
-                    psi = params[2].data[5];
-                    model.psi = psi['Actual Value'] / psi.ParameterScore
+                    model.proxyScore = {};
+                    model.proxyScore = params[2].data[5];
                 }
             },
             actions: {}
