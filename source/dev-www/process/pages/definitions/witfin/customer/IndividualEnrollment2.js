@@ -241,7 +241,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "trackDetails",
                     "trackDetails.vehiclesOwned",
                     "trackDetails.vehiclesFinanced",
-                    "trackDetails.vehiclesFree"
+                    "trackDetails.vehiclesFree",
+                    "reference",
+                    "reference.verifications",
+                    "reference.verifications.referenceFirstName",
+                    "reference.verifications.mobileNo",
+                    "reference.verifications.occupation",
+                    "reference.verifications.address",
+                    "reference.verifications.referenceCheck",
+                    "reference.verifications.referenceCheck.knownSince",
+                    "reference.verifications.referenceCheck.relationship",
+                    "reference.verifications.referenceCheck.opinion",
+                    "reference.verifications.referenceCheck.financialStatus",
+                    "reference.verifications.referenceCheck.customerResponse"
 
                 ];
 
