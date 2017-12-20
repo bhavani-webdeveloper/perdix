@@ -20,7 +20,9 @@
         "illuminate/database": "~5.1",
         "guzzlehttp/guzzle": "^6.2",
         "ellipsesynergie/api-response": "^0.12.3",
-        "phpoffice/phpexcel": "^1.8"
+        "phpoffice/phpexcel": "^1.8",
+        "illuminate/validation": "~5.3",
+        "illuminate/translation": "~5.3"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.8 < 6.0"
