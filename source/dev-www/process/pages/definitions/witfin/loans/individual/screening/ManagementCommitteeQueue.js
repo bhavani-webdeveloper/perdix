@@ -157,9 +157,9 @@ define({
                     },
                     getListItem: function(item) {
                         return [
-                            item.screeningDate,
                             item.applicantName,
                             item.customerName,
+                            item.loanAmount,
                             item.area,
                             item.villageName,
                             item.enterprisePincode
@@ -174,9 +174,6 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            title: 'SCREENING_DATE',
-                            data: 'screeningDate'
-                        }, {
                             title: 'APPLICANT_NAME',
                             data: 'applicantName'
                         },{
@@ -198,7 +195,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "APPRAISAL",
+                            name: "MANAGEMENT_COMMITTEE",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

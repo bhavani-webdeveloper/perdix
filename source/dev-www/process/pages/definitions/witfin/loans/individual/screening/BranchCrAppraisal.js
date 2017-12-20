@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries,  Utils, IndividualLoan, BundleManager) {
                 return {
                     "type": "page-bundle",
-                    "title": "BRANCH_CR_APPRAISAL",
+                    "title": "CREDIT_APPRAISAL",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
@@ -51,13 +51,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1
                             },
-                            // {
-                            //     pageName: 'witfin.customer.FieldInvestigation',
-                            //     title: 'Field Investigation',
-                            //     pageClass: 'field-investigation',
-                            //     minimum: 1,
-                            //     maximum: 1
-                            // },
+                            {
+                                pageName: 'witfin.customer.FieldInvestigation',
+                                title: 'Field Investigation',
+                                pageClass: 'field-investigation',
+                                minimum: 1,
+                                maximum: 1
+                            },
                             {
                                 pageName: 'witfin.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
@@ -213,12 +213,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-                                // $this.bundlePages.push({
-                                //     pageClass: 'field-investigation',
-                                //     model: {
-                                //         loanRelation: {customerId:loanAccount.customerId}
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'field-investigation',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                //   $this.bundlePages.push({
                                //      pageClass: 'cbview',

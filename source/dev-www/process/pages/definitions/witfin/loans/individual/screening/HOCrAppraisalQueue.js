@@ -157,7 +157,6 @@ define({
                     },
                     getListItem: function(item) {
                         return [
-                            item.screeningDate,
                             item.applicantName,
                             item.customerName,
                             item.area,
@@ -174,9 +173,6 @@ define({
                     },
                     getColumns: function() {
                         return [{
-                            title: 'SCREENING_DATE',
-                            data: 'screeningDate'
-                        }, {
                             title: 'APPLICANT_NAME',
                             data: 'applicantName'
                         },{
