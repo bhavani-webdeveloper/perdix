@@ -48,6 +48,10 @@ let config = {
                         "arguments": {
 
                         }
+                    },
+                    {
+                        "name": "PopulateLeadDefaultFieldsPolicy",
+                        "arguments":null
                     }
                 ]
             },

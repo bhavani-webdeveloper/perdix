@@ -154,9 +154,6 @@ define({
                         },{
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        },{
-                            title: 'Loan Amount',
-                            data: 'loanAmount'
                         }, /*{
                             title: 'AREA',
                             data: 'area'

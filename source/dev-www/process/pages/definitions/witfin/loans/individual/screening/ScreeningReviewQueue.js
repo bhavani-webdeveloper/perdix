@@ -130,9 +130,6 @@ define({
 							item.screeningDate,
 							item.applicantName,
 							item.customerName,
-							/*item.area,
-							item.villageName,
-							item.enterprisePincode*/
 							item.branchName,
 							item.centreName
 						]
@@ -151,22 +148,10 @@ define({
 						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
+						}, {
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
-						},{
-							title: 'Loan Amount',
-							data: 'loanAmount'
-						}, /*{
-							title: 'AREA',
-							data: 'area'
 						}, {
-							title: 'CITY_TOWN_VILLAGE',
-							data: 'villageName'
-						}, {
-							title: 'PIN_CODE',
-							data: 'enterprisePincode'
-						}*/{
 							title: 'BRANCH_NAME',
 							data: 'branchName'
 						}, {

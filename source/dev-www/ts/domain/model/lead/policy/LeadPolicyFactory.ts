@@ -7,6 +7,7 @@ import {LeadScreeningPolicy} from "./LeadScreeningPolicy";
 import {LeadFollowupPolicy} from "./LeadFollowupPolicy";
 import {LeadRejectPolicy} from "./LeadRejectPolicy";
 import {LeadDerivedColumnsPolicy} from "./LeadDerivedColumnsPolicy";
+import {PopulateLeadDefaultFieldsPolicy} from "./PopulateLeadDefaultFieldsPolicy";
 export class LeadPolicyFactory implements IPolicyFactory {
 
     private static _instance:LeadPolicyFactory = null;
@@ -37,6 +38,8 @@ export class LeadPolicyFactory implements IPolicyFactory {
                 return new LeadRejectPolicy();
             case 'LeadDerivedColumnsPolicy':
                 return new LeadDerivedColumnsPolicy();
+            case 'PopulateLeadDefaultFieldsPolicy':
+                return new PopulateLeadDefaultFieldsPolicy();
             default:
             	return null;
 

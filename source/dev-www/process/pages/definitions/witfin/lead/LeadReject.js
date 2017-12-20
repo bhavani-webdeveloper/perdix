@@ -41,7 +41,8 @@ define({
                             id: leadId
                         },
                         function(res) {
-                            _.assign(model.lead, res);
+                            // _.assign(model.lead, res);
+                            model.lead = res;
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
@@ -57,10 +58,6 @@ define({
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
-
-
-
-                            model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
                     );
@@ -129,7 +126,7 @@ define({
                             parentEnumCode: "branch_id",
                             parentValueExpr: "model.lead.branchId",
                             screenFilter: true
-                        },*/ 
+                        },*/
                         {
                             key: "lead.id",
                             condition: "model.lead.id",
@@ -467,25 +464,12 @@ define({
                                 key: "lead.productRejectReason",
                                 type: "select",
                                 condition: "model.lead.interestedInProduct==='NO'",
-                                titleMap: {
-                                    "Has many running loans": "Has many running loans",
-                                    "Available from banks": "Available from banks",
-                                    "Not planned for now": "Not planned for now",
-                                    "Available from banks": "Available from banks",
-                                    "Interest rate is not satisfactory": "Interest rate is not satisfactory",
-                                    "Too many documents": "Too many documents",
-                                    "Interested only for cash collection": "Interested only for cash collection"
-                                }
+                                enumCode: "lead_eligibility_reject_reason"
                             }, {
                                 key: "lead.productRejectReason",
-                                //type: "select",
+                                type: "select",
                                 condition: "model.lead.eligibleForProduct ==='NO'",
-                                /*titleMap: {
-                                    "High Interest rate": "High Interest rate",
-                                    "Negative": "Negative",
-                                    "Not Kinara's target segment": "Not Kinara's target segment",
-                                    "Not having proper documents": "Not having proper documents",
-                                }*/
+                                enumCode:"lead_reject_reason"
                             }, {
                                 key: "lead.additionalRemarks",
                             }, ]
@@ -665,11 +649,11 @@ define({
 
                         if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
                             LeadHelper.followData(reqData).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
+                                $state.go('Page.witfinLeadDashboard', null);
                             });
                         } else {
                             LeadHelper.proceedData(reqData).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
+                                $state.go('Page.witfinLeadDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;
@@ -678,7 +662,7 @@ define({
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.LeadDashboard', null);
+                                $state.go('Page.witfinLeadDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;

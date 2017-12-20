@@ -41,6 +41,10 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "PopulateLeadInteractionPolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "PopulateLeadDefaultFieldsPolicy",
+                            "arguments": null
                         }
                     ]
                 },
