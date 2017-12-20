@@ -3,7 +3,7 @@ define({
     pageType: "Engine",
     dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
     $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+                      PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
 
@@ -85,8 +85,8 @@ define({
                                                 model.loanMonitoringDetails.proprietoryName = cust.first_name;
 
                                                 Enrollment.getCustomerById({
-                                                        id: cust.id
-                                                    })
+                                                    id: cust.id
+                                                })
                                                     .$promise
                                                     .then(function(response2) {
                                                         $log.info("printing customer2");
@@ -157,8 +157,8 @@ define({
 
                                     if (custId) {
                                         Enrollment.getCustomerById({
-                                                id: custId
-                                            })
+                                            id: custId
+                                        })
                                             .$promise
                                             .then(function(response1) {
                                                 $log.info("printing customer");
@@ -483,10 +483,10 @@ define({
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         type: "integer",
                         "readonly": true
-                    },{
+                    }, {
                         key: "loanMonitoringDetails.loanAmountPurpose",
                         title: "LOAN_AMOUNT_UTILIZED_FOR",
-                        type:"select",
+                        type: "select",
                         condition: "model.loanMonitoringDetails.nonIntendedPurposeAmount > 0",
                         enumCode: "luc_loan_amount_Purpose",
                         readonly: true
@@ -757,7 +757,8 @@ define({
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                        type: "amount"
+                        type: "amount",
+                        readonly: true
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                         title: "%_OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
@@ -1051,6 +1052,7 @@ define({
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         type: "amount",
+                        readonly: true,
                         "onChange": function(modelValue, form, model) {
                             var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                             model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
@@ -1064,7 +1066,7 @@ define({
                     }, {
                         key: "loanMonitoringDetails.loanAmountPurpose",
                         title: "LOAN_AMOUNT_UTILIZED_FOR",
-                        type:"select",
+                        type: "select",
                         condition: "model.loanMonitoringDetails.nonIntendedPurposeAmount > 0",
                         enumCode: "luc_loan_amount_Purpose"
                     }, {
@@ -1323,7 +1325,8 @@ define({
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                        type: "amount"
+                        type: "amount",
+                        readonly: true
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                         title: "%_OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
@@ -1428,330 +1431,329 @@ define({
                         fileType: "application/pdf",
                         using: "scanner",
                     }]
-            }]
-        }, {
-            "type": "box",
-            "title": "LUC_DOCUMENTS",
-            "condition": "!(model.loanMonitoringDetails.currentStage == 'LUCReview' || model.lucCompleted)",
-            "items": [{
-                "key": "loanMonitoringDetails.loanMonitoringDocuments",
-                "type": "array",
+                }]
+            }, {
+                "type": "box",
                 "title": "LUC_DOCUMENTS",
-                startEmpty: true,
+                "condition": "!(model.loanMonitoringDetails.currentStage == 'LUCReview' || model.lucCompleted)",
                 "items": [{
+                    "key": "loanMonitoringDetails.loanMonitoringDocuments",
+                    "type": "array",
+                    "title": "LUC_DOCUMENTS",
+                    startEmpty: true,
+                    "items": [{
 
-                    key: "loanMonitoringDetails.loanMonitoringDocuments[].documentName",
-                    title: "DOCUMENT_NAME",
-                    required: true,
-                    "type": ["string", "null"],
-                }, {
-                    key: "loanMonitoringDetails.loanMonitoringDocuments[].documentId",
-                    title: "UPLOAD",
-                    type: "file",
-                    required: true,
-                    fileType: "application/pdf",
-                    using: "scanner",
-                }]
-            }]
-        }, {
-            "type": "box",
-            condition: "model.loanMonitoringDetails.isAssetNotDelivered == 'Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 && (model.lucCompleted || model.loanMonitoringDetails.currentStage =='LUCReview') && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
-            "title": "SOCIAL_IMPACT",
-            readonly: true,
-            "items": [{
-                key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
-                title: "NO_OF_JOBS_ADDED",
-                "readonly": true
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
-                type: "number",
-                title: "MEN",
-                "readonly": true
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
-                type: "number",
-                title: "WOMEN",
-                "readonly": true
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.noOfFreshersInAddedJobs",
-                title: "FRESHERS",
-                "readonly": true
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.avgSalaryOfNewJoinees",
-                title: "AVERAGE_SALARY_OF_NEW_JOINEES",
-                "readonly": true
-            }, {
-                "type": "fieldset",
-                "title": "PRE_LOAN_DETAILS",
-                "items": [{
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
-                    //type: "number",
-                    "readonly": true
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
-                    //type: "amount",
-                    "readonly": true
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
-                    //type: "amount",
-                    "readonly": true
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
-                    //type: "number",
-                    "readonly": true
+                        key: "loanMonitoringDetails.loanMonitoringDocuments[].documentName",
+                        title: "DOCUMENT_NAME",
+                        required: true,
+                        "type": ["string", "null"],
+                    }, {
+                        key: "loanMonitoringDetails.loanMonitoringDocuments[].documentId",
+                        title: "UPLOAD",
+                        type: "file",
+                        required: true,
+                        fileType: "application/pdf",
+                        using: "scanner",
+                    }]
                 }]
             }, {
-                "type": "fieldset",
-                "title": "POST_LOAN_DETAILS",
+                "type": "box",
+                condition: "model.loanMonitoringDetails.isAssetNotDelivered == 'Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 && (model.lucCompleted || model.loanMonitoringDetails.currentStage =='LUCReview') && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
+                "title": "SOCIAL_IMPACT",
+                readonly: true,
                 "items": [{
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
+                    key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
+                    title: "NO_OF_JOBS_ADDED",
+                    "readonly": true
+                }, {
+                    key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
                     type: "number",
+                    title: "MEN",
                     "readonly": true
                 }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
-                    type: "amount",
-                    "readonly": true
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
-                    type: "amount",
-                    "readonly": true
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
+                    key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
                     type: "number",
+                    title: "WOMEN",
                     "readonly": true
+                }, {
+                    key: "loanMonitoringDetails.socialImpactDetails.noOfFreshersInAddedJobs",
+                    title: "FRESHERS",
+                    "readonly": true
+                }, {
+                    key: "loanMonitoringDetails.socialImpactDetails.avgSalaryOfNewJoinees",
+                    title: "AVERAGE_SALARY_OF_NEW_JOINEES",
+                    "readonly": true
+                }, {
+                    "type": "fieldset",
+                    "title": "PRE_LOAN_DETAILS",
+                    "items": [{
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
+                        //type: "number",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
+                        //type: "amount",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
+                        //type: "amount",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
+                        //type: "number",
+                        "readonly": true
+                    }]
+                }, {
+                    "type": "fieldset",
+                    "title": "POST_LOAN_DETAILS",
+                    "items": [{
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
+                        type: "number",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
+                        type: "amount",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
+                        type: "amount",
+                        "readonly": true
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
+                        type: "number",
+                        "readonly": true
+                    }]
                 }]
-            }]
-        }, {
-            "type": "box",
-            condition: "model.loanMonitoringDetails.isAssetNotDelivered == 'Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 && !(model.loanMonitoringDetails.currentStage == 'LUCReview' || model.lucCompleted) && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
-            "title": "SOCIAL_IMPACT",
-            "items": [{
-                key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
-                title: "NO_OF_JOBS_ADDED"
             }, {
-                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
-                type: "number",
-                title: "MEN"
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
-                type: "number",
-                title: "WOMEN"
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.noOfFreshersInAddedJobs",
-                title: "FRESHERS"
-            }, {
-                key: "loanMonitoringDetails.socialImpactDetails.avgSalaryOfNewJoinees",
-                title: "AVERAGE_SALARY_OF_NEW_JOINEES"
-            }, {
-                "type": "fieldset",
-                "title": "PRE_LOAN_DETAILS",
+                "type": "box",
+                condition: "(( model.loanMonitoringDetails.currentStage=='LUCSchedule' || model.loanMonitoringDetails.currentStage=='LUCReschedule') && (model.loanMonitoringDetails.lucDone=='Yes' || model.loanMonitoringDetails.lucEscalated=='Yes')) || model.loanMonitoringDetails.isAssetNotDelivered == 'Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 && !(model.loanMonitoringDetails.currentStage == 'LUCReview' || model.lucCompleted) && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
+                "title": "SOCIAL_IMPACT",
                 "items": [{
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
-                    //type: "number",
-                    readonly: "true"
+                    key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
+                    title: "NO_OF_JOBS_ADDED"
                 }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
-                    //type: "amount",
-                    readonly: "true"
+                    key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
+                    type: "number",
+                    title: "MEN"
                 }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
-                    //type: "amount",
-                    readonly: "true"
+                    key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
+                    type: "number",
+                    title: "WOMEN"
                 }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
-                    //type: "number",
-                    readonly: "true"
+                    key: "loanMonitoringDetails.socialImpactDetails.noOfFreshersInAddedJobs",
+                    title: "FRESHERS"
+                }, {
+                    key: "loanMonitoringDetails.socialImpactDetails.avgSalaryOfNewJoinees",
+                    title: "AVERAGE_SALARY_OF_NEW_JOINEES"
+                }, {
+                    "type": "fieldset",
+                    "title": "PRE_LOAN_DETAILS",
+                    "items": [{
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
+                        //type: "number",
+                        readonly: "true"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
+                        //type: "amount",
+                        readonly: "true"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
+                        //type: "amount",
+                        readonly: "true"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
+                        //type: "number",
+                        readonly: "true"
+                    }]
+                }, {
+                    "type": "fieldset",
+                    "title": "POST_LOAN_DETAILS",
+                    "items": [{
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
+                        type: "number"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
+                        type: "amount"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
+                        type: "amount"
+                    }, {
+                        key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
+                        type: "number"
+                    }]
                 }]
             }, {
-                "type": "fieldset",
-                "title": "POST_LOAN_DETAILS",
+                "type": "actionbox",
+                condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && model.loanMonitoringDetails.lucEscalated=='No' ",
                 "items": [{
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
-                    type: "number"
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
-                    type: "amount"
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
-                    type: "amount"
-                }, {
-                    key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
-                    type: "number"
+                    type: "button",
+                    icon: "fa fa-step-backward",
+                    title: "ReSchedule",
+                    onClick: function(model, formCtrl) {
+                        $log.info("Inside submit()");
+                        $log.warn(model);
+                        model.loanMonitoringDetails.udf5 = model.loanMonitoringDetails.currentStage;
+                        var sortFn = function(unordered) {
+                            var out = {};
+                            Object.keys(unordered).sort().forEach(function(key) {
+                                out[key] = unordered[key];
+                            });
+                            return out;
+                        };
+                        formHelper.validate(formCtrl).then(function() {
+                            orderLUCDocuments(model);
+                            var reqData = _.cloneDeep(model);
+
+                            if (!(validateDate(reqData))) {
+                                return;
+                            }
+
+                            if (reqData.loanMonitoringDetails.id) {
+                                LucHelper.reschedule(reqData).then(function(resp) {
+                                    $state.go('Page.LUCDashboard', null);
+                                });
+
+                            } else {
+                                $log.info("Id is not in the model");
+                            }
+                        });
+                    }
                 }]
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && model.loanMonitoringDetails.lucEscalated=='No' ",
-            "items": [{
-                type: "button",
-                icon: "fa fa-step-backward",
-                title: "ReSchedule",
-                onClick: function(model, formCtrl) {
+            }, {
+                "type": "actionbox",
+                condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                "items": [{
+                    type: "button",
+                    icon: "fa fa-step-forward",
+                    title: "Escalate",
+                    onClick: function(model, formCtrl) {
+                        $log.info("Inside submit()");
+                        $log.warn(model);
+                        model.loanMonitoringDetails.udf5 = model.loanMonitoringDetails.currentStage;
+                        var sortFn = function(unordered) {
+                            var out = {};
+                            Object.keys(unordered).sort().forEach(function(key) {
+                                out[key] = unordered[key];
+                            });
+                            return out;
+                        };
+                        formHelper.validate(formCtrl).then(function() {
+                            orderLUCDocuments(model);
+                            var reqData = _.cloneDeep(model);
+                            if (reqData.loanMonitoringDetails.id) {
+                                LucHelper.escalate(reqData).then(function(resp) {
+                                    $state.go('Page.LUCDashboard', null);
+                                });
+                            } else {
+                                $log.info("Id is not in the model");
+                            }
+                        });
+                    }
+                }]
+            }, {
+                "type": "actionbox",
+                condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !(model.lucCompleted || model.loanMonitoringDetails.currentStage == 'LUCReview')",
+                "items": [{
+                    "type": "submit",
+                    "title": "Close"
+                }]
+            }, {
+                "type": "actionbox",
+                "condition": "model.loanMonitoringDetails.lucDone== 'Yes' && model.loanMonitoringDetails.currentStage == 'LUCReview'",
+                "items": [{
+                    "type": "submit",
+                    "title": "PROCEED"
+                }]
+            }, {
+                "type": "actionbox",
+                condition: "!model.lucCompleted",
+                "items": [{
+                    "type": "save",
+                    "title": "OffLine Save"
+                }]
+            }, {
+                "type": "actionbox",
+                condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'|| model.loanMonitoringDetails.currentStage=='LUCLegalRecovery' || model.loanMonitoringDetails.currentStage=='LUCReview'",
+                "items": [{
+                    type: "button",
+                    icon: "fa fa-step-backward",
+                    title: "Sent Back",
+                    onClick: function(model, formCtrl) {
+                        $log.info("Inside submit()");
+                        $log.warn(model);
+                        var sortFn = function(unordered) {
+                            var out = {};
+                            Object.keys(unordered).sort().forEach(function(key) {
+                                out[key] = unordered[key];
+                            });
+                            return out;
+                        };
+                        formHelper.validate(formCtrl).then(function() {
+                            orderLUCDocuments(model);
+                            var reqData = _.cloneDeep(model);
+                            if (reqData.loanMonitoringDetails.id) {
+                                LucHelper.goBack(reqData).then(function(resp) {
+                                    $state.go('Page.LUCDashboard', null);
+                                });
+                            } else {
+                                $log.info("Id is not in the model");
+                            }
+                        });
+                    }
+                }]
+            }, {
+                "type": "actionbox",
+                condition: "model.lucCompleted",
+                "items": [{
+                    type: "button",
+                    icon: "fa fa-step-backward",
+                    title: "Back",
+                    onClick: function(model, formCtrl) {
+                        irfNavigator.goBack();
+                    }
+                }]
+            }],
+
+            schema: function() {
+                return LUC.getSchema().$promise;
+            },
+
+            actions: {
+                preSave: function(model, form, formName) {
+                    var deferred = $q.defer();
+                    if (model.loanMonitoringDetails.customerName) {
+                        deferred.resolve();
+                    } else {
+                        irfProgressMessage.pop('lUC-save', 'Customer Name is required', 3000);
+                        deferred.reject();
+                    }
+                    return deferred.promise;
+                },
+                submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     $log.warn(model);
+                    var sortFn = function(unordered) {
+                        var out = {};
+                        Object.keys(unordered).sort().forEach(function(key) {
+                            out[key] = unordered[key];
+                        });
+                        return out;
+                    };
+
                     model.loanMonitoringDetails.udf5 = model.loanMonitoringDetails.currentStage;
-                    var sortFn = function(unordered) {
-                        var out = {};
-                        Object.keys(unordered).sort().forEach(function(key) {
-                            out[key] = unordered[key];
+                    orderLUCDocuments(model);
+                    var reqData = _.cloneDeep(model);
+                    // reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                    if (reqData.loanMonitoringDetails.id) {
+                        LucHelper.proceedData(reqData).then(function(resp) {
+                            $state.go('Page.LUCDashboard', null);
                         });
-                        return out;
-                    };
-                    formHelper.validate(formCtrl).then(function() {
-                        orderLUCDocuments(model);
-                        var reqData = _.cloneDeep(model);
 
-                        if (!(validateDate(reqData))) {
-                            return;
-                        }
-
-                        if (reqData.loanMonitoringDetails.id) {
-                            LucHelper.reschedule(reqData).then(function(resp) {
-                                $state.go('Page.LUCDashboard', null);
-                            });
-
-                        } else {
-                            $log.info("Id is not in the model");
-                        }
-                    });
+                    } else {
+                        $log.info("Id is not in the model");
+                    }
                 }
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-            "items": [{
-                type: "button",
-                icon: "fa fa-step-forward",
-                title: "Escalate",
-                onClick: function(model, formCtrl) {
-                    $log.info("Inside submit()");
-                    $log.warn(model);
-                    model.loanMonitoringDetails.udf5 = model.loanMonitoringDetails.currentStage;
-                    var sortFn = function(unordered) {
-                        var out = {};
-                        Object.keys(unordered).sort().forEach(function(key) {
-                            out[key] = unordered[key];
-                        });
-                        return out;
-                    };
-                    formHelper.validate(formCtrl).then(function() {
-                        orderLUCDocuments(model);
-                        var reqData = _.cloneDeep(model);
-                        if (reqData.loanMonitoringDetails.id) {
-                            LucHelper.escalate(reqData).then(function(resp) {
-                                $state.go('Page.LUCDashboard', null);
-                            });
-                        } else {
-                            $log.info("Id is not in the model");
-                        }
-                    });
-                }
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "model.loanMonitoringDetails.lucDone== 'Yes' && !(model.lucCompleted || model.loanMonitoringDetails.currentStage == 'LUCReview')",
-            "items": [{
-                "type": "submit",
-                "title": "Close"
-            }]
-        }, {
-            "type": "actionbox",
-            "condition": "model.loanMonitoringDetails.lucDone== 'Yes' && model.loanMonitoringDetails.currentStage == 'LUCReview'",
-            "items": [{
-                "type": "submit",
-                "title": "PROCEED"
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "!model.lucCompleted",
-            "items": [{
-                "type": "save",
-                "title": "OffLine Save"
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'|| model.loanMonitoringDetails.currentStage=='LUCLegalRecovery' || model.loanMonitoringDetails.currentStage=='LUCReview'",
-            "items": [{
-                type: "button",
-                icon: "fa fa-step-backward",
-                title: "Sent Back",
-                onClick: function(model, formCtrl) {
-                    $log.info("Inside submit()");
-                    $log.warn(model);
-                    var sortFn = function(unordered) {
-                        var out = {};
-                        Object.keys(unordered).sort().forEach(function(key) {
-                            out[key] = unordered[key];
-                        });
-                        return out;
-                    };
-                    formHelper.validate(formCtrl).then(function() {
-                        orderLUCDocuments(model);
-                        var reqData = _.cloneDeep(model);
-                        if (reqData.loanMonitoringDetails.id) {
-                            LucHelper.goBack(reqData).then(function(resp) {
-                                $state.go('Page.LUCDashboard', null);
-                            });
-                        } else {
-                            $log.info("Id is not in the model");
-                        }
-                    });
-                }
-            }]
-        }, {
-            "type": "actionbox",
-            condition: "model.lucCompleted",
-            "items": [{
-                type: "button",
-                icon: "fa fa-step-backward",
-                title: "Back",
-                onClick: function(model, formCtrl) {
-                    irfNavigator.goBack();
-                }
-            }]
-        }
-    ],
-
-    schema: function() {
-        return LUC.getSchema().$promise;
-    },
-
-    actions: {
-        preSave: function(model, form, formName) {
-            var deferred = $q.defer();
-            if (model.loanMonitoringDetails.customerName) {
-                deferred.resolve();
-            } else {
-                irfProgressMessage.pop('lUC-save', 'Customer Name is required', 3000);
-                deferred.reject();
-            }
-            return deferred.promise;
-        },
-        submit: function(model, form, formName) {
-            $log.info("Inside submit()");
-            $log.warn(model);
-            var sortFn = function(unordered) {
-                var out = {};
-                Object.keys(unordered).sort().forEach(function(key) {
-                    out[key] = unordered[key];
-                });
-                return out;
-            };
-
-            model.loanMonitoringDetails.udf5 = model.loanMonitoringDetails.currentStage;
-            orderLUCDocuments(model);
-            var reqData = _.cloneDeep(model);
-            // reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
-            if (reqData.loanMonitoringDetails.id) {
-                LucHelper.proceedData(reqData).then(function(resp) {
-                    $state.go('Page.LUCDashboard', null);
-                });
-
-            } else {
-                $log.info("Id is not in the model");
             }
         }
     }
-}
-}
 })
