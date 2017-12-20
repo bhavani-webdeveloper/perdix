@@ -207,6 +207,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     submit: function(model, form, formName){
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 
                         model.enrolmentProcess.save()
@@ -215,7 +216,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             })
                             .subscribe(function(){
                                 model.loanProcess.refreshRelatedCustomers();
-                            })
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            }, function(err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
 
                     },
                     proceed: function(model, form){
