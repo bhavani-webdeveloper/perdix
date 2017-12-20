@@ -28,6 +28,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						model.collectionDemandSummary.denominationThousand = null;
 						model.collectionDemandSummary.denominationTwenty = null;
 						model.collectionDemandSummary.denominationTwo = null;
+						model.collectionDemandSummary.denominationTwoThousand = null;
 					}
 					$log.info("showDenomination: "+model.showDenomination);
 				});
@@ -41,12 +42,15 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	                    model.customerBranchId = branch1[i].value;
 	                }
 	            }
-			
-				model.collected = 0;
-				$timeout(function() {
-					model.groupCollectionDemand = [];
-				});
-			
+				if (!model.$$STORAGE_KEY$$) {
+					model.collected = 0;
+					$timeout(function() {
+						model.groupCollectionDemand = [];
+					});
+				} else {
+					formCtrl.disabled = true;
+					model._mode = 'VIEW';
+				}
 				if (model._storedData && model._storedData.collectionDate) {
 					var cDate = moment(model._storedData.collectionDate);
 					model._storedData.formatedCollectionDate = SessionStore.getFormatedDate(cDate);
@@ -63,6 +67,11 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			if (model.$$STORAGE_KEY$$) {
 				//formCtrl.disabled = true;
 				model._mode = 'VIEW';
+				// for(var i = 0; i < form.length; i++) {
+				// 	if(i == 1 || i == 2) {
+				// 		form[i].readonly = true; 
+				// 	}
+				// }
 				// model.groupCollectionDemand = [];
 				// var collectionDemands = model._storedData.collectionDemands;
 				// var centreDemands = $filter('filter')(collectionDemands, {centreId: model.collectionDemandSummary.centreId}, true);
@@ -100,7 +109,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				'Collected: '+item["collected"]
 			]
 		},
-		form: [{
+		form: [
+		{
 			"type": "box",
 			"title": "CENTRE",
 			//"readonly": true,
@@ -230,15 +240,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"key": "collectionDemandSummary.photoOfCentre",
 							"type": "file",
 							"fileType": "image/*",
-							"condition": "model._mode!=='VIEW'",
-							"offline": true
-						},
-						{
-							"key": "collectionDemandSummary.photoOfCentre",
-							"type": "file",
-							"condition": "model._mode == 'VIEW'",
-							"fileType": "image/*",
-							readonly: true,
 							"offline": true
 						},
 						{
@@ -261,13 +262,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					]
 				}
 			]
-		},{
+		},
+		{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
+			"condition": "model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
-				"condition": "model._mode!=='VIEW'",
 				"fullwidth": true,
 				"onChange": function(modelValue, form, model) {
 					_.each(model.groupCollectionDemand, function(value, key){
@@ -281,8 +282,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"key": "groupCollectionDemand",
 				"add": null,
 				"remove": null,
-				"type": "array",
-				"condition": "model._mode!=='VIEW' && model.groupCollectionDemand",
 				"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
 				"items": [
 					{
@@ -290,85 +289,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
 						"add": null,
 						"remove": null,
-						"type": "array",
-						"condition": "model._mode==='VIEW' && model.groupCollectionDemand[arrayIndex].collectiondemand",
-						"fieldHtmlClass": "no-border",
-						"items": [
-							{
-								"type": "section",
-								"htmlClass": "row",
-								"items": [{
-									"type": "section",
-									"htmlClass": "col-xs-5",
-									"items": [{
-										"type": "section",
-										"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].totalToBeCollected|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (with overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
-									}]
-								},{
-									"type": "section",
-									"htmlClass": "col-xs-5",
-									"items": [{
-										"key": "groupCollectionDemand[].collectiondemand[].amountPaid",
-										"type": "amount",
-										"notitle": true,
-										"onChange": function(modelValue, form, model){
-											var demand = model.groupCollectionDemand[form.arrayIndexes[0]].collectiondemand[form.arrayIndexes[1]];
-											demand.error = '';
-											if (demand.amountPaid > demand.totalToBeCollected) {
-												demand.error = "No advance payment allowed";
-												return;
-											}
-											var collected = 0;
-											var l1 = model.groupCollectionDemand.length;
-											for(i=0;i<l1;i++){
-												var l2=model.groupCollectionDemand[i].collectiondemand.length;
-												for(j=0;j<l2;j++){
-													collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
-												}
-											}
-											model.collected = collected;
-										}
-									}]
-								},{
-									"type": "section",
-									"htmlClass": "col-xs-2",
-									"items": [{
-										"key": "groupCollectionDemand[].collectiondemand[].attendance",
-										"notitle": true
-									}]
-								}]
-							}
-						]
-					}
-				]
-			}]
-		},{
-			"type": "box",
-			"title": "GROUPS",
-			"condition": "model._mode==='VIEW' && model.groupCollectionDemand",
-			"readonly": true,
-			"items": [{
-				"key":"collectionDemandSummary.allAttendance",
-				"condition": "model._mode==='VIEW'",
-				"fullwidth": true
-			},
-			{
-				"key": "groupCollectionDemand",
-				"add": null,
-				"condition": "model._mode==='VIEW' && model.groupCollectionDemand",
-				"remove": null,
-				"view": "fixed",
-				"type": "array",
-				"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
-				"items": [
-					{
-						"key": "groupCollectionDemand[].collectiondemand",
-						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
-						"add": null,
-						"remove": null,
-						"type": "array",
 						"view": "fixed",
-						"condition": "model._mode==='VIEW' && model.groupCollectionDemand[arrayIndex].collectiondemand",
 						"fieldHtmlClass": "no-border",
 						"items": [
 							{
@@ -419,11 +340,82 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					}
 				]
 			}]
-		}, {
+		},
+		// {
+		// 	"type": "box",
+		// 	"title": "GROUPS",
+		// 	"condition": "model._mode==='VIEW'",
+		// 	"readonly": true,
+		// 	"items": [
+		// 		{
+		// 			"key":"collectionDemandSummary.allAttendance",
+		// 			"fullwidth": true
+		// 		},
+		// 		{
+		// 			"key": "groupCollectionDemand",
+		// 			"add": null,
+		// 			"remove": null,
+		// 			"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
+		// 			"items": [
+		// 				{
+		// 					"key": "groupCollectionDemand[].collectiondemand",
+		// 					"add": null,
+		// 					"remove": null,
+		// 					"view": "fixed",
+		// 					"fieldHtmlClass": "no-border",
+		// 					"items": [
+		// 					{
+		// 							"type": "section",
+		// 							"htmlClass": "row",
+		// 							"items": [{
+		// 								"type": "section",
+		// 								"htmlClass": "col-xs-5",
+		// 								"items": [{
+		// 									"key": "groupCollectionDemand[].collectiondemand[].customerName",
+		// 									"readonly": true,
+		// 									"notitle": true
+		// 								}]
+		// 							}, 
+		// 							]
+		// 						},
+		// 						{
+		// 							"type": "section",
+		// 							"htmlClass": "row",
+		// 							"items": [
+		// 							{
+		// 								"type": "section",
+		// 								"htmlClass": "col-xs-5",
+		// 								"items": [{
+		// 									"type": "section",
+		// 									"html": "{{'INSTALLMENT_AMOUNT'|translate}}: {{(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].totalToBeCollected|irfCurrency)+(model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].overdue?' (with overdue)':'')}}<br><small style='color:tomato'>{{model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].error}}</small>",
+		// 								}]
+		// 							}, {
+		// 								"type": "section",
+		// 								"htmlClass": "col-xs-5",
+		// 								"items": [{
+		// 									"key": "groupCollectionDemand[].collectiondemand[].amountPaid",
+		// 									"type": "amount",
+		// 									"notitle": true
+		// 								}]
+		// 							},{
+		// 								"type": "section",
+		// 								"htmlClass": "col-xs-2",
+		// 								"items": [{
+		// 									"key": "groupCollectionDemand[].collectiondemand[].attendance",
+		// 									"notitle": true
+		// 								}]
+		// 							}]
+		// 						}
+		// 					]
+		// 				}
+		// 			]
+		// 		}
+		// 	]
+		// },
+		{
 			"type": "box",
 			"title": "COLLECTION",
-			"condition": "model._mode==='VIEW' && model.collectionDemandSummary",
-			"readonly": true,
+			"condition": "((model._storedData && !model._storedData.expired)) && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
 			"items": [
 				{
 					"key": "totalToBeCollected",
@@ -440,8 +432,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				{
 					"type": "fieldset",
 					"title": "DENOMINATIONS",
-					"condition": "model._mode==='VIEW'",
-					"readonly": true,
+					"condition": "model.showDenomination",
 					"items": [{
 						"type": "section",
 						"htmlClass": "row",
@@ -449,10 +440,19 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
-								key:"collectionDemandSummary.denominationThousand",
+								key:"collectionDemandSummary.denominationTwoThousand",
 								onChange:"actions.valueOfDenoms(model,form)"
 							}]
-						},{
+						}, 
+						// {
+						// 	"type": "section",
+						// 	"htmlClass": "col-xs-4",
+						// 	"items": [{
+						// 		key:"collectionDemandSummary.denominationThousand",
+						// 		onChange:"actions.valueOfDenoms(model,form)"
+						// 	}]
+						// }, 
+						{
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
@@ -524,114 +524,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"type": "amount",
 						readonly:true
 					}]
-				}
-			]
-		}, {
-			"type": "box",
-			"title": "COLLECTION",
-			"condition": "model._mode!=='VIEW' && model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
-			"items": [
-				{
-					"key": "totalToBeCollected",
-					"title": "TO_COLLECT",
-					"type": "amount",
-					"readonly": true
 				},
-				{
-					"key": "collected",
-					"title": "COLLECTED",
-					"type": "amount",
-					"readonly": true
-				},
-				{
-					"type": "fieldset",
-					"title": "DENOMINATIONS",
-					"condition": "model._mode!=='VIEW' && model.showDenomination",
-					"items": [{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationThousand",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFiveHundred",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationHundred",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFifty",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTwenty",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTen",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationFive",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationTwo",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						},{
-							"type": "section",
-							"htmlClass": "col-xs-4",
-							"items": [{
-								key:"collectionDemandSummary.denominationOne",
-								onChange:"actions.valueOfDenoms(model,form)"
-							}]
-						}]
-					},
-					{
-						key:"collectionDemandSummary._denominationTotal",
-						title:"TOTAL",
-						"type": "amount",
-						readonly:true
-					}]
-				}
 			]
-		}, {
+		},
+		{
 			"type": "actionbox",
 			"items": [{
 				"type": "save",
@@ -640,10 +536,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"type": "submit",
 				"title": "SUBMIT"
 			}]
-		}],
+		}
+		],
 		actions: {
 			valueOfDenoms : function(model,form){
 				var thousands = 1000*parseInt(model.collectionDemandSummary.denominationThousand,10);
+				var twoTthousands = 2000*parseInt(model.collectionDemandSummary.denominationTwoThousand,10);
 				var fivehundreds = 500*parseInt(model.collectionDemandSummary.denominationFiveHundred,10);
 				var hundreds = 100*parseInt(model.collectionDemandSummary.denominationHundred,10);
 
@@ -656,7 +554,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				var ones = parseInt(model.collectionDemandSummary.denominationOne,10);
 
 				var denominationTotal = 0;
-
+				if(!isNaN(twoTthousands)) denominationTotal+=twoTthousands;
 				if(!isNaN(thousands)) denominationTotal+=thousands;
 				if(!isNaN(fivehundreds)) denominationTotal+=fivehundreds;
 				if(!isNaN(hundreds)) denominationTotal+=hundreds;
@@ -717,6 +615,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					{
 						"bFont": 1,
 						"text": ""
+					},
+					{
+						"bFont": 1,
+						"text": "2000  x" + summary.denominationTwoThousand
 					},
 					{
 						"bFont": 1,
@@ -794,13 +696,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				var fdate = moment(model.collectionDemandSummary.demandDate).format('YYYY-MM-DD');
 				var skey = model.collectionDemandSummary.centreId + fdate;
 				var off = StorageService.getJSON('CentrePaymentCollection', skey);
-				if (!model.$$STORAGE_KEY$$ && _.isObject(off) && !_.isEmpty(off)) {
-					PM.pop('collection-demand', 'Collection already saved. Cannot process again.', 5000);
+				if ((model.$$STORAGE_KEY$$ && !model.$$STORAGE_KEY$$.includes(skey))  && _.isObject(off) && !_.isEmpty(off)) {
+					PM.pop('collection-demand', 'Collection already saved in offline for CENTRE: ' + model.collectionDemandSummary.centreName + ' and DATE: ' + model.collectionDemandSummary.demandDate + '. Cannot process again. Please submit existing offline data.', 7000);
 					return;
 				}
 				if (_.isObject(off) && !_.isEmpty(off)) {
 					Utils.confirm(model.collectionDemandSummary.centreId+' Demand for '+fdate+' already saved. Do you want to overwrite?', 'Demand overwrite!').then(function(){
-						model._storedData = null;
+						//model._storedData = null;
 						model.$$STORAGE_KEY$$ = skey;
 						deferred.resolve();
 					});
@@ -839,7 +741,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"denominationHundred": 0,
 							"denominationOne": 0,
 							"denominationTen": 0,
-							"denominationThousand": 1,
+							"denominationThousand": 0,
 							"denominationTwenty": 0,
 							"denominationTwo": 0,
 							"denominationTwoThousand": 0
@@ -861,6 +763,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							cashDenomination.denominationOne = model.collectionDemandSummary.denominationOne;
 							cashDenomination.denominationTen = model.collectionDemandSummary.denominationTen;
 							cashDenomination.denominationThousand = model.collectionDemandSummary.denominationThousand;
+							cashDenomination.denominationTwoThousand = model.collectionDemandSummary.denominationTwoThousand;
 							cashDenomination.denominationTwenty = model.collectionDemandSummary.denominationTwenty;
 							cashDenomination.denominationTwo = model.collectionDemandSummary.denominationTwo;
 
@@ -878,7 +781,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								$log.info(response);
 								PM.pop('collection-demand', 'Collection Submitted Successfully', 3000);
 								if(model.$$STORAGE_KEY$$) {
-									formHelper.newOffline.deleteOffline($stateParams.pageName, model);
+									var fdate = moment(requestObj.collectionDemandSummary.demandDate).format('YYYY-MM-DD');
+									var skey = requestObj.collectionDemandSummary.centreId + fdate;
+									StorageService.deleteJSON($stateParams.pageName, skey);
 								}
 								var modidifiedCollectionData = [], modifiedCollectionDemand = [];
 								var _offlineKey = formCtrl.$name+"Download" + "__" + SessionStore.getBranch();
@@ -901,7 +806,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										modidifiedCollectionData.push(localStorageCollectionData[index]);
 									}
 									StorageService.storeJSON(model._offlineKey, modidifiedCollectionData);
-									if (modifiedCollectionDemand.length == 0) irfNavigator.goBack();
+									if (modifiedCollectionDemand.length == 0 || model.$$STORAGE_KEY$$) irfNavigator.goBack();
 								}
 
 							},
@@ -951,9 +856,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"category": "Collection",
 							"subCategory": "PHOTOOFCENTRE"
 						},
+						"denominationTwoThousand": {
+							"type": "integer",
+							"title": "2000 x"
+						},
 						"denominationThousand": {
 							"type": "integer",
-							"title": "1000 x"
+							"title": "1000 x",
 						},
 						"denominationFiveHundred": {
 							"type": "integer",
