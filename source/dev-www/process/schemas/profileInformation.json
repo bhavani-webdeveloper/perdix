@@ -21,7 +21,7 @@
                 "email": {
                     "type": ["string", "null"],
                     "pattern": "^\\S+@\\S+$",
-                    "title": "EMAIL"    
+                    "title": "EMAIL"
                 },
                 "nameInLocalLanguage":{
                     "type":["string","null"],
@@ -526,7 +526,7 @@
 
                         },
                         "required": [
-                            
+
                         ]
                     }
                 },
@@ -1590,7 +1590,7 @@
                                 "enumCode": "relationship"
                             },
                             "address": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "ADDRESS"
                             },
                             "knownSince": {
@@ -1600,11 +1600,11 @@
                                 "maximum": 99
                             },
                             "opinion": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "OPINION_ON_APPLICANT"
                             },
                             "financialStatus": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "FINANCIAL_STATUS"
                             },
                             "goodsSold": {

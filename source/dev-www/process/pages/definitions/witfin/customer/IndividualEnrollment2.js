@@ -39,7 +39,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             var configFile = function () {
                 return {
-                    "currentStage": {
+                    "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
@@ -82,6 +82,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "householdeDetails.familyMembers.salary",
                                 "householdeDetails.familyMembers.incomes",
                                 "householdeDetails.expenditures",
+                                "reference"
+                            ]
+                        },
+                        "Application": {
+                            "Includes": [
                                 "reference"
                             ]
                         }
@@ -302,7 +307,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         }
                     };
-                    self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest);
+                    self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest, configFile(), model);
                     /* Form rendering ends */
                 },
 

@@ -322,5 +322,76 @@
                 }
             }
         }
+    },
+    "Reference": {
+        "type": "box",
+        "title": "REFERENCES",
+        "items": {
+            "verifications": {
+                "key": "customer.verifications",
+                "title": "VERIFICATION",
+                "titleExpr": "model.customer.verifications[arrayIndexes[0]].referenceFirstName",
+                "type": "array",
+                "items": {
+                    "referenceFirstName": {
+                        "key": "customer.verifications[].referenceFirstName",
+                        "title": "CONTACT_PERSON_NAME",
+                        "type": "string",
+                        "required": true
+                    },
+                    "mobileNo": {
+                        "key": "customer.verifications[].mobileNo",
+                        "title": "CONTACT_NUMBER",
+                        "type": "string",
+                        "required": true,
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "occupation": {
+                        "key": "customer.verifications[].occupation",
+                        "title": "OCCUPATION",
+                        "type": "select",
+                        "enumCode": "occupation"
+                    },
+                    "address": {
+                        "key": "customer.verifications[].address",
+                        "type": "textarea"
+                    },
+                    "ReferenceCheck": {
+                        "type": "fieldset",
+                        "title": "REFERENCE_CHECK",
+                        "items": {
+                            "knownSince": {
+                                "key": "customer.verifications[].knownSince",
+                                "required": true
+                            },
+                            "relationship": {
+                                "key": "customer.verifications[].relationship",
+                                "title": "REFERENCE_TYPE1",
+                                "type": "select",
+                                "required": true,
+                                "titleMap": {
+                                    "Neighbour": "Neighbour",
+                                    "Relative/friend": "Relative/friend"
+                                }
+                            },
+                            "opinion": {
+                                "key": "customer.verifications[].opinion"
+                            },
+                            "financialStatus": {
+                                "key": "customer.verifications[].financialStatus"
+                            },
+                            "customerResponse": {
+                                "key": "customer.verifications[].customerResponse",
+                                "title": "CUSTOMER_RESPONSE",
+                                "required": true,
+                                "type": "select",
+                                "enumCode": "customer_response"
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

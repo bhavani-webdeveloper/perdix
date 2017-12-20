@@ -157,7 +157,6 @@ define({
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
 							item.applicantName,
 							item.customerName,
 							item.area,
@@ -174,26 +173,11 @@ define({
 					},
 					getColumns: function() {
 						return [{
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
-						},{
-							title: 'Loan Amount',
-							data: 'loanAmount'
-						}, {
-							title: 'AREA',
-							data: 'area'
-						}, {
-							title: 'CITY_TOWN_VILLAGE',
-							data: 'villageName'
-						}, {
-							title: 'PIN_CODE',
-							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
