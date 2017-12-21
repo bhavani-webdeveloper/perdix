@@ -84,7 +84,7 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 PageHelper.showLoader();
                 irfProgressMessage.pop('Go Back', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
-                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule" || res.loanMonitoringDetails.currentStage == "LUCReviewe")
+                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule" || res.loanMonitoringDetails.currentStage == "LUCReview")
                 {
                     res.stage="LUCEscalate";
                 } 

@@ -65,7 +65,7 @@ define({
                             //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
-
+                            model.loanMonitoringDetails.nonIntendedPurposeAmount = 0;
                             var loanresponse = IndividualLoan.get({
                                 id: loanId
                             }).$promise;
