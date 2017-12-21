@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q",
-function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q){
+["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q", "Utils",
+function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q, Utils){
 
     // var branch = SessionStore.getBranch();
     var branch = SessionStore.getCurrentBranch().branchName;
@@ -361,7 +361,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                                 LoanCollection.update(reqParams, function(resp, header) {
                                     PageHelper.showProgress('loan collection with id' +resp.id + 'is rejected', 'Working...');
                                     PageHelper.hideLoader();
-                                    PageHelper.navigateGoBack();
+                                    $state.reload();
+
                                 }, function(resp) {
                                     PageHelper.showErrors(resp);
                                 }).$promise.finally(function() {
