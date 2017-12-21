@@ -14,7 +14,7 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 res.loanMonitoringAction = "PROCEED";
                 if (res.loanMonitoringDetails.lucDone == 'Yes') {
                     if (res.loanMonitoringDetails.nonIntendedPurposeAmount > 0) {
-                            if (res.loanMonitoringDetails.currentStage == "LUCReview") {
+                            if (res.loanMonitoringDetails.currentStage == "LUCReview" || res.loanMonitoringDetails.currentStage == "LUCEscalate" || res.loanMonitoringDetails.currentStage == "LUCLegalRecovery") {
                                 res.stage = "Completed";
                             } else {
                                 res.stage = "LUCReview";
@@ -49,17 +49,15 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 irfProgressMessage.pop('Go Back', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
                 if (res.loanMonitoringDetails.currentStage == "LUCEscalate") {
-                    res.stage="LUCSchedule";
-                }else if(res.loanMonitoringDetails.currentStage == "LUCLegalRecovery") 
-                {
-                    res.stage="LUCEscalate";
-                }else if(res.loanMonitoringDetails.currentStage == "LUCReview") 
-                {
-                    if (res.loanMonitoringDetails.udf5 == "LUCSchedule") {
-                        res.stage = "LUCSchedule";
-                    } else if (res.loanMonitoringDetails.udf5 == "LUCReschedule") {
-                        res.stage = "LUCReschedule";
+                    if (res.loanMonitoringDetails.nonIntendedPurposeAmount > 0) {
+                        res.stage="LUCReview";
+                    } else if (res.loanMonitoringDetails.nonIntendedPurposeAmount == 0) {
+                        res.stage = "LUCSchedule"
                     }
+                } else if (res.loanMonitoringDetails.currentStage == "LUCLegalRecovery") {
+                    res.stage="LUCEscalate";
+                } else if (res.loanMonitoringDetails.currentStage == "LUCReview") {
+                    res.stage = "LUCReschedule";
                 }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
