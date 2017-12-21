@@ -15,6 +15,14 @@ irf.models.factory('Messaging', ["$resource", "$httpParamSerializer", "BASE_URL"
                 method: 'POST',
                 url: endpoint + 'addMessage.php'   
             }),
+            findConversation: searchResource({
+                method: 'GET',
+                url: endpoint + 'findConversation.php'   
+            }),
+            findProcess: searchResource({
+                method: 'GET',
+                url: endpoint + 'findProcess.php'   
+            })
             
         });
 
@@ -81,7 +89,7 @@ irf.models.directive("irfMessaging", [function() {
         </div>
     </div>
     <span ng-if="!conversation.messages && readonly" style="text-align: center;display: block;">Conversation is not available</span>
-    <div ng-hide="readonly || conversation.messages.length" class="box-footer">
+    <div ng-hide="readonly || conversation.messages.length || hideCreateConversation" class="box-footer">
         <img class="img-responsive img-circle img-sm" src="img/unknownUser.jpg">
         <div class="img-push">
             <div class="input-group">
@@ -97,6 +105,7 @@ irf.models.directive("irfMessaging", [function() {
         scope: {
             processId: "=",
             subProcessId: "=",
+            hideCreateConversation: "=",
             conversation: "=",
             expand: "=",
             readonly: "="

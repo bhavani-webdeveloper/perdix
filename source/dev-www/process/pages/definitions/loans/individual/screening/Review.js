@@ -7,6 +7,8 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 		"title": "REVIEW",
 		"subTitle": "BUSINESS",
 		initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+			$log.info("bundleModel");
+			$log.info(bundleModel);
 			model.currentStage = bundleModel.currentStage;
 			
 			if (model.loanAccount && model.loanAccount.id) {
@@ -21,6 +23,9 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 					}
 
 					var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
+					if(model.currentStage == 'loanView') {
+						model.loanSummary[currentStage].hideCreateConversation = true;
+					}
 					model.loanSummary[currentStage].isCurrentStage = true;
 					model.loanSummary[currentStage]._conversationExpand = true;					
 				}).finally(PageHelper.hideLoader);
@@ -63,7 +68,7 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 				item._footerHtml = '<b>Remarks:</b> <div style="white-space: pre-wrap;">'+(item.remarks?item.remarks:'--')+'</div>';
 				if (item.action == 'PROCEED') {
 					item._footerHtml += '<hr><a href="" style="display: inherit;text-align: center;" ng-if="!model.loanSummary['+index+']._conversationExpand" ng-click="model.loanSummary['+index+']._conversationExpand=true" class="color-theme">{{\'VIEW_CONVERSATION\'|translate}}</a>'
-						+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
+						+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" hide-create-conversation="model.loanSummary['+index+'].hideCreateConversation" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
 				}
 
 				return moment(item.createdDate, "YYYY-MM-DD[T]hh:mm:ss[Z]");
