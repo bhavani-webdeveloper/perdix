@@ -1,21 +1,18 @@
 define({
     pageUID: "loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess"
-    ],
-    $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess) {
-        
-var navigateToQueue = function(model) {
-                    // Considering this as the success callback
-                    // Deleting offline record on success submission
-                    BundleManager.deleteOffline().then(function() {
-                        PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
-                    });
+    dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "Utils", "BundleManager", "$filter", "Dedupe", "$resource", "BASE_URL", "SchemaResource", "LoanProcess"],
+    $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, Utils, BundleManager, $filter, Dedupe, $resource, BASE_URL, SchemaResource, LoanProcess) {
+
+        var navigateToQueue = function(model) {
+            // Considering this as the success callback
+            // Deleting offline record on success submission
+            BundleManager.deleteOffline().then(function() {
+                PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
+            });
 
 
-                    /*if (model.currentStage == 'ApplicationReview')
+            /*if (model.currentStage == 'ApplicationReview')
                         $state.go('Page.Engine', {
                             pageName: 'loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
@@ -42,64 +39,64 @@ var navigateToQueue = function(model) {
                         });
 */
 
-                    if (model.currentStage == 'Screening')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Dedupe')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.DedupeQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ScreeningReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Application')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ApplicationReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisal')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisalReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CreditCommitteeReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CentralRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ZonalRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Sanction')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.LoanSanctionQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Rejected')
-                        $state.go('Page.LoanOriginationDashboard', null);
-                }
+            if (model.currentStage == 'Screening')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.ScreeningQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'Dedupe')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.DedupeQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'ScreeningReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.ScreeningReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'Application')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.ApplicationQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'ApplicationReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.ApplicationReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'FieldAppraisal')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.FieldAppraisalQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'FieldAppraisalReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'CreditCommitteeReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'CentralRiskReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.CentralRiskReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'ZonalRiskReview')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'Sanction')
+                $state.go('Page.Engine', {
+                    pageName: 'loans.individual.screening.LoanSanctionQueue',
+                    pageId: null
+                });
+            if (model.currentStage == 'Rejected')
+                $state.go('Page.LoanOriginationDashboard', null);
+        }
 
 
         return {
@@ -114,9 +111,9 @@ var navigateToQueue = function(model) {
                 model.temp = model.temp || {}
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
 
-                
 
-            /*Asset details*/
+
+                /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = {
                         "collateralDescription": model.loanAccount.collateral[0].collateralDescription,
@@ -149,14 +146,14 @@ var navigateToQueue = function(model) {
 */
 
 
-            Enrollment.getCustomerById({
-                id: model.customerId
-            }).$promise.then(function(res) {
-                model.customer = res;
-            });
+                Enrollment.getCustomerById({
+                    id: model.customerId
+                }).$promise.then(function(res) {
+                    model.customer = res;
+                });
 
-        },
-        form: [{
+            },
+            form: [{
                 "type": "section",
                 "html": '<div class="col-xs-12">' +
                     '<div class="box no-border">' +
@@ -660,7 +657,8 @@ var navigateToQueue = function(model) {
                 model.loanAccount.loanCentre.centreId = params.customer.centreId;
                 model.enterprise = params.customer;
             },
-*/                "financial-summary": function(bundleModel, model, params) {
+*/
+                "financial-summary": function(bundleModel, model, params) {
                     model._scores = params;
                     model._deviationDetails = model._scores[12].data;
 
@@ -839,7 +837,7 @@ var navigateToQueue = function(model) {
                     Utils.confirm("Are You Sure?")
                         .then(
                             function() {
-                              var reqData = {
+                                var reqData = {
                                     loanAccount: _.cloneDeep(model.loanAccount)
                                 };
                                 reqData.loanAccount.status = 'HOLD';
@@ -966,10 +964,10 @@ var navigateToQueue = function(model) {
                     if (model.currentStage == 'CreditCommitteeReview') {
                         model.loanAccount.status = 'APPROVED';
                     }
-/*
-                    if (!preLoanSaveOrProceed(model)) {
-                        return;
-                    }*/
+                    /*
+                                        if (!preLoanSaveOrProceed(model)) {
+                                            return;
+                                        }*/
 
                     Utils.confirm("Are You Sure?").then(function() {
                         var mandatoryPromises = [];
@@ -1105,6 +1103,6 @@ var navigateToQueue = function(model) {
 
 
             }
+        }
     }
-}
 })

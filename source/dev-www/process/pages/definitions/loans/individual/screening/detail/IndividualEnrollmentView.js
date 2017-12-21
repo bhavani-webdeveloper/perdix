@@ -697,19 +697,24 @@ define({
                                 "title": "CIBIL Score"
                             }, {
                                 "key": "UIUDF.cibil.active_accounts",
-                                "title": "Active Accounts"
+                                "title": "Active Accounts",
+                                "type": "number"
                             }, {
                                 "key": "UIUDF.cibil.overdue_accounts",
-                                "title": "Overdue Accounts"
+                                "title": "Overdue Accounts",
+                                "type": "number"
                             }, {
                                 "key": "UIUDF.cibil.sanctioned_Amount",
-                                "title": "Sanctioned Amount"
+                                "title": "Sanctioned Amount",
+                                "type": "amount"
                             }, {
                                 "key": "UIUDF.cibil.current_balance",
-                                "title": "Current Balance"
+                                "title": "Current Balance",
+                                "type": "amount"
                             }, {
                                 "key": "UIUDF.cibil.amount_overdue",
-                                "title": "Overdue Balance"
+                                "title": "Overdue Balance",
+                                "type": "amount"
                             }, {
                                 "key": "",
                                 "title": "Report"

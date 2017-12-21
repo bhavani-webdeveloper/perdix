@@ -1,6 +1,5 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-	"Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
-	function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsView'), ["$log", "$q", "LoanAccount", "$stateParams","PageHelper", "$filter", "IndividualLoan", "BundleManager",
+	function($log, $q, LoanAccount, $stateParams,PageHelper, $filter, IndividualLoan, BundleManager) {
 		$log.info("Inside LoanAnalyticsView");
 		return {
 			"type": "page-bundle",
@@ -153,7 +152,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'business',
 							model: {
 								customerId: res.customerId,
-								loanAccount:res
+								loanAccount: res
 							}
 						});
 
