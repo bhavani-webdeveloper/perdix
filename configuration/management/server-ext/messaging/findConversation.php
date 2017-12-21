@@ -44,7 +44,7 @@ try {
 	->join("$db.ms_message as mm", "mm.conversation_id", "=", "mc.id")
 	->where("mc.process_type", "=", "LOAN")
 	->whereNull('mc.closed_at')
-	->groupBy("conversation_id")
+	->groupBy("mc.process_id")
 	->havingRaw($havingCondition)
 	->get();
 
