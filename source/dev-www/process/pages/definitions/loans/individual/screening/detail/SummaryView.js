@@ -295,7 +295,8 @@ define({
                             "title": "Loan Product"
                         }, {
                             "key": "loanAccount.loanAmountRequested",
-                            "title": "Loan Amount Requested"
+                            "title": "Loan Amount Requested",
+                            "type": "amount"
                         }]
                     }, {
                         "type": "grid",
@@ -320,10 +321,12 @@ define({
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
-                            "title": "Tenure of Loan"
+                            "title": "Tenure of Loan",
+                            "type": "number"
                         }, {
                             "key": "loanAccount.expectedInterestRate",
-                            "title": "Rate of Interest"
+                            "title": "Rate of Interest",
+                            "type": "number"
                         }]
                     }]
                 }]
@@ -472,30 +475,36 @@ define({
                             "orientation": "vertical",
                             "items": [{
                                     "key": "secData['No of total loans']",
-                                    "title": "Total no. of Loans"
+                                    "title": "Total no. of Loans",
+                                    "type": "number"
                                 },
-                                /*{
+                                {
                                                                "key": "",
                                                                "title": "Minimum Loan Size"
                                                            }, {
                                                                "key": "",
                                                                "title": "Maximum Loan Size"
-                                                           },*/
+                                                           },
                                 {
                                     "key": "secData['Average Loan Size']|irfCurrency",
-                                    "title": "Average Loan Size"
+                                    "title": "Average Loan Size",
+                                    "type": "amount"
                                 }, {
                                     "key": "secData['No of Loans with cheque bounce']",
-                                    "title": "No. of loans with cheque bounce"
+                                    "title": "No. of loans with cheque bounce",
+                                    "type": "number"
                                 }, {
                                     "key": "secData['Average Loan Size of Cheque Bounce accounts']",
-                                    "title": "Avg loan size of cheque bounce accounts"
+                                    "title": "Avg loan size of cheque bounce accounts",
+                                    "type": "amount"
                                 }, {
                                     "key": "secData['No of loans as NPA']",
-                                    "title": "No. of loans as NPA"
+                                    "title": "No. of loans as NPA",
+                                    "type": "number"
                                 }, {
                                     "key": "secData['Average Loan Size of NPA accounts']",
-                                    "title": "Avg loan size of NPA accounts"
+                                    "title": "Avg loan size of NPA accounts",
+                                    "type": "amount"
                                 }
                             ]
                         }]
@@ -517,30 +526,37 @@ define({
                             "orientation": "vertical",
                             "items": [{
                                     "key": "subsecData['No of total loans']",
-                                    "title": "Total no. of Loans"
+                                    "title": "Total no. of Loans",
+                                    "type": "number"
                                 },
-                                /*{
+                                {
                                                                "key": "",
                                                                "title": "Minimum Loan Size"
                                                            }, {
                                                                "key": "",
                                                                "title": "Maximum Loan Size"
-                                                           },*/
+                                                           },
                                 {
                                     "key": "subsecData['Average Loan Size']",
-                                    "title": "Average Loan Size"
+                                    "title": "Average Loan Size",
+                                    "type": "amount"
                                 }, {
                                     "key": "subsecData['No of Loans with cheque bounce']",
-                                    "title": "No. of loans with cheque bounce"
+                                    "title": "No. of loans with cheque bounce",
+                                    "type": "number"
                                 }, {
                                     "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
-                                    "title": "Avg loan size of cheque bounce accounts"
+                                    "title": "Avg loan size of cheque bounce accounts",
+                                    "type": "amount"
                                 }, {
                                     "key": "subsecData['No of loans as NPA']",
-                                    "title": "No. of loans as NPA"
+                                    "title": "No. of loans as NPA",
+                                    "type": "number"
                                 }, {
                                     "key": "subsecData['Average Loan Size of NPA accounts']",
+                                    "type": "amount",
                                     "title": "Avg loan size of NPA accounts"
+
                                 }
                             ]
                         }]
