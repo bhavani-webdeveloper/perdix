@@ -30,7 +30,8 @@ define({
 */
                     /*CBREPORT*/
 
-                    model.CB_REPORT_DATA = {
+                    if (_.isArray(model.customer.enterpriseBureauDetails) && model.customer.enterpriseBureauDetails.length) {
+                        model.CB_REPORT_DATA = {
                             "bureau": model.customer.enterpriseBureauDetails[0].bureau,
                             "doubtful": model.customer.enterpriseBureauDetails[0].doubtful,
                             "loss": model.customer.enterpriseBureauDetails[0].loss,
@@ -39,7 +40,8 @@ define({
                             "standard": model.customer.enterpriseBureauDetails[0].standard,
                             "subStandard": model.customer.enterpriseBureauDetails[0].subStandard
                         }
-                        /* Machin Details*/
+                    }
+                    /* Machin Details*/
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
                     model.totalValue = 0;/*
