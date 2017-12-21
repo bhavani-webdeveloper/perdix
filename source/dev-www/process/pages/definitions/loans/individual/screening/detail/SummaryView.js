@@ -318,8 +318,8 @@ define({
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
-                            "title": "Tenure of Loan",
-                            "type": "number"
+                            "title": "Tenure of Loan"/*,
+                            "type": "number"*/
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Rate of Interest",

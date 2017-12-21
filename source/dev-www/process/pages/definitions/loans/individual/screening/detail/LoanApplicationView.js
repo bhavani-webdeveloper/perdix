@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "Utils", "BundleManager", "$filter", "Dedupe", "$resource", "BASE_URL", "SchemaResource", "LoanProcess"],
-    $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, Utils, BundleManager, $filter, Dedupe, $resource, BASE_URL, SchemaResource, LoanProcess) {
+    dependencies: ["$log", "$state", "Enrollment","PageHelper", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "Utils", "BundleManager", "$filter", "Dedupe", "$resource", "BASE_URL", "SchemaResource", "LoanProcess"],
+    $pageFn: function($log, $state, Enrollment,PageHelper, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, Utils, BundleManager, $filter, Dedupe, $resource, BASE_URL, SchemaResource, LoanProcess) {
 
         var navigateToQueue = function(model) {
             // Considering this as the success callback
@@ -10,34 +10,6 @@ define({
             BundleManager.deleteOffline().then(function() {
                 PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
             });
-
-
-            /*if (model.currentStage == 'ApplicationReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisalReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CreditCommitteeReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CentralRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ZonalRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
-                            pageId: null
-                        });
-*/
 
             if (model.currentStage == 'Screening')
                 $state.go('Page.Engine', {
@@ -97,6 +69,74 @@ define({
             if (model.currentStage == 'Rejected')
                 $state.go('Page.LoanOriginationDashboard', null);
         }
+
+        var preLoanSaveOrProceed = function(model){
+        var loanAccount = model.loanAccount;
+
+        if (_.hasIn(loanAccount, 'status') && loanAccount.status == 'HOLD'){
+            loanAccount.status = null;
+        }
+
+        if (_.hasIn(loanAccount, 'guarantors') && _.isArray(loanAccount.guarantors)){
+            for (var i=0;i<loanAccount.guarantors.length; i++){
+                var guarantor = loanAccount.guarantors[i];
+                if (!_.hasIn(guarantor, 'guaUrnNo') || _.isNull(guarantor, 'guaUrnNo')){
+                    PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                    return false;
+                }
+
+            }
+        }
+
+        if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)){
+            _.forEach(loanAccount.collateral, function(collateral){
+                if (!_.hasIn(collateral, "id") || _.isNull(collateral.id)){
+                    /* ITS A NEW COLLATERAL ADDED */
+                    collateral.quantity = collateral.quantity || 1;
+                    collateral.loanToValue = collateral.collateralValue;
+                    collateral.totalValue = collateral.loanToValue * collateral.quantity;
+                }
+            })
+        }
+        // Psychometric Required for applicants & co-applicants
+        if (_.isArray(loanAccount.loanCustomerRelations)) {
+            var psychometricIncomplete = false;
+            var enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations;
+            for (i in loanAccount.loanCustomerRelations) {
+                if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                    if (_.isArray(enterpriseCustomerRelations)) {
+                        var psychometricRequiredUpdated = false;
+                        for (j in enterpriseCustomerRelations) {
+                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
+                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                                psychometricRequiredUpdated = true;
+                            }
+                        }
+                        if (!psychometricRequiredUpdated) {
+                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                        }
+                    } else {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                    }
+                } else {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                }
+                if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
+                    loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
+                }
+                if (loanAccount.loanCustomerRelations[i].psychometricRequired == 'YES' && loanAccount.loanCustomerRelations[i].psychometricCompleted == 'NO') {
+                        psychometricIncomplete = true;
+                }
+            }
+            if (psychometricIncomplete) {
+                loanAccount.psychometricCompleted = 'N';
+            }
+        }
+
+        return true;
+    }
 
 
         return {
@@ -229,8 +269,8 @@ define({
                             "type": "number"
                         }, {
                             "key": "loanAccount.tenureRequested",
-                            "title": "Requested Tenure",
-                            "type": "number"
+                            "title": "Requested Tenure"/*,
+                            "type": "number"*/
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Expected Interest Rate",
@@ -451,8 +491,8 @@ define({
                             "type": "amount"
                         }, {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)",
-                            "type": "number"
+                            "title": "Duration(months)"/*,
+                            "type": "number"*/
                         }, {
                             "key": "loanAccount.interestRate",
                             "title": "Interest Rate",
@@ -867,14 +907,14 @@ define({
                     $log.info("Inside sendBack()");
                     PageHelper.clearErrors();
 
-                    /* if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
+                     if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
                          PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
                          return false;
-                     }*/
+                     }
 
-                    /* if (!preLoanSaveOrProceed(model)){
+                     if (!preLoanSaveOrProceed(model)){
                          return;
-                     }*/
+                     }
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {

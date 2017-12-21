@@ -188,7 +188,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 								});*/
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "loans.individual.screening.LoanAnalyticsView",
+									pageName: "loans.individual.screening.CreditCommitteeReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
