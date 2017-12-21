@@ -2,6 +2,8 @@ irf.models.factory('LoanCollection',[
 "$resource","$httpParamSerializer","BASE_URL","searchResource",
 function($resource,$httpParamSerializer,BASE_URL,searchResource){
     var endpoint = BASE_URL + '/api/loanCollection';
+
+    var biEndPoint= irf.MANAGEMENT_BASE_URL; 
     /*
     * GET /api/loanaccounts/reverse/{transactionId}/{transactionName} will translate into
     * {action:'reverse',param1:'<tid>',param2:'<tname>'}
@@ -83,6 +85,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method: "GET",
             url: endpoint + "/findDepositSummaries",
             isArray: true
+        },
+        collectionRemainder:{
+            method:'GET',
+            //isArray: true,
+            url:biEndPoint+'/server-ext/repayment_reminder.php/',
         }
     });
 }]);

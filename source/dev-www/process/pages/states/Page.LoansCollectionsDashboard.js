@@ -19,7 +19,8 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
             "Page/Engine/loans.individual.collections.DepositStage",
             "Page/Engine/loans.individual.collections.MonthlyDemandList",
-            "Page/Engine/loans.individual.collections.offlineCollectionUpload"
+            "Page/Engine/loans.individual.collections.offlineCollectionUpload",
+            "Page/Engine/loans.individual.collections.CollectionRemainder"
         ]
     };
 
