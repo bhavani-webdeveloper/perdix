@@ -46,6 +46,22 @@ let config = {
                         ]
                     }
                 ]
+            },
+            beforeProceed: {
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='ManagementCommittee'",
+                        "add": [
+                            {
+                                "name": "OriginationToBookingPolicy",
+                                "arguments": {
+                                    "postStage":"LoanInitiation"
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         },
 
