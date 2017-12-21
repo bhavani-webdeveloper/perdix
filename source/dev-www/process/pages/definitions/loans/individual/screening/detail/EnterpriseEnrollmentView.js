@@ -2,10 +2,10 @@ define({
     pageUID: "loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter"
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter) {
         return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
@@ -199,11 +199,11 @@ define({
                             "type": "section",
                             "htmlClass": "col-sm-12",
                             "title": "Present Address",
-                            "html": '{{model.customer.doorNo==null? "": model.customer.doorNo}}'+','+'<br>'+
-                                '{{model.customer.street==null? "": model.customer.street}}'+','+'<br>'+
-                                '{{model.customer.pincode==null? "": model.customer.pincode}}'+','+'<br>'+
-                                '{{model.customer.district==null? "": model.customer.district}}'+','+'<br>'+
-                                '{{model.customer.state==null? "": model.customer.state}}'+'<br>'+
+                            "html": '{{model.customer.doorNo==null? "": model.customer.doorNo.concat(",")}}' +'<br>'+
+                                '{{model.customer.street==null? "": model.customer.street.concat(",")}}' +'<br>'+
+                                '{{model.customer.district==null? "": model.customer.district.concat(",")}}'+'<br>'+
+                                '{{model.customer.state==null? "": model.customer.state.concat(",")}}'+'<br>'+
+                                '{{model.customer.pincode==null? "": model.customer.pincode}}'+'<br>'+
                                 ''
 
                             }]
@@ -228,7 +228,7 @@ define({
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "Registration Detials",
+                "title": "Registration Details",
                 "readonly": true,
                 "items": [{
                     "type": "tableview",
@@ -287,17 +287,20 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "customer.enterprise.noOfFemaleEmployees",
-                            "title": "No Of Male Employees"
+                            "title": "No. of Male Employees",
+                            "type": "number"
                         }, {
                             "key": "customer.enterprise.noOfMaleEmployees",
-                            "title": "No. of Female Employees"
+                            "title": "No. of Female Employees",
+                            "type": "number"
                         }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
                             "key": "customer.enterprise.avgMonthlySalary",
-                            "title": "Average Monthly Salary"
+                            "title": "Average Monthly Salary",
+                            "type": "amount"
                         }]
                     }]
                 }]
@@ -315,20 +318,24 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "machine_count",
-                            "title": "Total no. of machinery"
+                            "title": "Total no. of machinery",
+                            "type": "number"
                         }, {
                             "key": "totalValue",
-                            "title": "Total value of machinery"
+                            "title": "Total value of machinery",
+                            "type": "amount"
                         }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
                             "key": "hypothecatedToKinara",
-                            "title": "No. of machinery hypothecated to Kinara"
+                            "title": "No. of machinery hypothecated to Kinara",
+                            "type": "number"
                         }, {
                             "key": "totalHypothecatedValue",
-                            "title": "Value of machinery hypothecated to Kinara"
+                            "title": "Value of machinery hypothecated to Kinara",
+                            "type": "amount"
                         }]
                     }]
                 }, {
@@ -368,10 +375,17 @@ define({
                                 }
                             }, {
                                 "title": "Purchase Price",
-                                "data": "purchasePrice"
+                                "data": "purchasePrice",
+                                render: function(data, type, full, meta) {
+                                                return irfCurrencyFilter(data);
+                                            }
+                                            
                             }, {
                                 "title": "Present Value",
-                                "data": "presentValue"
+                                "data": "presentValue",
+                                render: function(data, type, full, meta) {
+                                                return irfCurrencyFilter(data);
+                                            }
                             }, {
                                 "title": "Source",
                                 "data": "fundingSource"
@@ -475,10 +489,12 @@ define({
                             "title": "Bureau"
                         }, {
                             "key": "CB_REPORT_DATA.doubtful",
-                            "title": "Doubtful Account"
+                            "title": "Doubtful Account",
+                            "type": "number"
                         }, {
                             "key": "CB_REPORT_DATA.loss",
-                            "title": "Loss Accounts"
+                            "title": "Loss Accounts",
+                            "type": "number"
                         }, {
                             "type":"section",
                             "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
@@ -498,13 +514,16 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "CB_REPORT_DATA.specialMentionAccount",
-                            "title": "Special Mention Accounts"
+                            "title": "Special Mention Accounts",
+                            "type": "number"
                         }, {
                             "key": "CB_REPORT_DATA.standard",
-                            "title": "Standard Accounts"
+                            "title": "Standard Accounts",
+                            "type": "number"
                         }, {
                             "key": "CB_REPORT_DATA.subStandard",
-                            "title": "Sub-Standard Accounts"
+                            "title": "Sub-Standard Accounts",
+                            "type": "number"
                         }]
                     }]
                 }]

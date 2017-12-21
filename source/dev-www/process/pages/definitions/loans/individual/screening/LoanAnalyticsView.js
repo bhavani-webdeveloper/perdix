@@ -68,6 +68,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 			"offline": false,
 			"pre_pages_initialize": function(bundleModel) {
 				$log.info("Inside pre_page_initialize");
+				bundleModel.currentStage = "loanAnalyticsView";
 				var deferred = $q.defer();
 
 				var $this = this;
@@ -77,6 +78,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 					IndividualLoan.get({
 						id: bundleModel.loanId
 					}).$promise.then(function(res) {
+						/*target stage is in res.currentStage*/
 						bundleModel.loanAccount = res;
 
 						bundleModel.applicant = {};
