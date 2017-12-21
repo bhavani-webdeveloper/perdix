@@ -1,11 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC"
-    ],
-    $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, filterFilter, irfCurrencyFilter, Model_ELEM_FC) {
+    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau"],
+    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau) {
         return {
             "type": "schema-form",
             "title": "INDIVIDUAL_ENROLLMENT",
@@ -14,6 +11,16 @@ define({
                 var self =this;
                 model.bundlePageObj = bundlePageObj;
                 model.bundleModel = bundleModel;
+
+                model.UIUDF = {
+                    'family_fields': {},
+                    'liability_fields': {},
+                    'household_fields': {},
+                    'bank_fields': {},
+                    'cibil': {},
+                    'customer_address': {}
+                };
+
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -31,114 +38,92 @@ define({
                             break;
                     };
 
-                    model.individual_custom_fields = {
-                        'family_fields': {},
-                        'liability_fields': {},
-                        'household_fields': {},
-                        'bank_fields': {},
-                        'cibil': {},
-                        'customer_address': {}
-                    };
+                    model.customer.presetAddress = [
+                        model.customer.doorNo,
+                        model.customer.street,
+                        model.customer.district,
+                        model.customer.state
+                    ].filter(a=>a).join(', ')+' - '+model.customer.pincode;
+
                     /*Family fields*/
-                    model.individual_custom_fields.family_fields.family_member_count = model.customer.familyMembers.length;
-                    model.individual_custom_fields.family_fields.dependent_family_member = 0;
-                    model.individual_custom_fields.family_fields.total_household_income = 0;
+                    model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
+                    model.UIUDF.family_fields.dependent_family_member = 0;
+                    model.UIUDF.family_fields.total_household_income = 0;
                     _.each(model.customer.familyMembers, function(member) {
                         if (member.incomes.length == 0)
-                            model.individual_custom_fields.family_fields.dependent_family_member++;
+                            model.UIUDF.family_fields.dependent_family_member++;
                         else {
                             _.each(member.incomes, function(income) {
-                                model.individual_custom_fields.family_fields.total_household_income += income.incomeEarned;
+                                model.UIUDF.family_fields.total_household_income += income.incomeEarned;
                             });
                         }
                     });
                     /*Liability fields*/
-                    model.individual_custom_fields.liability_fields.active_loans = model.customer.liabilities.length;
-                    model.individual_custom_fields.liability_fields.total_monthly_installment = 0;
-                    model.individual_custom_fields.liability_fields.outstandingAmount = 0;
-                    model.individual_custom_fields.liability_fields.loan_from_bank = 0;
-                    model.individual_custom_fields.liability_fields.loan_from_NBFC_MFI = 0;
-                    model.individual_custom_fields.liability_fields.loan_from_others = 0;
+                    model.UIUDF.liability_fields.active_loans = model.customer.liabilities.length;
+                    model.UIUDF.liability_fields.total_monthly_installment = 0;
+                    model.UIUDF.liability_fields.outstandingAmount = 0;
+                    model.UIUDF.liability_fields.loan_from_bank = 0;
+                    model.UIUDF.liability_fields.loan_from_NBFC_MFI = 0;
+                    model.UIUDF.liability_fields.loan_from_others = 0;
                     _.each(model.customer.liabilities, function(liability) {
-                        model.individual_custom_fields.liability_fields.total_monthly_installment += liability.installmentAmountInPaisa;
-                        model.individual_custom_fields.liability_fields.outstandingAmount += liability.outstandingAmountInPaisa;
+                        model.UIUDF.liability_fields.total_monthly_installment += liability.installmentAmountInPaisa;
+                        model.UIUDF.liability_fields.outstandingAmount += liability.outstandingAmountInPaisa;
                         switch (liability.loanSource) {
                             case "BANK":
-                                model.individual_custom_fields.liability_fields.loan_from_bank += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_bank += liability.loanAmountInPaisa;
                                 break;
                             case "MFI/NBFC":
-                                model.individual_custom_fields.liability_fields.loan_from_NBFC_MFI += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_NBFC_MFI += liability.loanAmountInPaisa;
                                 break;
                             default:
-                                model.individual_custom_fields.liability_fields.loan_from_others += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_others += liability.loanAmountInPaisa;
                                 break;
 
                         };
                     });
 
                     /*Household Assets field*/
-                    model.individual_custom_fields.household_fields.total_Assets = model.customer.physicalAssets.length; /* what assets i need to take*/
-                    model.individual_custom_fields.household_fields.total_Value = 0;
+                    model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length; /* what assets i need to take*/
+                    model.UIUDF.household_fields.total_Value = 0;
                     _.each(model.customer.physicalAssets, function(Assets) {
-                        model.individual_custom_fields.household_fields.total_Value += Assets.ownedAssetValue;
+                        model.UIUDF.household_fields.total_Value += Assets.ownedAssetValue;
                     });
 
                     /*Bank fields*/
-                    model.individual_custom_fields.bank_fields.bankStatements = [];
-                    model.individual_custom_fields.bank_fields.total_Deposit = 0;
-                    model.individual_custom_fields.bank_fields.total_Withdrawals = 0;
-                    model.individual_custom_fields.bank_fields.avg_deposit = 0;
-                    model.individual_custom_fields.bank_fields.avg_withdrawals = 0;
-                    model.individual_custom_fields.bank_fields.avg_bal_EMI_date;
-                    model.individual_custom_fields.bank_fields.tot_accounts = model.customer.customerBankAccounts.length;
-                    model.individual_custom_fields.bank_fields.tot_checque_bounce = 0;
-                    model.individual_custom_fields.bank_fields.tot_EMI_bounce = 0;
-                    model.individual_custom_fields.bank_fields.total_bankstatement = 0;
-                    model.individual_custom_fields.bank_fields.avgMonBal=0;
+                    model.UIUDF.bank_fields.bankStatements = [];
+                    model.UIUDF.bank_fields.total_Deposit = 0;
+                    model.UIUDF.bank_fields.total_Withdrawals = 0;
+                    model.UIUDF.bank_fields.avg_deposit = 0;
+                    model.UIUDF.bank_fields.avg_withdrawals = 0;
+                    model.UIUDF.bank_fields.avg_bal_EMI_date;
+                    model.UIUDF.bank_fields.tot_accounts = model.customer.customerBankAccounts.length;
+                    model.UIUDF.bank_fields.tot_checque_bounce = 0;
+                    model.UIUDF.bank_fields.tot_EMI_bounce = 0;
+                    model.UIUDF.bank_fields.total_bankstatement = 0;
+                    model.UIUDF.bank_fields.avgMonBal=0;
                     _.each(model.customer.customerBankAccounts, function(account) {
                         _.each(account.bankStatements, function(bankslips) {
-                            model.individual_custom_fields.bank_fields.bankStatements.push(bankslips);
-                            model.individual_custom_fields.bank_fields.total_Deposit += bankslips.totalDeposits;
-                            model.individual_custom_fields.bank_fields.total_Withdrawals += bankslips.totalWithdrawals;
-                            model.individual_custom_fields.bank_fields.total_bankstatement++;
-                            model.individual_custom_fields.bank_fields.tot_checque_bounce += bankslips.noOfChequeBounced;
-                            model.individual_custom_fields.bank_fields.tot_EMI_bounce += bankslips.noOfEmiChequeBounced;
+                            model.UIUDF.bank_fields.bankStatements.push(bankslips);
+                            model.UIUDF.bank_fields.total_Deposit += bankslips.totalDeposits;
+                            model.UIUDF.bank_fields.total_Withdrawals += bankslips.totalWithdrawals;
+                            model.UIUDF.bank_fields.total_bankstatement++;
+                            model.UIUDF.bank_fields.tot_checque_bounce += bankslips.noOfChequeBounced;
+                            model.UIUDF.bank_fields.tot_EMI_bounce += bankslips.noOfEmiChequeBounced;
 
                         });
                     });
-                    if (model.individual_custom_fields.bank_fields.total_bankstatement != 0) {
-                        model.individual_custom_fields.bank_fields.avg_deposit = (model.individual_custom_fields.bank_fields.total_Deposit / model.individual_custom_fields.bank_fields.total_bankstatement);
-                        model.individual_custom_fields.bank_fields.avg_withdrawals = (model.individual_custom_fields.bank_fields.total_Withdrawals / model.individual_custom_fields.bank_fields.total_bankstatement);
-                        model.individual_custom_fields.bank_fields.avgMonBal = model.individual_custom_fields.bank_fields.avg_deposit-model.individual_custom_fields.bank_fields.avg_withdrawals;
+                    if (model.UIUDF.bank_fields.total_bankstatement != 0) {
+                        model.UIUDF.bank_fields.avg_deposit = (model.UIUDF.bank_fields.total_Deposit / model.UIUDF.bank_fields.total_bankstatement);
+                        model.UIUDF.bank_fields.avg_withdrawals = (model.UIUDF.bank_fields.total_Withdrawals / model.UIUDF.bank_fields.total_bankstatement);
+                        model.UIUDF.bank_fields.avgMonBal = model.UIUDF.bank_fields.avg_deposit-model.UIUDF.bank_fields.avg_withdrawals;
                     }
-                    /*Cibil/highmark fields*/
-                    var endpoint = BASE_URL;
-                    var cibil = $resource(endpoint, null, {
-                        get: {
-                            method: 'GET',
-                            url: endpoint + '/api/creditbureau/find'
-                        }
-                    });
 
-                    cibil.get({
-                        customerId: model.customerId
-                    }).$promise.then(function(res) {
-                        model.cibil_highmark = res;
-                        model.individual_custom_fields.cibil.cibil_score = model.cibil_highmark.cibil.cibilScore[0].score;
-                        model.individual_custom_fields.cibil.active_accounts = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].totalAccounts;
-                        model.individual_custom_fields.cibil.overdue_accounts = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
-                        model.individual_custom_fields.cibil.sanctioned_Amount = model.cibil_highmark.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
-                        model.individual_custom_fields.cibil.current_balance = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].currentBalance;
-                        model.individual_custom_fields.cibil.amount_overdue = model.cibil_highmark.cibil.cibilLoanSummaryInfo[0].amountOverDue;
-                        /*for(i=0;i<=model.cibil_highmark.cibil.cibilScore.length;i++){
-                            model.custom_fields.cibil.cibil_score += model.cibil_highmark.cibil.cibilScore[i].score;
-                        }*/
-                    });
+                    /*Cibil/highmark fields*/
 
                     /*Household fields */
 
                     /*Reference Check fields*/
-                    model.individual_custom_fields.REFERENCE_CHECK_RESPONSE = 'NA';
+                    model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                     var count_neg_response = 0;
                     _.each(model.customer.verifications, function(verification) {
                         if (verification.customerResponse != 'positive' && verification.customerResponse != null) {
@@ -146,13 +131,12 @@ define({
                         }
                     })
                     if (count_neg_response >= 1) {
-                        model.individual_custom_fields.REFERENCE_CHECK_RESPONSE = 'negative';
+                        model.UIUDF.REFERENCE_CHECK_RESPONSE = 'negative';
                     } else {
-                        model.individual_custom_fields.REFERENCE_CHECK_RESPONSE = 'positive';
+                        model.UIUDF.REFERENCE_CHECK_RESPONSE = 'positive';
                     }
                     /*Family Section*/
-                    var family = {};
-                    family = {
+                    var family = {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -165,11 +149,11 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "individual_custom_fields.family_fields.family_member_count",
+                                    "key": "UIUDF.family_fields.family_member_count",
                                     "title": "No. of Family Members",
                                     "type": "number"
                                 }, {
-                                    "key": "individual_custom_fields.family_fields.dependent_family_member",
+                                    "key": "UIUDF.family_fields.dependent_family_member",
                                     "title": "No. of Dependent Family Members",
                                     "type": "number"
                                 }]
@@ -177,7 +161,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "individual_custom_fields.family_fields.total_household_income",
+                                    "key": "UIUDF.family_fields.total_household_income",
                                     "type": "amount",
                                     "title": "Total Household income"
                                 }, {
@@ -259,6 +243,20 @@ define({
                     };
                     self.form.splice(2, 0, family);
                 });
+
+                CreditBureau.getCBDetails({"customerId": model.customerId}).$promise.then(function(res) {
+                    $log.warn("res");
+                    $log.warn(res);
+                    model.cibil_highmark = res;
+                    model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
+                    model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
+                    model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
+                    model.UIUDF.cibil.sanctioned_Amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
+                    model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
+                    model.UIUDF.cibil.amount_overdue = res.cibil.cibilLoanSummaryInfo[0].amountOverDue;
+                }, function(e) {
+                    model.cibil_highmark = null;
+                });
             },
 
             form: [{
@@ -282,8 +280,7 @@ define({
                             "orientation": "vertical",
                             "items": [{
                                 "key": "customer.id",
-                                "title": "CUSTOMER_ID",
-                                "type": "number",
+                                "title": "CUSTOMER_ID"
                             }, {
                                 "key": "customer.firstName",
                                 "title": "FULL_NAME"
@@ -309,19 +306,9 @@ define({
                                 "key": "customer.email",
                                 "title": "EMAIL"
                             }, {
-                                "type": "section",
-                                "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-20px; padding-left:100px; font-weight:bold;"><sf-decorator  form="item"></sf-decorator><div></div>',
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "col-sm-12",
-                                    "title": "Present Address",
-                                    "html": '{{model.customer.doorNo==null? "": model.customer.doorNo.concat(",")}}' + '<br>' +
-                                        '{{model.customer.street==null? "": model.customer.street.concat(",")}}' + '<br>' +
-                                        '{{model.customer.district==null? "": model.customer.district.concat(",")}}' + '<br>' +
-                                        '{{model.customer.state==null? "": model.customer.state.concat(",")}}' + '<br>' +
-                                        '{{model.customer.pincode==null? "": model.customer.pincode}}' + '<br>'
-
-                                }]
+                                "key": "customer.presetAddress",
+                                "type": "html",
+                                "title": "Present Address"
                             }]
                         }, {
                             "type": "grid",
@@ -394,7 +381,7 @@ define({
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
                     "title": "HOUSEHOLD_LIABILITIES",
-                    "condition": "model.individual_custom_fields.liability_fields.active_loans !=0",
+                    "condition": "model.UIUDF.liability_fields.active_loans !=0",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -402,15 +389,15 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.liability_fields.active_loans",
+                                "key": "UIUDF.liability_fields.active_loans",
                                 "title": "No of Active Loans",
                                 "type": "number"
                             }, {
-                                "key": "individual_custom_fields.liability_fields.total_monthly_installment",
+                                "key": "UIUDF.liability_fields.total_monthly_installment",
                                 "title": "Total Monthly Instalments",
                                 "type": "amount"
                             }, {
-                                "key": "individual_custom_fields.liability_fields.outstandingAmount",
+                                "key": "UIUDF.liability_fields.outstandingAmount",
                                 "title": "OUTSTANDING_AMOUNT",
                                 "type": "amount"
                             }]
@@ -419,17 +406,17 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.liability_fields.loan_from_bank",
+                                "key": "UIUDF.liability_fields.loan_from_bank",
                                 "title": "Total loan amount from Banks",
                                 "type": "amount"
 
                             }, {
-                                "key": "individual_custom_fields.liability_fields.loan_from_NBFC_MFI",
+                                "key": "UIUDF.liability_fields.loan_from_NBFC_MFI",
                                 "title": "Total loan amount from MFI/NBFC",
                                 "type": "amount"
 
                             }, {
-                                "key": "individual_custom_fields.liability_fields.loan_from_others",
+                                "key": "UIUDF.liability_fields.loan_from_others",
                                 "title": "Total loan amount from others",
                                 "type": "amount"
 
@@ -512,7 +499,7 @@ define({
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
                     "title": "Household Assets",
-                    "condition": "model.individual_custom_fields.household_fields.total_Assets !=0",
+                    "condition": "model.UIUDF.household_fields.total_Assets !=0",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -520,7 +507,7 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.household_fields.total_Assets",
+                                "key": "UIUDF.household_fields.total_Assets",
                                 "title": "Total Assets",
                                 "type": "number"
                             }]
@@ -528,7 +515,7 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.household_fields.total_Value",
+                                "key": "UIUDF.household_fields.total_Value",
                                 "title": "Total Value",
                                 "type": "amount"
                             }]
@@ -583,15 +570,15 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.bank_fields.avg_deposit",
+                                "key": "UIUDF.bank_fields.avg_deposit",
                                 "title": "Average Monthly Deposit",
                                 "type": "amount"
                             }, {
-                                "key": "individual_custom_fields.bank_fields.avg_withdrawals",
+                                "key": "UIUDF.bank_fields.avg_withdrawals",
                                 "title": "Average Monthly Withdrawals",
                                 "type": "amount"
                             }, {
-                                "key": "individual_custom_fields.bank_fields.avgMonBal",
+                                "key": "UIUDF.bank_fields.avgMonBal",
                                 "title": "Average Monthly Balances",
                                 "type": "amount"
                             }]
@@ -599,15 +586,15 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.bank_fields.tot_accounts",
+                                "key": "UIUDF.bank_fields.tot_accounts",
                                 "title": "Total no of Account",
                                 "type": "number"
                             }, {
-                                "key": "individual_custom_fields.bank_fields.tot_checque_bounce",
+                                "key": "UIUDF.bank_fields.tot_checque_bounce",
                                 "title": "Total no of Cheque Bounce",
                                 "type": "number"
                             }, {
-                                "key": "individual_custom_fields.bank_fields.tot_EMI_bounce",
+                                "key": "UIUDF.bank_fields.tot_EMI_bounce",
                                 "title": "Total no EMI Bounce",
                                 "type": "number"
                             }]
@@ -698,6 +685,7 @@ define({
                     "overrideType": "default-view",
                     "title": "CIBIL/Highmark",
                     "readonly": true,
+                    "condition": "model.cibil_highmark",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -705,22 +693,22 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.cibil.cibil_score",
+                                "key": "UIUDF.cibil.cibil_score",
                                 "title": "CIBIL Score"
                             }, {
-                                "key": "individual_custom_fields.cibil.active_accounts",
+                                "key": "UIUDF.cibil.active_accounts",
                                 "title": "Active Accounts"
                             }, {
-                                "key": "individual_custom_fields.cibil.overdue_accounts",
+                                "key": "UIUDF.cibil.overdue_accounts",
                                 "title": "Overdue Accounts"
                             }, {
-                                "key": "individual_custom_fields.cibil.sanctioned_Amount",
+                                "key": "UIUDF.cibil.sanctioned_Amount",
                                 "title": "Sanctioned Amount"
                             }, {
-                                "key": "individual_custom_fields.cibil.current_balance",
+                                "key": "UIUDF.cibil.current_balance",
                                 "title": "Current Balance"
                             }, {
-                                "key": "individual_custom_fields.cibil.amount_overdue",
+                                "key": "UIUDF.cibil.amount_overdue",
                                 "title": "Overdue Balance"
                             }, {
                                 "key": "",
@@ -863,7 +851,7 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "individual_custom_fields.REFERENCE_CHECK_RESPONSE",
+                                "key": "UIUDF.REFERENCE_CHECK_RESPONSE",
                                 "title": "Reference Check Responses",
                             }]
                         }]
@@ -992,7 +980,7 @@ define({
                             model.psy_coapp_count++
                                 break;
                     };
-                    if (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant') {
+                    if (model.psy_data && (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant')) {
                         model.psy_data.passOutOf = 0;
                         model.psy_data.psyTotalPara = 0;
                         _.forEach(model.psy_data.data, function(data) {
@@ -1024,6 +1012,7 @@ define({
 
                 },
                 "business-customer": function(bundleModel, model, params) {
+                    model.business = params;
                     model.enterpriseCustomerRelations = [];
                     model.coApp_cnt = 1
                     model.gua_cnt = 3;
@@ -1044,11 +1033,11 @@ define({
                             }
                             break;
                     };
-                    model.business = params;
-                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
-                        value: model.business.centreId
-                    })[0].name;
-
+                    if (model.business.centreId) {
+                        model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                            value: model.business.centreId
+                        })[0].name;
+                    }
                 }
             },
             actions: {}

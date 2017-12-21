@@ -25,12 +25,16 @@ self.renderForm = function() {
 	var currencyRightRender = function(data) {
 		return irfCurrencyFilter(data, null, null, "decimal") + ' ' + irfElementsConfig.currency.iconHtml;
 	}
+	var configRender = function(data, type, full, meta) {
+		if (!full.$config) return data;
+	}
+	var strongRender = function(data, type, full, meta) {
+		return '<strong>'+data+'</strong>';
+	}
 	var buyerDetailsColumns = [{
 		"title": "Buyer",
 		"data": "buyer",
-		render: function(data, type, full, meta) {
-			return '<strong>'+data+'</strong>';
-		}
+		render: strongRender
 	}];
 	_.forOwn(model.summary.cashFlowDetails.buyerSummary.tableData[0], function(v, k) {
 		if (k != "buyer" && k != "percentage") {
@@ -53,9 +57,7 @@ self.renderForm = function() {
 			return [{
 				"title": "Bank Name",
 				"data": "customerBankName",
-				"render": function(data, type, full, meta) {
-					return '<strong>'+data+'</strong>';
-				}
+				"render": strongRender
 			}, {
 				"title": "Branch Name",
 				"data": "customerBankBranchName"
@@ -97,7 +99,9 @@ self.renderForm = function() {
 					"title": " ",
 					"data": "startMonth",
 					"render": function(data, type, full, meta) {
-						return '<strong>'+moment(data, 'YYYY-MM-DD').format('MMM, YYYY')+'</strong>';
+						if (data != "Total")
+							data = moment(data, 'YYYY-MM-DD').format('MMM, YYYY');
+						return strongRender(data);
 					}
 				}, {
 					"title": "Avg Bank Deposits",
@@ -113,15 +117,18 @@ self.renderForm = function() {
 					}
 				}, {
 					"title": "No of EMI Bounces",
-					"data": "noOfEmiChequeBounced"
+					"data": "noOfEmiChequeBounced",
+					"className": "text-right"
 				}, {
 					"title": "No of non EMI Bounces",
-					"data": "noOfChequeBounced"
+					"data": "noOfChequeBounced",
+					"className": "text-right"
 				}, {
 					"title": "Bank Statement",
 					"data": "bankStatementPhoto",
+					"className": "text-center",
 					"render": function(data, type, full, meta) {
-						return '<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer">Download</a>';
+						return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer">Download</a>':'';
 					}
 				}];
 			}
@@ -155,9 +162,7 @@ self.renderForm = function() {
 				return [{
 					"title": "Month",
 					"data": "month",
-					render: function(data, type, full, meta) {
-						return '<strong>'+data+'</strong>';
-					}
+					render: strongRender
 				}, {
 					"title": "Invoice",
 					"data": "invoice",
@@ -287,27 +292,33 @@ self.renderForm = function() {
 				"type": "grid",
 				"orientation": "vertical",
 				"items": [{
-					"key": "bankAccountSummary.total_avg_deposit",
-					"title": "Average Monthly Deposit"
+					"key": "business.summary.bankStatement.averageMonthlyDeposit",
+					"title": "Average Monthly Deposit",
+					"type": "amount"
 				}, {
-					"key": "",
-					"title": "Average Monthly Withdrawls"
+					"key": "business.summary.bankStatement.averageMonthlyWithdrawal",
+					"title": "Average Monthly Withdrawl",
+					"type": "amount"
 				}, {
-					"key": "",
-					"title": "Average Monthly Balance on requested EMI Date"
+					"key": "business.summary.bankStatement.averageMonthlyBalance",
+					"title": "Average Monthly Balance",
+					"type": "amount"
 				}]
 			}, {
 				"type": "grid",
 				"orientation": "vertical",
 				"items": [{
-					"key": "bankAccountSummary.total_account",
-					"title": "Total no of Account"
+					"key": "business.summary.bankStatement.totalAccounts",
+					"title": "Total no of Accounts",
+					"type": "number"
 				}, {
-					"key": "bankAccountSummary.total_cheque_bounces",
-					"title": "Total no of Cheque Bounce"
+					"key": "business.summary.bankStatement.totalChequeBounces",
+					"title": "Total no of Cheque Bounces",
+					"type": "number"
 				}, {
-					"key": "bankAccountSummary.total_EMI_bounces",
-					"title": "Total no EMI Bounce"
+					"key": "business.summary.bankStatement.totalEMIBounces",
+					"title": "Total no EMI Bounces",
+					"type": "number"
 				}]
 			}]
 		}, {
@@ -316,7 +327,80 @@ self.renderForm = function() {
 		}]
 	}, {
 		"type": "box",
-		"title": "Profit and Loss"
+		"title": "Profit and Loss",
+		"colClass": "col-sm-12",
+		"items": [{
+			"type": "tableview",
+			"key": "summary.profitLoss.summary.tableData",
+			"notitle": true,
+			"tableConfig": {
+				"ordering": false,
+				"searching": false,
+				"paginate": false,
+				"pageLength": 10,
+				"responsive": false,
+				"scrollX": true
+			},
+			getColumns: function() {
+				return [{
+					"title": " ",
+					"data": "title",
+					render: strongRender
+				}, {
+					"title": "Amount",
+					"data": "amount",
+					"className": "text-right"
+				}, {
+					"title": "Total",
+					"data": "total",
+					"className": "text-right"
+				}, {
+					"title": " ",
+					"data": "percentage",
+					"className": "text-right"
+				}, {
+					"title": " ",
+					"data": "description"
+				}];
+			}
+		}, {
+			"type": "expandablesection",
+			"items": [{
+				"type": "tableview",
+				"key": "summary.profitLoss.summary.tableData",
+				"notitle": true,
+				"tableConfig": {
+					"ordering": false,
+					"searching": false,
+					"paginate": false,
+					"pageLength": 10,
+					"responsive": false,
+					"scrollX": true
+				},
+				getColumns: function() {
+					return [{
+						"title": " ",
+						"data": "title",
+						render: strongRender
+					}, {
+						"title": "Amount",
+						"data": "amount",
+						"className": "text-right"
+					}, {
+						"title": "Total",
+						"data": "total",
+						"className": "text-right"
+					}, {
+						"title": " ",
+						"data": "percentage",
+						"className": "text-right"
+					}, {
+						"title": " ",
+						"data": "description"
+					}];
+				}
+			}]
+		}]
 	}, {
 		"type": "box",
 		"colClass": "col-sm-12",
@@ -509,6 +593,8 @@ self.renderReady = function(eventName) {
 						}
 					}
 
+					var bpl = params[8].data[0];
+
 					model.summary = {
 						"cashFlowDetails": {
 							"invoiceCash": {
@@ -549,15 +635,98 @@ self.renderReady = function(eventName) {
 									}
 								}
 							}
+						},
+						"profitLoss": {
+							"summary": {
+								"tableData": [{
+									"title": "Income",
+									"amount": "",
+									"total": bpl['Total Business Revenue'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Purchases",
+									"amount": "",
+									"total": bpl['Purchases'],
+									"percentage": bpl['Purchases pct'],
+									"description": "Purchases as % of Income",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
+									"title": "OPEX",
+									"amount": "",
+									"total": bpl['Opex'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}]
+							},
+							"details": {
+								"tableData": [{
+									"title": "Income",
+									"amount": "",
+									"total": bpl['Total Business Revenue'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Invoice",
+									"amount": "",
+									"total": bpl['Total Business Revenue'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-right"
+										}
+									}
+								}, {
+									"title": "Purchases",
+									"amount": "",
+									"total": bpl['Purchases'],
+									"percentage": bpl['Purchases pct'],
+									"description": "Purchases as % of Income",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
+									"title": "OPEX",
+									"amount": "",
+									"total": bpl['Opex'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}]
+							}
 						}
 					};
 
-					var bpl = params[8].data[0];
 					model.businessPL = {
 						"scrapIncome": bpl['Scrap or any business related income'],
 						"scrapIncomePCT": bpl['Scrap or any business related income pct'],
 						"totalBusinessIncome": bpl['Total Business Revenue'],
-						"purchases": bpl['Purchases'],
 						"purchasesPCT": bpl['Purchases pct'],
 						"grossIncome": bpl['Gross Income'],
 						"Opex": bpl['Opex'],
@@ -604,19 +773,51 @@ self.renderReady = function(eventName) {
 					model.business = params;
 					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
 
-					for (i = 0; i < model.business.customerBankAccounts.length; i++) {
-						var acc = model.business.customerBankAccounts[i];
-					}
+					var bankStatementSummary = (function() {
+						var totalAverageDeposits = 0;
+						var totalAverageWithdrawals = 0;
+						var totalChequeBounces = 0;
+						var totalEMIBounces = 0;
+						for (i = 0; i < model.business.customerBankAccounts.length; i++) {
+							var acc = model.business.customerBankAccounts[i];
+							var totalDeposits = 0;
+							var totalWithdrawals = 0;
+							var noOfEmiChequeBounced = 0;
+							var noOfChequeBounced = 0;
+							for (j in acc.bankStatements) {
+								var stat = acc.bankStatements[j];
+								totalDeposits += stat.totalDeposits;
+								totalWithdrawals += stat.totalWithdrawals;
+								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
+								noOfChequeBounced += stat.noOfChequeBounced;
+							}
+							acc.total = {
+								"startMonth": "Total",
+								"totalDeposits": totalDeposits,
+								"averageDeposits": totalDeposits / acc.bankStatements.length,
+								"totalWithdrawals": totalWithdrawals,
+								"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
+								"noOfEmiChequeBounced": noOfEmiChequeBounced,
+								"noOfChequeBounced": noOfChequeBounced
+							};
+							totalAverageDeposits += acc.total.averageDeposits;
+							totalAverageWithdrawals += acc.total.averageWithdrawals;
+							totalEMIBounces += acc.total.noOfEmiChequeBounced;
+							totalChequeBounces += acc.total.noOfChequeBounced;
+							acc.bankStatements.push(acc.total);
+						}
+						return {
+							"averageMonthlyDeposit": Math.round(totalAverageDeposits / model.business.customerBankAccounts.length),
+							"averageMonthlyWithdrawal": Math.round(totalAverageWithdrawals / model.business.customerBankAccounts.length),
+							"averageMonthlyBalance": Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length),
+							"totalAccounts": model.business.customerBankAccounts.length,
+							"totalEMIBounces": totalEMIBounces,
+							"totalChequeBounces": totalChequeBounces
+						};
+					})();
 
 					model.business.summary = {
-						"bankStatementSummary": {
-							"averageMonthlyDeposit": 0,
-							"averageMonthlyWithdrawals": 0,
-							"averageMonthlyBalance": 0,
-							"totalAccounts": model.business.customerBankAccounts.length,
-							"totalChequeBounces": 0,
-							"totalEMIBounces": 0
-						}
+						"bankStatement": bankStatementSummary
 					}
 					self.renderReady("business-customer");
 				}
