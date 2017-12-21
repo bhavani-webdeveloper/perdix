@@ -118,6 +118,11 @@ define({
                     items: [{
                         type: "submit",
                         title: "Update"
+                    },
+                    {
+                        type: "button",
+                        title: "Reject",
+                        onClick: "actions.reject(model, formCtlr, form)"
                     }]
                 }
             ],
@@ -160,6 +165,48 @@ define({
                                 });
                             })
                     }
+
+                },
+                reject: function(model, form, formName) {
+                    var temp = [];
+                    var instrument = null;
+                    for (var i = model.loanCollectionSummaryDTOs.length - 1; i >= 0; i--) {
+                        var item = model.loanCollectionSummaryDTOs[i]
+                        if (item.$selected) {
+                            temp.push(item);
+                            instrument = item.instrumentType;
+                        }
+                    };
+
+                    if (temp.length > 1 ) {
+                        PageHelper.showProgress("brs-reject", "Only 1 entry can be rejected at a time.", 5000);
+                        return;
+                    }
+
+                    var reqData = { "loanCollectionSummaryDTOs": temp };
+
+                    if (instrument == 'CASH') {
+                        reqData.stage = 'Deposit';
+                    } else {
+                        reqData.stage = 'Rejected';
+                    }
+
+                    Utils.confirm("Are You Sure?")
+                        .then(function() {
+                            PageHelper.showLoader();
+                            PageHelper.showProgress("brs-reject", "Working");
+                            reqData.repaymentProcessAction = "PROCEED";
+                            LoanCollection.batchUpdate(reqData, function(resp, header) {
+                                PageHelper.showProgress("brs-reject", "Done", 5000);
+                                loadBRSRecords(model);
+                            }, function(resp) {
+                                PageHelper.showProgress("brs-reject", "Failed.");
+                                PageHelper.showErrors(resp);
+                            }).$promise.finally(function() {
+                                PageHelper.hideLoader();
+                            });
+                        })
+
 
                 }
 
