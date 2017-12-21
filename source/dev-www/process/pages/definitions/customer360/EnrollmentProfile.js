@@ -79,7 +79,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
             initData(model);
-            fixData(model);
+            model = EnrollmentHelper.fixData(model);
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -90,9 +90,8 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 Enrollment.EnrollmentById({id:pageId},function(resp,header){
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
-                    model =fixData(model);
-
-
+                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                    model = EnrollmentHelper.fixData(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
                         $log.info(data.EditBasicCustomerInfo);
@@ -879,7 +878,10 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             type:"select"
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf28"
+                            key:"customer.udf.userDefinedFieldValues.udf28",
+                            "schema":{
+                                "type":"number"
+                            }
                         }
                     ]
                 }
@@ -1117,7 +1119,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                 key:"customer.udf.userDefinedFieldValues.udf4",
                                 type: "string",
                                 "schema":{
-                                    "type":"string"
+                                    "type":"number"
                                 }
                             },
                             {
@@ -1183,7 +1185,13 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             key:"customer.verifications[].houseNo"
                         },
                         {
-                            key:"customer.verifications[].houseNoIsVerified"
+                            key:"customer.verifications[].houseNoIsVerified1",
+                            "type": "checkbox",
+                            "title": "HOUSE_NO_IS_VERIFIED",
+                            "required": true,
+                            "schema": {
+                                "default": false
+                            }
                         },
                         {
                             key:"customer.verifications[].referenceFirstName"
@@ -1222,6 +1230,9 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     irfProgressMessage.pop('PROFILE', 'Working...');
                     model.customer.title=String(model.customer.addressProofSameAsIdProof);
                     $log.info(model);
+                    if (!( EnrollmentHelper.validateDate(model))) {
+                        return false;
+                    }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.currentStage == 'Completed'){ 
@@ -1231,13 +1242,12 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     };
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
-                            fixData(res);
                             model.customer = res.customer;
                             model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
                             model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
                             model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+                            model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                             model = EnrollmentHelper.fixData(model);
-    
                         }
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);

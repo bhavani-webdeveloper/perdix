@@ -60,6 +60,10 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
 
                     if (family.familydata.maritalStatus == 'MARRIED' && (family.familydata.relationShip == 'Wife' || family.familydata.relationShip == 'Husband')) {
                         model.customer.spouseFirstName = family.firstName;
+                        model.customer.spouseDateOfBirth = family.spouseDateOfBirth;
+                        if(family.spouseDateOfBirth){
+                            model.customer.spouseAge = moment().diff(moment(family.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
                         if (!_.hasIn(model.customer, 'udf') || model.customer.udf == null) {
                             model.customer.udf = {
                                 userDefinedFieldValues: {
@@ -85,11 +89,11 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                 Enrollment.getCustomerById({ id: pageId }, function(resp, header) {
                     var model = { $$OFFLINE_FILES$$: _model.$$OFFLINE_FILES$$ };
                     model.customer = resp;
-                    model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
+                    model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                     model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
                     model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
                     model = EnrollmentHelper.fixData(model);
-                    model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
+                   // model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
                     if (model.customer.dateOfBirth) {
                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                     }
@@ -638,7 +642,6 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                     return deferred.promise;
                 },
                 submit: function(model, form, formName) {
-
                     $log.info("Inside submit()");
                     model.customer.customerType = "Individual";
                     model.customer.title = String(model.customer.addressProofSameAsIdProof);
@@ -663,6 +666,10 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                         return out;
                     };
 
+                    if (!( EnrollmentHelper.validateDate(model))) {
+                        return false;
+                    }
+
                     var reqData = _.cloneDeep(model);
 
                     EnrollmentHelper.fixData(reqData);
@@ -670,9 +677,8 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                     $log.info(JSON.stringify(sortFn(reqData)));
                     EnrollmentHelper.saveData(reqData).then(function(res) {
                         model.customer = _.clone(res.customer);
+                        model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                         model = EnrollmentHelper.fixData(model);
-                        model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
-
                         /*reqData = _.cloneDeep(model);
                         EnrollmentHelper.proceedData(reqData).then(function(res){
                             irfNavigator.goBack();
@@ -694,14 +700,17 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                     }
                     model.customer.ageProof = model.customer.addressProofSameAsIdProof;
                     model.customer.customerType = "Individual";
+                    if (!( EnrollmentHelper.validateDate(model))) {
+                        return false;
+                    }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id && reqData.customer.currentStage === 'Stage01') {
                         $log.info("Customer id not null, skipping save");
                         EnrollmentHelper.proceedData(reqData).then(function(res) {
                             model.customer = _.clone(res.customer);
+                            model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                             model = EnrollmentHelper.fixData(model);
-                            model.customer.addressProofSameAsIdProof = Boolean(model.customer.title);
                             $stateParams.confirmExit = false;
                             $state.go("Page.Engine", {
                                 pageName: 'CustomerSearch',

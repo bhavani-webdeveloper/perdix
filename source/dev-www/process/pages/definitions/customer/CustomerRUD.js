@@ -15,9 +15,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     fields['udf11'] = Number(fields['udf11']);
                     fields['udf28'] = Number(fields['udf28']);
                     fields['udf32'] = Number(fields['udf32']);
-                    fields['udf1'] = Boolean(fields['udf1']);
-                    fields['udf6'] = Boolean(fields['udf6']);
-                    fields['udf4'] = Number(fields['udf4']);
+                    fields['udf1'] = (fields['udf1']=="true")?true:false;
+                    fields['udf6'] = (fields['udf6']=="true")?true:false;
+                    fields['udf4'] = (fields['udf4']=="true")?true:false;
+                    fields['udf26'] = (fields['udf26']=="true")?true:false;
 
                     for(var i=1; i<=40; i++){
                         if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)){
@@ -28,15 +29,15 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                 if (model.customer.dateOfBirth) {
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
-                if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
-                    if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
-                            model.customer.udf.userDefinedFieldValues.udf26 = true;
+                /*if (model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
+                    if (model.customer.udf.userDefinedFieldValues.udf26 === "true") {
+                        model.customer.udf.userDefinedFieldValues.udf26 = true;
                     }
-                    if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
-                            model.customer.udf.userDefinedFieldValues.udf26 = false;
+                    if (model.customer.udf.userDefinedFieldValues.udf26 === "false") {
+                        model.customer.udf.userDefinedFieldValues.udf26 = false;
                     }
-                }
-                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
+                }*/
+                //model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                 $log.info("After fixData");
                 $log.info(model);
                 return model;
@@ -66,7 +67,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     Enrollment.EnrollmentById({id: custId}, function (resp, header) {
                         PageHelper.hideLoader();
                         model.customer = _.cloneDeep(resp);
-                        model = fixData(model);
+                        model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                        //model = fixData(model);
+                        model = EnrollmentHelper.fixData(model);
                         $window.scrollTo(0, 0);
                         irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                     }, function (resp) {
@@ -773,7 +776,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
 
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf28"
+                                        key:"customer.udf.userDefinedFieldValues.udf28",
+                                        "schema": {
+                                            "type": "number"
+                                        }
                                     }
                                 ]
                             }
@@ -1027,7 +1033,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf5",
@@ -1068,6 +1076,37 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         offline: true,
                         type:"file",
                         fileType:"image/*"
+                    },
+                    {
+                        "key":"customer.verifications",
+                        "title":"VERIFICATION",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                key:"customer.verifications[].houseNo",
+                                "required":true,
+                            },
+                            {
+                                key:"customer.verifications[].houseNoIsVerified1",
+                                "type":"checkbox",
+                                "title": "HOUSE_NO_IS_VERIFIED",
+                                "required":true,
+                                "schema":{
+                                    "default":false
+                                }
+                            },
+                            {
+                                key:"customer.verifications[].referenceFirstName",
+                                "required":true,
+                            },
+                            {
+                                key:"customer.verifications[].relationship",
+                                "required":true,
+                                type:"select"
+                            }
+
+                        ]
                     },
                     {
                         key: "customer.date",
@@ -1143,6 +1182,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             irfProgressMessage.pop('cust-update', 'Working...');
                             model.customer.title=String(model.customer.addressProofSameAsIdProof);
                             $log.info(model);
+                            if (!(EnrollmentHelper.validateDate(model))) {
+                                return false;
+                            }
+                            if (model.customer.verifications && model.customer.verifications.length) {
+                                for (i in model.customer.verifications) {
+                                    if (model.customer.verifications[i].houseNoIsVerified1) {
+                                        model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                                    }
+                                }
+                            }
                             var reqData = _.cloneDeep(model);
                             EnrollmentHelper.fixData(reqData);
                             if (reqData.customer.currentStage == 'Completed'){ 
@@ -1155,8 +1204,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                                 model.customer = _.clone(res.customer);
+                                model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                                 model = EnrollmentHelper.fixData(model);
-                                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
                                 $state.go("Page.Engine", {
                                     pageName: "CustomerRUD",
                                     pageId: model.customer.id,

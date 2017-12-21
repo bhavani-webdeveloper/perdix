@@ -231,16 +231,95 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
             model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
-        if (model.customer.udf && model.customer.udf.userDefinedFieldValues
-            && model.customer.udf.userDefinedFieldValues.udf1) {
+
+        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
+            var fields = model.customer.udf.userDefinedFieldValues;
+            $log.info(fields);
+            if(fields['udf17']){
+              fields['udf17'] = Number(fields['udf17']);  
+            }
+            if(fields['udf10']){
+               fields['udf10'] = Number(fields['udf10']); 
+            }
+            if(fields['udf11']){
+                fields['udf11'] = Number(fields['udf11']);
+            }
+            if(fields['udf28']){
+               fields['udf28'] = Number(fields['udf28']); 
+            }
+            if(fields['udf32']){
+                fields['udf32'] = Number(fields['udf32']);
+            }
+            if(fields['udf1']){
+                fields['udf1'] = (fields['udf1'] == "true") ? true : false;
+            }
+            if(fields['udf6']){
+                fields['udf6'] = (fields['udf6'] == "true") ? true : false;
+            }
+            if(fields['udf4']){
+                fields['udf4'] = (fields['udf4'] == "true") ? true : false;
+            }
+            if(fields['udf26']){
+                fields['udf26'] = (fields['udf26'] == "true") ? true : false;
+            }
+            
+            for (var i = 1; i <= 40; i++) {
+                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
+                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
+                }
+            }
+        }
+
+/*        if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
+            model.customer.udf.userDefinedFieldValues.udf1) {
             model.customer.udf.userDefinedFieldValues.udf1 =
-                model.customer.udf.userDefinedFieldValues.udf1 === true
-                || model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+                model.customer.udf.userDefinedFieldValues.udf1 === true ||
+                model.customer.udf.userDefinedFieldValues.udf1 === 'true';
+        }*/
+        if (model.customer.verifications && model.customer.verifications.length) {
+            for (i in model.customer.verifications) {
+                if (model.customer.verifications[i].houseNoIsVerified) {
+                    model.customer.verifications[i].houseNoIsVerified1= (model.customer.verifications[i].houseNoIsVerified == 1) ? true : false;
+                }
+            }
         }
 
         Utils.removeNulls(model,true);
         return model;
     };
+
+    var validateDate = function(model) {
+        var today = moment(new Date()).format("YYYY-MM-DD");
+        if (model.customer && model.customer.idProofIssueDate) {
+            if (model.customer.idProofIssueDate > today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Id Proof Issued Date should not be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.idProofValidUptoDate) {
+            if (model.customer.idProofValidUptoDate <= today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Id Proof Valid Up to Date must be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.addressProofIssueDate) {
+            if (model.customer.addressProofIssueDate > today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Address Proof Issued Date should not be a Future Date', 5000);
+                return false;
+            }
+        }
+        if (model.customer && model.customer.addressProofValidUptoDate) {
+            if (model.customer.addressProofValidUptoDate <= today) {
+                $log.info("bad date");
+                PageHelper.showProgress('validate-error', 'Address Proof Valid Up to Date must be a Future Date', 5000);
+                return false;
+            }
+        }
+        return true;
+    }
 
     var validateData = function(model) {
         PageHelper.clearErrors();
@@ -413,6 +492,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         saveData: saveData,
         proceedData: proceedData,
         validateData: validateData,
+        validateDate:validateDate,
         parseAadhaar: parseAadhaar,
         customerAadhaarOnCapture: customerAadhaarOnCapture,
         validatePanCard: validatePanCard

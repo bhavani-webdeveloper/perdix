@@ -1,7 +1,7 @@
 irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
-["$log","formHelper","Enrollment", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
+["$log","formHelper","Enrollment","EnrollmentHelper", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
     'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',
-function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
+function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
          SessionStore,Utils,authService, BiometricService, Files, irfNavigator) {
     var fixData = function(model) {
         $log.info("Before fixData");
@@ -65,7 +65,8 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 Enrollment.get({id: customerId},
                     function(res){
                         _.assign(model.customer, res);
-                        model = fixData(model);
+                        model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                        model = EnrollmentHelper.fixData(model);
                         model.customer.date = model.customer.date || Utils.getCurrentDate();
                         model.customer.familyMembers = model.customer.familyMembers || [];
 
@@ -513,7 +514,10 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 type:"select"
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf28"
+                                key:"customer.udf.userDefinedFieldValues.udf28",
+                                "schema": {
+                                    "type": "number"
+                                }
                             }
                         ]
                     }
@@ -805,7 +809,9 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
-
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf5",
@@ -859,8 +865,14 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                                 "required":true,
                             },
                             {
-                                key:"customer.verifications[].houseNoIsVerified",
+                                key:"customer.verifications[].houseNoIsVerified1",
                                 "required":true,
+                                "type": "checkbox",
+                                "title": "HOUSE_NO_IS_VERIFIED",
+                                "required": true,
+                                "schema": {
+                                    "default": false
+                                }
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
@@ -987,6 +999,13 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                 if (model.customer.isBiometricValidated == true) {
                     model.customer.biometricEnrollment = "AUTHENTICATED";
                 }
+                if (model.customer.verifications && model.customer.verifications.length) {
+                    for (i in model.customer.verifications) {
+                        if (model.customer.verifications[i].houseNoIsVerified1) {
+                            model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                        }
+                    }
+                }
 
                 $log.info("Inside submit()");
                 $log.info(model);
@@ -1016,6 +1035,14 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
 
                 var out = model.customer.$fingerprint;
                 var BiometricQuality = SessionStore.getGlobalSetting("BiometricQuality");
+
+                if (model.customer.verifications && model.customer.verifications.length) {
+                    for (i in model.customer.verifications) {
+                        if (model.customer.verifications[i].houseNoIsVerified1) {
+                            model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                        }
+                    }
+                }
 
                 var fpPromisesArr = [];
                 for (var key in out) {
@@ -1060,10 +1087,10 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         return;
                     }
 
-                    if(!model.customer.$fingerprintquality) {
+                    /*if(!model.customer.$fingerprintquality) {
                         elementsUtils.alert('Fingerprint quality is less than the required percentage' +" "+ BiometricQuality);
                         return;
-                    }
+                    }*/
 
                     if (reqData['customer']['miscellaneous']){
                         var misc = reqData['customer']['miscellaneous'];
