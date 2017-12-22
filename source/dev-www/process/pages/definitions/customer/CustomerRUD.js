@@ -1112,9 +1112,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     {
                         "type": "actionbox",
                         "items": [{
-                            "type": "save",
-                            "title": "SAVE_OFFLINE",
-                        }, {
                             "type": "submit",
                             "title": "SUBMIT"
                         }]
