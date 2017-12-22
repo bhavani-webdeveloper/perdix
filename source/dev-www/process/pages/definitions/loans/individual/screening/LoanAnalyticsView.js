@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsView'), ["$log", "$q", "LoanAccount", "$stateParams","PageHelper", "$filter", "IndividualLoan", "BundleManager",
-	function($log, $q, LoanAccount, $stateParams,PageHelper, $filter, IndividualLoan, BundleManager) {
+irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+	"Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
+	function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
 		$log.info("Inside LoanAnalyticsView");
 		return {
 			"type": "page-bundle",
@@ -48,14 +49,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				minimum: 1,
 				maximum: 1,
 				order: 60
-			}, {
+			}, /*{
 				pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
 				title: 'LOAN_REQUEST',
 				pageClass: 'loan-request',
 				minimum: 1,
 				maximum: 1,
 				order: 65
-			}, {
+			},*/ {
 				pageName: 'loans.individual.screening.detail.SummaryView',
 				title: 'Summary',
 				pageClass: 'summary',
@@ -152,7 +153,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'business',
 							model: {
 								customerId: res.customerId,
-								loanAccount: res
+								loanAccount:res
 							}
 						});
 
@@ -169,13 +170,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								customerId: res.customerId
 							}
 						});
-
-						$this.bundlePages.push({ // TODO: remove once LoanApplicationView is completed
+/*
+						$this.bundlePages.push({ 
 							pageClass: 'loan-request',
 							model: {
 								loanAccount: res
 							}
-						});
+						});*/
 
 						/*$this.bundlePages.push({
 							pageClass: 'scoring_view',

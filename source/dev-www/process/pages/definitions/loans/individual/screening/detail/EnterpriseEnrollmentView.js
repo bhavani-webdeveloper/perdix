@@ -1,8 +1,11 @@
 define({
     pageUID: "loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "$q", "BundleManager", "$filter", "BASE_URL", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter"],
-    $pageFn: function($log, Enrollment, $q, BundleManager, $filter, BASE_URL, Model_ELEM_FC, filterFilter, irfCurrencyFilter) {
+    dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter"
+    ],
+    $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter) {
         return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
@@ -17,12 +20,14 @@ define({
                     model.customer = res;
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
-                    model.customer.presetAddress = [
-                        model.customer.doorNo,
-                        model.customer.street,
-                        model.customer.district,
-                        model.customer.state
-                    ].filter(a=>a).join(', ')+' - '+model.customer.pincode;
+                    /*Address*/
+                   /* var s1 = model.customer.doorNo;
+                    var s2 = model.customer.street;
+                    var s3 = model.customer.pincode;
+                    var s4 = model.customer.district;
+                    var s5 = model.customer.state;
+                    model.business_address_html = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ', (s4 == null ? "" : s4), ' \n', (s5 == null ? "" : s5));
+*/
                     /*CBREPORT*/
 
                     if (_.isArray(model.customer.enterpriseBureauDetails) && model.customer.enterpriseBureauDetails.length) {
@@ -190,10 +195,21 @@ define({
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                         },{
-                            "key":"customer.presetAddress",
-                            "type": "html",
+                            "type":"section",
+                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-20px; padding-left:100px; font-weight:bold;"><sf-decorator  form="item"></sf-decorator><div></div>',
+                            "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-12",
                             "title": "Present Address",
-                          }]
+                            "html": '{{model.customer.doorNo==null? "": model.customer.doorNo.concat(",")}}' +'<br>'+
+                                '{{model.customer.street==null? "": model.customer.street.concat(",")}}' +'<br>'+
+                                '{{model.customer.district==null? "": model.customer.district.concat(",")}}'+'<br>'+
+                                '{{model.customer.state==null? "": model.customer.state.concat(",")}}'+'<br>'+
+                                '{{model.customer.pincode==null? "": model.customer.pincode}}'+'<br>'+
+                                ''
+
+                            }]
+                        }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",

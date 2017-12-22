@@ -1,8 +1,11 @@
 define({
     pageUID: "loans.individual.screening.detail.SummaryView",
     pageType: "Engine",
-    dependencies: ["$log", "$q", "Enrollment", 'SchemaResource', 'PageHelper', 'formHelper', 'SessionStore', "Scoring", "AuthTokenHelper", "BundleManager", "filterFilter", "irfCurrencyFilter"],
-    $pageFn: function($log, $q, Enrollment, SchemaResource, PageHelper, formHelper, SessionStore, Scoring, AuthTokenHelper, BundleManager, filterFilter, irfCurrencyFilter) {
+    dependencies: ["$log", "$q", "Enrollment", 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
+        'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "Scoring", "AuthTokenHelper", "BundleManager", "filterFilter", "irfCurrencyFilter"
+    ],
+    $pageFn: function($log, $q, Enrollment, SchemaResource, PageHelper, formHelper, elementsUtils,
+        irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, Scoring, AuthTokenHelper, BundleManager, filterFilter, irfCurrencyFilter) {
 
         var branch = SessionStore.getBranch();
         var scoreName;
@@ -471,36 +474,39 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "secData['No of total loans']",
-                                "title": "Total no. of Loans",
-                                "type": "number"
-                            }, {
-                                "key": "",
-                                "title": "Minimum Loan Size"
-                            }, {
-                                "key": "",
-                                "title": "Maximum Loan Size"
-                            }, {
-                                "key": "secData['Average Loan Size']|irfCurrency",
-                                "title": "Average Loan Size",
-                                "type": "amount"
-                            }, {
-                                "key": "secData['No of Loans with cheque bounce']",
-                                "title": "No. of loans with cheque bounce",
-                                "type": "number"
-                            }, {
-                                "key": "secData['Average Loan Size of Cheque Bounce accounts']",
-                                "title": "Avg loan size of cheque bounce accounts",
-                                "type": "amount"
-                            }, {
-                                "key": "secData['No of loans as NPA']",
-                                "title": "No. of loans as NPA",
-                                "type": "number"
-                            }, {
-                                "key": "secData['Average Loan Size of NPA accounts']",
-                                "title": "Avg loan size of NPA accounts",
-                                "type": "amount"
-                            }]
+                                    "key": "secData['No of total loans']",
+                                    "title": "Total no. of Loans",
+                                    "type": "number"
+                                },
+                                {
+                                                               "key": "",
+                                                               "title": "Minimum Loan Size"
+                                                           }, {
+                                                               "key": "",
+                                                               "title": "Maximum Loan Size"
+                                                           },
+                                {
+                                    "key": "secData['Average Loan Size']|irfCurrency",
+                                    "title": "Average Loan Size",
+                                    "type": "amount"
+                                }, {
+                                    "key": "secData['No of Loans with cheque bounce']",
+                                    "title": "No. of loans with cheque bounce",
+                                    "type": "number"
+                                }, {
+                                    "key": "secData['Average Loan Size of Cheque Bounce accounts']",
+                                    "title": "Avg loan size of cheque bounce accounts",
+                                    "type": "amount"
+                                }, {
+                                    "key": "secData['No of loans as NPA']",
+                                    "title": "No. of loans as NPA",
+                                    "type": "number"
+                                }, {
+                                    "key": "secData['Average Loan Size of NPA accounts']",
+                                    "title": "Avg loan size of NPA accounts",
+                                    "type": "amount"
+                                }
+                            ]
                         }]
                     }]
 
@@ -519,37 +525,40 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "subsecData['No of total loans']",
-                                "title": "Total no. of Loans",
-                                "type": "number"
-                            }, {
-                                "key": "",
-                                "title": "Minimum Loan Size"
-                            }, {
-                                "key": "",
-                                "title": "Maximum Loan Size"
-                            }, {
-                                "key": "subsecData['Average Loan Size']",
-                                "title": "Average Loan Size",
-                                "type": "amount"
-                            }, {
-                                "key": "subsecData['No of Loans with cheque bounce']",
-                                "title": "No. of loans with cheque bounce",
-                                "type": "number"
-                            }, {
-                                "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
-                                "title": "Avg loan size of cheque bounce accounts",
-                                "type": "amount"
-                            }, {
-                                "key": "subsecData['No of loans as NPA']",
-                                "title": "No. of loans as NPA",
-                                "type": "number"
-                            }, {
-                                "key": "subsecData['Average Loan Size of NPA accounts']",
-                                "type": "amount",
-                                "title": "Avg loan size of NPA accounts"
+                                    "key": "subsecData['No of total loans']",
+                                    "title": "Total no. of Loans",
+                                    "type": "number"
+                                },
+                                {
+                                                               "key": "",
+                                                               "title": "Minimum Loan Size"
+                                                           }, {
+                                                               "key": "",
+                                                               "title": "Maximum Loan Size"
+                                                           },
+                                {
+                                    "key": "subsecData['Average Loan Size']",
+                                    "title": "Average Loan Size",
+                                    "type": "amount"
+                                }, {
+                                    "key": "subsecData['No of Loans with cheque bounce']",
+                                    "title": "No. of loans with cheque bounce",
+                                    "type": "number"
+                                }, {
+                                    "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
+                                    "title": "Avg loan size of cheque bounce accounts",
+                                    "type": "amount"
+                                }, {
+                                    "key": "subsecData['No of loans as NPA']",
+                                    "title": "No. of loans as NPA",
+                                    "type": "number"
+                                }, {
+                                    "key": "subsecData['Average Loan Size of NPA accounts']",
+                                    "type": "amount",
+                                    "title": "Avg loan size of NPA accounts"
 
-                            }]
+                                }
+                            ]
                         }]
                     }]
 
@@ -625,7 +634,7 @@ define({
                             score_name: scoreName
                         }).$promise;
                         onSuccessPromise.then(function(res) {
-                            /* var financialData = [model.ScoreDetails,res];*/
+                           /* var financialData = [model.ScoreDetails,res];*/
                             BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
                             prepareData(res, model);
                             model.$prepared = true;

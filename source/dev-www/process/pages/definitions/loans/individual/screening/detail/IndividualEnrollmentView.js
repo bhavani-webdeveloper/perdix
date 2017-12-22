@@ -136,6 +136,7 @@ define({
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'positive';
                     }
                     /*Family Section*/
+                    self.form= self.formSource;
                     var family = {
                         "type": "box",
                         "readonly": true,
@@ -259,7 +260,8 @@ define({
                 });
             },
 
-            form: [{
+             form: [],
+            formSource: [{
                     "type": "section",
                     "html": `
 <div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
@@ -697,24 +699,19 @@ define({
                                 "title": "CIBIL Score"
                             }, {
                                 "key": "UIUDF.cibil.active_accounts",
-                                "title": "Active Accounts",
-                                "type": "number"
+                                "title": "Active Accounts"
                             }, {
                                 "key": "UIUDF.cibil.overdue_accounts",
-                                "title": "Overdue Accounts",
-                                "type": "number"
+                                "title": "Overdue Accounts"
                             }, {
                                 "key": "UIUDF.cibil.sanctioned_Amount",
-                                "title": "Sanctioned Amount",
-                                "type": "amount"
+                                "title": "Sanctioned Amount"
                             }, {
                                 "key": "UIUDF.cibil.current_balance",
-                                "title": "Current Balance",
-                                "type": "amount"
+                                "title": "Current Balance"
                             }, {
                                 "key": "UIUDF.cibil.amount_overdue",
-                                "title": "Overdue Balance",
-                                "type": "amount"
+                                "title": "Overdue Balance"
                             }, {
                                 "key": "",
                                 "title": "Report"
