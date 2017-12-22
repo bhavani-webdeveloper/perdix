@@ -1451,7 +1451,7 @@ define({
                 {
                 "type": "box",
                 "title": "LUC_DOCUMENTS",
-                "condition": "model.loanMonitoringDetails.currentStage=='LUCReview' || model.lucCompleted",
+                "condition": "model.lucCompleted",
                 "items": [{
                     "key": "loanMonitoringDetails.loanMonitoringDocuments",
                     "type": "array",
@@ -1476,7 +1476,7 @@ define({
             }, {
                 "type": "box",
                 "title": "LUC_DOCUMENTS",
-                "condition": "!(model.loanMonitoringDetails.currentStage == 'LUCReview' || model.lucCompleted)",
+                "condition": "!model.lucCompleted",
                 "items": [{
                     "key": "loanMonitoringDetails.loanMonitoringDocuments",
                     "type": "array",
