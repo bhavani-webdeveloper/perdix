@@ -15,6 +15,10 @@ irf.models.factory('Messaging', ["$resource", "$httpParamSerializer", "BASE_URL"
                 method: 'POST',
                 url: endpoint + 'addMessage.php'   
             }),
+            closeConversation: searchResource({
+                method: 'GET',
+                url: endpoint + 'closeConversation.php'   
+            }),
             findConversation: searchResource({
                 method: 'GET',
                 url: endpoint + 'findConversation.php'   

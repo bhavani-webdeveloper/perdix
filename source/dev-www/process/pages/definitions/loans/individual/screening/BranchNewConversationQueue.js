@@ -1,8 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.NewConversationQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.screening.BranchNewConversationQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","Messaging", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Messaging, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
+		var currentBranch = SessionStore.getCurrentBranch();
 		var centreId=[];
 	    if (centres && centres.length) {
 		    for (var i = 0; i < centres.length; i++) {
@@ -15,6 +16,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.NewConversationQ
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
 			},
@@ -36,22 +39,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.NewConversationQ
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
-	                    'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
-	                    },
-                        "centre": {
+	                    "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branchId",
 								"screenFilter": true
 							}
 						},
@@ -92,7 +87,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.NewConversationQ
 					return Messaging.findProcess({
 	                    'replied': 'false',
 	                    'stage': searchOptions.stage,
-	                    'branchName':searchOptions.branch,
+	                    'branchName':currentBranch.branchName,
 	                    'applicantName':searchOptions.applicantName,
 	                    'status':searchOptions.status,                   
 	                    'customerName': searchOptions.businessName,
@@ -187,7 +182,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.NewConversationQ
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "loans.individual.screening.NewConversationQueue"
+                                    pageName: "loans.individual.screening.BranchNewConversationQueue"
 								});
 							},
 							isApplicable: function(item, index) {
