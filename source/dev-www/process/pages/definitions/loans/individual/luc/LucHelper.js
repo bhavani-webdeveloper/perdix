@@ -19,9 +19,9 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                             } else {
                                 res.stage = "LUCReview";
                             }
-                    } else if(res.loanMonitoringDetails.nonIntendedPurposeAmount == 0) {   
-                        res.stage="Completed";    
-                    }   
+                    } else if(res.loanMonitoringDetails.nonIntendedPurposeAmount == 0) {
+                        res.stage="Completed";
+                    }
                 }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
@@ -49,11 +49,7 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 irfProgressMessage.pop('Go Back', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
                 if (res.loanMonitoringDetails.currentStage == "LUCEscalate") {
-                    if (res.loanMonitoringDetails.nonIntendedPurposeAmount > 0) {
-                        res.stage="LUCReview";
-                    } else if (res.loanMonitoringDetails.nonIntendedPurposeAmount == 0) {
-                        res.stage = "LUCSchedule"
-                    }
+                    res.stage = "LUCReschedule"
                 } else if (res.loanMonitoringDetails.currentStage == "LUCLegalRecovery") {
                     res.stage="LUCEscalate";
                 } else if (res.loanMonitoringDetails.currentStage == "LUCReview") {
@@ -87,11 +83,11 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule" || res.loanMonitoringDetails.currentStage == "LUCReview")
                 {
                     res.stage="LUCEscalate";
-                } 
-                else if (res.loanMonitoringDetails.currentStage == "LUCEscalate") 
+                }
+                else if (res.loanMonitoringDetails.currentStage == "LUCEscalate")
                 {
                     res.stage="LUCLegalRecovery";
-                } 
+                }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('luc-Back', 'Done. luc updated with ID: ' + res.loanMonitoringDetails.id, 5000);
