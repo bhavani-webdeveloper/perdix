@@ -65,9 +65,8 @@ define({
                         "demandDate": {
                             "title": "DEMAND_DATE",
                             "type": ["string", "null"],
-                            "enumCode": "demandDate",
                             "x-schema-form": {
-                                "type": "select",
+                                "type": "date",
                                 "screenFilter": true
                             }
                         },
