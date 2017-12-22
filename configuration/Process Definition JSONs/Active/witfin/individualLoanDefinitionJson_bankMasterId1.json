@@ -1097,7 +1097,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeMiddleName":{
@@ -1106,7 +1106,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeLastName":{
@@ -1115,14 +1115,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeRelationship":{
                      "title":"Nominee Relationship",
                      "type":"string",
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"relation"
                   },
@@ -1132,7 +1132,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeStreet":{
@@ -1141,7 +1141,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeLocality":{
@@ -1150,14 +1150,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeDistrict":{
                      "title":"Nominee District",
                      "type":"string",
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1167,7 +1167,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ]
                   },
                   "nomineePincode":{
@@ -1176,21 +1176,21 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeDOB":{
                      "title":"Nominee DOB",
                      "type":"string",
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ]
                   },
                   "nomineeGender":{
                      "title":"Nominee Gender",
                      "type":"string",
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"gender"
                   },
@@ -1198,7 +1198,7 @@
                      "title":"Nominee Minor",
                      "type":"boolean",
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianTitle":{
@@ -1216,7 +1216,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianMiddleName":{
@@ -1225,7 +1225,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianLastName":{
@@ -1234,14 +1234,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianRelationWithMinor":{
                      "title":"Guardian Relation With Minor",
                      "type":"string",
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"relationship"
                   },
@@ -1249,7 +1249,7 @@
                      "title":"Guardian DOB",
                      "type":"string",
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianDoorNo":{
@@ -1258,7 +1258,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianStreet":{
@@ -1267,7 +1267,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianLocality":{
@@ -1276,14 +1276,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ]
                   },
                   "guardianDistrict":{
                      "title":"Guardian District",
                      "type":"string",
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1293,7 +1293,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       
+                        "LoanInitiation"
                      ]
                   },
                   "guardianPincode":{
@@ -1302,14 +1302,14 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ]
                   },
                   "guardianGender":{
                      "title":"Guardian Gender",
                      "type":"string",
                      "captureStages":[
-                        
+                        "LoanInitiation"
                      ],
                      "refCodeCategory":"gender"
                   }
