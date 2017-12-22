@@ -42,7 +42,7 @@ try {
 	$skip = ($query['page']-1)*$query['per_page'];
 	// Fetching the messaging details depends on the conversation ID
 	$havingCondition = ($query['replied']=='true') ? 'count(conversation_id) > 1' : 'count(conversation_id) = 1';
-	$havingCondition = ($query['replied']=='true') ? "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id) > 1" : "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id) = 1";
+	$havingCondition = ($query['replied']=='true') ? "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id AND reply_reference_id IS NOT NULL) > 0" : "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mc.id AND reply_reference_id IS NOT NULL) = 0";
 	$conversationMessage = DB::table("$db.ms_conversation as mc")
 	->join("$db.ms_message as mm", "mm.conversation_id", "=", "mc.id")
 	->join("$db.loan_accounts as la", "la.id", "=", "mc.process_id")
@@ -67,10 +67,10 @@ try {
 		$conversationMessage = $conversationMessage->where('la.current_stage','=', $query['stage']);
 			
 	if(isset($query['customerName']) && !empty($query['customerName'])) 
-		$conversationMessage = $conversationMessage->where('c.first_name','=', $query['customerName']);	
+		$conversationMessage = $conversationMessage->where('c.first_name','like',  "%$query[customerName]%");	
 	
 	if(isset($query['applicantName']) && !empty($query['applicantName'])) 
-		$conversationMessage = $conversationMessage->where('app.first_name','=', $query['applicantName']);
+		$conversationMessage = $conversationMessage->where('app.first_name','like', "%$query[applicantName]%");
 		
 	
 	$conversationMessage = $conversationMessage->select(

@@ -39,12 +39,26 @@ if ($validator->fails()) {
 
 try {
 	// Fetching the messaging details depends on the conversation ID
-	$havingCondition = ($query['replied']=='true') ? "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mm.conversation_id) > 1" : "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mm.conversation_id) = 1";
-	$conversationMessage =  DB::table("$db.ms_conversation as mc")
+	$havingCondition = ($query['replied']=='true') ? "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mm.conversation_id AND reply_reference_id IS NOT NULL) > 0" : "(SELECT count(conversation_id) FROM $db.ms_message WHERE conversation_id = mm.conversation_id AND reply_reference_id IS NOT NULL) = 0";
+	$conversationMessage = DB::table("$db.ms_conversation as mc")
 	->join("$db.ms_message as mm", "mm.conversation_id", "=", "mc.id")
+	->join("$db.loan_accounts as la", "la.id", "=", "mc.process_id")
+	->join("$db.branch_master as bm", "bm.id", "=", "la.branch_id")
+	->join("$db.loan_centre as lc", "lc.loan_id", "=", "la.id")
+	->join("$db.centre_master as cm", "cm.id", "=", "lc.centre_id")
 	->where("mc.process_type", "=", "LOAN")
-	->whereNull('mc.closed_at')
-	->groupBy("mc.process_id")
+	->whereNull('mc.closed_at');
+	
+	if(isset($query['branchName']) && !empty($query['branchName'])) 
+		$conversationMessage = $conversationMessage->where('bm.branch_name','=', $query['branchName']);
+	
+	if(isset($query['centreCode']) && !empty($query['centreCode'])) {
+		$centreCode  = explode(",", $query['centreCode']);
+		$conversationMessage = $conversationMessage->whereIn('cm.centre_code', $centreCode);
+		// $conversationMessage = $conversationMessage->where('cm.centre_code','=', $query['centreCode']);
+	}
+	
+	$conversationMessage = $conversationMessage->groupBy("process_id")
 	->havingRaw($havingCondition)
 	->get();
 
