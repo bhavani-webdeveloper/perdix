@@ -26,6 +26,7 @@ var enrichCustomer = function(customer) {
     customer.fullName = Utils.getFullName(customer.firstName, customer.middleName, customer.lastName);
     customer.fatherFullName = Utils.getFullName(customer.fatherFirstName, customer.fatherMiddleName, customer.fatherLastName);
     customer.spouseFullName = Utils.getFullName(customer.spouseFirstName, customer.spouseMiddleName, customer.spouseLastName);
+    customer.photo = customer.photoImageId;
     var addr = [];
     if (customer.street) addr.push(customer.street);
     //if (customer.postOffice) addr.push(customer.postOffice);
@@ -155,6 +156,13 @@ return {
                     }, {
                         "title": "FULL_NAME",
                         "key": "group.jlgGroupMembers[].customer.fullName"
+                    },{
+                        "title": "CUSTOMER_PHOTO",
+                        "key": "group.jlgGroupMembers[].customer.photo",
+                         type:"file",
+                         fileType:"image/*",
+                         "category": "CustomerEnrollment",
+                         "subCategory": "PHOTO"
                     }, {
                         "title": "DATE_OF_BIRTH",
                         "key": "group.jlgGroupMembers[].customer.dateOfBirth",

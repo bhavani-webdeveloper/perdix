@@ -4,45 +4,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
         function ($log, $q, Enrollment, PageHelper, irfProgressMessage, $stateParams, $state,
                   formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
 
-            var fixData = function (model) { 
-                $log.info("Before fixData");
-                Utils.removeNulls(model, true);
-                if (_.has(model.customer, 'udf.userDefinedFieldValues')){
-                    var fields = model.customer.udf.userDefinedFieldValues;
-                    $log.info(fields);
-                    fields['udf17'] = Number(fields['udf17']);
-                    fields['udf10'] = Number(fields['udf10']);
-                    fields['udf11'] = Number(fields['udf11']);
-                    fields['udf28'] = Number(fields['udf28']);
-                    fields['udf32'] = Number(fields['udf32']);
-                    fields['udf1'] = (fields['udf1']=="true")?true:false;
-                    fields['udf6'] = (fields['udf6']=="true")?true:false;
-                    fields['udf4'] = (fields['udf4']=="true")?true:false;
-                    fields['udf26'] = (fields['udf26']=="true")?true:false;
-
-                    for(var i=1; i<=40; i++){
-                        if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)){
-                            model.customer.udf.userDefinedFieldValues['udf'+i] = '';
-                        }
-                    }
-                }
-                if (model.customer.dateOfBirth) {
-                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                }
-                /*if (model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.udf.userDefinedFieldValues.udf26 != "" && model.customer.udf.userDefinedFieldValues.udf26 != null) {
-                    if (model.customer.udf.userDefinedFieldValues.udf26 === "true") {
-                        model.customer.udf.userDefinedFieldValues.udf26 = true;
-                    }
-                    if (model.customer.udf.userDefinedFieldValues.udf26 === "false") {
-                        model.customer.udf.userDefinedFieldValues.udf26 = false;
-                    }
-                }*/
-                //model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
-                $log.info("After fixData");
-                $log.info(model);
-                return model;
-            };
-
             return {
                 "id": "CustomerRUD",
                 "type": "schema-form",
@@ -199,7 +160,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             }, {
                                 key: "customer.udf.userDefinedFieldValues.udf1",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
-                                title: "SPOUSE_LOAN_CONSENT"
+                                title: "SPOUSE_LOAN_CONSENT",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
+
                             }
 
                         ]
@@ -558,6 +524,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             title:"FAMILY_MEMBER_FULL_NAME"
                         },
                         {
+                            key:"customer.familyMembers[].familyMemberLastName",
+                            title:"FAMILY_MEMBER_LAST_NAME"
+                        },
+                        {
                             key:"customer.familyMembers[].relationShip",
                             type:"select",
                             title: "T_RELATIONSHIP"
@@ -768,7 +738,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         key:"customer.udf.userDefinedFieldValues.udf15"
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf26"
+                                        key:"customer.udf.userDefinedFieldValues.udf26",
+                                        type: "checkbox",
+                                        "schema": {
+                                            "default": false
+                                        }
                                     },
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf27",
@@ -791,6 +765,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         "title": "T_ASSETS",
                         "items": [{
                             key: "customer.physicalAssets",
+                            titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                             type: "array",
                             items: [
                                {
@@ -1033,6 +1008,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
+                                "type":"number",
                                 "schema":{
                                     "type":"number"
                                 }
@@ -1050,14 +1026,25 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             "CONCRETE":"CONCRETE",
                                             "MUD":"MUD",
                                             "BRICK":"BRICK"
+                                },
+                                "schema":{
+                                    "type":"string"
                                 }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf32",
                                 title:"NUMBER_OF_ROOMS",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf6"
+                                key:"customer.udf.userDefinedFieldValues.udf6",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             }
                         ]
                     },
@@ -1099,6 +1086,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             {
                                 key:"customer.verifications[].referenceFirstName",
                                 "required":true,
+                            },
+                            {
+                                key: "customer.verifications[].referenceLastName",
+                                "condition": "model.customer.verifications[arrayIndex].referenceLastName"
                             },
                             {
                                 key:"customer.verifications[].relationship",

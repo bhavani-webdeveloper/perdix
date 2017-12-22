@@ -251,16 +251,28 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 fields['udf32'] = Number(fields['udf32']);
             }
             if(fields['udf1']){
-                fields['udf1'] = (fields['udf1'] == "true") ? true : false;
+                if(typeof(fields['udf1']) === "boolean"){
+
+                }else{
+                   fields['udf1'] = (fields['udf1'] == "true") ? true : false; 
+                }   
             }
             if(fields['udf6']){
-                fields['udf6'] = (fields['udf6'] == "true") ? true : false;
+                if(typeof(fields['udf6']) === "boolean"){
+
+                }else{
+                   fields['udf6'] = (fields['udf6'] == "true") ? true : false; 
+                }    
             }
             if(fields['udf4']){
-                fields['udf4'] = (fields['udf4'] == "true") ? true : false;
+                fields['udf4'] = Number(fields['udf4']);
             }
             if(fields['udf26']){
-                fields['udf26'] = (fields['udf26'] == "true") ? true : false;
+                if(typeof(fields['udf26']) === "boolean"){
+
+                }else{
+                   fields['udf26'] = (fields['udf26'] == "true") ? true : false; 
+                }  
             }
             
             for (var i = 1; i <= 40; i++) {
@@ -283,6 +295,25 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
+
+        if(model.customer.physicalAssets && model.customer.physicalAssets.length){
+            for(i in model.customer.physicalAssets){
+                if(model.customer.physicalAssets[i].nameOfOwnedAsset && (model.customer.physicalAssets[i].assetType == null)){
+                     model.customer.physicalAssets[i].assetType=model.customer.physicalAssets[i].nameOfOwnedAsset;
+                }
+            }
+        }
+
+        if(model.customer.familyMembers && model.customer.familyMembers.length){
+            for(i in model.customer.familyMembers){
+                if(model.customer.familyMembers[i].dateOfBirth){
+                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+            }
+
+        }
+
+
 
         Utils.removeNulls(model,true);
         return model;

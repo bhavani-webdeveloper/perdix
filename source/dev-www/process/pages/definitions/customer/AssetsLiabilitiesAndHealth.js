@@ -3,44 +3,7 @@ irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
     'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',
 function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
          SessionStore,Utils,authService, BiometricService, Files, irfNavigator) {
-    var fixData = function(model) {
-        $log.info("Before fixData");
-        Utils.removeNulls(model, true);
-        if (_.has(model.customer, 'udf.userDefinedFieldValues')) {
-            var fields = model.customer.udf.userDefinedFieldValues;
-            $log.info(fields);
-            fields['udf17'] = Number(fields['udf17']);
-            fields['udf10'] = Number(fields['udf10']);
-            fields['udf11'] = Number(fields['udf11']);
-            fields['udf28'] = Number(fields['udf28']);
-            fields['udf32'] = Number(fields['udf32']);
-            fields['udf1'] = Boolean(fields['udf1']);
-            fields['udf6'] = Boolean(fields['udf6']);
-            fields['udf4'] = Number(fields['udf4']);
-
-            for (var i = 1; i <= 40; i++) {
-                if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)) {
-                    model.customer.udf.userDefinedFieldValues['udf' + i] = '';
-                }
-            }
-        }
-        if (model.customer.dateOfBirth) {
-            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-        }
-        if(model.customer.udf.userDefinedFieldValues.udf26 !="" && model.customer.udf.userDefinedFieldValues.udf26 != null ){
-            if(model.customer.udf.userDefinedFieldValues.udf26 === "true"){
-                    model.customer.udf.userDefinedFieldValues.udf26 = true;
-            }
-            if(model.customer.udf.userDefinedFieldValues.udf26 === "false"){
-                    model.customer.udf.userDefinedFieldValues.udf26 = false;
-            }
-        }
-        $log.info("After fixData");
-        $log.info(model);
-        return model;
-    };
-
-
+    
     return {
         "id": "AssetsAndLiabilities",
         "type": "schema-form",
@@ -306,6 +269,10 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             title:"FAMILY_MEMBER_FULL_NAME"
                         },
                         {
+                            key:"customer.familyMembers[].familyMemberLastName",
+                            title:"FAMILY_MEMBER_LAST_NAME"
+                        },
+                        {
                             key:"customer.familyMembers[].relationShip",
                             type:"select",
                             title: "T_RELATIONSHIP"
@@ -507,7 +474,11 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                 key:"customer.udf.userDefinedFieldValues.udf15"
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf26"
+                                key:"customer.udf.userDefinedFieldValues.udf26",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf27",
@@ -530,6 +501,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                     {
                         key: "customer.physicalAssets",
                         type: "array",
+                        titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                         startEmpty: true,
                         items: [
                                {
@@ -809,6 +781,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf4",
+                                "type":"number",
                                 "schema":{
                                     "type":"number"
                                 }
@@ -826,14 +799,25 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                                             "CONCRETE":"CONCRETE",
                                             "MUD":"MUD",
                                             "BRICK":"BRICK"
+                                },
+                                "schema":{
+                                    "type":"string"
                                 }
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf32",
                                 title:"NUMBER_OF_ROOMS",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf6"
+                                key:"customer.udf.userDefinedFieldValues.udf6",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
                             }
                         ]
                     },
@@ -877,6 +861,10 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             {
                                 key:"customer.verifications[].referenceFirstName",
                                 "required":true,
+                            },
+                            {
+                                key: "customer.verifications[].referenceLastName",
+                                "condition": "model.customer.verifications[arrayIndex].referenceLastName"
                             },
                             {
                                 key:"customer.verifications[].relationship",
