@@ -69,7 +69,7 @@ define({
                             //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
-                            model.lucNonEditable = !model.lucCompleted && model.loanMonitoringDetails.currentStage == 'LUCReview';
+                            model.lucNonEditable = model.lucCompleted || model.loanMonitoringDetails.currentStage == 'LUCReview';
 
                             if (model.loanMonitoringDetails.loanPurposeCategory == null){
                                 IndividualLoan.get({
@@ -601,8 +601,8 @@ define({
                         type: "amount",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         "onChange": function(modelValue, form, model) {
-                            if (model.loanMonitoringDetails.intendedPurposeAmount > model.loanMonitoringDetails.loanAmountUsed) {
-                                model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed;
+                            if (model.loanMonitoringDetails.repayedDebitAmount!=null && model.loanMonitoringDetails.intendedPurposeAmount > model.loanMonitoringDetails.repayedDebitAmount) {
+                                model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.repayedDebitAmount;
                             }
                             var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                             model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
@@ -1055,18 +1055,7 @@ define({
                         }, {
                             key: "loanMonitoringDetails.intendedPurposeAmount",
                             type: "amount",
-                            readonly: true,
-                            //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                            "onChange": function(modelValue, form, model) {
-                                if (model.loanMonitoringDetails.intendedPurposeAmount > model.loanMonitoringDetails.loanAmountUsed) {
-                                    model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed;
-                                }
-                                var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
-                                model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
-                                var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
-                            }
+                            readonly: true
                         }, {
                             key: "loanMonitoringDetails.intendedPurposePercentage",
                             title: "%_OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
