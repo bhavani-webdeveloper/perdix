@@ -58,14 +58,12 @@ define({
                     if (!lucId) {
                         PageHelper.hideLoader();
                     }
-                    var machineDetails=[];
                     LUC.get({
                             id: lucId
                         },
                         function(res) {
                             $log.info(res);
                             _.assign(model.loanMonitoringDetails, res.loanMonitoringDetails);
-                            machineDetails = model.loanMonitoringDetails.machineDetails;
                             //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                             model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate != null) ? moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD") : null;
                             var loanId = res.loanMonitoringDetails.loanId;
@@ -160,12 +158,6 @@ define({
                                         model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
                                         model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
                                         model.loanMonitoringDetails.loanAmount = model.loanMonitoringDetails.loanAmount || response.loanAmount;
-                                        if(machineDetails)
-                                        {
-                                            model.loanMonitoringDetails.machineDetails = machineDetails;
-                                        }
-
-
                                         var custId = response.customerId;
 
                                         if (custId) {
