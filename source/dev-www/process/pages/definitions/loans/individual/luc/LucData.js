@@ -71,7 +71,7 @@ define({
                             var loanId = res.loanMonitoringDetails.loanId;
                             model.lucNonEditable = !model.lucCompleted && model.loanMonitoringDetails.currentStage == 'LUCReview';
 
-                            if (model.loanMonitoringDetails.loanProductCode == null){
+                            if (model.loanMonitoringDetails.loanPurposeCategory == null){
                                 IndividualLoan.get({
                                     id: loanId
                                 }).$promise.then(
