@@ -45,6 +45,16 @@ $settings = [
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
     ],
+    'encore_db' => [
+        'driver' => 'mysql',
+        'host' => getenv('DB_HOST'),
+        'database' => getenv('ENCORE_DB_NAME'),
+        'username' => getenv('DB_USER'),
+        'password' => getenv('DB_PASSWORD'),
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+    ],
     'perdix' => [
         'v8_url' => getenv('PERDIX_V8_BASE_URL'),
         'username' => getenv('PERDIX_USERNAME'),
