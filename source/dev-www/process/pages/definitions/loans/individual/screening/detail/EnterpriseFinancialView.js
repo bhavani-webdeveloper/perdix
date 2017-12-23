@@ -928,10 +928,7 @@ self.renderReady = function(eventName) {
 										"stacked": false,
 										"rotateLabels": -90,
 										"showControls": false,
-										"reduceXTicks": false,
-										"xAxis": {
-											"tickPadding": 7
-										}
+										"reduceXTicks": false
 									}
 								}
 							}
