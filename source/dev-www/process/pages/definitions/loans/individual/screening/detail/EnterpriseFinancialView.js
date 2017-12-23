@@ -25,11 +25,25 @@ self.renderForm = function() {
 	var currencyRightRender = function(data) {
 		return irfCurrencyFilter(data, null, null, "decimal") + ' ' + irfElementsConfig.currency.iconHtml;
 	}
-	var configRender = function(data, type, full, meta) {
-		if (!full.$config) return data;
+	var currencyRightNullRender = function(data) {
+		if (data)
+			return currencyRightRender(data);
+		return '';
+	}
+	var configRenderer = function(col) {
+		return function(data, type, full, meta) {
+			if (full.$config && full.$config[col] && full.$config[col].className) {
+				return '<div class="'+full.$config[col].className+'">'+data+'</div>'
+			} else {
+				return data
+			}
+		}
 	}
 	var strongRender = function(data, type, full, meta) {
 		return '<strong>'+data+'</strong>';
+	}
+	var zeroRender = function(data, type, full, meta) {
+		return data? data: '0';
 	}
 	var buyerDetailsColumns = [{
 		"title": "Buyer",
@@ -118,11 +132,13 @@ self.renderForm = function() {
 				}, {
 					"title": "No of EMI Bounces",
 					"data": "noOfEmiChequeBounced",
-					"className": "text-right"
+					"className": "text-right",
+					"render": zeroRender
 				}, {
 					"title": "No of non EMI Bounces",
 					"data": "noOfChequeBounced",
-					"className": "text-right"
+					"className": "text-right",
+					"render": zeroRender
 				}, {
 					"title": "Bank Statement",
 					"data": "bankStatementPhoto",
@@ -135,6 +151,39 @@ self.renderForm = function() {
 		};
 		bankAccountTableForm.push(statementForm);
 	}
+	bankAccountTableForm.push({
+		"type": "section",
+		"htmlClass": "row",
+		"items": [{
+			"type": "section",
+			"htmlClass": "col-sm-8",
+			"items": [{
+				"type": "section",
+				"html": `
+<div class="">
+<nvd3
+	data="model.business.summary.bankStatement.average.graphData"
+	options="model.business.summary.bankStatement.average.graphOptions"
+	config="{refreshDataOnly:true, deepWatchData: false}"
+></nvd3>
+</div>`
+			}]
+		}, {
+			"type": "section",
+			"htmlClass": "col-sm-4",
+			"items": [{
+				"type": "section",
+				"html": `
+<div class="">
+<nvd3
+	data="model.business.summary.bankStatement.bounces.graphData"
+	options="model.business.summary.bankStatement.bounces.graphOptions"
+	config="{refreshDataOnly:true, deepWatchData: false}"
+></nvd3>
+</div>`
+			}]
+		}]
+	});
 
 	self.form = [{
 		"type": "section",
@@ -214,8 +263,7 @@ self.renderForm = function() {
 						"searching": false,
 						"paginate": false,
 						"pageLength": 10,
-						"responsive": false,
-						"scrollX": true
+						"responsive": false
 					},
 					getColumns: function() {
 						return [{
@@ -264,8 +312,7 @@ self.renderForm = function() {
 					"searching": false,
 					"paginate": false,
 					"pageLength": 10,
-					"responsive": false,
-					"scrollX": true
+					"responsive": false
 				},
 				getColumns: function() {
 					return buyerDetailsColumns;
@@ -338,8 +385,7 @@ self.renderForm = function() {
 				"searching": false,
 				"paginate": false,
 				"pageLength": 10,
-				"responsive": false,
-				"scrollX": true
+				"responsive": false
 			},
 			getColumns: function() {
 				return [{
@@ -353,7 +399,8 @@ self.renderForm = function() {
 				}, {
 					"title": "Total",
 					"data": "total",
-					"className": "text-right"
+					"className": "text-right",
+					"render": currencyRightRender
 				}, {
 					"title": " ",
 					"data": "percentage",
@@ -367,29 +414,30 @@ self.renderForm = function() {
 			"type": "expandablesection",
 			"items": [{
 				"type": "tableview",
-				"key": "summary.profitLoss.summary.tableData",
+				"key": "summary.profitLoss.details.tableData",
 				"notitle": true,
 				"tableConfig": {
 					"ordering": false,
 					"searching": false,
 					"paginate": false,
 					"pageLength": 10,
-					"responsive": false,
-					"scrollX": true
+					"responsive": false
 				},
 				getColumns: function() {
 					return [{
 						"title": " ",
 						"data": "title",
-						render: strongRender
+						render: configRenderer("title")
 					}, {
 						"title": "Amount",
 						"data": "amount",
-						"className": "text-right"
+						"className": "text-right",
+						"render": currencyRightNullRender
 					}, {
 						"title": "Total",
 						"data": "total",
-						"className": "text-right"
+						"className": "text-right",
+						"render": currencyRightNullRender
 					}, {
 						"title": " ",
 						"data": "percentage",
@@ -400,47 +448,6 @@ self.renderForm = function() {
 					}];
 				}
 			}]
-		}]
-	}, {
-		"type": "box",
-		"colClass": "col-sm-12",
-		"items": [{
-			"type": "section",
-			"colClass": "col-sm-12",
-			"html": '<table class="table table-responsive">' +
-				'<colgroup>' +
-				'<col width="30%"> <col width="30"> <col width="15%"> <col width="15%"> <col width="10%">' +
-				'</colgroup>' +
-				'<tbody>' +
-				'<tr ng-style = "{\'font-weight\': \'bold\'}"><td></td><td></td><td>{{"AMOUNT" | translate}}</td><td>{{"Total" | translate}}</td><td></td></tr>' +
-				'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"INCOME" | translate}}</td><td></td><td></td><td>{{model.businessPL.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>' +
-				'<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.businessPL.invoice | irfCurrency}}</td><td></td> <td>{{model.businessPL.invoicePCT}}</td> </tr>' +
-				'<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.businessPL.cashRevenue | irfCurrency}}</td><td></td> <td>{{model.businessPL.cashRevenuePCT}}</td> </tr>' +
-				'<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.businessPL.scrapIncome | irfCurrency}}</td><td></td> <td>{{model.businessPL.scrapIncomePCT }}</td> </tr>' +
-				'<tr class="dotted"> <th></th> <th></th> <th></th> <th></th> <th></th> </tr>' +
-				'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"PURCHASES" | translate}}</td><td></td><td></td><td>{{model.businessPL.purchases | irfCurrency}}</td><td></td></tr>' +
-
-				'<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.p1.business.purchase_invoice | irfCurrency}}</td><td></td> <td></td><td>{{model.p1.business.purchase_invoice_pct}}</td> </tr>' +
-				'<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.p1.business.purchase_cash | irfCurrency}}</td><td></td><td></td> <td>{{model.p1.business.purchase_cash_pct}}</td> </tr>' +
-
-				'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.businessPL.Opex | irfCurrency}}</td> <td></td> </tr>' +
-				'<tr ng-repeat="items in model._opex"><td></td><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td></td><td>{{items["% of Avg Monthly Revenue"]}}</td></tr>' +
-
-				'<tr class="table-sub-header" ng-style = "{\'font-weight\': \'bold\'}"> <th>{{"TOTAL EXPANSES" | translate}}</th> <th></th> <th>{{model.businessPL.grossIncome | irfCurrency}}</th> <th></th> </tr>' +
-				'<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.businessPL.EBITDA | irfCurrency}}</strong></td><td></td> <td>{{model.businessPL.EBITDA_PCT }}</td> </tr>' +
-				'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></th> <th></th> <th></th> </tr>' +
-				'<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.businessPL.businessLiabilities | irfCurrency}}</td> <td></td> </tr>' +
-				'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"><td>{{"NET INCOME"}}</td><td></td><td></td><td></td><td></td></tr>' +
-				'<tr> <td></td><td>{{"NET_INCOME" | translate}}</td> <td>{{model.businessPL.netIncome | irfCurrency}}</td> <td></td><td></td> </tr>' +
-
-				'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"><td>{{"HOUSEHOLD NET INCOME"}}</td><td></td><td></td><td></td><td></td></tr>' +
-				'<tr> <td></td><td>{{"HOUSEHOLD NET INCOME" | translate}}</td><td>{{model.businessPL.netBusinessIncome | irfCurrency}}</td><td></td><td>{{model.businessPL.netBusinessIncomePCT }}</td> </tr>' +
-
-				'<tr class="table-sub-header " ng-style = "{\'font-weight\': \'bold\'}"> <td>{{"KINARA_EMI" | translate}}</td><td></td><td></td> <td></td> </tr>' +
-
-				'<tr><td></td><td>Kinara EMI</td><td>{{model.businessPL.finalKinaraEmi | irfCurrency}}</td><td></td> <td>{{model.businessPL.finalKinaraEmiPCT }}</td> </tr>' +
-				'</tbody>' +
-				'</table>'
 		}]
 	}, {
 		"type": "box",
@@ -687,10 +694,32 @@ self.renderReady = function(eventName) {
 									}
 								}, {
 									"title": "Invoice",
-									"amount": "",
-									"total": bpl['Total Business Revenue'],
-									"percentage": "",
-									"description": "",
+									"amount": bpl['Invoice'],
+									"total": "",
+									"percentage": bpl['Invoice pct'],
+									"description": "of total income",
+									"$config": {
+										"title": {
+											"className": "text-right"
+										}
+									}
+								}, {
+									"title": "Cash",
+									"amount": bpl['Cash'],
+									"total": "",
+									"percentage": bpl['Cash pct'],
+									"description": "of total income",
+									"$config": {
+										"title": {
+											"className": "text-right"
+										}
+									}
+								}, {
+									"title": "Scrap",
+									"amount": bpl['Scrap or any business related income'],
+									"total": "",
+									"percentage": bpl['Scrap or any business related income pct'],
+									"description": "of total income",
 									"$config": {
 										"title": {
 											"className": "text-right"
@@ -705,6 +734,17 @@ self.renderReady = function(eventName) {
 									"$config": {
 										"title": {
 											"className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Invoice",
+									"amount": bpl['Invoice'],
+									"total": "",
+									"percentage": bpl['Invoice pct'],
+									"description": "of total income",
+									"$config": {
+										"title": {
+											"className": "text-right"
 										}
 									}
 								}, {
@@ -774,10 +814,29 @@ self.renderReady = function(eventName) {
 					model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
 
 					var bankStatementSummary = (function() {
+						var averageGraphData = [{
+							"key": "Avg Bank Deposits",
+							"color": "limegreen",
+							"values": []
+						}, {
+							"key": "Avg Bank Balances",
+							"color": "firebrick",
+							"values": []
+						}];
+						var bouncesGraphData = [{
+							"key": "No of EMI Bounces",
+							"color": "limegreen",
+							"values": []
+						}, {
+							"key": "No of non EMI Bounces",
+							"color": "firebrick",
+							"values": []
+						}];
 						var totalAverageDeposits = 0;
 						var totalAverageWithdrawals = 0;
 						var totalChequeBounces = 0;
 						var totalEMIBounces = 0;
+						var graphStatement = {};
 						for (i = 0; i < model.business.customerBankAccounts.length; i++) {
 							var acc = model.business.customerBankAccounts[i];
 							var totalDeposits = 0;
@@ -790,6 +849,17 @@ self.renderReady = function(eventName) {
 								totalWithdrawals += stat.totalWithdrawals;
 								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
 								noOfChequeBounced += stat.noOfChequeBounced;
+
+								var graphKey = stat.startMonth;
+								graphStatement[graphKey] = graphStatement[graphKey] || {};
+								graphStatement[graphKey].totalDeposits = graphStatement[graphKey].totalDeposits || 0;
+								graphStatement[graphKey].totalDeposits += stat.totalDeposits;
+								graphStatement[graphKey].totalWithdrawals = graphStatement[graphKey].totalWithdrawals || 0;
+								graphStatement[graphKey].totalWithdrawals += stat.totalWithdrawals;
+								graphStatement[graphKey].noOfEmiChequeBounced = graphStatement[graphKey].noOfEmiChequeBounced || 0;
+								graphStatement[graphKey].noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
+								graphStatement[graphKey].noOfChequeBounced = graphStatement[graphKey].noOfChequeBounced || 0;
+								graphStatement[graphKey].noOfChequeBounced += stat.noOfChequeBounced;
 							}
 							acc.total = {
 								"startMonth": "Total",
@@ -806,13 +876,65 @@ self.renderReady = function(eventName) {
 							totalChequeBounces += acc.total.noOfChequeBounced;
 							acc.bankStatements.push(acc.total);
 						}
+						_.forOwn(graphStatement, function(v, k) {
+							k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
+							averageGraphData[0].values.push({
+								"x": k,
+								"y": v.totalDeposits / model.business.customerBankAccounts.length,
+								"series": 0
+							})
+							averageGraphData[1].values.push({
+								"x": k,
+								"y": (v.totalDeposits - v.totalWithdrawals) / model.business.customerBankAccounts.length,
+								"series": 1
+							})
+							bouncesGraphData[0].values.push({
+								"x": k,
+								"y": v.noOfEmiChequeBounced,
+								"series": 0
+							})
+							bouncesGraphData[1].values.push({
+								"x": k,
+								"y": v.noOfChequeBounced,
+								"series": 1
+							})
+						});
 						return {
 							"averageMonthlyDeposit": Math.round(totalAverageDeposits / model.business.customerBankAccounts.length),
 							"averageMonthlyWithdrawal": Math.round(totalAverageWithdrawals / model.business.customerBankAccounts.length),
 							"averageMonthlyBalance": Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length),
 							"totalAccounts": model.business.customerBankAccounts.length,
 							"totalEMIBounces": totalEMIBounces,
-							"totalChequeBounces": totalChequeBounces
+							"totalChequeBounces": totalChequeBounces,
+							"average": {
+								"graphData": averageGraphData,
+								"graphOptions": {
+									"chart": {
+										"type": "multiBarChart",
+										"height": 250,
+										"duration": 500,
+										"stacked": false,
+										"reduceXTicks": false
+									}
+								}
+							},
+							"bounces": {
+								"graphData": bouncesGraphData,
+								"graphOptions": {
+									"chart": {
+										"type": "multiBarChart",
+										"height": 250,
+										"duration": 500,
+										"stacked": false,
+										"rotateLabels": -90,
+										"showControls": false,
+										"reduceXTicks": false,
+										"xAxis": {
+											"tickPadding": 7
+										}
+									}
+								}
+							}
 						};
 					})();
 
