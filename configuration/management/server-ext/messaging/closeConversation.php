@@ -19,14 +19,12 @@ $response = get_response_obj();
 
 // Validation rules
 $rule = [
-	'process_id'=>'required',
-	'sub_process_id'=>'required'
+	'process_id'=>'required'
 ];
 
 // Custome error message
 $customeMessage = [
-	'process_id.required' => 'required',
-	'sub_process_id.required' => 'required'
+	'process_id.required' => 'required'
 ];
 
 $validator = get_validator()->make($query, $rule,$customeMessage);
@@ -37,15 +35,15 @@ if ($validator->fails()) {
 
 try {
 	// Create model
-	$conversation = Conversation::where([['process_id', '=', $query['process_id']], ['sub_process_id', '=', $query['sub_process_id']]])->first();
+	// $conversation = Conversation::where([['process_id', '=', $query['process_id']], ['sub_process_id', '=', $query['sub_process_id']]])->first();
+	$conversation = Conversation::where('process_id', '=', $query['process_id'])->whereNull("closed_at")->count();
 	if($conversation) {
-		$conversation->closed_at = date('Y-m-d H:i:s');
-		$conversation->save();
+		DB::table('ms_conversation')->where('process_id', $query['process_id'])->whereNull("closed_at")->update(['closed_at' => date('Y-m-d H:i:s')]);
 		$response->setStatusCode(200)->json($conversation->toArray());
-	} else {
-		$response->setStatusCode(500);
+		exit();
 	}
 } catch(Exception $e) {
+	echo $e->getMessage();
 }
-	$response->setStatusCode(500);
+$response->setStatusCode(500);
 ?>
