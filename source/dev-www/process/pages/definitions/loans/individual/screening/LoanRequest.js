@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper", "$filter", "Psychometric",
+"BundleManager", "PsychometricTestService", "LeadHelper", "$filter", "Psychometric", "Messaging",
 function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper, $filter, Psychometric){
+    BundleManager, PsychometricTestService, LeadHelper, $filter, Psychometric, Messaging){
 
     var branch = SessionStore.getBranch();
 
@@ -2767,10 +2767,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         .$promise
                         .then(function(res){
                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return navigateToQueue(model);
+                            return res;
                         }, function(httpRes){
                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);
+
+                        })
+                        .then(function(res){
+                            console.log("S1");
+                            console.log(res);
+                            return Messaging.closeConversation({process_id: res.loanAccount.id})
+                        })
+                        .then(function(res){
+                            console.log("S2");
+                            console.log(res);
+                            return navigateToQueue(model);
                         })
                         .finally(function(){
                             PageHelper.hideLoader();
@@ -3072,10 +3083,19 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     }
 
                                     PageHelper.showProgress("update-loan", "Done.", 3000);
-                                    return navigateToQueue(model);
+                                    return res;
                                 }, function(httpRes){
                                     PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                     PageHelper.showErrors(httpRes);
+                                })
+                                .then(function(res){
+                                    console.log("S1");
+                                    console.log(res);
+                                    return Messaging.closeConversation({process_id: res.loanAccount.id})
+                                })
+                                .then(function(res){
+                                    console.log(res);
+                                    return navigateToQueue(model);
                                 })
                                 .finally(function(){
                                     PageHelper.hideLoader();
