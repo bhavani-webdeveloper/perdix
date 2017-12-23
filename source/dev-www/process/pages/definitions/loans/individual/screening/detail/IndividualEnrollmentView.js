@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau"],
-    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau) {
+    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig"],
+    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig) {
         return {
             "type": "schema-form",
             "title": "INDIVIDUAL_ENROLLMENT",
@@ -18,6 +18,7 @@ define({
                     'household_fields': {},
                     'bank_fields': {},
                     'cibil': {},
+                    'highmark': {},
                     'customer_address': {}
                 };
 
@@ -252,9 +253,18 @@ define({
                     model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
                     model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
                     model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
-                    model.UIUDF.cibil.sanctioned_Amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
+                    model.UIUDF.cibil.sanctioned_amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
                     model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
                     model.UIUDF.cibil.amount_overdue = res.cibil.cibilLoanSummaryInfo[0].amountOverDue;
+                    // model.UIUDF.cibil.report = '<a href="" class="color-theme">Download</a>';
+
+                    model.UIUDF.highmark.score = res.highMark.highmarkScore;
+                    var highmarkFields = $(res.highMark.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
+                    model.UIUDF.highmark.active_accounts = highmarkFields[1].innerText.trim();
+                    model.UIUDF.highmark.overdue_accounts = highmarkFields[2].innerText.trim();
+                    model.UIUDF.highmark.current_balance = highmarkFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                    model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                    // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
                 }, function(e) {
                     model.cibil_highmark = null;
                 });
@@ -704,40 +714,47 @@ define({
                                 "key": "UIUDF.cibil.overdue_accounts",
                                 "title": "Overdue Accounts"
                             }, {
-                                "key": "UIUDF.cibil.sanctioned_Amount",
-                                "title": "Sanctioned Amount"
+                                "key": "UIUDF.cibil.sanctioned_amount",
+                                "title": "Sanctioned Amount",
+                                "type": "number"
                             }, {
                                 "key": "UIUDF.cibil.current_balance",
-                                "title": "Current Balance"
+                                "title": "Current Balance",
+                                "type": "number"
                             }, {
                                 "key": "UIUDF.cibil.amount_overdue",
-                                "title": "Overdue Balance"
-                            }, {
-                                "key": "",
-                                "title": "Report"
-                            }]
+                                "title": "Overdue Balance",
+                                "type": "number"
+                            }/*, {
+                                "key": "UIUDF.cibil.report",
+                                "title": "Report",
+                                "type": "html"
+                            }*/]
                         }, {
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "cibil_highmark.highMark.highmarkScore",
+                                "key": "UIUDF.highmark.score",
                                 "title": "Highmark Score"
                             }, {
-                                "key": "",
+                                "key": "UIUDF.highmark.active_accounts",
                                 "title": "Active Accounts"
                             }, {
-                                "key": "",
+                                "key": "UIUDF.highmark.overdue_accounts",
                                 "title": "Overdue Account"
                             }, {
-                                "key": "",
-                                "title": "Total Current Balance"
+                                "key": "UIUDF.highmark.current_balance",
+                                "title": "Total Current Balance",
+                                "type": "number"
                             }, {
-                                "key": "",
-                                "title": "Amount Disbursed"
-                            }, {
-                                "key": "",
-                                "title": "Report"
-                            }]
+                                "key": "UIUDF.highmark.disbursed_amount",
+                                "title": "Amount Disbursed",
+                                "type": "number"
+                            }/*, {
+                                "key": "UIUDF.highmark.report",
+                                "title": "Report",
+                                "type": "html"
+                            }*/]
                         }]
                     }]
                 }, {
