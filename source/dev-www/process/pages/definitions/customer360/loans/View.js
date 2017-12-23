@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         },
                         "required":["branch"]
                     },
-                    getSearchFormHelper: function() { 
+                    getSearchFormHelper: function() {
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
@@ -144,7 +144,18 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return true;
                                     }
-                                },
+                                },{
+                                    name: "VIEW_LOAN",
+                                    fn: function(item, index){
+                                        $state.go('Page.Bundle', {
+                                            pageName: 'loans.individual.screening.LoanViewList',
+                                            pageId: item.accountId
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
+                                }
                             ];
                         }
                     }
