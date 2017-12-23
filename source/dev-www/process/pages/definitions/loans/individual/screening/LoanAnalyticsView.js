@@ -208,6 +208,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				}
 				return deferred.promise;
 			},
+			post_pages_initialize: function(bundleModel) {
+			},
 			eventListeners: {
 				"financialSummary": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("financial-summary", params);
