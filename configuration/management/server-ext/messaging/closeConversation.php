@@ -35,7 +35,7 @@ try {
 	$conversation = Conversation::where('process_id', '=', $query['process_id'])->whereNull("closed_at")->count();
 	if($conversation) {
 		DB::table('ms_conversation')->where('process_id', $query['process_id'])->whereNull("closed_at")->update(['closed_at' => date('Y-m-d H:i:s')]);
-		$response->setStatusCode(200)->json($conversation->toArray());
+		$response->setStatusCode(200)->json(['closed_count' => $conversation]);
 		exit();
 	}
 } catch(Exception $e) {
