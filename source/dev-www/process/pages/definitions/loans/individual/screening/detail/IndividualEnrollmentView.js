@@ -364,7 +364,7 @@ define({
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
                     "title": "RELATIONSHIP_TO_BUSINESS",
-                    "condition": "model.enterpriseCustomerRelations.length!=0",
+                    "condition": "model.enterpriseRelationship",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -373,17 +373,17 @@ define({
                             "orientation": "vertical",
                             "items": [{
                                 "title": "RELATIONSHIP_TO_BUSINESS",
-                                "key": "enterpriseCustomerRelations[0].relationshipType"
+                                "key": "enterpriseRelationship.relationshipType"
                             }, {
                                 "title": "EXPERIENCE_IN_BUSINESS",
-                                "key": "enterpriseCustomerRelations[0].experienceInBusiness"
+                                "key": "enterpriseRelationship.experienceInBusiness"
 
                             }, {
                                 "title": "BUSINESS_INVOLVEMENT",
-                                "key": "enterpriseCustomerRelations[0].businessInvolvement"
+                                "key": "enterpriseRelationship.businessInvolvement"
                             }, {
                                 "title": "PARTNER_OF_ANY_OTHER_COMPANY",
-                                "key": "enterpriseCustomerRelations[0].partnerOfAnyOtherCompany"
+                                "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
                             }]
                         }]
                     }]
@@ -1032,26 +1032,13 @@ define({
                 },
                 "business-customer": function(bundleModel, model, params) {
                     model.business = params;
-                    model.enterpriseCustomerRelations = [];
-                    model.coApp_cnt = 1
-                    model.gua_cnt = 3;
-                    switch (model.bundlePageObj.pageClass) {
-                        case 'applicant':
-                            model.enterpriseCustomerRelations.push(params.enterpriseCustomerRelations[0]);
+                    for (i in params.enterpriseCustomerRelations) {
+                        var r = params.enterpriseCustomerRelations[i];
+                        if (model.customerId == r.linkedToCustomerId) {
+                            model.enterpriseRelationship = r;
                             break;
-                        case 'co-applicant':
-                            if (params.enterpriseCustomerRelations[model.coApp_cnt]) {
-                                model.enterpriseCustomerRelations.push(params.enterpriseCustomerRelations[model.coApp_cnt]);
-                                model.coApp_cnt++
-                            }
-                            break;
-                        case 'guarantor':
-                            if (params.enterpriseCustomerRelations[model.gua_cnt]) {
-                                model.enterpriseCustomerRelations.push(params.enterpriseCustomerRelations[model.gua_cnt]);
-                                model.gua_cnt++;
-                            }
-                            break;
-                    };
+                        }
+                    }
                     if (model.business.centreId) {
                         model.business.centreName = filterFilter(formHelper.enum('centre').data, {
                             value: model.business.centreId

@@ -311,7 +311,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
-                "title": "Machinery/Stocks/Non-Machinery Asset Detials",
+                "title": "Machinery/Stocks/Non-Machinery Asset Details",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
