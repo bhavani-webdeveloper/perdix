@@ -71,13 +71,13 @@ define({
                         model.UIUDF.liability_fields.outstandingAmount += liability.outstandingAmountInPaisa;
                         switch (liability.loanSource) {
                             case "BANK":
-                                model.UIUDF.liability_fields.loan_from_bank += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_bank += parseInt(liability.loanAmountInPaisa);
                                 break;
                             case "MFI/NBFC":
-                                model.UIUDF.liability_fields.loan_from_NBFC_MFI += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_NBFC_MFI += parseInt(liability.loanAmountInPaisa);
                                 break;
                             default:
-                                model.UIUDF.liability_fields.loan_from_others += liability.loanAmountInPaisa;
+                                model.UIUDF.liability_fields.loan_from_others += parseInt(liability.loanAmountInPaisa);
                                 break;
 
                         };
@@ -105,8 +105,8 @@ define({
                     _.each(model.customer.customerBankAccounts, function(account) {
                         _.each(account.bankStatements, function(bankslips) {
                             model.UIUDF.bank_fields.bankStatements.push(bankslips);
-                            model.UIUDF.bank_fields.total_Deposit += bankslips.totalDeposits;
-                            model.UIUDF.bank_fields.total_Withdrawals += bankslips.totalWithdrawals;
+                            model.UIUDF.bank_fields.total_Deposit += parseInt(bankslips.totalDeposits);
+                            model.UIUDF.bank_fields.total_Withdrawals += parseInt(bankslips.totalWithdrawals);
                             model.UIUDF.bank_fields.total_bankstatement++;
                             model.UIUDF.bank_fields.tot_checque_bounce += bankslips.noOfChequeBounced;
                             model.UIUDF.bank_fields.tot_EMI_bounce += bankslips.noOfEmiChequeBounced;
@@ -1032,8 +1032,8 @@ define({
                     }
 
                     if (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant') {
-                        model.household_data.data[0]['Total Incomes'] = model.household_data.data[0]['Salary from business'] + model.household_data.data[0]['Other Income/salaries'] + model.household_data.data[0]['Family Member Incomes'];
-                        model.household_data.data[0]['Total Expenses'] = model.household_data.data[0]['Expenses Declared or based on the educational expense whichever is higher'] + model.household_data.data[0]['EMI\'s of household liabilities'];
+                        model.household_data.data[0]['Total Incomes'] = parseInt(model.household_data.data[0]['Salary from business']) + parseInt(model.household_data.data[0]['Other Income/salaries']) + parseInt(model.household_data.data[0]['Family Member Incomes']);
+                        model.household_data.data[0]['Total Expenses'] = parseInt(model.household_data.data[0]['Expenses Declared or based on the educational expense whichever is higher']) + parseInt(model.household_data.data[0]['EMI\'s of household liabilities']);
                         model.household = [];
                         model.household.push({
                             income: model.household_data.data[0]['Total Incomes'],
