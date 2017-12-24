@@ -271,7 +271,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                     },
                     "deviation-loaded":function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-deviation", params);
-                    }
+                    },
+                    "financialSummary": function(pageObj, bundleModel, params) {
+                    BundleManager.broadcastEvent("financial-summary", params);
+                },
+                "business": function(pageObj, bundleModel, params) {
+                    BundleManager.broadcastEvent("business-customer", params);
+                }
         		}
         	}
         }
