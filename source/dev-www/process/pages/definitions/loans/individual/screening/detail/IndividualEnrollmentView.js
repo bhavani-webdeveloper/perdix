@@ -122,6 +122,14 @@ define({
                     /*Cibil/highmark fields*/
 
                     /*Household fields */
+                    
+                    var decExpanse =0;
+
+                    _.each(model.customer.expenditures,function(expanse){
+                        decExpanse += expanse.annualExpenses;
+
+                    })
+                    model.decHouseExpanse =decExpanse;
 
                     /*Reference Check fields*/
                     model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
@@ -163,11 +171,11 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "UIUDF.family_fields.total_household_income",
+                                    "key": "decHouseExpanse",
                                     "type": "amount",
                                     "title": "Total Household income"
                                 }, {
-                                    "key": "customer.financialSummaries[].householdExpenses",
+                                    "key": "decHouseExpanse",
                                     "type": "amount",
                                     "title": "Declared Household Expenditure"
                                 }]
