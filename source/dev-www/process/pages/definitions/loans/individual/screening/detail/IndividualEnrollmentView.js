@@ -121,17 +121,8 @@ define({
 
                     /*Cibil/highmark fields*/
 
-                    /*Household fields */
-                    
-                    var decExpanse =0;
 
-                    _.each(model.customer.expenditures,function(expanse){
-                        decExpanse += parseInt(expanse.annualExpenses);
-
-                    })
-                    model.decHouseExpanse =decExpanse;
-
-                    /*Reference Check fields*/
+                      /*Reference Check fields*/
                     model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                     var count_neg_response = 0;
                     _.each(model.customer.verifications, function(verification) {
@@ -144,7 +135,19 @@ define({
                     } else {
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'positive';
                     }
-                    /*Family Section*/
+
+
+                    /*Household fields */
+                    
+                    var decExpanse =0;
+
+                    _.each(model.customer.expenditures,function(expanse){
+                        decExpanse += parseInt(expanse.annualExpenses);
+
+                    })
+                    model.decHouseExpanse =decExpanse;
+
+                                      /*Family Section*/
                     self.form= self.formSource;
                     var family = {
                         "type": "box",
