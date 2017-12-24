@@ -297,7 +297,6 @@ var navigateToQueue = function(model) {
                         "items": [{
                             "key": "loanAccount.frequencyRequested",
                             "title": "Requested Frequency",
-                            "type": "number"
                         }, {
                             "key": "loanAccount.tenureRequested",
                             "title": "Requested Tenure"/*,
@@ -305,9 +304,8 @@ var navigateToQueue = function(model) {
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Expected Interest Rate",
-                            "type": "number"
                         }, {
-                            "key": "loanAccount.expectedEmi",
+                            "key": "loanAccount.estimatedEmi",
                             "title": "Expected Kinara EMI",
                             "type": "amount"
                         }, {

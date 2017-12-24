@@ -114,9 +114,9 @@ define({
                         });
                     });
                     if (model.UIUDF.bank_fields.total_bankstatement != 0) {
-                        model.UIUDF.bank_fields.avg_deposit = (model.UIUDF.bank_fields.total_Deposit / model.UIUDF.bank_fields.total_bankstatement);
-                        model.UIUDF.bank_fields.avg_withdrawals = (model.UIUDF.bank_fields.total_Withdrawals / model.UIUDF.bank_fields.total_bankstatement);
-                        model.UIUDF.bank_fields.avgMonBal = model.UIUDF.bank_fields.avg_deposit-model.UIUDF.bank_fields.avg_withdrawals;
+                        model.UIUDF.bank_fields.avg_deposit = Math.round(model.UIUDF.bank_fields.total_Deposit / model.UIUDF.bank_fields.total_bankstatement);
+                        model.UIUDF.bank_fields.avg_withdrawals = Math.round(model.UIUDF.bank_fields.total_Withdrawals / model.UIUDF.bank_fields.total_bankstatement);
+                        model.UIUDF.bank_fields.avgMonBal = Math.abs(Math.round(model.UIUDF.bank_fields.avg_deposit-model.UIUDF.bank_fields.avg_withdrawals));
                     }
 
                     /*Cibil/highmark fields*/
@@ -304,7 +304,7 @@ define({
                                 "key": "customer.aadhaarNo",
                                 "title": "ID - Aadhar No."
                             }, {
-                                "key": "customer.panNo",
+                                "key": "customer.identityProofNo",
                                 "title": "ID - PAN no."
                             }, {
                                 "key": "customer.language",

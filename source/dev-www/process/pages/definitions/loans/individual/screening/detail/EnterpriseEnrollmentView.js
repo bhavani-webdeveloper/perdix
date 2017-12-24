@@ -41,6 +41,25 @@ define({
                             "subStandard": model.customer.enterpriseBureauDetails[0].subStandard
                         }
                     }
+
+
+                    /*AVG MONTHLY INCOME EMPLOYEE DETAILS*/
+                    var avgExp=0;
+                    
+                    if(model.customer.expenditures && model.customer.expenditures.length !=0){
+                        var expCount=0;
+                    _.each(model.customer.expenditures,function(annualExp){
+                        expCount ++;
+                          avgExp += annualExp.annualExpenses;
+                    })
+                    avgExp=avgExp/expCount;
+                    model.employee_avgExp=avgExp;
+
+                }
+                else {
+                    model.employee_avgExp="NA";
+                }
+                    
                     /* Machin Details*/
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
@@ -300,7 +319,7 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.enterprise.avgMonthlySalary",
+                            "key": "employee_avgExp",
                             "title": "Average Monthly Salary",
                             "type": "amount"
                         }]

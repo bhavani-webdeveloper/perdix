@@ -127,7 +127,7 @@ self.renderForm = function() {
 					"data": "totalWithdrawals",
 					"className": "text-right",
 					"render": function(data, type, full, meta) {
-						return irfCurrencyFilter(full.totalDeposits - data, null, null, "decimal") + ' ' + irfElementsConfig.currency.iconHtml;
+						return irfCurrencyFilter(Math.abs(full.totalDeposits - data), null, null, "decimal") + ' ' + irfElementsConfig.currency.iconHtml;
 					}
 				}, {
 					"title": "No of EMI Bounces",
@@ -453,6 +453,7 @@ self.renderForm = function() {
 		"type": "box",
 		"colClass": "col-sm-12",
 		"notitle": true,
+		"title": "Balance Sheet",
 		"condition": "model.currentStage != 'ScreeningReview'",
 		"items": [{
 			"type": "section",
@@ -472,7 +473,7 @@ self.renderForm = function() {
 				'<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | irfCurrency}}</td><td></td><td></td></tr>' +
 				'<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | irfCurrency}}</td><td></td><td></td></tr>' +
 				'<trclass="table-sub-header"><th>{{"TOTAL_CURRENT_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</th><th>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalCurrentLiabilities | irfCurrency}}</th></tr>' +
-				'<tr ><td >{{"FIXED_ASSETS" | translate}}</td><td >{{"LONG_TERM_LIABILITIES" | translate}}</td></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>' +
+				'<tr ><td >{{"FIXED_ASSETS" | translate}}</td><td></td><td >{{"LONG_TERM_LIABILITIES" | translate}}</td><td></td></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>' +
 				'<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>' +
 				'<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>' +
 				'<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>' +
@@ -601,6 +602,8 @@ self.renderReady = function(eventName) {
 					}
 
 					var bpl = params[8].data[0];
+					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
+					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance
 
 					model.summary = {
 						"cashFlowDetails": {
@@ -758,6 +761,85 @@ self.renderReady = function(eventName) {
 											"className": "text-bold"
 										}
 									}
+								},{
+									"title": "EBITDA",
+									"amount": "",
+									"total": bpl['EBITDA'],
+									"percentage": bpl['EBITDA pct'],
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Gross Income",
+									"amount": "",
+									"total": bpl['Gross Income'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Net Income",
+									"amount": "",
+									"total": bpl['Net Income'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Household Net Income",
+									"amount": "",
+									"total": bpl['Net Business Income'],
+									"percentage": bpl['Net Business Income pct'],
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Kinara Emi",
+									"amount": "",
+									"total": bpl['Kinara EMI'],
+									"percentage": bpl['Kinara EMI pct'],
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+
+								},{
+									"title": "Average Bank Balance",
+									"amount": bpl['avgMonBal'] ,
+									"total": "",
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Average Bank Deposit",
+									"amount": bpl['avgMonDep'] ,
+									"total": "",
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								
 								}]
 							}
 						}
@@ -902,7 +984,7 @@ self.renderReady = function(eventName) {
 						return {
 							"averageMonthlyDeposit": Math.round(totalAverageDeposits / model.business.customerBankAccounts.length),
 							"averageMonthlyWithdrawal": Math.round(totalAverageWithdrawals / model.business.customerBankAccounts.length),
-							"averageMonthlyBalance": Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length),
+							"averageMonthlyBalance": Math.abs(Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length)),
 							"totalAccounts": model.business.customerBankAccounts.length,
 							"totalEMIBounces": totalEMIBounces,
 							"totalChequeBounces": totalChequeBounces,
