@@ -283,12 +283,14 @@ define({
                             "title": "Co-Applicant ID"
                         }, {
                             "key": "customer_detail.coApplicants.id[1]",
-                            "title": "Co-Applicant ID"
+                            "title": "Co-Applicant ID",
+                            "condition": "model.customer_detail.coApplicants.id[1]"
                         }, {
                             "key": "customer_detail.guarantors.id[0]",
-                            "title": "Guarantor ID"
+                            "title": "Guarantor ID",
+                            "condition": "model.customer_detail.guarantors.id[0]"
                         }, {
-                            "key": "",
+                            "key": "customer.firstName",
                             "title": "Enterprise Name"
                         }, {
                             "key": "loanAccount.productCategory",
@@ -312,10 +314,12 @@ define({
                             "title": "URN"
                         }, {
                             "key": "customer_detail.coApplicants.urn[1]",
-                            "title": "URN"
+                            "title": "URN",
+                            "condition": "model.customer_detail.coApplicants.id[1]"
                         }, {
                             "key": "customer_detail.guarantors.urn[0]",
-                            "title": "URN"
+                            "title": "URN",
+                            "condition": "model.customer_detail.guarantors.id[0]"
                         }, {
                             "key": "customer.firstName",
                             "title": "Applicant Name"
@@ -325,8 +329,7 @@ define({
                             "type": "number"*/
                         }, {
                             "key": "loanAccount.expectedInterestRate",
-                            "title": "Rate of Interest",
-                            "type": "number"
+                            "title": "Rate of Interest"
                         }]
                     }]
                 }]

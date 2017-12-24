@@ -171,7 +171,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "decHouseExpanse",
+                                    "key": "UIUDF.family_fields.total_household_income",
                                     "type": "amount",
                                     "title": "Total Household income"
                                 }, {
@@ -651,10 +651,10 @@ define({
                                     "numberType": "tel"
                                 }, {
                                     "title": "Average Bank Balance",
-                                    "data": ""
+                                    "data": "BankAvgBal"
                                 }, {
                                     "title": "Average Bank Deposit",
-                                    "data": ""
+                                    "data": "BankAvgDep"
                                 }, {
                                     "title": "Account Name",
                                     "data": "customerNameAsInBank"
@@ -990,6 +990,19 @@ define({
             },
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
+                    model.bankDetails =params[10].BankAccounts;
+                    model.BankAvgBal=0;
+                    model.BankAvgDep=0;
+                    _.each(model.bankDetails,function(bankDetails){
+                        if(bankDetails['Customer Relation']=='Applicant'){
+                            model.BankAvgBal += bankDetails['Average Bank Balance'];
+                            model.BankAvgDep += bankDetails['Average Bank Deposit'];
+                        }
+
+
+
+
+                    })
                     model._scores = params;
                     model.psychometricScores = model._scores[14].sections;
                     model.houseHoldPL = model._scores[7].sections;

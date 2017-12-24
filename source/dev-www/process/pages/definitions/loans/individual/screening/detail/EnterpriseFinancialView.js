@@ -681,6 +681,39 @@ self.renderReady = function(eventName) {
 											"className": "text-bold"
 										}
 									}
+								},{
+									"title": "EBITDA",
+									"amount": "",
+									"total": bpl['EBITDA'],
+									"percentage": bpl['EBITDA pct'],
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Gross Income",
+									"amount": "",
+									"total": bpl['Gross Income'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Net Income",
+									"amount": "",
+									"total": bpl['Net Income'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
 								}]
 							},
 							"details": {

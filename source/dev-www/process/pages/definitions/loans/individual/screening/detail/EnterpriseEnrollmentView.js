@@ -28,6 +28,13 @@ define({
                     var s5 = model.customer.state;
                     model.business_address_html = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ', (s4 == null ? "" : s4), ' \n', (s5 == null ? "" : s5));
 */
+                    model.customer.presetAddress = [
+                        model.customer.doorNo,
+                        model.customer.street,
+                        model.customer.district,
+                        model.customer.state
+                    ].filter(a=>a).join(', ')+' - '+model.customer.pincode;
+
                     /*CBREPORT*/
 
                     if (_.isArray(model.customer.enterpriseBureauDetails) && model.customer.enterpriseBureauDetails.length) {
@@ -214,20 +221,9 @@ define({
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                         },{
-                            "type":"section",
-                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-20px; padding-left:100px; font-weight:bold;"><sf-decorator  form="item"></sf-decorator><div></div>',
-                            "items": [{
-                            "type": "section",
-                            "htmlClass": "col-sm-12",
                             "title": "Present Address",
-                            "html": '{{model.customer.doorNo==null? "": model.customer.doorNo.concat(",")}}' +'<br>'+
-                                '{{model.customer.street==null? "": model.customer.street.concat(",")}}' +'<br>'+
-                                '{{model.customer.district==null? "": model.customer.district.concat(",")}}'+'<br>'+
-                                '{{model.customer.state==null? "": model.customer.state.concat(",")}}'+'<br>'+
-                                '{{model.customer.pincode==null? "": model.customer.pincode}}'+'<br>'+
-                                ''
-
-                            }]
+                            "key": "customer.presetAddress"
+                           
                         }]
                     }, {
                         "type": "grid",
