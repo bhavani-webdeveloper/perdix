@@ -67,8 +67,8 @@ define({
                     model.UIUDF.liability_fields.loan_from_NBFC_MFI = 0;
                     model.UIUDF.liability_fields.loan_from_others = 0;
                     _.each(model.customer.liabilities, function(liability) {
-                        model.UIUDF.liability_fields.total_monthly_installment += liability.installmentAmountInPaisa;
-                        model.UIUDF.liability_fields.outstandingAmount += liability.outstandingAmountInPaisa;
+                        model.UIUDF.liability_fields.total_monthly_installment +=  parseInt(liability.installmentAmountInPaisa);
+                        model.UIUDF.liability_fields.outstandingAmount += parseInt(liability.outstandingAmountInPaisa);
                         switch (liability.loanSource) {
                             case "BANK":
                                 model.UIUDF.liability_fields.loan_from_bank += parseInt(liability.loanAmountInPaisa);
@@ -126,7 +126,7 @@ define({
                     var decExpanse =0;
 
                     _.each(model.customer.expenditures,function(expanse){
-                        decExpanse += expanse.annualExpenses;
+                        decExpanse += parseInt(expanse.annualExpenses);
 
                     })
                     model.decHouseExpanse =decExpanse;

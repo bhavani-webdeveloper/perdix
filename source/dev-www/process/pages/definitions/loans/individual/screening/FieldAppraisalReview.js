@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                     pageClass: 'summary',
                     minimum: 1,
                     maximum: 1,
-                    order: 70
+                    order: 5
                 }
             ],
             "bundlePages": [],
@@ -163,6 +163,18 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                     }
                                 }
 
+                                  $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        cbModel: {
+                                            customerId: res.customerId,
+                                            loanId: bundleModel.loanId,
+                                            scoreName: 'RiskScore3',
+                                            customerDetail: bundleModel.customer_detail
+                                        }
+                                    }
+                                });
+
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -227,17 +239,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                         }
                                     }
                                 });*/
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3',
-                                            customerDetail: bundleModel.customer_detail
-                                        }
-                                    }
-                                });
+                              
 
 
                                 deferred.resolve();
