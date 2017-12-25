@@ -147,10 +147,10 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "customer.enterprise.id",
+                            "key": "customer.id",
                             "title": "Entity ID"
                         }, {
-                            "key": "businessName",
+                            "key": "customer.firstName",
                             "title": "Company Name"
                         }, {
                             "key": "customer.enterprise.businessType",

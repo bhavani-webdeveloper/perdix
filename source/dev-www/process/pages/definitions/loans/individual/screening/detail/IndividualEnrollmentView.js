@@ -59,6 +59,7 @@ define({
                             });
                         }
                     });
+                    model.UIUDF.family_fields.total_household_income +=parseInt(model.customer.salary);
                     /*Liability fields*/
                     model.UIUDF.liability_fields.active_loans = model.customer.liabilities.length;
                     model.UIUDF.liability_fields.total_monthly_installment = 0;
@@ -87,7 +88,7 @@ define({
                     model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length; /* what assets i need to take*/
                     model.UIUDF.household_fields.total_Value = 0;
                     _.each(model.customer.physicalAssets, function(Assets) {
-                        model.UIUDF.household_fields.total_Value += Assets.ownedAssetValue;
+                        model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
                     });
 
                     /*Bank fields*/
@@ -232,7 +233,7 @@ define({
                                         }
                                     }, {
                                         "title": "INCOME_SOURCE",
-                                        "data": "",
+                                        "data": "incomeSource",
                                         render: function(data, type, full, meta) {
                                             if (full.incomes[0])
                                                 return full.incomes[0].incomeSource;
@@ -240,7 +241,7 @@ define({
                                         }
                                     }, {
                                         "title": "INCOME",
-                                        "data": "",
+                                        "data": "incomeEarned",
                                         render: function(data, type, full, meta) {
                                             if (full.incomes[0])
                                                 return irfCurrencyFilter(full.incomes[0].incomeEarned);
@@ -255,6 +256,143 @@ define({
                         }]
                     };
                     self.form.splice(2, 0, family);
+
+                    var bankAccountDetail ={
+                    "type": "box",
+                    "readonly": true,
+                    "colClass": "col-sm-12",
+                    "overrideType": "default-view",
+                    "title": "Bank Account Detail",
+                    "condition": "model.customer.customerBankAccounts.length != 0",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "BankAvgDep",
+                                "title": "Average Monthly Deposit",
+                                "type": "amount"
+                            }, {
+                                "key": "BankAvgWithdrawl",
+                                "title": "Average Monthly Withdrawals",
+                                "type": "amount"
+                            }, {
+                                "key": "BankAvgBal",
+                                "title": "Average Monthly Balances",
+                                "type": "amount"
+                            }]
+                        }, {
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "totalAccount",
+                                "title": "Total no of Account",
+                                "type": "number"
+                            }, {
+                                "key": "checkBounced",
+                                "title": "Total no of Cheque Bounce",
+                                "type": "number"
+                            }, {
+                                "key": "emiBounced",
+                                "title": "Total no EMI Bounce",
+                                "type": "number"
+                            }]
+                        }]
+                    }, {
+                        "type": "expandablesection",
+                        "items": [{
+                            "type": "tableview",
+                            "key": "customer.customerBankAccounts",
+                            "notitle": true,
+                            "transpose": true,
+                            "selectable": false,
+                            "editable": false,
+                            "tableConfig": {
+                                "searching": false,
+                                "paginate": false,
+                                "pageLength": 10,
+                            },
+                            getColumns: function() {
+                                return [{
+                                    "title": "Bank Name",
+                                    "data": "customerBankName"
+                                }, {
+                                    "title": "Branch Name",
+                                    "data": "customerBankBranchName"
+                                }, {
+                                    "title": "IFSC Code",
+                                    "data": "ifscCode"
+                                }, {
+                                    "title": "Account Number",
+                                    "data": "accountNumber",
+                                    "type": "password",
+                                    "inputmode": "number",
+                                    "numberType": "tel"
+                                }, {
+                                    "title": "Average Bank Balance",
+                                    "data": "BankAvgBal",
+                                     render: function(data, type, full, meta) {
+                                        if(model.BankAvgBal)
+                                        return irfCurrencyFilter(model.BankAvgBal)
+                                     else return "NA"
+                                }
+                                }, {
+                                    "title": "Average Bank Deposit",
+                                    "data": "BankAvgDep",
+                                     render: function(data, type, full, meta) {
+                                        if(model.BankAvgDep)
+                                        return irfCurrencyFilter(model.BankAvgDep)
+                                     else return "NA"
+                                 }
+                                }, {
+                                    "title": "Account Name",
+                                    "data": "customerNameAsInBank"
+                                }, {
+                                    "title": "Account Type",
+                                    "data": "accountType"
+                                }, {
+                                    "title": "BANKING_SINCE",
+                                    "data": "bankingSince"
+
+                                }, {
+                                    "title": "NET_BANKING_AVAILABLE",
+                                    "data": "netBankingAvailable"
+                                }, {
+                                    "title": "Limit",
+                                    "data": "limit"
+                                }, {
+
+                                    "title": "Bank Statement's",
+                                    "data": "",
+                                    render: function(data, type, full, meta) {
+                                        var title = [];
+                                        var url = [];
+                                        for (i = 0; i < full.bankStatements.length; i++) {
+                                            url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.bankStatements[i].bankStatementPhoto);
+                                            title.push(moment(full.bankStatements[i].startMonth).format('MMMM YYYY'));
+                                        }
+                                        //return '<div  ng-repeat = "i in ' + full.bankStatements + 'track by $index"  ><p><a  href="' + url + '[$index] ">' + title + '[$index]</a></p></div>'
+                                        return '<div >' +
+                                            '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
+                                            '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
+                                            '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
+                                            '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
+                                            '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
+                                            '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
+                                            '</div>'
+                                    }
+                                }];
+                            },
+                            getActions: function() {
+                                return [];
+                            }
+                        }]
+                    }]
+                };
+
+                self.form.splice(4, 0, bankAccountDetail);
                 });
 
                 CreditBureau.getCBDetails({"customerId": model.customerId}).$promise.then(function(res) {
@@ -581,129 +719,6 @@ define({
                     }]
                 }, {
                     "type": "box",
-                    "readonly": true,
-                    "colClass": "col-sm-12",
-                    "overrideType": "default-view",
-                    "title": "Bank Account Detail",
-                    "condition": "model.customer.customerBankAccounts.length != 0",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "UIUDF.bank_fields.avg_deposit",
-                                "title": "Average Monthly Deposit",
-                                "type": "amount"
-                            }, {
-                                "key": "UIUDF.bank_fields.avg_withdrawals",
-                                "title": "Average Monthly Withdrawals",
-                                "type": "amount"
-                            }, {
-                                "key": "UIUDF.bank_fields.avgMonBal",
-                                "title": "Average Monthly Balances",
-                                "type": "amount"
-                            }]
-                        }, {
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "UIUDF.bank_fields.tot_accounts",
-                                "title": "Total no of Account",
-                                "type": "number"
-                            }, {
-                                "key": "UIUDF.bank_fields.tot_checque_bounce",
-                                "title": "Total no of Cheque Bounce",
-                                "type": "number"
-                            }, {
-                                "key": "UIUDF.bank_fields.tot_EMI_bounce",
-                                "title": "Total no EMI Bounce",
-                                "type": "number"
-                            }]
-                        }]
-                    }, {
-                        "type": "expandablesection",
-                        "items": [{
-                            "type": "tableview",
-                            "key": "customer.customerBankAccounts",
-                            "notitle": true,
-                            "transpose": true,
-                            "selectable": false,
-                            "editable": false,
-                            "tableConfig": {
-                                "searching": false,
-                                "paginate": false,
-                                "pageLength": 10,
-                            },
-                            getColumns: function() {
-                                return [{
-                                    "title": "Bank Name",
-                                    "data": "customerBankName"
-                                }, {
-                                    "title": "Branch Name",
-                                    "data": "customerBankBranchName"
-                                }, {
-                                    "title": "IFSC Code",
-                                    "data": "ifscCode"
-                                }, {
-                                    "title": "Account Number",
-                                    "data": "accountNumber",
-                                    "type": "password",
-                                    "inputmode": "number",
-                                    "numberType": "tel"
-                                }, {
-                                    "title": "Average Bank Balance",
-                                    "data": "BankAvgBal"
-                                }, {
-                                    "title": "Average Bank Deposit",
-                                    "data": "BankAvgDep"
-                                }, {
-                                    "title": "Account Name",
-                                    "data": "customerNameAsInBank"
-                                }, {
-                                    "title": "Account Type",
-                                    "data": "accountType"
-                                }, {
-                                    "title": "BANKING_SINCE",
-                                    "data": "bankingSince"
-
-                                }, {
-                                    "title": "NET_BANKING_AVAILABLE",
-                                    "data": "netBankingAvailable"
-                                }, {
-                                    "title": "Limit",
-                                    "data": "limit"
-                                }, {
-
-                                    "title": "Bank Statement's",
-                                    "data": "",
-                                    render: function(data, type, full, meta) {
-                                        var title = [];
-                                        var url = [];
-                                        for (i = 0; i < full.bankStatements.length; i++) {
-                                            url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.bankStatements[i].bankStatementPhoto);
-                                            title.push(moment(full.bankStatements[i].startMonth).format('MMMM YYYY'));
-                                        }
-                                        //return '<div  ng-repeat = "i in ' + full.bankStatements + 'track by $index"  ><p><a  href="' + url + '[$index] ">' + title + '[$index]</a></p></div>'
-                                        return '<div >' +
-                                            '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
-                                            '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
-                                            '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
-                                            '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
-                                            '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
-                                            '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
-                                            '</div>'
-                                    }
-                                }];
-                            },
-                            getActions: function() {
-                                return [];
-                            }
-                        }]
-                    }]
-                }, {
-                    "type": "box",
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
                     "title": "CIBIL/Highmark",
@@ -996,11 +1011,21 @@ define({
                     model.bankDetails =params[10].BankAccounts;
                     model.BankAvgBal=0;
                     model.BankAvgDep=0;
+                    model.BankAvgWithdrawl=0;
+                    model.checkBounced=0;
+                    model.emiBounced=0;
+                    var count=0
                     _.each(model.bankDetails,function(bankDetails){
                         if(bankDetails['Customer Relation']=='Applicant'){
-                            model.BankAvgBal += bankDetails['Average Bank Balance'];
-                            model.BankAvgDep += bankDetails['Average Bank Deposit'];
+                            count ++;
+                            model.BankAvgBal += parseInt(bankDetails['Average Bank Balance']);
+                            model.BankAvgDep += parseInt(bankDetails['Average Bank Deposit']);
+                            model.checkBounced = bankDetails['Total Cheque Bounced (Non EMI)'];
+                            model.emiBounce += bankDetails['Total EMI Bounced'];
+
                         }
+                        model.BankAvgWithdrawl =Math.abs(model.BankAvgDep - model.BankAvgBal);
+                        model.totalAccount = count;
 
 
 
@@ -1013,7 +1038,7 @@ define({
                     model.psy_coapp_count = 1;
                     switch (model.bundlePageObj.pageClass) {
                         case 'applicant':
-                            model.household_data = model.houseHoldPL[model.houseHoldPL.length - 1];
+                            model.household_data = model.houseHoldPL[0];
                             model.psy_data = model.psychometricScores[0];
                             break;
                         case 'co-applicant':
