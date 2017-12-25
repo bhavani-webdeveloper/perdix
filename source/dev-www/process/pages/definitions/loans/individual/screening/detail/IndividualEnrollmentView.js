@@ -1038,7 +1038,7 @@ define({
                     model.psy_coapp_count = 1;
                     switch (model.bundlePageObj.pageClass) {
                         case 'applicant':
-                            model.household_data = model.houseHoldPL[0];
+                           model.household_data = model.houseHoldPL[model.houseHoldPL.length-1]
                             model.psy_data = model.psychometricScores[0];
                             break;
                         case 'co-applicant':
@@ -1048,6 +1048,17 @@ define({
                             model.psy_coapp_count++
                                 break;
                     };
+                   /* for(var i=0;i<model.houseHoldPL.length;i++){
+                    switch(model.houseHoldPL[i].relation_detail.Contains()){
+                        case 'applicant' :
+                        model.household_data = model.houseHoldPL[i];
+                        case 'co-applicant':
+                        model.household_data =model.houseHoldPL[i];
+                    }
+                }
+*/
+
+
                     if (model.psy_data && (model.bundlePageObj.pageClass == 'applicant' || model.bundlePageObj.pageClass == 'co-applicant')) {
                         model.psy_data.passOutOf = 0;
                         model.psy_data.psyTotalPara = 0;
