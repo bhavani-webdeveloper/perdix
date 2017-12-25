@@ -27,7 +27,7 @@ define({
                         model.reminder.repaymentReminderDTO = res.repaymentReminderDTO;
                         model.reminder.repaymentCurrentHistories = res.repaymentCurrentHistories;
                         model.reminder.repaymentPreviousHistories = res.repaymentPreviousHistories;
-                        model.reminder.repaymentReminderDTO.interactionDate = model.currentDate;
+                        model.reminder.repaymentReminderDTO.interactionDate = Utils.getCurrentDateTime();
                         var branches = formHelper.enum('branch').data;
                         var branchName = null;
                         for (var i = 0; i < branches.length; i++) {
@@ -52,16 +52,16 @@ define({
                                 $log.info(response);
                                 model.reminder.repaymentReminderDTO.coAppArray = [];
                                 model.reminder.repaymentReminderDTO.guarantorArray = [];
-                                if (_.hasIn(response, 'loanCustomer') && response.loanCustomer.relation == "Loan Customer"){ 
+                                if (_.hasIn(response, 'loanCustomer') && response.loanCustomer.relation == "Loan Customer"){
                                     model.reminder.repaymentReminderDTO.businessPhoneNo = response.loanCustomer.mobile_phone;
                                 }
-                                if (_.hasIn(response, 'applicant') && response.applicant.relation.toLowerCase() == 'applicant'){ 
+                                if (_.hasIn(response, 'applicant') && response.applicant.relation.toLowerCase() == 'applicant'){
                                     model.reminder.repaymentReminderDTO.applicantName = response.applicant.first_name;
                                     model.reminder.repaymentReminderDTO.mobile_phone = response.applicant.mobile_phone;
                                     if (model.reminder.repaymentReminderDTO.mobile_phone == null) {
                                         model.reminder.repaymentReminderDTO.mobile_phone = 'NA';
                                     }
-                                } 
+                                }
                                 if (_.hasIn(response, 'coApplicants') && response.coApplicants[0] && response.coApplicants[0].relation == 'Co-Applicant') {
                                     for (i=0;i<response.coApplicants.length;i++) {
                                         model.reminder.repaymentReminderDTO.coAppArray.push(response.coApplicants[i]);
@@ -69,7 +69,7 @@ define({
                                             model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone = 'NA';
                                         }
                                     }
-                                } 
+                                }
                                 if (_.hasIn(response, 'guarantors') && response.guarantors[0] && response.guarantors[0].relation.toLowerCase() == 'guarantors') {
                                     for (i=0;i<response.guarantors.length;i++) {
                                         model.reminder.repaymentReminderDTO.guarantorArray.push(response.guarantorArray[i]);
@@ -90,7 +90,7 @@ define({
                                 });
 
                         RepaymentReminder.getAccountDetails(
-                            { 
+                            {
                                 accountNumber: model.reminder.repaymentReminderDTO.accountNumber
                              }).$promise
                                .then(
@@ -104,8 +104,8 @@ define({
                                             model.accountDetails[i].installmentAmount = (model.accountDetails[i].installmentAmount/100);
                                             model.accountDetails[i].repaymentAmountInPaisa = (model.accountDetails[i].repaymentAmountInPaisa/100);
                                         }
-                                    }); 
-                               
+                                    });
+
                         PageHelper.hideLoader();
                     }
                 );
@@ -356,7 +356,7 @@ define({
                     $log.info("Inside submit()");
                     PageHelper.showLoader();
                     PageHelper.showProgress("Repayment Reminder Save", "Working...");
-                    
+
                     if (model.reminder.repaymentReminderDTO.id) {
                         RepaymentReminder.update(model.reminder)
                             .$promise
