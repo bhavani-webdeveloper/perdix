@@ -139,7 +139,7 @@ define({
 
 
                     /*Household fields */
-                    
+
                     var decExpanse =0;
 
                     _.each(model.customer.expenditures,function(expanse){
@@ -423,7 +423,9 @@ define({
             formSource: [{
                     "type": "section",
                     "html": `
-<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-6">
+<i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
+</div>
 <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
 <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
 `
@@ -1014,6 +1016,13 @@ define({
                     model.BankAvgWithdrawl=0;
                     model.checkBounced=0;
                     model.emiBounced=0;
+
+                    if (params[0].data[0]['Existing Customer'] == 'No') {
+                        model.existingCustomerStr = "New Customer";
+                    } else {
+                        model.existingCustomerStr = "Existing Customer";
+                    }
+
                     var count=0
                     _.each(model.bankDetails,function(bankDetails){
                         if(bankDetails['Customer Relation']=='Applicant'){
@@ -1038,15 +1047,19 @@ define({
                     model.psy_coapp_count = 1;
                     switch (model.bundlePageObj.pageClass) {
                         case 'applicant':
-                           model.household_data = model.houseHoldPL[model.houseHoldPL.length-1]
+                            model.household_data = _.find(model.houseHoldPL, function(value){
+                                return /^Applicant.*/.test(value.relation_detail);
+                            });
                             model.psy_data = model.psychometricScores[0];
                             break;
                         case 'co-applicant':
-                            model.household_data = model.houseHoldPL[model.coapp_count];
+                            model.household_data = _.find(model.houseHoldPL, function(value){
+                                return /^Co-Applicant.*/.test(value.relation_detail);
+                            });
                             model.coapp_count++;
                             model.psy_data = model.psychometricScores[model.psy_coapp_count];
                             model.psy_coapp_count++
-                                break;
+                            break;
                     };
                    /* for(var i=0;i<model.houseHoldPL.length;i++){
                     switch(model.houseHoldPL[i].relation_detail.Contains()){

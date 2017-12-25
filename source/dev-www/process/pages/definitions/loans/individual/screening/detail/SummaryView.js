@@ -12,6 +12,12 @@ define({
 
         var prepareData = function(res, model) {
 
+            if (res[0].data[0]['Existing Customer'] == 'No') {
+                model.existingCustomerStr = "New Customer";
+            } else {
+                model.existingCustomerStr = "Existing Customer";
+            }
+
             model.enterpriseDetails = res[0];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
 
@@ -253,7 +259,9 @@ define({
             form.push({
                 "type": "section",
                 "html": `
-<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-6">
+<i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
+</div>
 <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
 <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
 `
@@ -321,7 +329,7 @@ define({
                             "title": "URN",
                             "condition": "model.customer_detail.guarantors.id[0]"
                         }, {
-                            "key": "bundleModel.applicant.firstName",
+                            "key": "customer.firstName",
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
