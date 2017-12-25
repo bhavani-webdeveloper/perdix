@@ -370,47 +370,47 @@
 						"properties": {
 							"make": {
 								"title": "MAKE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"type": {
 								"title": "TYPE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"year": {
 								"title": "YEAR",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"model": {
 								"title": "MODEL",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"serialNumber": {
 								"title": "SERIAL_NUMBER",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"assetType": {
 								"title": "ASSET_TYPE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"hypothecationLabelBeenApplied": {
 								"title": "IS_HYPOTHECATION_LABEL_APPLIED",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"companyNameInOriginalInvoice": {
 								"title": "DOES_ORIGINAL_INVOICE_HAS_COMPANY_NAME",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"hypothecatedTo": {
 								"title": "HYPOTHECATED_TO",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"udf1": {
 								"title": "udf1",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"udfDate1": {
 								"title": "udfDate1",
-								"type": "string"
+								"type": ["string", "null"]
 							}
 						}
 					}

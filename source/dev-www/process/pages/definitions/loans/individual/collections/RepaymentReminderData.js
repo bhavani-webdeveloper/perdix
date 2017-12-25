@@ -10,7 +10,9 @@ define({
             "title": "Repayment Reminder Details",
             "subTitle": "Repayment Reminder",
             initialize: function(model, form, formCtrl) {
+                PageHelper.showLoader();
                 model = Utils.removeNulls(model, true);
+                model.currentDate = Utils.getCurrentDate();
                 $log.info("Reminder Follow Up Data Details got initiated");
                 var reminderId = $stateParams.pageId;
                 if (!reminderId) {
@@ -25,6 +27,7 @@ define({
                         model.reminder.repaymentReminderDTO = res.repaymentReminderDTO;
                         model.reminder.repaymentCurrentHistories = res.repaymentCurrentHistories;
                         model.reminder.repaymentPreviousHistories = res.repaymentPreviousHistories;
+                        model.reminder.repaymentReminderDTO.interactionDate = model.currentDate;
                         var branches = formHelper.enum('branch').data;
                         var branchName = null;
                         for (var i = 0; i < branches.length; i++) {
@@ -42,22 +45,37 @@ define({
                             }
                         }
 
-                        Queries.getLoanCustomerRelations({
-                            accountNumber: model.reminder.repaymentReminderDTO.accountNumber
-                        }).then(
+
+                        Queries.getLoanCustomerDetails(model.reminder.repaymentReminderDTO.loanId)
+                        .then(
                             function(response) {
                                 $log.info(response);
                                 model.reminder.repaymentReminderDTO.coAppArray = [];
                                 model.reminder.repaymentReminderDTO.guarantorArray = [];
-                                for(i=0;i<response.length;i++){
-                                    if (response[i].relation == 'Applicant') {
-                                        model.reminder.repaymentReminderDTO.applicantName =  response[i].first_name;
-                                    } else if (response[i].relation == 'Co-Applicant') {
-                                        model.reminder.repaymentReminderDTO.coAppArray.push(response[i]);
-                                        //model.reminder.repaymentReminderDTO.coAppName =  response[i].first_name;
-                                    } else if (response[i].relation == 'Guarantor') {
-                                        model.reminder.repaymentReminderDTO.guarantorArray.push(response[i]);
-                                     /*   model.reminder.repaymentReminderDTO.guarantorName =  response[i].first_name;*/
+                                if (_.hasIn(response, 'loanCustomer') && response.loanCustomer.relation == "Loan Customer"){ 
+                                    model.reminder.repaymentReminderDTO.businessPhoneNo = response.loanCustomer.mobile_phone;
+                                }
+                                if (_.hasIn(response, 'applicant') && response.applicant.relation.toLowerCase() == 'applicant'){ 
+                                    model.reminder.repaymentReminderDTO.applicantName = response.applicant.first_name;
+                                    model.reminder.repaymentReminderDTO.mobile_phone = response.applicant.mobile_phone;
+                                    if (model.reminder.repaymentReminderDTO.mobile_phone == null) {
+                                        model.reminder.repaymentReminderDTO.mobile_phone = 'NA';
+                                    }
+                                } 
+                                if (_.hasIn(response, 'coApplicants') && response.coApplicants[0] && response.coApplicants[0].relation == 'Co-Applicant') {
+                                    for (i=0;i<response.coApplicants.length;i++) {
+                                        model.reminder.repaymentReminderDTO.coAppArray.push(response.coApplicants[i]);
+                                        if (model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone == null) {
+                                            model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone = 'NA';
+                                        }
+                                    }
+                                } 
+                                if (_.hasIn(response, 'guarantors') && response.guarantors[0] && response.guarantors[0].relation.toLowerCase() == 'guarantors') {
+                                    for (i=0;i<response.guarantors.length;i++) {
+                                        model.reminder.repaymentReminderDTO.guarantorArray.push(response.guarantorArray[i]);
+                                        if (model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone == null) {
+                                            model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone = 'NA';
+                                        }
                                     }
                                 }
                             }
@@ -120,15 +138,15 @@ define({
                     title: "BUSINESS_NAME"
                 }, {
                     key: "reminder.repaymentReminderDTO.businessPhoneNo",
-                    type: "number",
+                    type: "string",
                     title: "BUSINESS_PHONE_NO"
                 }, {
                     key: "reminder.repaymentReminderDTO.applicantName",
                     type: "string",
                     title: "APPLICANT_NAME"
                 }, {
-                    key: "reminder.repaymentReminderDTO.applicantPhoneNo",
-                    type: "number",
+                    key: "reminder.repaymentReminderDTO.mobile_phone",
+                    type: "string",
                     title: "APPLICANT_PHONE_NO"
                 },
                 {
@@ -143,9 +161,13 @@ define({
                         "add":null,
                         "remove":null,
                         "startEmpty": true,
+                        "view" : "fixed",
                         "items": [{
                             "key": "reminder.repaymentReminderDTO.coAppArray[].first_name",
                             "title": "CO_APP_NAME",
+                        }, {
+                            "key": "reminder.repaymentReminderDTO.coAppArray[].mobile_phone",
+                            "title": "CO_APP_NO"
                         }]
                     }]
                 },
@@ -164,6 +186,9 @@ define({
                         "items": [{
                             "key": "reminder.repaymentReminderDTO.guarantorArray[].first_name",
                             "title": "GUARANTOR_NAME",
+                        }, {
+                            "key": "reminder.repaymentReminderDTO.guarantorArray[].mobile_phone",
+                            "title": "GUARANTER_NO"
                         }]
                     }]
                 },
@@ -208,7 +233,7 @@ define({
                         type: "array",
                         add: null,
                         remove: null,
-                        titleExpr: "'Reminder: ' + moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
+                        titleExpr: "'Reminder: ' + moment(model.reminder.repaymentCurrentHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
                         titleExprLocals: {moment: window.moment},
                         items: [{
                             key: "reminder.repaymentCurrentHistories[].reminderStatus",
@@ -266,7 +291,7 @@ define({
                     type: "array",
                     add: null,
                     remove: null,
-                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
+                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.reminder.accountDetails[arrayIndexes[0]].createdAt).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.reminder.accountDetails[arrayIndexes[0]].createdAt).format('DD, MMMM YYYY')",
                     "titleExprLocals": {moment: window.moment},
                     items: [{
                         key: "accountDetails[].instrumnetType",
@@ -299,7 +324,7 @@ define({
                         condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
                     },
                     {
-                        key: "accountDetails[].interactionDate",
+                        key: "accountDetails[].createdAt",
                         type: "string",
                         title: "INTERACTION_DATE_",
                         condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
