@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                     }
                                 });
 
-                                /*  $this.bundlePages.push({ 
+                                /*  $this.bundlePages.push({
                                        pageClass: 'loan-request',
                                       model: {
                                           loanAccount: res
@@ -239,7 +239,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                         }
                                     }
                                 });*/
-                              
+
 
 
                                 deferred.resolve();

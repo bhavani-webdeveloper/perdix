@@ -221,7 +221,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                     }
                                 });
 
-                                /*  $this.bundlePages.push({ 
+                                /*  $this.bundlePages.push({
                                        pageClass: 'loan-request',
                                       model: {
                                           loanAccount: res
@@ -238,7 +238,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                         }
                                     }
                                 });*/
-                                
+
 
 
                                 deferred.resolve();

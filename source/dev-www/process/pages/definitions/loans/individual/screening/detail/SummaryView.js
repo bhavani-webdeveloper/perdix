@@ -398,43 +398,44 @@ define({
                             type: "section",
                             htmlClass: "col-sm-12",
                             title: model.scoreDetails[0].title,
-                            html: '<div ng-init="_score=model.scoreDetails[0]">' +
-                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>' +
-                                '<table class="table">' +
-                                '<colgroup>' +
-                                '<col width="25%">' +
-                                '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">' +
-                                '<col width="{{_score.valuePct}}%" ng-repeat-end>' +
-                                '</colgroup>' +
-                                '<tbody>' +
-                                '<tr>' +
-                                '<th>Parameter Name</th>' +
-                                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
-                                '</tr>' +
-                                '<tr ng-repeat="data in model.management_Data" ng-init="parameterIndex=$index">' +
-                                '<td>{{data.Parameter}}</td>' +
-                                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
-                                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
-                                '</tbody>' +
-                                '</table>' +
-                                '</div>'
+                            html:
+                            '<div ng-init="_score=model.scoreDetails[0]">'+
+                            '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+                            '<table class="table">'+
+                            '<colgroup>'+
+                            '<col width="25%">'+
+                            '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
+                            '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
+                            '</colgroup>'+
+                            '<tbody>'+
+                            '<tr>'+
+                            '<th>Parameter Name</th>'+
+                            '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
+                            '</tr>'+
+                            '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
+                            '<td>{{data.Parameter}}</td>'+
+                            '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
+                            '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
+                            '</tbody>'+
+                            '</table>'+
+                            '</div>'
                         }, {
                             "type": "section",
                             "htmlClass": "col-sm-12",
                             "title": "model.scoreDetails[1].title",
-                            "html": '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
-                                '<table class="table">' +
-                                '<colgroup><col width="35%"><col width="5%"><col width="35%"></colgroup>' +
-                                '<tbody>' +
-                                '<tr><th>Parameter</th><th>Actual Value</th><th>Status</th></tr>' +
-                                '<tr ng-repeat="data in model.business_data">' +
-                                '<td>{{ data.Parameter }}</td>' +
-                                '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>' +
-
-                                '<td>{{ data["Actual Value"] }}</td>' +
-                                '</tr>' +
-                                '</tbody>' +
-                                '</table>'
+                            html:
+                            '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
+                            '<table class="table">'+
+                            '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
+                            '<tbody>'+
+                            '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
+                            '<tr ng-repeat="data in model.scoreDetails[1].data">'+
+                            '<td>{{ data.Parameter }}</td>'+
+                            '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
+                            '<td>{{ data["Actual Value"] }}</td>'+
+                            '</tr>'+
+                            '</tbody>'+
+                            '</table>'
                         }]
                     }, {
                         type: "section",
