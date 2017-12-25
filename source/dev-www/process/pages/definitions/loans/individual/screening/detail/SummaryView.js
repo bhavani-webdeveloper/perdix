@@ -273,7 +273,7 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             /*"key":"loanAccount.enterpriseId",*/
-                            "key": "loanAccount.enrollmentId",
+                            "key": "business.id",
                             "title": "Entity ID"
                         }, {
                             "key": "customer_detail.applicant.id",
@@ -321,7 +321,7 @@ define({
                             "title": "URN",
                             "condition": "model.customer_detail.guarantors.id[0]"
                         }, {
-                            "key": "customer.firstName",
+                            "key": "bundleModel.applicant.firstName",
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
@@ -594,7 +594,7 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 prepareDataDeferred = $q.defer();
                 prepareDataPromise = prepareDataDeferred.promise;
-
+                model.bundleModel = bundleModel;
                 model.currentStage = bundleModel.currentStage;
                 model.ScoreDetails = [];
                 model.customer = {};

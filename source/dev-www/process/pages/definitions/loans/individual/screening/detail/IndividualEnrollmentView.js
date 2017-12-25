@@ -59,7 +59,7 @@ define({
                             });
                         }
                     });
-                    model.UIUDF.family_fields.total_household_income +=parseInt(model.customer.salary);
+                    //model.UIUDF.family_fields.total_household_income +=parseInt(model.customer.salary);
                     /*Liability fields*/
                     model.UIUDF.liability_fields.active_loans = model.customer.liabilities.length;
                     model.UIUDF.liability_fields.total_monthly_installment = 0;
@@ -1075,6 +1075,7 @@ define({
                         });
                         model.household_new = model.household[0];
                     }
+                     model.UIUDF.family_fields.total_household_income = model.household[0].income;
 
 
 
