@@ -109,6 +109,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								customerIds.applicant = cust.customerId;
 								bundleModel.customer_detail.applicant.id = cust.customerId;
 								bundleModel.customer_detail.applicant.urn = cust.urn;
+								//bundleModel.customer_detail.applicant.firstName = res.customer.firstName;
 							} else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
 								bundleModel.urnNos.push(cust.urn);
 								customerIds.coApplicants.push(cust.customerId);
