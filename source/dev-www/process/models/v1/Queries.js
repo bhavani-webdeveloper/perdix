@@ -516,7 +516,7 @@ irf.models.factory('Queries', [
                     } else {
                         deferred.resolve(out);
                     }
-                    
+
                 }, deferred.reject);
 
             return deferred.promise;

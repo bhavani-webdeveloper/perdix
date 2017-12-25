@@ -46,5 +46,5 @@ groupLoanProductsByPartner.list=SELECT product_name as productName, `product_cod
 feesFormMapping.list = select * from invoice_form_mapping
 dedupe.list = SELECT d.id, d.customer_id, d.duplicate_above_threshold_count, d.status FROM dedupe_request d INNER JOIN customer c ON (c.id = d.customer_id AND d.created_at >= c.last_edited_at) where d.customer_id in (:ids) and d.id = (select max(id) from dedupe_request dr where dr.customer_id = d.customer_id)
 enterpriseCustomer=select e.customer_id from  enterprise_customer_relations e where e.linked_to_customer_id = :individualCustomerId
-loanCustomerDetails.list=select c.urn_no, IFNULL(lcr.relation, IF(c.id=l.customer_id, 'Loan Customer', 'NA')) `relation`, c.first_name, c.mobile_phone, c.landline_no, c.mobile_number_2 `alternate_mobile_number` from customer c left join loan_customer_relation lcr on (lcr.customer_id = c.id) left join loan_accounts l on (l.customer_id = c.id or l.id = lcr.loan_id) where l.id = :loanId;
+loanCustomerDetails.list=select c.urn_no, IFNULL(lcr.relation, IF(c.id=l.customer_id, 'Loan Customer', 'NA')) `relation`, c.first_name, c.mobile_phone, c.landline_no, c.mobile_number_2 `alternate_mobile_number` from customer c left join loan_accounts l on (l.customer_id = c.id) left join loan_customer_relation lcr on (lcr.customer_id = c.id) where l.id = :loanId or lcr.loan_id = :loanId
 
