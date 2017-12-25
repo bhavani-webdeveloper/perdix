@@ -493,7 +493,7 @@ irf.models.factory('Queries', [
             resource.getResult("loanCustomerDetails.list", request)
                 .then(function(records) {
                     var out = {
-                        'applicants': [],
+                        'applicant': null,
                         'coApplicants':[],
                         'guarantors':[],
                         'loanCustomer': null
@@ -504,7 +504,7 @@ irf.models.factory('Queries', [
                             if (value.relation == 'Loan Customer') {
                                 out.loanCustomer = value;
                             } else if (value.relation == 'Applicant') {
-                                out.applicants.push(value);
+                                out.applicant = value;
                             } else if (value.relation == 'Co-Applicant') {
                                 out.coApplicants.push(value);
                             } else if (value.relation == 'Guarantor') {

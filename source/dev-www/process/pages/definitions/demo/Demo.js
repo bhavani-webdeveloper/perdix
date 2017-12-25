@@ -1,8 +1,8 @@
 define({
     pageUID: "demo.Demo",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "SessionStore", "Files", "formHelper"],
-    $pageFn: function($log, Enrollment, SessionStore, Files, formHelper){
+    dependencies: ["$log", "Enrollment", "SessionStore", "Files", "formHelper", "Queries"],
+    $pageFn: function($log, Enrollment, SessionStore, Files, formHelper, Queries){
         return {
             "type": "schema-form",
             "title": "Demo Page2",
@@ -21,8 +21,14 @@ define({
                 },function(err){
 
                 });
+
+                Queries.getLoanCustomerDetails(26)
+                .then(function(out){
+                    console.log('shahal');
+                    console.log(out);
+                })
             },
-            
+
             form: [
                 {
                     type: "box",
@@ -202,7 +208,7 @@ define({
                         }
                     ]
                 }
-                 
+
 
             ],
             schema: function(){
