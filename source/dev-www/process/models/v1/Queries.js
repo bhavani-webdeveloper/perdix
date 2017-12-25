@@ -485,6 +485,43 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getLoanCustomerDetails = function(loanId) {
+            var deferred = $q.defer();
+            var request = {
+                'loanId': loanId
+            };
+            resource.getResult("loanCustomerDetails.list", request)
+                .then(function(records) {
+                    var out = {
+                        'applicants': [],
+                        'coApplicants':[],
+                        'guarantors':[],
+                        'loanCustomer': null
+                    };
+
+                    if (records && records.results) {
+                        _.forEach(records.results, function(value){
+                            if (value.relation == 'Loan Customer') {
+                                out.loanCustomer = value;
+                            } else if (value.relation == 'Applicant') {
+                                out.applicants.push(value);
+                            } else if (value.relation == 'Co-Applicant') {
+                                out.coApplicants.push(value);
+                            } else if (value.relation == 'Guarantor') {
+                                out.guarantors.push(value);
+                            }
+                        });
+
+                        deferred.resolve(out);
+                    } else {
+                        deferred.resolve(out);
+                    }
+                    
+                }, deferred.reject);
+
+            return deferred.promise;
+        }
+
         resource.getAllLoanPurpose1 = function() {
             var deferred = $q.defer();
             var request = {};
