@@ -38,9 +38,12 @@ gulp.task('bower', function () {
 });
 
 gulp.task('clean', function(){
-    return del([
-            buildDirectory + "/**/*"
-        ])
+    return del(
+        [
+            buildDirectory + "/**/*",
+            'dev-www/process/config/**/*'
+        ]
+    )
 })
 
 gulp.task('fonts', function(){
@@ -168,7 +171,7 @@ var tsProject = ts.createProject({
 });
 
 gulp.task('ts:perdixConfig', function(){
-    return gulp.src('./dev-www/process/config/**/*.ts')
+    return gulp.src('../configuration/ui-process-config/' + argv.siteCode + '/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
             module: 'AMD',

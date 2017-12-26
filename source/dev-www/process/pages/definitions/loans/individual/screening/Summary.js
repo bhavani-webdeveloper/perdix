@@ -38,7 +38,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
                 if(record && record.data && angular.isObject(record.data)){
 
-                    return (record.overrides && record.overrides.format && angular.isObject(record.overrides.format)) ? 
+                    return (record.overrides && record.overrides.format && angular.isObject(record.overrides.format)) ?
                     (record.overrides.format[column.data] ? record.overrides.format[column.data] : displayFormat) : displayFormat;
 
                 }
@@ -222,15 +222,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
         for (var i=0;i< model.deviationDetails.data.length; i++){
             var d = model.deviationDetails.data[i];
-            if (d.Mitigant && d.Mitigant.length!=00){
+            if (d.Mitigant && d.Mitigant.length!=0){
                 if (d.Mitigant && d.Mitigant!=null){
                     d.ListOfMitigants = d.Mitigant.split("|");
                 }
-                
+
                 if (d.ChosenMitigant && d.ChosenMitigant!=null){
                     d.ChosenMitigants = d.ChosenMitigant.split("|")
                 }
-                
+
             }
         }
 
@@ -241,12 +241,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
             delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
             model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
-            if (d.Mitigant && d.Mitigant.length!=00){
+            if (d.Mitigant && d.Mitigant.length!=0){
                 d.ListOfMitigants = d.Mitigant.split("|");
                 for (var j =0; j < d.ListOfMitigants.length; j++) {
                     model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
                 }
-                
+
             }
         }
         model.additional = {};
@@ -261,7 +261,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     }; // END OF prepareData()
 
 
-    var HOUSEHOLD_PL_HTML = 
+    var HOUSEHOLD_PL_HTML =
     '<table class="table">'+
         '<colgroup>'+
             '<col width="30%"> <col width="40%"> <col width="30%">'+
@@ -377,7 +377,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-        
+
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
@@ -458,7 +458,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         }
                     ]
                 }
-                
+
             ]
         })
 
@@ -484,7 +484,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //             ]
         //         });
         //     })(i)
-            
+
         //     // form.push()
         // }
 
@@ -506,7 +506,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
-        
+
         form.push({
             type: "box",
             colClass: "col-sm-12",
@@ -536,7 +536,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     {
                         type: "section",
                         colClass: "col-sm-12",
-                        html: 
+                        html:
                         // '\
                         // <table class="table">\
                         //     <colgroup>\
@@ -577,14 +577,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             '</tr>'+
             '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
                 '<td >{{key}}</td>'+
-                '<td >{{value["Cut Off Score"]}}</td>' + 
+                '<td >{{value["Cut Off Score"]}}</td>' +
                 '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
                '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
 
             '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
                 '<td >{{key}}</td>'+
-                '<td ></td>' + 
-                '<td ng-repeat-start="_score in _scores"></td>' + 
+                '<td ></td>' +
+                '<td ng-repeat-start="_score in _scores"></td>' +
                 '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
         '</tbody>'+
     '</table>'+
@@ -629,7 +629,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // })
-        
+
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12",
@@ -661,7 +661,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         html: '<div ng-init="household = model.pl.household['+ i +']">' + HOUSEHOLD_PL_HTML + '</div>'
                     }
                 ]
-            });    
+            });
         }
 
         // form.push({
@@ -677,7 +677,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-        
+
         // if (model.pl.householdCoApplicant) {
         //     form.push({
         //         type: "box",
@@ -693,8 +693,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         ]
         //     });
         // }
-        
-        
+
+
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
@@ -737,7 +737,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             title: "BALANCE_SHEET",
             condition: "model.currentStage != 'ScreeningReview'",
             items: [
-               
+
                 {
                     type: "section",
                     colClass: "col-sm-12",
@@ -812,7 +812,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         <hr>\
                         '
                 });
-            }    
+            }
         }
 
         form.push({
@@ -850,7 +850,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     html: machineryDetailsTable
                 }
             ]
-        });        
+        });
 
         var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
@@ -921,7 +921,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // })
-        
+
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12",
@@ -979,7 +979,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             if (bundlePageObj) {
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-            
+
             if (_.hasIn(model, 'cbModel')) {
                 Scoring.get({
                     auth_token: AuthTokenHelper.getAuthData().access_token,

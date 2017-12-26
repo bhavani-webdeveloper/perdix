@@ -193,7 +193,7 @@ define({
 
             for (var i = 0; i < model.deviationDetails.data.length; i++) {
                 var d = model.deviationDetails.data[i];
-                if (d.Mitigant && d.Mitigant.length != 00) {
+                if (d.Mitigant && d.Mitigant.length != 0) {
                     if (d.Mitigant && d.Mitigant != null) {
                         d.ListOfMitigants = d.Mitigant.split("|");
                     }
