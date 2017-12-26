@@ -145,19 +145,29 @@ return {
             "remove": null,
             "items": [{
                 "type": "section",
-                "readonly": true,
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
                     "htmlClass": "col-sm-6",
-                    "items": [{
+                    "items": [
+                    {
+                        "key": "group.jlgGroupMembers[].ViewCustomer",
+                        "type": "button",
+                        "title": "View Customer",
+                        "readonly": false,
+                        "onClick": "actions.viewCustomer(model, formCtrl, form, $event)"
+                    },
+                    {
                         "title": "URN",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].urnNo"
                     }, {
                         "title": "FULL_NAME",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.fullName"
                     },{
                         "title": "CUSTOMER_PHOTO",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.photo",
                          type:"file",
                          fileType:"image/*",
@@ -165,28 +175,35 @@ return {
                          "subCategory": "PHOTO"
                     }, {
                         "title": "DATE_OF_BIRTH",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.dateOfBirth",
                         "type": "date"
                     }, {
                         "title": "AADHAAR_NO",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.aadhaarNo"
                     }, {
                         "title": "IDENTITY_PROOF",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.identityProof",
                         "type": "select",
                         "enumCode": "identity_proof"
                     }, {
                         "title": "IDENTITY_PROOFNO",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.identityProofNo"
                     }, {
                         "title": "FATHER_FULL_NAME",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.fatherFullName"
                     }, {
                         "title": "SPOUSE_FULL_NAME",
+                        "readonly": true,
                         "key": "group.jlgGroupMembers[].customer.spouseFullName"
                     }]
                 }, {
                     "type": "section",
+                    "readonly": true,
                     "htmlClass": "col-sm-6",
                     "items": [{
                         "title": "IDENTITY_PROOF_DOCUMENT",
@@ -775,6 +792,21 @@ return {
     },
     actions: {
         preSave: function(model, form, formName) {},
+        viewCustomer: function(model, formCtrl, form, $event) {
+            Utils.confirm("Save the data before proceed").then(function() {
+                $log.info("Inside ViewCustomer()");
+                irfNavigator.go({
+                    state: "Page.Customer360",
+                    pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
+                    pageData: model.siteCode
+                }, {
+                    state: "Page.Engine",
+                    pageName: $stateParams.pageName,
+                    pageId: $stateParams.pageId,
+                    pageData: $stateParams.pageData
+                });
+            })
+        },
         saveGroup: function(model, formCtrl, form) {
             $log.info("Inside submit()");
             if(!validateForm(formCtrl)) 
