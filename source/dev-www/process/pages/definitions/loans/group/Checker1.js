@@ -165,7 +165,7 @@ return {
                 "type": "array",
                 "condition": "model.siteCode == 'KGFS'",
                 "key": "group.jlgGroupMembers",
-                "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
+                "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
                 "add": null,
                 "remove": null,
                 "items": [{

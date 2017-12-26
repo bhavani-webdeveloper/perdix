@@ -159,7 +159,7 @@ return {
             "type": "array",
             "key": "group.jlgGroupMembers",
             "condition": "model.siteCode == 'KGFS'",
-            "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
+            "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
             "add": null,
             "remove": null,
             "items": [{
