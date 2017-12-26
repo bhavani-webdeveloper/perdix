@@ -107,36 +107,28 @@
         "items": {
             "loanCustomerRelations": {
                 "type": "array",
-                "add": null,
-                "remove": null,
                 "startEmpty": true,
                 "title": "LOAN_CUSTOMER_RELATIONS",
                 "items": {
                     "customerId": {
                         "key": "loanAccount.loanCustomerRelations[].customerId",
-                        "title": "CUSTOMER_ID",
-                        "readonly": true
+                        "title": "CUSTOMER_ID"
                     },
                     "urn": {
                         "key": "loanAccount.loanCustomerRelations[].urn",
-                        "title": "URN_NO",
-                        "readonly": true
+                        "title": "URN_NO"
                     },
                     "name": {
                         "key": "loanAccount.loanCustomerRelations[].name",
-                        "title": "NAME",
-                        "readonly": true
+                        "title": "NAME"
                     },
                     "relation": {
                         "key": "loanAccount.loanCustomerRelations[].relation",
-                        "readonly": true,
                         "title": "RELATIONSHIP"
                     },
                     "relationshipWithApplicant": {
                         "key": "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
                         "title": "RELATIONSHIP_WITH_APPLICATION",
-                        "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                        "required": true,
                         "type": "select",
                         "enumCode": "relation"
                     }
