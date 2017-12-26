@@ -250,7 +250,7 @@ define({
                         }, {
                             key: "reminder.repaymentCurrentHistories[].interactionDate",
                             type: "date",
-                            title: "DATA_&_TIMESTAMP"
+                            title: "DATE_&_TIMESTAMP"
                         }, ]
                     }]
             }, {
