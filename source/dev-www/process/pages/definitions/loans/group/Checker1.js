@@ -407,9 +407,14 @@ return {
                                 },{
                                     "title": "LOAN_CYCLE",
                                     "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                }, {
+                                },{
                                     "title": "TENURE",
                                     "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                                },{
+                                    "key": "group.jlgGroupMembers[].loanAccount.frequency",
+                                    "type":"select",
+                                    "title": "FREQUENCY",
+                                    "enumCode":"loan_product_frequency"
                                 }, {
                                     "title": "LOAN_APPLICATION_DATE",
                                     "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
