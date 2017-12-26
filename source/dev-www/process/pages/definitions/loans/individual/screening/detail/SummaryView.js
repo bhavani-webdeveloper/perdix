@@ -329,7 +329,7 @@ define({
                             "title": "URN",
                             "condition": "model.customer_detail.guarantors.id[0]"
                         }, {
-                            "key": "customer.firstName",
+                            "key": "bundleModel.applicant.firstName",
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
