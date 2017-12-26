@@ -522,6 +522,23 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getNextInstallmentDate = function() {
+            var deferred = $q.defer();
+            var request = {};
+            resource.getResult("nextInstallmentDate", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getAllLoanPurpose1 = function() {
             var deferred = $q.defer();
             var request = {};

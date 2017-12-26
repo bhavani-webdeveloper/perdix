@@ -18,10 +18,11 @@ define({
                 if (!reminderId) {
                     PageHelper.hideLoader();
                 }
-                RepaymentReminder.get({
-                        id: reminderId
-                    },
-                    function(res) {
+
+                RepaymentReminder.get({id: reminderId})
+                .$promise
+                .then(function(res) {
+                        // code for setting model
                         model.reminder = res;
                         $log.info(model.reminder);
                         model.reminder.repaymentReminderDTO = res.repaymentReminderDTO;
@@ -44,56 +45,55 @@ define({
                                 model.reminder.repaymentReminderDTO.centreName = centre.name;
                             }
                         }
-
-
-                        Queries.getLoanCustomerDetails(model.reminder.repaymentReminderDTO.loanId)
-                        .then(
-                            function(response) {
-                                $log.info(response);
-                                model.reminder.repaymentReminderDTO.coAppArray = [];
-                                model.reminder.repaymentReminderDTO.guarantorArray = [];
-                                if (_.hasIn(response, 'loanCustomer') && response.loanCustomer.relation == "Loan Customer"){
-                                    model.reminder.repaymentReminderDTO.businessPhoneNo = response.loanCustomer.mobile_phone;
-                                }
-                                if (_.hasIn(response, 'applicant') && response.applicant.relation.toLowerCase() == 'applicant'){
-                                    model.reminder.repaymentReminderDTO.applicantName = response.applicant.first_name;
-                                    model.reminder.repaymentReminderDTO.mobile_phone = response.applicant.mobile_phone;
-                                    if (model.reminder.repaymentReminderDTO.mobile_phone == null) {
-                                        model.reminder.repaymentReminderDTO.mobile_phone = 'NA';
+                })
+                .then(function(){
+                        var promises = [];
+                        var p1 = Queries.getLoanCustomerDetails(model.reminder.repaymentReminderDTO.loanId)
+                                 .then(function(response){
+                                    $log.info(response);
+                                    model.reminder.repaymentReminderDTO.coAppArray = [];
+                                    model.reminder.repaymentReminderDTO.guarantorArray = [];
+                                    if (_.hasIn(response, 'loanCustomer') && response.loanCustomer.relation == "Loan Customer"){
+                                        model.reminder.repaymentReminderDTO.businessPhoneNo = response.loanCustomer.mobile_phone;
                                     }
-                                }
-                                if (_.hasIn(response, 'coApplicants') && response.coApplicants[0] && response.coApplicants[0].relation == 'Co-Applicant') {
-                                    for (i=0;i<response.coApplicants.length;i++) {
-                                        model.reminder.repaymentReminderDTO.coAppArray.push(response.coApplicants[i]);
-                                        if (model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone == null) {
-                                            model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone = 'NA';
+                                    if (_.hasIn(response, 'applicant') && response.applicant.relation.toLowerCase() == 'applicant'){
+                                        model.reminder.repaymentReminderDTO.applicantName = response.applicant.first_name;
+                                        model.reminder.repaymentReminderDTO.mobile_phone = response.applicant.mobile_phone;
+                                        if (model.reminder.repaymentReminderDTO.mobile_phone == null) {
+                                            model.reminder.repaymentReminderDTO.mobile_phone = 'NA';
                                         }
                                     }
-                                }
-                                if (_.hasIn(response, 'guarantors') && response.guarantors[0] && response.guarantors[0].relation.toLowerCase() == 'guarantors') {
-                                    for (i=0;i<response.guarantors.length;i++) {
-                                        model.reminder.repaymentReminderDTO.guarantorArray.push(response.guarantorArray[i]);
-                                        if (model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone == null) {
-                                            model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone = 'NA';
+                                    if (_.hasIn(response, 'coApplicants') && response.coApplicants[0] && response.coApplicants[0].relation == 'Co-Applicant') {
+                                        for (i=0;i<response.coApplicants.length;i++) {
+                                            model.reminder.repaymentReminderDTO.coAppArray.push(response.coApplicants[i]);
+                                            if (model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone == null) {
+                                                model.reminder.repaymentReminderDTO.coAppArray[i].mobile_phone = 'NA';
+                                            }
                                         }
                                     }
-                                }
-                            }
-                        );
+                                    if (_.hasIn(response, 'guarantors') && response.guarantors[0] && response.guarantors[0].relation.toLowerCase() == 'guarantors') {
+                                        for (i=0;i<response.guarantors.length;i++) {
+                                            model.reminder.repaymentReminderDTO.guarantorArray.push(response.guarantorArray[i]);
+                                            if (model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone == null) {
+                                                model.reminder.repaymentReminderDTO.guarantorArray[i].mobile_phone = 'NA';
+                                            }
+                                        }
+                                    }
+                                });
+                        promises.push(p1);
 
-                        IndividualLoan.get({id: model.reminder.repaymentReminderDTO.loanId})
-                            .$promise
-                            .then(
-                                function(res){
+                        var p2 = IndividualLoan.get({id: model.reminder.repaymentReminderDTO.loanId})
+                                .$promise
+                                .then(
+                                    function(res){
                                         $log.info(res);
                                         model.reminder.repaymentReminderDTO.loanAmount = res.loanAmount;
-                                });
+                                    });
+                        promises.push(p2);
 
-                        RepaymentReminder.getAccountDetails(
-                            {
-                                accountNumber: model.reminder.repaymentReminderDTO.accountNumber
-                             }).$promise
-                               .then(
+                        var p3 = RepaymentReminder.getAccountDetails({accountNumber: model.reminder.repaymentReminderDTO.accountNumber})
+                                .$promise
+                                .then(
                                     function (res) {
                                         $log.info(res);
                                         model.accountDetails = [];
@@ -105,12 +105,12 @@ define({
                                             model.accountDetails[i].repaymentAmountInPaisa = (model.accountDetails[i].repaymentAmountInPaisa/100);
                                         }
                                     });
-
-                        PageHelper.hideLoader();
-                    }
-                );
-                $log.info("Reminder Follow Up Data Details is initiated");
-
+                        promises.push(p3);
+                        return $q.all(promises);
+                })
+                .then(function(){
+                    PageHelper.hideLoader();  
+                })
             },
 
             offline: true,

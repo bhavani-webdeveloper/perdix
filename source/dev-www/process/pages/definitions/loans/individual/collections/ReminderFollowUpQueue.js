@@ -10,7 +10,13 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info("Reminder Follow Up Queue got initialized");
                 model.branchName = SessionStore.getCurrentBranch().branchId;
-
+                Queries.getNextInstallmentDate()
+                .then(function(response){
+                    $log.info(response);
+                    if (response.body[0].min_date != null) {
+                        model.demandDate = response.body[0].min_date;    
+                    }
+                });
             },
             definition: {
                 title: "SEARCH",
