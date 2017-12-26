@@ -458,7 +458,7 @@ return {
                 "html": '<hr>'
             }, {
                 "type": "section",
-                "condition":"model.group.partnerCode=='AXIS'",
+                "condition":"model.group.partnerCode!='AXIS'",
                 "htmlClass": "row",
                 "items": [{
                     "type": "section",
