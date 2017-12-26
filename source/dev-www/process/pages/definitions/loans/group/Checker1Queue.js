@@ -72,6 +72,11 @@ define({
 						"type": "string",
 						"title": "PRODUCT",
 						readonly: true
+					},
+					{
+						"key": "groupCode",
+						"type": "string",
+						"title": "GROUP_CODE",
 					}]
 				}],
 				searchSchema: {
@@ -92,6 +97,10 @@ define({
 							"type": "string",
 							"title": "PARTNER",
 							"enumCode": "partner"
+						},
+						"groupCode": {
+							"type": "string",
+							"title": "GROUP_CODE",
 						}, 
 						"product": {
 							"title": "PRODUCT"
@@ -108,6 +117,7 @@ define({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
+						'groupCode':searchOptions.groupCode,
 						'product': searchOptions.product,
 						'groupStatus': true,
 						'currentStage': "Checker1",
@@ -148,6 +158,9 @@ define({
 						return [{
 							title: 'GROUP_ID',
 							data: 'id'
+						},{
+							title: 'GROUP_CODE',
+							data: 'groupCode'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
