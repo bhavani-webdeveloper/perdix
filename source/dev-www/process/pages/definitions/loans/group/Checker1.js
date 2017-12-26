@@ -19,7 +19,6 @@ define({
             model.group.cgtEndDate13 = moment(model.group.cgtEndDate3).format("DD-MM-YYYY HH:mm:ss");
             model.group.grtDate1 = moment(model.group.grtDate).format("DD-MM-YYYY HH:mm:ss");
             model.group.grtEndDate1 = moment(model.group.grtEndDate).format("DD-MM-YYYY HH:mm:ss");
-
             $log.info(model);
         };
 
@@ -85,6 +84,9 @@ return {
                             };
                             for (j in member.teleCallingDetails) {
                                 var telecal = member.teleCallingDetails[j];
+                                if (telecal.customerCalledAt) {
+                                    telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                }
                                 var temp = [];
                                 if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
                                 if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
@@ -165,7 +167,7 @@ return {
                 "type": "array",
                 "condition": "model.siteCode == 'KGFS'",
                 "key": "group.jlgGroupMembers",
-                "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
+                "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
                 "add": null,
                 "remove": null,
                 "items": [{
@@ -424,14 +426,9 @@ return {
                                 },{
                                     "title": "LOAN_CYCLE",
                                     "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                },{
+                                }, {
                                     "title": "TENURE",
                                     "key": "group.jlgGroupMembers[].loanAccount.tenure",
-                                },{
-                                    "key": "group.jlgGroupMembers[].loanAccount.frequency",
-                                    "type":"select",
-                                    "title": "FREQUENCY",
-                                    "enumCode":"loan_product_frequency"
                                 }, {
                                     "title": "LOAN_APPLICATION_DATE",
                                     "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
@@ -461,81 +458,85 @@ return {
                         }, {
                             "type": "section",
                             "html": '<hr>'
-                        }, {
-                            "type": "section",
-                    "condition":"model.group.partnerCode=='AXIS'",
-                    "htmlClass": "row",
-                    "items": [{
+                        }, 
+                    {
                         "type": "section",
-                        "htmlClass": "col-sm-6",
+                        "condition": "model.group.partnerCode=='AXIS'",
+                        "htmlClass": "row",
                         "items": [{
-                            type: "fieldset",
-                            "title": "TELE_CALLING_INFORMATION_CAPTURE",
-                                    items: [{
-                                        "title": "IS_CUSTOMER_CALLED",
-                                        "key": "group.jlgGroupMembers[].customerCalled",
-                                        "type": "select",
-                                        "titleMap":{
-                                            "Yes":"Yes",
-                                            "No":"No"
-                                        }
-                                    }, {
-                                        "title": "CUSTOMER_NOT_CALLED_REASON",
-                                        "key": "group.jlgGroupMembers[].customerNotCalledReason",
-                                        "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
-                                    }, {
-                                        "title": "CUSTOMER_CALLED_REMARKS",
-                                        "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
-                                        "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                                        "enumCode": "customerTelecallingDetails",
-                                        "type": "select"
-                                    }, {
-                                        "type": "button",
-                                        "key": "group.jlgGroupMembers[]",
-                                        "icon": "fa fa-circle-o",
-                                        "title": "SUBMIT_TELE_CALLING_INFO",
-                                        "onClick": function(model, formCtrl, form, event) {
-                                            if (!model.group.jlgGroupMembers[event.arrayIndex].customerCalled) {
-                                                irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
-                                                return false;
+                                    "type": "section",
+                                    "htmlClass": "col-sm-6",
+                                    "items": [{
+                                        type: "fieldset",
+                                        "title": "TELE_CALLING_INFORMATION_CAPTURE",
+                                        items: [{
+                                            "title": "IS_CUSTOMER_CALLED",
+                                            "key": "group.jlgGroupMembers[].customerCalled",
+                                            "type": "select",
+                                            "titleMap": {
+                                                "Yes": "Yes",
+                                                "No": "No"
                                             }
-                                            PageHelper.showLoader();
-                                            var reqData = {
-                                                "processType": "JLG"
-                                            };
-                                            reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
-                                            reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
-                                            reqData.customerCalledDate = moment().format("YYYY-MM-DD");
-                                            reqData.customerCalledAt = moment().format();
-                                            reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
-                                            reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
-                                            reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
-                                            reqData.customerCalledBy = SessionStore.getUsername();
-                                            GroupProcess.telecalling(reqData).$promise.then(function(response) {
-                                                $log.info(response);
-                                                model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
-                                                model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
-                                                model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
-                                                model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
-
-                                                var arraymember=model.group.jlgGroupMembers[event.arrayIndex];
-
-                                                for (j in arraymember.teleCallingDetails) {
-                                                    $log.info
-                                                    var telecal = arraymember.teleCallingDetails[j];
-                                                    var temp = [];
-                                                    if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
-                                                    if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
-                                                    telecal.remarks = temp.join('<br>');
+                                        }, {
+                                            "title": "CUSTOMER_NOT_CALLED_REASON",
+                                            "key": "group.jlgGroupMembers[].customerNotCalledReason",
+                                            "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
+                                        }, {
+                                            "title": "CUSTOMER_CALLED_REMARKS",
+                                            "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
+                                            "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
+                                            "enumCode": "customerTelecallingDetails",
+                                            "type": "select"
+                                        }, {
+                                            "type": "button",
+                                            "key": "group.jlgGroupMembers[]",
+                                            "icon": "fa fa-circle-o",
+                                            "title": "SUBMIT_TELE_CALLING_INFO",
+                                            "onClick": function(model, formCtrl, form, event) {
+                                                if (!model.group.jlgGroupMembers[event.arrayIndex].customerCalled) {
+                                                    irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
+                                                    return false;
                                                 }
-                                        }).finally(function(){
-                                            PageHelper.hideLoader();
-                                        })
-                                    }
-                                }
-                            ]
-                                }]
-                            }, {
+                                                PageHelper.showLoader();
+                                                var reqData = {
+                                                    "processType": "JLG"
+                                                };
+                                                reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
+                                                reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
+                                                reqData.customerCalledDate = moment().format("YYYY-MM-DD");
+                                                reqData.customerCalledAt = moment().format();
+                                                reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
+                                                reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
+                                                reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
+                                                reqData.customerCalledBy = SessionStore.getUsername();
+                                                GroupProcess.telecalling(reqData).$promise.then(function(response) {
+                                                    $log.info(response);
+                                                    model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
+
+                                                    var arraymember = model.group.jlgGroupMembers[event.arrayIndex];
+
+                                                    for (j in arraymember.teleCallingDetails) {
+                                                        $log.info
+                                                        var telecal = arraymember.teleCallingDetails[j];
+                                                        if (telecal.customerCalledAt) {
+                                                            telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                                        }
+                                                        var temp = [];
+                                                        if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
+                                                        if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
+                                                        telecal.remarks = temp.join('<br>');
+                                                    }
+                                                }).finally(function() {
+                                                    PageHelper.hideLoader();
+                                                })
+                                            }
+                                        }]
+                                    }]
+                                },
+                            {
                                 "type": "section",
                                 "htmlClass": "col-sm-6",
                                 "items": [{
@@ -551,7 +552,7 @@ return {
                                     }, {
                                         "title": "CUSTOMER_CALLED_DATE",
                                         "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledAt",
-                                        "type": "date"
+                                        //"type": "date"
                                     }, {
                                         "title": "CUSTOMER_CALLED_BY",
                                         "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledBy",
@@ -615,7 +616,8 @@ return {
                                 "html": '<hr>'
                             }]
                         }]
-                    }, {
+                    }, 
+                {
                 "type": "array",
                 "key": "group.jlgGroupMembers",
                 "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
@@ -675,7 +677,8 @@ return {
                                 "subCategory": "IDENTITYPROOF"
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "section",
                         "html": '<hr>'
                     }, {
@@ -921,7 +924,7 @@ return {
                                     {
                                         "title": "CUSTOMER_CALLED_DATE",
                                         "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledAt",
-                                        "type":"date"
+                                        //"type":"date"
                                     },
                                     {
                                         "title": "CUSTOMER_CALLED_BY",
@@ -1425,7 +1428,8 @@ return {
             Utils.confirm("Save the data before proceed").then(function() {
                 $log.info("Inside ViewCustomer()");
                 irfNavigator.go({
-                    state: "Page.Customer360",
+                    state: "Page.Engine",
+                    pageName:"customer360.EnrollmentProfile",
                     pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
                     pageData: model.siteCode
                 }, {

@@ -79,6 +79,9 @@ return {
                     };
                     for (j in member.teleCallingDetails) {
                         var telecal = member.teleCallingDetails[j];
+                        if (telecal.customerCalledAt) {
+                            telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                        }
                         var temp = [];
                         if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
                         if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
@@ -464,7 +467,7 @@ return {
                                 }, {
                                     "title": "CUSTOMER_CALLED_DATE",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledAt",
-                                    "type": "date"
+                                    //"type": "date"
                                 }, {
                                     "title": "CUSTOMER_CALLED_BY",
                                     "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledBy",
@@ -796,7 +799,8 @@ return {
             Utils.confirm("Save the data before proceed").then(function() {
                 $log.info("Inside ViewCustomer()");
                 irfNavigator.go({
-                    state: "Page.Customer360",
+                    state: "Page.Engine",
+                    pageName:"customer360.EnrollmentProfile",
                     pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
                     pageData: model.siteCode
                 }, {
