@@ -22,19 +22,22 @@ var validateForm = function(formCtrl){
     return true;
 }
 
-var enrichCustomer = function(customer) {
+var enrichCustomer = function(customer,jlgMembers) {
     customer.fullName = Utils.getFullName(customer.firstName, customer.middleName, customer.lastName);
     customer.fatherFullName = Utils.getFullName(customer.fatherFirstName, customer.fatherMiddleName, customer.fatherLastName);
     customer.spouseFullName = Utils.getFullName(customer.spouseFirstName, customer.spouseMiddleName, customer.spouseLastName);
     customer.photo = customer.photoImageId;
     var addr = [];
+    var obj = {};
+    obj.urnNo=customer.urnNo;
+    obj.firstName=customer.firstName;
+    obj.fatherFirstName=customer.fatherFirstName;
+    obj.spouseFirstName=customer.spouseFirstName;
+    obj.mobilePhone=customer.mobilePhone;
+    obj.accountNumber=jlgMembers.loanAccount.accountNumber;
+    customer.member=obj;
     if (customer.street) addr.push(customer.street);
-    //if (customer.postOffice) addr.push(customer.postOffice);
     if (customer.locality) addr.push(customer.locality);
-    //if (customer.villageName) addr.push(customer.villageName);
-    //if (customer.district) addr.push(customer.district);
-    //if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
-    customer.addressHtml = addr.join(',<br>');
     if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
     customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
     return customer;
@@ -56,6 +59,7 @@ return {
             }, function(response) {
                 model.group = response;
                 model.group.groupRemarks = null;
+                model.group.members=[];
                 var centreCode = formHelper.enum('centre').data;
                 for (var i = 0; i < centreCode.length; i++) {
                     if (centreCode[i].code == model.group.centreCode) {
@@ -82,6 +86,17 @@ return {
                                 if (telecal.customerCalledAt) {
                                     telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
                                 }
+                                if (telecal.customerNotCalledRemarks) {
+                                    var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
+                                    if (telecalSplitArray && telecalSplitArray.length > 1) {
+                                        telecal.customerNotCalledRemarks = telecalSplitArray[0];
+                                        telecal.telecallingRemarks = telecalSplitArray[1];
+                                    } else {
+                                        telecal.telecallingRemarks = "";
+                                    }
+                                } else {
+                                    telecal.telecallingRemarks = "";
+                                }
                                 var temp = [];
                                 if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
                                 if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
@@ -91,7 +106,9 @@ return {
                 $q.all([
                     $q.all(customerPromises).then(function(data) {
                         for (i in data) {
-                            model.group.jlgGroupMembers[i].customer = enrichCustomer(data[i]);
+                            var customer = enrichCustomer(data[i],model.group.jlgGroupMembers[i]);
+                            model.group.members.push(customer.member);
+                            model.group.jlgGroupMembers[i].customer = customer;
                             model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
                         }
                     }, function(errors) {
@@ -140,7 +157,52 @@ return {
                 "key": "group.groupCode",
                 "title": "GROUP_CODE",
                 readonly: true,
-            },{
+            },
+            {
+                type: "section",
+                "htmlClass": "row",
+                title: "MEMBER_DETAILS",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-12",
+                    "items": [{
+                        type: "tableview",
+                        htmlClass: "table-striped",
+                        listStyle: "table",
+                        key: "group.members",
+                        title: "MEMBER_DETAILS",
+                        selectable: false,
+                        expandable: true,
+                        paginate: false,
+                        searching: false,
+                        getColumns: function() {
+                            return [{
+                                title: 'ACCOUNT_NUMBER',
+                                data: 'accountNumber'
+                            }, {
+                                title: 'URN_NO',
+                                data: 'urnNo'
+                            }, {
+                                title: 'CUSTOMER_NAME',
+                                data: 'firstName'
+                            }, {
+                                title: 'FATHER_NAME',
+                                data: 'fatherFirstName'
+                            }, {
+                                title: 'Spouse Name',
+                                data: 'spouseFirstName'
+                            }, {
+                                title: 'MOBILE_PHONE',
+                                data: 'mobilePhone'
+                            }]
+                        },
+                        getActions: function(item) {
+                            return [];
+                        }
+                    }]
+                }]
+            },
+            {
             "type": "array",
             "key": "group.jlgGroupMembers",
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
@@ -443,50 +505,64 @@ return {
                     }, {
                         "type": "section",
                         "html": '<hr>'
-                    }, {
+                    }, 
+                    {
                         "type": "section",
-                       //"condition":"model.group.partnerCode=='AXIS'",
+                        //"condition":"model.group.partnerCode=='AXIS'",
                         "htmlClass": "row",
                         "items": [{
                             "type": "section",
+                            condition: "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails.length",
                             "htmlClass": "col-sm-6",
                             "items": [{
-                                "key": "group.jlgGroupMembers[].teleCallingDetails",
-                                condition: "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails.length",
+                                type: "tableview",
+                                listStyle: "table",
+                                key: "group.jlgGroupMembers[].teleCallingDetails",
                                 "title": "TELE_CALLING_HISTORY",
-                                "readonly": true,
-                                "type": "array",
-                                "items": [{
-                                    "title": "IS_CUSTOMER_CALLED",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalled",
-                                    "type": "string",
-                                }, {
-                                    "title": "CUSTOMER_CALLED_DATE",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledAt",
-                                    //"type": "date"
-                                }, {
-                                    "title": "CUSTOMER_CALLED_BY",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerCalledBy",
-                                    "type": "string"
-                                },{
-                                    "title": "REMARKS",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].remarks",
-                                } /*{
-                                    "title": "CUSTOMER_NOT_CALLED_REASON",
-                                   // "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledReason",
-                                    "type": "string"
-                                }, {
-                                    "title": "CUSTOMER_CALLED_REMARKS",
-                                    //"condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
-                                    "key": "group.jlgGroupMembers[].teleCallingDetails[].customerNotCalledRemarks",
-                                    "type": "string"
-                                }*/]
+                                selectable: false,
+                                expandable: true,
+                                paginate: false,
+                                searching: false,
+                                getColumns: function() {
+                                    return [{
+                                        title: 'IS_CUSTOMER_CALLED',
+                                        data: 'customerCalled'
+                                    }, {
+                                        title: 'CUSTOMER_CALLED_DATE',
+                                        data: 'customerCalledAt'
+                                    }, {
+                                        title: 'CUSTOMER_CALLED_BY',
+                                        data: 'customerCalledBy'
+                                    }, {
+                                        title: 'REMARKS',
+                                        data: 'remarks'
+                                    },
+                                    {
+                                        title: 'Additional Remarks',
+                                        data: 'telecallingRemarks'
+                                    }
+                                    ]
+                                },
+                                getActions: function(item) {
+                                    return [];
+                                }
                             }]
                         }]
-                    }, {
+                    },
+                    {
                         "type": "section",
-                        "htmlClass": "col-sm-6",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        },{
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
                         "items": [{
                             "title": "DSC_STATUS",
                             "readonly": true,
@@ -562,55 +638,85 @@ return {
                 ]
             },*/
             {
-                type: "box",
-                "readonly": true,
+                "type": "box",
                 "condition":"model.group.checkerTransactionHistory.length",
                 title: "CHECKER_HISTORY",
-                items: [{
-                    key: "group.checkerTransactionHistory",
-                    type: "array",
-                    "add": null,
-                    "remove": null,
-                    "titleExpr":"model.group.checkerTransactionHistory[arrayIndex].typeOfApprover + ' : ' + model.group.checkerTransactionHistory[arrayIndex].status",
-                    title: "CHECKER_HISTORY",
-                    items: [{
-                        key: "group.checkerTransactionHistory[].remarks",
-                        title: "CHECKER_REMARKS",
-                    }, {
-                        key: "group.checkerTransactionHistory[].status",
-                        title: "STATUS",
-                    }, {
-                        key: "group.checkerTransactionHistory[].typeOfApprover",
-                        title: "APPROVER_TYPE",
-                    },{
-                       key: "group.checkerTransactionHistory[].statusUpDatedBy",
-                       title: "APPROVER",
-                    },{
-                       key: "group.checkerTransactionHistory[].statusUpDatedAt",
-                       title: "APPROVED_AT",
-                    }]
-                }]
+                "items": [{
+                        type: "tableview",
+                        listStyle: "table",
+                        key: "group.checkerTransactionHistory",
+                        title: "CHECKER_HISTORY",
+                        selectable: false,
+                        expandable: true,
+                        paginate: false,
+                        searching: false,
+                        getColumns: function() {
+                            return [{
+                                title: 'CHECKER_REMARKS',
+                                data: 'remarks'
+                            }, {
+                                title: 'STATUS',
+                                data: 'status'
+                            }, {
+                                title: 'APPROVER_TYPE',
+                                data: 'typeOfApprover'
+                            }, {
+                                title: 'APPROVER',
+                                data: 'statusUpDatedBy'
+                            }, {
+                                title: 'APPROVED_AT',
+                                data: 'statusUpDatedAt'
+                            }]
+                        },
+                        getActions: function(item) {
+                            return [];
+                        }
+                    }
+                ]
             },
-    {
-        "title": "REMARKS_HISTORY",
-        "type": "box",
-        condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
-        "items": [{
-            "key": "group.remarksHistory",
-            "type": "array",
-            "view": "fixed",
-            add: null,
-            remove: null,
-            "items": [{
-                "type": "section",
-                "htmlClass": "",
-                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedBy}}\
-                <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.group.remarksHistory[arrayIndex].updatedOn}}\
-                <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.group.remarksHistory[arrayIndex].remarks}}</strong>\
-                <br><i class="fa fa-pencil-square-o text-gray">&nbsp;</i>{{model.group.remarksHistory[arrayIndex].stage}}-{{model.group.remarksHistory[arrayIndex].action}}<br>'
-            }]
-        }]
-    },
+            {
+                "type": "box",
+                condition: "model.group.remarksHistory && model.group.remarksHistory.length > 0",
+                "title": "REMARKS_HISTORY",
+                "items": [{
+                        type: "tableview",
+                        listStyle: "table",
+                        key: "group.remarksHistory",
+                        "title": "REMARKS_HISTORY",
+                        selectable: false,
+                        expandable: true,
+                        paginate: false,
+                        searching: false,
+                        getColumns: function() {
+                            return [{
+                                title: 'CHECKER_REMARKS',
+                                data: 'updatedBy',
+                                render: function(data, type, full, meta) {
+                                    return  '<i class="fa fa-user text-gray">&nbsp;</i> ' + data;
+                                }
+                            }, {
+                                title: 'STATUS',
+                                data: 'updatedOn',
+                                render: function(data, type, full, meta) {
+                                    return  '<i class="fa fa-clock-o text-gray">&nbsp;</i> ' + data;
+                                }
+                            }, {
+                                title: 'APPROVER_TYPE',
+                                data: 'remarks',
+                                render: function(data, type, full, meta) {
+                                    return  '<i class="fa fa-commenting text-gray">&nbsp;</i> ' + data;
+                                }
+                            }, {
+                                title: 'APPROVER',
+                                data: 'stage',
+                            }]
+                        },
+                        getActions: function(item) {
+                            return [];
+                        }
+                    }
+                ]
+            },
     {
         "type": "box",
         "title": "POST_REVIEW",
