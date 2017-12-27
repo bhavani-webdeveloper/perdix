@@ -169,21 +169,30 @@ define({
                         {
                             title: 'SPOKE_NAME',
                             data: 'centreName'
-                        }, {
+                        },
+                        {
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        }, {
+                        }, 
+                        {
                             title: 'DUE_DATE',
                             data: 'installmentDate'
-                        }, {
+                        }, 
+                        {
                             title: 'DEMAND_AMOUNT',
                             data: 'installmentAmount'
-                        },{
+                        },
+                        {
                             title: 'PHONE_NUMBER',
                             data: 'mobilePhone'
-                        },{
+                        },
+                        {
                             title: 'AREA',
                             data: 'area'
+                        },
+                        {
+                            title: "LOAN_ACCOUNT_NO",
+                            data: "accountNumber"
                         }
                         ]
                     },

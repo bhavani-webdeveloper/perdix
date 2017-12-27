@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.ReminderFollowUpQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils", "irfNavigator", "RepaymentReminder"],
-    $pageFn: function($log, formHelper, LUC, $state, SessionStore, Utils, irfNavigator, RepaymentReminder) {
+    dependencies: ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils", "irfNavigator", "RepaymentReminder", "Queries"],
+    $pageFn: function($log, formHelper, LUC, $state, SessionStore, Utils, irfNavigator, RepaymentReminder, Queries) {
         return {
             "type": "search-list",
             "title": "REMINDER_FOLLOW_UP",
@@ -169,21 +169,30 @@ define({
                         {
                             title: 'SPOKE_NAME',
                             data: 'centreName'
-                        }, {
+                        }, 
+                        {
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        }, {
+                        }, 
+                        {
                             title: 'DUE_DATE',
                             data: 'installmentDate'
-                        }, {
+                        }, 
+                        {
                             title: 'DEMAND_AMOUNT',
                             data: 'installmentAmount'
-                        },{
+                        },
+                        {
                             title: 'PHONE_NUMBER',
                             data: 'mobilePhone'
-                        },{
+                        },
+                        {
                             title: 'STATUS',
                             data: 'reminderStatus'
+                        },
+                        {
+                            title: "LOAN_ACCOUNT_NO",
+                            data: "accountNumber"
                         }
                         ]
                     },
