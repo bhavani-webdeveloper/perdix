@@ -182,11 +182,11 @@
 				},
 				"loanAmountPurpose": {
 					"title": "LOAN_AMOUNT_USED_FOR",
-					"type": "string"	
+					"type": "string"
 				},
 				"verifiedBy": {
 					"title": "VERIFIED_BY",
-					"type": "string"	
+					"type": "string"
 				},
 				"amountUsedPercentage": {
 					"title": "PERCENTAGE",
@@ -198,11 +198,11 @@
 				},
 				"intendedPurposePercentage": {
 					"title": "PERCENTAGE",
-					"type": "number"	
+					"type": "number"
 				},
 				"nonIntendedPurposeAmount": {
 					"title": "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
-					"type": "number"	
+					"type": ["number", "null", "string"]
 				},
 				"nonIntendedPurposePercentage": {
 					"title": "PERCENTAGE",
@@ -210,11 +210,11 @@
 				},
 				"nonIntendedPurposeAmountSpentOn": {
 					"title": "UNINTENDED_AMOUNT_USED_FOR",
-					"type": "string"	
+					"type": "string"
 				},
 				"repayedDebitAmount": {
 					"title": "AMOUNT_USED_FOR_REPAYING_DEBIT",
-					"type": "number"	
+					"type": "number"
 				},
 				"monthlyInterestForDebit": {
 					"title": "MONTHLY_INTEREST_FOR_REPAYING_DEBIT",

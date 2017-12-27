@@ -473,6 +473,8 @@ define({
                         "readonly": true,
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                        title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
+                        title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         type: "amount",
                         "readonly": true,
@@ -610,6 +612,7 @@ define({
                         "readonly": true,
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                        title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         type: "amount",
                         "readonly": true,
@@ -758,6 +761,7 @@ define({
                         "readonly": true,
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                        title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         type: "amount",
                         readonly: true
@@ -1056,6 +1060,7 @@ define({
                             "readonly": true,
                         }, {
                             key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                            title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                             //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             type: "amount",
                             "readonly": true,
@@ -1193,6 +1198,7 @@ define({
                             "readonly": true,
                         }, {
                             key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                            title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                             //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             type: "amount",
                             "readonly": true,
@@ -1341,6 +1347,7 @@ define({
                             "readonly": true,
                         }, {
                             key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                            title: "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
                             //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                             type: "amount",
                             readonly: true
