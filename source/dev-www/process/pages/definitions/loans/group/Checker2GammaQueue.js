@@ -1,5 +1,5 @@
 define({
-	pageUID: "loans.group.Checker2Queue",
+	pageUID: "loans.group.Checker2GammaQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -16,7 +16,6 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
-				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				var bankName = SessionStore.getBankName();
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){
@@ -41,12 +40,7 @@ define({
 	                	items: [
 	                	{
 	                		key: "bankId",
-	                		readonly: true, 
-	                		condition: "!model.fullAccess && (model.siteCode != 'KGFS')"
-	                	},
-	                	{
-	                		key: "bankId",
-	                		condition: "model.fullAccess && (model.siteCode != 'KGFS')"
+	                		"type": "select"
 	                	},
 	                	{
 	                		key: "branchId", 

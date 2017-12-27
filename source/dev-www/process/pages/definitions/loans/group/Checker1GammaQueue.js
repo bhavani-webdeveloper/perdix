@@ -1,5 +1,5 @@
 define({
-	pageUID: "loans.group.Checker2Queue",
+	pageUID: "loans.group.Checker1GammaQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -12,11 +12,10 @@ define({
 
 		return {
 			"type": "search-list",
-			"title": "CHECKER2_QUEUE",
+			"title": "CHECKER1_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
-				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				var bankName = SessionStore.getBankName();
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){
@@ -31,56 +30,50 @@ define({
 				}
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
-				$log.info("Checker2 Queue got initialized");
+				$log.info("Checker1 Queue got initialized");
 			},
 			definition: {
-				title: "CHECKER2_QUEUE",
-				searchForm: [
+				title: "CHECKER1_QUEUE",
+				searchForm: [{
+					"type": "section",
+					"items": [ 
 					{
-	                	"type": "section",
-	                	items: [
-	                	{
-	                		key: "bankId",
-	                		readonly: true, 
-	                		condition: "!model.fullAccess && (model.siteCode != 'KGFS')"
-	                	},
-	                	{
-	                		key: "bankId",
-	                		condition: "model.fullAccess && (model.siteCode != 'KGFS')"
-	                	},
-	                	{
-	                		key: "branchId", 
-	                	},
-	                	{
-	                		key: "partner",
-	                		"readonly": true,
-							"condition": "!model.isPartnerChangeAllowed"
-						}, 
-						{
-							"key": "partner",
-							"condition": "model.isPartnerChangeAllowed"
-						}, {
-							"key": "product",
-							"title": "PRODUCT_CATEGORY",
-							"type": "select",
-							"enumCode": "jlg_loan_product",
-							"parentEnumCode": "partner",
-							"parentValueExpr": "model.partner"
-						}, {
-							"key": "product",
-							condition: "model.product",
-							"type": "string",
-							"title": "PRODUCT",
-							readonly: true
-						},
-						{
-							"key": "groupCode",
-							"type": "string",
-							"title": "GROUP_CODE",
-						}]
-	                }
-				],
-				//autoSearch: true,
+						"key": "bankId",
+						"type": "select",
+					}, {
+						"key": "branchId",
+						"type": "select",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
+					}, {
+						"key": "partner",
+						"type": "select",
+						"readonly": true,
+						"condition": "!model.isPartnerChangeAllowed"
+					}, {
+						"key": "partner",
+						"type": "select",
+						"condition": "model.isPartnerChangeAllowed"
+					}, {
+						"key": "product",
+						"title": "PRODUCT_CATEGORY",
+						"type": "select",
+						"enumCode": "jlg_loan_product",
+						"parentEnumCode": "partner",
+						"parentValueExpr": "model.partner"
+					}, {
+						"key": "product",
+						condition: "model.product",
+						"type": "string",
+						"title": "PRODUCT",
+						readonly: true
+					},
+					{
+						"key": "groupCode",
+						"type": "string",
+						"title": "GROUP_CODE",
+					}]
+				}],
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -88,36 +81,22 @@ define({
 						"bankId": {
 							"title": "BANK_NAME",
 							"type": ["integer", "null"],
-							enumCode: "bank",	
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true,
-
-							}
+							enumCode: "bank"
 						},
 						"branchId": {
 							"title": "BRANCH_NAME",
 							"type": ["integer", "null"],
-							"enumCode": "branch_id",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true,
-								"parentEnumCode": "bank",
-								"parentValueExpr": "model.bankId",
-							}
+							"enumCode": "branch_id"
 						},
 						"partner": {
 							"type": "string",
 							"title": "PARTNER",
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "partner"
-							}
+							"enumCode": "partner"
 						},
 						"groupCode": {
 							"type": "string",
 							"title": "GROUP_CODE",
-						},
+						}, 
 						"product": {
 							"title": "PRODUCT"
 						}
@@ -129,21 +108,17 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-					var params = {
+					return GroupProcess.search({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
-						'product': searchOptions.product,
 						'groupCode':searchOptions.groupCode,
+						'product': searchOptions.product,
 						'groupStatus': true,
+						'currentStage': "Checker1",
 						'page': pageOpts.pageNo,
-						'currentStage': "Checker2",
 						'per_page': pageOpts.itemsPerPage
-					};
-
-					var promise = GroupProcess.search(params).$promise;
-					return promise;
+					}).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -208,11 +183,11 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.Checker2",
+									pageName: "loans.group.Checker1",
 									pageId:item.id
 								}, {
 									state: "Page.Engine",
-									pageName: "loans.group.Checker2Queue",
+									pageName: "loans.group.Checker1Queue",
 								});
 							},
 							isApplicable: function(item, index) {

@@ -23,7 +23,9 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             "Page/Engine/loans.group.GrtQueue",
             "Page/Engine/loans.group.ApplicationPendingQueue",
             "Page/Engine/loans.group.Checker1Queue",
+            "Page/Engine/loans.group.Checker1GammaQueue",
             "Page/Engine/loans.group.Checker2Queue",
+            "Page/Engine/loans.group.Checker2GammaQueue",
             "Page/Engine/loans.group.AgreementUploadPendingQueue",
             "Page/Engine/loans.group.Checker3Queue",
             "Page/Engine/loans.group.Checker4Queue",
@@ -98,6 +100,8 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         var checker2 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker2Queue"];
         var checker3 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker3Queue"];
         var checker4 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker4Queue"];
+        var checkerGamma1 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker1GammaQueue"];
+        var checkerGamma2 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker2GammaQueue"];
         var agmtUpldPendingq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.AgreementUploadPendingQueue"];
         var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
         var disbursement = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.JLGDisbursementQueue"];
@@ -237,6 +241,30 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'currentStage': "Checker2"
             }, function(response) {
                 checker2.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checkerGamma1) {
+            checkerGamma1.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker1"
+            }, function(response) {
+                checkerGamma1.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checkerGamma2) {
+            checkerGamma2.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker2"
+            }, function(response) {
+                checkerGamma2.data = Number(response.headers['x-total-count']) || 0;
             });
         }
 

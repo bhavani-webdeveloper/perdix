@@ -17,6 +17,7 @@ define({
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				var bankName = SessionStore.getBankName();
+				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){
 					if(banks[i].name == bankName){
@@ -40,11 +41,11 @@ define({
 						"key": "bankId",
 						"readonly": true,
 						"type": "select",
-						"condition": "!model.fullAccess"
+						"condition": "!model.fullAccess && (model.siteCode != 'KGFS')"
 					}, {
 						"key": "bankId",
 						"type": "select",
-						"condition": "model.fullAccess"
+						"condition": "model.fullAccess && (model.siteCode != 'KGFS')"
 					}, {
 						"key": "branchId",
 						"type": "select",
