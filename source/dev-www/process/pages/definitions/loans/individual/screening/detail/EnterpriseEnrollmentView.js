@@ -20,20 +20,66 @@ define({
                     model.customer = res;
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
-                    /*Address*/
-                   /* var s1 = model.customer.doorNo;
-                    var s2 = model.customer.street;
-                    var s3 = model.customer.pincode;
-                    var s4 = model.customer.district;
-                    var s5 = model.customer.state;
-                    model.business_address_html = (s1 == null ? "" : s1).concat('\n', (s2 == null ? "" : s2), '\n', (s3 == null ? "" : s3), '\n ', (s4 == null ? "" : s4), ' \n', (s5 == null ? "" : s5));
-*/
                     model.customer.presetAddress = [
                         model.customer.doorNo,
                         model.customer.street,
                         model.customer.district,
                         model.customer.state
                     ].filter(a=>a).join(', ')+' - '+model.customer.pincode;
+
+
+
+                    /*machine pics */
+                var machineDocs = _.filter(self.form, {title: "Machinery/Stocks/Non-Machinery Asset Details"});
+                  var machineData = [];
+                  var machineBills = [];
+                    for (i in model.customer.fixedAssetsMachinaries) {
+                        machineData.push({
+                            "key": "customer.fixedAssetsMachinaries[" + i + "].machineImage",
+                            "notitle": true,
+                            "title": model.customer.fixedAssetsMachinaries[1].machineType,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                             "type": "file",
+                            "fileType": "image/*",
+                            "using": "scanner"
+                        });
+
+                        machineBills.push({
+                            "key": "customer.fixedAssetsMachinaries[" + i + "].machineBillsDocId",
+                            "title": model.customer.fixedAssetsMachinaries[i].machineType,
+                            "notitle":true,
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "fileType": "image/*",
+                            "using": "scanner"
+                        })
+
+                    }
+                  var machinaPhotosData = {
+                        "type": "section",
+                        "title": "Machine Photos",
+                        "condition": "machineData.length!=0",
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                        "items": machineData
+                    };
+
+                     var MachineBillData ={
+                        "type": "section",
+                        "title": "Machine Bills",
+                        "condition": "MachineBillData.length!=0",
+                        "condition": "model.customer.fixedAssetsMachinaries[0].machineBillsDocId !=null",
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
+                        "items": machineBills
+                        
+                     }
+                
+
+                    machineDocs[0].items[1].items.push(machinaPhotosData);
+                    machineDocs[0].items[1].items.push(MachineBillData);
+
+                    
 
                     /*CBREPORT*/
 
@@ -83,13 +129,13 @@ define({
                         }
                     });
                     model.REFERENCE_CHECK_RESPONSE = 'NA';
-                    var count_neg_response = 0;
+                    var count_neg_response = "true";
                     _.each(model.customer.verifications, function(verification) {
-                        if (verification.customerResponse == 'negative' && verification.customerResponse != null) {
-                            count_neg_response++;
+                        if (verification.customerResponse == 'negative' && verification.customerResponse == 'NEGATIVE') {
+                            return count_neg_response="false";
                         }
                     })
-                    if (count_neg_response >= 1) {
+                    if (count_neg_response ="false") {
                         model.REFERENCE_CHECK_RESPONSE = 'negative';
                     } else {
                         model.REFERENCE_CHECK_RESPONSE = 'positive';
@@ -131,7 +177,6 @@ define({
                         }]
                     });
                 }
-
 
             },
             form: [{
@@ -414,79 +459,6 @@ define({
                         getActions: function() {
                             return [];
                         }
-                    }, {
-                        "type": "section",
-                        "title": "Machine Photos",
-                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
-                        "items": [{
-
-                            "key": "customer.fixedAssetsMachinaries[0].machineImage",
-                            "notitle": true,
-                            /*
-                                                        "title":model.customer.fixedAssetsMachinaries[0].machineType,*/
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "using": "scanner"
-                        }, {
-
-                            "key": "customer.fixedAssetsMachinaries[1].machineImage",
-                            "notitle": true,
-                            /*
-                                                        "title":"customer.fixedAssetsMachinaries[1].machineType",*/
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "using": "scanner"
-                        }, {
-
-                            "key": "customer.fixedAssetsMachinaries[2].machineImage",
-                            "notitle": true,
-                            /*
-                                                        "title":"customer.fixedAssetsMachinaries[2].machineType",*/
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "using": "scanner"
-                        }]
-
-
-                    }, {
-                        "type": "section",
-                        "title": "Machine Bills",
-                        "condition": "model.customer.fixedAssetsMachinaries[0].machineBillsDocId !=null",
-                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
-                        "items": [{
-                            "key": "customer.fixedAssetsMachinaries[0].machineBillsDocId",
-                            /*
-                                                        "title": "customer.fixedAssetsMachinaries[0].machineType",
-                                                        "notitle":true,*/
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "customer.fixedAssetsMachinaries[1].machineBillsDocId",
-                            /*
-                                                        "title":"customer.fixedAssetsMachinaries[1].machineType",*/
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }, {
-                            "key": "model.customer.fixedAssetsMachinaries[2].machineBillsDocId",
-                            /*
-                                                        "title": "customer.fixedAssetsMachinaries[2].machineType",*/
-                            "notitle": true,
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "preview": "pdf",
-                            "using": "scanner"
-                        }]
                     }]
                 }]
             }, {
