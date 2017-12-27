@@ -71,6 +71,7 @@ define({
                         "demandDate": {
                             "title": "DEMAND_DATE",
                             "type": ["string", "null"],
+                            "required": true,
                             "x-schema-form": {
                                 "type": "date",
                                 "screenFilter": true
