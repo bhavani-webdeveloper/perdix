@@ -109,7 +109,7 @@ define({
                         return $q.all(promises);
                 })
                 .then(function(){
-                    PageHelper.hideLoader();  
+                    PageHelper.hideLoader();
                 })
             },
 
@@ -232,6 +232,7 @@ define({
                         key: "reminder.repaymentCurrentHistories",
                         type: "array",
                         add: null,
+                        startEmpty: true,
                         remove: null,
                         titleExpr: "'Reminder: ' + moment(model.reminder.repaymentCurrentHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
                         titleExprLocals: {moment: window.moment},
@@ -244,7 +245,7 @@ define({
                             type: "string",
                             title: "REMARKS"
                         }, {
-                            key: "reminder.repaymentCurrentHistories[].customerName",
+                            key: "reminder.repaymentCurrentHistories[].lastModifiedUserName",
                             type: "string",
                             title: "USERNAME"
                         }, {
@@ -262,6 +263,7 @@ define({
                     type: "array",
                     add: null,
                     remove: null,
+                    startEmpty: true,
                     titleExpr: "moment(model.reminder.repaymentPreviousHistories[arrayIndexes[0]].interactionDate.startMonth).format('MMMM YYYY')",
                     titleExprLocals: {moment: window.moment},
                     items: [{
@@ -273,7 +275,7 @@ define({
                         type: "string",
                         title: "REMARKS"
                     }, {
-                        key: "reminder.repaymentPreviousHistories[].customerName",
+                        key: "reminder.repaymentPreviousHistories[].lastModifiedUserName",
                         type: "string",
                         title: "USERNAME"
                     }, {
@@ -289,6 +291,7 @@ define({
                 items: [{
                     key: "accountDetails",
                     type: "array",
+                    startEmpty: true,
                     add: null,
                     remove: null,
                     "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.reminder.accountDetails[arrayIndexes[0]].createdAt).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.reminder.accountDetails[arrayIndexes[0]].createdAt).format('DD, MMMM YYYY')",

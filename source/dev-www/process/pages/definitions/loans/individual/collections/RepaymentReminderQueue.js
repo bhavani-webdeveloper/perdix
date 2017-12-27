@@ -14,7 +14,7 @@ define({
                 .then(function(response){
                     $log.info(response);
                     if (response.body[0].min_date != null) {
-                        model.demandDate = response.body[0].min_date;    
+                        model.demandDate = response.body[0].min_date;
                     }
                 });
             },
@@ -79,7 +79,7 @@ define({
                         "reminderStatus": {
                             "title": "REMINDER_STATUS",
                             "type": ["string", "null"],
-                            "enumCode": "reminderStatus",
+                            "enumCode": "repayment_call_status",
                             "x-schema-form": {
                                 "type": "select",
                                 "screenFilter": true
@@ -88,11 +88,11 @@ define({
                     },
                     "required": []
                 },
-                
+
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { 
+                getResultsPromise: function(searchOptions, pageOpts) {
                     var branches = formHelper.enum('branch').data;
                     var branchName = null;
                     for (var i = 0; i < branches.length; i++) {
@@ -182,7 +182,7 @@ define({
                             data: 'mobilePhone'
                         },{
                             title: 'AREA',
-                            data: 'area' 
+                            data: 'area'
                         }
                         ]
                     },
@@ -193,13 +193,13 @@ define({
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
-                                    state: "Page.Engine", 
+                                    state: "Page.Engine",
                                     pageName: "loans.individual.collections.RepaymentReminderData",
                                     pageId: item.id,
                                     pageData: {_lucCompleted : true}
                                 },
                                 {
-                                    state: "Page.Engine", 
+                                    state: "Page.Engine",
                                     pageName: "loans.individual.collections.RepaymentReminderQueue",
                                 });
                             },
