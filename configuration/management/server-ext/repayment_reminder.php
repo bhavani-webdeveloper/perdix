@@ -39,7 +39,7 @@ try {
         ->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date', DB::raw('NOW() as `created_at`'), DB::raw("'SYSTEM' as `created_by`"), DB::raw("0 as `version`"), DB::raw('NOW() as `last_edited_at`'), DB::raw("'SYSTEM' as `last_edited_by`"))
         ->havingRaw("(select count(account_number) from $db.repayment_reminder where account_number = `fut`.`ACCOUNT_NO` and installment_date = `fut`.`INSTALLMENT_DATE`) = 0")
         ->orderBy('fut.INSTALLMENT_DATE')
-        ->chunk(500, function ($reminderData) use ($totalCount) {
+        ->chunk(500, function ($reminderData) use (&$totalCount) {
             $details = json_encode($reminderData);
             $details = json_decode($details, true);
             RepaymentReminder::insert($details);
