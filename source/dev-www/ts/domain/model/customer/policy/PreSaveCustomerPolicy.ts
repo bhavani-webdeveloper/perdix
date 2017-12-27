@@ -57,13 +57,12 @@ export class PreSaveCustomerPolicy extends IPolicy<EnrolmentProcess> {
                         }
                     }
 
-
                     return Observable.of(enrolmentProcess);
                 } catch(err) {
                     console.error(err);
                     return Observable.of(enrolmentProcess);
                 }
-                
+
             }
         )
     }
