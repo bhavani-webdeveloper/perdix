@@ -3307,6 +3307,16 @@
               "Completed"
             ]
           },
+		   "enterpriseType": {
+            "title": "enterpriseType",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "finishedGoods": {
             "title": "finishedGoods",
             "type": "number",
