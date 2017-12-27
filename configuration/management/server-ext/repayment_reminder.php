@@ -36,7 +36,7 @@ try {
         ->join("$db.loan_accounts as l", 'l.account_number', '=', 'fut.ACCOUNT_NO')
         ->join("$db.customer as c", 'c.id', '=', 'l.customer_id')
         ->whereBetween('fut.INSTALLMENT_DATE', [$fromDate, $toDate])
-        ->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date', DB::raw('NOW() as `created_at`'), DB::raw("'SYSTEM' as `created_by`"), DB::raw("0 as `version`"), DB::raw('NOW() as `last_edited_at`'), DB::raw("'SYSTEM' as `last_edited_by`"))
+        ->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date', DB::raw('NOW() as `created_at`'), DB::raw("'SYSTEM' as `created_by`"), DB::raw("0 as `version`"), DB::raw('NOW() as `last_edited_at`'), DB::raw("'SYSTEM' as `last_edited_by`"), DB::raw("'No Status' as `reminder_status`") )
         ->havingRaw("(select count(account_number) from $db.repayment_reminder where account_number = `fut`.`ACCOUNT_NO` and installment_date = `fut`.`INSTALLMENT_DATE`) = 0")
         ->orderBy('fut.INSTALLMENT_DATE')
         ->chunk(500, function ($reminderData) use (&$totalCount) {
