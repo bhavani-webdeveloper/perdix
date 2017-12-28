@@ -1,13 +1,11 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'),
-	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
-        ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
-        	$log.info("Inside LoanBookingBundle");
+irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
+        $log.info("Inside LoanBookingBundle");
 
 
-        	return {
-        		"type": "page-bundle",
+        return {
+            "type": "page-bundle",
             "title": "ZONAL_RISK_REVIEW",
             "subTitle": "",
             "readonly": true,
@@ -53,45 +51,51 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                 minimum: 1,
                 maximum: 1,
                 order: 60
-            }, /*{
-                pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
-                title: 'LOAN_REQUEST',
-                pageClass: 'loan-request',
-                minimum: 1,
-                maximum: 1,
-                order: 65
-            }, */{
+            }, {
                 pageName: 'loans.individual.screening.detail.SummaryView',
                 title: 'Summary',
                 pageClass: 'summary',
                 minimum: 1,
                 maximum: 1,
                 order: 5
-            }
-                ],
-                "bundlePages": [],
-                "offline": true,
-                "getOfflineDisplayItem": function(value, index){
-                    var out = new Array(2);
-                    for (var i=0; i<value.bundlePages.length; i++){
-                        var page = value.bundlePages[i];
-                        if (page.pageClass == "applicant"){
-                            out[0] = page.model.customer.firstName;
-                        } else if (page.pageClass == "business"){
-                            out[1] = page.model.customer.firstName;
-                        }
+            }, {
+                pageName: 'loans.individual.screening.Review',
+                title: 'REVIEW',
+                pageClass: 'loan-review',
+                minimum: 1,
+                maximum: 1,
+                order: 80
+            }, {
+                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                title: 'BALANCE_SHEET_HISTORY',
+                pageClass: 'balance-sheet-history',
+                minimum: 1,
+                maximum: 1,
+                order: 90
+            }],
+            "bundlePages": [],
+            "offline": true,
+            "getOfflineDisplayItem": function(value, index) {
+                var out = new Array(2);
+                for (var i = 0; i < value.bundlePages.length; i++) {
+                    var page = value.bundlePages[i];
+                    if (page.pageClass == "applicant") {
+                        out[0] = page.model.customer.firstName;
+                    } else if (page.pageClass == "business") {
+                        out[1] = page.model.customer.firstName;
                     }
-                    return out;
-                },
+                }
+                return out;
+            },
 
-                bundleActions: [],
+            bundleActions: [],
 
-                "pre_pages_initialize": function(bundleModel){
-                    $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "ZonalRiskReview";
-                    var deferred = $q.defer();
+            "pre_pages_initialize": function(bundleModel) {
+                $log.info("Inside pre_page_initialize");
+                bundleModel.currentStage = "ZonalRiskReview";
+                var deferred = $q.defer();
 
-                    var $this = this;
+                var $this = this;
                 if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                     PageHelper.showLoader();
                     bundleModel.loanId = $stateParams.pageId;
@@ -126,12 +130,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                                     guarantors: []
                                 };
 
-/*
-                                if (res.currentStage != 'ZonalRiskReview') {
-                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                    irfNavigator.goBack();
-                                    return;
-                                }*/
+                                /*
+                                                                if (res.currentStage != 'ZonalRiskReview') {
+                                                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                                                    irfNavigator.goBack();
+                                                                    return;
+                                                                }*/
 
                                 for (var i = 0; i < res.loanCustomerRelations.length; i++) {
                                     var cust = res.loanCustomerRelations[i];
@@ -212,24 +216,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                                     }
                                 });
 
-                              /*  $this.bundlePages.push({ 
-                                     pageClass: 'loan-request',
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
                                     model: {
                                         loanAccount: res
                                     }
-                                });*/
+                                });
 
-                                /*$this.bundlePages.push({
-                                    pageClass: 'scoring_view',
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
-                                        }
+                                        customerUrn: res.urnNo,
+                                        loanId: bundleModel.loanId
                                     }
-                                });*/
-                                
+                                });
+
 
 
                                 deferred.resolve();
@@ -244,44 +245,45 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                             PageHelper.hideLoader();
                         })
                 }
-                    return deferred.promise;
-                },
-                "post_pages_initialize": function(bundleModel){
-                    $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
-                    
-                },
-        		eventListeners: {
-        			"on-customer-load": function(pageObj, bundleModel, params){
-                        BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
-        			},
-                    "new-enrolment": function(pageObj, bundleModel, params){
-                        switch (pageObj.pageClass){
-                            case 'applicant':
-                                $log.info("New applicant");
-                                break;
-                            case 'co-applicant':
-                                $log.info("New co-applicant");
-                                break;
-                            case 'guarantor':
-                                $log.info("New guarantor");
-                                break;
-                            default:
-                                $log.info("Unknown page class");
+                return deferred.promise;
+            },
+            "post_pages_initialize": function(bundleModel) {
+                $log.info("Inside post_page_initialize");
+                BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
 
-                        }
-                    },
-                    "deviation-loaded":function(pageObj, bundleModel, params){
-                        BundleManager.broadcastEvent("load-deviation", params);
-                    },
-                    "financialSummary": function(pageObj, bundleModel, params) {
+            },
+            eventListeners: {
+                "on-customer-load": function(pageObj, bundleModel, params) {
+                    BundleManager.broadcastEvent("test-listener", {
+                        name: "SHAHAL AGAIN"
+                    });
+                },
+                "new-enrolment": function(pageObj, bundleModel, params) {
+                    switch (pageObj.pageClass) {
+                        case 'applicant':
+                            $log.info("New applicant");
+                            break;
+                        case 'co-applicant':
+                            $log.info("New co-applicant");
+                            break;
+                        case 'guarantor':
+                            $log.info("New guarantor");
+                            break;
+                        default:
+                            $log.info("Unknown page class");
+
+                    }
+                },
+                "deviation-loaded": function(pageObj, bundleModel, params) {
+                    BundleManager.broadcastEvent("load-deviation", params);
+                },
+                "financialSummary": function(pageObj, bundleModel, params) {
                     BundleManager.broadcastEvent("financial-summary", params);
                 },
                 "business": function(pageObj, bundleModel, params) {
                     BundleManager.broadcastEvent("business-customer", params);
                 }
-        		}
-        	}
+            }
         }
-    ]
-)
+    }
+])

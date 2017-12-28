@@ -10,65 +10,69 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": [{
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'APPLICANT',
-                    pageClass: 'applicant',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 10
-                }, {
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'CO_APPLICANT',
-                    pageClass: 'co-applicant',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 20
-                }, {
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'GUARANTOR',
-                    pageClass: 'guarantor',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 30
-                }, {
-                    pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
-                    title: 'BUSINESS',
-                    pageClass: 'business',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 40
-                }, {
-                    pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
-                    title: 'Business Financials',
-                    pageClass: 'business-finance',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 50
-                }, {
-                    pageName: 'loans.individual.screening.detail.LoanApplicationView',
-                    title: 'Loan Recommendation',
-                    pageClass: 'loan-recommendation',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 60
-                },
-                /*{
-                               pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
-                               title: 'LOAN_REQUEST',
-                               pageClass: 'loan-request',
-                               minimum: 1,
-                               maximum: 1,
-                               order: 65
-                           }, */
-                {
-                    pageName: 'loans.individual.screening.detail.SummaryView',
-                    title: 'Summary',
-                    pageClass: 'summary',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 5
-                }
-            ],
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'APPLICANT',
+                pageClass: 'applicant',
+                minimum: 1,
+                maximum: 1,
+                order: 10
+            }, {
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'CO_APPLICANT',
+                pageClass: 'co-applicant',
+                minimum: 1,
+                maximum: 1,
+                order: 20
+            }, {
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'GUARANTOR',
+                pageClass: 'guarantor',
+                minimum: 1,
+                maximum: 1,
+                order: 30
+            }, {
+                pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
+                title: 'BUSINESS',
+                pageClass: 'business',
+                minimum: 1,
+                maximum: 1,
+                order: 40
+            }, {
+                pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
+                title: 'Business Financials',
+                pageClass: 'business-finance',
+                minimum: 1,
+                maximum: 1,
+                order: 50
+            }, {
+                pageName: 'loans.individual.screening.detail.LoanApplicationView',
+                title: 'Loan Recommendation',
+                pageClass: 'loan-recommendation',
+                minimum: 1,
+                maximum: 1,
+                order: 60
+            }, {
+                pageName: 'loans.individual.screening.detail.SummaryView',
+                title: 'Summary',
+                pageClass: 'summary',
+                minimum: 1,
+                maximum: 1,
+                order: 5
+            }, {
+                pageName: 'loans.individual.screening.Review',
+                title: 'REVIEW',
+                pageClass: 'loan-review',
+                minimum: 1,
+                maximum: 1,
+                order: 80
+            }, {
+                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                title: 'BALANCE_SHEET_HISTORY',
+                pageClass: 'balance-sheet-history',
+                minimum: 1,
+                maximum: 1,
+                order: 90
+            }],
             "bundlePages": [],
             "offline": true,
             "getOfflineDisplayItem": function(value, index) {
@@ -163,7 +167,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                     }
                                 }
 
-                                  $this.bundlePages.push({
+                                $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
                                         cbModel: {
@@ -222,23 +226,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                     }
                                 });
 
-                                /*  $this.bundlePages.push({
-                                       pageClass: 'loan-request',
-                                      model: {
-                                          loanAccount: res
-                                      }
-                                  });*/
 
-                                /*$this.bundlePages.push({
-                                    pageClass: 'scoring_view',
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
-                                        }
+                                        loanAccount: res
                                     }
-                                });*/
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: res.urnNo,
+                                        loanId: bundleModel.loanId
+                                    }
+                                });
 
 
 

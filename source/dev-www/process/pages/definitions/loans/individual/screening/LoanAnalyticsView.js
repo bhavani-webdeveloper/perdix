@@ -49,20 +49,27 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				minimum: 1,
 				maximum: 1,
 				order: 60
-			}, /*{
-				pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
-				title: 'LOAN_REQUEST',
-				pageClass: 'loan-request',
-				minimum: 1,
-				maximum: 1,
-				order: 65
-			},*/ {
+			}, {
 				pageName: 'loans.individual.screening.detail.SummaryView',
 				title: 'Summary',
 				pageClass: 'summary',
 				minimum: 1,
 				maximum: 1,
 				order: 5
+			}, {
+				pageName: 'loans.individual.screening.Review',
+				title: 'REVIEW',
+				pageClass: 'loan-review',
+				minimum: 1,
+				maximum: 1,
+				order: 80
+			}, {
+				pageName: 'loans.individual.misc.BalanceSheetHistory',
+				title: 'BALANCE_SHEET_HISTORY',
+				pageClass: 'balance-sheet-history',
+				minimum: 1,
+				maximum: 1,
+				order: 90
 			}],
 			"bundlePages": [],
 			"offline": false,
@@ -124,8 +131,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 						}
 
 
-                        
-                        $this.bundlePages.push({
+
+						$this.bundlePages.push({
 							pageClass: 'summary',
 							model: {
 								cbModel: {
@@ -136,7 +143,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								}
 							}
 						});
-						
+
 						$this.bundlePages.push({
 							pageClass: 'applicant',
 							model: {
@@ -166,7 +173,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'business',
 							model: {
 								customerId: res.customerId,
-								loanAccount:res
+								loanAccount: res
 							}
 						});
 
@@ -183,25 +190,22 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 								customerId: res.customerId
 							}
 						});
-/*
-						$this.bundlePages.push({ 
-							pageClass: 'loan-request',
+
+						$this.bundlePages.push({
+							pageClass: 'loan-review',
 							model: {
 								loanAccount: res
 							}
-						});*/
+						});
 
-						/*$this.bundlePages.push({
-							pageClass: 'scoring_view',
+						$this.bundlePages.push({
+							pageClass: 'balance-sheet-history',
 							model: {
-								cbModel: {
-									customerId: res.customerId,
-									loanId: bundleModel.loanId,
-									scoreName: 'RiskScore3'
-								}
+								customerUrn: res.urnNo,
+								loanId: bundleModel.loanId
 							}
-						});*/
-						
+						});
+
 
 						deferred.resolve();
 					}, function(httpRes) {
@@ -211,8 +215,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 				}
 				return deferred.promise;
 			},
-			post_pages_initialize: function(bundleModel) {
-			},
+			post_pages_initialize: function(bundleModel) {},
 			eventListeners: {
 				"financialSummary": function(pageObj, bundleModel, params) {
 					BundleManager.broadcastEvent("financial-summary", params);

@@ -10,79 +10,83 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": [{
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'APPLICANT',
-                    pageClass: 'applicant',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 10
-                }, {
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'CO_APPLICANT',
-                    pageClass: 'co-applicant',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 20
-                }, {
-                    pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
-                    title: 'GUARANTOR',
-                    pageClass: 'guarantor',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 30
-                }, {
-                    pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
-                    title: 'BUSINESS',
-                    pageClass: 'business',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 40
-                }, {
-                    pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
-                    title: 'Business Financials',
-                    pageClass: 'business-finance',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 50
-                }, {
-                    pageName: 'loans.individual.screening.detail.LoanApplicationView',
-                    title: 'Loan Recommendation',
-                    pageClass: 'loan-recommendation',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 70
-                },
-                /*{
-                               pageName: 'loans.individual.screening.LoanRequest', // TODO: remove once LoanApplicationView is completed
-                               title: 'LOAN_REQUEST',
-                               pageClass: 'loan-request',
-                               minimum: 1,
-                               maximum: 1,
-                               order: 65
-                           }, */
-                {
-                    pageName: 'loans.individual.screening.detail.SummaryView',
-                    title: 'Summary',
-                    pageClass: 'summary',
-                    minimum: 1,
-                    maximum: 1,
-                    order: 90
-                }
-            ],
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'APPLICANT',
+                pageClass: 'applicant',
+                minimum: 1,
+                maximum: 1,
+                order: 10
+            }, {
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'CO_APPLICANT',
+                pageClass: 'co-applicant',
+                minimum: 1,
+                maximum: 1,
+                order: 20
+            }, {
+                pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
+                title: 'GUARANTOR',
+                pageClass: 'guarantor',
+                minimum: 1,
+                maximum: 1,
+                order: 30
+            }, {
+                pageName: 'loans.individual.screening.detail.EnterpriseEnrollmentView',
+                title: 'BUSINESS',
+                pageClass: 'business',
+                minimum: 1,
+                maximum: 1,
+                order: 40
+            }, {
+                pageName: 'loans.individual.screening.detail.EnterpriseFinancialView',
+                title: 'Business Financials',
+                pageClass: 'business-finance',
+                minimum: 1,
+                maximum: 1,
+                order: 50
+            }, {
+                pageName: 'loans.individual.screening.detail.LoanApplicationView',
+                title: 'Loan Recommendation',
+                pageClass: 'loan-recommendation',
+                minimum: 1,
+                maximum: 1,
+                order: 70
+            }, {
+                pageName: 'loans.individual.screening.detail.SummaryView',
+                title: 'Summary',
+                pageClass: 'summary',
+                minimum: 1,
+                maximum: 1,
+                order: 5
+            }, {
+                pageName: 'loans.individual.screening.Review',
+                title: 'REVIEW',
+                pageClass: 'loan-review',
+                minimum: 1,
+                maximum: 1,
+                order: 80
+            }, {
+                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                title: 'BALANCE_SHEET_HISTORY',
+                pageClass: 'balance-sheet-history',
+                minimum: 1,
+                maximum: 1,
+                order: 90
+            }],
             "bundlePages": [],
             "offline": true,
-           /* "getOfflineDisplayItem": function(value, index) {
-                var out = new Array(2);
-                for (var i = 0; i < value.bundlePages.length; i++) {
-                    var page = value.bundlePages[i];
-                    if (page.pageClass == "applicant") {
-                        out[0] = page.model.customer.firstName;
-                    } else if (page.pageClass == "business") {
-                        out[1] = page.model.customer.firstName;
-                    }
-                }
-                return out;
-            },*/
+            /* "getOfflineDisplayItem": function(value, index) {
+                 var out = new Array(2);
+                 for (var i = 0; i < value.bundlePages.length; i++) {
+                     var page = value.bundlePages[i];
+                     if (page.pageClass == "applicant") {
+                         out[0] = page.model.customer.firstName;
+                     } else if (page.pageClass == "business") {
+                         out[1] = page.model.customer.firstName;
+                     }
+                 }
+                 return out;
+             },*/
 
             bundleActions: [{
                 name: "Conversation",
@@ -164,20 +168,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                 }
 
                                 $this.bundlePages.push({
-                                    pageClass: 'applicant',
-                                    model: {
-                                        customerId: customerIds.applicant
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-recommendation',
-                                    model: {
-                                        customerId: res.customerId
-                                    }
-                                });
-
-                                $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
                                         cbModel: {
@@ -189,7 +179,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                     }
                                 });
 
-                                
+                                $this.bundlePages.push({
+                                    pageClass: 'applicant',
+                                    model: {
+                                        customerId: customerIds.applicant
+                                    }
+                                });
 
                                 for (i in customerIds.coApplicants) {
                                     $this.bundlePages.push({
@@ -224,26 +219,28 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                     }
                                 });
 
-                                
-
-                                /*  $this.bundlePages.push({ 
-                                       pageClass: 'loan-request',
-                                      model: {
-                                          loanAccount: res
-                                      }
-                                  });*/
-
-                                /*$this.bundlePages.push({
-                                    pageClass: 'scoring_view',
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-recommendation',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
-                                        }
+                                        customerId: res.customerId
                                     }
-                                });*/
-                                
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: res
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: res.urnNo,
+                                        loanId: bundleModel.loanId
+                                    }
+                                });
+
 
 
                                 deferred.resolve();
