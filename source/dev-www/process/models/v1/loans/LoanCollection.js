@@ -1,6 +1,6 @@
 irf.models.factory('LoanCollection',[
-"$resource","$httpParamSerializer","BASE_URL","searchResource",
-function($resource,$httpParamSerializer,BASE_URL,searchResource){
+"$resource","$httpParamSerializer","BASE_URL","searchResource","Upload","$q","PageHelper",
+function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, PageHelper){
     var endpoint = BASE_URL + '/api/loanCollection';
 
     var biEndPoint= irf.MANAGEMENT_BASE_URL; 
@@ -10,7 +10,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
     *
     * */
 
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint+'/:id'
@@ -92,4 +92,25 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:biEndPoint+'/server-ext/repayment_reminder.php/',
         }
     });
+
+    resource.loanAssignmentUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/individualLoan/loanCollectionAssignmentUpload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp) {
+                // TODO handle success
+                PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp) {
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
+    
+    return resource;
 }]);

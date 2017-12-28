@@ -11,6 +11,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
         "items": [
             "Page/Engine/loans.individual.collections.RepaymentReminderQueue",
             "Page/Engine/loans.individual.collections.ReminderFollowUpQueue",
+            "Page/Engine/loans.individual.collections.LoanAssignment",
             "Page/Engine/loans.individual.collections.BounceQueue",
             "Page/Engine/loans.individual.collections.BouncePromiseQueue",
             "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
