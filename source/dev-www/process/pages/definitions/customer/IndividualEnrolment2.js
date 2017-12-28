@@ -440,7 +440,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                     var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
                                     model.customer.addressProofNo = aadhaarData.uid;
                                 },
-                                type:"qrcode"
+                                type:"qrcode",
+                                "pattern":"^[2-9]{1}[0-9]{11}$"
 
                             },
                         ]

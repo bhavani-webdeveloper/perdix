@@ -12,8 +12,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
             var getIncludes = function (model) {
                 return [
-                    "BusinessInformation",
-                    "BusinessInformation.firstName",
+                    "EnterpriseInformation",
+                    "EnterpriseInformation.firstName",
+                    "EnterpriseInformation.customerId",
+                    "EnterpriseInformation.customerBranchId",
+                    "EnterpriseInformation.entityId",
+                    "EnterpriseInformation.urnNo",
+                    "EnterpriseInformation.centreId",
+                    "EnterpriseInformation.firstName",
+                    "EnterpriseInformation.referredBy",
+                    "EnterpriseInformation.referredName",
+                    "EnterpriseInformation.companyOperatingSince",
+                    "EnterpriseInformation.companyEmailId",
+                    "EnterpriseInformation.latitude",
+                    "EnterpriseInformation.photoImageId",
+                    "EnterpriseInformation.ownership",
+                    "EnterpriseInformation.businessConstitution",
+                    "EnterpriseInformation.businessHistory",
+                    "EnterpriseInformation.noOfPartners",
+                    "EnterpriseInformation.anyPartnerOfPresentBusiness",
+                    "EnterpriseInformation.partnershipDissolvedDate",
+                    "EnterpriseInformation.companyRegistered",
+                    "EnterpriseInformation.isGSTAvailable",
+                    "EnterpriseInformation.enterpriseRegistrations",
+                    "EnterpriseInformation.businessType",
+                    "EnterpriseInformation.businessActivity",
+                    "EnterpriseInformation.businessSector",
+                    "EnterpriseInformation.businessSubsector",
+                    "EnterpriseInformation.itrAvailable",
+                    "EnterpriseInformation.enterpriseCustomerRelations",
                     "BusinessLiabilities",
                     "BusinessLiabilities.liabilities",
                     "BusinessLiabilities.liabilities.loanType",
@@ -53,8 +80,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto"
-
-
                 ];
             }
 
@@ -73,8 +98,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }
 
                         }
-
-
                     }
             }
 
@@ -102,7 +125,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     var self = this;
                     p1.then(function(repo){
                         var formRequest = {
-                            "overrides": "",
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "EnterpriseInformation.enterpriseType": {
+                                    "title": "ENTERPRISE_TYPE",
+                                    "resolver": "SoleProprietorshipBusinessConfiguration"
+                                }
+                            },
                             "includes": getIncludes(model),
                             "excludes": [],
                             "options": {
@@ -118,15 +149,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         ]
                                     },
                                     {
-                                        "targetID": "BusinessInformation",
-                                        "items": [
+                                        "orderNo": 1,
+                                        "type": "box",
+                                        "title": "BUSINESS_SELECTION",
+                                        "items":[
                                             {
                                                 "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null",
                                                 "type": "section",
                                                 "htmlClass": "alert alert-warning",
                                                 "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
                                                 "orderNo": 10
-                                            }
+                                            },
+                                            "EnterpriseInformation.enterpriseType"
                                         ]
                                     }
                                 ]
@@ -147,40 +181,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "applicant-updated": function(bundleModel, model, params){
                         $log.info("inside applicant-updated of EnterpriseEnrolment2");
                         /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
-                        Queries.getEnterpriseCustomerId(params.customer.id)
-                            .then(function(response){
-                                if (!response || !response.customer_id){
-                                    return false;
-                                }
-
-                                if (response.customer_id == model.customer.id){
-                                    return false;
-                                }
-
-                                return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
-                            })
-                            .then(function(enrolmentProcess){
-                                if (!enrolmentProcess){
-                                    /* IF no enrolment present, reset to applicant */
-                                    model.customer.firstName = params.customer.firstName;
-                                    model.customer.villageName = params.customer.villageName;
-                                    model.customer.pincode = params.customer.pincode;
-                                    model.customer.area = params.customer.area;
-                                    return;
-                                }
-                                $log.info("Inside customer loaded of applicant-updated");
-                                if (model.customer.id) {
-                                    model.loanProcess.removeRelatedEnrolmentProcess(model.customer.id, 'Customer');
-                                }
-                                model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-
-                                /* Setting for the current page */
-                                model.enrolmentProcess = enrolmentProcess;
-                                model.customer = enrolmentProcess.customer;
-
-                                /* Setting enterprise customer relation on the enterprise customer */
-                                model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
-                            })
+                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                     },
                     "co-applicant-updated": function(bundleModel, model, params){
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);

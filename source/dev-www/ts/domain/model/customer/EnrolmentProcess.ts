@@ -82,6 +82,13 @@ export class EnrolmentProcess {
             });
 
             /* @TODO Code to insert to enterprise customer relations */
+
+            if (aIndex==-1){
+                let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
+                a.linkedToCustomerId = loanProcess.applicantEnrolmentProcess.customer.id;
+                this.customer.enterpriseCustomerRelations.push(a);
+            }
+
         }
 
         for (let coApplicant:EnrolmentProcess of loanProcess.coApplicantsEnrolmentProcesses){
@@ -91,15 +98,27 @@ export class EnrolmentProcess {
             let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
                 return item.linkedToCustomerId == coApplicant.customer.id;
             });
+
+            if (aIndex == -1) {
+                let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
+                a.linkedToCustomerId = coApplicant.customer.id;
+                this.customer.enterpriseCustomerRelations.push(a);
+            }
         }
 
         for (let guarantor:EnrolmentProcess of loanProcess.guarantorsEnrolmentProcesses){
 
-            /* Need details on coBorrower */
+            /* Need details on guarantor */
 
             let aIndex = _.findIndex(this.customer.enterpriseCustomerRelations, (item) => {
                 return item.linkedToCustomerId == guarantor.customer.id;
             });
+
+            if (aIndex == -1) {
+                let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
+                a.linkedToCustomerId = guarantor.customer.id;
+                this.customer.enterpriseCustomerRelations.push(a);
+            }
         }
     }
 

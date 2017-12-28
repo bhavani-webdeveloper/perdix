@@ -126,8 +126,7 @@
                 },
                 "addressProofNo": {
                     "type": ["string","null"],
-                    "title": "ADDRESS_PROOF_NO",
-                    "pattern":"^[2-9]{1}[0-9]{11}$"
+                    "title": "ADDRESS_PROOF_NO"
                 },
                 "addressProofValidUptoDate": {
                     "type": ["string","null"],

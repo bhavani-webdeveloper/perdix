@@ -101,6 +101,7 @@ export class Customer {
     enrollmentCheckerStatus: string;
     enrollmentId: string;
     enterpriseId: number;
+    enterpriseType: string;
     existingLoan: string;
     exserviceman: boolean;
     familyEnrollmentId: string;

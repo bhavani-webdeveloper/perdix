@@ -6514,7 +6514,22 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 if(tmp.items) {
                                    tmp.items = processItems(tmp.items);
                                 }
-                                transformedItems.push(tmp);
+
+                                if (overrides[items[i]]) {
+                                    _defn = _.merge({}, tmp, overrides[items[i]]);
+                                } else {
+                                    _defn = _.merge({}, tmp);
+                                }
+
+                                if(_.hasIn(_defn, 'resolver')) {
+                                    var obj = {
+                                        'resolver':_defn.resolver,
+                                        'item': _defn
+                                    };
+                                    resolvers.push(obj);
+                                }
+
+                                transformedItems.push(_defn);
                             }
                         } else if (_.isObject(items[i])){
 
@@ -6524,6 +6539,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
                             if (items[i].targetID) {
                                 tmp = getPropertyFromFormRepo(items[i].targetID);
+                                if (!tmp){
+                                    throw new Error("Cannot find the targetID :: '" + items[i].targetID + "'");
+                                }
+
                                 if (tmp.items){
                                     tmp.itemAdditions = tmp.itemAdditions || [];
                                     tmp.itemAdditions = _.concat([], items[i].items);

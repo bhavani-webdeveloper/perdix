@@ -8,16 +8,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./LOVElementConfiguration", "../../../domain/shared/RepositoryFactory", "../../../domain/shared/RepositoryIdentifiers"], function (require, exports, LOVElementConfiguration_1, RepositoryFactory, RepositoryIdentifiers_1) {
+define(["require", "exports", "./LOVElementConfiguration", "../../../domain/shared/RepositoryFactory", "../../../domain/shared/RepositoryIdentifiers", "../../../infra/helpers/NGHelper"], function (require, exports, LOVElementConfiguration_1, RepositoryFactory, RepositoryIdentifiers_1, NGHelper_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var LoanPurpose2LOVConfiguration = /** @class */ (function (_super) {
         __extends(LoanPurpose2LOVConfiguration, _super);
         function LoanPurpose2LOVConfiguration() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.outputMap = {
-                "purpose2": "loanAccount.loanPurpose2"
-            };
+            _this.outputMap = null;
             _this.search = function (inputModel, form, model, context) {
                 var queryRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers_1.RepositoryIdentifiers.Queries);
                 return queryRepo.getAllLoanPurpose2(model.loanAccount.loanPurpose1).toPromise();
@@ -28,6 +26,8 @@ define(["require", "exports", "./LOVElementConfiguration", "../../../domain/shar
                 ];
             };
             _this.onSelect = function (valueObj, model, context) {
+                model.loanAccount.loanPurpose2 = valueObj.purpose2;
+                NGHelper_1.NGHelper.refreshUI();
             };
             _this.lovonly = true;
             _this.autolov = true;

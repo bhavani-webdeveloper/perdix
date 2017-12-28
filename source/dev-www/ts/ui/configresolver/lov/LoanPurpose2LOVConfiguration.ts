@@ -7,13 +7,12 @@ import RepositoryFactory = require("../../../domain/shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../../domain/shared/RepositoryIdentifiers";
 import {IQueryRepository} from "../../../domain/shared/query/IQueryRepository";
 import Utils = require("../../../domain/shared/Utils");
+import {NGHelper} from "../../../infra/helpers/NGHelper";
 
 export class LoanPurpose2LOVConfiguration extends LOVElementConfiguration{
 
 
-    outputMap: Object = {
-        "purpose2": "loanAccount.loanPurpose2"
-    };
+    outputMap: Object = null;
     search: Function = function(inputModel, form, model, context){
         let queryRepo:IQueryRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Queries);
         return queryRepo.getAllLoanPurpose2(model.loanAccount.loanPurpose1).toPromise();
@@ -24,7 +23,8 @@ export class LoanPurpose2LOVConfiguration extends LOVElementConfiguration{
         ];
     };
     onSelect: Function = function(valueObj, model, context) {
-
+        model.loanAccount.loanPurpose2 = valueObj.purpose2;
+        NGHelper.refreshUI();
     };
 
     lovonly: boolean = true;

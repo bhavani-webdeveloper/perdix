@@ -539,6 +539,21 @@
         "orderNo": 10,
         "title": "ENTITY_INFORMATION",
         "items": {
+            "enterpriseType": {
+                "key": "customer.enterprise.enterpriseType",
+                "title": "ENTERPRISE_TYPE",
+                "type": "select",
+                "titleMap": [
+                    {
+                        "name": "Sole Proprietorship",
+                        "value": "Sole Proprietorship"
+                    },
+                    {
+                        "name": "Enterprise",
+                        "value": "Enterprise"
+                    }
+                ]
+            },
             "customerId": {
                 "key": "customer.id",
                 "title": "LOAD_EXISTING_CUSTOMER",
