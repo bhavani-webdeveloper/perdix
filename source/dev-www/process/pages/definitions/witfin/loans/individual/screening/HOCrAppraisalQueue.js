@@ -126,7 +126,7 @@ define({
                         'stage': 'HOCreditAppraisal',
                         'centreCode':searchOptions.centreCode,
                         'branchName':branch,
-                        'enterprisePincode':searchOptions.pincode,
+                        'pincode':searchOptions.pincode,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
                         'status':searchOptions.status,

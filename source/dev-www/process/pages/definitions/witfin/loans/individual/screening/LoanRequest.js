@@ -136,6 +136,59 @@ define([],function(){
                                             onClick: "actions.proceed(model, formCtrl, form, $event)"
                                         }]
 
+                                    }, {
+                                        type: "section",
+                                        condition: "model.review.action=='SEND_BACK'",
+                                        items: [{
+                                        title: "REMARKS",
+                                        key: "review.remarks",
+                                        type: "textarea",
+                                        required: true
+                                    }, {
+                                        key: "review.targetStage",
+                                        type: "lov",
+                                        autolov: true,
+                                        lovonly:true,
+                                        title: "SEND_BACK_TO_STAGE",
+                                        bindMap: {},
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var stage1 = model.loanProcess.loanAccount.currentStage;
+                                            var targetstage = formHelper.enum('targetstage').data;
+                                            var out = [];
+                                            for (var i = 0; i < targetstage.length; i++) {
+                                                var t = targetstage[i];
+                                                if (t.field1 == stage1) {
+                                                    out.push({
+                                                        name: t.name,
+                                                        value:t.code
+                                                    })
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context) {
+                                            model.review.targetStage1 = valueObj.name;
+                                            model.review.targetStage = valueObj.value;
+
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
+                                    }, {
+                                        key: "review.sendBackButton",
+                                        type: "button",
+                                        title: "SEND_BACK",
+                                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                    }]
+
                                     }]
                                 }
                             ]
@@ -207,6 +260,22 @@ define([],function(){
                     },
                     sendBack: function(model, formCtrl, form, $event){
 
+                        model.loanProcess.proceed(model.review.targetStage)
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "witfin.lead.ReadyForScreeningQueue"
+                                });
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
 
                     },
                     proceed: function(model, formCtrl, form, $event){

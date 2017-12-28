@@ -58,6 +58,10 @@ define({
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
+
+
+
+                            // model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
                     );
@@ -120,13 +124,7 @@ define({
                                     item.name
                                 ];
                             }
-                        }, /*{
-                            key: "lead.centreId",
-                            type: "select",
-                            parentEnumCode: "branch_id",
-                            parentValueExpr: "model.lead.branchId",
-                            screenFilter: true
-                        },*/
+                        },
                         {
                             key: "lead.id",
                             condition: "model.lead.id",
@@ -154,40 +152,8 @@ define({
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.customerType === 'Enterprise'",
+
                                     items: [{
-                                        key: "lead.businessName"
-                                    }, {
-                                        key: "lead.companyRegistered",
-                                        type: "radios",
-                                        enumCode: "decisionmaker"
-                                    }, {
-                                        key: "lead.businessType",
-                                        type: "select",
-                                        enumCode: "businessType"
-                                    }, {
-                                        key: "lead.businessActivity",
-                                        //title:"BUSINESS_LINE",
-                                        type: "select",
-                                        enumCode: "businessActivity",
-                                        parentEnumCode: "businessType"
-                                    }, {
-                                        key: "lead.companyOperatingSince",
-                                        type: "date"
-                                    }, {
-                                        key: "lead.ownership",
-                                        type: "select",
-                                        enumCode: "ownership",
-
-                                        /*titleMap: {
-                                            "Owned": "Owned",
-                                            "Own house without registration": "Own house without registration",
-                                            "Family Property": "Family Property",
-                                            "Leased": "Leased",
-                                            "Rental": "Rental",
-                                        }*/
-
-                                    }, {
                                         type: "fieldset",
                                         title: "INDIVIDUAL_DETAILS",
                                         items: [{
@@ -216,85 +182,21 @@ define({
                                         }, {
                                             key: "lead.maritalStatus",
                                             type: "select",
-                                            enumCode: "marital_status",
-                                            /*titleMap: {
-                                                "MARRIED": "MARRIED",
-                                                "UNMARRIED": "UNMARRIED",
-                                                "DIVORCED": "DIVORCED",
-                                                "SEPARATED": "SEPARATED",
-                                                "WIDOW(ER)": "WIDOW(ER)",
-                                            }*/
+                                            enumCode: "marital_status"
                                         }, {
                                             key: "lead.educationStatus",
                                             type: "select",
-                                            enumCode: "education",
-                                            /* titleMap: {
-                                                 "Below SSLC": "Below SSLC",
-                                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                                 "More than post graduation": "MoreThanPostGraduation",
-                                             }*/
+                                            enumCode: "education"
                                         }]
                                     }]
                                 },
 
-                                {
-                                    type: "fieldset",
-                                    title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'",
-                                    items: [{
-                                        key: "lead.gender",
-                                        type: "radios"
-                                    }, {
-                                        key: "lead.dob",
-                                        type: "date",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.dob) {
-                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.age",
-                                        type: "number",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.age > 0) {
-                                                if (model.lead.dob) {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                } else {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                }
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.maritalStatus",
-                                        type: "select",
-                                        enumCode: "marital_status",
-                                        /*titleMap: {
-                                            "MARRIED": "MARRIED",
-                                            "UNMARRIED": "UNMARRIED",
-                                            "DIVORCED": "DIVORCED",
-                                            "SEPARATED": "SEPARATED",
-                                            "WIDOW(ER)": "WIDOW(ER)",
-                                        }*/
-                                    }, {
-                                        key: "lead.educationStatus",
-                                        type: "select",
-                                        enumCode: "education",
-                                        /* titleMap: {
-                                             "Below SSLC": "Below SSLC",
-                                             "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                             "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                             "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                             "More than post graduation": "MoreThanPostGraduation",
-                                         }*/
-                                    }]
-                                },
+
 
                                 {
                                     type: "fieldset",
                                     title: "CONTACT_DETAILS",
-                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
+
                                     items: [{
                                             key: "lead.mobileNo",
                                         }, {
