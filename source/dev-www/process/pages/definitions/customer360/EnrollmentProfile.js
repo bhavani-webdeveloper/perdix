@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer360.EnrollmentProfile"),
-["$log", "Enrollment", "EnrollmentHelper","PagesDefinition", "SessionStore","$state", "formHelper", "$q", "irfProgressMessage",
+["$log", "Enrollment", "EnrollmentHelper","PagesDefinition", "SessionStore","$state","$stateParams", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService",
-function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state, formHelper, $q, irfProgressMessage,
+function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state,$stateParams, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService){
 
     var branch = SessionStore.getBranch();
@@ -33,60 +33,20 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
             initData(model);
+            var enabletrue= false;
             model = EnrollmentHelper.fixData(model);
-        },
-        modelPromise: function(pageId, _model) {
-            if (!_model || !_model.customer || _model.customer.id != pageId) {
-                $log.info("data not there, loading...");
 
-                var deferred = $q.defer();
-                PageHelper.showLoader();
-                Enrollment.EnrollmentById({id:pageId},function(resp,header){
-                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                    model.customer = resp;
-                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
-                    model = EnrollmentHelper.fixData(model);
-                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
-                        $log.info(data);
-                        $log.info(data.EditBasicCustomerInfo);
-                        if(data){
-                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
-                        }
-                    },function(err){
-                        model.EditBasicCustomerInfo= true;
-                    });
-
-                    if (model.customer.currentStage==='Stage01') {
-                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
-                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
-                    } else {
-                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
-                        initData(model);
-                        //$log.info(model);
-                        deferred.resolve(model);
-                    }
-                    PageHelper.hideLoader();
-                },function(resp){
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
-                    $state.go("Page.Engine",{
-                        pageName:"CustomerSearch",
-                        pageId:null
-                    });
-                });
-                return deferred.promise;
+            if($stateParams.pageData){
+                if($stateParams.pageData.enabletrue){
+                    enabletrue= $stateParams.pageData.enabletrue;
+                }  
             }
-        },
-        offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item["customer"]["urnNo"],
-                item["customer"]["firstName"],
-                item["customer"]["villageName"]
-            ]
-        },
-        form: [{
+
+            var self = this;
+            self.form = [];
+            self.form = [{
             "type": "box",
+            "readonly":enabletrue,
             "title": "CUSTOMER_INFORMATION",
             "items": [
                 {
@@ -238,6 +198,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
             ]
         },{
             "type": "box",
+            "readonly":enabletrue,
             "title": "CONTACT_INFORMATION",
             "items":[{
                 type: "fieldset",
@@ -306,6 +267,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
             ]
         },{
             type:"box",
+            "readonly":enabletrue,
             title:"KYC",
             items:[
                 {
@@ -483,6 +445,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type":"box",
+            "readonly":enabletrue,
             "title":"ADDITIONAL_KYC",
             "items":[
                 {
@@ -568,6 +531,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_FAMILY_DETAILS",
             "items": [{
                 key:"customer.familyMembers",
@@ -709,6 +673,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "EXPENDITURES",
             "items": [{
                 key: "customer.expenditures",
@@ -752,6 +717,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type":"box",
+            "readonly":enabletrue,
             "title":"BUSINESS_OCCUPATION_DETAILS",
             "items":[
                 {
@@ -855,6 +821,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_ASSETS",
             "items": [{
                 key: "customer.physicalAssets",
@@ -994,6 +961,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             type:"box",
+            "readonly":enabletrue,
             title:"T_LIABILITIES",
             items:[
                 {
@@ -1041,6 +1009,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         },
         {
             "type": "box",
+            "readonly":enabletrue,
             "title": "T_HOUSE_VERIFICATION",
             "items": [
                 {
@@ -1193,11 +1162,66 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
             ]
         },{
             "type": "actionbox",
+            "readonly":enabletrue,
             "items": [{
                 "type": "submit",
                 "title": "SUBMIT"
             }]
-        }],
+        }];
+
+
+        },
+        modelPromise: function(pageId, _model) {
+            if (!_model || !_model.customer || _model.customer.id != pageId) {
+                $log.info("data not there, loading...");
+
+                var deferred = $q.defer();
+                PageHelper.showLoader();
+                Enrollment.EnrollmentById({id:pageId},function(resp,header){
+                    var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
+                    model.customer = resp;
+                    model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
+                    model = EnrollmentHelper.fixData(model);
+                    PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
+                        $log.info(data);
+                        $log.info(data.EditBasicCustomerInfo);
+                        if(data){
+                            model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+                        }
+                    },function(err){
+                        model.EditBasicCustomerInfo= true;
+                    });
+
+                    if (model.customer.currentStage==='Stage01') {
+                        irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
+                        $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
+                    } else {
+                        irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
+                        initData(model);
+                        //$log.info(model);
+                        deferred.resolve(model);
+                    }
+                    PageHelper.hideLoader();
+                },function(resp){
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                    $state.go("Page.Engine",{
+                        pageName:"CustomerSearch",
+                        pageId:null
+                    });
+                });
+                return deferred.promise;
+            }
+        },
+        offline: true,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                item["customer"]["urnNo"],
+                item["customer"]["firstName"],
+                item["customer"]["villageName"]
+            ]
+        },
+        form: [],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },

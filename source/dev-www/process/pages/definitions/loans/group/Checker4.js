@@ -208,237 +208,260 @@ return {
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
             "add": null,
             "remove": null,
-            "items": [{
-                "type": "section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [
+            "items": [
                     {
-                        "key": "group.jlgGroupMembers[].ViewCustomer",
-                        "type": "button",
-                        "title": "View Customer",
-                        "readonly": false,
-                        "onClick": "actions.viewCustomer(model, formCtrl, form, $event)"
-                    },
-                    {
-                        "title": "URN",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].urnNo"
+                        "type": "section",
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "key": "group.jlgGroupMembers[].ViewCustomer",
+                                "type": "button",
+                                "title": "View Customer",
+                                "required": true,
+                                "readonly": false,
+                                "onClick": "actions.viewCustomer(model, formCtrl, form, $event)"
+                            }, {
+                                "title": "URN",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].urnNo"
+                            }, {
+                                "title": "FULL_NAME",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.fullName"
+                            }, {
+                                "title": "DATE_OF_BIRTH",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.dateOfBirth",
+                                "type": "date"
+                            }, {
+                                "title": "FATHER_FULL_NAME",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.fatherFullName"
+                            }, {
+                                "title": "Spouse Name",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.spouseFullName"
+                            }]
+                        }, {
+                            "type": "section",
+                            "readonly": true,
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "CUSTOMER_PHOTO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.photo",
+                                type: "file",
+                                fileType: "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO"
+                            }]
+                        }]
                     }, {
-                        "title": "FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.fullName"
-                    },{
-                        "title": "CUSTOMER_PHOTO",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.photo",
-                         type:"file",
-                         fileType:"image/*",
-                         "category": "CustomerEnrollment",
-                         "subCategory": "PHOTO"
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
                     }, {
-                        "title": "DATE_OF_BIRTH",
+                        "type": "section",
                         "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.dateOfBirth",
-                        "type": "date"
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "AADHAAR_NO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                            }, {
+                                "title": "IDENTITY_PROOF",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.identityProof",
+                                "type": "select",
+                                "enumCode": "identity_proof"
+                            }, {
+                                "title": "IDENTITY_PROOF_DOCUMENT",
+                                "key": "group.jlgGroupMembers[].customer.identityProofImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF"
+                            }, ]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "IDENTITY_PROOFNO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.identityProofNo"
+                            }, {
+                                "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                                "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF"
+                            }]
+                        }, ]
                     }, {
-                        "title": "AADHAAR_NO",
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    }, {
+                        "type": "section",
                         "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
-                    }, {
-                        "title": "IDENTITY_PROOF",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.identityProof",
-                        "type": "select",
-                        "enumCode": "identity_proof"
-                    }, {
-                        "title": "IDENTITY_PROOFNO",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.identityProofNo"
-                    }, {
-                        "title": "FATHER_FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.fatherFullName"
-                    }, {
-                        "title": "SPOUSE_FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.spouseFullName"
-                    }]
-                }, {
-                    "type": "section",
-                    "readonly": true,
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "IDENTITY_PROOF_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }, {
-                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "type": "section",
-                "readonly": true,
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
-                        "key": "group.jlgGroupMembers[].customer.addressHtml",
-                        "type": "html"
-                    }, {
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                "key": "group.jlgGroupMembers[].customer.addressHtml",
+                                "type": "html"
+                            }, {
                                 "title": "VILLAGE_NAME",
                                 "key": "group.jlgGroupMembers[].customer.villageName"
-                            },{
+                            }, {
                                 "title": "POST_OFFICE",
                                 "key": "group.jlgGroupMembers[].customer.postOffice"
-                            },{
+                            }, {
                                 "title": "DISTRICT",
                                 "key": "group.jlgGroupMembers[].customer.district"
-                            },{
+                            }, {
                                 "title": "PIN_CODE",
                                 "key": "group.jlgGroupMembers[].customer.pincode"
                             }, {
-                        "title": "MOBILE_PHONE",
-                        "key": "group.jlgGroupMembers[].customer.mobilePhone"
+                                "title": "MOBILE_PHONE",
+                                "key": "group.jlgGroupMembers[].customer.mobilePhone"
+                            }, {
+                                "title": "LANDLINE_NO",
+                                "key": "group.jlgGroupMembers[].customer.landLineNo"
+                            }, {
+                                "title": "HOUSE_LOCATION",
+                                "key": "group.jlgGroupMembers[].customer.latitude",
+                                "type": "geotag",
+                                "latitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.latitude",
+                                "longitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.longitude"
+                            }, {
+                                "title": "ADDRESS_PROOF",
+                                "key": "group.jlgGroupMembers[].customer.addressProof",
+                                "type": "select",
+                                "enumCode": "address_proof"
+                            }]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "ADDRESS_PROOF_NO",
+                                "key": "group.jlgGroupMembers[].customer.addressProofNo"
+                            }, {
+                                "title": "ADDRESS_PROOF_IMAGE_ID",
+                                "key": "group.jlgGroupMembers[].customer.addressProofImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
+                            }, {
+                                "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                                "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
+                            }]
+                        }]
                     }, {
-                        "title": "LANDLINE_NO",
-                        "key": "group.jlgGroupMembers[].customer.landLineNo"
-                    }, {
-                        "title": "HOUSE_LOCATION",
-                        "key": "group.jlgGroupMembers[].customer.latitude",
-                        "type": "geotag",
-                        "latitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.latitude",
-                        "longitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.longitude"
-                    }, {
-                        "title": "ADDRESS_PROOF",
-                        "key": "group.jlgGroupMembers[].customer.addressProof",
-                        "type": "select",
-                        "enumCode": "address_proof"
-                    }, {
-                        "title": "ADDRESS_PROOF_NO",
-                        "key": "group.jlgGroupMembers[].customer.addressProofNo"
-                    }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "ADDRESS_PROOF_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }, {
-                        "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "key": "group.jlgGroupMembers[].customer.additionalKYCs",
-                condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
-                "type": "array",
-                "htmlClass": "row",
-                "notitle": true,
-                "readonly": true,
-                "items": [
-                    {
                         "type": "section",
-                        "htmlClass": "col-sm-6",
-                        "items": [
-                            {
-                                
-                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofType",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    }, {
+                        "key": "group.jlgGroupMembers[].customer.additionalKYCs",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
+                        "type": "array",
+                        "htmlClass": "row",
+                        "notitle": true,
+                        "readonly": true,
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofType",
                                 "title": "KYC1_PROOF_TYPE",
-                                type:"select",
+                                type: "select",
                                 "enumCode": "identity_proof"
-                            },
-                            
-                            {
-                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
                                 "title": "KYC1_PROOF_NUMBER",
-                                    type: "barcode",
-                                    onCapture: function(result, model, form) {
-                                        $log.info(result);
-                                        model.customer.identityProofNo = result.text;
-                                    }
-                                },
-                                {
-                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
-                                    "title": "KYC2_PROOF_TYPE",
-                                    type: "select",
-                                    "enumCode": "identity_proof"
-                                },
-                                {
-                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofNumber",
-                                    "title": "KYC2_PROOF_NUMBER",
-                                type:"barcode",
+                                type: "barcode",
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
                                 }
-                            }
-                        ]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6",
-                        "items": [{
-                            "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
-                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "KYC1"
-                        },
-                        {
-                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
-                            "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "KYC1"
-                        },
-                        {
-                            "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
-                            key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
-                            "title": "KYC2_PROOF_DOCUMENT",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "KYC1"
-
-                        },
-
-                             {
+                            }, {
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
+                                "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, ]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
+                                "title": "KYC2_PROOF_TYPE",
+                                type: "select",
+                                "enumCode": "identity_proof"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofNumber",
+                                "title": "KYC2_PROOF_NUMBER",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            }, {
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
+                                "title": "KYC2_PROOF_DOCUMENT",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, {
                                 key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ReverseImagePath",
                                 "title": "KYC2_PROOF_DOCUMENT_BACK_SIDE",
                                 "type": "file",
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
-                            }, ]
-
+                            }]
                         }]
                     }, {
                         "type": "section",
@@ -451,13 +474,8 @@ return {
                             "type": "section",
                             "htmlClass": "col-sm-6",
                             "items": [{
-                                "title": "LOAN_ACCOUNT_NUMBER",
-                                "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                "type": "string"
-                            }, {
                                 "title": "ACCOUNT_NUMBER",
-                                "readonly": true,
-                                "key": "group.jlgGroupMembers[].loanAccount.bcAccount.bcAccountNo",
+                                "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
                                 "type": "string"
                             }, {
                                 "title": "PRODUCT",
@@ -468,29 +486,18 @@ return {
                             }, {
                                 "title": "LOAN_AMOUNT",
                                 "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                                "type": "amount"
+                                //"type": "amount"
                             }, {
                                 "title": "LOAN_CYCLE",
                                 "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
                             }, {
                                 "title": "TENURE",
-                                "key": "group.jlgGroupMembers[].loanAccount.tenure"
-                            },{
+                                "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                            }, {
                                 "key": "group.jlgGroupMembers[].loanAccount.frequency",
-                                "type":"select",
+                                "type": "select",
                                 "title": "FREQUENCY",
-                                "enumCode":"loan_product_frequency"
-                            }, {
-                                "title": "LOAN_APPLICATION_DATE",
-                                "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
-                                "type": "date"
-                            }, {
-                                "title": "APPLICATION_FILE_DOWNLOAD",
-                                "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
-                                "type": "file",
-                                "fileType": "*/*",
-                                "category": "Group",
-                                "subCategory": "APPLICATION"
+                                "enumCode": "loan_product_frequency"
                             }]
                         }, {
                             "type": "section",
@@ -504,12 +511,23 @@ return {
                             }, {
                                 "title": "LOAN_PURPOSE_3",
                                 "key": "group.jlgGroupMembers[].loanPurpose3"
+                            }, {
+                                "title": "LOAN_APPLICATION_DATE",
+                                "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+                                "type": "date"
+                            }, {
+                                "title": "APPLICATION_FILE_DOWNLOAD",
+                                "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                                "type": "file",
+                                "fileType": "*/*",
+                                "category": "Group",
+                                "subCategory": "APPLICATION"
                             }]
                         }]
                     }, {
                         "type": "section",
                         "html": '<hr>'
-                    }, 
+                    },
                     {
                         "type": "section",
                         //"condition":"model.group.partnerCode=='AXIS'",
@@ -908,7 +926,10 @@ return {
                     state: "Page.Engine",
                     pageName:"customer360.EnrollmentProfile",
                     pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
-                    pageData: model.siteCode
+                    pageData: {
+                        "siteCode":model.siteCode,
+                        "enabletrue":true
+                    }
                 }, {
                     state: "Page.Engine",
                     pageName: $stateParams.pageName,

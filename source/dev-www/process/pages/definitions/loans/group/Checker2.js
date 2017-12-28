@@ -227,220 +227,245 @@ return {
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
             "add": null,
             "remove": null,
-            "items": [{
-                "type": "section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [
-                    {
-                        "key": "group.jlgGroupMembers[].ViewCustomer",
-                        "type": "button",
-                        "title": "View Customer",
-                        "required": true,
-                        "readonly": false,
-                        "onClick": "actions.viewCustomer(model, formCtrl, form, $event)"
-                    },
-                    {
-                        "title": "URN",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].urnNo"
-                    }, {
-                        "title": "FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.fullName"
-                    },
-                    {
-                        "title": "CUSTOMER_PHOTO",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.photo",
-                        type: "file",
-                        fileType: "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "PHOTO"
-                    },
-                    {
-                        "title": "DATE_OF_BIRTH",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.dateOfBirth",
-                        "type": "date"
-                    }, {
-                        "title": "AADHAAR_NO",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
-                    }, {
-                        "title": "IDENTITY_PROOF",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.identityProof",
-                        "type": "select",
-                        "enumCode": "identity_proof"
-                    }, {
-                        "title": "IDENTITY_PROOFNO",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.identityProofNo"
-                    }, {
-                        "title": "FATHER_FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.fatherFullName"
-                    }, {
-                        "title": "SPOUSE_FULL_NAME",
-                        "readonly": true,
-                        "key": "group.jlgGroupMembers[].customer.spouseFullName"
-                    }]
-                }, {
-                    "type": "section",
-                    "readonly": true,
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "IDENTITY_PROOF_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }, {
-                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "type": "section",
-                "readonly": true,
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
-                        "key": "group.jlgGroupMembers[].customer.addressHtml",
-                        "type": "html"
-                    }, {
-                        "title": "VILLAGE_NAME",
-                        "key": "group.jlgGroupMembers[].customer.villageName"
-                    },{
-                        "title": "POST_OFFICE",
-                        "key": "group.jlgGroupMembers[].customer.postOffice"
-                    },{
-                        "title": "DISTRICT",
-                        "key": "group.jlgGroupMembers[].customer.district"
-                    },{
-                        "title": "PIN_CODE",
-                        "key": "group.jlgGroupMembers[].customer.pincode"
-                    }, {
-                        "title": "MOBILE_PHONE",
-                        "key": "group.jlgGroupMembers[].customer.mobilePhone"
-                    }, {
-                        "title": "LANDLINE_NO",
-                        "key": "group.jlgGroupMembers[].customer.landLineNo"
-                    }, {
-                        "title": "HOUSE_LOCATION",
-                        "key": "group.jlgGroupMembers[].customer.latitude",
-                        "type": "geotag",
-                        "latitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.latitude",
-                        "longitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.longitude"
-                    }, {
-                        "title": "ADDRESS_PROOF",
-                        "key": "group.jlgGroupMembers[].customer.addressProof",
-                        "type": "select",
-                        "enumCode": "address_proof"
-                    }, {
-                        "title": "ADDRESS_PROOF_NO",
-                        "key": "group.jlgGroupMembers[].customer.addressProofNo"
-                    }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "ADDRESS_PROOF_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }, {
-                        "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "key": "group.jlgGroupMembers[].customer.additionalKYCs",
-                condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
-                "type": "array",
-                "htmlClass": "row",
-                "notitle": true,
-                "readonly": true,
-                "items": [
+            "items": [
                     {
                         "type": "section",
-                        "htmlClass": "col-sm-6",
-                        "items": [
-                            {
-                                
-                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofType",
-                                "title": "KYC1_PROOF_TYPE",
-                                type:"select",
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "key": "group.jlgGroupMembers[].ViewCustomer",
+                                "type": "button",
+                                "title": "View Customer",
+                                "required": true,
+                                "readonly": false,
+                                "onClick": "actions.viewCustomer(model, formCtrl, form, $event)"
+                            }, {
+                                "title": "URN",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].urnNo"
+                            }, {
+                                "title": "FULL_NAME",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.fullName"
+                            }, {
+                                "title": "DATE_OF_BIRTH",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.dateOfBirth",
+                                "type": "date"
+                            }, {
+                                "title": "FATHER_FULL_NAME",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.fatherFullName"
+                            }, {
+                                "title": "Spouse Name",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.spouseFullName"
+                            }]
+                        }, {
+                            "type": "section",
+                            "readonly": true,
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "CUSTOMER_PHOTO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.photo",
+                                type: "file",
+                                fileType: "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO"
+                            }]
+                        }]
+                    }, {
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    }, {
+                        "type": "section",
+                        "readonly": true,
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "AADHAAR_NO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                            }, {
+                                "title": "IDENTITY_PROOF",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.identityProof",
+                                "type": "select",
                                 "enumCode": "identity_proof"
-                            },
-                            
-                            {
-                                key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
+                            }, {
+                                "title": "IDENTITY_PROOF_DOCUMENT",
+                                "key": "group.jlgGroupMembers[].customer.identityProofImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF"
+                            }, ]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "IDENTITY_PROOFNO",
+                                "readonly": true,
+                                "key": "group.jlgGroupMembers[].customer.identityProofNo"
+                            }, {
+                                "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                                "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF"
+                            }]
+                        }, ]
+                    }, {
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    }, {
+                        "type": "section",
+                        "readonly": true,
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                "key": "group.jlgGroupMembers[].customer.addressHtml",
+                                "type": "html"
+                            }, {
+                                "title": "VILLAGE_NAME",
+                                "key": "group.jlgGroupMembers[].customer.villageName"
+                            }, {
+                                "title": "POST_OFFICE",
+                                "key": "group.jlgGroupMembers[].customer.postOffice"
+                            }, {
+                                "title": "DISTRICT",
+                                "key": "group.jlgGroupMembers[].customer.district"
+                            }, {
+                                "title": "PIN_CODE",
+                                "key": "group.jlgGroupMembers[].customer.pincode"
+                            }, {
+                                "title": "MOBILE_PHONE",
+                                "key": "group.jlgGroupMembers[].customer.mobilePhone"
+                            }, {
+                                "title": "LANDLINE_NO",
+                                "key": "group.jlgGroupMembers[].customer.landLineNo"
+                            }, {
+                                "title": "HOUSE_LOCATION",
+                                "key": "group.jlgGroupMembers[].customer.latitude",
+                                "type": "geotag",
+                                "latitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.latitude",
+                                "longitudeExpr": "model.group.jlgGroupMembers[arrayIndexes[0]].customer.longitude"
+                            }, {
+                                "title": "ADDRESS_PROOF",
+                                "key": "group.jlgGroupMembers[].customer.addressProof",
+                                "type": "select",
+                                "enumCode": "address_proof"
+                            }]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "ADDRESS_PROOF_NO",
+                                "key": "group.jlgGroupMembers[].customer.addressProofNo"
+                            }, {
+                                "title": "ADDRESS_PROOF_IMAGE_ID",
+                                "key": "group.jlgGroupMembers[].customer.addressProofImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
+                            }, {
+                                "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                                "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
+                            }]
+                        }]
+                    }, {
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            "type": "section",
+                            "html": '<hr>'
+                        }, {
+                            "type": "section",
+                            "html": '<hr>'
+                        }]
+                    }, {
+                        "key": "group.jlgGroupMembers[].customer.additionalKYCs",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs && model.group.jlgGroupMembers[arrayIndex].customer.additionalKYCs.length",
+                        "type": "array",
+                        "htmlClass": "row",
+                        "notitle": true,
+                        "readonly": true,
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofType",
+                                "title": "KYC1_PROOF_TYPE",
+                                type: "select",
+                                "enumCode": "identity_proof"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ProofNumber",
                                 "title": "KYC1_PROOF_NUMBER",
-                                    type: "barcode",
-                                    onCapture: function(result, model, form) {
-                                        $log.info(result);
-                                        model.customer.identityProofNo = result.text;
-                                    }
-                                },
-                                {
-                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
-                                    "title": "KYC2_PROOF_TYPE",
-                                    type: "select",
-                                    "enumCode": "identity_proof"
-                                },
-                                {
-                                    key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofNumber",
-                                    "title": "KYC2_PROOF_NUMBER",
-                                type:"barcode",
+                                type: "barcode",
                                 onCapture: function(result, model, form) {
                                     $log.info(result);
                                     model.customer.identityProofNo = result.text;
                                 }
-                            }
-                        ]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6",
-                        "items": [{
-                            "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
-                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "KYC1"
-                        },
-                        {
-                            key:"group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
-                            "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
-                            "type": "file",
-                            "fileType": "image/*",
-                            "category": "CustomerEnrollment",
-                            "subCategory": "KYC1"
-                            },{
+                            }, {
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ImagePath",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc1ReverseImagePath",
+                                "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }, ]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofType",
+                                "title": "KYC2_PROOF_TYPE",
+                                type: "select",
+                                "enumCode": "identity_proof"
+                            }, {
+                                key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ProofNumber",
+                                "title": "KYC2_PROOF_NUMBER",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            }, {
                                 "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
                                 key: "group.jlgGroupMembers[].customer.additionalKYCs[].kyc2ImagePath",
                                 "title": "KYC2_PROOF_DOCUMENT",
@@ -455,173 +480,173 @@ return {
                                 "fileType": "image/*",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
-                            }, ]
-                        }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "type": "section",
-                "readonly": true,
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "ACCOUNT_NUMBER",
-                        "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                        "type": "string"
-                    }, {
-                        "title": "PRODUCT",
-                        "key": "group.productCode" // TODO: this should be product name
-                    }, {
-                        "title": "GROUP_CODE",
-                        "key": "group.groupCode" //loanCycle TODO: this should be product name
-                    }, {
-                        "title": "LOAN_AMOUNT",
-                        "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
-                        "type": "amount"
-                    }, {
-                        "title": "LOAN_CYCLE",
-                        "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
-                    }, {
-                        "title": "TENURE",
-                        "key": "group.jlgGroupMembers[].loanAccount.tenure"
-                    },{
-                        "key": "group.jlgGroupMembers[].loanAccount.frequency",
-                        "type":"select",
-                        "title": "FREQUENCY",
-                        "enumCode":"loan_product_frequency"
-                    }, {
-                        "title": "LOAN_APPLICATION_DATE",
-                        "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
-                        "type": "date"
-                    }, {
-                    "title": "APPLICATION_FILE_DOWNLOAD",
-                    "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
-                    "type": "file",
-                    "fileType": "*/*",
-                    "category": "Group",
-                    "subCategory": "APPLICATION"
-                }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "LOAN_PURPOSE_1",
-                        "key": "group.jlgGroupMembers[].loanPurpose1"
-                    }, {
-                        "title": "LOAN_PURPOSE_2",
-                        "key": "group.jlgGroupMembers[].loanPurpose2"
-                    }, {
-                        "title": "LOAN_PURPOSE_3",
-                        "key": "group.jlgGroupMembers[].loanPurpose3"
-                    }]
-                }]
-            }, {
-                "type": "section",
-                "html": '<hr>'
-            }, {
-                "type": "section",
-                "condition":"model.group.partnerCode!='AXIS'",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        type: "fieldset",
-                        "title": "TELE_CALLING_INFORMATION_CAPTURE",
-                                items: [{
-                                    "title": "IS_CUSTOMER_CALLED",
-                                    "key": "group.jlgGroupMembers[].customerCalled",
-                                    "type": "select",
-                                    titleMap: {
-                                        "Yes": "Yes",
-                                        "No": "No"
-                                    }
-                                }, {
-                                    "title": "CUSTOMER_NOT_CALLED_REASON",
-                                    "key": "group.jlgGroupMembers[].customerNotCalledReason",
-                                    "type": "string",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
-                                }, {
-                                    "title": "CUSTOMER_CALLED_REMARKS",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
-                                    "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                                    "type": "select",
-                                    "enumCode": "customerTelecallingDetails",
-                                },
-                                {
-                                    "title": "Additional Remarks",
-                                    "key": "group.jlgGroupMembers[].telecallingRemarks",
-                                    "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'"
-                                },
-                                {
-                                    "type": "button",
-                                    "key": "group.jlgGroupMembers[]",
-                                    "icon": "fa fa-circle-o",
-                                    "title": "SUBMIT_TELE_CALLING_INFO",
-                                    "onClick": function(model, formCtrl, form, event) {
-                                        if (!model.group.jlgGroupMembers[event.arrayIndex].customerCalled) {
-                                            irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
-                                            return false;
-                                        }
-                                        PageHelper.showLoader();
-                                        var reqData = {
-                                            "processType": "JLG"
-                                        };
-                                        reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
-                                        reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
-                                        reqData.customerCalledDate = moment().format("YYYY-MM-DD");
-                                        reqData.customerCalledAt = moment().format();
-                                        reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
-                                        reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
-                                        reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
-                                        reqData.customerCalledBy = SessionStore.getUsername();
-                                        reqData.telecallingRemarks = model.group.jlgGroupMembers[event.arrayIndex].telecallingRemarks;
-                                        var temp1 = [];
-                                        temp1.push(reqData.customerNotCalledRemarks);
-                                        temp1.push(reqData.telecallingRemarks);
-                                        reqData.customerNotCalledRemarks = temp1.join('<br>');
-
-                                        GroupProcess.telecalling(reqData).$promise.then(function(response) {
-                                            model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
-                                            model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
-                                            model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
-                                            model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
-
-                                            var arraymember=model.group.jlgGroupMembers[event.arrayIndex];
-
-                                            for (j in arraymember.teleCallingDetails) {
-                                                $log.info
-                                                var telecal = arraymember.teleCallingDetails[j];
-                                                if (telecal.customerCalledAt) {
-                                                    telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
-                                                }
-                                                if (telecal.customerNotCalledRemarks) {
-                                                    var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
-                                                    if (telecalSplitArray && telecalSplitArray.length > 1) {
-                                                        telecal.customerNotCalledRemarks = telecalSplitArray[0];
-                                                        telecal.telecallingRemarks = telecalSplitArray[1];
-                                                    } else {
-                                                        telecal.telecallingRemarks = "";
-                                                    }
-                                                } else {
-                                                    telecal.telecallingRemarks = "";
-                                                }
-                                                var temp = [];
-                                                if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
-                                                if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
-                                                telecal.remarks = temp.join('<br>');
-                                            }
-
-                                        }).finally(function() {
-                                            PageHelper.hideLoader();
-                                        })
-                                    }
-                                }]
                             }]
-                        },
+                        }]
+                    }, {
+                        "type": "section",
+                        "html": '<hr>'
+                    }, {
+                        "type": "section",
+                        "readonly": true,
+                        "htmlClass": "row",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "ACCOUNT_NUMBER",
+                                "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                                "type": "string"
+                            }, {
+                                "title": "PRODUCT",
+                                "key": "group.productCode" // TODO: this should be product name
+                            }, {
+                                "title": "GROUP_CODE",
+                                "key": "group.groupCode" //loanCycle TODO: this should be product name
+                            }, {
+                                "title": "LOAN_AMOUNT",
+                                "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                                //"type": "amount"
+                            }, {
+                                "title": "LOAN_CYCLE",
+                                "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
+                            }, {
+                                "title": "TENURE",
+                                "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                            }, {
+                                "key": "group.jlgGroupMembers[].loanAccount.frequency",
+                                "type": "select",
+                                "title": "FREQUENCY",
+                                "enumCode": "loan_product_frequency"
+                            }]
+                        }, {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "LOAN_PURPOSE_1",
+                                "key": "group.jlgGroupMembers[].loanPurpose1"
+                            }, {
+                                "title": "LOAN_PURPOSE_2",
+                                "key": "group.jlgGroupMembers[].loanPurpose2"
+                            }, {
+                                "title": "LOAN_PURPOSE_3",
+                                "key": "group.jlgGroupMembers[].loanPurpose3"
+                            }, {
+                                "title": "LOAN_APPLICATION_DATE",
+                                "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+                                "type": "date"
+                            }, {
+                                "title": "APPLICATION_FILE_DOWNLOAD",
+                                "key": "group.jlgGroupMembers[].loanAccount.applicationFileId",
+                                "type": "file",
+                                "fileType": "*/*",
+                                "category": "Group",
+                                "subCategory": "APPLICATION"
+                            }]
+                        }]
+                    }, {
+                        "type": "section",
+                        "html": '<hr>'
+                    },
+
+                    {
+                        "type": "section",
+                        "condition": "model.group.partnerCode!='AXIS'",
+                        "htmlClass": "row",
+                        "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-sm-6",
+                                    "items": [{
+                                        type: "fieldset",
+                                        "title": "TELE_CALLING_INFORMATION_CAPTURE",
+                                        items: [{
+                                            "title": "IS_CUSTOMER_CALLED",
+                                            "key": "group.jlgGroupMembers[].customerCalled",
+                                            "type": "select",
+                                            titleMap: {
+                                                "Yes": "Yes",
+                                                "No": "No"
+                                            }
+                                        }, {
+                                            "title": "CUSTOMER_NOT_CALLED_REASON",
+                                            "key": "group.jlgGroupMembers[].customerNotCalledReason",
+                                            "type": "string",
+                                            "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'No'"
+                                        }, {
+                                            "title": "CUSTOMER_CALLED_REMARKS",
+                                            "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'",
+                                            "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
+                                            "type": "select",
+                                            "enumCode": "customerTelecallingDetails",
+                                        }, {
+                                            "title": "Additional Remarks",
+                                            "key": "group.jlgGroupMembers[].telecallingRemarks",
+                                            "condition": "model.group.jlgGroupMembers[arrayIndex].customerCalled == 'Yes'"
+                                        }, {
+                                            "type": "button",
+                                            "key": "group.jlgGroupMembers[]",
+                                            "icon": "fa fa-circle-o",
+                                            "title": "SUBMIT_TELE_CALLING_INFO",
+                                            "onClick": function(model, formCtrl, form, event) {
+                                                if (!model.group.jlgGroupMembers[event.arrayIndex].customerCalled) {
+                                                    irfProgressMessage.pop('CHECKER-save', 'Is Customer Called field is not selected. Please select to proceed.', 3000);
+                                                    return false;
+                                                }
+                                                PageHelper.showLoader();
+                                                var reqData = {
+                                                    "processType": "JLG"
+                                                };
+                                                reqData.processId = model.group.jlgGroupMembers[event.arrayIndex].groupId;
+                                                reqData.customerId = model.group.jlgGroupMembers[event.arrayIndex].customerId;
+                                                reqData.customerCalledDate = moment().format("YYYY-MM-DD");
+                                                reqData.customerCalledAt = moment().format();
+                                                reqData.customerCalled = model.group.jlgGroupMembers[event.arrayIndex].customerCalled;
+                                                reqData.customerNotCalledReason = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason;
+                                                reqData.customerNotCalledRemarks = model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks;
+                                                reqData.customerCalledBy = SessionStore.getUsername();
+                                                reqData.telecallingRemarks = model.group.jlgGroupMembers[event.arrayIndex].telecallingRemarks;
+                                                var temp1 = [];
+                                                temp1.push(reqData.customerNotCalledRemarks);
+                                                temp1.push(reqData.telecallingRemarks);
+                                                reqData.customerNotCalledRemarks = temp1.join('<br>');
+
+                                                GroupProcess.telecalling(reqData).$promise.then(function(response) {
+                                                    model.group.jlgGroupMembers[event.arrayIndex].teleCallingDetails = JSON.parse(angular.toJson(response));
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerCalled = false;
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledReason = undefined;
+                                                    model.group.jlgGroupMembers[event.arrayIndex].customerNotCalledRemarks = undefined;
+
+                                                    var arraymember = model.group.jlgGroupMembers[event.arrayIndex];
+
+                                                    for (j in arraymember.teleCallingDetails) {
+                                                        $log.info
+                                                        var telecal = arraymember.teleCallingDetails[j];
+                                                        if (telecal.customerCalledAt) {
+                                                            telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                                        }
+                                                        if (telecal.customerNotCalledRemarks) {
+                                                            var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
+                                                            if (telecalSplitArray && telecalSplitArray.length > 1) {
+                                                                telecal.customerNotCalledRemarks = telecalSplitArray[0];
+                                                                telecal.telecallingRemarks = telecalSplitArray[1];
+                                                            } else {
+                                                                telecal.telecallingRemarks = "";
+                                                            }
+                                                        } else {
+                                                            telecal.telecallingRemarks = "";
+                                                        }
+                                                        var temp = [];
+                                                        if (telecal.customerNotCalledReason) temp.push(telecal.customerNotCalledReason);
+                                                        if (telecal.customerNotCalledRemarks) temp.push(telecal.customerNotCalledRemarks);
+                                                        telecal.remarks = temp.join('<br>');
+                                                    }
+
+                                                }).finally(function() {
+                                                    PageHelper.hideLoader();
+                                                })
+                                            }
+                                        }]
+                                    }]
+                                },
                         {
                             "type": "section",
                             condition: "model.group.jlgGroupMembers[arrayIndex].teleCallingDetails.length",
@@ -1409,7 +1434,10 @@ return {
                     state: "Page.Engine",
                     pageName:"customer360.EnrollmentProfile",
                     pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
-                    pageData: model.siteCode
+                    pageData: {
+                        "siteCode":model.siteCode,
+                        "enabletrue":true
+                    }
                 }, {
                     state: "Page.Engine",
                     pageName: $stateParams.pageName,
