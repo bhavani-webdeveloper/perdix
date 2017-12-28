@@ -84,7 +84,7 @@ return {
                             for (j in member.teleCallingDetails) {
                                 var telecal = member.teleCallingDetails[j];
                                 if (telecal.customerCalledAt) {
-                                    telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                    telecal.customerCalledAt1 = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
                                 }
                                 if (telecal.customerNotCalledRemarks) {
                                     var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
@@ -528,7 +528,7 @@ return {
                         "type": "section",
                         "html": '<hr>'
                     },
-                     
+
                     {
                         "type": "section",
                         //"condition":"model.group.partnerCode=='AXIS'",
@@ -552,7 +552,7 @@ return {
                                         data: 'customerCalled'
                                     }, {
                                         title: 'CUSTOMER_CALLED_DATE',
-                                        data: 'customerCalledAt'
+                                        data: 'customerCalledAt1'
                                     }, {
                                         title: 'CUSTOMER_CALLED_BY',
                                         data: 'customerCalledBy'

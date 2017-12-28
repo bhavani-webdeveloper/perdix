@@ -89,7 +89,7 @@ return {
                             for (j in member.teleCallingDetails) {
                                 var telecal = member.teleCallingDetails[j];
                                 if (telecal.customerCalledAt) {
-                                    telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                    telecal.customerCalledAt1 = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
                                 }
                                 if (telecal.customerNotCalledRemarks) {
                                     var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
@@ -623,7 +623,7 @@ return {
                                                     for (j in arraymember.teleCallingDetails) {
                                                         var telecal = arraymember.teleCallingDetails[j];
                                                         if (telecal.customerCalledAt) {
-                                                            telecal.customerCalledAt = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
+                                                            telecal.customerCalledAt1 = moment(telecal.customerCalledAt).format("DD-MM-YYYY HH:mm:ss");
                                                         }
                                                         if (telecal.customerNotCalledRemarks) {
                                                             var telecalSplitArray = telecal.customerNotCalledRemarks.split('<br>');
@@ -670,7 +670,7 @@ return {
                                             data: 'customerCalled'
                                         }, {
                                             title: 'CUSTOMER_CALLED_DATE',
-                                            data: 'customerCalledAt'
+                                            data: 'customerCalledAt1'
                                         }, {
                                             title: 'CUSTOMER_CALLED_BY',
                                             data: 'customerCalledBy'
@@ -1600,6 +1600,14 @@ return {
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'PROCEED';
             reqData.stage = model.review.rejectStage;
+            reqData.group.cgtDate11 = '';
+            reqData.group.cgtEndDate11 = '';
+            reqData.group.cgtDate12 = '';
+            reqData.group.cgtEndDate12 = '';
+            reqData.group.cgtDate13 = '';
+            reqData.group.cgtEndDate13 = '';
+            reqData.group.grtDate1 = '';
+            reqData.group.grtEndDate1 = '';
             PageHelper.clearErrors();
             Utils.removeNulls(reqData, true);
             GroupProcess.updateGroup(reqData, function(res) {

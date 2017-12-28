@@ -206,7 +206,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
 
         /* Fix to add atleast one fingerprint */
-        model['customer']['leftHandIndexImageId'] = "232";
+        //model['customer']['leftHandIndexImageId'] = "232";
 
         if (model.customer.dateOfBirth) {
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
