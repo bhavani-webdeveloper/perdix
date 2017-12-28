@@ -1487,7 +1487,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                condition: "model.loanMonitoringDetails.lucDone== 'Yes' && model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
+                condition: "model.loanMonitoringDetails.currentStage=='LUCReview' || (model.loanMonitoringDetails.lucDone== 'Yes' && model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija'))",
                 "title": "SOCIAL_IMPACT",
                 readonly: true,
                 "items": [{
@@ -1555,7 +1555,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                condition: "(model.loanMonitoringDetails.lucDone== 'Yes' || model.loanMonitoringDetails.lucEscalated=='Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 || model.loanMonitoringDetails.isAssetNotDelivered == 'Yes') && !model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
+                condition: "(model.loanMonitoringDetails.currentStage!='LUCReview') && (model.loanMonitoringDetails.lucDone== 'Yes' || model.loanMonitoringDetails.lucEscalated=='Yes' || model.loanMonitoringDetails.nonIntendedPurposeAmount > 0 || model.loanMonitoringDetails.isAssetNotDelivered == 'Yes') && !model.lucCompleted && !(model.siteCode == 'sambandh' || model.siteCode == 'saija')",
                 "title": "SOCIAL_IMPACT",
                 "items": [{
                     key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
