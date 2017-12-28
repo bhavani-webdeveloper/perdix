@@ -73,7 +73,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 key:"customer.photoImageId",
                                 type:"file",
                                 fileType:"image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.centreId",
@@ -251,7 +256,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.identityProofReverseImageId",
                                     type: "file",
@@ -261,7 +266,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.identityProofNo",
                                     type: "barcode",
@@ -297,7 +302,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.udf.userDefinedFieldValues.udf35",
                                     type: "file",
@@ -307,7 +312,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.udf.userDefinedFieldValues.udf36",
                                     condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
@@ -347,7 +352,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.addressProofReverseImageId",
                                     type: "file",
@@ -357,7 +362,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                             customerId: model.customer.id
                                         };
                                     },
-                                    "offline": true
+                                    //"offline": true
                                 }, {
                                     key: "customer.addressProofNo",
                                     type: "barcode",
@@ -407,13 +412,23 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 type: "file",
                                 required: true,
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             }, {
                                 key: "customer.additionalKYCs[].kyc1ReverseImagePath",
                                 type: "file",
                                 required: true,
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             }, {
                                 key: "customer.additionalKYCs[].kyc1IssueDate",
                                 type: "date"
@@ -434,12 +449,22 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 key: "customer.additionalKYCs[].kyc2ImagePath",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             }, {
                                 key: "customer.additionalKYCs[].kyc2ReverseImagePath",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             }, {
                                 key: "customer.additionalKYCs[].kyc2IssueDate",
                                 type: "date"
@@ -1060,9 +1085,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                     "customer.nameOfRo",
                     {
                         key:"customer.houseVerificationPhoto",
-                        offline: true,
+                        //offline: true,
                         type:"file",
-                        fileType:"image/*"
+                        fileType:"image/*",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
                     },
                     {
                         "key":"customer.verifications",

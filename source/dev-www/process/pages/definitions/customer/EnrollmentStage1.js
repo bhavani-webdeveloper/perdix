@@ -144,7 +144,12 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                         type: "file",
                         "required": true,
                         fileType: "image/*",
-                        "offline": true
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        //"offline": true
                     },
                     {
                         key: "customer.centreId",
@@ -356,13 +361,23 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                                 key: "customer.identityProofImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.identityProofReverseImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.identityProofNo",
@@ -410,13 +425,23 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                                 key: "customer.addressProofImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.addressProofReverseImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.addressProofNo",
@@ -468,13 +493,23 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                                 key: "customer.udf.userDefinedFieldValues.udf34",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.udf.userDefinedFieldValues.udf35",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
                                 key: "customer.udf.userDefinedFieldValues.udf36",
@@ -534,14 +569,24 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                             type: "file",
                             required: true,
                             fileType: "image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key: "customer.additionalKYCs[].kyc1ReverseImagePath",
                             type: "file",
                             required: true,
                             fileType: "image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key: "customer.additionalKYCs[].kyc1IssueDate",
@@ -567,13 +612,23 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                             key: "customer.additionalKYCs[].kyc2ImagePath",
                             type: "file",
                             fileType: "image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key: "customer.additionalKYCs[].kyc2ReverseImagePath",
                             type: "file",
                             fileType: "image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key: "customer.additionalKYCs[].kyc2IssueDate",

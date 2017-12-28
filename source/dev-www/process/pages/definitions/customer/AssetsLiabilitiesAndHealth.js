@@ -833,10 +833,15 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                     "customer.nameOfRo",
                     {
                         key:"customer.houseVerificationPhoto",
-                        offline: true,
+                        //offline: true,
                         "required":true,
                         type:"file",
-                        fileType:"image/*"
+                        fileType:"image/*",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
                     },
                     {
                         "key":"customer.verifications",
