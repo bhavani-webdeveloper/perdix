@@ -710,26 +710,29 @@ return {
                         searching: false,
                         getColumns: function() {
                             return [{
-                                title: 'CHECKER_REMARKS',
+                                title: 'Approved By',
                                 data: 'updatedBy',
                                 render: function(data, type, full, meta) {
                                     return  '<i class="fa fa-user text-gray">&nbsp;</i> ' + data;
                                 }
                             }, {
-                                title: 'STATUS',
+                                title: 'Approved On',
                                 data: 'updatedOn',
                                 render: function(data, type, full, meta) {
                                     return  '<i class="fa fa-clock-o text-gray">&nbsp;</i> ' + data;
                                 }
                             }, {
-                                title: 'APPROVER_TYPE',
+                                title: 'REMARKS',
                                 data: 'remarks',
                                 render: function(data, type, full, meta) {
                                     return  '<i class="fa fa-commenting text-gray">&nbsp;</i> ' + data;
                                 }
                             }, {
-                                title: 'APPROVER',
-                                data: 'stage',
+                                title: 'Action',
+                                data: 'action',
+                                render: function(data, type, full, meta) {
+                                    return  full.stage +"-" +data;
+                                }
                             }]
                         },
                         getActions: function(item) {
@@ -737,7 +740,7 @@ return {
                         }
                     }
                 ]
-            }, 
+            },
     {
         "type": "box",
         "title": "POST_REVIEW",
