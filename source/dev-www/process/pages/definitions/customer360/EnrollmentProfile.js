@@ -293,7 +293,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                           // "offline": true
                         },
                         {
                             key:"customer.identityProofReverseImageId",
@@ -304,7 +304,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.identityProofNo",
@@ -348,7 +348,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf35",
@@ -359,7 +359,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf36",
@@ -405,7 +405,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.addressProofReverseImageId",
@@ -416,7 +416,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.addressProofNo",
@@ -476,21 +476,24 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             required: true,
                             type:"file",
                             fileType:"image/*",
-                            category: 'CustomerEnrollment',
-                            subCategory: 'KYC1',
                             "viewParams": function(modelValue, form, model) {
                                 return {
                                     customerId: model.customer.id
                                 };
                             },
-                            "offline": true
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
                             required: true,
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
@@ -516,13 +519,23 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             key:"customer.additionalKYCs[].kyc2ImagePath",
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
-                            "offline": true
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            //"offline": true
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2IssueDate",
@@ -1114,7 +1127,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                 },
                 {
                     key:"customer.houseVerificationPhoto",
-                    offline: true,
+                    //offline: true,
                     type:"file",
                     fileType:"image/*",
                     "viewParams": function(modelValue, form, model) {
