@@ -19,6 +19,8 @@ define({
             }
 
             model.enterpriseDetails = res[0];
+            model.secName=res[0].data[0]['Sector'];
+            model.subSecName=res[0].data[0]['Sub-Sector'];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
 
 
@@ -93,28 +95,6 @@ define({
                 business: {}
             };
 
-
-
-            // model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
-            // model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
-            // model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
-            // model.pl.household.familyMemberIncomes = model.houseHoldPL.data[0]['Family Member Incomes'];
-            // model.pl.household.Expenses = model.houseHoldPL.data[0]['Total Expenses'];
-            // model.pl.household.declaredEducationExpense = model.houseHoldPL.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-            // model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
-            // model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
-
-            // if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
-            //     model.pl.householdCoApplicant = {};
-            //     model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
-            //     model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
-            //     model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
-            //     model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
-            //     model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
-            //     model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-            //     model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
-            //     model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
-            // }
 
             if (model.houseHoldPL && model.houseHoldPL.length) {
                 for (var i = 0; i < model.houseHoldPL.length; i++) {
@@ -333,8 +313,9 @@ define({
                             "title": "Applicant Name"
                         }, {
                             "key": "loanAccount.tenureRequested",
-                            "title": "Tenure of Loan"/*,
-                            "type": "number"*/
+                            "title": "Tenure of Loan"
+                                /*,
+                                                            "type": "number"*/
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Rate of Interest"
@@ -406,44 +387,42 @@ define({
                             type: "section",
                             htmlClass: "col-sm-12",
                             title: model.scoreDetails[0].title,
-                            html:
-                            '<div ng-init="_score=model.scoreDetails[0]">'+
-                            '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-                            '<table class="table">'+
-                            '<colgroup>'+
-                            '<col width="25%">'+
-                            '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-                            '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-                            '</colgroup>'+
-                            '<tbody>'+
-                            '<tr>'+
-                            '<th>Parameter Name</th>'+
-                            '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
-                            '</tr>'+
-                            '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
-                            '<td>{{data.Parameter}}</td>'+
-                            '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
-                            '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
-                            '</tbody>'+
-                            '</table>'+
-                            '</div>'
+                            html: '<div ng-init="_score=model.scoreDetails[0]">' +
+                                '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>' +
+                                '<table class="table">' +
+                                '<colgroup>' +
+                                '<col width="25%">' +
+                                '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">' +
+                                '<col width="{{_score.valuePct}}%" ng-repeat-end>' +
+                                '</colgroup>' +
+                                '<tbody>' +
+                                '<tr>' +
+                                '<th>Parameter Name</th>' +
+                                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
+                                '</tr>' +
+                                '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">' +
+                                '<td>{{data.Parameter}}</td>' +
+                                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
+                                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
+                                '</tbody>' +
+                                '</table>' +
+                                '</div>'
                         }, {
                             "type": "section",
                             "htmlClass": "col-sm-12",
                             "title": "model.scoreDetails[1].title",
-                            html:
-                            '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
-                            '<table class="table">'+
-                            '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
-                            '<tbody>'+
-                            '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
-                            '<tr ng-repeat="data in model.scoreDetails[1].data">'+
-                            '<td>{{ data.Parameter }}</td>'+
-                            '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
-                            '<td>{{ data["Actual Value"] }}</td>'+
-                            '</tr>'+
-                            '</tbody>'+
-                            '</table>'
+                            html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>' +
+                                '<table class="table">' +
+                                '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>' +
+                                '<tbody>' +
+                                '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>' +
+                                '<tr ng-repeat="data in model.scoreDetails[1].data">' +
+                                '<td>{{ data.Parameter }}</td>' +
+                                '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>' +
+                                '<td>{{ data["Actual Value"] }}</td>' +
+                                '</tr>' +
+                                '</tbody>' +
+                                '</table>'
                         }]
                     }, {
                         type: "section",
@@ -469,243 +448,214 @@ define({
             form.push({
                 "type": "box",
                 "colClass": "col-sm-12",
+                "title": "Sector-SubSector Compare",
                 "readonly": true,
-                "title": "Sector -SubSector Compare",
-                "condition": "model.currentStage!='ScreeningReview'",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "type": "section",
-                        "html": '<div><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th>Sector</th><th>Fabrication</th></tr></tbody></table></div>'
-                    }, {
+                "items":[{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items":[{
                         "type": "grid",
-                        "overrideType": "default-view",
-                        "orientation": "horizontal",
+                        "orientation": "vertical",
                         "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                    "key": "secData['No of total loans']",
-                                    "title": "Total no. of Loans",
-                                    "type": "number"
-                                },
-                                {
-                                                               "key": "",
-                                                               "title": "Minimum Loan Size"
-                                                           }, {
-                                                               "key": "",
-                                                               "title": "Maximum Loan Size"
-                                                           },
-                                {
-                                    "key": "secData['Average Loan Size']|irfCurrency",
-                                    "title": "Average Loan Size",
-                                    "type": "amount"
-                                }, {
-                                    "key": "secData['No of Loans with cheque bounce']",
-                                    "title": "No. of loans with cheque bounce",
-                                    "type": "number"
-                                }, {
-                                    "key": "secData['Average Loan Size of Cheque Bounce accounts']",
-                                    "title": "Avg loan size of cheque bounce accounts",
-                                    "type": "amount"
-                                }, {
-                                    "key": "secData['No of loans as NPA']",
-                                    "title": "No. of loans as NPA",
-                                    "type": "number"
-                                }, {
-                                    "key": "secData['Average Loan Size of NPA accounts']",
-                                    "title": "Avg loan size of NPA accounts",
-                                    "type": "amount"
-                                }
-                            ]
-                        }]
-                    }]
+                                "title": "Sector",
+                                "key": "secName"
+                            },{
+                                "key": "secData['No of total loans']",
+                                "title": "Total no. of Loans",
+                            }, {
+                                "key": "",
+                                "title": "Minimum Loan Size"
+                            }, {
+                                "key": "",
+                                "title": "Maximum Loan Size"
+                            }, {
+                                "key": "secData['Average Loan Size']",
+                                "title": "Average Loan Size",
+                                "type": "amount"
+                            }, {
+                                "key": "secData['No of Loans with cheque bounce']",
+                                "title": "No. of loans with cheque bounce"
+                            }, {
+                                "key": "secData['Average Loan Size of Cheque Bounce accounts']",
+                                "title": "Avg loan size of cheque bounce accounts",
+                                "type": "amount"
+                            }, {
+                                "key": "secData['No of loans as NPA']",
+                                "title": "No. of loans as NPA"
+                            }, {
+                                "key": "secData['Average Loan Size of NPA accounts']",
+                                "title": "Avg loan size of NPA accounts",
+                                "type": "amount"
+                            }]
 
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": [{
-                        "type": "section",
-                        "html": '<div><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th>Sub-Sector</th><th>Tools and Dyes</th></tr></tbody></table></div>'
-
-                    }, {
+                    },{
                         "type": "grid",
-                        "overrideType": "default-view",
-                        "orientation": "horizontal",
+                        "orientation": "vertical",
                         "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                    "key": "subsecData['No of total loans']",
-                                    "title": "Total no. of Loans",
-                                    "type": "number"
-                                },
-                                {
-                                                               "key": "",
-                                                               "title": "Minimum Loan Size"
-                                                           }, {
-                                                               "key": "",
-                                                               "title": "Maximum Loan Size"
-                                                           },
-                                {
-                                    "key": "subsecData['Average Loan Size']",
-                                    "title": "Average Loan Size",
-                                    "type": "amount"
-                                }, {
-                                    "key": "subsecData['No of Loans with cheque bounce']",
-                                    "title": "No. of loans with cheque bounce",
-                                    "type": "number"
-                                }, {
-                                    "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
-                                    "title": "Avg loan size of cheque bounce accounts",
-                                    "type": "amount"
-                                }, {
-                                    "key": "subsecData['No of loans as NPA']",
-                                    "title": "No. of loans as NPA",
-                                    "type": "number"
-                                }, {
-                                    "key": "subsecData['Average Loan Size of NPA accounts']",
-                                    "type": "amount",
-                                    "title": "Avg loan size of NPA accounts"
+                            "title": "Sub-Sector",
+                            "key": "subSecName"
+                        },{
+                            "key": "subsecData['No of total loans']",
+                            "title": "Total no. of Loans"
+                        }, {
+                            "key": "",
+                            "title": "Minimum Loan Size"
+                        }, {
+                            "key": "",
+                            "title": "Maximum Loan Size"
+                        }, {
+                            "key": "subsecData['Average Loan Size']",
+                            "title": "Average Loan Size",
+                            "type": "amount"
+                        }, {
+                            "key": "subsecData['No of Loans with cheque bounce']",
+                            "title": "No. of loans with cheque bounce"
+                        }, {
+                            "key": "subsecData['Average Loan Size of Cheque Bounce accounts']",
+                            "title": "Avg loan size of cheque bounce accounts",
+                            "type": "amount"
+                        }, {
+                            "key": "subsecData['No of loans as NPA']",
+                            "title": "No. of loans as NPA"
+                        }, {
+                            "key": "subsecData['Average Loan Size of NPA accounts']",
+                            "type": "amount",
+                            "title": "Avg loan size of NPA accounts"
 
-                                }
-                            ]
                         }]
+
                     }]
-
-
                 }]
-            });
+            })
 
-            form.push({
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "Operating Expenses",
-                "condition": "model.currentStage!='ScreeningReview'",
-                "items": [{
-                    "type": "section",
-                    "html": '<table class="table"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><tbody><tr ng-style = "{\'font-weight\': \'bold\'}"><td>Expenditure Source</td><td>Monthly Expense</td><td>% of Avg Monthly Revenue</td></tr><tr ng-repeat="items in model._opex"><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td>{{((items["% of Avg Monthly Revenue"] | number : 2) + "%")}}</td></tr></tbody></table>'
-                }]
-            });
-            return form;
-        }; // END OF prepareForms()
+    form.push({
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "Operating Expenses",
+        "condition": "model.currentStage!='ScreeningReview'",
+        "items": [{
+            "type": "section",
+            "html": '<table class="table"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><tbody><tr ng-style = "{\'font-weight\': \'bold\'}"><td>Expenditure Source</td><td>Monthly Expense</td><td>% of Avg Monthly Revenue</td></tr><tr ng-repeat="items in model._opex"><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td>{{((items["% of Avg Monthly Revenue"] | number : 2) + "%")}}</td></tr></tbody></table>'
+        }]
+    });
+    return form;
+}; // END OF prepareForms()
 
-        var prepareDataDeferred;
-        var prepareDataPromise;
+var prepareDataDeferred;
+var prepareDataPromise;
 
-        return {
-            "type": "schema-form",
-            "title": "",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                prepareDataDeferred = $q.defer();
-                prepareDataPromise = prepareDataDeferred.promise;
-                model.bundleModel = bundleModel;
-                model.currentStage = bundleModel.currentStage;
-                model.ScoreDetails = [];
-                model.customer = {};
+return {
+    "type": "schema-form",
+    "title": "",
+    "subTitle": "",
+    initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+        prepareDataDeferred = $q.defer();
+        prepareDataPromise = prepareDataDeferred.promise;
+        model.bundleModel = bundleModel;
+        model.currentStage = bundleModel.currentStage;
+        model.ScoreDetails = [];
+        model.customer = {};
 
-                /*Business Summary*/
-                model.customer_detail = bundleModel.customer_detail;
-                model.loanAccount = bundleModel.loanAccount;
-                var $this = this;
-                var deferred = $q.defer();
+        /*Business Summary*/
+        model.customer_detail = bundleModel.customer_detail;
+        model.loanAccount = bundleModel.loanAccount;
+        var $this = this;
+        var deferred = $q.defer();
 
-                scoreName = null;
-                switch (model.currentStage) {
-                    case "ScreeningReview":
-                        scoreName = "RiskScore1";
-                        break;
-                    case "ApplicationReview":
-                        scoreName = "RiskScore2";
-                        break;
-                    case "FieldAppraisalReview":
-                        scoreName = "RiskScore3";
-                        break;
-                    default:
-                        scoreName = "ConsolidatedScore";
-                        break;
-                }
+        scoreName = null;
+        switch (model.currentStage) {
+            case "ScreeningReview":
+                scoreName = "RiskScore1";
+                break;
+            case "ApplicationReview":
+                scoreName = "RiskScore2";
+                break;
+            case "FieldAppraisalReview":
+                scoreName = "RiskScore3";
+                break;
+            default:
+                scoreName = "ConsolidatedScore";
+                break;
+        }
 
-                if (bundlePageObj) {
-                    model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                }
+        if (bundlePageObj) {
+            model._bundlePageObj = _.cloneDeep(bundlePageObj);
+        }
 
-                if (_.hasIn(model, 'cbModel')) {
-                    Scoring.get({
-                        auth_token: AuthTokenHelper.getAuthData().access_token,
-                        LoanId: model.cbModel.loanId,
-                        ScoreName: scoreName
-                    }).$promise.then(function(response) {
-                        model.ScoreDetails = response.ScoreDetails;
-                    }).finally(function() {
-                        var onSuccessPromise = Scoring.financialSummary({
-                            loan_id: model.cbModel.loanId,
-                            score_name: scoreName
-                        }).$promise;
-                        onSuccessPromise.then(function(res) {
-                           /* var financialData = [model.ScoreDetails,res];*/
-                            BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
-                            prepareData(res, model);
-                            model.$prepared = true;
-                            prepareDataDeferred.resolve();
-                        });
+        if (_.hasIn(model, 'cbModel')) {
+            Scoring.get({
+                auth_token: AuthTokenHelper.getAuthData().access_token,
+                LoanId: model.cbModel.loanId,
+                ScoreName: scoreName
+            }).$promise.then(function(response) {
+                model.ScoreDetails = response.ScoreDetails;
+            }).finally(function() {
+                var onSuccessPromise = Scoring.financialSummary({
+                    loan_id: model.cbModel.loanId,
+                    score_name: scoreName
+                }).$promise;
+                onSuccessPromise.then(function(res) {
+                    /* var financialData = [model.ScoreDetails,res];*/
+                    BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
+                    prepareData(res, model);
+                    model.$prepared = true;
+                    prepareDataDeferred.resolve();
+                });
 
-                        var p3 = Enrollment.getCustomerById({
-                            id: model.cbModel.customerId
-                        }).$promise.then(function(res) {
-                            model.customer = res;
-                        }, function(httpRes) {
-                            PageHelper.showErrors(httpRes);
-                        }).finally(function() {});
+                var p3 = Enrollment.getCustomerById({
+                    id: model.cbModel.customerId
+                }).$promise.then(function(res) {
+                    model.customer = res;
+                }, function(httpRes) {
+                    PageHelper.showErrors(httpRes);
+                }).finally(function() {});
 
-                        $q.all([onSuccessPromise, p3]).finally(function() {
-                            deferred.resolve();
-                        });
-                    });
-                } else {
+                $q.all([onSuccessPromise, p3]).finally(function() {
                     deferred.resolve();
-                }
-                return deferred.promise;
-            },
-            eventListeners: {},
-            form: [{
-                type: 'section',
-                html: '<br><br><br><center>Loading...</center>'
-            }],
-            initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                PageHelper.showLoader();
-                var $this = this;
-                if (model.$prepared) {
-                    $this.form = prepareForms(model);
-                    PageHelper.hideLoader();
-                } else {
-                    prepareDataPromise.then(function() {
-                        $this.form = prepareForms(model);
-                        formCtrl.redraw();
-                        PageHelper.hideLoader();
-                    });
-                }
-                return $q.resolve();
-            },
-            schema: function() {
-                return SchemaResource.getLoanAccountSchema().$promise;
-            },
-            eventListeners: {
-                "business-customer": function(bundleModel, model, params) {
-                    model.business = params;
-                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
-                        value: model.business.centreId
-                    })[0].name;
-                }
-            },
-            actions: {
-                save: function(customerId, CBType, loanAmount, loanPurpose) {
-                    $log.info("Inside submit()");
-                    $log.warn(model);
-                }
-            }
-        };
+                });
+            });
+        } else {
+            deferred.resolve();
+        }
+        return deferred.promise;
+    },
+    eventListeners: {},
+    form: [{
+        type: 'section',
+        html: '<br><br><br><center>Loading...</center>'
+    }],
+    initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+        PageHelper.showLoader();
+        var $this = this;
+        if (model.$prepared) {
+            $this.form = prepareForms(model);
+            PageHelper.hideLoader();
+        } else {
+            prepareDataPromise.then(function() {
+                $this.form = prepareForms(model);
+                formCtrl.redraw();
+                PageHelper.hideLoader();
+            });
+        }
+        return $q.resolve();
+    },
+    schema: function() {
+        return SchemaResource.getLoanAccountSchema().$promise;
+    },
+    eventListeners: {
+        "business-customer": function(bundleModel, model, params) {
+            model.business = params;
+            model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                value: model.business.centreId
+            })[0].name;
+        }
+    },
+    actions: {
+        save: function(customerId, CBType, loanAmount, loanPurpose) {
+            $log.info("Inside submit()");
+            $log.warn(model);
+        }
     }
+};
+}
 });

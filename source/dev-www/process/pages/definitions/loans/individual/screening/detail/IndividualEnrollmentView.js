@@ -49,8 +49,8 @@ define({
 
                     /*Family fields*/
                     model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
-                    model.UIUDF.family_fields.dependent_family_member = 0;
-                    model.UIUDF.family_fields.total_household_income = 0;
+                    model.UIUDF.family_fields.dependent_family_member = 0;/*
+                    model.UIUDF.family_fields.total_household_income = 0;*/
                     _.each(model.customer.familyMembers, function(member) {
                         if (member.incomes.length == 0)
                             model.UIUDF.family_fields.dependent_family_member++;
@@ -1065,9 +1065,9 @@ define({
                     /*household data details*/
                     var totalIncome = 0;
                     var totalExpenses = 0;
+                    if(model.bundlePageObj.pageClass!='guarantor'){
                     _.each(houseHoldPL, function(household) {
                         if (model.customer.id == household["customer_id"]) {
-                            //model.household_data = _.clonedeep(household.data[0])
                             totalIncome = parseInt(household.data[0]['Salary from business']) + parseInt(household.data[0]['Other Income/salaries']) + parseInt(household.data[0]['Family Member Incomes']);
                             totalExpenses = parseInt(household.data[0]['Expenses Declared or based on the educational expense whichever is higher']) + parseInt(household.data[0]['EMI\'s of household liabilities']);
                             model.household = [];
@@ -1104,6 +1104,8 @@ define({
                         });
                     }
                     })
+
+                }
 
 
 

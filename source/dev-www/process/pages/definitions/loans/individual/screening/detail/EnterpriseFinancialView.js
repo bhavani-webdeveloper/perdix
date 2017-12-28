@@ -602,8 +602,18 @@ self.renderReady = function(eventName) {
 					}
 
 					var bpl = params[8].data[0];
+					model.ExistingLoanRepayments = params[0].data[0]['Existing Loan Repayments'];
+					bpl.ExistingLoanRepayments=model.ExistingLoanRepayments;
+					bpl.RevisedNetIncome=bpl['Net Business Income'] <0 ?(parseInt(bpl['Net Income'])+parseInt(bpl['Net Business Income'])):bpl['Net Income'];
 					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
-					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance
+					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
+
+					var CalPercentage=function(total, value){
+						if(total== 0 && value!= 0) return "0.00 %";
+						if(total!= 0 && value== 0) return "0.00 %"
+						if(total== 0 && value== 0) return "0.00 %"
+						return ((value/total)*100).toFixed(2)+" %";
+					}
 
 					model.summary = {
 						"cashFlowDetails": {
@@ -681,7 +691,7 @@ self.renderReady = function(eventName) {
 											"className": "text-bold"
 										}
 									}
-								},{
+								}, {
 									"title": "EBITDA",
 									"amount": "",
 									"total": bpl['EBITDA'],
@@ -692,7 +702,18 @@ self.renderReady = function(eventName) {
 										    "className": "text-bold"
 										}
 									}
-								},{
+								}, {
+									"title": "Existing Loan Repayments",
+									"amount": "",
+									"total": bpl['Business Liabilities'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
 									"title": "Gross Income",
 									"amount": "",
 									"total": bpl['Gross Income'],
@@ -805,12 +826,23 @@ self.renderReady = function(eventName) {
 										    "className": "text-bold"
 										}
 									}
-								},{
+								}, {
+									"title": "Existing Loan Repayments",
+									"amount": "",
+									"total": bpl['Business Liabilities'],
+									"percentage": "",
+									"description": "",
+									"$config": {
+										"title": {
+											"className": "text-bold"
+										}
+									}
+								}, {
 									"title": "Gross Income",
 									"amount": "",
 									"total": bpl['Gross Income'],
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -838,10 +870,21 @@ self.renderReady = function(eventName) {
 										    "className": "text-bold"
 										}
 									}
-								},{
+								}, {
+									"title": "Revised Net Income",
+									"amount": bpl['RevisedNetIncome'],
+									"total":  "",
+									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['RevisedNetIncome'])),
+									"description": "of turnover",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								}, {
 									"title": "Kinara Emi",
-									"amount": "",
-									"total": bpl['Kinara EMI'],
+									"amount": bpl['Kinara EMI'],
+									"total": "",
 									"percentage": bpl['Kinara EMI pct'],
 									"description": "",
 									"$config": {
@@ -854,8 +897,8 @@ self.renderReady = function(eventName) {
 									"title": "Average Bank Balance",
 									"amount": bpl['avgMonBal'] ,
 									"total": "",
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['avgMonBal'])) ,
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -865,8 +908,8 @@ self.renderReady = function(eventName) {
 									"title": "Average Bank Deposit",
 									"amount": bpl['avgMonDep'] ,
 									"total": "",
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['avgMonDep'])) ,
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"

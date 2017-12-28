@@ -13,6 +13,13 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
+                var loanCustomerRel=[];
+                _.each(model.loanAccount.loanCustomerRelations, function(loanRelation){
+                    if(loanRelation.relation !='Applicant'){
+                        loanCustomerRel.push(loanRelation);
+                    }
+                })
+                model.loanCustomerRel = loanCustomerRel;
                 var self = this;
                 Enrollment.getCustomerById({
                     id: model.customerId
@@ -94,24 +101,6 @@ define({
                             "subStandard": model.customer.enterpriseBureauDetails[0].subStandard
                         }
                     }
-
-
-                    /*AVG MONTHLY INCOME EMPLOYEE DETAILS*/
-                    var avgExp=0;
-                    
-                    if(model.customer.expenditures && model.customer.expenditures.length !=0){
-                        var expCount=0;
-                    _.each(model.customer.expenditures,function(annualExp){
-                        expCount ++;
-                          avgExp += annualExp.annualExpenses;
-                    })
-                    avgExp=avgExp/expCount;
-                    model.employee_avgExp=avgExp;
-
-                }
-                else {
-                    model.employee_avgExp="NA";
-                }
                     
                     /* Machin Details*/
 
@@ -128,10 +117,11 @@ define({
 
                         }
                     });
+
                     model.REFERENCE_CHECK_RESPONSE = 'NA';
                     var count_neg_response = "true";
                     _.each(model.customer.verifications, function(verification) {
-                        if (verification.customerResponse == 'negative' && verification.customerResponse == 'NEGATIVE') {
+                        if (verification.customerResponse == 'negative' || verification.customerResponse == 'NEGATIVE') {
                             return count_neg_response="false";
                         }
                     })
@@ -338,6 +328,16 @@ define({
             }, {
                 "type": "box",
                 "colClass": "col-sm-12",
+                "readonly": true,
+                "title": "Loan Customer Relationship",
+                "condition": "model.loanCustomerRel.length!=0",
+                "items":[{
+                    "type": "section",
+                    "html":'<div ng-repeat="data in model.loanCustomerRel"><p >{{data.relation}} is the <u>{{data.relationshipWithApplicant}}</u> of Applicant</p></div>'
+                }]
+            }, {
+                "type": "box",
+                "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
                 "title": "Employee Details",
@@ -360,7 +360,7 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "employee_avgExp",
+                            "key": "customer.enterprise.avgMonthlySalary",
                             "title": "Average Monthly Salary",
                             "type": "amount"
                         }]
