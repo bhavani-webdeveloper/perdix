@@ -476,6 +476,13 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                             required: true,
                             type:"file",
                             fileType:"image/*",
+                            category: 'CustomerEnrollment',
+                            subCategory: 'KYC1',
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
                             "offline": true
                         },
                         {
