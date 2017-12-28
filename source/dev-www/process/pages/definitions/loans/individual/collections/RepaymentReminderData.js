@@ -138,23 +138,23 @@ define({
                     key: "reminder.repaymentReminderDTO.customerUrn",
                     type: "string",
                     title: "URN_NO"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.customerName",
                     type: "string",
                     title: "SPOKE",
                     title: "BUSINESS_NAME"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.businessPhoneNo",
                     type: "string",
                     title: "BUSINESS_PHONE_NO"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.applicantName",
                     type: "string",
                     title: "APPLICANT_NAME"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.mobile_phone",
                     type: "string",
@@ -207,12 +207,12 @@ define({
                     key: "reminder.repaymentReminderDTO.loanAmount",
                     type: "number",
                     title: "LOAN_AMOUNT"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.installmentNumber",
                     type: "number",
                     title: "INSTALLMENT_NO"
-                }, 
+                },
                 {
                     key: "reminder.repaymentReminderDTO.installmentAmount",
                     type: "",
@@ -246,6 +246,7 @@ define({
                         type: "array",
                         add: null,
                         startEmpty: true,
+                        view: "fixed",
                         remove: null,
                         titleExpr: "'Reminder: ' + moment(model.reminder.repaymentCurrentHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
                         titleExprLocals: {moment: window.moment},
@@ -277,7 +278,8 @@ define({
                     startEmpty: true,
                     add: null,
                     remove: null,
-                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.reminder.accountDetails[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.accountDetails[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
+                    view: "fixed",
+                    "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.accountDetails[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.accountDetails[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
                     "titleExprLocals": {moment: window.moment},
                     items: [{
                         key: "accountDetails[].instrumnetType",
@@ -325,7 +327,7 @@ define({
                       key: "accountDetails[].reminderStatus",
                       type: "string",
                       title: "CALL_STATUS",
-                      condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"  
+                      condition: "model.accountDetails[arrayIndex].repaymentType == 'Reminder'"
                     }]
                 }]
             }, {
