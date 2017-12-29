@@ -85,8 +85,9 @@ define({
                     var decExpanse = 0;
 
                     _.each(model.customer.expenditures, function(expanse) {
-                        decExpanse += parseInt(expanse.annualExpenses);
-
+                        if(expanse.annualExpenses!=null){
+                            decExpanse += parseInt(expanse.annualExpenses);
+                        }
                     })
                     model.decHouseExpanse = decExpanse;
 

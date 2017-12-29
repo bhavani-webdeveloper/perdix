@@ -202,6 +202,9 @@ define({
                         }, {
                             "key": "customer.enterprise.referredBy",
                             "title": "Sourced by"
+                        }, {
+                            "key": "customer.enterprise.isGSTAvailable",
+                            "title": "GST Available"
                         }]
                     }, {
                         "type": "grid",
@@ -255,7 +258,10 @@ define({
                         }, {
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                        },{
+                        }, {
+                            "key": "customer.enterprise.companyEmailId",
+                            "title": "Email ID"
+                        }, {
                             "title": "Present Address",
                             "key": "customer.presetAddress"
                            
@@ -405,10 +411,8 @@ define({
                     "items": [{
                         "type": "tableview",
                         "key": "customer.fixedAssetsMachinaries",
-                        "title": "",
                         "selectable": false,
                         "editable": false,
-
                         "tableConfig": {
                             "searching": false,
                             "paginate": false,
