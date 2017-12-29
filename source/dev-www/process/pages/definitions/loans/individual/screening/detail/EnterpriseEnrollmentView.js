@@ -457,7 +457,10 @@ define({
                                 "data": "fundingSource"
                             }, {
                                 "title": "Hypothecated to",
-                                "data": "hypothecatedTo"
+                                "data": "hypothecatedTo",
+                                render: function(data, type, full, meta){
+                                    return full.hypothecatedToUs=="YES"?("Kinara"):(full.hypothecatedTo);
+                                }
                             }];
                         },
                         getActions: function() {
