@@ -1199,5 +1199,15 @@
                 }
             }
         }
+    },
+    "actionbox": {
+        "type": "actionbox",
+        "items": {
+            "save": {
+                "type": "button",
+                "title": "SAVE",
+                "onClick": "actions.save(model, formCtrl, form, $event)"
+            }
+        }
     }
 }
