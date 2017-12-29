@@ -29,7 +29,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:10
                             },
-
+                            {
+                                pageName: 'witfin.loans.individual.screening.LoanRequest',
+                                title: 'LOAN_REQUEST',
+                                pageClass: 'loan-request',
+                                minimum: 1,
+                                maximum: 1
+                            },
                             {
                                 pageName: 'witfin.customer.IndividualEnrollment2',
                                 title: 'GUARANTOR',
@@ -57,14 +63,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'field-investigation',
                                 minimum: 1,
                                 maximum: 1
-                            },
-                            {
-                                pageName: 'witfin.loans.individual.screening.LoanRequest',
-                                title: 'LOAN_REQUEST',
-                                pageClass: 'loan-request',
-                                minimum: 1,
-                                maximum: 1
                             }
+
 
                             // {
                             //     pageName: 'loans.individual.screening.CBCheck',
