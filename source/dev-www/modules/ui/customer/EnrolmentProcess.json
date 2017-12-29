@@ -2,6 +2,7 @@
     "EnterpriseAssets": {
         "type": "box",
         "title": "ASSET_DETAILS",
+        "orderNo": 400,
         "items": {
             "enterpriseAssets": {
                 "key": "customer.enterpriseAssets",
@@ -69,6 +70,7 @@
     "BankAccounts": {
         "type": "box",
         "title": "BANK_ACCOUNTS",
+        "orderNo": 90,
         "items": {
             "customerBankAccounts": {
                 "key": "customer.customerBankAccounts",
@@ -204,6 +206,7 @@
     "IndividualReferences": {
         "type": "box",
         "title": "REFERENCES",
+        "orderNo": 100,
         "items": {
             "verifications": {
                 "key": "customer.verifications",
@@ -345,6 +348,7 @@
     "KYC": {
         "type": "box",
         "title": "KYC",
+        "orderNo": 10,
         "items": {
             "customerId": {
                 "key": "customer.id",
@@ -415,6 +419,7 @@
     "IndividualInformation": {
         "type": "box",
         "title": "PERSONAL_INFORMATION",
+        "orderNo": 20,
         "items": {
             "customerBranchId": {
                 "key": "customer.customerBranchId",
@@ -533,6 +538,7 @@
     "EnterpriseInformation": {
         "type": "box",
         "title": "ENTITY_INFORMATION",
+        "orderNo": 10,
         "items": {
             "enterpriseType": {
                 "key": "customer.enterprise.enterpriseType",
@@ -841,6 +847,7 @@
     "ContactInformation": {
         "type": "box",
         "title": "CONTACT_INFORMATION",
+        "orderNo": 30,
         "items": {
             "mobilePhone": {
                 "key": "customer.mobilePhone",
@@ -985,6 +992,7 @@
     "IndividualFinancials": {
         "type": "box",
         "title": "HOUSEHOLD_FINANCIALS",
+        "orderNo": 40,
         "items": {
             "expenditures": {
                 "key": "customer.expenditures",
@@ -1219,6 +1227,7 @@
     "FamilyDetails": {
         "type": "box",
         "title": "FAMILY_DETAILS",
+        "orderNo": 50,
         "items": {
             "familyMembers": {
                 "key": "customer.familyMembers",
@@ -1274,6 +1283,7 @@
     "Liabilities": {
         "type": "box",
         "title": "HOUSEHOLD_LIABILITIES",
+        "orderNo": 70,
         "items": {
             "liabilities": {
                 "key": "customer.liabilities",
@@ -1365,6 +1375,7 @@
     "HouseVerification": {
         "type": "box",
         "title": "T_HOUSE_VERIFICATION",
+        "orderNo": 80,
         "items": {
             "ownership": {
                 "key": "customer.ownership",
@@ -1421,6 +1432,7 @@
     "EmployeeDetails": {
         "type": "box",
         "title": "EMPLOYEE_DETAILS",
+        "orderNo": 30,
         "items": {
             "noOfFemaleEmployees": {
                 "key": "customer.enterprise.noOfFemaleEmployees",

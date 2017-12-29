@@ -2,80 +2,95 @@
     "PreliminaryInformation": {
         "type": "box",
         "title": "PRELIMINARY_INFORMATION",
+        "orderNo": 10,
         "items": {
             "linkedAccountNumber": {
                 "key": "loanAccount.linkedAccountNumber",
                 "title": "LINKED_ACCOUNT_NUMBER",
                 "type": "lov",
-                "autolov": true
+                "autolov": true,
+                "orderNo": 10
             },
             "npa": {
                 "key": "loanAccount.npa",
-                "title": "IS_NPA"
+                "title": "IS_NPA",
+                "orderNo": 20
             },
             "loanPurpose1": {
                 "key": "loanAccount.loanPurpose1",
                 "type": "lov",
-                "autolov": true
+                "autolov": true,
+                "orderNo": 30
             },
             "loanPurpose2": {
                 "key": "loanAccount.loanPurpose2",
                 "type": "lov",
                 "autolov": true,
-                "title": "LOAN_PURPOSE_2"
+                "title": "LOAN_PURPOSE_2",
+                "orderNo": 40
             },
             "loanAmountRequested": {
                 "key": "loanAccount.loanAmountRequested",
                 "type": "amount",
-                "title": "REQUESTED_LOAN_AMOUNT"
+                "title": "REQUESTED_LOAN_AMOUNT",
+                "orderNo": 50
             },
             "frequencyRequested": {
                 "key": "loanAccount.frequencyRequested",
                 "type": "select",
                 "title": "FREQUENCY_REQUESTED",
-                "enumCode": "frequency"
+                "enumCode": "frequency",
+                "orderNo": 60
             },
             "tenureRequested": {
                 "key": "loanAccount.tenureRequested",
                 "type": "number",
-                "title": "TENURE_REQUESETED"
+                "title": "TENURE_REQUESETED",
+                "orderNo": 70
             },
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
-                "title": "EXPECTED_INTEREST_RATE"
+                "title": "EXPECTED_INTEREST_RATE",
+                "orderNo": 80
             },
             "expectedEmi": {
                 "key": "loanAccount.expectedEmi",
                 "type": "amount",
-                "title": "ESTIMATED_EMI"
+                "title": "ESTIMATED_EMI",
+                "orderNo": 90
             },
             "emiRequested": {
                 "key": "loanAccount.emiRequested",
                 "type": "amount",
-                "title": "EMI_REQUESTED"
+                "title": "EMI_REQUESTED",
+                "orderNo": 100
             },
             "emiPaymentDateRequested": {
                 "key": "loanAccount.emiPaymentDateRequested",
                 "type": "select",
                 "title": "EMI_PAYMENT_DATE_REQUESTED",
-                "enumCode": "emi_requested_datestring"
+                "enumCode": "emi_requested_datestring",
+                "orderNo": 110
             },
             "collectionPaymentType": {
                 "key": "loanAccount.collectionPaymentType",
                 "title": "MODE_OF_REPAYMENT",
                 "type": "select",
-                "enumCode": "collectionPaymentType"
+                "enumCode": "collectionPaymentType",
+                "orderNo": 120
             },
             "expectedPortfolioInsurancePremium": {
                 "key": "loanAccount.expectedPortfolioInsurancePremium",
-                "title": "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM"
+                "title": "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
+                "orderNo": 130
             }
         }
     },
     "LoanCustomerRelations": {
         "type": "box",
         "title": "LOAN_CUSTOMER_RELATIONS",
+        "orderNo": 20,
         "items": {
             "loanCustomerRelations": {
                 "type": "array",
