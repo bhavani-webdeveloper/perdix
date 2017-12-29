@@ -1,7 +1,10 @@
 var irf = irf || {};
-var irfModels = irf.models = angular.module('IRFModels', ['ngResource', 'ngJSONPath', 'irf.SessionManager']);
+var irfModels = irf.models = angular.module('IRFModels', ['ngResource', 'ngJSONPath', 'irf.SessionManager', 'ngCacheBuster']);
 
 irf.models
+    .config(function(httpRequestInterceptorCacheBusterProvider){
+        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*\.json/],true);
+    })
 	.constant('searchResource', function(opts){
 		var obj = {
 			transformResponse: function(response, headersGetter){
