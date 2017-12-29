@@ -518,7 +518,8 @@
                   "maxLength": 250,
                   "captureStages": [
                      "GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "DSC","CGT1","CGT2","CGT3","LoanBooking","ApplicationPending","Checker1","Checker2","AgreementUploadPending","Checker3","Checker4","LoanDisbursement"
                   ]
                },
                "groupPhotoFileId": {

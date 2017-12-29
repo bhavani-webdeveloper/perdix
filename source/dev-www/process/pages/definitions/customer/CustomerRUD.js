@@ -620,7 +620,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     type: "select"
                                 },
                                 {
-                                    key: "customer.familyMembers[].incomes[].monthsPerYear"
+                                    key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                    "schema":{
+                                        "minimum": 0,
+                                        "maximum": 366,
+                                    }
                                 }
                             ]
                         }
