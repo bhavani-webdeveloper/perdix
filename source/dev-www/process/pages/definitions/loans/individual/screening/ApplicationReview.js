@@ -53,11 +53,18 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 order: 70
             }, {
                 pageName: 'loans.individual.screening.detail.SummaryView',
-                title: 'Summary',
-                pageClass: 'summary',
+                title: 'SummaryView',
+                pageClass: 'summaryView',
                 minimum: 1,
                 maximum: 1,
                 order: 5
+            }, {
+                pageName: 'loans.individual.screening.Summary',
+                title: 'SUMMARY',
+                pageClass: 'summary',
+                minimum: 1,
+                maximum: 1,
+                order: 6
             }, {
                 pageName: 'loans.individual.screening.Review',
                 title: 'REVIEW',
@@ -169,6 +176,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
 
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
+                                    model: {
+                                        cbModel: {
+                                            customerId: res.customerId,
+                                            loanId: bundleModel.loanId,
+                                            scoreName: 'RiskScore3'
+                                        }
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'summaryView',
                                     model: {
                                         cbModel: {
                                             customerId: res.customerId,

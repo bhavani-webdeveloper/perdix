@@ -185,8 +185,6 @@ define({
                 }
             }
 
-            $log.info("Karthik here");
-            $log.info(model.additional);
 
             model.enterpriseDetailsData = model.enterpriseDetails.data[0];
 
