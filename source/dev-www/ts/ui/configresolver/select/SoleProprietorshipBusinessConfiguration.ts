@@ -13,9 +13,7 @@ export class SoleProprietorshipBusinessConfiguration extends SelectElementConfig
             model.customer.enterprise.enterpriseType = null;
             return;
         }
-        if (value == 'Sole Proprietorship') {
-
-
+        if (value == 'Sole Proprietorship' && !_.isNumber(model.customer.id)) {
             PageHelper.showLoader("Loading...");
             Queries.getEnterpriseCustomerId(model.loanProcess.applicantEnrolmentProcess.customer.id)
                 .then(function (response) {

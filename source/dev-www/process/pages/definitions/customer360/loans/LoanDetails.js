@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator",
-    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator) {
+ ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder",
+    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -47,7 +47,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
-                        model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0; 
+                        model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
 
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                             LoanAccount.get({
@@ -360,6 +360,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 .finally(function() {
                                     PageHelper.hideLoader();
                                 })
+
+                            RepaymentReminder.getAccountDetails({accountNumber: model.loanAccount.accountNumber})
+                                .$promise
+                                .then(
+                                    function (res) {
+                                        $log.info(res);
+                                        model.loanRepaymentReminderHistory = res;
+
+                                        for(var i=0; i<model.loanRepaymentReminderHistory.length;i++){
+                                            model.loanRepaymentReminderHistory[i].installmentAmount = (model.loanRepaymentReminderHistory[i].installmentAmount/100);
+                                            model.loanRepaymentReminderHistory[i].repaymentAmountInPaisa = (model.loanRepaymentReminderHistory[i].repaymentAmountInPaisa/100);
+                                        }
+                                    });
                         }
 
                         if (model.loanAccount.loanDocuments) {
@@ -1028,6 +1041,69 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                                  }
                                                                  }*/
                         ]
+                    }]
+                },
+                {
+                    type: "box",
+                    title: "REMINDER_/_REPAYMEMT_HISTORY",
+                    "readonly": true,
+                    items: [{
+                        key: "loanRepaymentReminderHistory",
+                        type: "array",
+                        startEmpty: true,
+                        add: null,
+                        remove: null,
+                        view: "fixed",
+                        "titleExpr": "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.loanRepaymentReminderHistory[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.loanRepaymentReminderHistory[arrayIndex].repaymentType + ': '+ moment(model.loanRepaymentReminderHistory[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
+                        "titleExprLocals": {moment: window.moment},
+                        items: [{
+                            key: "loanRepaymentReminderHistory[].instrumnetType",
+                            type: "string",
+                            title: "INSTRUMENT_TYPE",
+                            condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                        },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
+                                type: "string",
+                                title: "AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].installmentAmount",
+                                type: "string",
+                                title: "AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentDate",
+                                type: "string",
+                                title: "REPAYMENT_DATE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reference",
+                                type: "string",
+                                title: "REFERENCE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].interactionMode",
+                                type: "string",
+                                title: "INTERACTION_MODE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].interactionDate",
+                                type: "string",
+                                title: "INTERACTION_DATE_",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reminderStatus",
+                                type: "string",
+                                title: "CALL_STATUS",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            }]
                     }]
                 },
                 {
@@ -1817,7 +1893,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             irfNavigator.goBack();
                         }
                     }]
-                }, 
+                },
             ],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
