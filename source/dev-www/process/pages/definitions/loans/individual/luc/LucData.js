@@ -7,6 +7,12 @@ define({
 
         var branch = SessionStore.getBranch();
 
+        var noOfWomenCalc = function(model) {
+            if (_.isNumber(model.loanMonitoringDetails.socialImpactDetails.noOfJobsAdded) || _.isNumber(model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen)) {
+                model.loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen = model.loanMonitoringDetails.socialImpactDetails.noOfJobsAdded - model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen;
+            }
+        }
+
         var validateDate = function(req) {
             if (req.loanMonitoringDetails && req.loanMonitoringDetails.lucRescheduledDate) {
                 var today = moment(new Date()).format("YYYY-MM-DD");
@@ -1559,11 +1565,17 @@ define({
                 "title": "SOCIAL_IMPACT",
                 "items": [{
                     key: "loanMonitoringDetails.socialImpactDetails.noOfJobsAdded",
-                    title: "NO_OF_JOBS_ADDED"
+                    title: "NO_OF_JOBS_ADDED",
+                    onChange:function(value,form,model){
+                        noOfWomenCalc(model);
+                    }
                 }, {
                     key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
                     type: "number",
-                    title: "MEN"
+                    title: "MEN",
+                    onChange:function(value,form,model){
+                        noOfWomenCalc(model);
+                    }
                 }, {
                     key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
                     type: "number",
