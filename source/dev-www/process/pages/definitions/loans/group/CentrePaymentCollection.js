@@ -23,6 +23,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						model.collectionDemandSummary.denominationFive = null;
 						model.collectionDemandSummary.denominationFiveHundred = null;
 						model.collectionDemandSummary.denominationHundred = null;
+						model.collectionDemandSummary.denominationTwoHundred = null;
 						model.collectionDemandSummary.denominationOne = null;
 						model.collectionDemandSummary.denominationTen =null;
 						model.collectionDemandSummary.denominationThousand = null;
@@ -193,8 +194,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		                        model.collectionDemandSummary.centreName = valueObj.name;
 		                        model.collectionDemandSummary.centreId = valueObj.id;
 		                        delete model.collectionDemandSummary.photoOfCentre;
-		                        delete model.collectionDemandSummary.latitude;
-		                        delete model.collectionDemandSummary.longitude;
+		                        if(model.$$OFFLINE_FILES$$ && model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre)
+		                        {
+			                        model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre['data'] = null;
+			                        model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre['filename'] = null;
+		                        }
+		                        model.collectionDemandSummary.latitude = ' ';
+		                        model.collectionDemandSummary.longitude = ' ';
 		                        model.collected = 0;
 								model.groupCollectionDemand = [];
 								var collectionDemands = model._storedData.collectionDemands;
@@ -246,6 +252,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"key": "collectionDemandSummary.latitude",
 							"title": "CENTRE_LOCATION",
 							"type": "geotag",
+							"latitudeExpr": "model.collectionDemandSummary.latitude",
+							"longitudeExpr":"model.collectionDemandSummary.longitude",
 							"latitude": "collectionDemandSummary.latitude",
 							"longitude": "collectionDemandSummary.longitude",
 							"condition": "model._mode!=='VIEW'"
@@ -463,14 +471,21 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
-								key:"collectionDemandSummary.denominationHundred",
+								key:"collectionDemandSummary.denominationTwoHundred",
 								onChange:"actions.valueOfDenoms(model,form)"
 							}]
-						}]
+						},]
 					},{
 						"type": "section",
 						"htmlClass": "row",
 						"items": [{
+							"type": "section",
+							"htmlClass": "col-xs-4",
+							"items": [{
+								key:"collectionDemandSummary.denominationHundred",
+								onChange:"actions.valueOfDenoms(model,form)"
+							}]
+						},{
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
@@ -484,18 +499,18 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								key:"collectionDemandSummary.denominationTwenty",
 								onChange:"actions.valueOfDenoms(model,form)"
 							}]
-						},{
+						},]
+					},{
+						"type": "section",
+						"htmlClass": "row",
+						"items": [{
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
 								key:"collectionDemandSummary.denominationTen",
 								onChange:"actions.valueOfDenoms(model,form)"
 							}]
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "row",
-						"items": [{
+						}, {
 							"type": "section",
 							"htmlClass": "col-xs-4",
 							"items": [{
@@ -543,6 +558,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				var thousands = 1000*parseInt(model.collectionDemandSummary.denominationThousand,10);
 				var twoTthousands = 2000*parseInt(model.collectionDemandSummary.denominationTwoThousand,10);
 				var fivehundreds = 500*parseInt(model.collectionDemandSummary.denominationFiveHundred,10);
+				var twohundreds = 200*parseInt(model.collectionDemandSummary.denominationTwoHundred,10);
 				var hundreds = 100*parseInt(model.collectionDemandSummary.denominationHundred,10);
 
 				var fifties = 50*parseInt(model.collectionDemandSummary.denominationFifty,10);
@@ -557,6 +573,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				if(!isNaN(twoTthousands)) denominationTotal+=twoTthousands;
 				if(!isNaN(thousands)) denominationTotal+=thousands;
 				if(!isNaN(fivehundreds)) denominationTotal+=fivehundreds;
+				if(!isNaN(twohundreds)) denominationTotal+=twohundreds;
 				if(!isNaN(hundreds)) denominationTotal+=hundreds;
 
 				if(!isNaN(fifties)) denominationTotal+=fifties;
@@ -630,6 +647,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					},
 					{
 						"bFont": 1,
+						"text": "200   x" + summary.denominationTwoHundred
+					},
+					{
+						"bFont": 1,
 						"text": "100   x" + summary.denominationHundred
 					},
 					{
@@ -659,6 +680,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			validateCollection: function(model, formCtrl) {
 				if (!(model._storedData && !model._storedData.expired && model.collectionDemandSummary.centreId)) {
 					PM.pop('collection-demand', 'Demand not avilable / Centre is mandatory', 5000);
+					return false;
+				}
+				var cds = model.collectionDemandSummary;
+				var gcd = model.groupCollectionDemand;
+				if (!model.collectionDemandSummary || !model.groupCollectionDemand || !model.groupCollectionDemand.length) {
+					PM.pop('collection-demand', 'Collection demand missing. Try again with correct centre.', 6000);
 					return false;
 				}
 				if (!model.collectionDemandSummary.latitude) {
@@ -739,6 +766,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"denominationFive": 0,
 							"denominationFiveHundred": 0,
 							"denominationHundred": 0,
+							"denominationTwoHundred": 0,
 							"denominationOne": 0,
 							"denominationTen": 0,
 							"denominationThousand": 0,
@@ -760,6 +788,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							cashDenomination.denominationFive = model.collectionDemandSummary.denominationFive;
 							cashDenomination.denominationFiveHundred = model.collectionDemandSummary.denominationFiveHundred;
 							cashDenomination.denominationHundred = model.collectionDemandSummary.denominationHundred;
+							cashDenomination.denominationTwoHundred = model.collectionDemandSummary.denominationTwoHundred;
 							cashDenomination.denominationOne = model.collectionDemandSummary.denominationOne;
 							cashDenomination.denominationTen = model.collectionDemandSummary.denominationTen;
 							cashDenomination.denominationThousand = model.collectionDemandSummary.denominationThousand;
@@ -816,7 +845,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								PageHelper.showErrors(errorResponse);
 							});
 					} else {
-						PM.pop('collection-demand', 'Collection demand missing...');
+						PM.pop('collection-demand', 'Collection demand missing. Try again with correct centre.', 7000);
 					}
 				}
 			}
@@ -871,6 +900,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						"denominationHundred": {
 							"type": "integer",
 							"title": "100 x"
+						},
+						"denominationTwoHundred": {
+							"type": "integer",
+							"title": "200 x"
 						},
 						"denominationFifty": {
 							"type": "integer",
