@@ -2,16 +2,12 @@
     "PreliminaryInformation": {
         "type": "box",
         "title": "PRELIMINARY_INFORMATION",
-        "orderNo": 10,
         "items": {
             "linkedAccountNumber": {
                 "key": "loanAccount.linkedAccountNumber",
                 "title": "LINKED_ACCOUNT_NUMBER",
                 "type": "lov",
-                "autolov": true,
-                "searchHelper": {
-                    "newOffline": {}
-                }
+                "autolov": true
             },
             "npa": {
                 "key": "loanAccount.npa",
@@ -20,35 +16,17 @@
             "loanPurpose1": {
                 "key": "loanAccount.loanPurpose1",
                 "type": "lov",
-                "autolov": true,
-                "title": "LOAN_PURPOSE_1",
-                "bindMap": {},
-                "outputMap": {
-                    "purpose1": "loanAccount.loanPurpose1"
-                },
-                "resolver": "LoanPurpose1LOVConfiguration",
-                "searchHelper": {
-                    "newOffline": {}
-                }
+                "autolov": true
             },
             "loanPurpose2": {
                 "key": "loanAccount.loanPurpose2",
                 "type": "lov",
                 "autolov": true,
-                "title": "LOAN_PURPOSE_2",
-                "bindMap": {},
-                "outputMap": {
-                    "purpose2": "loanAccount.loanPurpose2"
-                },
-                "resolver": "LoanPurpose2LOVConfiguration",
-                "searchHelper": {
-                    "newOffline": {}
-                }
+                "title": "LOAN_PURPOSE_2"
             },
             "loanAmountRequested": {
                 "key": "loanAccount.loanAmountRequested",
                 "type": "amount",
-                "required": true,
                 "title": "REQUESTED_LOAN_AMOUNT"
             },
             "frequencyRequested": {
@@ -59,7 +37,6 @@
             },
             "tenureRequested": {
                 "key": "loanAccount.tenureRequested",
-                "required": true,
                 "type": "number",
                 "title": "TENURE_REQUESETED"
             },
@@ -71,12 +48,10 @@
             "expectedEmi": {
                 "key": "loanAccount.expectedEmi",
                 "type": "amount",
-                "title": "ESTIMATED_EMI",
-                "readonly": true
+                "title": "ESTIMATED_EMI"
             },
             "emiRequested": {
                 "key": "loanAccount.emiRequested",
-                "required": true,
                 "type": "amount",
                 "title": "EMI_REQUESTED"
             },
@@ -88,22 +63,19 @@
             },
             "collectionPaymentType": {
                 "key": "loanAccount.collectionPaymentType",
-                "required": true,
                 "title": "MODE_OF_REPAYMENT",
                 "type": "select",
                 "enumCode": "collectionPaymentType"
             },
             "expectedPortfolioInsurancePremium": {
                 "key": "loanAccount.expectedPortfolioInsurancePremium",
-                "title": "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
-                "readonly": true
+                "title": "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM"
             }
         }
     },
     "LoanCustomerRelations": {
         "type": "box",
         "title": "LOAN_CUSTOMER_RELATIONS",
-        "orderNo": 20,
         "items": {
             "loanCustomerRelations": {
                 "type": "array",
@@ -153,8 +125,7 @@
             "estimatedEmi": {
                 "key": "loanAccount.estimatedEmi",
                 "type": "amount",
-                "title": "EXPECTED_SECURITY_EMI",
-                "readonly": true
+                "title": "EXPECTED_SECURITY_EMI"
             }
         }
     },
@@ -172,13 +143,11 @@
                     "document": {
                         "key": "loanAccount.loanDocuments[].document",
                         "title": "DOCUMENT_NAME",
-                        "type": "string",
-                        "required": true
+                        "type": "string"
                     },
                     "documentId": {
                         "title": "Upload",
                         "key": "loanAccount.loanDocuments[].documentId",
-                        "required": true,
                         "type": "file",
                         "fileType": "application/pdf",
                         "category": "Loan",
@@ -444,38 +413,32 @@
                     "collateralDescription": {
                         "key": "loanAccount.collateral[].collateralDescription",
                         "title": "MACHINE",
-                        "required": true,
                         "type": "string"
                     },
                     "collateralValue": {
                         "key": "loanAccount.collateral[].collateralValue",
                         "title": "PURCHASE_PRICE",
-                        "required": true,
                         "type": "number"
                     },
                     "expectedIncome": {
                         "key": "loanAccount.collateral[].expectedIncome",
                         "title": "EXPECTED_INCOME",
-                        "required": true,
                         "type": "number"
                     },
                     "collateralType": {
                         "key": "loanAccount.collateral[].collateralType",
                         "title": "MACHINE_TYPE",
-                        "required": true,
                         "type": "select",
                         "enumCode": "collateral_type"
                     },
                     "manufacturer": {
                         "key": "loanAccount.collateral[].manufacturer",
                         "title": "MANFACTURE_NAME",
-                        "required": true,
                         "type": "string"
                     },
                     "modelNo": {
                         "key": "loanAccount.collateral[].modelNo",
                         "title": "MACHINE_MODEL",
-                        "required": true,
                         "type": "string"
                     },
                     "serialNo": {
@@ -486,7 +449,6 @@
                     "expectedPurchaseDate": {
                         "key": "loanAccount.collateral[].expectedPurchaseDate",
                         "title": "EXPECTED_PURCHASE_DATE",
-                        "required": true,
                         "type": "date",
                         "minDate": "2017-09-08"
                     },
@@ -494,13 +456,11 @@
                         "key": "loanAccount.collateral[].machineAttachedToBuilding",
                         "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                         "type": "select",
-                        "required": true,
                         "enumCode": "decisionmaker"
                     },
                     "hypothecatedToBank": {
                         "key": "loanAccount.collateral[].hypothecatedToBank",
                         "title": "HYPOTHECATED_TO_KINARA",
-                        "required": true,
                         "enumCode": "decisionmaker",
                         "type": "select"
                     },
@@ -508,21 +468,18 @@
                         "key": "loanAccount.collateral[].electricityAvailable",
                         "title": "ELECTRICITY_AVAIALBLE",
                         "type": "select",
-                        "enumCode": "decisionmaker",
-                        "required": true
+                        "enumCode": "decisionmaker"
                     },
                     "spaceAvailable": {
                         "key": "loanAccount.collateral[].spaceAvailable",
                         "title": "SPACE_AVAILABLE",
                         "type": "select",
-                        "enumCode": "decisionmaker",
-                        "required": true
+                        "enumCode": "decisionmaker"
                     },
                     "collateral1FilePath": {
                         "key": "loanAccount.collateral[].collateral1FilePath",
                         "title": "MACHINE_QUOTATION",
                         "category": "Loan",
-                        "required": true,
                         "subCategory": "DOC1",
                         "type": "file",
                         "fileType": "application/pdf",
@@ -1060,8 +1017,7 @@
                             "mitigantsName": {
                                 "type": "section",
                                 "htmlClass": "row",
-                                "items": [
-                                    {
+                                "items": [{
                                         "type": "section",
                                         "htmlClass": "col-xs-2 col-md-2",
                                         "items": {

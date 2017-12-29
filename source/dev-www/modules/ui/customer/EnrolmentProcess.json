@@ -2,7 +2,6 @@
     "EnterpriseAssets": {
         "type": "box",
         "title": "ASSET_DETAILS",
-        "orderNo": 400,
         "items": {
             "enterpriseAssets": {
                 "key": "customer.enterpriseAssets",
@@ -69,7 +68,6 @@
     },
     "BankAccounts": {
         "type": "box",
-        "orderNo": 60,
         "title": "BANK_ACCOUNTS",
         "items": {
             "customerBankAccounts": {
@@ -347,7 +345,6 @@
     "KYC": {
         "type": "box",
         "title": "KYC",
-        "orderNo": 10,
         "items": {
             "customerId": {
                 "key": "customer.id",
@@ -417,7 +414,6 @@
     },
     "IndividualInformation": {
         "type": "box",
-        "orderNo": 20,
         "title": "PERSONAL_INFORMATION",
         "items": {
             "customerBranchId": {
@@ -536,7 +532,6 @@
     },
     "EnterpriseInformation": {
         "type": "box",
-        "orderNo": 10,
         "title": "ENTITY_INFORMATION",
         "items": {
             "enterpriseType": {
@@ -557,21 +552,25 @@
             "customerId": {
                 "key": "customer.id",
                 "title": "LOAD_EXISTING_CUSTOMER",
-                "type": "lov"
+                "type": "lov",
+                "orderNo": 10
             },
             "customerBranchId": {
                 "key": "customer.customerBranchId",
                 "title": "BRANCH_NAME",
-                "type": "select"
+                "type": "select",
+                "orderNo": 20
             },
             "entityId": {
                 "key": "customer.id",
-                "title": "ENTITY_ID"
+                "title": "ENTITY_ID",
+                "orderNo": 30
             },
             "urnNo": {
                 "key": "customer.urnNo",
                 "condition": "model.customer.urnNo",
-                "title": "URN_NO"
+                "title": "URN_NO",
+                "orderNo": 40
             },
             "centreId": {
                 "key": "customer.centreId",
@@ -581,45 +580,52 @@
                     "parentCode": "branch_id"
                 },
                 "parentEnumCode": "branch_id",
-                "parentValueExpr": "model.customer.customerBranchId"
+                "parentValueExpr": "model.customer.customerBranchId",
+                "orderNo": 50
             },
             "oldCustomerId": {
                 "key": "customer.oldCustomerId",
                 "title": "ENTITY_ID",
                 "titleExpr": "('ENTITY_ID'|translate)+' (Artoo)'",
-                "condition": "model.customer.oldCustomerId"
+                "orderNo": 60
             },
             "firstName": {
                 "key": "customer.firstName",
-                "title": "ENTITY_NAME"
+                "title": "ENTITY_NAME",
+                "orderNo": 70
             },
             "referredBy": {
                 "key": "customer.enterprise.referredBy",
                 "title": "SOURCED",
                 "type": "select",
-                "enumCode": "referredBy"
+                "enumCode": "referredBy",
+                "orderNo": 80
             },
             "referredName": {
                 "key": "customer.enterprise.referredName",
-                "title": "REFERRED_NAME"
+                "title": "REFERRED_NAME",
+                "orderNo": 90
             },
             "companyOperatingSince": {
                 "key": "customer.enterprise.companyOperatingSince",
                 "title": "OPERATING_SINCE",
-                "type": "date"
+                "type": "date",
+                "orderNo": 100
             },
             "companyEmailId": {
                 "key": "customer.enterprise.companyEmailId",
                 "type": "email",
                 "pattern": "^\\S+@\\S+$",
-                "title": "COMPANY_EMAIL_ID"
+                "title": "COMPANY_EMAIL_ID",
+                "orderNo": 110
             },
             "latitude": {
                 "key": "customer.latitude",
                 "title": "BUSINESS_LOCATION",
                 "type": "geotag",
                 "latitude": "customer.latitude",
-                "longitude": "customer.longitude"
+                "longitude": "customer.longitude",
+                "orderNo": 120
             },
             "photoImageId": {
                 "key": "customer.photoImageId",
@@ -627,25 +633,29 @@
                 "type": "file",
                 "fileType": "image/*",
                 "category": "CustomerEnrollment",
-                "subCategory": "PHOTO"
+                "subCategory": "PHOTO",
+                "orderNo": 130
             },
             "ownership": {
                 "key": "customer.enterprise.ownership",
                 "title": "OWNERSHIP",
                 "type": "select",
-                "enumCode": "ownership"
+                "enumCode": "ownership",
+                "orderNo": 140
             },
             "businessConstitution": {
                 "key": "customer.enterprise.businessConstitution",
                 "title": "CONSTITUTION",
                 "type": "select",
-                "enumCode": "constitution"
+                "enumCode": "constitution",
+                "orderNo": 150
             },
             "businessHistory": {
                 "key": "customer.enterprise.businessHistory",
                 "title": "BUSINESS_HISTORY",
                 "type": "select",
-                "enumCode": "business_history"
+                "enumCode": "business_history",
+                "orderNo": 160
             },
             "noOfPartners": {
                 "key": "customer.enterprise.noOfPartners",
@@ -656,55 +666,65 @@
                     "3": "3",
                     "4": "4",
                     ">4": ">4"
-                }
+                },
+                "orderNo": 170
             },
             "anyPartnerOfPresentBusiness": {
                 "key": "customer.enterprise.anyPartnerOfPresentBusiness",
                 "title": "HAS_ANYONE_ELSE_PARTNER",
                 "type": "select",
-                "enumCode": "decisionmaker"
+                "enumCode": "decisionmaker",
+                "orderNo": 180
             },
             "partnershipDissolvedDate": {
                 "key": "customer.enterprise.partnershipDissolvedDate",
                 "title": "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
-                "type": "date"
+                "type": "date",
+                "orderNo": 190
             },
             "companyRegistered": {
                 "key": "customer.enterprise.companyRegistered",
                 "type": "select",
                 "enumCode": "decisionmaker",
-                "title": "IS_REGISTERED"
+                "title": "IS_REGISTERED",
+                "orderNo": 200
             },
             "isGSTAvailable": {
                 "key": "customer.enterprise.isGSTAvailable",
                 "type": "radios",
                 "enumCode": "decisionmaker",
-                "title": "IS_GST_AVAILABLE"
+                "title": "IS_GST_AVAILABLE",
+                "orderNo": 210
             },
             "enterpriseRegistrations": {
                 "key": "customer.enterpriseRegistrations",
                 "type": "array",
                 "title": "REGISTRATION_DETAILS",
+                "orderNo": 211,
                 "items": {
                     "registrationType": {
                         "key": "customer.enterpriseRegistrations[].registrationType",
                         "title": "REGISTRATION_TYPE",
                         "type": "select",
-                        "enumCode": "business_registration_type"
+                        "enumCode": "business_registration_type",
+                        "orderNo": 220
                     },
                     "registrationNumber": {
                         "key": "customer.enterpriseRegistrations[].registrationNumber",
-                        "title": "REGISTRATION_NUMBER"
+                        "title": "REGISTRATION_NUMBER",
+                        "orderNo": 230
                     },
                     "registeredDate": {
                         "key": "customer.enterpriseRegistrations[].registeredDate",
                         "type": "date",
-                        "title": "REGISTRATION_DATE"
+                        "title": "REGISTRATION_DATE",
+                        "orderNo": 240
                     },
                     "expiryDate": {
                         "key": "customer.enterpriseRegistrations[].expiryDate",
                         "type": "date",
-                        "title": "VALID_UPTO"
+                        "title": "VALID_UPTO",
+                        "orderNo": 250
                     },
                     "documentId": {
                         "key": "customer.enterpriseRegistrations[].documentId",
@@ -713,7 +733,8 @@
                         "category": "CustomerEnrollment",
                         "subCategory": "REGISTRATIONDOCUMENT",
                         "fileType": "application/pdf",
-                        "using": "scanner"
+                        "using": "scanner",
+                        "orderNo": 260
                     }
                 }
             },
@@ -721,7 +742,8 @@
                 "key": "customer.enterprise.businessType",
                 "title": "BUSINESS_TYPE",
                 "type": "select",
-                "enumCode": "businessType"
+                "enumCode": "businessType",
+                "orderNo": 270
             },
             "businessActivity": {
                 "key": "customer.enterprise.businessActivity",
@@ -729,7 +751,8 @@
                 "type": "select",
                 "enumCode": "businessActivity",
                 "parentEnumCode": "businessType",
-                "parentValueExpr": "model.customer.enterprise.businessType"
+                "parentValueExpr": "model.customer.enterprise.businessType",
+                "orderNo": 280
             },
             "businessSector": {
                 "key": "customer.enterprise.businessSector",
@@ -737,18 +760,21 @@
                 "type": "select",
                 "enumCode": "businessSector",
                 "parentEnumCode": "businessType",
-                "parentValueExpr": "model.customer.enterprise.businessType"
+                "parentValueExpr": "model.customer.enterprise.businessType",
+                "orderNo": 290
             },
             "businessSubsector": {
                 "key": "customer.enterprise.businessSubsector",
                 "title": "BUSINESS_SUBSECTOR",
-                "type": "lov"
+                "type": "lov",
+                "orderNo": 300
             },
             "itrAvailable": {
                 "key": "customer.enterprise.itrAvailable",
                 "title": "ITR_AVAILABLE",
                 "type": "select",
-                "enumCode": "decisionmaker"
+                "enumCode": "decisionmaker",
+                "orderNo": 310
             },
             "enterpriseCustomerRelations": {
                 "key": "customer.enterpriseCustomerRelations",
@@ -760,45 +786,53 @@
                         "key": "customer.enterpriseCustomerRelations[].relationshipType",
                         "title": "RELATIONSHIP_TYPE",
                         "type": "select",
-                        "enumCode": "relationship_type"
+                        "enumCode": "relationship_type",
+                        "orderNo": 320
                     },
                     "linkedToCustomerId": {
                         "key": "customer.enterpriseCustomerRelations[].linkedToCustomerId",
                         "type": "lov",
-                        "title": "CUSTOMER_ID"
+                        "title": "CUSTOMER_ID",
+                        "orderNo": 330
                     },
                     "linkedToCustomerName": {
                         "key": "customer.enterpriseCustomerRelations[].linkedToCustomerName",
-                        "title": "CUSTOMER_NAME"
+                        "title": "CUSTOMER_NAME",
+                        "orderNo": 340
                     },
                     "experienceInBusiness": {
                         "key": "customer.enterpriseCustomerRelations[].experienceInBusiness",
                         "title": "EXPERIENCE_IN_BUSINESS",
                         "type": "select",
-                        "enumCode": "years_in_current_area"
+                        "enumCode": "years_in_current_area",
+                        "orderNo": 350
                     },
                     "businessInvolvement": {
                         "key": "customer.enterpriseCustomerRelations[].businessInvolvement",
                         "title": "BUSINESS_INVOLVEMENT",
                         "type": "select",
-                        "enumCode": "business_involvement"
+                        "enumCode": "business_involvement",
+                        "orderNo": 360
                     },
                     "partnerOfAnyOtherCompany": {
                         "key": "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                         "title": "PARTNER_OF_ANY_OTHER_COMPANY",
                         "type": "select",
-                        "enumCode": "decisionmaker"
+                        "enumCode": "decisionmaker",
+                        "orderNo": 370
                     },
                     "otherBusinessClosed": {
                         "key": "customer.enterpriseCustomerRelations[].otherBusinessClosed",
                         "title": "OTHER_BUSINESS_CLOSED",
                         "type": "select",
-                        "enumCode": "decisionmaker"
+                        "enumCode": "decisionmaker",
+                        "orderNo": 380
                     },
                     "otherBusinessClosureDate": {
                         "key": "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
                         "type": "date",
-                        "title": "OTHER_BUSINESS_CLOSE_DATE"
+                        "title": "OTHER_BUSINESS_CLOSE_DATE",
+                        "orderNo": 390
                     }
                 }
             }
@@ -806,7 +840,6 @@
     },
     "ContactInformation": {
         "type": "box",
-        "orderNo": 30,
         "title": "CONTACT_INFORMATION",
         "items": {
             "mobilePhone": {
@@ -925,12 +958,32 @@
             "mailingState": {
                 "key": "customer.mailingState",
                 "orderNo": 220
+            },
+            "distanceFromBranch": {
+                "key": "customer.distanceFromBranch",
+                "type": "select",
+                "enumCode": "distance_from_branch",
+                "title": "DISTANCE_FROM_BRANCH",
+                "orderNo": 230
+            },
+            "businessInPresentAreaSince": {
+                "key": "customer.enterprise.businessInPresentAreaSince",
+                "type": "select",
+                "enumCode": "business_in_present_area_since",
+                "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
+                "orderNo": 240
+            },
+            "businessInCurrentAddressSince": {
+                "key": "customer.enterprise.businessInCurrentAddressSince",
+                "type": "select",
+                "enumCode": "bsns_in_current_addrss_since",
+                "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                "orderNo": 250
             }
         }
     },
     "IndividualFinancials": {
         "type": "box",
-        "orderNo": 70,
         "title": "HOUSEHOLD_FINANCIALS",
         "items": {
             "expenditures": {
@@ -1165,8 +1218,7 @@
     },
     "FamilyDetails": {
         "type": "box",
-        "orderNo": 60,
-        "title": "FAMILY_SELF_DETAILS",
+        "title": "FAMILY_DETAILS",
         "items": {
             "familyMembers": {
                 "key": "customer.familyMembers",
@@ -1176,12 +1228,10 @@
                     "relationShip": {
                         "key": "customer.familyMembers[].relationShip",
                         "type": "select",
-                        "condition": "(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
                         "title": "T_RELATIONSHIP"
                     },
                     "familyMemberFirstName": {
                         "key": "customer.familyMembers[].familyMemberFirstName",
-                        "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                         "title": "FAMILY_MEMBER_FULL_NAME"
                     },
                     "educationStatus": {
@@ -1223,7 +1273,6 @@
     },
     "Liabilities": {
         "type": "box",
-        "orderNo": 40,
         "title": "HOUSEHOLD_LIABILITIES",
         "items": {
             "liabilities": {
@@ -1232,6 +1281,12 @@
                 "startEmpty": true,
                 "title": "HOUSEHOLD_LIABILITIES",
                 "items": {
+                    "loanType": {
+                        "key": "customer.liabilities[].loanType",
+                        "type": "select",
+                        "enumCode": "liability_loan_type",
+                        "orderNo": 9
+                    },
                     "loanSource": {
                         "key": "customer.liabilities[].loanSource",
                         "type": "select",
@@ -1292,6 +1347,16 @@
                         "type": "number",
                         "title": "RATE_OF_INTEREST",
                         "orderNo": 110
+                    },
+                    "proofDocuments": {
+                        "key": "customer.liabilities[].proofDocuments",
+                        "title": "DOCUMENTS",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "using": "scanner",
+                        "orderNo": 120
                     }
                 }
             }
@@ -1299,7 +1364,6 @@
     },
     "HouseVerification": {
         "type": "box",
-        "orderNo": 50,
         "title": "T_HOUSE_VERIFICATION",
         "items": {
             "ownership": {
@@ -1320,7 +1384,6 @@
     },
     "PhysicalAssets": {
         "type": "box",
-        "orderNo": 110,
         "title": "PHYSICAL_ASSETS",
         "items": {
             "physicalAssets": {
@@ -1357,7 +1420,6 @@
     },
     "EmployeeDetails": {
         "type": "box",
-        "orderNo": 30,
         "title": "EMPLOYEE_DETAILS",
         "items": {
             "noOfFemaleEmployees": {
