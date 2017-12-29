@@ -49,8 +49,7 @@
     "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
     "mathjs": "^3.8.1",
     "angular-sanitize": "1.6.1",
-    "class-transformer": "^0.1.1",
-    "angular-cache-buster": "^0.4.3"
+    "class-transformer": "^0.1.1"
   },
   "overrides": {
     "admin-lte": {
