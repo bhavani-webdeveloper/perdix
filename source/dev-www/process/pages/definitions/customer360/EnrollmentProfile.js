@@ -22,6 +22,7 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
         model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.spouseFirstName=Utils.getFullName(model.customer.spouseFirstName,model.customer.spouseMiddleName,model.customer.spouseLastName);
         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
     return {

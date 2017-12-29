@@ -309,8 +309,9 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 if(model.customer.familyMembers[i].dateOfBirth){
                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
+                var family= model.customer.familyMembers[i];
+                family.familyMemberFirstName=Utils.getFullName(family.familyMemberFirstName,family.familyMemberMiddleName,family.familyMemberLastName);
             }
-
         }
 
 
