@@ -186,7 +186,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             {
                 "key":"bankDepositSummary.totalAmount",
                 "type":"amount",
-                "title":"AMOUNT_DEPOSITED"
+                "title":"AMOUNT_DEPOSITED",
+                "readonly": true
             },
             {
                 "key":"bankDepositSummary.reference",
