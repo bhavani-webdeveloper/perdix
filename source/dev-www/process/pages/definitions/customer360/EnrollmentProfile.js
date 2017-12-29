@@ -485,7 +485,6 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                            required: true,
                             type:"file",
                             fileType:"image/*",
                             "viewParams": function(modelValue, form, model) {

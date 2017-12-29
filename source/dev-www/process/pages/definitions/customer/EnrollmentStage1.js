@@ -579,7 +579,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "$q", "Enrollme
                         {
                             key: "customer.additionalKYCs[].kyc1ReverseImagePath",
                             type: "file",
-                            required: true,
+                            //required: true,
                             fileType: "image/*",
                             "viewParams": function(modelValue, form, model) {
                                 return {

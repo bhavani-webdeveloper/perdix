@@ -421,7 +421,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             }, {
                                 key: "customer.additionalKYCs[].kyc1ReverseImagePath",
                                 type: "file",
-                                required: true,
                                 fileType: "image/*",
                                 "viewParams": function(modelValue, form, model) {
                                     return {
