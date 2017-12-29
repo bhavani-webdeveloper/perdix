@@ -527,15 +527,18 @@
             },
             "valuationDate": {
                 "key": "loanAccount.vehicleLoanDetails.valuationDate",
+                "required": "true",
                 "type": "date",
                 "title": "DATE_OF_VALUATION"
             },
             "valuationPlace": {
                 "key": "loanAccount.vehicleLoanDetails.valuationPlace",
+                "required": "true",
                 "title": "PLACE_OF_VALUATION"
             },
             "registeredOwnerName": {
                 "key": "loanAccount.vehicleLoanDetails.registeredOwnerName",
+                "required": "true",
                 "title": "REGISTERED_OWNER_NAME"
             },
             "proposedOwnerName": {
@@ -556,15 +559,18 @@
         "items": {
             "inspectionDate": {
                 "key": "loanAccount.vehicleLoanDetails.inspectionDate",
+                "required": "true",
                 "type": "date",
                 "title": "INSPECTION_DATE"
             },
             "inspectedBy": {
                 "key": "loanAccount.vehicleLoanDetails.inspectedBy",
+                "required": "true",
                 "title": "INSPECTED_BY"
             },
             "vehicleMoved": {
                 "key": "loanAccount.vehicleLoanDetails.vehicleMoved",
+                "required": "true",
                 "title": "VECHICLE_MOVED",
                 "type": "select",
                 "enumCode": "decisionmaker"
@@ -578,10 +584,12 @@
             },
             "inspectionAltitude": {
                 "key": "loanAccount.vehicleLoanDetails.inspectionAltitude",
+                "required": "true",
                 "title": "TIME_OF_INSPECTION"
             },
             "engineStarted": {
                 "key": "loanAccount.vehicleLoanDetails.engineStarted",
+                "required": "true",
                 "title": "ENGINE_STARTED",
                 "type": "select",
                 "enumCode": "decisionmaker"
@@ -595,14 +603,17 @@
             "make": {
                 "key": "loanAccount.vehicleLoanDetails.make",
                 "title": "MAKE",
+                "required": "true",
                 "type": "select"
             },
             "variant": {
                 "key": "loanAccount.vehicleLoanDetails.variant",
+                "required": "true",
                 "title": "VARIANT"
             },
             "colour": {
                 "key": "loanAccount.vehicleLoanDetails.colour",
+                "required": "true",
                 "title": "COLOUR"
             },
             "trailer": {
@@ -611,10 +622,12 @@
             },
             "chasisNo": {
                 "key": "loanAccount.vehicleLoanDetails.chasisNo",
+                "required": "true",
                 "title": "CHASIS_NO"
             },
             "engineNo": {
                 "key": "loanAccount.vehicleLoanDetails.engineNo",
+                "required": "true",
                 "title": "ENGINE_NO"
             },
             "odometerReading": {
@@ -900,7 +913,8 @@
                     "componentType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentType",
                         "title": "COMPONENT_TYPE",
-                        "type": "select"
+                        "type": "select",
+                        "enumCode": "vehicle_components"
                     },
                     "componentCondition": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentCondition",
