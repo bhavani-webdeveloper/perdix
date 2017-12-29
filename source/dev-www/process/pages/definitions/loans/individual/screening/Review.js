@@ -44,22 +44,18 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 			"sortOrder": "DESC",
 			"momentFn": function(item, index) {
 				item._timeSpent = moment.duration(item.timeSpent * 60 * 1000).humanize();
-				if (item.isCurrentStage) {
-					item._titleHtml = '';
+				item._titleHtml = '<div class="row"><div class="col-sm-2"><small>User ID</small><br><strong>'+item.userId+'</strong></div> ';
+				item._titleHtml += '<div class="col-sm-2"><small>Action</small><br><strong>';
+				if (item.action == 'SAVE') {
+					item._titleHtml += 'Saved';
 				} else {
-					item._titleHtml = '<div class="row"><div class="col-sm-2"><small>User ID</small><br><strong>'+item.userId+'</strong></div> ';
-					item._titleHtml += '<div class="col-sm-2"><small>Action</small><br><strong>';
-					if (item.action == 'SAVE') {
-						item._titleHtml += 'Saved';
-					} else {
-						item._titleHtml += 'Proceed';
-					}
-					item._titleHtml += '</strong></div>';
-					item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+item.preStage+'</strong></div>';
-					item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+item.postStage+'</strong></div>';
-					item._titleHtml += '<div class="col-sm-2"><small>Time taken</small><br><strong>'+item._timeSpent+'</strong></div>';
-					item._titleHtml += '<div class="col-sm-2"></div>';
+					item._titleHtml += 'Proceed';
 				}
+				item._titleHtml += '</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+item.preStage+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+item.postStage+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>Time taken</small><br><strong>'+item._timeSpent+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"></div>';
 				item._bodyHtml = '<div class="row"><div class="col-sm-4">Loan Amount: <b>'+irfCurrencyFilter(item.loanAmount)+'</b></div>';
 				item._bodyHtml += '<div class="col-sm-4">Interest Rate: <b>'+item.interestRate+'</b></div>';
 				item._bodyHtml += '<div class="col-sm-4">Tenure: <b>'+item.tenure+'</b></div></div>';

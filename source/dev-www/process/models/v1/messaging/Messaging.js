@@ -9,25 +9,25 @@ irf.models.factory('Messaging', ["$resource", "$httpParamSerializer", "BASE_URL"
             }),
             createConversation: searchResource({
                 method: 'POST',
-                url: endpoint + 'createConversation.php'   
+                url: endpoint + 'createConversation.php'
             }),
             addMessage: searchResource({
                 method: 'POST',
-                url: endpoint + 'addMessage.php'   
+                url: endpoint + 'addMessage.php'
             }),
             closeConversation: searchResource({
                 method: 'GET',
-                url: endpoint + 'closeConversation.php'   
+                url: endpoint + 'closeConversation.php'
             }),
             findConversation: searchResource({
                 method: 'GET',
-                url: endpoint + 'findConversation.php'   
+                url: endpoint + 'findConversation.php'
             }),
             findProcess: searchResource({
                 method: 'GET',
-                url: endpoint + 'findProcess.php'   
+                url: endpoint + 'findProcess.php'
             })
-            
+
         });
 
         return res;
@@ -64,7 +64,7 @@ irf.models.directive("irfMessaging", [function() {
                             </span>
                         </span>
                         <span ng-bind-html="highlightUsernames(reply.message_text)"></span>
-                        &nbsp;<a ng-hide="readonly" href="" class="color-theme" ng-click="msg._reply=msg._reply?msg._reply:\'@\'+reply.created_by+\' \';" onclick="$(\'#in_reply_\'+$(this).attr(\'msgid\')).focus()" ng-attr-msgid="{{msg.id}}"><i class="fa fa-reply">&nbsp;</i>{{'REPLY'|translate}}</a>
+                        &nbsp;<a ng-hide="readonly" href="" class="color-theme" ng-click="msg._reply=msg._reply?msg._reply:\'@[\'+reply.created_by+\'] \';" onclick="$(\'#in_reply_\'+$(this).attr(\'msgid\')).focus()" ng-attr-msgid="{{msg.id}}"><i class="fa fa-reply">&nbsp;</i>{{'REPLY'|translate}}</a>
                     </div>
                 </div>
                 <div ng-hide="readonly" style="padding-top:10px">
@@ -115,10 +115,12 @@ irf.models.directive("irfMessaging", [function() {
             readonly: "="
         },
         controller: ["$scope", "$log", "Messaging","PageHelper", "SessionStore", function($scope, $log, Messaging, PageHelper, SessionStore) {
-            var created_by = SessionStore.getLoginname();
+            //var created_by = SessionStore.getUsername();
+            var created_by = "Prakash Dharuman";
 
             $scope.highlightUsernames = function(msg_text) {
-                return msg_text.replace(/(\@([a-zA-Z0-9_]+)) /g, ' <strong>$2</strong> ');
+                return msg_text.replace(/\@\[(.*)\]/g, ' <strong>$1</strong> ');
+                //return msg_text.replace(/(\@([a-zA-Z0-9_]+)) /g, ' <strong>$2</strong> ');
             }
 
             $scope.momentCalendar = function(date) {
