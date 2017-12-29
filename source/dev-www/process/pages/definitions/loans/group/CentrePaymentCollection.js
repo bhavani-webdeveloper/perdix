@@ -688,10 +688,10 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					PM.pop('collection-demand', 'Collection demand missing. Try again with correct centre.', 6000);
 					return false;
 				}
-				if (!model.collectionDemandSummary.latitude) {
-					PM.pop('collection-demand', 'Centre location is mandatory', 5000);
-					return false;
-				}
+				// if (!model.collectionDemandSummary.latitude) {
+				// 	PM.pop('collection-demand', 'Centre location is mandatory', 5000);
+				// 	return false;
+				// }
 				if (!(model.collectionDemandSummary.photoOfCentre || model.$$OFFLINE_FILES$$.collectionDemandSummary$photoOfCentre.data)) {
 					PM.pop('collection-demand', 'Centre Photo is mandatory', 5000);
 					return false;
@@ -855,7 +855,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 			"properties": {
 				"collectionDemandSummary": {
 					"type": "object",
-					"required": ["centreId", "latitude", "longitude", "photoOfCentre"],
+					"required": ["centreId", "photoOfCentre"],
 					"properties": {
 						"centreId": {
 							"title": "CENTRE",
