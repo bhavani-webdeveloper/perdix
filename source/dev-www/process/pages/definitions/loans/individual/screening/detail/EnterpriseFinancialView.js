@@ -373,6 +373,16 @@ self.renderForm = function() {
 			"items": bankAccountTableForm
 		}]
 	}, {
+
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "Operating Expenses",
+        "condition": "model.currentStage!='ScreeningReview'",
+        "items": [{
+            "type": "section",
+            "html": '<table class="table"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><tbody><tr ng-style = "{\'font-weight\': \'bold\'}"><td>Expenditure Source</td><td>Monthly Expense</td><td>% of Avg Monthly Revenue</td></tr><tr ng-repeat="items in model._opex"><td>{{items["Expenditure Source"]}}</td><td>{{(items["Monthly Expense"]!="")?(items["Monthly Expense"]!=null?(items["Monthly Expense"] | irfCurrency):""):""}}</td><td>{{(items["% of Avg Monthly Revenue"]!="")?((items["% of Avg Monthly Revenue"]!=null)?((items["% of Avg Monthly Revenue"] | number : 2) + "%"):""):""}}</td></tr></tbody></table>'
+        }]
+	}, {
 		"type": "box",
 		"title": "Profit and Loss",
 		"colClass": "col-sm-12",
@@ -499,6 +509,7 @@ self.renderReady = function(eventName) {
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {
+					model._opex = params[21].data;
 					var cfd = params[15];
 					var invoiceCashTableData = [];
 					var invoiceCashGraphData = [{

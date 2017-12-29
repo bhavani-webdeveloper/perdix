@@ -528,16 +528,7 @@ define({
                 }]
             })
 
-    form.push({
-        "type": "box",
-        "colClass": "col-sm-12",
-        "title": "Operating Expenses",
-        "condition": "model.currentStage!='ScreeningReview'",
-        "items": [{
-            "type": "section",
-            "html": '<table class="table"><colgroup><col width="40%"><col width="40%"><col width="20%"></colgroup><tbody><tr ng-style = "{\'font-weight\': \'bold\'}"><td>Expenditure Source</td><td>Monthly Expense</td><td>% of Avg Monthly Revenue</td></tr><tr ng-repeat="items in model._opex"><td>{{items["Expenditure Source"]}}</td><td>{{items["Monthly Expense"] | irfCurrency}}</td><td>{{((items["% of Avg Monthly Revenue"] | number : 2) + "%")}}</td></tr></tbody></table>'
-        }]
-    });
+  
     return form;
 }; // END OF prepareForms()
 
