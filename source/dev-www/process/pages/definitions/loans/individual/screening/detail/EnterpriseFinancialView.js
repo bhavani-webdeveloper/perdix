@@ -732,8 +732,8 @@ self.renderReady = function(eventName) {
 									"title": "Gross Income",
 									"amount": "",
 									"total": bpl['Gross Income'],
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -743,8 +743,8 @@ self.renderReady = function(eventName) {
 									"title": "Net Income",
 									"amount": "",
 									"total": bpl['Net Income'],
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),,
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -856,8 +856,8 @@ self.renderReady = function(eventName) {
 									"title": "Net Income",
 									"amount": "",
 									"total": bpl['Net Income'],
-									"percentage": "",
-									"description": "",
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
