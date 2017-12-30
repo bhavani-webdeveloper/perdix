@@ -743,7 +743,7 @@ self.renderReady = function(eventName) {
 									"title": "Net Income",
 									"amount": "",
 									"total": bpl['Net Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
