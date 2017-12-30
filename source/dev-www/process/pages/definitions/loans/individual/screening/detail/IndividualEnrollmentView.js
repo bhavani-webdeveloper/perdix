@@ -68,17 +68,26 @@ define({
                     /*Reference Check fields*/
                     model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                     var ref_flag = "true";
+                    var countNull=0;
                     _.each(model.customer.verifications, function(verification) {
-                        if (verification.customerResponse == 'negative' || verification.customerResponse == 'NEGATIVE') {
-                            return ref_flag = "false";
+                        if (verification.customerResponse == null) {
+                            countNull++;
+                        } else {
+                            if (verification.customerResponse.toLowerCase() == 'negative') {
+                                return ref_flag = "false";
+                            }
                         }
+                        
                     })
                     if (ref_flag == "false") {
-                        model.UIUDF.REFERENCE_CHECK_RESPONSE = 'negative';
-                    } else {
-                        model.UIUDF.REFERENCE_CHECK_RESPONSE = 'positive';
+                        model.UIUDF.REFERENCE_CHECK_RESPONSE = 'Negative';
+                    } 
+                    if (countNull == model.customer.verifications.length){
+                        model.UIUDF.REFERENCE_CHECK_RESPONSE = " Referer Responses not Captured"
                     }
-
+                    if ( ref_flag == "true"){
+                        model.UIUDF.REFERENCE_CHECK_RESPONSE = "Positive"
+                    }
 
                     /*Household fields */
 
@@ -566,15 +575,7 @@ define({
                                 "pageLength": 10,
                             },
                             getColumns: function() {
-                                return [{
-                                    "title": "Loan Type",
-                                    "data": "LoanType",
-                                    render: function(data, type, full, meta) {
-                                        if (full['Loan Type'] == null) return "NA"
-                                        return full['Loan Type']
-
-                                    }
-                                }, {
+                                return [ {
                                     "title": "loan_source",
                                     "data": "loanSource",
                                     render: function(data, type, full, meta) {
@@ -1031,7 +1032,7 @@ define({
                         }
                     })
 
-                    BankAvgWithdrawl = Math.abs(BankAvgDep - BankAvgBal);
+                    BankAvgWithdrawl = BankAvgDep - BankAvgBal;
                     model.totalAccount = count;
                     model.BankAvgBal = BankAvgBal;
                     model.BankAvgDep = BankAvgDep;

@@ -312,8 +312,6 @@ define({
                         }, {
                             "key": "loanAccount.tenureRequested",
                             "title": "Tenure of Loan"
-                                /*,
-                                                            "type": "number"*/
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Rate of Interest"
@@ -461,10 +459,10 @@ define({
                                 "key": "secData['No of total loans']",
                                 "title": "Total no. of Loans",
                             }, {
-                                "key": "",
+                                "key": "secData['Min Loan Size']",
                                 "title": "Minimum Loan Size"
                             }, {
-                                "key": "",
+                                "key": "secData['Max Loan Size']",
                                 "title": "Maximum Loan Size"
                             }, {
                                 "key": "secData['Average Loan Size']",
@@ -496,10 +494,10 @@ define({
                             "key": "subsecData['No of total loans']",
                             "title": "Total no. of Loans"
                         }, {
-                            "key": "",
+                            "key": "subsecData['Max Loan Size']",
                             "title": "Minimum Loan Size"
                         }, {
-                            "key": "",
+                            "key": "subsecData['Min Loan Size']",
                             "title": "Maximum Loan Size"
                         }, {
                             "key": "subsecData['Average Loan Size']",

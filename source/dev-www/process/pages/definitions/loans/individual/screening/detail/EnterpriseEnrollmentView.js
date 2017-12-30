@@ -13,13 +13,24 @@ define({
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
-                var loanCustomerRel=[];
-                _.each(model.loanAccount.loanCustomerRelations, function(loanRelation){
-                    if(loanRelation.relation !='Applicant'){
-                        loanCustomerRel.push(loanRelation);
-                    }
-                })
-                model.loanCustomerRel = loanCustomerRel;
+
+                model.loanCustomerRelation={};
+                model.loanCustomerRel=[]
+                Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
+                        model.loanCustomerRelation=res;
+                        _.each(model.loanCustomerRelation.coApplicants, function(coApp){
+                            model.loanCustomerRel.push(coApp);
+                        })
+                        _.each(model.loanCustomerRelation.guarantors, function(guarantor){
+                            model.loanCustomerRel.push(guarantor);
+                        })
+
+                    }, function(e) {
+                      $log.info(e)
+                    });
+                
+
+
                 var self = this;
                 Enrollment.getCustomerById({
                     id: model.customerId
@@ -32,14 +43,16 @@ define({
                         model.customer.street,
                         model.customer.district,
                         model.customer.state
-                    ].filter(a=>a).join(', ')+' - '+model.customer.pincode;
+                    ].filter(a => a).join(', ') + ' - ' + model.customer.pincode;
 
 
 
                     /*machine pics */
-                var machineDocs = _.filter(self.form, {title: "Machinery/Stocks/Non-Machinery Asset Details"});
-                  var machineData = [];
-                  var machineBills = [];
+                    var machineDocs = _.filter(self.form, {
+                        title: "Machinery/Stocks/Non-Machinery Asset Details"
+                    });
+                    var machineData = [];
+                    var machineBills = [];
                     for (i in model.customer.fixedAssetsMachinaries) {
                         machineData.push({
                             "key": "customer.fixedAssetsMachinaries[" + i + "].machineImage",
@@ -47,24 +60,24 @@ define({
                             "title": model.customer.fixedAssetsMachinaries[1].machineType,
                             "category": "Loan",
                             "subCategory": "DOC1",
-                             "type": "file",
-                            "fileType": "image/*",
+                            "type": "file",
+                            "preview": "pdf",
                             "using": "scanner"
                         });
 
                         machineBills.push({
                             "key": "customer.fixedAssetsMachinaries[" + i + "].machineBillsDocId",
                             "title": model.customer.fixedAssetsMachinaries[i].machineType,
-                            "notitle":true,
+                            "notitle": true,
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
-                            "fileType": "image/*",
+                            "preview": "pdf",
                             "using": "scanner"
                         })
 
                     }
-                  var machinaPhotosData = {
+                    var machinaPhotosData = {
                         "type": "section",
                         "title": "Machine Photos",
                         "condition": "machineData.length!=0",
@@ -72,21 +85,21 @@ define({
                         "items": machineData
                     };
 
-                     var MachineBillData ={
+                    var MachineBillData = {
                         "type": "section",
                         "title": "Machine Bills",
                         "condition": "MachineBillData.length!=0",
                         "condition": "model.customer.fixedAssetsMachinaries[0].machineBillsDocId !=null",
                         "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display:inline-block;text-align:center"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div>',
                         "items": machineBills
-                        
-                     }
-                
+
+                    }
+
 
                     machineDocs[0].items[1].items.push(machinaPhotosData);
                     machineDocs[0].items[1].items.push(MachineBillData);
 
-                    
+
 
                     /*CBREPORT*/
 
@@ -101,12 +114,13 @@ define({
                             "subStandard": model.customer.enterpriseBureauDetails[0].subStandard
                         }
                     }
-                    
+
                     /* Machin Details*/
 
                     model.machine_count = model.customer.fixedAssetsMachinaries.length;
-                    model.totalValue = 0;/*
-                    model.proxyScore = model.psi;*/
+                    model.totalValue = 0;
+                    /*
+                                        model.proxyScore = model.psi;*/
                     model.hypothecatedToKinara = 0;
                     model.totalHypothecatedValue = 0;
                     _.each(model.customer.fixedAssetsMachinaries, function(machine) {
@@ -121,11 +135,11 @@ define({
                     model.REFERENCE_CHECK_RESPONSE = 'NA';
                     var count_neg_response = "true";
                     _.each(model.customer.verifications, function(verification) {
-                        if (verification.customerResponse == 'negative' || verification.customerResponse == 'NEGATIVE') {
-                            return count_neg_response="false";
+                        if (verification.customerResponse.toLowerCase() == 'negative') {
+                            return count_neg_response = "false";
                         }
                     })
-                    if (count_neg_response ="false") {
+                    if (count_neg_response == "false") {
                         model.REFERENCE_CHECK_RESPONSE = 'negative';
                     } else {
                         model.REFERENCE_CHECK_RESPONSE = 'positive';
@@ -264,7 +278,7 @@ define({
                         }, {
                             "title": "Present Address",
                             "key": "customer.presetAddress"
-                           
+
                         }]
                     }, {
                         "type": "grid",
@@ -337,9 +351,9 @@ define({
                 "readonly": true,
                 "title": "Loan Customer Relationship",
                 "condition": "model.loanCustomerRel.length!=0",
-                "items":[{
+                "items": [{
                     "type": "section",
-                    "html":'<div ng-repeat="data in model.loanCustomerRel"><p >{{data.relation}} is the <u>{{data.relationshipWithApplicant}}</u> of Applicant</p></div>'
+                    "html": '<div ng-repeat="data in model.loanCustomerRel"><p >{{data.relation}}, <u>{{data.first_name}}</u> is the <u>{{data.relationship_with_applicant}}</u> of Applicant <u ng-bind-html="model.loanCustomerRelation.applicant.first_name"></u></p></div>'
                 }]
             }, {
                 "type": "box",
@@ -443,23 +457,23 @@ define({
                                 "title": "Purchase Price",
                                 "data": "purchasePrice",
                                 render: function(data, type, full, meta) {
-                                                return irfCurrencyFilter(data);
-                                            }
-                                            
+                                    return irfCurrencyFilter(data);
+                                }
+
                             }, {
                                 "title": "Present Value",
                                 "data": "presentValue",
                                 render: function(data, type, full, meta) {
-                                                return irfCurrencyFilter(data);
-                                            }
+                                    return irfCurrencyFilter(data);
+                                }
                             }, {
                                 "title": "Source",
                                 "data": "fundingSource"
                             }, {
                                 "title": "Hypothecated to",
                                 "data": "hypothecatedTo",
-                                render: function(data, type, full, meta){
-                                    return full.hypothecatedToUs=="YES"?("Kinara"):(full.hypothecatedTo);
+                                render: function(data, type, full, meta) {
+                                    return full.hypothecatedToUs == "YES" ? ("Kinara") : (full.hypothecatedTo);
                                 }
                             }];
                         },
@@ -492,18 +506,18 @@ define({
                             "title": "Loss Accounts",
                             "type": "number"
                         }, {
-                            "type":"section",
+                            "type": "section",
                             "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
                             "items": [{
-                            "key": "CB_REPORT_DATA.fileId",
-                            "notitle": true,
-                            "title": "CB Report",
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "type":"file",
-                            "fileType":"application/pdf",
-                            "using": "scanner"
-                        }]
+                                "key": "CB_REPORT_DATA.fileId",
+                                "notitle": true,
+                                "title": "CB Report",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                "type": "file",
+                                "fileType": "application/pdf",
+                                "using": "scanner"
+                            }]
                         }]
                     }, {
                         "type": "grid",
@@ -531,7 +545,7 @@ define({
                 "title": "Proxy Indicators",
                 "items": [{
                     "type": "section",
-                    "htmlClass":"col-sm-12",
+                    "htmlClass": "col-sm-12",
                     "html": '<div style="display: table;"><div style="font-weight: bold; display: table-cell;">Proxy Indicator Score</div><div style="display: table-cell; padding-left: 40px;">{{(model.proxyScore==null || model.proxyScore==undefined) ?"-Proxy Waiting For Summary-": model.proxyScore["Actual Value"].concat("/",model.proxyScore["ParameterScore"])}}</p></div>'
                 }, {
                     "type": "expandablesection",

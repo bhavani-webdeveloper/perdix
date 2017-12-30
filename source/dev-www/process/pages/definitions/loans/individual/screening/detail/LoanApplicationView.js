@@ -15,32 +15,7 @@ var navigateToQueue = function(model) {
                     });
 
 
-                    /*if (model.currentStage == 'ApplicationReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisalReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CreditCommitteeReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CentralRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ZonalRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
-                            pageId: null
-                        });
-*/
+                    
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
@@ -166,6 +141,28 @@ var navigateToQueue = function(model) {
             }
         }
 
+        return true;
+    }
+
+    var validateCibilHighmark = function(model){
+        var cibilMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "cibilMandatory") && _.isString(model.cibilHighmarkMandatorySettings.cibilMandatory) && model.cibilHighmarkMandatorySettings.cibilMandatory=='N')?"N":"Y";
+        var highmarkMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "highmarkMandatory") && _.isString(model.cibilHighmarkMandatorySettings.highmarkMandatory) && model.cibilHighmarkMandatorySettings.highmarkMandatory=='N')?"N":"Y";
+
+        if (model.loanAccount && model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length>0){
+            for (i=0; i<model.loanAccount.loanCustomerRelations.length; i++){
+
+                if((highmarkMandatory=='Y' && !model.loanAccount.loanCustomerRelations[i].highmarkCompleted)) {
+                    PageHelper.showProgress("pre-save-validation", "Highmark not completed.",5000);
+                    return false;
+                }
+
+                if( (cibilMandatory=='Y' && !model.loanAccount.loanCustomerRelations[i].cibilCompleted)) {
+                    PageHelper.showProgress("pre-save-validation", "CIBIL not completed",5000);
+                    return false;
+                }
+
+            }
+        }
         return true;
     }
 

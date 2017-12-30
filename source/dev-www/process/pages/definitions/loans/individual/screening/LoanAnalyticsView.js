@@ -191,7 +191,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanAnalyticsVie
 							pageClass: 'business',
 							model: {
 								customerId: res.customerId,
-								loanAccount: res
+								loanAccount: res,
 							}
 						});
 
