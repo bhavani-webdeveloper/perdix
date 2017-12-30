@@ -721,7 +721,7 @@ self.renderReady = function(eventName) {
 									"title": "Existing Loan Repayments",
 									"amount": "",
 									"total": bpl['Business Liabilities'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities']))
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities'])),
 									"description": "of turn pver",
 									"$config": {
 										"title": {
