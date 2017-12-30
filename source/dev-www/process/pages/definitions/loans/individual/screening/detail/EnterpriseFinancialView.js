@@ -127,7 +127,7 @@ self.renderForm = function() {
 					"data": "totalWithdrawals",
 					"className": "text-right",
 					"render": function(data, type, full, meta) {
-						return ' ' + irfElementsConfig.currency.iconHtml+irfCurrencyFilter(Math.abs(full.totalDeposits - data), null, null, "decimal") ;
+						return ' ' + irfElementsConfig.currency.iconHtml+irfCurrencyFilter(full.totalDeposits - data, null, null, "decimal") ;
 					}
 				}, {
 					"title": "No of EMI Bounces",
@@ -1071,7 +1071,7 @@ self.renderReady = function(eventName) {
 						return {
 							"averageMonthlyDeposit": Math.round(totalAverageDeposits / model.business.customerBankAccounts.length),
 							"averageMonthlyWithdrawal": Math.round(totalAverageWithdrawals / model.business.customerBankAccounts.length),
-							"averageMonthlyBalance": Math.abs(Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length)),
+							"averageMonthlyBalance": Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length),
 							"totalAccounts": model.business.customerBankAccounts.length,
 							"totalEMIBounces": totalEMIBounces,
 							"totalChequeBounces": totalChequeBounces,
