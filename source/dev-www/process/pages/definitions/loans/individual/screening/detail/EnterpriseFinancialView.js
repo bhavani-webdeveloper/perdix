@@ -615,7 +615,14 @@ self.renderReady = function(eventName) {
 					var bpl = params[8].data[0];
 					var purchase=params[18].data;
 					// assuming unfortunately in hurry that applicant will always be at 0
-					bpl.household_income=params[7].sections[0].data[0]['Net Household Income']
+					
+					var household_income=0;
+					var household=params[7].sections;
+					_.each(household, function(household){
+						household_income += parseInt(household.data[0]['Net Household Income']);
+
+					})
+					bpl.household_income=household_income;
 					model.ExistingLoanRepayments = params[0].data[0]['Existing Loan Repayments'];
 					bpl.ExistingLoanRepayments=model.ExistingLoanRepayments;
 					bpl.RevisedNetIncome=bpl['household_income'] <0 ?(parseInt(bpl['Net Income'])+parseInt(bpl['household_income'])):bpl['Net Income'];
