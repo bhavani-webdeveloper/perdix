@@ -189,6 +189,67 @@ define([],function(){
                                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
                                     }]
 
+                                    } , {
+                                        type: "section",
+                                        condition: "model.review.action=='REJECT'",
+                                        items: [{
+                                                title: "REMARKS",
+                                                key: "review.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            }, {
+                                                key: "loanAccount.rejectReason",
+                                                type: "lov",
+                                                autolov: true,
+                                                required:true,
+                                                title: "REJECT_REASON",
+                                                bindMap: {},
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model, context) {
+                                                    var stage1 = model.loanProcess.loanAccount.currentStage;
+
+                                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                                        stage1 = "Application";
+                                                    }
+                                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                                        stage1 = "FieldAppraisal";
+                                                    }
+
+                                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                                    var out = [];
+                                                    for (var i = 0; i < rejectReason.length; i++) {
+                                                        var t = rejectReason[i];
+                                                        if (t.field1 == stage1) {
+                                                            out.push({
+                                                                name: t.name,
+                                                            })
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function(valueObj, model, context) {
+                                                    model.loanAccount.rejectReason = valueObj.name;
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            },
+
+                                            {
+                                                key: "review.rejectButton",
+                                                type: "button",
+                                                title: "REJECT",
+                                                required: true,
+                                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                                            }
+                                        ]
                                     }]
                                 }
                             ]
@@ -298,7 +359,22 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-
+                         model.loanProcess.proceed(model.review.targetStage)
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "witfin.lead.ReadyForScreeningQueue"
+                                });
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     }
                 }
             };
