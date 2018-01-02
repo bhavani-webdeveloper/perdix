@@ -359,7 +359,8 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                         model.loanProcess.proceed(model.review.targetStage)
+                        var stage = "REJECTED";
+                         model.loanProcess.proceed(stage)
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
