@@ -22,6 +22,9 @@ define(
                     return [
                         "VehiclePrimaryInfo",
                         "VehiclePrimaryInfo.registrationNumber",
+                        "VehiclePrimaryInfo.firstName",
+                        "VehiclePrimaryInfo.mobileNo",
+                        "VehiclePrimaryInfo.AlternatemobileNo",
                         "VehicleValuationPriliminaryInformation",
                         "VehicleValuationPriliminaryInformation.valuationPurpose",
                         "VehicleValuationPriliminaryInformation.valuationDate",
@@ -30,6 +33,7 @@ define(
                         "VehicleValuationPriliminaryInformation.proposedOwnerName",
                         "VehicleValuationPriliminaryInformation.bankReferenceNumber",
                         "VehicleInspectionDetails",
+                        "VehicleInspectionDetails.firstName",
                         "VehicleInspectionDetails.inspectionDate",
                         "VehicleInspectionDetails.inspectedBy",
                         "VehicleInspectionDetails.vehicleMoved",
@@ -54,6 +58,7 @@ define(
                         "VehicleRegistrationDetails.registrationAsPerRcbook",
                         "VehicleRegistrationDetails.registrationAsPerActual",
                         "VehicleRegistrationDetails.numberPlateColour",
+                        "VehicleRegistrationDetails.registeredownersname",
                         "VehicleRegistrationDetails.engineNo",
                         "VehicleRegistrationDetails.registeredAddress",
                         "VehicleRegistrationDetails.ownerSerialNo",
@@ -123,20 +128,10 @@ define(
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
                         self = this;
-
                         LoanProcess.get($stateParams.pageId)
-                            .toPromise()
-                            .then(function(loanProcess){
-                                model.loanProcess = loanProcess;
-                                model.loanAccount = loanProcess.loanAccount;
-                                return model;
-                            }, function(err){
-
-                            })
-                            .then(function(){
-                                return UIRepository.getLoanProcessUIRepository().$promise;
-                            })
-                            .then(function(repo){
+                        .subscribe(function(data) {
+                            model.loanProcess = data;
+                            model.loanAccount = data.loanAccount;
                                 var formRequest = {
                                     "overrides": "",
                                     "includes": getIncludes(model),
@@ -158,9 +153,54 @@ define(
                                         ]
                                     }
                                 };
+
+                            var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
+                            p1.then(function(repo) {
                                 self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, null, model);
-                                NGHelper.refreshUI();
-                            });
+                                // NGHelper.refreshUI();
+                            })
+                        }, function(err) {
+                            console.log(err)
+                        })
+
+
+                        // LoanProcess.get($stateParams.pageId)
+                        //     .toPromise()
+                        //     .then(function(loanProcess){
+                        //         model.loanProcess = loanProcess;
+                        //         model.loanAccount = loanProcess.loanAccount;
+                        //         return model;
+                        //     }, function(err){
+
+                        //     })
+                        //     .then(function(){
+                        //         return UIRepository.getLoanProcessUIRepository().$promise;
+                        //     })
+                        //     .then(function(repo){
+                        //         var formRequest = {
+                        //             "overrides": "",
+                        //             "includes": getIncludes(model),
+                        //             "excludes": [
+                        //                 ""
+                        //             ],
+                        //             "options": {
+                        //                 "additions": [
+                        //                     {
+                        //                         "targetID": "actionbox",
+                        //                         "items": [
+                        //                             {
+                        //                                 "type": "button",
+                        //                                 "title": "PROCEED",
+                        //                                 "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                        //                             }
+                        //                         ]
+                        //                     }
+                        //                 ]
+                        //             }
+                        //         };
+                        //         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, null, model);
+                        //         NGHelper.refreshUI();
+                        //     });
                     },
                     offline: false,
                     getOfflineDisplayItem: function (item, index) {

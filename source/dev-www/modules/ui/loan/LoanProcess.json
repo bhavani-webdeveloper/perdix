@@ -513,15 +513,15 @@
                 "title": "REGISTRATION_NUMBER"
             },
             "firstName": {
-                "key": "loanAccount.vehicleLoanDetails.firstName",
+                "key": "loanProcess.applicantEnrolmentProcess.customer.firstName",
                 "title": "BORROWER_NAME"
             },
             "mobileNo": {
-                "key": "loanAccount.vehicleLoanDetails.mobileNo",
+                "key": "loanProcess.applicantEnrolmentProcess.customer.mobilePhone",
                 "title": "MOBILE_NO"
             },
             "AlternatemobileNo": {
-                "key": "loanAccount.vehicleLoanDetails.AlternatemobileNo",
+                "key": "loanProcess.applicantEnrolmentProcess.customer.mobileNumber2",
                 "title": "ALTERNATE_MOBILE_NO"
             },
             "registeredaddress": {
@@ -572,6 +572,10 @@
         "type": "box",
         "title": "INSPECTION_DETAILS",
         "items": {
+            "firstName": {
+                "key": "loanProcess.applicantEnrolmentProcess.customer.firstName",
+                "title": "BORROWER_NAME"
+            },
             "inspectionDate": {
                 "key": "loanAccount.vehicleLoanDetails.inspectionDate",
                 "required": "true",
@@ -653,7 +657,7 @@
             },
             "estimatedReading": {
                 "key": "loanAccount.vehicleLoanDetails.estimatedReading",
-                "title": "BANK_REFERENCE_NUMBER",
+                "title": "ESTIMATE_READING",
                 "type": "number",
                 "inputmode": "number",
                 "numberType": "number"
@@ -749,7 +753,7 @@
             },
             "cubicCapacity": {
                 "key": "loanAccount.vehicleLoanDetails.cubicCapacity",
-                "title": "FUEL_USED",
+                "title": "CUBIC_CAPACITY",
                 "type": "select"
             },
             "makersClassification": {

@@ -240,6 +240,27 @@ export class LoanProcess {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
+    sendBack(): any {
+        this.loanProcessAction = "PROCEED";
+        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSendBack', LoanProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.individualLoanRepo.update(this);
+        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSendBack', LoanProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
+
+    reject(): any {
+        this.stage = "REJECTED";
+        this.loanProcessAction = "PROCEED";
+        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeReject', LoanProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.individualLoanRepo.update(this);
+        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterReject', LoanProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
+
     static get(id: number): Observable<LoanProcess> {
         return LoanProcessFactory.createFromLoanId(id).flatMap(
             (loanProcess) => {

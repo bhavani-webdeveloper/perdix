@@ -145,7 +145,7 @@ define([],function(){
                                         type: "textarea",
                                         required: true
                                     }, {
-                                        key: "review.targetStage",
+                                        key: "loanProcess.stage",
                                         type: "lov",
                                         autolov: true,
                                         lovonly:true,
@@ -174,7 +174,7 @@ define([],function(){
                                         },
                                         onSelect: function(valueObj, model, context) {
                                             model.review.targetStage1 = valueObj.name;
-                                            model.review.targetStage = valueObj.value;
+                                            model.loanProcess.stage = valueObj.value;
 
                                         },
                                         getListDisplayItem: function(item, index) {
@@ -321,7 +321,7 @@ define([],function(){
                     },
                     sendBack: function(model, formCtrl, form, $event){
 
-                        model.loanProcess.proceed(model.review.targetStage)
+                        model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
@@ -359,8 +359,7 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        var stage = "REJECTED";
-                         model.loanProcess.proceed(stage)
+                         model.loanProcess.reject()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
