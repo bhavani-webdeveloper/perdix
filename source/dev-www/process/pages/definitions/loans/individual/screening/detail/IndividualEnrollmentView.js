@@ -375,7 +375,7 @@ define({
                                 "type": "amount"
                             }, {
                                 "key": "BankAvgWithdrawl",
-                                "title": "Average Monthly Withdrawals",
+                                "title": "Average Monthly Withdrawls",
                                 "type": "amount"
                             }, {
                                 "key": "BankAvgBal",

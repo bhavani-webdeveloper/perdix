@@ -14,21 +14,21 @@ define({
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
 
-                model.loanCustomerRelation={};
-                model.loanCustomerRel=[]
+                model.loanCustomerRelation = {};
+                model.loanCustomerRel = []
                 Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
-                        model.loanCustomerRelation=res;
-                        _.each(model.loanCustomerRelation.coApplicants, function(coApp){
-                            model.loanCustomerRel.push(coApp);
-                        })
-                        _.each(model.loanCustomerRelation.guarantors, function(guarantor){
-                            model.loanCustomerRel.push(guarantor);
-                        })
+                    model.loanCustomerRelation = res;
+                    _.each(model.loanCustomerRelation.coApplicants, function(coApp) {
+                        model.loanCustomerRel.push(coApp);
+                    })
+                    _.each(model.loanCustomerRelation.guarantors, function(guarantor) {
+                        model.loanCustomerRel.push(guarantor);
+                    })
 
-                    }, function(e) {
-                      $log.info(e)
-                    });
-                
+                }, function(e) {
+                    $log.info(e)
+                });
+
 
 
                 var self = this;
@@ -344,6 +344,150 @@ define({
                     getActions: function() {
                         return [];
                     }
+                }]
+            }, {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "HOUSEHOLD_LIABILITIES",
+                "condition": "model.customer.liabilities.length !=0",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "active_accounts",
+                            "title": "No of Active Loans",
+                            "type": "number"
+                        }, {
+                            "key": "monthly_installment",
+                            "title": "Total Monthly Instalments",
+                            "type": "amount"
+                        }, {
+                            "key": "outstanding_bal",
+                            "title": "OUTSTANDING_AMOUNT",
+                            "type": "amount"
+                        }]
+
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "",
+                            "title": "Total loan amount from Banks",
+                            "type": "amount"
+
+                        }, {
+                            "key": "",
+                            "title": "Total loan amount from MFI/NBFC",
+                            "type": "amount"
+
+                        }, {
+                            "key": "",
+                            "title": "Total loan amount from others",
+                            "type": "amount"
+
+                        }]
+
+                    }]
+                }, {
+                    "type": "expandablesection",
+                    "items": [{
+                        "type": "tableview",
+                        "key": "liabilities",
+                        "notitle": true,
+                        "transpose": true,
+                        "selectable": false,
+                        "editable": false,
+                        "tableConfig": {
+                            "searching": false,
+                            "paginate": false,
+                            "pageLength": 10,
+                        },
+                        getColumns: function() {
+                            return [{
+                                "title": "loan type",
+                                "data": "loan type",
+                                render: function(data, type, full, meta) {
+                                    return full['Loan Type']
+                                }
+                            }, {
+                                "title": "loan source",
+                                "data": "loanSource",
+                                render: function(data, type, full, meta) {
+                                    return full['Loan Source']
+                                }
+                            }, {
+                                "title": "loan Amount",
+                                "data": "loanAmount",
+                                render: function(data, type, full, meta) {
+                                    return irfCurrencyFilter(full['Loan Amount'])
+                                }
+                            }, {
+                                "title": "Installment Amount",
+                                "data": "installmentAmountInPaisa",
+                                render: function(data, type, full, meta) {
+                                    return irfCurrencyFilter(full['Installment Amount'])
+                                }
+                            }, {
+                                "data": "outstandingAmountInPaisa",
+                                "title": "OUTSTANDING_AMOUNT",
+                                render: function(data, type, full, meta) {
+                                    return irfCurrencyFilter(full['Outstanding Amount'])
+                                }
+                            }, {
+                                "title": "Loan Purpose",
+                                "data": "Purpose",
+                                render: function(data, type, full, meta) {
+                                    return full['Purpose']
+                                }
+
+                            }, {
+                                "title": "START_DATE",
+                                "data": "startDate",
+                                render: function(data, type, full, meta) {
+                                    return full['Start Date']
+                                }
+                            }, {
+                                "title": "MATURITY_DATE",
+                                "data": "maturityDate",
+                                render: function(data, type, full, meta) {
+                                    return full['Maturity Date']
+                                }
+                            }, {
+                                "title": "NO_OF_INSTALLMENT_PAID",
+                                "data": "noOfInstalmentPaid",
+                                render: function(data, type, full, meta) {
+                                    return full['No of Installment Paid']
+                                }
+
+                            }, {
+                                "title": "Frequency of Installments",
+                                "data": "Frequency",
+                                render: function(data, type, full, meta) {
+                                    return full['Frequency']
+                                }
+                            }, {
+                                "data": "",
+                                "title": "INTEREST_ONLY",
+                                render: function(data, type, full, meta) {
+                                    return full['Interest Only']
+                                }
+                            }, {
+                                "data": "interestRate",
+                                "title": "RATE_OF_INTEREST",
+                                render: function(data, type, full, meta) {
+                                    return full['Rate of Interest']
+                                }
+                            }];
+                        },
+                        getActions: function() {
+                            return [];
+                        }
+                    }]
                 }]
             }, {
                 "type": "box",
@@ -716,6 +860,24 @@ define({
                 "financial-summary": function(bundleModel, model, params) {
                     model.proxyScore = {};
                     model.proxyScore = params[2].data[5];
+                    model.liability = params[19].subgroups;
+                    model.liabilities = [];
+                    var monthly_installment = 0;
+                    var outstanding_bal = 0;
+                    _.each(model.liability, function(liability) {
+                        if (liability.summary['Customer ID'] == model.customer.id) {
+                            model.liabilities = _.cloneDeep(liability.data)
+                            monthly_installment += liability.summary['Total Monthly Installment'];
+                            outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
+
+                        }
+                    })
+
+                    model.active_accounts = model.liabilities.length;
+                    model.monthly_installment = monthly_installment;
+                    model.outstanding_bal = outstanding_bal;
+
+
                 }
             },
             actions: {}

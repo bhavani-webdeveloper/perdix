@@ -19,8 +19,8 @@ define({
             }
 
             model.enterpriseDetails = res[0];
-            model.secName=res[0].data[0]['Sector'];
-            model.subSecName=res[0].data[0]['Sub-Sector'];
+            model.secName = res[0].data[0]['Sector'];
+            model.subSecName = res[0].data[0]['Sub-Sector'];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
 
 
@@ -28,8 +28,6 @@ define({
             var res1 = model.scoreDetails[0].sections[0].data;
             model.management_Data = [res1[1], res1[2], res1[4], res1[6], res1[7]];
 
-            var res2 = model.scoreDetails[1].data;
-            model.business_data = [res2[0], res2[1], res2[3], res2[4], res2[5], res2[8]];
             if (_.isArray(managementScore.sections)) {
                 var count = managementScore.sections.length;
                 var spacePct = 75 / count;
@@ -133,44 +131,6 @@ define({
             model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
             model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
-            /* Scoring Sections */
-
-            /* Populate seperate scoring section for ScreeningReview screen */
-            // model.screeningScoreDetails = {
-            //     columns: [
-            //         {
-            //             "title": "Parameter",
-            //             "data": "Parameter"
-            //         },
-            //         {
-            //             "title": "Actual Value",
-            //             "data": "Actual Value"
-            //         },
-            //         {
-            //             "title": "ParameterScore",
-            //             "data": "ParameterScore"
-            //         }
-            //     ],
-            //     data: []
-            // };
-            // // debugger;
-            // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
-            //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
-            //     _.forEach(score1Data, function(data){
-            //         data["Actual Value"] = data["Applicant"];
-            //         delete data.Applicant;
-            //         delete data["Co-Applicant"];
-            //     });
-
-            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
-            // }
-            // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
-            //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
-            // }
-
-            // debugger;
-
-
             for (var i = 0; i < model.deviationDetails.data.length; i++) {
                 var d = model.deviationDetails.data[i];
                 if (d.Mitigant && d.Mitigant.length != 0) {
@@ -258,7 +218,6 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            /*"key":"loanAccount.enterpriseId",*/
                             "key": "business.id",
                             "title": "Entity ID"
                         }, {
@@ -272,9 +231,29 @@ define({
                             "title": "Co-Applicant ID",
                             "condition": "model.customer_detail.coApplicants.id[1]"
                         }, {
+                            "key": "customer_detail.coApplicants.id[2]",
+                            "title": "Co-Applicant ID",
+                            "condition": "model.customer_detail.coApplicants.id[2]"
+                        }, {
+                            "key": "customer_detail.coApplicants.id[3]",
+                            "title": "Co-Applicant ID",
+                            "condition": "model.customer_detail.coApplicants.id[3]"
+                        }, {
                             "key": "customer_detail.guarantors.id[0]",
                             "title": "Guarantor ID",
                             "condition": "model.customer_detail.guarantors.id[0]"
+                        }, {
+                            "key": "customer_detail.guarantors.id[1]",
+                            "title": "Guarantor ID",
+                            "condition": "model.customer_detail.guarantors.id[1]"
+                        }, {
+                            "key": "customer_detail.guarantors.id[2]",
+                            "title": "Guarantor ID",
+                            "condition": "model.customer_detail.guarantors.id[2]"
+                        }, {
+                            "key": "customer_detail.guarantors.id[3]",
+                            "title": "Guarantor ID",
+                            "condition": "model.customer_detail.guarantors.id[3]"
                         }, {
                             "key": "customer.firstName",
                             "title": "Enterprise Name"
@@ -303,9 +282,29 @@ define({
                             "title": "URN",
                             "condition": "model.customer_detail.coApplicants.id[1]"
                         }, {
+                            "key": "customer_detail.coApplicants.urn[2]",
+                            "title": "URN",
+                            "condition": "model.customer_detail.coApplicants.id[2]"
+                        }, {
+                            "key": "customer_detail.coApplicants.urn[3]",
+                            "title": "URN",
+                            "condition": "model.customer_detail.coApplicants.id[3]"
+                        }, {
                             "key": "customer_detail.guarantors.urn[0]",
                             "title": "URN",
                             "condition": "model.customer_detail.guarantors.id[0]"
+                        }, {
+                            "key": "customer_detail.guarantors.urn[1]",
+                            "title": "URN",
+                            "condition": "model.customer_detail.guarantors.id[1]"
+                        }, {
+                            "key": "customer_detail.guarantors.urn[2]",
+                            "title": "URN",
+                            "condition": "model.customer_detail.guarantors.id[2]"
+                        }, {
+                            "key": "customer_detail.guarantors.urn[3]",
+                            "title": "URN",
+                            "condition": "model.customer_detail.guarantors.id[3]"
                         }, {
                             "key": "bundleModel.applicant.firstName",
                             "title": "Applicant Name"
@@ -320,53 +319,6 @@ define({
                 }]
             })
 
-            // form.push({
-            //     "type": "box",
-            //     "colClass": "col-sm-12",
-            //     "title": "SCORING_DETAILS",
-            //     "condition": "model.currentStage=='ScreeningReview'",
-            //     "items": [
-            //         {
-            //             type:"tableview",
-            //             key:"ScoreDetails[0].Parameters",
-            //             // title:"SCORING_DETAILS",
-            //             selectable: false,
-            //             paginate: false,
-            //             searching: false,
-            //             getColumns: function(){
-            //                 return [{
-            //                     title: 'PARAMETER',
-            //                     data: 'ParameterName'
-            //                 }, {
-            //                     title: 'VALUE',
-            //                     data: 'UserInput'
-            //                 }, {
-            //                     title: 'SCORE',
-            //                     data: 'ParamterScore'
-            //                 },{
-            //                     title: 'RESULT',
-            //                     data: 'ParameterPassStatus'
-            //                 }]
-            //             }
-            //         },
-            //         {
-            //             type:"fieldset",
-            //             title:"",
-            //             items:[
-            //                 {
-            //                     "key":"ScoreDetails[0].OverallWeightedScore",
-            //                     "title":"TOTAL_SCREENING_SCORE",
-            //                     readonly:true
-            //                 },
-            //                 {
-            //                     "key":"ScoreDetails[0].OverallPassStatus",
-            //                     "title":"OVERALL_PASS_STATUS",
-            //                     readonly:true
-            //                 }
-            //             ]
-            //         }
-            //     ]
-            // });
 
             form.push({
                 type: "box",
@@ -397,7 +349,7 @@ define({
                                 '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
                                 '</tr>' +
                                 '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">' +
-                                '<td>{{data.Parameter}}</td>' +
+                                '<td >{{data.Parameter}}</td>' +
                                 '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
                                 '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
                                 '</tbody>' +
@@ -446,58 +398,58 @@ define({
                 "colClass": "col-sm-12",
                 "title": "Sector-SubSector Compare",
                 "readonly": true,
-                "items":[{
+                "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
-                    "items":[{
+                    "items": [{
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                                "title": "Sector",
-                                "key": "secName"
-                            },{
-                                "key": "secData['No of total loans']",
-                                "title": "Total no. of Loans",
-                            }, {
-                                "key": "secData['Min Loan Size']",
-                                "title": "Minimum Loan Size"
-                            }, {
-                                "key": "secData['Max Loan Size']",
-                                "title": "Maximum Loan Size"
-                            }, {
-                                "key": "secData['Average Loan Size']",
-                                "title": "Average Loan Size",
-                                "type": "amount"
-                            }, {
-                                "key": "secData['No of Loans with cheque bounce']",
-                                "title": "No. of loans with cheque bounce"
-                            }, {
-                                "key": "secData['Average Loan Size of Cheque Bounce accounts']",
-                                "title": "Avg loan size of cheque bounce accounts",
-                                "type": "amount"
-                            }, {
-                                "key": "secData['No of loans as NPA']",
-                                "title": "No. of loans as NPA"
-                            }, {
-                                "key": "secData['Average Loan Size of NPA accounts']",
-                                "title": "Avg loan size of NPA accounts",
-                                "type": "amount"
-                            }]
+                            "title": "Sector",
+                            "key": "secName"
+                        }, {
+                            "key": "secData['No of total loans']",
+                            "title": "Total no. of Loans",
+                        }, {
+                            "key": "secData['Min Loan Size']",
+                            "title": "Minimum Loan Size"
+                        }, {
+                            "key": "secData['Max Loan Size']",
+                            "title": "Maximum Loan Size"
+                        }, {
+                            "key": "secData['Average Loan Size']",
+                            "title": "Average Loan Size",
+                            "type": "amount"
+                        }, {
+                            "key": "secData['No of Loans with cheque bounce']",
+                            "title": "No. of loans with cheque bounce"
+                        }, {
+                            "key": "secData['Average Loan Size of Cheque Bounce accounts']",
+                            "title": "Avg loan size of cheque bounce accounts",
+                            "type": "amount"
+                        }, {
+                            "key": "secData['No of loans as NPA']",
+                            "title": "No. of loans as NPA"
+                        }, {
+                            "key": "secData['Average Loan Size of NPA accounts']",
+                            "title": "Avg loan size of NPA accounts",
+                            "type": "amount"
+                        }]
 
-                    },{
+                    }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
                             "title": "Sub-Sector",
                             "key": "subSecName"
-                        },{
+                        }, {
                             "key": "subsecData['No of total loans']",
                             "title": "Total no. of Loans"
                         }, {
-                            "key": "subsecData['Max Loan Size']",
+                            "key": "subsecData['Min Loan Size']",
                             "title": "Minimum Loan Size"
                         }, {
-                            "key": "subsecData['Min Loan Size']",
+                            "key": "subsecData['Max Loan Size']",
                             "title": "Maximum Loan Size"
                         }, {
                             "key": "subsecData['Average Loan Size']",
@@ -524,125 +476,125 @@ define({
                 }]
             })
 
-  
-    return form;
-}; // END OF prepareForms()
 
-var prepareDataDeferred;
-var prepareDataPromise;
+            return form;
+        }; // END OF prepareForms()
 
-return {
-    "type": "schema-form",
-    "title": "",
-    "subTitle": "",
-    initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-        prepareDataDeferred = $q.defer();
-        prepareDataPromise = prepareDataDeferred.promise;
-        model.bundleModel = bundleModel;
-        model.currentStage = bundleModel.currentStage;
-        model.ScoreDetails = [];
-        model.customer = {};
+        var prepareDataDeferred;
+        var prepareDataPromise;
 
-        /*Business Summary*/
-        model.customer_detail = bundleModel.customer_detail;
-        model.loanAccount = bundleModel.loanAccount;
-        var $this = this;
-        var deferred = $q.defer();
+        return {
+            "type": "schema-form",
+            "title": "",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                prepareDataDeferred = $q.defer();
+                prepareDataPromise = prepareDataDeferred.promise;
+                model.bundleModel = bundleModel;
+                model.currentStage = bundleModel.currentStage;
+                model.ScoreDetails = [];
+                model.customer = {};
 
-        scoreName = null;
-        switch (model.currentStage) {
-            case "ScreeningReview":
-                scoreName = "RiskScore1";
-                break;
-            case "ApplicationReview":
-                scoreName = "RiskScore2";
-                break;
-            case "FieldAppraisalReview":
-                scoreName = "RiskScore3";
-                break;
-            default:
-                scoreName = "ConsolidatedScore";
-                break;
-        }
+                /*Business Summary*/
+                model.customer_detail = bundleModel.customer_detail;
+                model.loanAccount = bundleModel.loanAccount;
+                var $this = this;
+                var deferred = $q.defer();
 
-        if (bundlePageObj) {
-            model._bundlePageObj = _.cloneDeep(bundlePageObj);
-        }
+                scoreName = null;
+                switch (model.currentStage) {
+                    case "ScreeningReview":
+                        scoreName = "RiskScore1";
+                        break;
+                    case "ApplicationReview":
+                        scoreName = "RiskScore2";
+                        break;
+                    case "FieldAppraisalReview":
+                        scoreName = "RiskScore3";
+                        break;
+                    default:
+                        scoreName = "ConsolidatedScore";
+                        break;
+                }
 
-        if (_.hasIn(model, 'cbModel')) {
-            Scoring.get({
-                auth_token: AuthTokenHelper.getAuthData().access_token,
-                LoanId: model.cbModel.loanId,
-                ScoreName: scoreName
-            }).$promise.then(function(response) {
-                model.ScoreDetails = response.ScoreDetails;
-            }).finally(function() {
-                var onSuccessPromise = Scoring.financialSummary({
-                    loan_id: model.cbModel.loanId,
-                    score_name: scoreName
-                }).$promise;
-                onSuccessPromise.then(function(res) {
-                    /* var financialData = [model.ScoreDetails,res];*/
-                    BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
-                    prepareData(res, model);
-                    model.$prepared = true;
-                    prepareDataDeferred.resolve();
-                });
+                if (bundlePageObj) {
+                    model._bundlePageObj = _.cloneDeep(bundlePageObj);
+                }
 
-                var p3 = Enrollment.getCustomerById({
-                    id: model.cbModel.customerId
-                }).$promise.then(function(res) {
-                    model.customer = res;
-                }, function(httpRes) {
-                    PageHelper.showErrors(httpRes);
-                }).finally(function() {});
+                if (_.hasIn(model, 'cbModel')) {
+                    Scoring.get({
+                        auth_token: AuthTokenHelper.getAuthData().access_token,
+                        LoanId: model.cbModel.loanId,
+                        ScoreName: scoreName
+                    }).$promise.then(function(response) {
+                        model.ScoreDetails = response.ScoreDetails;
+                    }).finally(function() {
+                        var onSuccessPromise = Scoring.financialSummary({
+                            loan_id: model.cbModel.loanId,
+                            score_name: scoreName
+                        }).$promise;
+                        onSuccessPromise.then(function(res) {
+                            /* var financialData = [model.ScoreDetails,res];*/
+                            BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
+                            prepareData(res, model);
+                            model.$prepared = true;
+                            prepareDataDeferred.resolve();
+                        });
 
-                $q.all([onSuccessPromise, p3]).finally(function() {
+                        var p3 = Enrollment.getCustomerById({
+                            id: model.cbModel.customerId
+                        }).$promise.then(function(res) {
+                            model.customer = res;
+                        }, function(httpRes) {
+                            PageHelper.showErrors(httpRes);
+                        }).finally(function() {});
+
+                        $q.all([onSuccessPromise, p3]).finally(function() {
+                            deferred.resolve();
+                        });
+                    });
+                } else {
                     deferred.resolve();
-                });
-            });
-        } else {
-            deferred.resolve();
-        }
-        return deferred.promise;
-    },
-    eventListeners: {},
-    form: [{
-        type: 'section',
-        html: '<br><br><br><center>Loading...</center>'
-    }],
-    initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-        PageHelper.showLoader();
-        var $this = this;
-        if (model.$prepared) {
-            $this.form = prepareForms(model);
-            PageHelper.hideLoader();
-        } else {
-            prepareDataPromise.then(function() {
-                $this.form = prepareForms(model);
-                formCtrl.redraw();
-                PageHelper.hideLoader();
-            });
-        }
-        return $q.resolve();
-    },
-    schema: function() {
-        return SchemaResource.getLoanAccountSchema().$promise;
-    },
-    eventListeners: {
-        "business-customer": function(bundleModel, model, params) {
-            model.business = params;
-            model.business.centreName = filterFilter(formHelper.enum('centre').data, {
-                value: model.business.centreId
-            })[0].name;
-        }
-    },
-    actions: {
-        save: function(customerId, CBType, loanAmount, loanPurpose) {
-            $log.info("Inside submit()");
-            $log.warn(model);
-        }
+                }
+                return deferred.promise;
+            },
+            eventListeners: {},
+            form: [{
+                type: 'section',
+                html: '<br><br><br><center>Loading...</center>'
+            }],
+            initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                PageHelper.showLoader();
+                var $this = this;
+                if (model.$prepared) {
+                    $this.form = prepareForms(model);
+                    PageHelper.hideLoader();
+                } else {
+                    prepareDataPromise.then(function() {
+                        $this.form = prepareForms(model);
+                        formCtrl.redraw();
+                        PageHelper.hideLoader();
+                    });
+                }
+                return $q.resolve();
+            },
+            schema: function() {
+                return SchemaResource.getLoanAccountSchema().$promise;
+            },
+            eventListeners: {
+                "business-customer": function(bundleModel, model, params) {
+                    model.business = params;
+                    model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                        value: model.business.centreId
+                    })[0].name;
+                }
+            },
+            actions: {
+                save: function(customerId, CBType, loanAmount, loanPurpose) {
+                    $log.info("Inside submit()");
+                    $log.warn(model);
+                }
+            }
+        };
     }
-};
-}
 });

@@ -23,7 +23,11 @@ define({
 
 self.renderForm = function() {
 	var currencyRightRender = function(data) {
-		return ' ' + irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
+		if(data<0)
+		return '-'+irfElementsConfig.currency.iconHtml+irfCurrencyFilter(Math.abs(data), null, null, "decimal");
+
+	return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
+
 	}
 	var currencyRightNullRender = function(data) {
 		if (data)
@@ -127,7 +131,11 @@ self.renderForm = function() {
 					"data": "totalWithdrawals",
 					"className": "text-right",
 					"render": function(data, type, full, meta) {
-						return ' ' + irfElementsConfig.currency.iconHtml+irfCurrencyFilter(full.totalDeposits - data, null, null, "decimal") ;
+						var avgBal=full.totalDeposits - data;
+						if(avgBal<0)
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(avgBal), null, null, "decimal") ;
+					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(avgBal, null, null, "decimal") ;
+					
 					}
 				}, {
 					"title": "No of EMI Bounces",
@@ -188,7 +196,7 @@ self.renderForm = function() {
 	self.form = [{
 		"type": "section",
 		"html": `
-<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">Existing Customer</em><br>&nbsp;</div>
+<div class="col-sm-6"><i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;</div>
 <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
 <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
 `
@@ -222,12 +230,7 @@ self.renderForm = function() {
 					"data": "cash",
 					"className": "text-right",
 					"render": currencyRightRender
-				}, {
-					"title": "Scrap",
-					"data": "scrap",
-					"className": "text-right",
-					"render": currencyRightRender
-				}, {
+				},{
 					"title": "Total",
 					"data": "total",
 					"className": "text-right",
@@ -509,6 +512,16 @@ self.renderReady = function(eventName) {
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {
+
+
+					/*Existing or new customer*/
+					if (params[0].data[0]['Existing Customer'] == 'No') {
+                        model.existingCustomerStr = "New Customer";
+                    } else {
+                        model.existingCustomerStr = "Existing Customer";
+                    }
+
+                   /*Operational expenditure calculation*/
 					model._opex = params[21].data;
 					var cfd = params[15];
 					var invoiceCashTableData = [];
@@ -519,10 +532,6 @@ self.renderReady = function(eventName) {
 					}, {
 						"key": "Cash",
 						"color": "firebrick",
-						"values": []
-					}, {
-						"key": "Scrap",
-						"color": "limegreen",
 						"values": []
 					}];
 					for (i = 0; i < cfd.data.length - 1; i++) {
@@ -536,14 +545,12 @@ self.renderReady = function(eventName) {
 							}
 							x.invoice = d.data["Invoice Sales Amount"] || 0;
 							x.cash = d.data["Cash Sales Amount"] || 0;
-							x.scrap = d.data["Revenue from Scrap Amount"] || 0;
-							x.total = d.data["Revenue from Sales Amount"] || 0;
+							x.total = d.data["Amount"] || 0;
 						} else {
 							x.month = d["Month"];
 							x.invoice = d["Invoice Sales Amount"] || 0;
 							x.cash = d["Cash Sales Amount"] || 0;
-							x.scrap = d["Revenue from Scrap Amount"] || 0;
-							x.total = d["Revenue from Sales Amount"] || 0;
+							x.total = d["Amount"] || 0;
 							invoiceCashGraphData[0].values.push({
 								"x": x.month,
 								"y": x.invoice,
@@ -554,11 +561,7 @@ self.renderReady = function(eventName) {
 								"y": x.cash,
 								"series": 1
 							});
-							invoiceCashGraphData[2].values.push({
-								"x": x.month,
-								"y": x.scrap,
-								"series": 2
-							});
+							
 						}
 						invoiceCashTableData.push(x);
 					}
@@ -614,8 +617,7 @@ self.renderReady = function(eventName) {
 
 					var bpl = params[8].data[0];
 					var purchase=params[18].data;
-					// assuming unfortunately in hurry that applicant will always be at 0
-					
+					/*Household income sum for applicant and co applicant , assuming it snever bethere for gurantor*/
 					var household_income=0;
 					var household=params[7].sections;
 					_.each(household, function(household){
@@ -629,6 +631,30 @@ self.renderReady = function(eventName) {
 					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
 					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
 
+					/*purchase splitup calculation under profit and loss*/
+                    
+                    var purchases= params[18].data;
+                    if(purchases.length!= 0){
+                    	  _.each(purchases, function(purchase){
+                    	 if(_.has(purchase, "data")){
+                    	 	if(purchase.data["Month"]== "Average Total by Seller"){
+                    	 		bpl['purchase_inv']= (purchase.data["Invoice Sales Amount"]== 0)?"0.00":purchase.data["Invoice Sales Amount"];
+                    	 		bpl['purchase_cash']= (purchase.data["Cash Sales Amount"]== 0)?"0.00":purchase.data["Cash Sales Amount"];
+                    	 		bpl['purchase_cash_pct']= purchase.data["Cash (%)"].toFixed(2) + " %";
+                    	 		bpl['purchase_inv_pct']= purchase.data["Invoice (%)"].toFixed(2) + " %";
+                    	 	}
+
+                    	 }
+
+                    })
+                    }else{
+                    	bpl['purchase_inv']= "0";
+                    	bpl['purchase_cash']= "0";
+                    	bpl['purchase_cash_pct']= "0.00 %";
+                    	bpl['purchase_inv_pct']= "0.00 %"
+
+                    }
+                  
 
 					var CalPercentage=function(total, value){
 						if(total== 0 && value!= 0) return "0.00 %";
@@ -645,7 +671,7 @@ self.renderReady = function(eventName) {
 								"graphOptions": {
 									"chart": {
 										"type": "multiBarChart",
-										"height": 250,
+										"height": 280,
 										"duration": 500,
 										"stacked": false
 									}
@@ -671,7 +697,7 @@ self.renderReady = function(eventName) {
 								"graphOptions": {
 									"chart": {
 										"type": "multiBarChart",
-										"height": 250,
+										"height": 280,
 										"duration": 500,
 										"stacked": false
 									}
@@ -815,7 +841,29 @@ self.renderReady = function(eventName) {
 											"className": "text-bold"
 										}
 									}
-								}, {
+								},	{
+                    	 			"title": "Invoice",
+									"amount": (bpl['purchase_inv']==null)?"0":bpl['purchase_inv'],
+									"total": "",
+									"percentage": (bpl['purchase_inv_pct']==null)?"0.00%":bpl['purchase_inv_pct'],
+									"description": "of total Purchases",
+									"$config": {
+										"title": {
+											"className": "text-right"
+										}
+									}
+                    	 		}, {
+                    	 			"title": "Cash",
+									"amount": (bpl['purchase_cash']==null)?"0":bpl['purchase_cash'],
+									"total": "",
+									"percentage": (bpl['purchase_cash_pct']==null)?"0.00%":bpl['purchase_cash_pct'],
+									"description": "of total Purchases",
+									"$config": {
+										"title": {
+											"className": "text-right"
+										}
+									}
+                    	 		}, {
 									"title": "OPEX",
 									"amount": "",
 									"total": bpl['Opex'],
@@ -1019,8 +1067,14 @@ self.renderReady = function(eventName) {
 								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
 								noOfChequeBounced += stat.noOfChequeBounced;
 
-								var graphKey = stat.startMonth;
-								graphStatement[graphKey] = graphStatement[graphKey] || {};
+								var graphKey = stat.startMonth;							    
+								if(graphStatement[graphKey]){
+									graphStatement[graphKey].count++
+								}else{
+									graphStatement[graphKey]={};
+									graphStatement[graphKey].count=1;
+
+								}
 								graphStatement[graphKey].totalDeposits = graphStatement[graphKey].totalDeposits || 0;
 								graphStatement[graphKey].totalDeposits += stat.totalDeposits;
 								graphStatement[graphKey].totalWithdrawals = graphStatement[graphKey].totalWithdrawals || 0;
@@ -1049,12 +1103,12 @@ self.renderReady = function(eventName) {
 							k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
 							averageGraphData[0].values.push({
 								"x": k,
-								"y": v.totalDeposits / model.business.customerBankAccounts.length,
+								"y": v.totalDeposits / v.count/*model.business.customerBankAccounts.length*/,
 								"series": 0
 							})
 							averageGraphData[1].values.push({
 								"x": k,
-								"y": (v.totalDeposits - v.totalWithdrawals) / model.business.customerBankAccounts.length,
+								"y": (v.totalDeposits - v.totalWithdrawals) / v.count/*model.business.customerBankAccounts.length*/,
 								"series": 1
 							})
 							bouncesGraphData[0].values.push({
@@ -1080,7 +1134,7 @@ self.renderReady = function(eventName) {
 								"graphOptions": {
 									"chart": {
 										"type": "multiBarChart",
-										"height": 250,
+										"height": 280,
 										"duration": 500,
 										"stacked": false,
 										"reduceXTicks": false
@@ -1092,7 +1146,7 @@ self.renderReady = function(eventName) {
 								"graphOptions": {
 									"chart": {
 										"type": "multiBarChart",
-										"height": 250,
+										"height": 280,
 										"duration": 500,
 										"stacked": false,
 										"rotateLabels": -90,
