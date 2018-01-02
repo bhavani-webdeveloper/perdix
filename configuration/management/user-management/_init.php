@@ -28,5 +28,6 @@ define('DB_PASSWORD', 'root');
 define('DB_SCHEMA', 'financialForms');
 
 $connection = new mysqli(DB_HOST,DB_USER,DB_PASSWORD) or die ('Could not connect to the server. If this is first time, please reload the page.');	
+mysqli_set_charset($connection, "utf8");
 
 // echo 'Connected successfully';
