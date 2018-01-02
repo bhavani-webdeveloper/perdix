@@ -40,6 +40,7 @@ define({
                             "title": "HUB_NAME",
                             "type": ["integer", "null"],
                             "enumCode": "branch_id",
+                            "readonly": true,
                             "x-schema-form": {
                                 "type": "select",
                                 "screenFilter": true
