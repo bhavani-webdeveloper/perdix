@@ -47,7 +47,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                             model.pendingCashDeposits[i].check = true;
                 computeTotal(model);
             });
-            var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+            var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay(
+                SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(function(res){
 
                 var records = res.body;
 

@@ -382,6 +382,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "SCORES",
+            condition: " model.siteCode != 'IREPDhan'",
             items: [
                 {
                     type: "section",
@@ -953,7 +954,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             prepareDataDeferred = $q.defer();
             prepareDataPromise = prepareDataDeferred.promise;
-
+            model.siteCode = SessionStore.getGlobalSettings('siteCode');
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};

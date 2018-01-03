@@ -214,7 +214,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
-                                return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                                return Queries.getBankAccountsByPartnerForLoanRepay(SessionStore.getGlobalSetting("mainPartner") 
+                                    || "Kinara");
                             },
                             getListDisplayItem: function(item, index) {
                                 return [

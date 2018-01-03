@@ -40,7 +40,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                         },
                         function (res) {
                             _.assign(model.lead, res);
-                            if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                            if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                                 model.lead.customerTypeString = model.lead.customerType;
                             }
                             if (model.lead.currentStage == 'Incomplete') {
@@ -140,7 +140,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
 
                     {
                         type: "fieldset",
-                        condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
+                        condition: "model.siteCode == 'kinara'",
                         title: "LEAD_DETAILS",
                         items: [{
                             key: "lead.customerType",
@@ -580,7 +580,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                         },]
                     }, {
                         type: "fieldset",
-                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'",
                         title: "LEAD_DETAILS",
                         items: [{
                             key: "lead.leadName",
@@ -812,7 +812,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 {
                     type: "box",
                     title: "PRODUCT_DETAILS",
-                    condition: "model.siteCode !== 'sambandh' && model.siteCode !== 'saija'",
+                    condition: "model.siteCode == 'kinara'",
                     items: [{
                         key: "lead.interestedInProduct",
                         title: "INTERESTED_IN_LOAN_PRODUCT",
@@ -955,7 +955,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                 }, {
                     type: "box",
                     title: "PRODUCT_DETAILS",
-                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'",
                     items: [{
                         key: "lead.interestedInProduct",
                         title: "INTERESTED_IN_LOAN_PRODUCT",
@@ -1233,7 +1233,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                         });
                         return out;
                     };
-                    if (model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                    if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan') {
                         model.lead.customerType = model.lead.customerTypeString;
                     }
                     var reqData = _.cloneDeep(model);

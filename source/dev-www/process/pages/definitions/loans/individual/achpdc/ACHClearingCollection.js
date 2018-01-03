@@ -306,7 +306,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
                         model.bankAccountNumber = '';
-                        var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+                        var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay(
+                            SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(function(res){
 
                             var records = res.body;
 
