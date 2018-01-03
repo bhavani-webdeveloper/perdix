@@ -507,6 +507,7 @@
     "VehiclePrimaryInfo": {
         "type": "box",
         "title": "PRIMARY_INFORMATION",
+        "orderNo": 10,
         "items": {
             "registrationNumber": {
                 "key": "loanAccount.vehicleLoanDetails.registrationNumber",
@@ -533,6 +534,7 @@
     "VehicleValuationPriliminaryInformation": {
         "type": "box",
         "title": "VALUATION_PRILIMINARY_INFORMATION",
+        "orderNo": 20,
         "items": {
             "valuationPurpose": {
                 "key": "loanAccount.vehicleLoanDetails.valuationPurpose",
@@ -571,6 +573,7 @@
     "VehicleInspectionDetails": {
         "type": "box",
         "title": "INSPECTION_DETAILS",
+        "orderNo": 30,
         "items": {
             "firstName": {
                 "key": "loanProcess.applicantEnrolmentProcess.customer.firstName",
@@ -618,6 +621,7 @@
     "VehicleIdentityDetails": {
         "type": "box",
         "title": "VEHICLE_IDENTITY_DETAILS",
+        "orderNo": 40,
         "items": {
             "make": {
                 "key": "loanAccount.vehicleLoanDetails.make",
@@ -685,6 +689,7 @@
     "VehicleRegistrationDetails": {
         "type": "box",
         "title": "REGISTRATION_DETAILS",
+        "orderNo": 50,
         "items": {
             "reRegistered": {
                 "key": "loanAccount.vehicleLoanDetails.reRegistered",
@@ -787,6 +792,7 @@
     "VehiclePermitAndTaxDetails": {
         "type": "box",
         "title": "PERMIT_AND_TAX_DETAILS",
+        "orderNo": 60,
         "items": {
             "permitStatus": {
                 "key": "loanAccount.vehicleLoanDetails.permitStatus",
@@ -817,6 +823,7 @@
     "VehicleInsuranceDetails": {
         "type": "box",
         "title": "INSURANCE_DETAILS",
+        "orderNo": 70,
         "items": {
             "insuranceCompany": {
                 "key": "loanAccount.vehicleLoanDetails.insuranceCompany",
@@ -856,6 +863,7 @@
     "VehicleOtherRemarks": {
         "type": "box",
         "title": "OTHER_REMARKS",
+        "orderNo": 80,
         "items": {
             "modelUnderProduction": {
                 "key": "loanAccount.vehicleLoanDetails.modelUnderProduction",
@@ -901,6 +909,7 @@
     "VehiclePastValuations": {
         "type": "box",
         "title": "PAST_VALUATIONS",
+        "orderNo": 90,
         "items": {
             "vehiclePastValuations": {
                 "type": "array",
@@ -925,6 +934,7 @@
     "VehicleAsset": {
         "type": "box",
         "title": "CONDITION_OF_ASSETS",
+        "orderNo": 100,
         "items": {
             "vehicleAssetConditions": {
                 "type": "array",
@@ -952,6 +962,7 @@
     "VehicleAccessories": {
         "type": "box",
         "title": "VEHICLE_ACCESSORIES",
+        "orderNo": 110,
         "items": {
             "vehicleAccessories": {
                 "type": "array",
@@ -978,6 +989,7 @@
     "VehicleValuation": {
         "type": "box",
         "title": "VALUATION",
+        "orderNo": 120,
         "items": {
             "valuationRating": {
                 "key": "loanAccount.vehicleLoanDetails.valuationRating",
@@ -1008,6 +1020,7 @@
     "VehiclePhotoCaptures": {
         "type": "box",
         "title": "VEHICLE_PHOTO_CAPTURES",
+        "orderNo": 130,
         "items": {
             "vehiclePhotoCaptures": {
                 "type": "array",
