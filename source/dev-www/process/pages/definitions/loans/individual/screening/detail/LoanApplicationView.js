@@ -178,6 +178,8 @@ var navigateToQueue = function(model) {
                 model.review = model.review || {};
                 model.temp = model.temp || {}
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
+                model.mitigantsChanged=0;
+                model.loanMitigants= model.loanAccount.loanMitigants;
 
                 
 
@@ -199,21 +201,7 @@ var navigateToQueue = function(model) {
                     }
                 }
 
-                /*   model.updateChosenMitigant = function(checked, item) {
-                    if (checked) {
-                        // add item
-                        item.selected = true;
-                        $log.info(model.deviationDetails + "kishan");
-
-                    } else {
-                        // remove item
-                        item.selected = false;
-                        $log.info(model.deviationDetails + "yadav")
-                    }
-                };
-*/
-
-
+     
             Enrollment.getCustomerById({
                 id: model.customerId
             }).$promise.then(function(res) {
@@ -433,7 +421,7 @@ var navigateToQueue = function(model) {
                             "title": "Machine Permanently Fixed To Building"
                         }, {
                             "key": "asset_details.hypothecatedToBank",
-                            "title": "HYPOTHECATED_TO_KINARA"
+                            "title": "Wheter Hypothecated To Kinara"
                         }, {
                             "key": "asset_details.electricityAvailable",
                             "title": "Electricity Available"
@@ -529,7 +517,7 @@ var navigateToQueue = function(model) {
                         "orientation": "vertical",
                         "items": [{
                             "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
+                            "title": "Estimated Kinara EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.processingFeePercentage",
@@ -715,15 +703,7 @@ var navigateToQueue = function(model) {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             eventListeners: {
-                /*"new-business": function(bundleModel, model, params){
-                $log.info("Inside new-business of LoanRequest");
-                model.loanAccount.customerId = params.customer.id;
-                model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
-                model.loanAccount.loanCentre.centreId = params.customer.centreId;
-                model.enterprise = params.customer;
-            },
-*/                "financial-summary": function(bundleModel, model, params) {
+                    "financial-summary": function(bundleModel, model, params) {
                     model._scores = params;
                     model._deviationDetails = model._scores[12].data;
 
@@ -776,7 +756,7 @@ var navigateToQueue = function(model) {
                     PageHelper.clearErrors();
 
                     /*DEVIATION AND MITIGATION - SAVING SELECTED MITIGANTS*/
-
+                    
                     model.loanAccount.loanMitigants = [];
                     _.forOwn(model.allMitigants, function(v, k) {
                         if (v.selected) {
@@ -794,9 +774,16 @@ var navigateToQueue = function(model) {
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
-                    Utils.confirm("Are You Sure?")
+                
+                    model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
+                   // loanMitigants= [];
+
+                    Utils.confirm(model.mitigantsChanged==0?"Are You Sure?":"Mitigants have chnaged . Are you sure?")
                         .then(
                             function() {
+
+                                        model.mitigantsChanged=0;
+                                        model.loanMitigants=model.loanAccount.loanMitigants;
                                 model.temp.loanCustomerRelations = model.loanAccount.loanCustomerRelations;
                                 var reqData = {
                                     loanAccount: _.cloneDeep(model.loanAccount)
@@ -1007,6 +994,12 @@ var navigateToQueue = function(model) {
                 proceed: function(model, formCtrl, form, $event) {
                     var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                     $log.info(DedupeEnabled);
+                    model.loanAccount.loanMitigants = [];
+                    _.forOwn(model.allMitigants, function(v, k) {
+                        if (v.selected) {
+                            model.loanAccount.loanMitigants.push(v);
+                        }
+                    })
 
                     $log.info("Inside Proceed()");
                     PageHelper.clearErrors();
@@ -1023,23 +1016,23 @@ var navigateToQueue = function(model) {
 
 
                     var autoRejected = false;
-
-
-
                     if (model.currentStage == 'CreditCommitteeReview') {
                         model.loanAccount.status = 'APPROVED';
                     }
-/*
+
                     if (!preLoanSaveOrProceed(model)) {
                         return;
-                    }*/
-
-                    Utils.confirm("Are You Sure?").then(function() {
+                    }
+                    model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
+                   
+                    Utils.confirm(model.mitigantsChanged==0?"Are You Sure?":"Mitigants have Chanegd. Are you sure?").then(function() {
                         var mandatoryPromises = [];
                         var mandatoryToProceedLoan = {
                             "Dedupe": true
                         };
 
+                        model.mitigantsChanged=0;
+                                        model.loanMitigants=model.loanAccount.loanMitigants;
                         var reqData = {
                             loanAccount: _.cloneDeep(model.loanAccount)
                         };

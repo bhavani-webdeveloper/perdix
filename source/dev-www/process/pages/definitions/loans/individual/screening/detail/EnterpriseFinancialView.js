@@ -117,20 +117,39 @@ self.renderForm = function() {
 					"title": " ",
 					"data": "startMonth",
 					"render": function(data, type, full, meta) {
-						if (data != "Total")
+						if (data != "Average")
 							data = moment(data, 'YYYY-MM-DD').format('MMM, YYYY');
 						return strongRender(data);
 					}
 				}, {
-					"title": "Avg Bank Deposits",
+					"title": "Total Deposit",
 					"data": "totalDeposits",
 					"className": "text-right",
-					"render": currencyRightRender
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							if(full.averageDeposits<0) return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.averageDeposits), null, null, "decimal") ;
+							return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(full.averageDeposits, null, null, "decimal") ;
+							}
+						if(data<0)	
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+								
+					}
 				}, {
-					"title": "Avg Bank Balances",
+					"title": "Total Balance",
 					"data": "totalWithdrawals",
 					"className": "text-right",
 					"render": function(data, type, full, meta) {
+                       
+                       if(full.startMonth == "Average"){
+                       	var avgBal1=full.averageDeposits - full.averageWithdrawals;
+                       	if(avgBal1<0)
+                       	return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(avgBal1), null, null, "decimal") ;
+					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(avgBal1, null, null, "decimal") ;
+					
+                       }
+
+
 						var avgBal=full.totalDeposits - data;
 						if(avgBal<0)
 						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(avgBal), null, null, "decimal") ;
@@ -141,12 +160,22 @@ self.renderForm = function() {
 					"title": "No of EMI Bounces",
 					"data": "noOfEmiChequeBounced",
 					"className": "text-right",
-					"render": zeroRender
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							return ""
+						}
+						return data? data: '0';;
+					}
 				}, {
 					"title": "No of non EMI Bounces",
 					"data": "noOfChequeBounced",
 					"className": "text-right",
-					"render": zeroRender
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							return ""
+						}
+						return data? data: '0';;
+					}
 				}, {
 					"title": "Bank Statement",
 					"data": "bankStatementPhoto",
@@ -941,7 +970,7 @@ self.renderReady = function(eventName) {
 										}
 									}
 								}, {
-									"title": "KINARA_EMI",
+									"title": "Kinara Emi",
 									"amount": bpl['Kinara EMI'],
 									"total": "",
 									"percentage": bpl['Kinara EMI pct'],
@@ -1085,7 +1114,7 @@ self.renderReady = function(eventName) {
 								graphStatement[graphKey].noOfChequeBounced += stat.noOfChequeBounced;
 							}
 							acc.total = {
-								"startMonth": "Total",
+								"startMonth": "Average",
 								"totalDeposits": totalDeposits,
 								"averageDeposits": totalDeposits / acc.bankStatements.length,
 								"totalWithdrawals": totalWithdrawals,
@@ -1099,7 +1128,20 @@ self.renderReady = function(eventName) {
 							totalChequeBounces += acc.total.noOfChequeBounced;
 							acc.bankStatements.push(acc.total);
 						}
-						_.forOwn(graphStatement, function(v, k) {
+						
+                       // Graph data need to be sorted
+                        var sortedGraphStatement = {};
+                        Object.keys(graphStatement).sort().forEach(function(key) {
+                         sortedGraphStatement[key] = graphStatement[key];
+                         });
+
+                        /*_.sortKeysBy(graphStatement);
+                        _.sortKeysBy(obj, function(value, key) {
+                            return value;
+                        });*/
+
+
+						_.forOwn(sortedGraphStatement, function(v, k) {
 							k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
 							averageGraphData[0].values.push({
 								"x": k,

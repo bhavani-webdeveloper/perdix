@@ -166,7 +166,17 @@ define({
                             "type": "file",
                             "preview": "pdf"
                         });
-                    }
+                     }
+                      fileForms.push({
+                            "key": "customer.businessSignboardImage",
+                            "notitle": true,
+                            "title": "Business Signboard",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "type": "file",
+                            "preview": "pdf"
+                        })
+
                     self.form.push({
                         "type": "box",
                         "colClass": "col-sm-12",
@@ -699,7 +709,20 @@ define({
                         "items": [{
                             "type": "grid",
                             "orientation": "vertical",
+                            "items": [/*{
+                            "type": "section",
+                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
                             "items": [{
+                                "key": "customer.businessSignboardImage",
+                                "notitle": true,
+                                "title": "SignBoard Image",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                "type": "file",
+                                "fileType": "application/pdf",
+                                "using": "scanner"
+                            }]
+                        },*/{
                                 "key": "customer.properAndMatchingSignboard",
                                 "title": "Proper Matching SignBoard"
                             }, {

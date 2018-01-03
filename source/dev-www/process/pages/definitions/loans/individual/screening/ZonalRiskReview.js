@@ -66,6 +66,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                 maximum: 1,
                 order: 6
             }, {
+                pageName: 'loans.individual.screening.CreditBureauView',
+                title: 'CREDIT_BUREAU',
+                pageClass: 'cbview',
+                minimum: 1,
+                maximum: 1,
+                order: 100
+            }, {
                 pageName: 'loans.individual.screening.Review',
                 title: 'REVIEW',
                 pageClass: 'loan-review',
@@ -246,6 +253,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                                     model: {
                                         customerUrn: res.urnNo,
                                         loanId: bundleModel.loanId
+                                    }
+                                });
+
+                                 $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: res
                                     }
                                 });
 
