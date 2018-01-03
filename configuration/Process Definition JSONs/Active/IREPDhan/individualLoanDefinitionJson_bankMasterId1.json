@@ -86,7 +86,6 @@
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
-         "authorizationCount":2,
          "sendSms":"Yes",
          "smsCategory":"Approval",
          "isAccountOpening":false,
