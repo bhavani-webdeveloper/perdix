@@ -76,6 +76,52 @@ var navigateToQueue = function(model) {
                         $state.go('Page.LoanOriginationDashboard', null);
                 }
 
+        var getStageNameByStageCode = function(stageCode) {
+            var stageName;
+            switch(stageCode) {
+                case 'Screening':
+                    stageName = $filter('translate')('SCREENING');
+                    break;
+                case 'Dedupe':
+                    stageName = $filter('translate')('DEDUPE');
+                    break;
+                case 'ScreeningReview':
+                    stageName = $filter('translate')('SCREENING_REVIEW');
+                    break;
+                case 'Application':
+                    stageName = $filter('translate')('APPLICATION');
+                    break;
+                case 'ApplicationReview':
+                    stageName = $filter('translate')('APPLICATION_REVIEW');
+                    break;
+                case 'FieldAppraisal':
+                    stageName = $filter('translate')('FIELD_APPRAISAL');
+                    break;
+                case 'FieldAppraisalReview':
+                    stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
+                    break;
+                case 'ZonalRiskReview':
+                    stageName = $filter('translate')('ZONAL_RISK_REVIEW');
+                    break;
+                case 'CentralRiskReview':
+                    stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
+                    break;
+                case 'CreditCommitteeReview':
+                    stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
+                    break;
+                case 'Sanction':
+                    stageName = $filter('translate')('SANCTION');
+                    break;
+                case 'Rejected':
+                    stageName = $filter('translate')('REJECTED');
+                    break;
+                default:
+                    stageName = stageCode;
+                    break;
+            }
+            return stageName;
+        };
+
         var preLoanSaveOrProceed = function(model){
         var loanAccount = model.loanAccount;
 
@@ -175,6 +221,7 @@ var navigateToQueue = function(model) {
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.review = model.review || {};
                 model.temp = model.temp || {}
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
@@ -645,7 +692,7 @@ var navigateToQueue = function(model) {
                                 var t = targetstage[i];
                                 if (t.field1 == stage1) {
                                     out.push({
-                                        name: t.name,
+                                        name: getStageNameByStageCode(t.name),
                                         value:t.code
                                     })
                                 }

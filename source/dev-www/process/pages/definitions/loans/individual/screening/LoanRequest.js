@@ -17,6 +17,52 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         return true;
     }
 
+    var getStageNameByStageCode = function(stageCode) {
+        var stageName;
+        switch(stageCode) {
+            case 'Screening':
+                stageName = $filter('translate')('SCREENING');
+                break;
+            case 'Dedupe':
+                stageName = $filter('translate')('DEDUPE');
+                break;
+            case 'ScreeningReview':
+                stageName = $filter('translate')('SCREENING_REVIEW');
+                break;
+            case 'Application':
+                stageName = $filter('translate')('APPLICATION');
+                break;
+            case 'ApplicationReview':
+                stageName = $filter('translate')('APPLICATION_REVIEW');
+                break;
+            case 'FieldAppraisal':
+                stageName = $filter('translate')('FIELD_APPRAISAL');
+                break;
+            case 'FieldAppraisalReview':
+                stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
+                break;
+            case 'ZonalRiskReview':
+                stageName = $filter('translate')('ZONAL_RISK_REVIEW');
+                break;
+            case 'CentralRiskReview':
+                stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
+                break;
+            case 'CreditCommitteeReview':
+                stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
+                break;
+            case 'Sanction':
+                stageName = $filter('translate')('SANCTION');
+                break;
+            case 'Rejected':
+                stageName = $filter('translate')('REJECTED');
+                break;
+            default:
+                stageName = stageCode;
+                break;
+        }
+        return stageName;
+    };
+
     var checkPsychometricTestValidity = function(model){
         var deferred = $q.defer();
         Queries.getGlobalSettings('psychometricTestValidDays', true).then(function(resp) {
@@ -2130,7 +2176,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
                     // readonly:true,
-                    required: true
+                    // required: true
                 },
                 {
                     "key": "loanAccount.commercialCibilCharge",
@@ -2405,7 +2451,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 var t = targetstage[i];
                                 if (t.field1 == stage1) {
                                     out.push({
-                                        name: t.name,
+                                        name: getStageNameByStageCode(t.name),
                                         value:t.code
                                     })
                                 }

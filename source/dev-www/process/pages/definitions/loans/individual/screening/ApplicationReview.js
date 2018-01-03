@@ -2,14 +2,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
     function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
         $log.info("Inside LoanBookingBundle");
-
-        return {
-            "type": "page-bundle",
-            "title": "APPLICATION_REVIEW",
-            "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
-            "subTitle": "",
-            "readonly": true,
-            "bundleDefinition": [{
+        var getBundleDefinition = function() {
+            var definition = [{
                 pageName: 'loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'APPLICANT',
                 pageClass: 'applicant',
@@ -52,13 +46,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 maximum: 1,
                 order: 70
             }, {
-                pageName: 'loans.individual.screening.detail.SummaryView',
-                title: 'SummaryView',
-                pageClass: 'summaryView',
-                minimum: 1,
-                maximum: 1,
-                order: 5
-            }, {
                 pageName: 'loans.individual.screening.Summary',
                 title: 'SUMMARY',
                 pageClass: 'summary',
@@ -86,7 +73,26 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 minimum: 1,
                 maximum: 1,
                 order: 90
-            }],
+            }];
+            if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan') {
+                definition.push({
+                    pageName: 'loans.individual.screening.detail.SummaryView',
+                    title: 'SummaryView',
+                    pageClass: 'summaryView',
+                    minimum: 1,
+                    maximum: 1,
+                    order: 5
+                });
+            } 
+            return definition;
+        };
+        return {
+            "type": "page-bundle",
+            "title": "APPLICATION_REVIEW",
+            "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+            "subTitle": "",
+            "readonly": true,
+            "bundleDefinition": getBundleDefinition(),
             "bundlePages": [],
             "offline": true,
             /* "getOfflineDisplayItem": function(value, index) {
@@ -191,18 +197,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                         }
                                     }
                                 });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'summaryView',
-                                    model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3',
-                                            customerDetail: bundleModel.customer_detail
+                                if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan') {
+                                    $this.bundlePages.push({
+                                        pageClass: 'summaryView',
+                                        model: {
+                                            cbModel: {
+                                                customerId: res.customerId,
+                                                loanId: bundleModel.loanId,
+                                                scoreName: 'RiskScore3',
+                                                customerDetail: bundleModel.customer_detail
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
