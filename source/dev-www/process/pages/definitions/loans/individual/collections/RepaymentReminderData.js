@@ -97,7 +97,7 @@ define({
                                     function (res) {
                                         $log.info(res);
                                         model.accountDetails = [];
-                                        for(var i=0; i<res.length; i++) {
+                                        for(var i=res.length-1; i>=0; i--) {
                                             model.accountDetails.push(res[i]);
                                         }
                                         for(var i=0; i<model.accountDetails.length;i++){
@@ -246,7 +246,6 @@ define({
                         type: "array",
                         add: null,
                         startEmpty: true,
-                        view: "fixed",
                         remove: null,
                         titleExpr: "'Reminder: ' + moment(model.reminder.repaymentCurrentHistories[arrayIndexes[0]].interactionDate).format('DD, MMMM YYYY')",
                         titleExprLocals: {moment: window.moment},
@@ -270,15 +269,14 @@ define({
                     }]
             }, {
                 type: "box",
-                title: "REMINDER_/_REPAYMEMT_HISTORY",
+                title: "REMINDER_REPAYMENT_HISTORY",
                 "readonly": true,
                 items: [{
                     key: "accountDetails",
                     type: "array",
-                    startEmpty: true,
                     add: null,
+                    startEmpty: true,
                     remove: null,
-                    view: "fixed",
                     "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.accountDetails[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.accountDetails[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
                     "titleExprLocals": {moment: window.moment},
                     items: [{

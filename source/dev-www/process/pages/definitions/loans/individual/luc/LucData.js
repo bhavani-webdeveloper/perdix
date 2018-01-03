@@ -1578,6 +1578,7 @@ define({
                     }
                 }, {
                     key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
+                    "readonly" : true,
                     type: "number",
                     title: "WOMEN"
                 }, {
