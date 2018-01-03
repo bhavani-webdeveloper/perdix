@@ -5,10 +5,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
         pageUID: "witfin.lead.LeadGeneration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector"],
+        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector) {
+            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator) {
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
@@ -215,7 +215,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                     PageHelper.hideLoader();
                                 })
                                 .subscribe(function(leadProcess){
-                                    $state.go('Page.witfinLeadDashboard', null);
+                                    irfNavigator.go({
+                                        state: "Page.Adhoc",
+                                        pageName: "witfin.loans.LoanOriginationDashboard"
+                                    });
+
                                 }, function(err) {
                                     PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
@@ -226,7 +230,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                         PageHelper.hideLoader();
                                     })
                                     .subscribe(function(leadProcess){
-                                        $state.go('Page.witfinLeadDashboard', null);
+                                        irfNavigator.go({
+                                            state: "Page.Adhoc",
+                                            pageName: "witfin.loans.LoanOriginationDashboard"
+                                        });
+
                                     }, function(err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();

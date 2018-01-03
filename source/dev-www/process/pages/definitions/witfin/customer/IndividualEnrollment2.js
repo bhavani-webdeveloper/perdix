@@ -215,6 +215,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "householdeDetails.familyMembers.incomes.frequency",
                     "householdeDetails.expenditures",
                     "householdeDetails.expenditures.expenditureSource",
+                    "householdeDetails.expenditures.annualExpenses",
                     "householdeDetails.expenditures.frequency",
                     "householdLiablities",
                     "householdLiablities.liabilities",
@@ -254,7 +255,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "reference.verifications.referenceCheck.opinion",
                     "reference.verifications.referenceCheck.financialStatus",
                     "reference.verifications.referenceCheck.customerResponse"
-
                 ];
 
             }
@@ -358,7 +358,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.customer.villageName = obj.cityTownVillage;
                         model.customer.landLineNo = obj.alternateMobileNo;
                         model.customer.dateOfBirth = obj.dob;
-                        model.customer.age = obj.age;
+                        model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
                         model.customer.gender = obj.gender;
                         model.customer.landLineNo = obj.alternateMobileNo;
 
