@@ -323,6 +323,7 @@ define({
             form.push({
                 type: "box",
                 colClass: "col-sm-12",
+                condition: " model.siteCode != 'IREPDhan'",
                 title: "SCORES",
                 items: [{
                         type: "section",
@@ -492,6 +493,7 @@ define({
                 prepareDataPromise = prepareDataDeferred.promise;
                 model.bundleModel = bundleModel;
                 model.currentStage = bundleModel.currentStage;
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.ScoreDetails = [];
                 model.customer = {};
 

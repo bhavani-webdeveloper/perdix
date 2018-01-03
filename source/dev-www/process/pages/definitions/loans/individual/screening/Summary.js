@@ -532,7 +532,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview'",
+                condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
                 items: [
                     {
                         type: "section",
@@ -899,7 +899,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "DEVIATION_AND_MITIGATIONS",
-            condition: "model.currentStage != 'ScreeningReview'",
+            condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
             items: [
                 {
                     type: "section",
@@ -954,7 +954,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             prepareDataDeferred = $q.defer();
             prepareDataPromise = prepareDataDeferred.promise;
-            model.siteCode = SessionStore.getGlobalSettings('siteCode');
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};

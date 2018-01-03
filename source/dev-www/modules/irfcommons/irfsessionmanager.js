@@ -146,6 +146,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	}
 
 	self.getGlobalSetting = function(key) {
+		if(key == 'siteCode') return "IREPDhan"
 		return session.global[key];
 	};
 

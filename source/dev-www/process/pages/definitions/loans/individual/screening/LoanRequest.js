@@ -3054,7 +3054,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         mandatoryPromises.push(p1);
                     }
 
-                    if(model.loanAccount.currentStage === 'Application'){
+                    if(model.loanAccount.currentStage === 'Application' && SessionStore.getGlobalSetting('siteCode') !== 'IREPDhan'){
                         var psychoPromise = checkPsychometricTestValidity(model);
                         mandatoryPromises.push(psychoPromise);
                     }

@@ -135,7 +135,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             }
                         )
 
-                    var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+                    var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay(
+                        SessionStore.getGlobalSetting('mainPartner') || "Kinara").then(function(res){
                         var records = res.body;
 
                         if(records && _.isArray(records) && records.length > 0){
@@ -434,7 +435,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                                    return Queries.getBankAccountsByPartnerForLoanRepay(
+                                        SessionStore.getGlobalSetting('mainPartner') || "Kinara");
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [

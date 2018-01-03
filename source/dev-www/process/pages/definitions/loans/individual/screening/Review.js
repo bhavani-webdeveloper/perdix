@@ -1,7 +1,51 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.Review"),
-["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "SessionStore", "irfCurrencyFilter",
-function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, irfCurrencyFilter){
-
+["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "SessionStore", "irfCurrencyFilter", "$filter",
+function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, irfCurrencyFilter, $filter){
+	var getStageNameByStageCode = function(stageCode) {
+		var stageName;
+		switch(stageCode) {
+			case 'Screening':
+				stageName = $filter('translate')('SCREENING');
+				break;
+			case 'Dedupe':
+				stageName = $filter('translate')('DEDUPE');
+				break;
+			case 'ScreeningReview':
+				stageName = $filter('translate')('SCREENING_REVIEW');
+				break;
+			case 'Application':
+				stageName = $filter('translate')('APPLICATION');
+				break;
+			case 'ApplicationReview':
+				stageName = $filter('translate')('APPLICATION_REVIEW');
+				break;
+			case 'FieldAppraisal':
+				stageName = $filter('translate')('FIELD_APPRAISAL');
+				break;
+			case 'FieldAppraisalReview':
+				stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
+				break;
+			case 'ZonalRiskReview':
+				stageName = $filter('translate')('ZONAL_RISK_REVIEW');
+				break;
+			case 'CentralRiskReview':
+				stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
+				break;
+			case 'CreditCommitteeReview':
+				stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
+				break;
+			case 'Sanction':
+				stageName = $filter('translate')('SANCTION');
+				break;
+			case 'Rejected':
+				stageName = $filter('translate')('REJECTED');
+				break;
+			default:
+				stageName = stageCode;
+				break;
+		}
+		return stageName;
+	};
 	return {
 		"type": "schema-form",
 		"title": "REVIEW",
@@ -52,8 +96,8 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 					item._titleHtml += 'Proceed';
 				}
 				item._titleHtml += '</strong></div>';
-				item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+item.preStage+'</strong></div>';
-				item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+item.postStage+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+getStageNameByStageCode(item.preStage)+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+getStageNameByStageCode(item.postStage)+'</strong></div>';
 				item._titleHtml += '<div class="col-sm-2"><small>Time taken</small><br><strong>'+item._timeSpent+'</strong></div>';
 				item._titleHtml += '<div class="col-sm-2"></div>';
 				item._bodyHtml = '<div class="row"><div class="col-sm-4">Loan Amount: <b>'+irfCurrencyFilter(item.loanAmount)+'</b></div>';
