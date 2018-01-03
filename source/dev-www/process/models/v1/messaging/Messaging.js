@@ -49,7 +49,7 @@ irf.models.directive("irfMessaging", [function() {
                             {{momentCalendar(msg.created_at)}}
                         </span>
                     </span>
-                    <span ng-bind-html="highlightUsernames(msg.message_text)"></span>
+                    <span style="word-break: break-word;" ng-bind-html="highlightUsernames(msg.message_text)"></span>
                 </div>
             </div>
             <a href="" ng-hide="readonly && !msg.replies.length" ng-click="msg._showReplies=!msg._showReplies" class="color-theme" style="position:absolute;right:10px;margin-top:-10px">{{msg.replies.length?((msg._showReplies?(\'HIDE_REPLIES\'|translate):(\'VIEW_REPLIES\'|translate)+\' (\'+msg.replies.length+\')\')):(msg._showReplies?\'\':(\'REPLY\'|translate))}}</a>
@@ -63,7 +63,7 @@ irf.models.directive("irfMessaging", [function() {
                                 {{momentCalendar(reply.created_at)}}
                             </span>
                         </span>
-                        <span ng-bind-html="highlightUsernames(reply.message_text)"></span>
+                        <span style="word-break: break-word;" ng-bind-html="highlightUsernames(reply.message_text)"></span>
                         &nbsp;<a ng-hide="readonly" href="" class="color-theme" ng-click="msg._reply=msg._reply?msg._reply:\'@[\'+reply.created_by+\'] \';" onclick="$(\'#in_reply_\'+$(this).attr(\'msgid\')).focus()" ng-attr-msgid="{{msg.id}}"><i class="fa fa-reply">&nbsp;</i>{{'REPLY'|translate}}</a>
                     </div>
                 </div>
@@ -115,8 +115,7 @@ irf.models.directive("irfMessaging", [function() {
             readonly: "="
         },
         controller: ["$scope", "$log", "Messaging","PageHelper", "SessionStore", function($scope, $log, Messaging, PageHelper, SessionStore) {
-            //var created_by = SessionStore.getUsername();
-            var created_by = "Prakash Dharuman";
+            var created_by = SessionStore.getUsername();
 
             $scope.highlightUsernames = function(msg_text) {
                 return msg_text.replace(/\@\[(.*)\]/g, ' <strong>$1</strong> ');
