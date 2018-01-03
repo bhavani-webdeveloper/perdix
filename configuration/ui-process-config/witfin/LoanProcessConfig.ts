@@ -38,9 +38,10 @@ let config = {
                         "expr": "this.loanAccount.currentStage=='Screening'",
                         "add": [
                             {
-                                "name": "LoadStageRelatedPolicy",
+                                "name": "CloseLeadonLoanSave",
                                 "arguments": {
-                                    "stage":"Completed"
+                                    "stage":"Completed",
+                                    "fromStage":"ReadyForScreening"
                                 }
                             }
                         ]

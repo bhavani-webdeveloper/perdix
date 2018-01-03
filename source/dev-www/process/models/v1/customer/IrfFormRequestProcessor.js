@@ -2150,14 +2150,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         // condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         title: "LEAD_DETAILS",
                         items: {
-                            "leadName": {
-                                key: "lead.leadName",
-                                title: "APPLICANT_NAME",
-                                schema: {
-                                    pattern: "^[a-zA-Z\. ]+$",
-                                },
-                                validationMessage: {202: "Only alphabets and space are allowed."},
-                            },
                             "customerTypeString": {
                                 key: "lead.customerTypeString",
                                 type: "select",
@@ -2270,164 +2262,265 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         }
                                     }
                                 }
+                            }
+                        },
+                    },
+                    "individualDetails": {
+                        type: "fieldset",
+                        title: "INDIVIDUAL_DETAILS",
+                        // condition: "model.lead.customerTypeString === 'Individual'",
+                        items: {
+                            "leadName": {
+                                key: "lead.leadName",
+                                title: "APPLICANT_NAME",
+                                schema: {
+                                    pattern: "^[a-zA-Z\. ]+$",
+                                },
+                                "orderNo": 10,
+                                validationMessage: {202: "Only alphabets and space are allowed."},
                             },
-
-                            "individualDetails": {
-                                type: "fieldset",
-                                title: "INDIVIDUAL_DETAILS",
-                                // condition: "model.lead.customerTypeString === 'Individual'",
-                                items: {
-                                    "gender": {
-                                        key: "lead.gender",
-                                        type: "radios"
+                            "existingApplicant": {
+                                "key": "lead.applicantCustomerId",
+                                "title": "CHOOSE_EXISTING_APPLICANT",
+                                "type": "lov",
+                                "orderNo": 5,
+                                "condition": "model.lead.customerId==null", /* Dont show if an existing business is selected */
+                                // "autolov": true,
+                                "lovonly": true,
+                                initialize: function(model, form, parentModel, context) {
+                                    model.branchId = parentModel.lead.branchName;
+                                    model.centreName = parentModel.lead.centreName;
+                                },
+                                "inputMap": {
+                                    "firstName": {
+                                        "key": "lead.customerFirstName"
                                     },
-                                    "dob": {
-                                        key: "lead.dob",
-                                        type: "date",
-                                        "onChange": function (modelValue, form, model) {
+                                    "urnNo": {
+                                        "key": "lead.urnNo",
+                                    },
+                                    "branchId": {
+                                        "key": "lead.branchName",
+                                        "type": "select",
+                                        "screenFilter": true,
+                                        "readonly": true
+                                    },
+                                    "centreName": {
+                                        "key": "lead.centreName",
+                                        "type": "string",
+                                        "readonly": true,
+                                    },
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form,model) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var branches = formHelper.enum('branch_id').data;
+                                    var branchName;
+                                    for (var i = 0; i < branches.length; i++) {
+                                        if (branches[i].code == inputModel.customerBranchId)
+                                            branchName = branches[i].name;
+                                    }
+                                    var promise = Enrollment.search({
+                                        'branchName': branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                        'centreId': model.lead.centreId,
+                                        'customerType': "individual",
+                                        'urnNo': inputModel.urnNo
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    Enrollment.getCustomerById({id: valueObj.id})
+                                        .$promise
+                                        .then(function(res){
+                                            PageHelper.showProgress("customer-load", "Done..", 5000);
+                                            model.lead.mobileNo = res.mobilePhone;
+                                            model.lead.gender = res.gender;
+                                            model.lead.leadName = res.firstName;
+                                            model.lead.maritalStatus=res.maritalStatus;
+                                            model.lead.landLineNo=res.landLineNo;
+                                            model.lead.dob=res.dateOfBirth;
+                                            model.lead.addressLine1=res.doorNo;
+                                            model.lead.addressLine2=res.street;
+                                            model.lead.pincode=res.pincode;
+                                            model.lead.district=res.district;
+                                            model.lead.state=res.state;
+                                            model.lead.area=res.locality;
+                                            model.lead.cityTownVillage=res.villageName;
+                                            model.lead.applicantCustomerId = res.id;
                                             if (model.lead.dob) {
                                                 model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                             }
-                                        }
-                                    },
-                                    "age": {
-                                        key: "lead.age",
-                                        type: "number",
-                                        "onChange": function (modelValue, form, model) {
-                                            if (model.lead.age > 0) {
-                                                if (model.lead.dob) {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                } else {
-                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                            for (var i=0;i<res.familyMembers.length; i++){
+                                                var f = res.familyMembers[i];
+                                                if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                                                    selfExist = true;
+                                                    break;
                                                 }
                                             }
-                                        }
-                                    },
-                                    "maritalStatus": {
-                                        key: "lead.maritalStatus",
-                                        type: "select",
-                                        enumCode: "marital_status",
-                                        /*titleMap: {
-                                         "MARRIED": "MARRIED",
-                                         "UNMARRIED": "UNMARRIED",
-                                         "DIVORCED": "DIVORCED",
-                                         "SEPARATED": "SEPARATED",
-                                         "WIDOW(ER)": "WIDOW(ER)",
-                                         }*/
-                                    },
-                                    "educationStatus": {
-                                        key: "lead.educationStatus",
-                                        type: "select",
-                                        enumCode: "education",
-                                        /* titleMap: {
-                                         "Below SSLC": "Below SSLC",
-                                         "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
-                                         "Graduate/Equivalent to graduate": "Graduate/Equivalent",
-                                         "Post graduate&equivalent": "PostGraduate & Equivalent",
-                                         "More than post graduation": "MoreThanPostGraduation",
-                                         }*/
-                                    },
-                                    "occupation1": {
-                                        key: "lead.occupation1",
-                                        type: "select",
-                                        enumCode: "lead_primary_occupation",
-                                        /*titleMap: {
-
-                                         }*/
-                                    },
-                                    "leadCategory": {
-                                        key: "lead.leadCategory",
-                                        type: "select",
-                                        enumCode: "lead_category",
-                                        /*titleMap: {
-
-                                         }*/
-                                    },
-                                    "licenseType": {
-                                        key: "lead.licenseType",
-                                        type: "select",
-                                        enumCode: "licence_type",
-                                        /*titleMap: {
-
-                                         }*/
-                                    }
+                                            model.lead.educationStatus = f.educationStatus;
+                                        }, function(httpRes){
+                                            PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                        })
 
                                 }
+
                             },
-
-                            "contactDetails": {
-                                type: "fieldset",
-                                title: "CONTACT_DETAILS",
-                                condition: "model.lead.customerTypeString === 'Individual'||model.lead.customerTypeString === 'Enterprise'",
-                                items: {
-                                    "mobileNo": {
-                                        key: "lead.mobileNo",
-                                    },
-                                    "alternateMobileNo": {
-                                        key: "lead.alternateMobileNo",
-                                    },
-                                    "addressLine1": {
-                                        key: "lead.addressLine1",
-                                        "title": "DOOR_NO"
-                                    },
-                                    "addressLine2": {
-                                        key: "lead.addressLine2",
-                                        "title": "STREET"
-                                    },
-                                    "pincode": {
-                                        key: "lead.pincode",
-                                        type: "lov",
-                                        fieldType: "number",
-
-                                        inputMap: {
-                                            "pincode": "lead.pincode",
-                                            "district": {
-                                                key: "lead.district"
-                                            },
-                                            "state": {
-                                                key: "lead.state"
-                                            }
-                                        },
-                                        outputMap: {
-                                            "division": "lead.area",
-                                            "region": "lead.cityTownVillage",
-                                            "pincode": "lead.pincode",
-                                            "district": "lead.district",
-                                            "state": "lead.state"
-
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function (inputModel, form, model) {
-                                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                        },
-                                        getListDisplayItem: function (item, index) {
-                                            return [
-                                                item.division + ', ' + item.region,
-                                                item.pincode,
-                                                item.district + ', ' + item.state
-                                            ];
+                            "gender": {
+                                key: "lead.gender",
+                                type: "radios"
+                            },
+                            "dob": {
+                                key: "lead.dob",
+                                type: "date",
+                                "onChange": function (modelValue, form, model) {
+                                    if (model.lead.dob) {
+                                        model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
+                            },
+                            "age": {
+                                key: "lead.age",
+                                type: "number",
+                                "onChange": function (modelValue, form, model) {
+                                    if (model.lead.age > 0) {
+                                        if (model.lead.dob) {
+                                            model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                        } else {
+                                            model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                         }
-                                    },
-                                    "area": {
-                                        "key": "lead.area",
-                                        "readonly": true
-                                    },
-                                    "cityTownVillage": {
-                                        "key": "lead.cityTownVillage",
-                                        "readonly": true
-                                    },
+                                    }
+                                }
+                            },
+                            "maritalStatus": {
+                                key: "lead.maritalStatus",
+                                type: "select",
+                                enumCode: "marital_status",
+                                /*titleMap: {
+                                 "MARRIED": "MARRIED",
+                                 "UNMARRIED": "UNMARRIED",
+                                 "DIVORCED": "DIVORCED",
+                                 "SEPARATED": "SEPARATED",
+                                 "WIDOW(ER)": "WIDOW(ER)",
+                                 }*/
+                            },
+                            "educationStatus": {
+                                key: "lead.educationStatus",
+                                type: "select",
+                                enumCode: "education",
+                                /* titleMap: {
+                                 "Below SSLC": "Below SSLC",
+                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                 "More than post graduation": "MoreThanPostGraduation",
+                                 }*/
+                            },
+                            "occupation1": {
+                                key: "lead.occupation1",
+                                type: "select",
+                                enumCode: "lead_primary_occupation",
+                                /*titleMap: {
+
+                                 }*/
+                            },
+                            "leadCategory": {
+                                key: "lead.leadCategory",
+                                type: "select",
+                                enumCode: "lead_category",
+                                /*titleMap: {
+
+                                 }*/
+                            },
+                            "licenseType": {
+                                key: "lead.licenseType",
+                                type: "select",
+                                enumCode: "licence_type",
+                                /*titleMap: {
+
+                                 }*/
+                            }
+
+                        }
+                    },
+
+                    "contactDetails": {
+                        type: "fieldset",
+                        title: "CONTACT_DETAILS",
+                        condition: "model.lead.customerTypeString === 'Individual'||model.lead.customerTypeString === 'Enterprise'",
+                        items: {
+                            "mobileNo": {
+                                key: "lead.mobileNo",
+                            },
+                            "alternateMobileNo": {
+                                key: "lead.alternateMobileNo",
+                            },
+                            "addressLine1": {
+                                key: "lead.addressLine1",
+                                "title": "DOOR_NO"
+                            },
+                            "addressLine2": {
+                                key: "lead.addressLine2",
+                                "title": "STREET"
+                            },
+                            "pincode": {
+                                key: "lead.pincode",
+                                type: "lov",
+                                fieldType: "number",
+
+                                inputMap: {
+                                    "pincode": "lead.pincode",
                                     "district": {
-                                        "key": "lead.district",
-                                        "readonly": true
+                                        key: "lead.district"
                                     },
                                     "state": {
-                                        "key": "lead.state",
-                                        "readonly": true
+                                        key: "lead.state"
                                     }
+                                },
+                                outputMap: {
+                                    "division": "lead.area",
+                                    "region": "lead.cityTownVillage",
+                                    "pincode": "lead.pincode",
+                                    "district": "lead.district",
+                                    "state": "lead.state"
+
+                                },
+                                searchHelper: formHelper,
+                                search: function (inputModel, form, model) {
+                                    return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
                                 }
                             },
+                            "area": {
+                                "key": "lead.area",
+                                "readonly": true
+                            },
+                            "cityTownVillage": {
+                                "key": "lead.cityTownVillage",
+                                "readonly": true
+                            },
+                            "district": {
+                                "key": "lead.district",
+                                "readonly": true
+                            },
+                            "state": {
+                                "key": "lead.state",
+                                "readonly": true
+                            }
                         }
-                    }
+                    },
                 }
             },
             "sourceDetails": {

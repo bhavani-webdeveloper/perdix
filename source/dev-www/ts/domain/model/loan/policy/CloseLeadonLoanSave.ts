@@ -16,13 +16,14 @@ import {LeadProcessFactory} from '../../lead/LeadProcessFactory';
 /**
  * Created by shahalpk on 28/11/17.
  */
-export interface LoadStageRelatedPolicyArgs {
+export interface CloseLeadonLoanSave {
     stage: string;
+    fromStage: string;
 }
-export class LoadStageRelatedPolicy extends IPolicy<LoanProcess> {
+export class CloseLeadonLoanSave extends IPolicy<LoanProcess> {
 
     enrolmentRepo: IEnrolmentRepository;
-    args: LoadStageRelatedPolicyArgs;
+    args: CloseLeadonLoanSave;
 
     constructor(){
         super();
@@ -38,17 +39,24 @@ export class LoadStageRelatedPolicy extends IPolicy<LoanProcess> {
             () => {
                 if (_.hasIn(loanProcess, "loanAccount.leadId")){
                     let lead_id = loanProcess.loanAccount.leadId;
-                    LeadProcessFactory.createFromLeadId(lead_id)
-                    .subscribe( (value) => {
+                    // return Observable.throw(new Error("shahal error"));
+                    return LeadProcessFactory.createFromLeadId(lead_id)
+                        .map((leadProcess) => {
+                            leadProcess.stage = this.args.stage;
 
-                        value.lead.currentStage = this.args.stage;
-                        return Observable.of(value.proceed());
-
-                    })
+                            if (leadProcess.lead.currentStage==this.args.fromStage) {
+                                return leadProcess.proceed();
+                            }
+                            return Observable.of(loanProcess);
+                        })
+                        .concatAll((leadProcess) => {
+                            return loanProcess;
+                        })
                 }
-
+                return Observable.of(loanProcess);
             }
         )
+
     }
 
 }

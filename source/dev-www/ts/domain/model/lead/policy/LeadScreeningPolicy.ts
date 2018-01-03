@@ -20,7 +20,6 @@ export class LeadScreeningPolicy implements LeadPolicy<LeadScreeningPolicyArgs> 
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
         return Observable.defer(() => {
-            console.log("SHAHALPASS1");
             if (leadProcess.lead) {
                 leadProcess.stage = this.args.stageForScreening;
             }

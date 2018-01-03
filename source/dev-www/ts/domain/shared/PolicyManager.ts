@@ -50,7 +50,13 @@ export class PolicyManager<T> {
             return Observable.of(this.obj);
         }
 
-        return Observable.concat(...observables).last();
+        return Observable.concat(...observables)
+            .map((x) => {
+                console.log("POLICY COMPLETED");
+                console.log(x);
+                return x;
+            })
+            .last();
     }
 
     private resolvePolicy(): Array<PolicyDefinition> {

@@ -203,7 +203,7 @@ gulp.task('ts:scripts', function() {
 
 gulp.task('watch', ['ts:scripts', 'ts:perdixConfig'], function() {
     gulp.watch('dev-www/ts/**/*.ts', ['ts:scripts']);
-    gulp.watch('dev-www/process/config/**/*.ts', ['ts:perdixConfig'])
+    gulp.watch('../configuration/ui-process-config/**/*.ts', ['ts:perdixConfig'])
 });
 
 gulp.task('build', ['html', 'assets', 'fonts']);

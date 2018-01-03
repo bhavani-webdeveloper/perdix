@@ -40,13 +40,23 @@ define(["require", "exports", "./SelectElementConfiguration", "../../../domain/m
                             var applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
                             /* IF no enrolment present, reset to applicant */
                             model.customer.firstName = applicantCustomer.firstName;
-                            model.customer.villageName = applicantCustomer.villageName;
+                            // Permanent Address
+                            model.customer.doorNo = applicantCustomer.doorNo;
+                            model.customer.street = applicantCustomer.street;
                             model.customer.pincode = applicantCustomer.pincode;
                             model.customer.area = applicantCustomer.area;
                             model.customer.locality = applicantCustomer.locality;
                             model.customer.villageName = applicantCustomer.villageName;
                             model.customer.district = applicantCustomer.district;
                             model.customer.state = applicantCustomer.state;
+                            // Mailing Address
+                            model.customer.mailSameAsResidence = applicantCustomer.mailSameAsResidence;
+                            model.customer.mailingDistrict = applicantCustomer.mailingDistrict;
+                            model.customer.mailingState = applicantCustomer.mailingState;
+                            model.customer.mailingPincode = applicantCustomer.mailingPincode;
+                            model.customer.mailingDoorNo = applicantCustomer.mailingDoorNo;
+                            model.customer.mailingLocality = applicantCustomer.mailingLocality;
+                            model.customer.mailingStreet = applicantCustomer.mailingStreet;
                             return;
                         }
                         if (model.customer.id) {
