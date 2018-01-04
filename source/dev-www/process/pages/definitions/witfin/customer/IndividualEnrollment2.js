@@ -371,6 +371,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                              break;
                              }*/
                         }
+                        if(obj.applicantCustomerId) {
+                             Enrollment.getCustomerById({id: obj.applicantCustomerId})
+                            .$promise
+                            .then(function (res) {
+                                PageHelper.showProgress("customer-load", "Done..", 5000);
+                                model.customer = Utils.removeNulls(res, true);
+                                model.customer.identityProof = "Pan Card";
+                                model.customer.addressProof = "Aadhar Card";
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                            }, function (httpRes) {
+                                PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                            })
+                        }
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj
@@ -421,7 +434,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         });
                     },
                     save: function (model, formCtrl, form, $event) {
-
+                        PageHelper.clearErrors();
                         formCtrl.scope.$broadcast('schemaFormValidate');
 
                         if (formCtrl && formCtrl.$invalid) {
@@ -438,6 +451,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.clearErrors();
                                 BundleManager.pushEvent()
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
@@ -446,7 +460,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
+                        PageHelper.clearErrors();
                         PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -454,6 +470,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function (enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

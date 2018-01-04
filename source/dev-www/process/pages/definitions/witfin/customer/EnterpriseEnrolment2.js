@@ -216,6 +216,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     submit: function(model, form, formName){
+                        PageHelper.clearErrors();
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 

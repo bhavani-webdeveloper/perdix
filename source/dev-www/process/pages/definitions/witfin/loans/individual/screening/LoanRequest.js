@@ -295,12 +295,14 @@ define([],function(){
                     },
                     save: function(model, formCtrl, form, $event){
                         /* Loan SAVE */
+                        PageHelper.clearErrors();
                         if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
 
                         }
+                        PageHelper.showLoader();
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {
@@ -320,7 +322,7 @@ define([],function(){
 
                     },
                     sendBack: function(model, formCtrl, form, $event){
-
+                        PageHelper.showLoader();
                         model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -340,12 +342,15 @@ define([],function(){
 
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        PageHelper.clearErrors();
+                        PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.go({
@@ -359,6 +364,7 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
+                        PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {
                                 PageHelper.hideLoader();
