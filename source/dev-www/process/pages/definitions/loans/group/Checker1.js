@@ -54,7 +54,7 @@ define({
             if (customer.street) addr1.push(customer.street);
             if (customer.locality) addr1.push(customer.locality);
             customer.addressHtml1 = addr1.join(',');
-            
+
             if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
             customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
             return customer;
@@ -1662,6 +1662,7 @@ return {
     },
     actions: {
         preSave: function(model, formCtrl, formName) {},
+        submit: function(model, formCtrl, formName) {},
         saveGroup: function(model, formCtrl, form) {
             $log.info("Inside submit()");
             if(!validateForm(formCtrl)) 

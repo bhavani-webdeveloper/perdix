@@ -1051,6 +1051,7 @@ return {
     },
     actions: {
         preSave: function(model, form, formName) {},
+        submit: function(model, formCtrl, formName) {},
         viewCustomer: function(model, formCtrl, form, $event) {
             Utils.confirm("Save the data before proceed").then(function() {
                 $log.info("Inside ViewCustomer()");
