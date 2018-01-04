@@ -81,11 +81,8 @@ define({
                     })
                     if (ref_flag == "false") {
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'Negative';
-                    } 
-                    if (countNull == model.customer.verifications.length){
-                        model.UIUDF.REFERENCE_CHECK_RESPONSE = " Referer Responses not Captured"
                     }
-                    if ( ref_flag == "true"){
+                    if ( ref_flag == "true" && countNull != model.customer.verifications.length){
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = "Positive"
                     }
 

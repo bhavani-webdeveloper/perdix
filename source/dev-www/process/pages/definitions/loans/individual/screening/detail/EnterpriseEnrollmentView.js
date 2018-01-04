@@ -132,10 +132,10 @@ define({
                         }
                     });
 
-                    model.REFERENCE_CHECK_RESPONSE = 'NA';
+                    /*model.REFERENCE_CHECK_RESPONSE = 'NA';
                     var count_neg_response = "true";
                     _.each(model.customer.verifications, function(verification) {
-                        if (verification.customerResponse.toLowerCase() == 'negative') {
+                        if (verification.customerResponse!=undefined && verification.customerResponse.toLowerCase() == 'negative') {
                             return count_neg_response = "false";
                         }
                     })
@@ -144,7 +144,26 @@ define({
                     } else {
                         model.REFERENCE_CHECK_RESPONSE = 'positive';
                     }
+*/
+                    model.REFERENCE_CHECK_RESPONSE = 'NA';
+                    var ref_flag = "true";
+                    var countNull = 0;
+                    _.each(model.customer.verifications, function(verification) {
+                        if (verification.customerResponse == null) {
+                            countNull++;
+                        } else {
+                            if (verification.customerResponse.toLowerCase() == 'negative') {
+                                return ref_flag = "false";
+                            }
+                        }
 
+                    })
+                    if (ref_flag == "false") {
+                        model.REFERENCE_CHECK_RESPONSE = 'Negative';
+                    }
+                    if (ref_flag == "true" && countNull != model.customer.verifications.length) {
+                        model.REFERENCE_CHECK_RESPONSE = "Positive"
+                    }
 
                     model.businessName = model.customer.verifications[0].businessName;
                 });
@@ -182,8 +201,8 @@ define({
                         "colClass": "col-sm-12",
                         "readonly": true,
                         "overrideType": "default-view",
-                        "title": "VIEW_UPLOADS",
-                        "condition": "model.loanAccount.loanDocuments.length != 0",
+                        "title": "VIEW_UPLOADS",/*
+                        "condition": "model.loanAccount.loanDocuments.length != 0",*/
                         "items": [{
                             "type": "section",
                             "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px;"><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
@@ -866,7 +885,7 @@ define({
                                 "title": "Mode of Payment",
                                 "data": "modeOfPayment"
                             }, {
-                                "title": "Customer Response",
+                                "title": "Referer Response",
                                 "data": "customerResponse",
                             }];
                         },
