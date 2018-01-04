@@ -842,6 +842,7 @@
             },
             "insurancePolicyNumber": {
                 "key": "loanAccount.vehicleLoanDetails.insurancePolicyNumber",
+                "required": "true",
                 "title": "INSURANCE_POLICY_NUMBER"
             },
             "insuranceIdv": {
@@ -866,6 +867,7 @@
             },
             "insurancePolicyType": {
                 "key": "loanAccount.vehicleLoanDetails.insurancePolicyType",
+                "required": "true",
                 "title": "INSURANCE_POLICY_TYPE"
             }
         }
