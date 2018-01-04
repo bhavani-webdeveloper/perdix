@@ -566,11 +566,11 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "hypothecatedToKinara",
-                            "title": "No. of machinery hypothecated to Kinara",
+                            "title": "NO_OF_MACHINERY_HYPOTHECATED_TO",
                             "type": "number"
                         }, {
                             "key": "totalHypothecatedValue",
-                            "title": "Value of machinery hypothecated to Kinara",
+                            "title": "VALUE_OF_MACHINERY_HYPOTHECATED_TO",
                             "type": "amount"
                         }]
                     }]
@@ -736,7 +736,7 @@ define({
                                 "title": "In Industrial Area"
                             }, {
                                 "key": "customer.customerAttitudeToKinara",
-                                "title": "Customer Attitude To Kinara"
+                                "title": "CUSTOMER_ATTITUDE_TO_KINARA"
                             }, {
                                 "key": "customer.bookKeepingQuality",
                                 "title": "Book Keeping Quality"

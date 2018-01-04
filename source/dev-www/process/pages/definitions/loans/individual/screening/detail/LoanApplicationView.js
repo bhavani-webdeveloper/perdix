@@ -338,7 +338,7 @@ var navigateToQueue = function(model) {
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Kinara EMI",
+                            "title": "EXPECTED_KINARA_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",
@@ -468,7 +468,7 @@ var navigateToQueue = function(model) {
                             "title": "Machine Permanently Fixed To Building"
                         }, {
                             "key": "asset_details.hypothecatedToBank",
-                            "title": "Wheter Hypothecated To Kinara"
+                            "title": "HYPOTHECATED_TO_KINARA"
                         }, {
                             "key": "asset_details.electricityAvailable",
                             "title": "Electricity Available"
@@ -564,7 +564,7 @@ var navigateToQueue = function(model) {
                         "orientation": "vertical",
                         "items": [{
                             "key": "loanAccount.estimatedEmi",
-                            "title": "Estimated Kinara EMI",
+                            "title": "ESTIMATED_KINARA_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.processingFeePercentage",
