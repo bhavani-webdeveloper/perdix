@@ -74,7 +74,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 maximum: 1,
                 order: 90
             }];
-            if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan') {
+            if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                 definition.push({
                     pageName: 'loans.individual.screening.detail.SummaryView',
                     title: 'SummaryView',
@@ -197,7 +197,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                         }
                                     }
                                 });
-                                if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan') {
+                                if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                     $this.bundlePages.push({
                                         pageClass: 'summaryView',
                                         model: {
