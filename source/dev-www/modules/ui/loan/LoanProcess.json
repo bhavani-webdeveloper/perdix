@@ -597,7 +597,10 @@
                 "required": "true",
                 "title": "VECHICLE_MOVED",
                 "type": "select",
-                "enumCode": "decisionmaker"
+                "type": "checkbox",
+                "schema": {
+                    "type": ["boolean", "null"]
+                }
             },
             "inspectionLatitude": {
                 "key": "loanAccount.vehicleLoanDetails.inspectionLatitude",
@@ -615,8 +618,10 @@
                 "key": "loanAccount.vehicleLoanDetails.engineStarted",
                 "required": "true",
                 "title": "ENGINE_STARTED",
-                "type": "select",
-                "enumCode": "decisionmaker"
+                "type": "checkbox",
+                "schema": {
+                    "type": ["boolean", "null"]
+                }
             }
         }
     },
@@ -629,7 +634,10 @@
                 "key": "loanAccount.vehicleLoanDetails.make",
                 "title": "MAKE",
                 "required": "true",
-                "type": "select"
+                "type": "select",
+                "titleMap": {
+                    "Test": "Test"
+                }
             },
             "variant": {
                 "key": "loanAccount.vehicleLoanDetails.variant",

@@ -128,7 +128,11 @@ define(
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
                         self = this;
+                        PageHelper.showLoader();
                         LoanProcess.get($stateParams.pageId)
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
                         .subscribe(function(data) {
                             model.loanProcess = data;
                             model.loanAccount = data.loanAccount;
@@ -160,7 +164,8 @@ define(
                                 // NGHelper.refreshUI();
                             })
                         }, function(err) {
-                            console.log(err)
+                            console.log(err);
+                            PageHelper.hideLoader();
                         })
 
 
@@ -217,6 +222,9 @@ define(
                     },
                     actions: {
                         save: function(model, formCtrl, form, $event){
+                            if(PageHelper.isFormInvalid(formCtrl)) {
+                                return false;
+                            }
                             PageHelper.showProgress('loan-process', 'Updating Loan');
                             model.loanProcess.save()
                                 .finally(function () {
@@ -232,6 +240,9 @@ define(
                                 });
                         },
                         proceed: function(model, formCtrl, form, $event){
+                            if(PageHelper.isFormInvalid(formCtrl)) {
+                                return false;
+                            }
                             PageHelper.showLoader();
                             PageHelper.showProgress('loan-process', 'Updating Loan');
                             model.loanProcess.proceed()
