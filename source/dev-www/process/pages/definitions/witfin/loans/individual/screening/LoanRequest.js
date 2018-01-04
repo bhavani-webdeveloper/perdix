@@ -146,6 +146,7 @@ define([],function(){
                                         required: true
                                     }, {
                                         key: "loanProcess.stage",
+                                        "required": true,
                                         type: "lov",
                                         autolov: true,
                                         lovonly:true,
@@ -296,6 +297,9 @@ define([],function(){
                     save: function(model, formCtrl, form, $event){
                         /* Loan SAVE */
                         PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
@@ -322,6 +326,9 @@ define([],function(){
 
                     },
                     sendBack: function(model, formCtrl, form, $event){
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         PageHelper.showLoader();
                         model.loanProcess.sendBack()
                             .finally(function () {
@@ -342,6 +349,9 @@ define([],function(){
 
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
@@ -364,6 +374,9 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {

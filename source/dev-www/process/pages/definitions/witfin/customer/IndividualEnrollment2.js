@@ -435,6 +435,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     save: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         formCtrl.scope.$broadcast('schemaFormValidate');
 
                         if (formCtrl && formCtrl.$invalid) {
@@ -461,6 +464,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     submit: function (model, form, formName) {
                         PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.save()
