@@ -89,6 +89,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "Includes": [
                                 "reference"
                             ]
+                        },
+                        "ApplicationReview": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            }
                         }
                     }
                 }
