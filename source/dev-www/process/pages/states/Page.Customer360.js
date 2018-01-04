@@ -9,6 +9,9 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$scope.role = SessionStore.getRole();
 	$scope.customerId = $stateParams.pageId;
 	var siteCode = SessionStore.getGlobalSetting('siteCode');
+	if ($stateParams.pageData) {
+		$scope.pageData=$stateParams.pageData;
+	}
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
@@ -348,6 +351,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
+			menu.stateParams.pageData =$scope.pageData;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
 		};

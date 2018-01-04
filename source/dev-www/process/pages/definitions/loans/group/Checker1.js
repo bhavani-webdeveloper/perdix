@@ -1683,11 +1683,11 @@ return {
             });
         },
         viewCustomer: function(model, formCtrl, form, $event) {
+            //pageName:"customer360.EnrollmentProfile",
             Utils.confirm("Save the data before proceed").then(function() {
                 $log.info("Inside ViewCustomer()");
                 irfNavigator.go({
-                    state: "Page.Engine",
-                    pageName:"customer360.EnrollmentProfile",
+                    state: "Page.Customer360", 
                     pageId: model.group.jlgGroupMembers[form.arrayIndex].customer.id,
                     pageData: {
                         "siteCode":model.siteCode,

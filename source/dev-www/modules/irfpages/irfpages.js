@@ -392,6 +392,7 @@ irf.pages.config([
 		templateUrl: "modules/irfpages/templates/Page.html",
 		controller: "PageCtrl",
 		params: {
+			pageData: null,
 			options: {
 				skipPageAccessCheck: false,
 				skipPageLazyLoad: false
