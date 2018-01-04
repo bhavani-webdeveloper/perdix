@@ -1698,7 +1698,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "valuationPurpose":{
@@ -1707,14 +1707,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "valuationDate":{
                   "title":"valuationDate",
                   "type":"date",              
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "valuationPlace":{
@@ -1723,7 +1723,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "registeredOwnerName":{
@@ -1732,7 +1732,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "proposedOwnerName":{
@@ -1741,7 +1741,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "bankReferenceNumber":{
@@ -1750,14 +1750,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "inspectionDate":{
                   "title":"inspectionDate",
                   "type":"date",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "inspectedBy":{
@@ -1766,14 +1766,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "vehicleMoved":{
                   "title":"vehicleMoved",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "inspectionLatitude":{
@@ -1782,7 +1782,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "inspectionLongitude":{
@@ -1791,7 +1791,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "inspectionAltitude":{
@@ -1800,14 +1800,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "engineStarted":{
                   "title":"engineStarted",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "make":{
@@ -1816,7 +1816,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "variant":{
@@ -1825,7 +1825,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "colour":{
@@ -1834,7 +1834,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "trailer":{
@@ -1843,7 +1843,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "chasisNo":{
@@ -1852,7 +1852,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "engineNo":{
@@ -1861,7 +1861,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "odometerReading":{
@@ -1870,7 +1870,7 @@
                      "minimum":0,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "estimatedReading":{
@@ -1879,7 +1879,7 @@
 				  "minimum":0,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "transmission":{
@@ -1888,7 +1888,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "odometer":{
@@ -1897,7 +1897,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "usedFor":{
@@ -1906,14 +1906,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "reRegistered":{
                   "title":"reRegistered",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "previousRegistrationNumber":{
@@ -1922,7 +1922,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "registrationAsPerRcbook":{
@@ -1931,7 +1931,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "registrationAsPerActual":{
@@ -1940,7 +1940,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "numberPlateCOlour":{
@@ -1949,7 +1949,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "registeredAddress":{
@@ -1958,7 +1958,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "ownerSerialNo":{
@@ -1967,14 +1967,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "registrationDate":{
                   "title":"registrationDate",
                   "type":"date",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "vehicleClass":{
@@ -1983,7 +1983,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "bodyType":{
@@ -1992,7 +1992,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "fuelUsed":{
@@ -2001,7 +2001,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "cubicCapacity":{
@@ -2010,7 +2010,7 @@
 				  "minimum":1,
                      "maximum":999999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "makersClassification":{
@@ -2019,7 +2019,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "seatingCapacity":{
@@ -2028,7 +2028,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "unladenWeight":{
@@ -2037,7 +2037,7 @@
 				  "minimum":1,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "hypothecatedTo":{
@@ -2046,14 +2046,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "fitnesscertifiedUpto":{
                   "title":"date",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "permitStatus":{
@@ -2062,14 +2062,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "permitValidUpto":{
                   "title":"permitValidUpto",
                   "type":"date",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "operationroute":{
@@ -2078,7 +2078,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "taxPaid":{
@@ -2087,7 +2087,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "taxValidUpto":{
@@ -2096,7 +2096,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "insuranceCompany":{
@@ -2105,7 +2105,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "insurancePolicyNumber":{
@@ -2114,7 +2114,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "insuranceIdv":{
@@ -2123,14 +2123,14 @@
 				  "minimum":1,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "insuranceValidTo":{
                   "title":"insuranceValidTo",
                   "type":"date",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "insurancePolicyType":{
@@ -2139,7 +2139,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "modelUnderProduction":{
@@ -2148,14 +2148,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "accident":{
                   "title":"accident",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "accidentRemarks":{
@@ -2164,7 +2164,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "originalInvoiceValue":{
@@ -2173,14 +2173,14 @@
 				  "minimum":1,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "majorRepair":{
                   "title":"majorRepair",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "currentInvoiceValue":{
@@ -2189,14 +2189,14 @@
 				  "minimum":1,
                      "maximum":99999999,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "rcbookStatus":{
                   "title":"rcbookStatus",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "recommendationStatus":{
@@ -2205,7 +2205,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "recommendationRemarks":{
@@ -2214,42 +2214,42 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "recommendationDate":{
                   "title":"recommendationDate",
                   "type":"date",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "powerWindowFont":{
                   "title":"powerWindowFont",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "powerWindowRear":{
                   "title":"powerWindowRear",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "powerSteering":{
                   "title":"powerSteering",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "airbag":{
                   "title":"airbag",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "accessories":{
@@ -2258,14 +2258,14 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "accessoriesStatus":{
                   "title":"accessoriesStatus",
                   "type":"boolean",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "valuationRating":{
@@ -2274,7 +2274,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "futureLife":{
@@ -2283,7 +2283,7 @@
                   "minimum":0,
                   "maximum":1000000,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "currentMarketValue":{
@@ -2292,7 +2292,7 @@
                   "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },
                "distressValue":{
@@ -2301,7 +2301,7 @@
                   "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"                  ]
+                     "Screening", "LoanInitiation", "VehicleValuation"                  ]
                },
 			   "segment":{
                   "title":"segment",
@@ -2309,7 +2309,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"subSegment":{
                   "title":"subSegment",
@@ -2317,7 +2317,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"entityType":{
                   "title":"entityType",
@@ -2325,7 +2325,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedWith":{
                   "title":"attachedWith",
@@ -2333,7 +2333,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedAddress":{
                   "title":"attachedAddress",
@@ -2341,7 +2341,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedContactNumber":{
                   "title":"attachedContactNumber",
@@ -2349,7 +2349,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"locationAddress":{
                   "title":"locationAddress",
@@ -2357,7 +2357,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"locationContactName":{
                   "title":"locationContactName",
@@ -2365,7 +2365,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                },"locationContactNumber":{
                   "title":"locationContactNumber",
@@ -2373,7 +2373,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValidation"
+                     "Screening", "LoanInitiation", "VehicleValuation"
                   ]
                }
             }
@@ -2394,21 +2394,21 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "valuationDate":{
                      "title":"valuationDate",
                      "type":"date",
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "valuation":{
                      "title":"valuation",
                      "type":"number",
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2430,7 +2430,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "componentCondition":{
@@ -2439,7 +2439,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "componentRemarks":{
@@ -2448,7 +2448,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2470,7 +2470,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "accessoryAvailable":{
@@ -2479,7 +2479,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "accessoryStatus":{
@@ -2488,7 +2488,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2511,7 +2511,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "photoFileId":{
@@ -2520,7 +2520,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "photoRemarks":{
@@ -2529,7 +2529,7 @@
                      "minLength":1,
                      "maxLength":1000,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2551,14 +2551,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "incomeAmount":{
                      "title":"incomeAmount",
                     "type":"number",
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2580,14 +2580,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "expenseAmount":{
                      "title":"expenseAmount",
                      "type":"number",
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2609,7 +2609,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "routeTo":{
@@ -2618,7 +2618,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   },
 				  "routeVia":{
@@ -2627,7 +2627,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValidation"
+                        "Screening", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
