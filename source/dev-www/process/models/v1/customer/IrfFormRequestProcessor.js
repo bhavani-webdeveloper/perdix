@@ -5253,13 +5253,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         title: "CUSTOMER_RESPONSE",
                                         required: true,
                                         type: "select",
-                                        titleMap: [{
-                                            value: "positive",
-                                            name: "positive"
-                                        }, {
-                                            value: "Negative",
-                                            name: "Negative"
-                                        }]
+                                        enumCode: "lead_customer_response"
                                     }
                                 }
                             }

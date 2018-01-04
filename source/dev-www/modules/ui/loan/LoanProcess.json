@@ -19,12 +19,14 @@
             "loanPurpose1": {
                 "key": "loanAccount.loanPurpose1",
                 "type": "lov",
+                "resolver": "LoanPurpose1LOVConfiguration",
                 "autolov": true,
                 "orderNo": 30
             },
             "loanPurpose2": {
                 "key": "loanAccount.loanPurpose2",
                 "type": "lov",
+                "resolver": "LoanPurpose2LOVConfiguration",
                 "autolov": true,
                 "title": "LOAN_PURPOSE_2",
                 "orderNo": 40
