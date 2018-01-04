@@ -181,8 +181,10 @@ self.renderForm = function() {
 					"data": "bankStatementPhoto",
 					"className": "text-center",
 					"render": function(data, type, full, meta) {
-						return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer">Download</a>':'';
-					}
+						var url = [];
+						url.push(Model_ELEM_FC.fileStreamUrl + "/" + data);
+                        return data ?'<a href="' + url[0]+ '" style="cursor:pointer">Download</a>': '';
+                                                }
 				}];
 			}
 		};
