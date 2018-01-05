@@ -4610,13 +4610,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "select"
                     },
                     "spouseFirstName": {
-                        key: "customer.spouse_first_name",
+                        key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
                         condition: "model.customer.maritalStatus==='MARRIED'",
                         type: "qrcode"
                     },
                     "spouseDateOfBirth": {
-                        key: "customer.spouse_date_of_birth",
+                        key: "customer.spouseDateOfBirth",
                         title: "SPOUSE_DOB",
                         type: "date",
                         condition: "model.customer.maritalStatus==='MARRIED'"
