@@ -178,6 +178,7 @@ define([],function(){
                             "additions": [
                                 {
                                     "type": "box",
+                                    "orderNo": 40,
                                     "title": "POST_REVIEW",
                                     "condition": "model.loanAccount.id",
                                     "items": [{

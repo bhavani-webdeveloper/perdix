@@ -11,11 +11,11 @@ define(
             pageType: "Engine",
             dependencies: ["$log", "$q", "LoanAccount", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
                 'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-                "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository"],
+                "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "irfNavigator"],
 
             $pageFn: function ($log, $q, LoanAccount, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
                                irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-                               BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository) {
+                               BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, irfNavigator) {
                 var self;
                 var getIncludes = function (model) {
 
@@ -231,7 +231,7 @@ define(
                                     PageHelper.hideLoader();
                                 })
                                 .subscribe(function (value) {
-                                    Utils.removeNulls(value, true);
+                                    // Utils.removeNulls(value, true);
                                     PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                                 }, function (err) {
                                     PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
@@ -250,7 +250,7 @@ define(
                                     PageHelper.hideLoader();
                                 })
                                 .subscribe(function (value) {
-                                    Utils.removeNulls(value, true);
+                                    // Utils.removeNulls(value, true);
                                     PageHelper.showProgress('loan-process', 'Done.', 5000);
                                     irfNavigator.go({
                                         state: "Page.Engine",

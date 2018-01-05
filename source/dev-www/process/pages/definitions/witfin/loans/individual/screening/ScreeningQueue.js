@@ -176,7 +176,7 @@ define({
                     getColumns: function() {
                         return [{
                             title: 'ID',
-                            data: 'id'
+                            data: 'loanId'
                         }, {
                             title: 'SCREENING_DATE',
                             data: 'screeningDate'

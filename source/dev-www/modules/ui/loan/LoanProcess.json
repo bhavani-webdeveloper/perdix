@@ -127,6 +127,7 @@
     },
     "DeductionsFromLoan": {
         "type": "box",
+        "orderNo": 20,
         "title": "DEDUCTIONS_FROM_LOANAMOUNT",
         "items": {
             "expectedProcessingFeePercentage": {
@@ -148,6 +149,7 @@
     },
     "LoanDocuments": {
         "type": "box",
+        "orderNo": 30,
         "title": "LOAN_DOCUMENTS",
         "items": {
             "loanDocuments": {
