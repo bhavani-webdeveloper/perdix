@@ -569,6 +569,7 @@
             },
             "entityId": {
                 "key": "customer.id",
+                "type": "number",
                 "title": "ENTITY_ID",
                 "orderNo": 30
             },
