@@ -59,6 +59,7 @@ export class DefaultVehicleAccessoriesPolicy extends IPolicy<LoanProcess> {
 
 
                 }
+                return Observable.of(loanProcess);
 
 
             }
