@@ -90,16 +90,155 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
             var configFile = function() {
                 return {
-                        "currentStage": {
+                        "loanProcess.loanAccount.currentStage": {
                             "Screening": {
                                 "excludes": [
                                     "bankAccounts"
-                                ]
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": "true"
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": "true"
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": "true"
+                                    }
+                                }
                             },
                             "ScreeningReview": {
                                 "excludes": [
                                     "bankAccounts"
-                                ]
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "Application": {
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "ApplicationReview": {
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "BranchCreditAppraisal": {
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "HOCreditAppraisal": {
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "ManagementCommittee": {
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                }
+                            },
+                            "REJECTED": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "BusinessLiabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    }
+                                },
+                                "excludes": [
+                                    "bankAccounts"
+                                ],
                             }
 
                         }

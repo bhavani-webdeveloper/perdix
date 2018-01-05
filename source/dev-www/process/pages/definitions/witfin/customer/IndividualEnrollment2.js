@@ -77,6 +77,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -86,6 +87,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         },
                         "Application": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ],
                             "Includes": [
                                 "reference"
                             ]
@@ -113,7 +146,152 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "trackDetails": {
                                     "readonly": true
                                 }
-                            }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ]
+                        },
+                        "BranchCreditAppraisal": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ]
+                        },
+                        "HOCreditAppraisal": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ]
+                        },
+                        "ManagementCommittee": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ]
+                        },
+                        "REJECTED": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "personalInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "householdeDetails": {
+                                    "readonly": true
+                                },
+                                "householdLiablities": {
+                                    "readonly": true
+                                },
+                                "householdVerification": {
+                                    "readonly": true
+                                },
+                                "trackDetails": {
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "householdeDetails.familyMembers.relationShip",
+                                "KYC.addressProof1",
+                                "householdeDetails.familyMembers.familyMemberFirstName",
+                                "householdeDetails.familyMembers.anualEducationFee",
+                                "householdeDetails.familyMembers.salary",
+                                "householdeDetails.familyMembers.incomes",
+                                "householdeDetails.expenditures"
+                            ]
                         }
                     }
                 }

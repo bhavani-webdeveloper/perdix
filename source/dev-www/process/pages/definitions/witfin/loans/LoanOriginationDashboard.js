@@ -13,18 +13,19 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.lead.IncompleteLeadQueue",
                 "Page/Engine/witfin.lead.LeadFollowUpQueue",
                 "Page/Engine/witfin.lead.ReadyForScreeningQueue",
-                "Page/Engine/witfin.lead.LeadRejectedQueue",
                 "Page/Engine/witfin.lead.LeadBulkUpload",
                 "Page/Engine/witfin.lead.LeadAssignmentPendingQueue",
                 // "Page/Bundle/witfin.loans.individual.screening.ScreeningInput",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
+                "Page/Engine/witfin.lead.LeadRejectedQueue",
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
                 "Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue",
                 "Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue",
-                "Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"
+                "Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue",
+                "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
             ]
         };
 
@@ -329,6 +330,25 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     mcqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     mcqMenu.data = '-';
+                });
+            }
+
+
+            var drqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
+            if (drqMenu) {
+                IndividualLoan.search({
+                    'stage': 'Rejected',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    drqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    drqMenu.data = '-';
                 });
             }
 

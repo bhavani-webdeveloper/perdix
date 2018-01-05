@@ -41,16 +41,107 @@ define([],function(){
 
             var configFile = function() {
                 return {
-                    "currentStage": {
+                    "loanProcess.loanAccount.currentStage": {
+                        "Screening": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
                         "ScreeningReview": {
                             "overrides": {
-                                "LoanRecomendation": {
+                                "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "IRR": {
+                                "DeductionsFromLoan": {
                                     "readonly": true
                                 },
-                                "postReview": {
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "Application": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "ApplicationReview": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "BranchCreditAppraisal": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "HOCreditAppraisal": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "ManagementCommittee": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "REJECTED": {
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
                                     "readonly": true
                                 }
                             }
