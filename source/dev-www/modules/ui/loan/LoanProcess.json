@@ -705,8 +705,10 @@
             "reRegistered": {
                 "key": "loanAccount.vehicleLoanDetails.reRegistered",
                 "title": "RE_REGISTERED",
-                "type": "select",
-                "enumCode": "decisionmaker"
+                "type": "checkbox",
+                "schema": {
+                    "type": ["boolean", "null"]
+                }
             },
             "previousRegistrationNumber": {
                 "key": "loanAccount.vehicleLoanDetails.previousRegistrationNumber",
