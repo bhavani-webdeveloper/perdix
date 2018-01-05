@@ -752,6 +752,7 @@
             "registrationDate": {
                 "key": "loanAccount.vehicleLoanDetails.registrationDate",
                 "title": "REGISTRATION_DATE",
+                "required": "true",
                 "type": "date"
             },
             "vehicleClass": {
@@ -812,6 +813,7 @@
             "permitStatus": {
                 "key": "loanAccount.vehicleLoanDetails.permitStatus",
                 "title": "PERMIT_STATUS",
+                "required": "true",
                 "type": "select"
             },
             "permitValidUpto": {
@@ -843,6 +845,7 @@
             "insuranceCompany": {
                 "key": "loanAccount.vehicleLoanDetails.insuranceCompany",
                 "title": "INSURANCE_COMPANY",
+                "required": "true",
                 "type": "select"
             },
             "insurancePolicyNumber": {
@@ -884,6 +887,7 @@
         "items": {
             "modelUnderProduction": {
                 "key": "loanAccount.vehicleLoanDetails.modelUnderProduction",
+                "required": "true",
                 "title": "MODEL_UNDER_PRODUCTION"
             },
             "accident": {
@@ -932,10 +936,12 @@
         "items": {
             "vehiclePastValuations": {
                 "key": "loanAccount.vehicleLoanDetails.vehiclePastValuations",
+                "title": "PAST_VALUATIONS",
                 "type": "array",
                 "items": {
                     "financier": {
                         "key": "loanAccount.vehicleLoanDetails.vehiclePastValuations[].financier",
+                        "required": "true",
                         "title": "FINANCIER"
                     },
                     "valuationDate": {
@@ -959,9 +965,11 @@
             "vehicleAssetConditions": {
                 "type": "array",
                 "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions",
+                "title": "CONDITION_OF_ASSETS",
                 "items": {
                     "componentType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentType",
+                        "required": "true",
                         "title": "COMPONENT_TYPE",
                         "type": "select",
                         "enumCode": "vehicle_components"
@@ -988,9 +996,11 @@
             "vehicleAccessories": {
                 "type": "array",
                 "key": "loanAccount.vehicleLoanDetails.vehicleAccessories",
+                "title": "VEHICLE_ACCESSORIES",
                 "items": {
                     "accessoryType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAccessories[].accessoryType",
+                        "required": "true",
                         "title": "ACCESSORY_TYPE",
                         "type": "select"
                     },
@@ -1011,6 +1021,7 @@
         "items": {
             "valuationRating": {
                 "key": "loanAccount.vehicleLoanDetails.valuationRating",
+                "required": "true",
                 "type": "select",
                 "enumCode": "vehicle_condition",
                 "title": "VALUATION_RATING"
@@ -1042,15 +1053,23 @@
         "items": {
             "vehiclePhotoCaptures": {
                 "type": "array",
+                "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures",
+                "title": "VEHICLE_PHOTO_CAPTURES",
+                "view":"fixed",
                 "items": {
                     "photoFileId": {
                         "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures[].photoFileId",
+                        "required": "true",
                         "title": "PHOTO_FILE",
                         "type": "file",
-                        "fileType": "application/pdf",
-                        "category": "Loan",
-                        "subCategory": "DOC1",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
                         "using": "scanner"
+                    },
+                    "photoRemarks": {
+                        "key":"loanAccount.vehicleLoanDetails.vehiclePhotoCaptures[].photoRemarks",
+                        "title": "PHOTO_REMARKS"
                     }
                 }
             }
