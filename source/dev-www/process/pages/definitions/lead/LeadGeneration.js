@@ -593,12 +593,22 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                             },
                         }, {
                             key: "lead.customerTypeString",
+                            condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                             type: "select",
                             titleMap: {
                                 "Individual": "Individual",
                                 "Enterprise": "Individual and Enterprise"
                             },
                             readonly: true
+
+                        }, {
+                            key: "lead.customerTypeString",
+                            type: "select",
+                            condition: "model.siteCode == 'IREPDhan'",
+                            titleMap: {
+                                "Individual": "Individual",
+                                "Enterprise": "Individual and Enterprise"
+                            },
 
                         }, {
                             type: "fieldset",
