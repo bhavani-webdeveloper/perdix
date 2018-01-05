@@ -709,7 +709,7 @@
                 "title": "RE_REGISTERED",
                 "type": "checkbox",
                 "schema": {
-                    "type": ["boolean", "null"]
+                    "default": false
                 }
             },
             "previousRegistrationNumber": {
@@ -890,7 +890,11 @@
             "modelUnderProduction": {
                 "key": "loanAccount.vehicleLoanDetails.modelUnderProduction",
                 "required": "true",
-                "title": "MODEL_UNDER_PRODUCTION"
+                "title": "MODEL_UNDER_PRODUCTION",
+                "type": "checkbox",
+                "schema": {
+                    "default": false
+                }
             },
             "accident": {
                 "key": "loanAccount.vehicleLoanDetails.accident",
@@ -914,8 +918,10 @@
             "majorRepair": {
                 "key": "loanAccount.vehicleLoanDetails.majorRepair",
                 "title": "MAJOR_REPAIR",
-                "type": "radios",
-                "enumCode": "decisionmaker"
+                "type": "checkbox",
+                "schema": {
+                    "default": false
+                }
             },
             "currentInvoiceValue": {
                 "key": "loanAccount.vehicleLoanDetails.currentInvoiceValue",
@@ -926,8 +932,10 @@
             "rcbookStatus": {
                 "key": "loanAccount.vehicleLoanDetails.rcbookStatus",
                 "title": "RC_BOOK_STATUS",
-                "type": "radios",
-                "enumCode": "decisionmaker"
+                "type": "checkbox",
+                "schema": {
+                    "default": false
+                }
             }
         }
     },
