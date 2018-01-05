@@ -889,8 +889,7 @@
             "accident": {
                 "key": "loanAccount.vehicleLoanDetails.accident",
                 "title": "ACCIDENT",
-                "type": "radios",
-                "enumCode": "decisionmaker"
+                "type": "checkbox"
             },
             "accidentRemarks": {
                 "key": "loanAccount.vehicleLoanDetails.accidentRemarks",
@@ -929,6 +928,7 @@
         "orderNo": 90,
         "items": {
             "vehiclePastValuations": {
+                "key": "loanAccount.vehicleLoanDetails.vehiclePastValuations",
                 "type": "array",
                 "items": {
                     "financier": {
@@ -955,6 +955,7 @@
         "items": {
             "vehicleAssetConditions": {
                 "type": "array",
+                "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions",
                 "items": {
                     "componentType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentType",
@@ -983,6 +984,7 @@
         "items": {
             "vehicleAccessories": {
                 "type": "array",
+                "key": "loanAccount.vehicleLoanDetails.vehicleAccessories",
                 "items": {
                     "accessoryType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAccessories[].accessoryType",
