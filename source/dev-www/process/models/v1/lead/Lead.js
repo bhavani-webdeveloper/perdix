@@ -57,7 +57,10 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 							"leadProfile": {
 								"readonly": true
 							}
-						}
+						},
+                        "excludes": [
+                            "previousInteractions"
+                        ]
 					},
 					"BulkUpload": {
 						"excludes": [
