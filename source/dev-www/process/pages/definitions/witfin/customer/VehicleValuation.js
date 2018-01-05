@@ -253,10 +253,7 @@ define(
                                 .subscribe(function (value) {
                                     // Utils.removeNulls(value, true);
                                     PageHelper.showProgress('loan-process', 'Done.', 5000);
-                                    irfNavigator.go({
-                                        state: "Page.Engine",
-                                        pageName: "witfin.lead.ReadyForScreeningQueue"
-                                    });
+                                    irfNavigator.goBack();
                                 }, function (err) {
                                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                     PageHelper.showErrors(err);

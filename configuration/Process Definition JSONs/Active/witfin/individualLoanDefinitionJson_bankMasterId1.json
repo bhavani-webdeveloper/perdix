@@ -1686,10 +1686,6 @@
             "maxItems":null,
             "items":null,
             "required":[
-				"modelUnderProduction",
-				"insurancePolicyType",
-				"insurancePolicyNumber",
-				"variant"
             ],
             "properties":{
                "registrationNumber":{
