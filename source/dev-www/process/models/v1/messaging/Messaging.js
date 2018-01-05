@@ -115,7 +115,7 @@ irf.models.directive("irfMessaging", [function() {
             readonly: "="
         },
         controller: ["$scope", "$log", "Messaging","PageHelper", "SessionStore", function($scope, $log, Messaging, PageHelper, SessionStore) {
-            var created_by = SessionStore.getUsername();
+            var created_by = SessionStore.getUsername()+" ("+SessionStore.getLoginname()+")";
 
             $scope.highlightUsernames = function(msg_text) {
                 return msg_text.replace(/\@\[(.*)\]/g, ' <strong>$1</strong> ');
