@@ -123,22 +123,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 }
                             },
-                            "Application": {
-                                "overrides": {
-                                    "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
-                                    },
-                                    "BusinessLiabilities": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    }
-                                }
-                            },
                             "ApplicationReview": {
                                 "overrides": {
                                     "EnterpriseInformation": {
