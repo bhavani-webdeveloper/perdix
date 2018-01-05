@@ -1,4 +1,4 @@
-condition:"model.customer.maritalStatus==='MARRIED'",irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                                                    PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe){
 
@@ -940,8 +940,8 @@ condition:"model.customer.maritalStatus==='MARRIED'",irf.pageCollection.factory(
                     {
                         key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
-                        condition:"model.customer.maritalStatus==='MARRIED'",
                         required: true,
+                        condition:"model.customer.maritalStatus==='MARRIED'",
                         type:"qrcode",
                         onCapture: function(result, model, form) {
                             $log.info(result); // spouse id proof
@@ -2203,15 +2203,15 @@ condition:"model.customer.maritalStatus==='MARRIED'",irf.pageCollection.factory(
                                 title: "OUTSTANDING_BALANCE",
                                 condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                             },
-                            {
-                                key:"customer.customerBankAccounts[].bankStatementDocId",
-                                type:"file",
-                                title:"BANK_STATEMENT_UPLOAD",
-                                fileType:"application/pdf",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            },
+                            // {
+                            //     key:"customer.customerBankAccounts[].bankStatementDocId",
+                            //     type:"file",
+                            //     title:"BANK_STATEMENT_UPLOAD",
+                            //     fileType:"application/pdf",
+                            //     "category": "CustomerEnrollment",
+                            //     "subCategory": "IDENTITYPROOF",
+                            //     using: "scanner"
+                            // },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",

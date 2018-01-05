@@ -1419,15 +1419,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].limit",
                                 type: "amount"
                             },
-                            {
-                                key:"customer.customerBankAccounts[].bankStatementDocId",
-                                type:"file",
-                                title:"BANK_STATEMENT_UPLOAD",
-                                fileType:"application/pdf",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            },
+                            // {
+                            //     key:"customer.customerBankAccounts[].bankStatementDocId",
+                            //     type:"file",
+                            //     title:"BANK_STATEMENT_UPLOAD",
+                            //     fileType:"application/pdf",
+                            //     "category": "CustomerEnrollment",
+                            //     "subCategory": "IDENTITYPROOF",
+                            //     using: "scanner"
+                            // },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
