@@ -813,6 +813,7 @@
             "permitStatus": {
                 "key": "loanAccount.vehicleLoanDetails.permitStatus",
                 "title": "PERMIT_STATUS",
+                "enumCode": "vehicle_permit_status",
                 "required": "true",
                 "type": "select"
             },
@@ -845,6 +846,7 @@
             "insuranceCompany": {
                 "key": "loanAccount.vehicleLoanDetails.insuranceCompany",
                 "title": "INSURANCE_COMPANY",
+                "enumCode": "vehicle_insurance_company",
                 "required": "true",
                 "type": "select"
             },
@@ -972,7 +974,7 @@
                         "required": "true",
                         "title": "COMPONENT_TYPE",
                         "type": "select",
-                        "enumCode": "vehicle_components"
+                        "enumCode": "vehicle_component_type"
                     },
                     "componentCondition": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentCondition",
@@ -1002,6 +1004,7 @@
                         "key": "loanAccount.vehicleLoanDetails.vehicleAccessories[].accessoryType",
                         "required": "true",
                         "title": "ACCESSORY_TYPE",
+                        "enumCode": "vehicle_accessory_type",
                         "type": "select"
                     },
                     "accessoryStatus": {
@@ -1023,7 +1026,7 @@
                 "key": "loanAccount.vehicleLoanDetails.valuationRating",
                 "required": "true",
                 "type": "select",
-                "enumCode": "vehicle_condition",
+                "enumCode": "status_scale",
                 "title": "VALUATION_RATING"
             },
             "futureLife": {
