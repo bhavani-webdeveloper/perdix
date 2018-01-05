@@ -42,19 +42,6 @@ define([],function(){
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-                        "Screening": {
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                }
-                            }
-                        },
                         "ScreeningReview": {
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -69,17 +56,7 @@ define([],function(){
                             }
                         },
                         "Application": {
-                            "overrides": {
-                                "PreliminaryInformation": {
-                                    "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
-                                "LoanDocuments": {
-                                    "readonly": true
-                                }
-                            }
+
                         },
                         "ApplicationReview": {
                             "overrides": {
