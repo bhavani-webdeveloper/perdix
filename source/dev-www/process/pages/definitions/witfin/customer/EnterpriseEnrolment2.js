@@ -92,9 +92,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 return {
                         "loanProcess.loanAccount.currentStage": {
                             "Screening": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": "true"
@@ -108,9 +105,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             },
                             "ScreeningReview": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -123,13 +117,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseAssets": {
                                         "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
                                     }
                                 }
                             },
                             "Application": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -146,9 +140,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             },
                             "ApplicationReview": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -160,14 +151,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
                                         "readonly": true
                                     }
                                 }
                             },
                             "BranchCreditAppraisal": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -179,14 +170,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
                                         "readonly": true
                                     }
                                 }
                             },
                             "HOCreditAppraisal": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -198,14 +189,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
                                         "readonly": true
                                     }
                                 }
                             },
                             "ManagementCommittee": {
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -217,6 +208,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
                                         "readonly": true
                                     }
                                 }
@@ -234,11 +228,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseAssets": {
                                         "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
                                     }
-                                },
-                                "excludes": [
-                                    "bankAccounts"
-                                ],
+                                }
                             }
 
                         }
