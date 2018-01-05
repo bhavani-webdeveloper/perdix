@@ -889,7 +889,10 @@
             "accident": {
                 "key": "loanAccount.vehicleLoanDetails.accident",
                 "title": "ACCIDENT",
-                "type": "checkbox"
+                "type": "checkbox",
+                "schema": {
+                    "default": false
+                }
             },
             "accidentRemarks": {
                 "key": "loanAccount.vehicleLoanDetails.accidentRemarks",
