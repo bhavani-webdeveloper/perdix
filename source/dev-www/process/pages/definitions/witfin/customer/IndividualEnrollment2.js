@@ -77,7 +77,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -112,7 +111,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -149,7 +147,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -183,7 +180,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -217,7 +213,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -251,7 +246,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -285,7 +279,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "householdeDetails.familyMembers.relationShip",
-                                "KYC.addressProof1",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
@@ -337,7 +330,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.IdentityProof1.identityProofNo3",
                     // "KYC.IdentityProof1.idProofIssueDate",
                     // "KYC.IdentityProof1.idProofValidUptoDate",
-                    "KYC.IdentityProof1.addressProofSameAsIdProof",
                     "KYC.addressProof1",
                     "KYC.addressProof1.addressProof",
                     "KYC.addressProof1.addressProofImageId",

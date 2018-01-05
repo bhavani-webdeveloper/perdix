@@ -532,7 +532,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "fieldset",
                         orderNo: 30,
                         title: "ADDRESS_PROOF",
-                        condition: "!model.customer.addressProofSameAsIdProof",
                         items: {
                             "addressProof": {
                                 key: "customer.addressProof",
