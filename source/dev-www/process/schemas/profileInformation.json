@@ -459,7 +459,7 @@
                                 "title": "VALUE_OF_THE_ASSET"
                             },
                             "vehicleMakeModel": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "VEHICLE_MAKE_MODEL"
                             },
                             "endUse": {
@@ -483,19 +483,19 @@
                                 "title": "CATEGORY"
                             },
                             "manufactureDate": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "YEAR_AND_MONTH_OF_MANUFACTURE"
                             },
                             "details": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "DESCRIPTION"
                             },
                             "subDetails": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "SUB_DESCRIPTION"
                             },
                             "assetregistrationNumber": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "REGISTRATION_NUMBER"
                             }
                         }
@@ -1195,6 +1195,10 @@
                     "items": {
                         "type": "object",
                         "properties": {
+                            "assetType": {
+                                "type": ["string", "null"],
+                                "title": "ASSET_TYPE"
+                            },
                             "address": {
                                 "type": ["string","null"],
                                 "title": "Address"
