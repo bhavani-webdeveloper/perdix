@@ -195,7 +195,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         }
 
         var partnerChange=function (value,model){
-            if (value != 'Kinara')
+            if (value != model.mainPartner)
             {
                 try
                 {
@@ -228,6 +228,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     PageHelper.showLoader();
                     Queries.getGlobalSettings("mainPartner").then(function(value) {
                         model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
+                        model.mainPartner = value;
                         $log.info("mainPartner:" + model.loanAccount.partnerCode);
                     }, function(err) {
                         $log.info("mainPartner is not available");
@@ -2690,7 +2691,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if(model.loanAccount.portfolioInsuranceUrn){
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";
                     }
-                    if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara' && model.loanAccount.productCode == null){
+                    if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == model.mainPartner && model.loanAccount.productCode == null){
                         PageHelper.showProgress("loan-create","Product Code is mandatory",5000);
                         return false;
                     }
@@ -2744,7 +2745,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                                 resp.loanProcessAction="PROCEED";
-                                if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == 'Kinara')
+                                if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == model.mainPartner)
                                     resp.stage = 'LoanBooking';
 
                                 if(resp.loanAccount.currentStage == 'PendingForPartner' && resp.loanAccount.partnerCode !== 'DO Partner1-IC')
@@ -2781,7 +2782,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }else{
                             reqData.loanProcessAction="PROCEED";
                             reqData.remarks = model.review.remarks;
-                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
+                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == model.mainPartner)
                                 reqData.stage = 'LoanBooking';
 
                             if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.partnerCode !=='DO Partner1-IC')
