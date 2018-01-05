@@ -10,6 +10,9 @@ import {DefaultRelatedCustomersPolicy} from "./DefaultRelatedCustomersPolicy";
 import {LoadStageRelatedPolicy} from './LoadStageRelatedPolicy';
 import {MandatoryFieldsPolicy} from './MandatoryFieldsPolicy';
 import {OriginationToBookingPolicy} from './OriginationToBookingPolicy';
+import {DefaultVehicleComponentsPolicy} from './DefaultVehicleComponentsPolicy';
+import {DefaultVehicleAccessoriesPolicy} from './DefaultVehicleAccessoriesPolicy';
+
 export class LoanPolicyFactory implements IPolicyFactory{
 
     private static _instance:LoanPolicyFactory = null;
@@ -47,6 +50,11 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new MandatoryFieldsPolicy();
             case 'OriginationToBookingPolicy':
                 return new OriginationToBookingPolicy();
+            case 'DefaultVehicleComponentsPolicy':
+                return new DefaultVehicleComponentsPolicy();
+            case 'DefaultVehicleAccessoriesPolicy':
+                return new DefaultVehicleAccessoriesPolicy();
+
             default:
                 return null;
         }
