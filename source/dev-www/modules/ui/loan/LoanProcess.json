@@ -974,13 +974,13 @@
                         "required": "true",
                         "title": "COMPONENT_TYPE",
                         "type": "select",
-                        "enumCode": "vehicle_component_type"
+                        "enumCode": "vehicle_components"
                     },
                     "componentCondition": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentCondition",
                         "title": "COMPONENT_CONDITION",
                         "type": "select",
-                        "enumCode": "vehicle_condition"
+                        "enumCode": "status_scale"
                     },
                     "componentRemarks": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentRemarks",
