@@ -86,37 +86,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         },
                         "Application": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": true
-                                },
-                                "personalInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation": {
-                                    "readonly": true
-                                },
-                                "householdeDetails": {
-                                    "readonly": true
-                                },
-                                "householdLiablities": {
-                                    "readonly": true
-                                },
-                                "householdVerification": {
-                                    "readonly": true
-                                },
-                                "trackDetails": {
-                                    "readonly": true
-                                }
-                            },
-                            "excludes": [
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
-                            ],
                             "Includes": [
                                 "reference"
                             ]
