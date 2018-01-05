@@ -713,12 +713,14 @@
                         "key": "customer.enterpriseRegistrations[].registrationType",
                         "title": "REGISTRATION_TYPE",
                         "type": "select",
+                        "required": true,
                         "enumCode": "business_registration_type",
                         "orderNo": 220
                     },
                     "registrationNumber": {
                         "key": "customer.enterpriseRegistrations[].registrationNumber",
                         "title": "REGISTRATION_NUMBER",
+                        "required": true,
                         "orderNo": 230
                     },
                     "registeredDate": {
