@@ -1,12 +1,12 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#", 
+    "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
         "customer":{
             "type":"object",
             "properties":{
                 "customerId":{
-                    "type":["integer","null"] 
+                    "type":["integer","null"]
                 },
                 "firstName":{
                     "type":["string", "null"]
@@ -29,7 +29,7 @@
                 }
             }
         },
-        
+
         "additional":{
             "type":"object",
             "properties":{
@@ -382,7 +382,7 @@
                     "type":"object",
                     "properties": {
                         "odometerReading": {
-                            "type":"number"
+                            "type":"string"
                         }
                     }
                 },

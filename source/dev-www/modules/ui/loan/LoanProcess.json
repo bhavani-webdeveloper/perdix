@@ -667,7 +667,8 @@
                 "key": "loanAccount.vehicleLoanDetails.odometerReading",
                 "title": "ODOMETER_READING",
                 "inputmode": "number",
-                "numberType": "number"
+                "numberType": "number",
+                "type":"number"
             },
             "estimatedReading": {
                 "key": "loanAccount.vehicleLoanDetails.estimatedReading",
