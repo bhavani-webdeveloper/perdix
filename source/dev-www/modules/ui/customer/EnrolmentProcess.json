@@ -100,6 +100,7 @@
                         "key": "customer.customerBankAccounts[].accountNumber",
                         "inputmode": "number",
                         "numberType": "tel",
+                        "required": true,
                         "orderNo": 50
                     },
                     "accountType": {
@@ -148,6 +149,7 @@
                                 "type": "date",
                                 "title": "START_MONTH",
                                 "dateDisplayFormat": "MMM, YYYY",
+                                "required": true,
                                 "orderNo": 110
                             },
                             "totalDeposits": {
