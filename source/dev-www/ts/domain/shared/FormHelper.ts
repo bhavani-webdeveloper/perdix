@@ -7,7 +7,10 @@ function getInjector(serviceName: string) {
 
 export interface IFormHelper {
     getBranchId(): any;
-    
+    getVehicleComponents(): any;
+    getAccessorries(): any;
+    getStages(): any;
+
 }
 
 export abstract class NeedsAngularInjector {
@@ -37,5 +40,17 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
         return this.getInjector().enum('branch_id').data;
     }
 
-    
+    getVehicleComponents() : any {
+        return this.getInjector().enum('vehicle_components').data;
+    }
+
+    getAccessorries(): any {
+        return this.getInjector().enum('vehicle_accessories').data;
+    }
+
+    getStages(): any {
+        return this.getInjector().enum('targetstage').data;
+    }
+
+
 }
