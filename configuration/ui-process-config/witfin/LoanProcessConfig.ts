@@ -19,7 +19,15 @@ let config = {
                 "defaults": [
                     {
                         "name": "LoadRelatedCustomersPolicy",
-                        "arguments": null
+                        "arguments": {}
+                    },
+                    {
+                        "name": "DefaultVehicleComponentsPolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name":"DefaultVehicleAccessoriesPolicy",
+                        "arguments": {}
                     }
                 ]
             },
