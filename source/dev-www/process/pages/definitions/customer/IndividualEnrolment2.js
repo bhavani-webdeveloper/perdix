@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+condition:"model.customer.maritalStatus==='MARRIED'",irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                                                    PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe){
 
@@ -941,6 +941,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
                         condition:"model.customer.maritalStatus==='MARRIED'",
+                        required: true,
                         type:"qrcode",
                         onCapture: function(result, model, form) {
                             $log.info(result); // spouse id proof
@@ -958,6 +959,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     {
                         key:"customer.spouseDateOfBirth",
                         type:"date",
+                        required: true,
                         condition:"model.customer.maritalStatus==='MARRIED'",
                         "onChange": function(modelValue, form, model) {
                             if (model.customer.spouseDateOfBirth) {

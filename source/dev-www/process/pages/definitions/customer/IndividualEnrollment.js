@@ -122,6 +122,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.spouseFirstName",
                     title: "SPOUSE_FULL_NAME",
+                    required: true,
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     type:"qrcode",
                     onCapture: function(result, model, form) {
@@ -140,6 +141,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseDateOfBirth",
                     type:"date",
+                    required: true,
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseDateOfBirth) {
@@ -150,6 +152,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseAge",
                     title: "SPOUSE_AGE",
+                    required: true,
                     type:"number",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
