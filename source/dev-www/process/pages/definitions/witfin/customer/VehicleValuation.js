@@ -117,6 +117,7 @@ define(
                         "VehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
+                        "VehiclePhotoCaptures.vehiclePhotoCaptures.photoRemarks",
                         "actionbox",
                         "actionbox.save"
                     ];
