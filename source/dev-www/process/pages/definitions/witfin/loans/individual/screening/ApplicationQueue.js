@@ -173,6 +173,9 @@ define({
 					},
 					getColumns: function() {
 						return [{
+                            title: 'ID',
+                            data: 'loanId'
+                        },{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
