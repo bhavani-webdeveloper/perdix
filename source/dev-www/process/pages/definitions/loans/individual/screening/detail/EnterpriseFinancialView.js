@@ -773,9 +773,9 @@ self.renderReady = function(eventName) {
 								}, {
 									"title": "Total Expenses",
 									"amount": "",
-									"total": bpl['EBITDA'],
-									"percentage": bpl['EBITDA pct'],
-									"description": "",
+									"total": parseInt(bpl['Purchases'])+parseInt(bpl['Opex']),
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),									
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -965,9 +965,9 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Total Expenses",
 									"amount": "",
-									"total": bpl['EBITDA'],
-									"percentage": bpl['EBITDA pct'],
-									"description": "",
+									"total": bpl['Purchases']+bpl['Opex'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
