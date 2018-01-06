@@ -137,23 +137,23 @@ self.renderForm = function() {
 					}
 				}, {
 					"title": "Total Balance",
-					"data": "totalWithdrawals",
+					"data": "balanceAsOn15th",
 					"className": "text-right",
 					"render": function(data, type, full, meta) {
                        
                        if(full.startMonth == "Average"){
-                       	var avgBal1=full.averageDeposits - full.averageWithdrawals;
-                       	if(avgBal1<0)
-                       	return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(avgBal1), null, null, "decimal") ;
-					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(avgBal1, null, null, "decimal") ;
+                       	/*var avgBal1=full.averageDeposits - full.averageWithdrawals;*/
+                       	if(full.Avgbalnceon15<0)
+                       	return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.Avgbalnceon15), null, null, "decimal") ;
+					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(full.Avgbalnceon15, null, null, "decimal") ;
 					
                        }
 
 
-						var avgBal=full.totalDeposits - data;
-						if(avgBal<0)
-						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(avgBal), null, null, "decimal") ;
-					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(avgBal, null, null, "decimal") ;
+						/*var avgBal=full.totalDeposits - data;*/
+						if(data<0)
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+					return irfElementsConfig.currency.iconHtml+ ''+ irfCurrencyFilter(data, null, null, "decimal") ;
 					
 					}
 				}, {
@@ -771,11 +771,22 @@ self.renderReady = function(eventName) {
 										}
 									}
 								}, {
-									"title": "EBITDA",
+									"title": "Total Expenses",
 									"amount": "",
 									"total": bpl['EBITDA'],
 									"percentage": bpl['EBITDA pct'],
 									"description": "",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Gross Income",
+									"amount": "",
+									"total": bpl['Gross Income'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
+									"description": "of turnover",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -792,17 +803,6 @@ self.renderReady = function(eventName) {
 											"className": "text-bold"
 										}
 									}
-								}, {
-									"title": "Gross Income",
-									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
 								},{
 									"title": "Net Income",
 									"amount": "",
@@ -814,6 +814,63 @@ self.renderReady = function(eventName) {
 										    "className": "text-bold"
 										}
 									}
+								},{
+									"title": "Household Net Income",
+									"amount": "",
+									"total": bpl['household_income'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['household_income'])),
+									"description": "of turnover",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Revised Net Income",
+									"amount": "",
+									"total":  bpl['RevisedNetIncome'],
+									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['RevisedNetIncome'])),
+									"description": "of turnover",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "KINARA_EMI",
+									"amount": "",
+									"total": bpl['Kinara EMI'],
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['Kinara EMI'])),
+									"description": "of Revised Net Income",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+
+								},{
+									"title": "Average Bank Balance",
+									"amount": "",
+									"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['avgMonBal'])) ,
+									"description": "of Revised Net Income",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								},{
+									"title": "Average Bank Deposit",
+									"amount": "",
+									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['avgMonDep'])) ,
+									"description": "of Revised Net Income",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								
 								}]
 							},
 							"details": {
@@ -906,7 +963,7 @@ self.renderReady = function(eventName) {
 										}
 									}
 								},{
-									"title": "EBITDA",
+									"title": "Total Expenses",
 									"amount": "",
 									"total": bpl['EBITDA'],
 									"percentage": bpl['EBITDA pct'],
@@ -962,8 +1019,8 @@ self.renderReady = function(eventName) {
 									}
 								}, {
 									"title": "Revised Net Income",
-									"amount": bpl['RevisedNetIncome'],
-									"total":  "",
+									"amount": "",
+									"total":  bpl['RevisedNetIncome'],
 									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['RevisedNetIncome'])),
 									"description": "of turnover",
 									"$config": {
@@ -973,10 +1030,10 @@ self.renderReady = function(eventName) {
 									}
 								}, {
 									"title": "KINARA_EMI",
-									"amount": bpl['Kinara EMI'],
-									"total": "",
-									"percentage": bpl['Kinara EMI pct'],
-									"description": "",
+									"amount": "",
+									"total": bpl['Kinara EMI'],
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['Kinara EMI'])),
+									"description": "of Revised Net Income",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -985,10 +1042,10 @@ self.renderReady = function(eventName) {
 
 								},{
 									"title": "Average Bank Balance",
-									"amount": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
-									"total": "",
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['avgMonBal'])) ,
-									"description": "of turnover",
+									"amount": "",
+									"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['avgMonBal'])) ,
+									"description": "of Revised Net Income",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -996,10 +1053,10 @@ self.renderReady = function(eventName) {
 									}
 								},{
 									"title": "Average Bank Deposit",
-									"amount": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
-									"total": "",
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['avgMonDep'])) ,
-									"description": "of turnover",
+									"amount": "",
+									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
+									"percentage": CalPercentage(parseInt(bpl['RevisedNetIncome']), parseInt(bpl['avgMonDep'])) ,
+									"description": "of Revised Net Income",
 									"$config": {
 									    "title": {
 										    "className": "text-bold"
@@ -1082,6 +1139,7 @@ self.renderReady = function(eventName) {
 						}];
 						var totalAverageDeposits = 0;
 						var totalAverageWithdrawals = 0;
+						var totalAvgbalanceon15 = 0;
 						var totalChequeBounces = 0;
 						var totalEMIBounces = 0;
 						var graphStatement = {};
@@ -1089,12 +1147,14 @@ self.renderReady = function(eventName) {
 							var acc = model.business.customerBankAccounts[i];
 							var totalDeposits = 0;
 							var totalWithdrawals = 0;
+							var balnceon15 = 0;
 							var noOfEmiChequeBounced = 0;
 							var noOfChequeBounced = 0;
 							for (j in acc.bankStatements) {
 								var stat = acc.bankStatements[j];
 								totalDeposits += stat.totalDeposits;
 								totalWithdrawals += stat.totalWithdrawals;
+								balnceon15 += stat.balanceAsOn15th;
 								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
 								noOfChequeBounced += stat.noOfChequeBounced;
 
@@ -1110,6 +1170,8 @@ self.renderReady = function(eventName) {
 								graphStatement[graphKey].totalDeposits += stat.totalDeposits;
 								graphStatement[graphKey].totalWithdrawals = graphStatement[graphKey].totalWithdrawals || 0;
 								graphStatement[graphKey].totalWithdrawals += stat.totalWithdrawals;
+								graphStatement[graphKey].balnceon15 = graphStatement[graphKey].balnceon15 || 0;
+								graphStatement[graphKey].balnceon15 += stat.balanceAsOn15th;
 								graphStatement[graphKey].noOfEmiChequeBounced = graphStatement[graphKey].noOfEmiChequeBounced || 0;
 								graphStatement[graphKey].noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
 								graphStatement[graphKey].noOfChequeBounced = graphStatement[graphKey].noOfChequeBounced || 0;
@@ -1121,11 +1183,13 @@ self.renderReady = function(eventName) {
 								"averageDeposits": totalDeposits / acc.bankStatements.length,
 								"totalWithdrawals": totalWithdrawals,
 								"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
+								"Avgbalnceon15": balnceon15 / acc.bankStatements.length,
 								"noOfEmiChequeBounced": noOfEmiChequeBounced,
 								"noOfChequeBounced": noOfChequeBounced
 							};
 							totalAverageDeposits += acc.total.averageDeposits;
 							totalAverageWithdrawals += acc.total.averageWithdrawals;
+							totalAvgbalanceon15 += acc.total.Avgbalnceon15,
 							totalEMIBounces += acc.total.noOfEmiChequeBounced;
 							totalChequeBounces += acc.total.noOfChequeBounced;
 							acc.bankStatements.push(acc.total);
@@ -1147,12 +1211,12 @@ self.renderReady = function(eventName) {
 							k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
 							averageGraphData[0].values.push({
 								"x": k,
-								"y": v.totalDeposits / v.count/*model.business.customerBankAccounts.length*/,
+								"y": v.totalDeposits / v.count,
 								"series": 0
 							})
 							averageGraphData[1].values.push({
 								"x": k,
-								"y": (v.totalDeposits - v.totalWithdrawals) / v.count/*model.business.customerBankAccounts.length*/,
+								"y": v.balnceon15 / v.count,
 								"series": 1
 							})
 							bouncesGraphData[0].values.push({
@@ -1167,9 +1231,9 @@ self.renderReady = function(eventName) {
 							})
 						});
 						return {
-							"averageMonthlyDeposit": Math.round(totalAverageDeposits / model.business.customerBankAccounts.length),
-							"averageMonthlyWithdrawal": Math.round(totalAverageWithdrawals / model.business.customerBankAccounts.length),
-							"averageMonthlyBalance": Math.round((totalAverageDeposits - totalAverageWithdrawals) / model.business.customerBankAccounts.length),
+							"averageMonthlyDeposit": totalAverageDeposits,
+							"averageMonthlyWithdrawal": totalAverageWithdrawals,
+							"averageMonthlyBalance": totalAvgbalanceon15,
 							"totalAccounts": model.business.customerBankAccounts.length,
 							"totalEMIBounces": totalEMIBounces,
 							"totalChequeBounces": totalChequeBounces,
