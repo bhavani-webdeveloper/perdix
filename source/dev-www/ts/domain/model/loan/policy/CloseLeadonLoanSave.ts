@@ -35,27 +35,40 @@ export class CloseLeadonLoanSave extends IPolicy<LoanProcess> {
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        return Observable.defer(
-            () => {
-                if (_.hasIn(loanProcess, "loanAccount.leadId")){
-                    let lead_id = loanProcess.loanAccount.leadId;
-                    // return Observable.throw(new Error("shahal error"));
-                    return LeadProcessFactory.createFromLeadId(lead_id)
-                        .map((leadProcess) => {
-                            leadProcess.stage = this.args.stage;
 
-                            if (leadProcess.lead.currentStage==this.args.fromStage) {
-                                return leadProcess.proceed();
-                            }
-                            return Observable.of(loanProcess);
-                        })
-                        .concatAll((leadProcess) => {
-                            return loanProcess;
-                        })
+            return Observable.defer(
+                () => {
+                    if (_.hasIn(loanProcess, "loanAccount.leadId")){
+                        let lead_id = loanProcess.loanAccount.leadId;
+                        // return Observable.throw(new Error("shahal error"));
+                        return LeadProcessFactory.createFromLeadId(lead_id)
+                            .map((leadProcess) => {
+                                leadProcess.stage = this.args.stage;
+                                if(leadProcess.lead.currentStage==this.args.fromStage) {
+                                    return leadProcess.proceed();
+                                }
+
+                                return Observable.of(loanProcess);
+                            })
+                        // return LeadProcessFactory.createFromLeadId(lead_id)
+                        //     .map((leadProcess) => {
+                        //         leadProcess.stage = this.args.stage;
+
+                        //         if (leadProcess.lead.currentStage==this.args.fromStage) {
+                        //             return leadProcess.proceed();
+                        //         }
+                        //         return Observable.of(loanProcess);
+                        //     })
+                        //     .concatAll((leadProcess) => {
+                        //         return loanProcess;
+                        //     })
+                    }
+                    return Observable.of(loanProcess);
                 }
-                return Observable.of(loanProcess);
-            }
-        )
+            )
+
+
+
 
     }
 

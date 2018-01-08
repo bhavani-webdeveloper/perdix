@@ -12,6 +12,7 @@ import {MandatoryFieldsPolicy} from './MandatoryFieldsPolicy';
 import {OriginationToBookingPolicy} from './OriginationToBookingPolicy';
 import {DefaultVehicleComponentsPolicy} from './DefaultVehicleComponentsPolicy';
 import {DefaultVehicleAccessoriesPolicy} from './DefaultVehicleAccessoriesPolicy';
+import {CloseLeadonLoanSave} from './CloseLeadonLoanSave';
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -54,7 +55,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultVehicleComponentsPolicy();
             case 'DefaultVehicleAccessoriesPolicy':
                 return new DefaultVehicleAccessoriesPolicy();
-
+            case 'CloseLeadonLoanSave':
+                return new CloseLeadonLoanSave();
             default:
                 return null;
         }
