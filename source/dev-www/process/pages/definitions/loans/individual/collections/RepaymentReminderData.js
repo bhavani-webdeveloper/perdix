@@ -275,8 +275,8 @@ define({
                     key: "accountDetails",
                     type: "array",
                     add: null,
-                    startEmpty: true,
-                    remove: null,
+                    // startEmpty: true,
+                    remove: null, 
                     "titleExpr": "model.accountDetails[arrayIndex].repaymentType == 'Scheduled' || model.accountDetails[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.accountDetails[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.accountDetails[arrayIndex].repaymentType + ': '+ moment(model.accountDetails[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
                     "titleExprLocals": {moment: window.moment},
                     items: [{

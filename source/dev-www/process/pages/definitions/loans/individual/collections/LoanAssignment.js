@@ -8,6 +8,7 @@ define({
             "title": "LOAN_ASSIGNMENT",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                model.upload={};
                 $log.info("LoanAssignment Page got initialized");
             },
             offline: false,
@@ -17,7 +18,7 @@ define({
                 "title": "LOAN_ASSIGNMENT_UPLOAD",
                 "colClass": "col-sm-6",
                 "items": [{
-                    "key": "upload",
+                    "key": "upload.uploadApplication",
                     "title": "CHOOSE_YOUR_UPLOAD_FILE",
                     "category": "ACH",
                     "subCategory": "cat2",
@@ -25,8 +26,24 @@ define({
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
                         LoanCollection.loanAssignmentUpload(file, progress).then(function(resp){
-                            $state.go('Page.LoansCollectionsDashboard', null);
+                            model.upload.uploadApplication = null;
+                            // irfNavigator.go({
+                            //         state: "Page.Engine",
+                            //         pageName: "loans.individual.collections.LoanAssignment"
+                            //     });
+                            // //$state.go('Page.loans.individual.collections.LoanAssignment', null);
                         });
+                    }
+                }]
+            },
+            {
+                "type": "actionbox",
+                "items": [{
+                    type: "button",
+                    icon: "fa fa-step-backward",
+                    title: "Go Back",
+                    onClick: function(model, formCtrl) {
+                        irfNavigator.goBack();
                     }
                 }]
             }],

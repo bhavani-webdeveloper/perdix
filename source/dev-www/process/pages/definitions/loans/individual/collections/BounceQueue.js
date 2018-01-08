@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition){
-    return {
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition", "$stateParams",
+function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition, $stateParams){
+        return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
@@ -12,9 +12,11 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 centresRestricted: false
             };
 
+            console.log($stateParams);
             PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
                 .then(
                 function(config){
+                    console.log("shahal1");
                     if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
                         model.pageConfig.isAllBranchAllowed = true;
                     }
@@ -31,7 +33,15 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 }, function(err){
                     model.pageConfig.isAllBranchAllowed = false;
                 }
-            )
+            );
+
+            PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+            .then(function(data){
+                console.log(data);
+                if (data.IncludeUserFilter) {
+                    model.assignedTo = SessionStore.getLoginname();
+                }
+            });
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -126,29 +136,36 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
             getSearchFormHelper: function() {
                 return formHelper;
             },
-            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
-                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
-                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
-                    'centreId': searchOptions.centre,
-                    'customerName': searchOptions.first_name,
-                    'promisreToPayDate': searchOptions.promisreToPayDate,
-                    'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage
-                }).$promise;
 
+            getResultsPromise: function(searchOptions, pageOpts) {
+                debugger;
+                /* Should return the Promise */
+                var promise = LoanProcess.bounceCollectionDemand({
+                        'accountNumbers': searchOptions.loan_no,
+                        /*Service missing_27082016*/
+                        'branchId': searchOptions.branchId || SessionStore.getBranchId(),
+                        'centreId': searchOptions.centre,
+                        'customerName': searchOptions.first_name,
+                        'promisreToPayDate': searchOptions.promisreToPayDate,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage,
+                        'assignedTo': searchOptions.assignedTo
+                    }).$promise;
                 return promise;
             },
+
             paginationOptions: {
                 "getItemsPerPage": function(response, headers){
-                    return 10;
+                    return 100;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers && headers['x-total-count'] || 10;
+                    return headers && headers['x-total-count'];
                 }
             },
             listOptions: {
+                selectable: false,
                 expandable: true,
+                listStyle: "table",
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -165,15 +182,51 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
                         item.amount2 = parseFloat(item['amount2']);
                     }
-                    return [
-                        item.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3),
-                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,         
-                        "{{'INTEREST_DUE'|translate}}: " + item.part2,             
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,  
-                        "{{'FEES_DUE'|translate}}: " + item.amount2,
-                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
+                    if (_.hasIn(item, 'amount1') && _.hasIn(item, 'amount2') && _.hasIn(item, 'amount3')) {
+                        item.totalAmount = Utils.ceil(item.amount1 + item.amount2 + item.amount3);
+                    } 
+                },
+                getTableConfig: function() {
+                    return {
+                        "serverPaginate": true,
+                        "paginate": true,
+                        "pageLength": 10
+                    };
+                },
+                getColumns: function() {
+                    return[
+                        {
+                            title: "CUSTOMER_NAME",
+                            data: "customerName" 
+                        },
+                        {
+                            title: "LOAN_ACCOUNT_NUMBER",
+                            data: "accountId"
+                        },
+                        {
+                            title: "TOTAL_AMOUNT_DUE",
+                            data: "totalAmount"
+                        },
+                        {
+                            title: "PRINCIPAL_DUE",
+                            data: "part1"
+                        },
+                        {
+                            title: "INTEREST_DUE",
+                            data: "part2"
+                        },
+                        {
+                            title: "PENAL_INTEREST",
+                            data: "part3"
+                        },
+                        {
+                            title: "FEES_DUE",
+                            data: "amount2"
+                        },
+                        {
+                            title: "UNAPPROVED_AMOUNT",
+                            data: "repaidAmountSum"
+                        }
                     ]
                 },
                 getActions: function(){
