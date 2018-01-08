@@ -14,6 +14,10 @@ let config = {
                     {
                         "name": "LoadRelatedCustomersPolicy",
                         "arguments": null
+                    },
+                    {
+                        "name":"EnrolmentDerivedPolicy",
+                        "arguments": {}
                     }
                 ]
             },

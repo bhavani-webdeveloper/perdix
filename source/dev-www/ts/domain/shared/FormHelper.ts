@@ -10,6 +10,7 @@ export interface IFormHelper {
     getVehicleComponents(): any;
     getAccessorries(): any;
     getStages(): any;
+    getCenters(): any;
 
 }
 
@@ -50,6 +51,10 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
 
     getStages(): any {
         return this.getInjector().enum('targetstage').data;
+    }
+
+    getCenters(): any {
+        return this.getInjector().enum('centre').data;
     }
 
 

@@ -46,7 +46,7 @@
                   },
                   "loanOfficerId": {
                      "type": ["string", "null"],
-                     "title": "LOAN_OFFICER_NAME"
+                     "title": "ACTION_TAKEN_BY"
                   },
                   "typeOfInteraction": {
                      "type": ["string", "null"],
@@ -58,7 +58,7 @@
                   },
                   "additionalRemarks": {
                      "type": ["string", "null"],
-                     "title": "ADDITIONAL_REMARKS"
+                     "title": "REMARKS"
                   },
                   "location": {
                      "type": ["string", "null"],
@@ -99,7 +99,7 @@
                   },
                   "additionalRemarks": {
                      "type": ["string", "null"],
-                     "title": "ADDITIONAL_REMARKS"
+                     "title": "REMARKS"
                   },
                   "location": {
                      "type": ["string", "null"],
@@ -240,7 +240,7 @@
          },
          "additionalRemarks": {
             "type": ["string", "null"],
-            "title": "ADDITIONAL_REMARKS"
+            "title": "REMARKS"
          },
          "dob": {
             "type": ["string", "null"],

@@ -452,7 +452,7 @@
                         "properties": {
                             "assetType": {
                                 "type": "string",
-                                "title": "ASSET_TYPE"
+                                "title": "VEHICLE_TYPE"
                             },
                             "valueOfAsset": {
                                 "type": "number",

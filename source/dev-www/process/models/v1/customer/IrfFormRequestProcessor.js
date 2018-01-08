@@ -2433,6 +2433,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.leadCategory",
                                 type: "select",
                                 enumCode: "lead_category",
+                                required: "true"
                                 /*titleMap: {
 
                                  }*/
@@ -3056,11 +3057,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "customerResponse": {
                                 key: "lead.leadInteractions[].customerResponse",
-                                type: "select"
+                                type: "select",
+                                enumCode: "lead_interaction_customer_response"
                             },
                             "additionalRemarks": {
                                 key: "lead.leadInteractions[].additionalRemarks",
-                                type: "select"
+                                type: "text"
                             },
                             "location": {
                                 "key": "lead.leadInteractions[].location",
@@ -4479,7 +4481,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 "items": {
                     "customerBranchId": {
                         key: "customer.customerBranchId",
-                        title: "BRANCH_NAME",
+                        title: "HUB_NAME",
                         orderNo: 10,
                         readonly: true,
                         type: "select"
@@ -4603,7 +4605,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "motherName": {
                         key: "customer.motherName",
-                        title: "MOTHER_NAME"
+                        title: "MOTHERS_FULL_NAME"
                     },
                     "maritalStatus": {
                         key: "customer.maritalStatus",
@@ -4957,7 +4959,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "primaryOccupation": {
                                 "key": "customer.occupation1",
                                 "title": "PRIMARY_OCCUPATION",
-                                "type": "select"
+                                "type": "select",
+                                "enumCode":"lead_primary_occupation"
                             },
 
                             "educationStatus": {
@@ -5041,6 +5044,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "select",
                                 orderNo: 10,
                                 title: "LOAN_SOURCE_CATEGORY",
+                                required: "true",
                                 enumCode: "applicant_loan_source_category"
                             },
                             "loanSource": {
@@ -5048,6 +5052,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "select",
                                 orderNo: 20,
                                 enumCode: "loan_source"
+                            },
+                            "loanType": {
+                                key: "customer.liabilities[].loanType",
+                                orderNo: 20
                             },
                             "loanAmountInPaisa": {
                                 key: "customer.liabilities[].loanAmountInPaisa",

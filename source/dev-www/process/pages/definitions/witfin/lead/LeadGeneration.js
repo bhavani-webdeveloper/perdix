@@ -90,7 +90,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "productDetails.productEligibility.eligibleForProduct",
                     "productDetails.productRejectionReason",
                     "productDetails.productRejectionReason.productRejectReason",
-                    "productDetails.productRejectionReason.productRejectReason",
                     "productDetails.productRejectionReason.additionalRemarks",
                     "productDetails.leadStatus",
                     "productDetails.leadStatus.leadStatus",

@@ -385,6 +385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "householdLiablities.liabilities",
                     "householdLiablities.liabilities.loanSourceCategory",
                     "householdLiablities.liabilities.loanSource",
+                    "householdLiablities.liabilities.loanType",
                     "householdLiablities.liabilities.loanAmountInPaisa",
                     "householdLiablities.liabilities.installmentAmountInPaisa",
                     "householdLiablities.liabilities.outstandingAmountInPaisa",
