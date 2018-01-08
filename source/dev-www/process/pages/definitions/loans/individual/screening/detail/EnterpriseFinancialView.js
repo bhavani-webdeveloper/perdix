@@ -655,12 +655,15 @@ self.renderReady = function(eventName) {
 						household_income += parseInt(household.data[0]['Net Household Income']);
 
 					})
-					bpl.household_income=household_income;
-					model.ExistingLoanRepayments = params[0].data[0]['Existing Loan Repayments'];
-					bpl.ExistingLoanRepayments=model.ExistingLoanRepayments;
-					bpl.RevisedNetIncome=bpl['household_income'] <0 ?(parseInt(bpl['Net Income'])+parseInt(bpl['household_income'])):bpl['Net Income'];
-					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
-					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
+					bpl.household_income= household_income;
+					model.ExistingLoanRepayments= params[0].data[0]['Existing Loan Repayments'];
+					bpl.ExistingLoanRepayments= model.ExistingLoanRepayments;
+					bpl.RevisedNetIncome= bpl['household_income'] <0 ?(parseInt(bpl['Net Income'])+parseInt(bpl['household_income'])):bpl['Net Income'];
+					bpl.avgMonDep= model.business.summary.bankStatement.averageMonthlyDeposit;
+					bpl.avgMonBal= model.business.summary.bankStatement.averageMonthlyBalance;
+					bpl.totalExpanse= parseInt(bpl['Purchases'])+parseInt(bpl['Opex']);
+					bpl.grossIncome= parseInt(bpl['Total Business Revenue'])-bpl.totalExpanse;
+					bpl.netIncome= bpl.grossIncome-bpl['Business Liabilities'];
 
 					/*purchase splitup calculation under profit and loss*/
                     
@@ -773,8 +776,8 @@ self.renderReady = function(eventName) {
 								}, {
 									"title": "Total Expenses",
 									"amount": "",
-									"total": parseInt(bpl['Purchases'])+parseInt(bpl['Opex']),
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),									
+									"total": bpl.totalExpanse,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.totalExpanse),									
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -784,8 +787,8 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Gross Income",
 									"amount": "",
-									"total": parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex']))),
+									"total": bpl.grossIncome,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.grossIncome),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -806,8 +809,8 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Net Income",
 									"amount": "",
-									"total": bpl['Net Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),
+									"total": bpl.netIncome,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.netIncome),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -965,8 +968,8 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Total Expenses",
 									"amount": "",
-									"total": bpl['Purchases']+bpl['Opex'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
+									"total": bpl.totalExpanse,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.totalExpanse),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -987,8 +990,8 @@ self.renderReady = function(eventName) {
 								}, {
 									"title": "Gross Income",
 									"amount": "",
-									"total": parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex']))) ,
+									"total": bpl.grossIncome,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.grossIncome) ,
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -998,8 +1001,8 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Net Income",
 									"amount": "",
-									"total": bpl['Net Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Net Income'])),
+									"total": bpl.netIncome,
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), bpl.netIncome),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
