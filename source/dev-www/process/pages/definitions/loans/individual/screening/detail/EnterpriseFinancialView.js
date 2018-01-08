@@ -784,8 +784,8 @@ self.renderReady = function(eventName) {
 								},{
 									"title": "Gross Income",
 									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
+									"total": parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex']))),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -987,8 +987,8 @@ self.renderReady = function(eventName) {
 								}, {
 									"title": "Gross Income",
 									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
+									"total": parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex'])),
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Business Revenue'])-(parseInt(bpl['Purchases'])+parseInt(bpl['Opex']))) ,
 									"description": "of turnover",
 									"$config": {
 									    "title": {
