@@ -41,17 +41,337 @@ define([],function(){
 
             var configFile = function() {
                 return {
-                    "currentStage": {
-                        "ScreeningReview": {
+                    "loanAccount.currentStage": {
+                        "Screening": {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "AdditionalLoanInformation",
+                                "NomineeDetails"
+                            ],
                             "overrides": {
-                                "LoanRecomendation": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2
+                                },
+                                "DeductionsFromLoan": {
+                                    "orderNo": 3
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "PreliminaryInformation.loanAmountRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.tenureRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedEmi": {
                                     "readonly": true
                                 },
-                                "IRR": {
+                                "PreliminaryInformation.emiRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.collectionPaymentType": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
                                     "readonly": true
                                 },
-                                "postReview": {
+                                "PreliminaryInformation.loanPurpose1": {
+                                    "resolver": "LoanPurpose1LOVConfiguration"
+                                },
+                                "PreliminaryInformation.loanPurpose2": {
+                                    "resolver": "LoanPurpose2LOVConfiguration"
+                                },
+                                "PreliminaryInformation.linkedAccountNumber": {
+                                    "resolver": "LinkedAccountNumberLOVConfiguration"
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations": {
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": false
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "required": true
+                                }
+                            }
+                        },
+                        "ScreeningReview": {
+                            "excludes": [
+                                "AdditionalLoanInformation",
+                                "NomineeDetails"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
                                     "readonly": true
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2
+                                },
+                                "DeductionsFromLoan": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "LoanRecommendation": {
+                                    "orderNo": 6
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations": {
+                                    "add": null,
+                                    "remove": null
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'"
+                                }
+                            }
+                        },
+                        "Application": {
+                            "excludes": ["LoanRecommendation"],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2
+                                },
+                                "DeductionsFromLoan": {
+                                    "orderNo": 3
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 7
+                                },
+                                "PreliminaryInformation.loanAmountRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.tenureRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedEmi": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.emiRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.collectionPaymentType": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanPurpose1": {
+                                    "resolver": "LoanPurpose1LOVConfiguration"
+                                },
+                                "PreliminaryInformation.loanPurpose2": {
+                                    "resolver": "LoanPurpose2LOVConfiguration"
+                                },
+                                "PreliminaryInformation.linkedAccountNumber": {
+                                    "resolver": "LinkedAccountNumberLOVConfiguration"
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations": {
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "required": true
+                                },
+                                "AdditionalLoanInformation.productCategory": {
+                                   "required":true,
+                                   "type":"select",
+                                   "enumCode":"loan_product_category"
+                                },
+                                "AdditionalLoanInformation.proposedHires": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeFirstName": {
+                                   "required":true,
+                                   "resolver": "NomineeFirstNameLOVConfiguration"
+                                },
+                                "NomineeDetails.nominees.nomineeGender": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDOB": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDoorNo": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineePincode": {
+                                   "required": true,
+                                   "resolver": "MailingPincodeLOVConfiguration"
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                   "required":true
+                                }
+
+                            }
+                        },
+                        "FieldAppraisal": {
+                            "excludes": [],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2
+                                },
+                                "DeductionsFromLoan": {
+                                    "orderNo": 3
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 7
+                                },
+                                "LoanRecommendation": {
+                                    "orderNo": 8
+                                },
+                                "PreliminaryInformation.loanAmountRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.tenureRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedEmi": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.emiRequested": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.collectionPaymentType": {
+                                    "required": true
+                                },
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation.loanPurpose1": {
+                                    "resolver": "LoanPurpose1LOVConfiguration"
+                                },
+                                "PreliminaryInformation.loanPurpose2": {
+                                    "resolver": "LoanPurpose2LOVConfiguration"
+                                },
+                                "PreliminaryInformation.linkedAccountNumber": {
+                                    "resolver": "LinkedAccountNumberLOVConfiguration"
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations": {
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation": {
+                                   "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "required": true
+                                },
+                                "AdditionalLoanInformation.productCategory": {
+                                   "required":true,
+                                   "type":"select",
+                                   "enumCode":"loan_product_category"
+                                },
+                                "AdditionalLoanInformation.proposedHires": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeFirstName": {
+                                   "required":true,
+                                   "resolver": "NomineeFirstNameLOVConfiguration"
+                                },
+                                "NomineeDetails.nominees.nomineeGender": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDOB": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeDoorNo": {
+                                   "required":true
+                                },
+                                "NomineeDetails.nominees.nomineePincode": {
+                                   "required": true,
+                                   "resolver": "MailingPincodeLOVConfiguration"
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                   "required":true
+                                },
+                                "LoanRecommendation.loanAmount": {
+                                   "required":true
+                                },
+                                "LoanRecommendation.tenure": {
+                                   "required":true
+                                },
+                                "LoanRecommendation.interestRate": {
+                                   "required":true
+                                },
+                                "LoanRecommendation.estimatedEmi": {
+                                   "readonly":true
+                                },
+                                "LoanRecommendation.processingFeePercentage": {
+                                   "required":true
+                                },
+                                "LoanRecommendation.securityEmiRequired": {
+                                   "readonly":true
                                 }
                             }
                         }
@@ -74,6 +394,11 @@ define([],function(){
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.expectedEmi",
+                    "PreliminaryInformation.emiRequested",
+                    "PreliminaryInformation.emiPaymentDateRequested",
+                    "PreliminaryInformation.collectionPaymentType",
+                    "PreliminaryInformation.expectedPortfolioInsurancePremium",
+
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations.customerId",
@@ -81,16 +406,52 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
                     "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
+                    "DeductionsFromLoan.expectedCommercialCibilCharge",
                     "DeductionsFromLoan.estimatedEmi",
+
+                    "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
+                    "LoanMitigants.deviationParameter.mitigants",
+                    "LoanMitigants.deviationParameter.mitigants.selected",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantName",
+
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
                     "LoanDocuments.loanDocuments.documentId",
-                    "actionbox",
-                    "actionbox.submit",
-                    "actionbox.save"
+
+                    "LoanRecommendation",
+                    "LoanRecommendation.loanAmount",
+                    "LoanRecommendation.tenure",
+                    "LoanRecommendation.interestRate",
+                    "LoanRecommendation.estimatedEmi",
+                    "LoanRecommendation.processingFeePercentage",
+                    "LoanRecommendation.securityEmiRequired",
+                    "LoanRecommendation.commercialCibilCharge",
+
+                    "AdditionalLoanInformation",
+                    "AdditionalLoanInformation.estimatedDateOfCompletion",
+                    "AdditionalLoanInformation.productCategory",
+                    "AdditionalLoanInformation.customerSignDateExpected",
+                    "AdditionalLoanInformation.proposedHires",
+                    "AdditionalLoanInformation.percentageIncreasedIncome",
+                    "AdditionalLoanInformation.percentageInterestSaved",
+
+                    "NomineeDetails",
+                    "NomineeDetails.nominees",
+                    "NomineeDetails.nominees.nomineeFirstName",
+                    "NomineeDetails.nominees.nomineeGender",
+                    "NomineeDetails.nominees.nomineeDOB",
+                    "NomineeDetails.nominees.nomineeDoorNo",
+                    "NomineeDetails.nominees.nomineeLocality",
+                    "NomineeDetails.nominees.nomineeStreet",
+                    "NomineeDetails.nominees.nomineePincode",
+                    "NomineeDetails.nominees.nomineeDistrict",
+                    "NomineeDetails.nominees.nomineeState",
+                    "NomineeDetails.nominees.nomineeRelationship"
 
                 ];
 
@@ -107,50 +468,59 @@ define([],function(){
                     model.loanAccount = model.loanProcess.loanAccount;
 
                     self = this;
-                    var formRequest = {
-                        "overrides": "",
-                        "includes": getIncludes (model),
-                        "excludes": [
-                            ""
-                        ],
-                        "options": {
-                            "additions": [
-                                {
-                                    "type": "box",
-                                    "title": "POST_REVIEW",
-                                    "condition": "model.loanAccount.id",
-                                    "items": [{
-                                        key: "review.action",
-                                        type: "radios",
-                                        titleMap: {
-                                            "REJECT": "REJECT",
-                                            "SEND_BACK": "SEND_BACK",
-                                            "PROCEED": "PROCEED",
-                                            "HOLD": "HOLD"
-                                        }
-                                    }, {
-                                        type: "section",
-                                        condition: "model.review.action=='PROCEED'",
-                                        items: [{
-                                            title: "REMARKS",
-                                            key: "review.remarks",
-                                            type: "textarea",
-                                            required: true
-                                        }, {
-                                            key: "review.proceedButton",
-                                            type: "button",
-                                            title: "PROCEED",
-                                            onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                        }]
-
-                                    }]
-                                }
-                            ]
-                        }
-                    };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
-
                     p1.then(function(repo) {
+                        var formRequest = {
+                            "overrides": "",
+                            "includes": getIncludes(model),
+                            "excludes": [
+                            ],
+                            "options": {
+                                "additions": [
+                                    {
+                                        "type": "actionbox",
+                                        "orderNo": 1000,
+                                        "items": [
+                                            {
+                                                "type": "submit",
+                                                "title": "SAVE"
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        "type": "box",
+                                        "title": "POST_REVIEW",
+                                        "condition": "model.loanAccount.id",
+                                        "orderNo": 20,
+                                        "items": [{
+                                            key: "review.action",
+                                            type: "radios",
+                                            titleMap: {
+                                                "REJECT": "REJECT",
+                                                "SEND_BACK": "SEND_BACK",
+                                                "PROCEED": "PROCEED",
+                                                "HOLD": "HOLD"
+                                            }
+                                        }, {
+                                            type: "section",
+                                            condition: "model.review.action=='PROCEED'",
+                                            items: [{
+                                                title: "REMARKS",
+                                                key: "review.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            }, {
+                                                key: "review.proceedButton",
+                                                type: "button",
+                                                title: "PROCEED",
+                                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                            }]
+
+                                        }]
+                                    }
+                                ]
+                            }
+                        };
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
                     })
 
@@ -227,7 +597,7 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.go({
                                     state: "Page.Engine",
-                                    pageName: "witfin.lead.ReadyForScreeningQueue"
+                                    pageName: "irep.lead.ReadyForScreeningQueue"
                                 });
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

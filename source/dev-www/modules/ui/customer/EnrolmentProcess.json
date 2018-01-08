@@ -1395,6 +1395,25 @@
                 "key": "customer.udf.userDefinedFieldValues.udf30",
                 "type": "select",
                 "title": "IN_CURRENT_AREA_SINCE"
+            },
+           "latitude": {
+                "key": "customer.latitude",
+                "title": "HOUSE_LOCATION",
+                "type": "geotag",
+                "latitude": "customer.latitude",
+                "longitude": "customer.longitude"
+            },
+            "houseVerificationPhoto": {
+                "key":"customer.houseVerificationPhoto",
+                "type":"file",
+                "fileType":"image/*"
+            },
+            "date": {
+                "key": "customer.date",
+                "type":"date"
+            },
+            "place": {
+                "key":"customer.place"
             }
         }
     },
@@ -1715,38 +1734,38 @@
                     }
                 }
             }
-        },
-        "SuppliersDeatils": {
-            "type": "box",
-            "title": "SUPPLIERS_DEATILS",
-            "items": {
-                "supplierDetails": {
-                    "key": "customer.supplierDetails",
-                    "title": "SUPPLIERS_DEATILS",
-                    "type": "array",
-                    "items": {
-                        "supplierName": {
-                            "key": "customer.supplierDetails[].supplierName",
-                            "title": "SUPPLIERS_NAME",
-                            "type": "string"
-                        },
-                        "supplierType": {
-                            "key": "customer.supplierDetails[].supplierType",
-                            "title": "TYPE",
-                            "type": "select",
-                            "enumCode": "supplier_type"
-                        },
-                        "paymentTerms": {
-                            "key": "customer.supplierDetails[].paymentTerms",
-                            "title": "PAYMENT_TERMS_IN_DAYS",
-                            "type": "select",
-                            "enumCode": "payment_terms"
-                        },
-                        "amount": {
-                            "key": "customer.supplierDetails[].amount",
-                            "title": "PAYABLE_OUTSTANDING",
-                            "type": "amount"
-                        }
+        }
+    },
+    "SuppliersDeatils": {
+        "type": "box",
+        "title": "SUPPLIERS_DEATILS",
+        "items": {
+            "supplierDetails": {
+                "key": "customer.supplierDetails",
+                "title": "SUPPLIERS_DEATILS",
+                "type": "array",
+                "items": {
+                    "supplierName": {
+                        "key": "customer.supplierDetails[].supplierName",
+                        "title": "SUPPLIERS_NAME",
+                        "type": "string"
+                    },
+                    "supplierType": {
+                        "key": "customer.supplierDetails[].supplierType",
+                        "title": "TYPE",
+                        "type": "select",
+                        "enumCode": "supplier_type"
+                    },
+                    "paymentTerms": {
+                        "key": "customer.supplierDetails[].paymentTerms",
+                        "title": "PAYMENT_TERMS_IN_DAYS",
+                        "type": "select",
+                        "enumCode": "payment_terms"
+                    },
+                    "amount": {
+                        "key": "customer.supplierDetails[].amount",
+                        "title": "PAYABLE_OUTSTANDING",
+                        "type": "amount"
                     }
                 }
             }

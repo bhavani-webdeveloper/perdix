@@ -59,7 +59,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName: 'loans.individual.screening.CBCheck',
+                            pageName: 'irep.loans.individual.origination.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
@@ -205,6 +205,13 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
