@@ -658,12 +658,13 @@ self.renderReady = function(eventName) {
 					bpl.household_income= household_income;
 					model.ExistingLoanRepayments= params[0].data[0]['Existing Loan Repayments'];
 					bpl.ExistingLoanRepayments= model.ExistingLoanRepayments;
-					bpl.RevisedNetIncome= bpl['household_income'] <0 ?(parseInt(bpl['Net Income'])+parseInt(bpl['household_income'])):bpl['Net Income'];
 					bpl.avgMonDep= model.business.summary.bankStatement.averageMonthlyDeposit;
 					bpl.avgMonBal= model.business.summary.bankStatement.averageMonthlyBalance;
 					bpl.totalExpanse= parseInt(bpl['Purchases'])+parseInt(bpl['Opex']);
 					bpl.grossIncome= parseInt(bpl['Total Business Revenue'])-bpl.totalExpanse;
 					bpl.netIncome= bpl.grossIncome-bpl['Business Liabilities'];
+					bpl.RevisedNetIncome= bpl['household_income'] <0 ?(bpl.netIncome +parseInt(bpl['household_income'])):bpl.netIncome;
+					
 
 					/*purchase splitup calculation under profit and loss*/
                     
