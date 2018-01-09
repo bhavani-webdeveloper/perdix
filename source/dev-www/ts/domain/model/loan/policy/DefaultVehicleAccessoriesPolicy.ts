@@ -44,10 +44,16 @@ export class DefaultVehicleAccessoriesPolicy extends IPolicy<LoanProcess> {
                         if(!_.hasIn(loanProcess.loanAccount, 'vehicleLoanDetails') || !loanProcess.loanAccount.vehicleLoanDetails) {
                             loanProcess.loanAccount.vehicleLoanDetails = vehicleLoanDetails;
                         }
-                        loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories || [];
+
+                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.length > 0) {
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories;
+                            return Observable.of(loanProcess);
+                        } else {
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = [];
+                        }
                         for(let accesory of data) {
                             let vehicleAccessory = new VehicleAccessory();
-                            vehicleAccessory.accessoryType = accesory.accessoryType
+                            vehicleAccessory.accessoryType = accesory.name;
                             loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.push(vehicleAccessory);
                         }
                         return Observable.of(loanProcess);

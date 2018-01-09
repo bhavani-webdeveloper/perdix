@@ -45,8 +45,13 @@ export class DefaultVehicleComponentsPolicy extends IPolicy<LoanProcess> {
                             loanProcess.loanAccount.vehicleLoanDetails = vehicleLoan;
 
                         }
-                        loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions || [];
 
+                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions.length > 0) {
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions;
+                            return Observable.of(loanProcess);
+                        } else {
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = [];
+                        }
                         for(let component of data) {
                             let vehicleAsset = new VehicleAssetCondition();
                             vehicleAsset.componentType = component.name;
