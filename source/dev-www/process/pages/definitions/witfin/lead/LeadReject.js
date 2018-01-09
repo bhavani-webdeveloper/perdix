@@ -43,6 +43,7 @@ define({
                         function(res) {
                             // _.assign(model.lead, res);
                             model.lead = res;
+                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
@@ -327,15 +328,9 @@ define({
                             key: "lead.productRequiredBy",
                             readonly:true,
                             type: "select",
-                            condition: "model.lead.interestedInProduct==='YES'",
-                            titleMap: {
-                                "In this week": "In this week",
-                                "In this month": "In this month",
-                                "Next 2 -3 months": "Next 2 -3 months",
-                                "Next 4-6 months": "Next 4-6 months",
+                            enumCode: "lead_product_required_by"
 
-                            },
-                            onChange: "actions.changeStatus(modelValue, form, model)"
+
                         }, {
                             key: "lead.screeningDate",
                             readonly:true,
@@ -414,11 +409,7 @@ define({
                         }, {
                             key: "lead.leadInteractions1[].typeOfInteraction",
                             type: "select",
-                            readonly: true,
-                            titleMap: {
-                                "Call": "Call",
-                                "Visit": "Visit",
-                            },
+                            readonly: true
                         }, {
                             key: "lead.leadInteractions1[].customerResponse",
                             readonly: true,
@@ -464,14 +455,17 @@ define({
                         }, {
                             key: "lead.leadInteractions[].typeOfInteraction",
                             type: "select",
+                            readonly: "true",
                             titleMap: {
                                 "Call": "Call",
                                 "Visit": "Visit",
                             },
                         }, {
                             key: "lead.leadInteractions[].customerResponse",
+                            readonly: "true"
                         }, {
                             key: "lead.leadInteractions[].additionalRemarks",
+                            readonly: "true"
                         }, {
                             "key": "lead.leadInteractions[].location",
                             "type": "geotag",
