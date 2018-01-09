@@ -238,7 +238,7 @@ define({
 								$state.go("Page.Engine", {
 									pageName: "witfin.customer.IndividualEnrollment2",
 									pageData: {
-										lead_id: item.ID
+										lead_id: item.id
 									}
 								});
 							},
