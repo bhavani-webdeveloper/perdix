@@ -2781,12 +2781,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "productRejectReason": {
                                 key: "lead.productRejectReason",
                                 type: "select",
-                                condition: "model.lead.interestedInProduct==='NO'",
-                                enumCode: "lead_eligibility_reject_reason"
-                            },
-                            "productRejectReason": {
-                                key: "lead.productRejectReason",
-                                type: "select",
                                 condition: "model.lead.eligibleForProduct ==='NO'",
                                 enumCode:"lead_reject_reason"
                             },
@@ -3058,7 +3052,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "customerResponse": {
                                 key: "lead.leadInteractions[].customerResponse",
                                 type: "select",
-                                enumCode: "lead_interaction_customer_response"
+                                enumCode: "li_customer_response"
                             },
                             "additionalRemarks": {
                                 key: "lead.leadInteractions[].additionalRemarks",
