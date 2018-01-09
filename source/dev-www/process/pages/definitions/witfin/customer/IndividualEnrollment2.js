@@ -112,6 +112,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "trackDetails": {
                                     "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
