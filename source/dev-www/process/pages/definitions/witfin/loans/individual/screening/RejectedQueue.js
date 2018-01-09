@@ -53,15 +53,6 @@ define({
                             "x-schema-form": {
                                 "type": "date"
                             }
-                        },
-                         "status":
-                        {
-                            "type":"string",
-                            "title":"STATUS",
-                            "enumCode": "origination_status",
-                            "x-schema-form": {
-                                "type": "select"
-                            }
                         }
 
                     },
