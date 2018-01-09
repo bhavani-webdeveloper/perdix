@@ -46,7 +46,7 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
     }
 
     getAccessorries(): any {
-        return this.getInjector().enum('vehicle_accessories').data;
+        return this.getInjector().enum('vehicle_accessory_type').data;
     }
 
     getStages(): any {
