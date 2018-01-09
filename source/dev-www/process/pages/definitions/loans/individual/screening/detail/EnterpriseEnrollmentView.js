@@ -57,7 +57,7 @@ define({
                         machineData.push({
                             "key": "customer.fixedAssetsMachinaries[" + i + "].machineImage",
                             "notitle": true,
-                            "title": model.customer.fixedAssetsMachinaries[1].machineType,
+                            "title": model.customer.fixedAssetsMachinaries[i].machineType,
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",

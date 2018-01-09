@@ -212,23 +212,26 @@ define({
                     "customerId": model.customerId
                 }).$promise.then(function(res) {
                     $log.warn("res");
-                    $log.warn(res);
+                    $log.warn(res);                    
                     model.cibil_highmark = res;
-                    model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
-                    model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
-                    model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
-                    model.UIUDF.cibil.sanctioned_amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
-                    model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
-                    model.UIUDF.cibil.amount_overdue = res.cibil.cibilLoanSummaryInfo[0].amountOverDue;
-                    // model.UIUDF.cibil.report = '<a href="" class="color-theme">Download</a>';
-
-                    model.UIUDF.highmark.score = res.highMark.highmarkScore;
-                    var highmarkFields = $(res.highMark.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
-                    model.UIUDF.highmark.active_accounts = highmarkFields[1].innerText.trim();
-                    model.UIUDF.highmark.overdue_accounts = highmarkFields[2].innerText.trim();
-                    model.UIUDF.highmark.current_balance = highmarkFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
-                    model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
-                    // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
+                    if (res.cibil != null) {
+                        model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
+                        model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
+                        model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
+                        model.UIUDF.cibil.sanctioned_amount = res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount;
+                        model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
+                        model.UIUDF.cibil.amount_overdue = res.cibil.cibilLoanSummaryInfo[0].amountOverDue;
+                        // model.UIUDF.cibil.report = '<a href="" class="color-theme">Download</a>';
+                    }
+                    if (res.highMark != null) {
+                        model.UIUDF.highmark.score = res.highMark.highmarkScore;
+                        var highmarkFields = $(res.highMark.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
+                        model.UIUDF.highmark.active_accounts = highmarkFields[1].innerText.trim();
+                        model.UIUDF.highmark.overdue_accounts = highmarkFields[2].innerText.trim();
+                        model.UIUDF.highmark.current_balance = highmarkFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                        model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                        // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
+                    }
                 }, function(e) {
                     model.cibil_highmark = null;
                 });
@@ -736,15 +739,15 @@ define({
                                 }, {
                                     "key": "UIUDF.cibil.sanctioned_amount",
                                     "title": "Sanctioned Amount",
-                                    "type": "number"
+                                    "type": "amount"
                                 }, {
                                     "key": "UIUDF.cibil.current_balance",
                                     "title": "Current Balance",
-                                    "type": "number"
+                                    "type": "amount"
                                 }, {
                                     "key": "UIUDF.cibil.amount_overdue",
                                     "title": "Overdue Balance",
-                                    "type": "number"
+                                    "type": "amount"
                                 }
                                 /*, {
                                                                 "key": "UIUDF.cibil.report",
