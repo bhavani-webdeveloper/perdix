@@ -17,70 +17,80 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 10
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 0,
-                        maximum: 3
+                        maximum: 3,
+                        order: 20
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 0,
-                        maximum: 3
+                        maximum: 3,
+                        order: 30
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 40
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 50
                     },
                     {
                         pageName: 'loans.individual.screening.CBCheck',
                         title: 'CB_CHECK',
                         pageClass: 'cb-check',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 90
                     },
                     {
                         pageName: 'loans.individual.screening.Summary',
                         title: 'SUMMARY',
                         pageClass: 'summary',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 5
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 100
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 80
                     },
                     {
                         pageName: 'loans.individual.misc.BalanceSheetHistory',
                         title: 'BALANCE_SHEET_HISTORY',
                         pageClass: 'balance-sheet-history',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 90
                     }
                 ],
         		"bundlePages": [],
@@ -147,11 +157,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                     });
 
                                     $this.bundlePages.push({
-                                        pageClass: 'balance-sheet-history',
-                                        model: {customerUrn:res.urnNo, loanId:bundleModel.loanId}
-                                    });
-
-                                    $this.bundlePages.push({
                                         pageClass: 'applicant',
                                         model: {
                                             loanRelation: applicant
@@ -191,18 +196,31 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                     });
 
                                     $this.bundlePages.push({
+                                        pageClass: 'loan-review',
+                                        model: {
+                                            loanAccount: res, 
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'balance-sheet-history',
+                                        model: {customerUrn:res.urnNo, loanId:bundleModel.loanId}
+                                    });
+/*
+                                     $this.bundlePages.push({
+                                        pageClass: 'cb-check',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });*/
+
+                                    $this.bundlePages.push({
                                         pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
                                         }
                                     });
 
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: res, 
-                                        }
-                                    });
                                     
                                     deferred.resolve();
 

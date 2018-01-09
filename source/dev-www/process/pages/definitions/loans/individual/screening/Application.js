@@ -56,7 +56,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageClass: 'cbview',
                         minimum: 1,
                         maximum: 1,
-                        order:60
+                        order:70
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
@@ -64,7 +64,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1,
-                        order:70
+                        order:60
                     }
                 ],
         		"bundlePages": [],
@@ -171,18 +171,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                     });
 
                                     $this.bundlePages.push({
-                                        pageClass: 'cbview',
+                                        pageClass: 'loan-review',
                                         model: {
                                             loanAccount: res
                                         }
                                     });
 
                                     $this.bundlePages.push({
-                                        pageClass: 'loan-review',
+                                        pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
                                         }
                                     });
+
+                                    
                                     deferred.resolve();
 
                                 }, function(httpRes){

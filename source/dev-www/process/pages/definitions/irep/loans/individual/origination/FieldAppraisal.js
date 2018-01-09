@@ -74,7 +74,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'cbview',
                                 minimum: 1,
                                 maximum: 1,
-                                order:60
+                                order:80
                             },
                             {
                                 pageName: 'loans.individual.screening.Review',
@@ -82,7 +82,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:80
+                                order:60
                             }
                         ]);
                     },
@@ -219,7 +219,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
@@ -228,12 +233,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                               $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount,
-                                    }
-                                });
+                               
 
                                 deferred.resolve();
 
