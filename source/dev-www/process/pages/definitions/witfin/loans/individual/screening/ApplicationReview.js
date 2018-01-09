@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "APPLICATION",
+                    "title": "APPLICATION_REVIEW",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([

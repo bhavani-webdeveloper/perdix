@@ -177,6 +177,15 @@ define({
                             title: 'ID',
                             data: 'loanId'
                         },{
+                            title: 'URN',
+                            data: 'urn'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        }, {
+                            title: 'SPOKE_NAME',
+                            data: 'centreName'
+                        }, {
                             title: 'APPLICANT_NAME',
                             data: 'applicantName'
                         },{

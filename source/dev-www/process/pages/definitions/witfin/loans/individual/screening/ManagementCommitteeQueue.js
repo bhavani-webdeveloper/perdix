@@ -177,23 +177,20 @@ define({
                             title: 'ID',
                             data: 'loanId'
                         },{
+                            title: 'URN',
+                            data: 'urn'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        }, {
+                            title: 'SPOKE_NAME',
+                            data: 'centreName'
+                        }, {
                             title: 'APPLICANT_NAME',
                             data: 'applicantName'
                         },{
                             title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        },{
-                            title: 'Loan Amount',
-                            data: 'loanAmount'
-                        }, {
-                            title: 'AREA',
-                            data: 'area'
-                        }, {
-                            title: 'CITY_TOWN_VILLAGE',
-                            data: 'villageName'
-                        }, {
-                            title: 'PIN_CODE',
-                            data: 'enterprisePincode'
                         }]
                     },
                     getActions: function() {
