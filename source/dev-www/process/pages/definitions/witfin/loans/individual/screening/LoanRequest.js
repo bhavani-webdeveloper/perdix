@@ -345,7 +345,7 @@ define([],function(){
                         model.lead = obj;
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
-                        model.loanAccount.screeningDate = obj.screeningDate || moment("DD-MM-YYYY");
+                        model.loanAccount.screeningDate = obj.screeningDate || moment().format("DD-MM-YYYY");
                     }
                 },
                 form: [],
