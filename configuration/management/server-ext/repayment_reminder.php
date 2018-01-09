@@ -29,20 +29,29 @@ try {
     $currentDate = DB::table("$encore_db.banks")->select("current_working_date")->get();
     $currentDate = $currentDate->toArray();
     $futTable = "fut__".strtoupper(date("dMY", strtotime("{$currentDate[0]->current_working_date} -1 days")));
-
     $totalCount = 0;
-
     $repaymentReminder = DB::table("$bi_db.$futTable as fut")
         ->join("$db.loan_accounts as l", 'l.account_number', '=', 'fut.ACCOUNT_NO')
         ->join("$db.customer as c", 'c.id', '=', 'l.customer_id')
         ->whereBetween('fut.INSTALLMENT_DATE', [$fromDate, $toDate])
-        ->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date', DB::raw('NOW() as `created_at`'), DB::raw("'SYSTEM' as `created_by`"), DB::raw("0 as `version`"), DB::raw('NOW() as `last_edited_at`'), DB::raw("'SYSTEM' as `last_edited_by`"), DB::raw("'No Status' as `reminder_status`") )
-        ->havingRaw("(select count(account_number) from $db.repayment_reminder where account_number = `fut`.`ACCOUNT_NO` and installment_date = `fut`.`INSTALLMENT_DATE`) = 0")
+        ->select('l.bank_id', 'l.branch_id', 'c.centre_id', 'l.customer_id', 'fut.URN as customer_urn', 'fut.CUSTOMER_NAME as customer_name', 'l.id as loan_id', 'l.account_number', 'fut.DEMAND_NO as installment_number', 'fut.INSTALLMENT_AMOUNT as installment_amount', 'fut.INSTALLMENT_DATE as installment_date', DB::raw('NOW() as `created_at`'), DB::raw("'SYSTEM' as `created_by`"), DB::raw("0 as `version`"), DB::raw('NOW() as `last_edited_at`'), DB::raw("'SYSTEM' as `last_edited_by`"), DB::raw("'No Status' as `reminder_status`"), DB::raw("(select count(account_number) from $db.repayment_reminder where account_number = `fut`.`ACCOUNT_NO` and installment_date = `fut`.`INSTALLMENT_DATE`) as `existing_status`") )
         ->orderBy('fut.INSTALLMENT_DATE')
-        ->chunk(500, function ($reminderData) use (&$totalCount) {
+        ->chunk(500, function ($reminderData) use (&$totalCount, &$db) {
             $details = json_encode($reminderData);
             $details = json_decode($details, true);
-            RepaymentReminder::insert($details);
+
+            // Filtering data where existing_status equal zero
+            $details = array_filter($details, function($v, $k) {
+                return $v['existing_status'] == 0;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            // Remove the existing_status identifier from array
+            array_walk($details, function(&$value, $key) {
+                unset($value["existing_status"]);
+            }); 
+
+            // Insert the record    
+			DB::table("$db.repayment_reminder")->insert($details);
             $totalCount = $totalCount + count($details);
         });
 
