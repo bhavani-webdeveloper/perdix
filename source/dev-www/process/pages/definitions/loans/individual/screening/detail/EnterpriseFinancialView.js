@@ -751,21 +751,10 @@ self.renderReady = function(eventName) {
 									"amount": "",
 									"total": bpl['Purchases'],
 									"percentage": bpl['Purchases pct'],
-									"description": "Purchases as % of Income",
+									"description": "of turnover",
 									"$config": {
 										"title": {
 											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Gross Income",
-									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
 										}
 									}
 								}, {
@@ -780,10 +769,21 @@ self.renderReady = function(eventName) {
 										}
 									}
 								}, {
-									"title": "EBITDA",
+									"title": "Total Expenses",
 									"amount": "",
-									"total": bpl['EBITDA'],
-									"percentage": bpl['EBITDA pct'],									
+									"total": bpl['Total Expenses'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Expenses'])),						
+									"description": "of turnover",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Gross Income",
+									"amount": "",
+									"total": bpl['Gross Income'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
 									"description": "of turnover",
 									"$config": {
 									    "title": {
@@ -888,7 +888,7 @@ self.renderReady = function(eventName) {
 									"amount": bpl['Invoice'],
 									"total": "",
 									"percentage": bpl['Invoice pct'],
-									"description": "of total income",
+									"description": "of turnover",
 									"$config": {
 										"title": {
 											"className": "text-right"
@@ -899,41 +899,29 @@ self.renderReady = function(eventName) {
 									"amount": bpl['Cash'],
 									"total": "",
 									"percentage": bpl['Cash pct'],
-									"description": "of total income",
+									"description": "of turnover",
 									"$config": {
 										"title": {
 											"className": "text-right"
 										}
 									}
 								}, {
-									"title": "Scrap",
+									"title": "Scrap & Other Business Income",
 									"amount": bpl['Scrap or any business related income'],
 									"total": "",
 									"percentage": bpl['Scrap or any business related income pct'],
-									"description": "of total income",
+									"description": "of turnover",
 									"$config": {
 										"title": {
 											"className": "text-right"
 										}
 									}
 								},{
-									"title": "Other Business Income",
-									"amount": bpl['Other Business Income'],
-									"total": "",
-									"percentage": bpl['Other Business Income pct'],
-									"description": "of total income",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-
-								}, {
 									"title": "Purchases",
 									"amount": "",
 									"total": bpl['Purchases'],
 									"percentage": bpl['Purchases pct'],
-									"description": "Purchases as % of Income",
+									"description": "of turnover",
 									"$config": {
 										"title": {
 											"className": "text-bold"
@@ -962,17 +950,6 @@ self.renderReady = function(eventName) {
 										}
 									}
                     	 		}, {
-									"title": "Gross Income",
-									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
 									"title": "OPEX",
 									"amount": "",
 									"total": bpl['Opex'],
@@ -984,10 +961,21 @@ self.renderReady = function(eventName) {
 										}
 									}
 								},{
-									"title": "EBITDA",
+									"title": "Total Expenses",
 									"amount": "",
-									"total": bpl['EBITDA'],
-									"percentage": bpl['EBITDA pct'],
+									"total": bpl['Total Expenses'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Total Expenses'])),
+									"description": "of turnover",
+									"$config": {
+									    "title": {
+										    "className": "text-bold"
+										}
+									}
+								}, {
+									"title": "Gross Income",
+									"amount": "",
+									"total": bpl['Gross Income'],
+									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
 									"description": "of turnover",
 									"$config": {
 									    "title": {
