@@ -987,7 +987,7 @@ self.renderReady = function(eventName) {
 									"title": "EBITDA",
 									"amount": "",
 									"total": bpl['EBITDA'],
-									"percentage": bpl['EBITDA_PCT'] ,
+									"percentage": bpl['EBITDA pct'],
 									"description": "of turnover",
 									"$config": {
 									    "title": {
