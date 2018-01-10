@@ -42,14 +42,41 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
+                                "reference.verifications.mobileNo",
+                                "reference.verifications.occupation",
+                                "reference.verifications.address",
+                                "reference.verifications.referenceCheck.relationship",
+                                "reference.verifications.referenceCheck.financialStatus",
+                                "ResidenceVerification",
+                                "assets",
                                 "householdeDetails.familyMembers.relationShip",
+                                "householdeDetails.familyMembers.maritalStatus",
+                                "householdeDetails.familyMembers.primaryOccupation",
+                                "householdeDetails.familyMembers.educationStatus",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
                                 "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures",
-                                "reference"
-                            ]
+                                "householdeDetails.expenditures"
+
+
+
+                            ],
+                            "overrides": {
+                                "householdeDetails.familyMembers": {
+                                    "add": null,
+                                    "remove": null
+                                },
+                                "reference.verifications.referenceFirstName": {
+                                    "title":"NAME_OF_NEIGHBOUR"
+                                },
+                                "reference.verifications.referenceCheck.customerResponse": {
+                                    "title":"NEIGHBOUR_REFERENCE"
+                                },
+                                "reference.verifications.referenceCheck.opinion": {
+                                    "title":"COMMENTS_OF_NEIGHBOUR"
+                                }
+                            }
                         },
                         "ScreeningReview": {
                             "overrides": {
@@ -73,16 +100,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "trackDetails": {
                                     "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "reference.verifications.referenceFirstName": {
+                                    "title":"NAME_OF_NEIGHBOUR"
+                                },
+                                "reference.verifications.referenceCheck.customerResponse": {
+                                    "title":"NEIGHBOUR_REFERENCE"
+                                },
+                                "reference.verifications.referenceCheck.opinion": {
+                                    "title":"COMMENTS_OF_NEIGHBOUR"
                                 }
                             },
                             "excludes": [
+                                "ResidenceVerification",
+                                "assets",
                                 "householdeDetails.familyMembers.relationShip",
+                                "householdeDetails.familyMembers.maritalStatus",
+                                "householdeDetails.familyMembers.primaryOccupation",
+                                "householdeDetails.familyMembers.educationStatus",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
                                 "householdeDetails.familyMembers.salary",
                                 "householdeDetails.familyMembers.incomes",
                                 "householdeDetails.expenditures",
-                                "reference"
+                                "reference.mobileNo",
+                                "reference.occupation",
+                                "reference.address",
+                                "reference.referenceCheck",
+                                "reference.referenceCheck.relationship",
+                                "reference.referenceCheck.financialStatus"
                             ]
                         },
                         "Application": {
@@ -115,15 +164,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "reference": {
                                     "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+
                             ]
                         },
                         "BranchCreditAppraisal": {
@@ -148,15 +195,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "trackDetails": {
                                     "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+
                             ]
                         },
                         "HOCreditAppraisal": {
@@ -181,15 +226,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "trackDetails": {
                                     "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+
                             ]
                         },
                         "ManagementCommittee": {
@@ -214,15 +257,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "trackDetails": {
                                     "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+
                             ]
                         },
                         "REJECTED": {
@@ -250,6 +291,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
+                                "ResidenceVerification",
                                 "householdeDetails.familyMembers.relationShip",
                                 "householdeDetails.familyMembers.familyMemberFirstName",
                                 "householdeDetails.familyMembers.anualEducationFee",
@@ -371,6 +413,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "householdeDetails.familyMembers",
                     "householdeDetails.familyMembers.relationShipself",
                     "householdeDetails.familyMembers.relationShip",
+                    "householdeDetails.familyMembers.maritalStatus",
                     "householdeDetails.familyMembers.familyMemberFirstName",
                     "householdeDetails.familyMembers.primaryOccupation",
                     "householdeDetails.familyMembers.educationStatus",
@@ -411,6 +454,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "trackDetails.vehiclesOwned",
                     "trackDetails.vehiclesFinanced",
                     "trackDetails.vehiclesFree",
+                    "ResidenceVerification",
+                    "ResidenceVerification.location",
+                    "ResidenceVerification.locatingHouse",
+                    "ResidenceVerification.distanceFromHouse",
+                    "ResidenceVerification.visibleIndicator",
+                    "ResidenceVerification.commentOnLocality",
+                    "ResidenceVerification.residenceStatus",
+                    "ResidenceVerification.contactInformationConfirmed",
+                    "ResidenceVerification.remarks",
+                    "ResidenceVerification.stayAtResidence",
+                    "ResidenceVerification.yearOfResidence",
+                    "ResidenceVerification.namePlate",
+                    "ResidenceVerification.localityType",
+                    "ResidenceVerification.typeOfAccomodation",
+                    "ResidenceVerification.areaSQFT",
+                    "ResidenceVerification.remarksOnBusiness",
+                    "assets",
+                    "assets.physicalAssets",
+                    "assets.physicalAssets.assetType",
+                    "assets.physicalAssets.ownedAssetDetails",
+                    "assets.physicalAssets.numberOfOwnedAsset",
                     "reference",
                     "reference.verifications",
                     "reference.verifications.referenceFirstName",
@@ -420,9 +484,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "reference.verifications.referenceCheck",
                     "reference.verifications.referenceCheck.knownSince",
                     "reference.verifications.referenceCheck.relationship",
+                    "reference.verifications.referenceCheck.customerResponse",
                     "reference.verifications.referenceCheck.opinion",
-                    "reference.verifications.referenceCheck.financialStatus",
-                    "reference.verifications.referenceCheck.customerResponse"
+                    "reference.verifications.referenceCheck.financialStatus"
+
                 ];
 
             }
@@ -476,11 +541,88 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "repositoryAdditions": {
                                 "ResidenceVerification": {
                                     "type": "box",
+                                    "title": "RELATIONSSHIP_VERIFICATION",
+                                    "orderNo": 999,
                                     "items": {
+                                        "location": {
+                                            "key": "customer.latitude",
+                                            "title": "LOCATION",
+                                            "type": "geotag",
+                                            "latitude": "latitude",
+                                            "longitude": "longitude",
+                                        },
+                                        "locatingHouse": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf1",
+                                            "type": "text",
+                                            "title": "LOCATING_HOUSE"
+                                        },
+                                        "distanceFromHouse": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf2",
+                                            "type": "text",
+                                            "title": "DISTANCE_FROM_HOUSE"
+                                        },
+                                        "visibleIndicator": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf3",
+                                            "type": "text",
+                                            "title": "VISIBLE_INDICATOR"
+                                        },
                                         "commentOnLocality": {
-                                            "key": "customer.udf1",
-                                            "type": "text"
-                                        }
+                                            "key": "customer.udf.userDefinedFieldValues.udf4",
+                                            "type": "text",
+                                            "title": "COMMENT_ON_LOCALITY"
+                                        },
+                                        "residenceStatus": {
+                                            "key": "customer.ownership",
+                                            "type": "text",
+                                            "title": "RESIDENCE_STATUS"
+                                        },
+                                        "contactInformationConfirmed": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf5",
+                                            "type": "select",
+                                            "title": "CONTACT_INFORMATION_CONFIRMED"
+                                        },
+                                        "remarks": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf5",
+                                            "condition": "customer.udf.userDefinedFieldValues.udf5=='No'",
+                                            "type": "text",
+                                            "title": "REMARKS"
+                                        },
+                                        "stayAtResidence": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf6",
+                                            "type": "select",
+                                            "enumCode":"decisionmaker",
+                                            "title": "STAY_AT_RESIDENCE"
+                                        },
+                                        "yearOfResidence": {
+                                            "key": "customer.inCurrentAddressSince",
+                                            "type": "select",
+                                            "title": "YEAR_OF_RESIDENCE"
+                                        },
+                                        "namePlate": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf7",
+                                            "type": "select",
+                                            "enumCode":"decisionmaker",
+                                            "title": "NAME_PLATE"
+                                        },
+                                        "localityType": {
+                                            "key": "customer.localityType",
+                                            "type": "select",
+                                            "title": "LOCALITY_TYPE"
+                                        },
+                                        "typeOfAccomodation": {
+                                            "key": "customer.accomodationType",
+                                            "type": "select",
+                                            "title": "ACCOMODATION_TYPE"
+                                        },
+                                        "areaSQFT": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf8",
+                                            "title": "AREA_SQFT",
+                                            "type":"select"
+                                        },
+                                        "remarksOnBusiness": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf9",
+                                            "title": "REMAKRS_ON_BUISNESS"
+                                        },
                                     }
                                 }
                             },

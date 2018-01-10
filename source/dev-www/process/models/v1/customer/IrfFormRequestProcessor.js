@@ -4950,6 +4950,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                 title: "FAMILY_MEMBER_FULL_NAME"
                             },
+                            "maritalStatus": {
+                                "key":"customer.familyMembers[].maritalStatus",
+                                "type": "select",
+                                "title": "MARITAL_STATUS"
+
+                            },
+
                             "primaryOccupation": {
                                 "key": "customer.occupation1",
                                 "title": "PRIMARY_OCCUPATION",
@@ -5155,6 +5162,50 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
 
+            },
+            "assets": {
+                "type": "box",
+                orderNo: 90,
+                "title": "T_ASSETS",
+                "items": {
+                    "physicalAssets": {
+                        key: "customer.physicalAssets",
+                        type: "array",
+                        startEmpty: true,
+                        items: {
+                            "assetType": {
+                                key: "customer.physicalAssets[].assetType",
+                                "title": "ASSET_TYPE",
+                                type: "select",
+                                enumCode: "asset_type"
+                            },
+                            "ownedAssetDetails": {
+                                key: "customer.physicalAssets[].ownedAssetDetails",
+                                type: "select",
+                                screenFilter: true,
+                                enumCode: "asset_Details",
+                                parentEnumCode: "asset_type",
+                                parentValueExpr: "model.customer.physicalAssets[arrayIndex].assetType",
+                            },
+                            "unit": {
+                                key: "customer.physicalAssets[].unit",
+                                "title": "UNIT",
+                                type: "select",
+                                screenFilter: true,
+                                parentEnumCode: "asset_type",
+                                parentValueExpr: "model.customer.physicalAssets[arrayIndex].assetType",
+                            },
+                            "numberOfOwnedAsset": {
+                                "title": "NUMBER_OF_ASSETS",
+                                key: "customer.physicalAssets[].numberOfOwnedAsset",
+                            },
+                            "ownedAssetValue": {
+                                key: "customer.physicalAssets[].ownedAssetValue",
+                                type: "amount"
+                            }
+                        }
+                    }
+                }
             },
             "trackDetails": {
                 type: "box",

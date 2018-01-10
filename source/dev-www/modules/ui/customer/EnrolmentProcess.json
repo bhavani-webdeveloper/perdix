@@ -1267,6 +1267,12 @@
                         "type": "amount",
                         "title": "SALARY"
                     },
+                    "maritalStatus": {
+                        "key":"customer.familyMembers[].maritalStatus",
+                        "type": "select",
+                        "title": "MARITAL_STATUS"
+
+                    },
                     "incomes": {
                         "key": "customer.familyMembers[].incomes",
                         "type": "array",
@@ -1431,11 +1437,15 @@
                 "startEmpty": true,
                 "title": "PHYSICAL_ASSETS",
                 "items": {
-                    "nameOfOwnedAsset": {
-                        "key": "customer.physicalAssets[].nameOfOwnedAsset",
+                    "assetType": {
+                         "key": "customer.physicalAssets[].assetType",
                         "title": "ASSET_TYPE",
                         "type": "select",
                         "enumCode": "asset_type"
+                    },
+                    "nameOfOwnedAsset": {
+                        "key": "customer.physicalAssets[].nameOfOwnedAsset",
+                        "title": "NAME_OF_OWNED_ASSET"
                     },
                     "vehicleModel": {
                         "key": "customer.physicalAssets[].vehicleModel",
