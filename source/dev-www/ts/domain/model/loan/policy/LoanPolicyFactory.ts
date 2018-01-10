@@ -7,7 +7,7 @@ import {LoadRelatedCustomerData} from './LoadRelatedCustomerData';
 
 import {LoadRelatedCustomersPolicy} from "./LoadRelatedCustomersPolicy";
 import {DefaultRelatedCustomersPolicy} from "./DefaultRelatedCustomersPolicy";
-import {LoadStageRelatedPolicy} from './LoadStageRelatedPolicy';
+
 import {MandatoryFieldsPolicy} from './MandatoryFieldsPolicy';
 import {OriginationToBookingPolicy} from './OriginationToBookingPolicy';
 import {DefaultVehicleComponentsPolicy} from './DefaultVehicleComponentsPolicy';
