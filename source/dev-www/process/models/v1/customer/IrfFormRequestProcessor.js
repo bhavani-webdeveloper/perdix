@@ -6478,9 +6478,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                 if(typeof formName === 'string') {
                     if (Object.keys(formRepository).indexOf(formName) === -1)
                         return form;
-                    formRepo = formRepository[formName];
+                    formRepo = _.cloneDeep(formRepository[formName]);
                 } else {
-                    formRepo = formName;
+                    formRepo = _.cloneDeep(formName);
+                }
+
+                // Add repoAdditions if any
+                if (formRequest.options && formRequest.options.repositoryAdditions){
+                    formRepo = _.merge(formRepo, formRequest.options.repositoryAdditions);
                 }
 
                 if (!formRequest || !_.isObject(formRequest)) {

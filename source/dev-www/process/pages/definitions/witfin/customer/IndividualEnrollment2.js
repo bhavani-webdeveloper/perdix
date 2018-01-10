@@ -473,6 +473,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "KYC.addressProofSameAsIdProof",
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "ResidenceVerification": {
+                                    "type": "box",
+                                    "items": {
+                                        "commentOnLocality": {
+                                            "key": "customer.udf1",
+                                            "type": "text"
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [
                                 {
                                     "type": "actionbox",
