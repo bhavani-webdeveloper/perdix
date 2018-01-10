@@ -13,7 +13,8 @@
                     "assetType": {
                         "key": "customer.enterpriseAssets[].assetType",
                         "orderNo": 10,
-                        "type": "select"
+                        "type": "select",
+                        "enumCode":"vehicle_type"
                     },
                     "endUse": {
                         "key": "customer.enterpriseAssets[].endUse",
@@ -21,7 +22,9 @@
                     },
                     "natureOfUse": {
                         "key": "customer.enterpriseAssets[].natureOfUse",
-                        "orderNo": 30
+                        "orderNo": 30,
+                        "type":"radios",
+                        "enumCode":"nature_of_use"
                     },
                     "manufacturer": {
                         "key": "customer.enterpriseAssets[].manufacturer",
@@ -560,6 +563,7 @@
             "customerId": {
                 "key": "customer.id",
                 "title": "LOAD_EXISTING_CUSTOMER",
+                "resolver": "EnterpriseCustomerIDLOVConfiguration",
                 "type": "lov",
                 "orderNo": 10
             },

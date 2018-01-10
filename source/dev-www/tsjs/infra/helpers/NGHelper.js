@@ -1,7 +1,4 @@
-/**
- * Created by shahalpk on 20/12/17.
- */
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "lodash"], function (require, exports, _) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var NGHelper = /** @class */ (function () {
@@ -10,7 +7,9 @@ define(["require", "exports"], function (require, exports) {
         NGHelper.refreshUI = function () {
             /* Calls $apply() method on the rootScope */
             var elem = angular.element(document.querySelector('[ng-controller]'));
-            elem.scope().$root.$apply();
+            _.defer(function () {
+                elem.scope().$root.$apply();
+            });
         };
         return NGHelper;
     }());

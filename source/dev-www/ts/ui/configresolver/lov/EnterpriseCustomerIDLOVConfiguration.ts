@@ -3,7 +3,7 @@ import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess';
 import * as _ from 'lodash';
-export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguration {
+export class EnterpriseCustomerIDLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
         "urnNo": "customer.urnNo",
         "firstName":"customer.firstName"
@@ -23,7 +23,7 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             'branchName': branchName ||SessionStore.getBranch(),
             'firstName': inputModel.firstName,
             'centreId':inputModel.centreId,
-            'customerType':"individual",
+            'customerType':"enterprise",
             'urnNo': inputModel.urnNo
         }).$promise;
         return promise;
@@ -163,7 +163,7 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
     };
 
     lovonly: boolean = true;
-    autolov: boolean = true;
+    autolov: boolean = false;
 }
 
 
