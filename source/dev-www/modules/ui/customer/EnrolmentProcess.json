@@ -1386,13 +1386,13 @@
                 "key": "customer.ownership",
                 "type": "select"
             },
-            "udf29": {
-                "key": "customer.udf.userDefinedFieldValues.udf29",
+            "inCurrentAddressSince": {
+                "key": "customer.inCurrentAddressSince",
                 "type": "select",
                 "title": "IN_CURRENT_ADDRESS_SINCE"
             },
-            "udf30": {
-                "key": "customer.udf.userDefinedFieldValues.udf30",
+            "inCurrentAreaSince": {
+                "key": "inCurrentAreaSince",
                 "type": "select",
                 "title": "IN_CURRENT_AREA_SINCE"
             },
