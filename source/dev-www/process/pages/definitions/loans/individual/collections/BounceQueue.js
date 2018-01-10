@@ -38,9 +38,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
             PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
             .then(function(data){
                 console.log(data);
-                if (data.IncludeUserFilter) {
-                    model.assignedTo = SessionStore.getLoginname();
-                }
+                var defaultConfig = {
+                    IncludeUserFilter: false
+                };
+                _.defaults(data, defaultConfig);
+                model.pageConfig = data;
+                if (model.pageConfig.IncludeUserFilter)
+                    model.assignedTo = SessionStore.getLoginname();                    
             });
         },
         definition: {

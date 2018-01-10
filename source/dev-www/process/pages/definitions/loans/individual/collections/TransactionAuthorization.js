@@ -161,6 +161,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 readonly: true
                             },
                             {
+                                key: "_transAuth.repaymentDate",
+                                title: "REPAYMENT_DATE",
+                                type: "date"
+                            },
+                            {
                                 title: "DETAILS",
                                 type: "fieldset",
                                 condition: "model._transAuth.transactionName == 'Scheduled Demand'",

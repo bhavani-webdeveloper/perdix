@@ -151,6 +151,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     //type:"amount"
                 },
                 {
+                    key: "_credit.repaymentDate",
+                    title: "REPAYMENT_DATE",
+                    type: "date"
+                },
+                {
                     type: "fieldset",
                     title: "PRECLOSURE_BREAKUP",
                     condition: "model._credit.transactionName=='Pre-closure'",
