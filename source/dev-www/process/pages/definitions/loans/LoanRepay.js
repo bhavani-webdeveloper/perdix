@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition) {
 
             function backToLoansList(){
                 try {
@@ -47,6 +47,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 initialize: function (model, form, formCtrl) {
 
                     pageInit();
+
+                    PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
+                    .then(function(data){
+                        // defaulting
+                        var defaultConfig = {
+                            ShowPayerInfo: false
+                        };
+                        _.defaults(data, defaultConfig);
+                        model.pageConfig = data;
+                    });
 
                     var config = {
                         fingerprintEnabled: false
@@ -176,6 +186,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     .then(
                                         function(res){
                                             model.loanAccount = res;
+                                            model.repayment.payeeName = res.payeeName;
+                                            model.repayment.payeeMobileNumber = res.payeeMobileNumber;
+                                            model.repayment.relationToApplicant = res.relationToApplicant;
                                             var urns = [];
                                             if (!_.isNull(model.loanAccount.applicant)){
                                                 urns.push(model.loanAccount.applicant);
@@ -232,6 +245,31 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "loanAccount.applicantName",
                                 title: "APPLICANT_NAME",
                                 readonly: true
+                            },
+                            {
+                                "type": "fieldset",
+                                "title": "PAYERS_INFORMATION",
+                                "condition" : "model.pageConfig.ShowPayerInfo==true",
+                                "items": [{
+                                    "key": "repayment.payeeName",
+                                    "title": "PAYER_NAME",
+                                    "type" :"string"
+                                },
+                                {
+                                    "key": "repayment.payeeMobileNumber",
+                                    "title": "PAYER_MOBILE_NUMBER",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "repayment.relationToApplicant",
+                                    "title": "RELATIONSHIP_TO_APPLICANT",
+                                    "type": "select",
+                                    "enumCode": "payerRelation"
+                                }]
+                            },
+                            {
+                                "title" : "REPAYMENT_INFORMATION",
+                                "type" : "fieldset"
                             },
                             /*{
                                 key: "loanAccount.coApplicantName",
@@ -514,8 +552,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 "type":"submit",
                                 "style":"btn-theme",
-                                "title":"SUBMIT"
-
+                                "title":"REPAY"
                             }
                         ]
                     }
@@ -723,6 +760,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.transactionName = model.repayment.transactionName;
                                     postData.loanCollection.agentTrxn = false;
                                     postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
+                                    postData.loanCollection.payeeName = model.repayment.payeeName;
+                                    postData.loanCollection.payeeMobileNumber = model.repayment.payeeMobileNumber;
+                                    postData.loanCollection.relationToApplicant = model.repayment.relationToApplicant;
 
                                     if (model.repayment.id) {
                                         if (postData.loanCollection.instrumentType == 'CASH') {

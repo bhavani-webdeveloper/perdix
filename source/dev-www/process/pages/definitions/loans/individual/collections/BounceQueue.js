@@ -138,7 +138,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
             },
 
             getResultsPromise: function(searchOptions, pageOpts) {
-                debugger;
                 /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
                         'accountNumbers': searchOptions.loan_no,
