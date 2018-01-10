@@ -1392,7 +1392,7 @@
                 "title": "IN_CURRENT_ADDRESS_SINCE"
             },
             "inCurrentAreaSince": {
-                "key": "inCurrentAreaSince",
+                "key": "customer.inCurrentAreaSince",
                 "type": "select",
                 "title": "IN_CURRENT_AREA_SINCE"
             },
