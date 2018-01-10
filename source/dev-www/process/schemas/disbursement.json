@@ -142,7 +142,7 @@
         },
         "udf4": {
           "title": "FINANCE_TEAM_REJECTION_REMARKS",
-          "type":"string"
+          "type": ["string", "null"]
         },
         "udf5": {
           "type": "string",
