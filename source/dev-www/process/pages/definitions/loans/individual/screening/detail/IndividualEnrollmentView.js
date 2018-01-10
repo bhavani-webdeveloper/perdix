@@ -981,7 +981,7 @@ define({
                             "key": "customer.identityProofImageId",
                             "type": "file",
                             "notitle": true,
-                            "title": "KYC-Aadhar Card",
+                            "title": "KYC-PAN Card",
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
@@ -989,7 +989,7 @@ define({
                             "key": "customer.addressProofImageId",
                             "type": "file",
                             "notitle": true,
-                            "title": "KYC-PAN Card",
+                            "title": "KYC-Aadhar Card",
                             "preview": "pdf",
                             "using": "scanner"
                         }, {
