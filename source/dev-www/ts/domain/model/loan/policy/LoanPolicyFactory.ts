@@ -45,8 +45,7 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return obj;
             case 'LoadRelatedCustomerData':
                 return new LoadRelatedCustomerData();
-            case 'LoadStageRelatedPolicy':
-                return new LoadStageRelatedPolicy();
+
             case 'MandatoryFieldsPolicy':
                 return new MandatoryFieldsPolicy();
             case 'OriginationToBookingPolicy':
