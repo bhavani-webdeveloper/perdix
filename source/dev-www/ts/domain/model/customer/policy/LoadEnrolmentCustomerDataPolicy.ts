@@ -74,12 +74,22 @@ export class LoadEnrolmentCustomerDataPolicy extends IPolicy<EnrolmentProcess> {
                         }
                     }
 
+                    if(enrolmentProcess.customer.mailSameAsResidence) {
+                        enrolmentProcess.customer.mailingLocality = enrolmentProcess.customer.locality;
+                        enrolmentProcess.customer.mailingDoorNo = enrolmentProcess.customer.doorNo;
+                        enrolmentProcess.customer.mailingStreet = enrolmentProcess.customer.street;
+                        enrolmentProcess.customer.mailingPostoffice = enrolmentProcess.customer.postOffice;
+                        enrolmentProcess.customer.mailingPincode = enrolmentProcess.customer.pincode.toString();
+                        enrolmentProcess.customer.mailingDistrict = enrolmentProcess.customer.district;
+                        enrolmentProcess.customer.mailingState = enrolmentProcess.customer.state;
+                    }
+
                     return Observable.of(enrolmentProcess);
                 } catch(err) {
                     console.error(err);
                     return Observable.of(enrolmentProcess);
                 }
-                
+
             }
         )
     }

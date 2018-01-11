@@ -301,6 +301,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         fieldType: "number",
                         resolver: "MailingPincodeLOVConfiguration"
                     },
+                    "IndividualInformation.customerBranchId": {
+                        "readonly": true
+                    },
+                    "ContactInformation.mailingDoorNo": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingStreet": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingPostoffice": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingPincode": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingLocality": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingDistrict": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingState": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
                     "KYC.customerId": {
                         type: "lov",
                         key: "customer.id",
