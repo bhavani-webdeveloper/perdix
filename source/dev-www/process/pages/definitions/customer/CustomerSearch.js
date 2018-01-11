@@ -242,7 +242,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 									});
 								} else {
 									$state.go("Page.Engine",{
-										pageName:"ProfileInformation",
+										pageName:"customer.IndividualEnrollment",
 										pageId:item.id
 									});
 								}

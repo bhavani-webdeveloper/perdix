@@ -20,6 +20,42 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
         },
+        modelPromise: function(pageId, _model) {
+            var deferred = $q.defer();
+            if(!pageId) {
+                deferred.resolve(_model);
+                return deferred.promise;
+            }
+            PageHelper.showLoader();
+            irfProgressMessage.pop("enrollment-save","Loading Customer Data...");
+            Enrollment.getCustomerById({id:pageId},function(resp,header){
+                model = _model;
+                model.customer = resp;
+                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
+                model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
+                model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
+                model = EnrollmentHelper.fixData(model);
+                if (model.customer.dateOfBirth) {
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+                if (model.customer.spouseDateOfBirth) {
+                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+
+                irfProgressMessage.pop("enrollment-save","Load Complete",2000);
+                deferred.resolve(model);
+                PageHelper.hideLoader();
+            },function(resp){
+                PageHelper.hideLoader();
+                irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                $stateParams.confirmExit = false;
+                $state.go("Page.Engine",{
+                    pageName:"CustomerSearch",
+                    pageId:null
+                });
+            });
+            return deferred.promise;
+        },
         offline: false,
         getOfflineDisplayItem: function(item, index){
             return [
