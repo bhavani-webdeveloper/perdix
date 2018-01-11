@@ -49,5 +49,5 @@ export class MailingPincodeLOVConfiguration extends LOVElementConfiguration {
         NGHelper.refreshUI();
     };
     autolov: boolean = true;
-    lovonly: boolean = true;
+    lovonly: boolean = false;
 }

@@ -9,6 +9,8 @@ export class NGHelper {
     public static refreshUI():void {
         /* Calls $apply() method on the rootScope */
         let elem = angular.element(document.querySelector('[ng-controller]'));
-        elem.scope().$root.$apply();
+        setTimeout(function(){
+            elem.scope().$root.$apply();
+        },0)
     }
 }

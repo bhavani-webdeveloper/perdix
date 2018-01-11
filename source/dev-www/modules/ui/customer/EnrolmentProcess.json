@@ -384,7 +384,8 @@
                 "type" : "date"
             },
             "addressProof": {
-                "key": "customer.addressProof"
+                "key": "customer.addressProof",
+                "type": "select"
             },
             "addressProofImageId": {
                 "key": "customer.addressProofImageId",

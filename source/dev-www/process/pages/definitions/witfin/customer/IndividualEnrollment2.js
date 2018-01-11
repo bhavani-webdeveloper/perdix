@@ -293,9 +293,114 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "ContactInformation.pincode": {
+                        fieldType: "number",
+                        resolver: "PincodeLOVConfiguration"
+                    },
+                    "ContactInformation.mailingPincode": {
+                        fieldType: "number",
+                        resolver: "MailingPincodeLOVConfiguration"
+                    },
                     "KYC.customerId": {
                         type: "lov",
                         key: "customer.id",
+                        "inputMap": {
+                            "firstName": {
+                                "key": "customer.firstName",
+                                "title": "CUSTOMER_NAME"
+                            },
+                            "urnNo": {
+                                "key": "customer.urnNo",
+                                "title": "URN_NO",
+                                "type": "string"
+                            },
+                            "customerBranchId": {
+                                "key": "customer.customerBranchId",
+                                "type": "select",
+                                "screenFilter": true,
+                                "readonly": true
+                            },
+                            "centreName": {
+                                "key": "customer.place",
+                                "title": "CENTRE_NAME",
+                                "type": "string",
+                                "readonly": true,
+
+                            },
+                            "centreId": {
+                                key: "customer.centreId",
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function (inputModel, form, model, context) {
+                                    var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+
+                                    var centreCode = formHelper.enum('centre').data;
+                                    var out = [];
+                                    if (centres && centres.length) {
+                                        for (var i = 0; i < centreCode.length; i++) {
+                                            for (var j = 0; j < centres.length; j++) {
+                                                if (centreCode[i].value == centres[j].id) {
+
+                                                    out.push({
+                                                        name: centreCode[i].name,
+                                                        id: centreCode[i].value
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.centreId = valueObj.id;
+                                    model.centreName = valueObj.name;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                        },
+                        "outputMap": {
+                            "urnNo": "customer.urnNo",
+                            "firstName": "customer.firstName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function (inputModel, form) {
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var branches = formHelper.enum('branch_id').data;
+                            var branchName;
+                            for (var i = 0; i < branches.length; i++) {
+                                if (branches[i].code == inputModel.customerBranchId)
+                                    branchName = branches[i].name;
+                            }
+                            var promise = Enrollment.search({
+                                'branchName': branchName || SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId': inputModel.centreId,
+                                'customerType': "individual",
+                                'urnNo': inputModel.urnNo
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function (data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
                         onSelect: function (valueObj, model, context) {
                             PageHelper.showProgress('customer-load', 'Loading customer...');
                             EnrolmentProcess.fromCustomerID(valueObj.id)
@@ -609,8 +714,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
-                            self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
+                        .then(function(form){
+                            self.form = form;
+                        });
 
                     /* Form rendering ends */
                 },

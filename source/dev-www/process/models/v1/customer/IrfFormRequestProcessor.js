@@ -6705,19 +6705,48 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
                 constructForm(formRepo, form, undefined, true);
 
-                _.forEach(resolvers, function(val, key) {
-                    var resolver = val.resolver;
-                    var pageDefPath = "perdix/ui/configresolver/" + val.item.type + "/" + resolver;
+
+                if (resolvers && resolvers.length > 0){
+                    var deferred = $q.defer();
+                    var resolverCountA = resolvers.length || 0;
+                    var resolverCountB = 0;
+                    form.promise = null;
+                    _.forEach(resolvers, function(val, key) {
+                        form.promise = deferred.promise;
+                        var resolver = val.resolver;
+                        var pageDefPath = "perdix/ui/configresolver/" + val.item.type + "/" + resolver;
                         require([pageDefPath], function(tsObject) {
+
                             var obj = new tsObject[resolver]();
                             _.defaults(val.item, obj);
+                            resolverCountB++;
+                            if (resolverCountB >= resolverCountA){
+                                deferred.resolve();
+                            }
                         },function(err){
                             $log.info("[REQUIRE] Error loading page(" + pageDefPath + ")");
-                            $log.error(err)
+                            $log.error(err);
+                            deferred.reject(err);
                         });
-                });
+                    });
+                }
+
 
                 return form;
+            },
+            buildFormDefinition: function(formName, formRequest, configFile, model) {
+                var form = this.getFormDefinition(formName, formRequest, configFile, model);
+                var deferred = $q.defer();
+                if (form.promise != null){
+                    form.promise
+                        .then(function(){
+                            deferred.resolve(form);
+                        }, function(e){
+                            deferred.reject(e)
+                        })
+                }
+
+                return deferred.promise;
             }
         }
     }
