@@ -20,14 +20,22 @@ let config = {
                     {
                         "name": "LoadRelatedCustomersPolicy",
                         "arguments": {}
-                    },
+                    }
+                ],
+                "overrides": [
                     {
-                        "name": "DefaultVehicleComponentsPolicy",
-                        "arguments": {}
-                    },
-                    {
-                        "name":"DefaultVehicleAccessoriesPolicy",
-                        "arguments": {}
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='VehicleValuation'",
+                        "add": [
+                            {
+                                "name": "DefaultVehicleComponentsPolicy",
+                                "arguments": {}
+                            },
+                            {
+                                "name":"DefaultVehicleAccessoriesPolicy",
+                                "arguments": {}
+                            }
+                        ]
                     }
                 ]
             },
@@ -35,6 +43,10 @@ let config = {
                 "defaults": [
                     {
                         "name":"MandatoryFieldsPolicy",
+                        "arguments": null
+                    },
+                    {
+                        "name":"LoanDerivedFieldsUpdate",
                         "arguments": null
                     }
                 ]
@@ -57,6 +69,12 @@ let config = {
                 ]
             },
             beforeProceed: {
+                "defaults": [
+                    {
+                        "name":"LoanDerivedFieldsUpdation",
+                        "arguments": null
+                    }
+                ],
                 "overrides": [
                     {
                         "type": "expr",

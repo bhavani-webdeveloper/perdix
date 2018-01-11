@@ -442,7 +442,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
                     "IndividualInformation",
                     "IndividualInformation.customerBranchId",
-                    "IndividualInformation.centerId",
+                    "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
                     "IndividualInformation.title",
                     "IndividualInformation.firstName",

@@ -36,6 +36,9 @@ export class PolicyManager<T> {
             policy.arguments = policy.arguments || {};
             try {
                 let policyObj: IPolicy<T> = this.policyFactory.fromPolicyName(policy.name);
+                if (policyObj == null){
+                    throw new Error("Cannot find policy [name:" + policy.name + "]");
+                }
                 if (policyObj && policy.arguments) {
                     policyObj.setArguments(policy.arguments);
                     observables.push(policyObj.run(this.obj));

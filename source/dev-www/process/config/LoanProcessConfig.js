@@ -22,14 +22,22 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "LoadRelatedCustomersPolicy",
                             "arguments": {}
-                        },
+                        }
+                    ],
+                    "overrides": [
                         {
-                            "name": "DefaultVehicleComponentsPolicy",
-                            "arguments": {}
-                        },
-                        {
-                            "name": "DefaultVehicleAccessoriesPolicy",
-                            "arguments": {}
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='VehicleValuation'",
+                            "add": [
+                                {
+                                    "name": "DefaultVehicleComponentsPolicy",
+                                    "arguments": {}
+                                },
+                                {
+                                    "name": "DefaultVehicleAccessoriesPolicy",
+                                    "arguments": {}
+                                }
+                            ]
                         }
                     ]
                 },
@@ -37,6 +45,10 @@ define(["require", "exports"], function (require, exports) {
                     "defaults": [
                         {
                             "name": "MandatoryFieldsPolicy",
+                            "arguments": null
+                        },
+                        {
+                            "name": "LoanDerivedFieldsUpdate",
                             "arguments": null
                         }
                     ]
@@ -59,6 +71,12 @@ define(["require", "exports"], function (require, exports) {
                     ]
                 },
                 beforeProceed: {
+                    "defaults": [
+                        {
+                            "name": "LoanDerivedFieldsUpdation",
+                            "arguments": null
+                        }
+                    ],
                     "overrides": [
                         {
                             "type": "expr",

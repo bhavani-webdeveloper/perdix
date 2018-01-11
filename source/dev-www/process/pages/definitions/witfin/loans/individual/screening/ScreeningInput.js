@@ -144,7 +144,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                var loanAccount = loanProcess;
-                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
+                                // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
                                         loanProcess.loanAccount.leadId = _leadId;
