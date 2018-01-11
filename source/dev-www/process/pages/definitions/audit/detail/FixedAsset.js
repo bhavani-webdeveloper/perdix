@@ -128,8 +128,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                                 "htmlClass": "col-sm-2",
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].description",
-                                    "notitle": true,
-                                    "required":true
+                                    "notitle": true
                                 }]
                             }]
                         });

@@ -49,7 +49,9 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                             var mgo = masters.general_observation.particulars[go.particular_id];
                             go.particular_name = mgo.particular_name;
                             if (mgo.particular_type != 2 && go.option_id && Number(go.option_id[0])) {
-                                var gopos = filterFilter(masters.general_observation.particular_options[go.particular_id], {option_id: Number(go.option_id[0])}, true);
+                                var gopos = filterFilter(masters.general_observation.particular_options[go.particular_id], {
+                                    option_id: Number(go.option_id[0])
+                                }, true);
                                 if (gopos && gopos.length) {
                                     go.option_name = gopos[0].name;
                                 }
@@ -155,7 +157,12 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                     }]
                                 }]
                             }, {
-                                key: "general_observations[].comments"
+                                key: "general_observations[].comments",
+                                "condition": 'model.general_observations[arrayIndex].option_name == "No"',
+                                "required": true
+                            }, {
+                                key: "general_observations[].comments",
+                                "condition": 'model.general_observations[arrayIndex].option_name == "Yes"',
                             }]
                         }]
                     }, {
