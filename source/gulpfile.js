@@ -170,7 +170,11 @@ var tsProject = ts.createProject({
     out: 'dev-www/domain/run.js'
 });
 
-gulp.task('ts:perdixConfig', function(){
+gulp.task('clean:tsPerdixConfig', function(){
+    return del(['./dev-www/process/config/**/*']);
+})
+
+gulp.task('ts:perdixConfig', ['clean:tsPerdixConfig'], function(){
     return gulp.src('../configuration/ui-process-config/' + argv.siteCode + '/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
@@ -182,14 +186,10 @@ gulp.task('ts:perdixConfig', function(){
         .pipe(gulp.dest('./dev-www/process/config'));
 })
 
-gulp.task('ts:scripts', function() {
-    // var tsResult = gulp.src('dev-www/domain/entites/*.ts')
-    //     .pipe(tsProject());
-
-    // return merge([ // Merge the two output streams, so this task is finished when the IO of both operations is done.
-    //     tsResult.dts.pipe(gulp.dest('dev-www/domain')),
-    //     tsResult.js.pipe(gulp.dest('dev-www/domain/js'))
-    // ]);
+gulp.task("clean:tsScripts", function(){
+    return del(['./dev-www/tsjs/**/*']);
+})
+gulp.task('ts:scripts', ['clean:tsScripts'], function() {
     return gulp.src('./dev-www/ts/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
