@@ -805,6 +805,15 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
+			    "payeeRelationToApplicant":{
+                  "title":"payeeRelationToApplicant",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
 			    "assignedTo":{
                   "title":"assignedTo",
                  "type":"string",
