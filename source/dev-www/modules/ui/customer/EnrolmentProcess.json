@@ -375,6 +375,14 @@
                 "key": "customer.identityProofNo",
                 "type": "barcode"
             },
+            "idProofIssueDate": {
+                "key" : "customer.idProofIssueDate",
+                "type" : "date"
+            },
+            "idProofValidUptoDate": {
+                "key" : "customer.idProofValidUptoDate",
+                "type" : "date"
+            },
             "addressProof": {
                 "key": "customer.addressProof"
             },
@@ -387,6 +395,14 @@
             "addressProofNo": {
                 "key": "customer.addressProofNo",
                 "type": "qrcode"
+            },
+            "addressProofIssueDate": {
+                "key": "customer.addressProofIssueDate",
+                "type": "date"
+            },
+            "addressProofValidUptoDate": {
+                "key": "customer.addressProofValidUptoDate",
+                "type": "date"
             },
             "additionalKYCs": {
                 "key": "customer.additionalKYCs",
@@ -1406,7 +1422,7 @@
                 "type": "select",
                 "title": "IN_CURRENT_AREA_SINCE"
             },
-           "latitude": {
+            "latitude": {
                 "key": "customer.latitude",
                 "title": "HOUSE_LOCATION",
                 "type": "geotag",
@@ -1414,22 +1430,39 @@
                 "longitude": "customer.longitude"
             },
             "houseVerificationPhoto": {
-                "key":"customer.houseVerificationPhoto",
-                "type":"file",
-                "fileType":"image/*"
+                "key": "customer.houseVerificationPhoto",
+                "type": "file",
+                "fileType": "image/*"
             },
             "date": {
                 "key": "customer.date",
-                "type":"date"
+                "type": "date"
             },
             "place": {
-                "key":"customer.place"
+                "key": "customer.place"
+            },
+            "distanceFromBranch": {
+                "key": "customer.distanceFromBranch",
+                "type": "select",
+                "title": "DISTANCE_FROM_BRANCH",
+                "enumCode": "loan_distance_from_branch"
+            },
+            "monthlyRent": {
+                "key": "customer.monthlyRent",
+                "type": "number",
+                "title": "MONTHLY_RENT"
+            },
+            "previousRentDetails": {
+                "key": "customer.previousRentDetails",
+                "title": "PREVIOUS_RENT_DEATLS",
+                "condition": "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"
             }
         }
     },
     "PhysicalAssets": {
         "type": "box",
         "title": "PHYSICAL_ASSETS",
+        "orderNo": 150,
         "items": {
             "physicalAssets": {
                 "key": "customer.physicalAssets",
@@ -1450,8 +1483,11 @@
                     "vehicleModel": {
                         "key": "customer.physicalAssets[].vehicleModel",
                         "title": "VEHICLE_MAKE_MODEL",
-                        "condition": "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
                         "type": "string"
+                    },
+                    "numberOfOwnedAsset": {
+                        "key": "customer.physicalAssets[].numberOfOwnedAsset",
+                        "title": "NUMBER_OF_OWNED_ASSET"
                     },
                     "registeredOwner": {
                         "key": "customer.physicalAssets[].registeredOwner",
@@ -1629,6 +1665,28 @@
                 "type": "file",
                 "fileType": "application/pdf",
                 "using": "scanner"
+            }
+        }
+    },
+    "TrackDetails": {
+        "type": "box",
+        "title": "TRACK_DETAILS",
+        "orderNo": 80,
+        "items": {
+            "vehiclesOwned": {
+                "key": "customer.vehiclesOwned",
+                "type": "number",
+                "title": "No of Vehicles owned by customer"
+            },
+            "vehiclesFinanced": {
+                "key": "customer.vehiclesFinanced",
+                "type": "number",
+                "title": "No of Vehicles financed"
+            },
+            "vehiclesFree": {
+                "key": "customer.vehiclesFree",
+                "type": "number",
+                "title": "No of Vehicles Free"
             }
         }
     },

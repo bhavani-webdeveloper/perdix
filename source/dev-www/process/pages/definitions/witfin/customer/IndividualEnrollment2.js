@@ -4,10 +4,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "witfin.customer.IndividualEnrollment2",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
             var self;
             AngularResourceService.getInstance().setInjector($injector);
@@ -42,38 +42,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
-                                "reference.verifications.mobileNo",
-                                "reference.verifications.occupation",
-                                "reference.verifications.address",
-                                "reference.verifications.referenceCheck.relationship",
-                                "reference.verifications.referenceCheck.financialStatus",
+                                "IndividualReferenes.verifications.mobileNo",
+                                "IndividualReferenes.verifications.occupation",
+                                "IndividualReferenes.verifications.address",
+                                "IndividualReferenes.verifications.referenceCheck.relationship",
+                                "IndividualReferenes.verifications.referenceCheck.financialStatus",
                                 "ResidenceVerification",
                                 "assets",
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.maritalStatus",
-                                "householdeDetails.familyMembers.primaryOccupation",
-                                "householdeDetails.familyMembers.educationStatus",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+                                "FamilyDetails.familyMembers.relationShip",
+                                "FamilyDetails.familyMembers.maritalStatus",
+                                "FamilyDetails.familyMembers.primaryOccupation",
+                                "FamilyDetails.familyMembers.educationStatus",
+                                "FamilyDetails.familyMembers.familyMemberFirstName",
+                                "FamilyDetails.familyMembers.anualEducationFee",
+                                "FamilyDetails.familyMembers.salary",
+                                "FamilyDetails.familyMembers.incomes",
+                                "FamilyDetails.expenditures"
 
 
 
                             ],
                             "overrides": {
-                                "householdeDetails.familyMembers": {
+                                "FamilyDetails.familyMembers": {
                                     "add": null,
                                     "remove": null
                                 },
-                                "reference.verifications.referenceFirstName": {
+                                "IndividualReferenes.verifications.referenceFirstName": {
                                     "title":"NAME_OF_NEIGHBOUR"
                                 },
-                                "reference.verifications.referenceCheck.customerResponse": {
+                                "IndividualReferenes.verifications.referenceCheck.customerResponse": {
                                     "title":"NEIGHBOUR_REFERENCE"
                                 },
-                                "reference.verifications.referenceCheck.opinion": {
+                                "IndividualReferenes.verifications.referenceCheck.opinion": {
                                     "title":"COMMENTS_OF_NEIGHBOUR"
                                 }
                             }
@@ -83,55 +83,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
-                                },
-                                "reference": {
-                                    "readonly": true
-                                },
-                                "reference.verifications.referenceFirstName": {
-                                    "title":"NAME_OF_NEIGHBOUR"
-                                },
-                                "reference.verifications.referenceCheck.customerResponse": {
-                                    "title":"NEIGHBOUR_REFERENCE"
-                                },
-                                "reference.verifications.referenceCheck.opinion": {
-                                    "title":"COMMENTS_OF_NEIGHBOUR"
                                 }
                             },
                             "excludes": [
                                 "ResidenceVerification",
-                                "assets",
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.maritalStatus",
-                                "householdeDetails.familyMembers.primaryOccupation",
-                                "householdeDetails.familyMembers.educationStatus",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures",
-                                "reference.mobileNo",
-                                "reference.occupation",
-                                "reference.address",
-                                "reference.referenceCheck",
-                                "reference.referenceCheck.relationship",
-                                "reference.referenceCheck.financialStatus"
+                                "PhysicalAssets",
+                                "FamilyDetails.familyMembers.relationShip",
+                                "FamilyDetails.familyMembers.maritalStatus",
+                                "FamilyDetails.familyMembers.primaryOccupation",
+                                "FamilyDetails.familyMembers.educationStatus",
+                                "FamilyDetails.familyMembers.familyMemberFirstName",
+                                "FamilyDetails.familyMembers.anualEducationFee",
+                                "FamilyDetails.familyMembers.salary",
+                                "FamilyDetails.familyMembers.incomes",
+                                "FamilyDetails.expenditures",
+                                "IndividualReferenes.mobileNo",
+                                "IndividualReferenes.occupation",
+                                "IndividualReferenes.address",
+                                "IndividualReferenes.referenceCheck",
+                                "IndividualReferenes.referenceCheck.relationship",
+                                "IndividualReferenes.referenceCheck.financialStatus"
                             ]
                         },
                         "Application": {
@@ -144,22 +132,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "reference": {
@@ -178,22 +166,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification":{
@@ -209,22 +197,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification":{
@@ -240,22 +228,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification":{
@@ -271,33 +259,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
-                                "personalInformation": {
+                                "IndividualInformation": {
                                     "readonly": true
                                 },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
-                                "householdeDetails": {
+                                "FamilyDetails": {
                                     "readonly": true
                                 },
-                                "householdLiablities": {
+                                "Liabilities": {
                                     "readonly": true
                                 },
-                                "householdVerification": {
+                                "V": {
                                     "readonly": true
                                 },
-                                "trackDetails": {
+                                "TrackDetails": {
                                     "readonly": true
                                 }
                             },
                             "excludes": [
                                 "ResidenceVerification",
-                                "householdeDetails.familyMembers.relationShip",
-                                "householdeDetails.familyMembers.familyMemberFirstName",
-                                "householdeDetails.familyMembers.anualEducationFee",
-                                "householdeDetails.familyMembers.salary",
-                                "householdeDetails.familyMembers.incomes",
-                                "householdeDetails.expenditures"
+                                "FamilyDetails.familyMembers.relationShip",
+                                "FamilyDetails.familyMembers.familyMemberFirstName",
+                                "FamilyDetails.familyMembers.anualEducationFee",
+                                "FamilyDetails.familyMembers.salary",
+                                "FamilyDetails.familyMembers.incomes",
+                                "IndividualFinancials.expenditures"
                             ]
                         }
                     }
@@ -305,7 +293,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    "KYC.customerSearch": {
+                    "KYC.customerId": {
                         type: "lov",
                         key: "customer.id",
                         onSelect: function (valueObj, model, context) {
@@ -333,127 +321,105 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                 return [
                     "KYC",
-                    "KYC.customerSearch",
-                    "KYC.IdentityProof1",
-                    "KYC.IdentityProof1.identityProof",
-                    "KYC.IdentityProof1.identityProofImageId",
-                    // "KYC.IdentityProof1.identityProofReverseImageId",
-                    "KYC.IdentityProof1.identityProofNo",
-                    "KYC.IdentityProof1.identityProofNo1",
-                    "KYC.IdentityProof1.identityProofNo2",
-                    "KYC.IdentityProof1.identityProofNo3",
-                    // "KYC.IdentityProof1.idProofIssueDate",
-                    // "KYC.IdentityProof1.idProofValidUptoDate",
+                    "KYC.customerId",
+                    "KYC.identityProof",
+                    "KYC.identityProofImageId",
+                    "KYC.identityProofNo",
                     "KYC.addressProof1",
-                    "KYC.addressProof1.addressProof",
-                    "KYC.addressProof1.addressProofImageId",
-                    // "KYC.addressProof1.addressProofReverseImageId",
-                    "KYC.addressProof1.addressProofNo",
-                    "KYC.addressProof1.addressProofNo1",
-                    "KYC.addressProof1.addressProofNo2",
-                    // "KYC.addressProof1.addressProofIssueDate",
-                    "KYC.addressProof1.addressProofValidUptoDate",
-                    "KYC.AdditionalKYC",
-                    "KYC.AdditionalKYC.additionalKYCs",
-                    "KYC.AdditionalKYC.kyc1ProofNumber",
-                    "KYC.AdditionalKYC.kyc1ProofNumber1",
-                    "KYC.AdditionalKYC.kyc1ProofNumber2",
-                    "KYC.AdditionalKYC.kyc1ProofNumber3",
-                    "KYC.AdditionalKYC.kyc1ProofType",
-                    "KYC.AdditionalKYC.kyc1ImagePath",
-                    // "AdditionalKYC.additionalKYCs.kyc1IssueDate",
-                    "KYC.AdditionalKYC.kyc1ValidUptoDate",
-                    "personalInformation",
-                    "personalInformation.customerBranchId",
-                    "personalInformation.centerId",
-                    "personalInformation.centerId1",
-                    "personalInformation.centerId2",
-                    "personalInformation.photoImageId",
-                    "personalInformation.title",
-                    "personalInformation.firstName",
-                    // "personalInformation.enrolledAs",
-                    "personalInformation.gender",
-                    "personalInformation.dateOfBirth",
-                    "personalInformation.age",
-                    "personalInformation.language",
-                    "personalInformation.fatherFirstName",
-                    "personalInformation.motherName",
-                    "personalInformation.maritalStatus",
-                    "personalInformation.spouseFirstName",
-                    "personalInformation.spouseDateOfBirth",
-                    "personalInformation.weddingDate",
+                    "KYC.addressProof",
+                    "KYC.addressProofImageId",
+                    "KYC.addressProofNo",
+                    "KYC.addressProofValidUptoDate",
+                    "KYC.additionalKYCs",
+                    "KYC.additionalKYCs.kyc1ProofType",
+                    "KYC.additionalKYCs.kyc1ProofNumber",
+                    "KYC.additionalKYCs.kyc1ImagePath",
+                    "KYC.additionalKYCs.kyc1ValidUptoDate",
+                    "IndividualInformation",
+                    "IndividualInformation.customerBranchId",
+                    "IndividualInformation.centerId",
+                    "IndividualInformation.photoImageId",
+                    "IndividualInformation.title",
+                    "IndividualInformation.firstName",
+                    "IndividualInformation.gender",
+                    "IndividualInformation.dateOfBirth",
+                    "IndividualInformation.age",
+                    "IndividualInformation.language",
+                    "IndividualInformation.fatherFirstName",
+                    "IndividualInformation.motherName",
+                    "IndividualInformation.maritalStatus",
+                    "IndividualInformation.spouseFirstName",
+                    "IndividualInformation.spouseDateOfBirth",
+                    "IndividualInformation.weddingDate",
                     "ContactInformation",
-                    "ContactInformation.contracInfo",
-                    "ContactInformation.contracInfo.mobilePhone",
-                    "ContactInformation.contracInfo.landLineNo",
-                    "ContactInformation.contracInfo.whatsAppMobileNoOption",
-                    "ContactInformation.contracInfo.whatsAppMobileNo",
-                    "ContactInformation.contracInfo.email",
-                    "ContactInformation.residentAddress",
-                    "ContactInformation.residentAddress.careOf",
-                    "ContactInformation.residentAddress.doorNo",
-                    "ContactInformation.residentAddress.street",
-                    "ContactInformation.residentAddress.postOffice",
-                    "ContactInformation.residentAddress.landmark",
-                    "ContactInformation.residentAddress.pincode",
-                    "ContactInformation.residentAddress.locality",
-                    "ContactInformation.residentAddress.villageName",
-                    "ContactInformation.residentAddress.district",
-                    "ContactInformation.residentAddress.state",
-                    "ContactInformation.residentAddress.mailSameAsResidence",
-                    "ContactInformation.permanentResidentAddress",
-                    "ContactInformation.permanentResidentAddress.mailingDoorNo",
-                    "ContactInformation.permanentResidentAddress.mailingStreet",
-                    "ContactInformation.permanentResidentAddress.mailingPostoffice",
-                    "ContactInformation.permanentResidentAddress.mailingPincode",
-                    "ContactInformation.permanentResidentAddress.mailingLocality",
-                    "ContactInformation.permanentResidentAddress.mailingDistrict",
-                    "ContactInformation.permanentResidentAddress.mailingState",
-                    "householdeDetails",
-                    "householdeDetails.familyMembers",
-                    "householdeDetails.familyMembers.relationShipself",
-                    "householdeDetails.familyMembers.relationShip",
-                    "householdeDetails.familyMembers.maritalStatus",
-                    "householdeDetails.familyMembers.familyMemberFirstName",
-                    "householdeDetails.familyMembers.primaryOccupation",
-                    "householdeDetails.familyMembers.educationStatus",
-                    "householdeDetails.familyMembers.anualEducationFee",
-                    "householdeDetails.familyMembers.salary",
-                    "householdeDetails.familyMembers.incomes",
-                    "householdeDetails.familyMembers.incomes.incomeSource",
-                    "householdeDetails.familyMembers.incomes.incomeEarned",
-                    "householdeDetails.familyMembers.incomes.frequency",
-                    "householdeDetails.expenditures",
-                    "householdeDetails.expenditures.expenditureSource",
-                    "householdeDetails.expenditures.annualExpenses",
-                    "householdeDetails.expenditures.frequency",
-                    "householdLiablities",
-                    "householdLiablities.liabilities",
-                    "householdLiablities.liabilities.loanSourceCategory",
-                    "householdLiablities.liabilities.loanSource",
-                    "householdLiablities.liabilities.loanType",
-                    "householdLiablities.liabilities.loanAmountInPaisa",
-                    "householdLiablities.liabilities.installmentAmountInPaisa",
-                    "householdLiablities.liabilities.outstandingAmountInPaisa",
-                    "householdLiablities.liabilities.startDate",
-                    "householdLiablities.liabilities.maturityDate",
-                    "householdLiablities.liabilities.noOfInstalmentPaid",
-                    "householdLiablities.liabilities.frequencyOfInstallment",
-                    "householdLiablities.liabilities.liabilityLoanPurpose",
-                    "householdLiablities.liabilities.interestOnly",
-                    "householdLiablities.liabilities.interestRate",
-                    "householdLiablities.liabilities.proofDocuments",
-                    "householdVerification",
-                    "householdVerification.householdDetails",
-                    "householdVerification.householdDetails.ownership",
-                    "householdVerification.householdDetails.udf29",
-                    "householdVerification.householdDetails.distanceFromBranch",
-                    "householdVerification.householdDetails.monthlyRent",
-                    "householdVerification.householdDetails.previousRentDetails",
-                    "trackDetails",
-                    "trackDetails.vehiclesOwned",
-                    "trackDetails.vehiclesFinanced",
-                    "trackDetails.vehiclesFree",
+                    "ContactInformation.mobilePhone",
+                    "ContactInformation.landLineNo",
+                    "ContactInformation.whatsAppMobileNoOption",
+                    "ContactInformation.whatsAppMobileNo",
+                    "ContactInformation.email",
+                    "ContactInformation.careOf",
+                    "ContactInformation.doorNo",
+                    "ContactInformation.street",
+                    "ContactInformation.postOffice",
+                    "ContactInformation.landmark",
+                    "ContactInformation.pincode",
+                    "ContactInformation.locality",
+                    "ContactInformation.villageName",
+                    "ContactInformation.district",
+                    "ContactInformation.state",
+                    "ContactInformation.mailSameAsResidence",
+                    "ContactInformation",
+                    "ContactInformation.mailingDoorNo",
+                    "ContactInformation.mailingStreet",
+                    "ContactInformation.mailingPostoffice",
+                    "ContactInformation.mailingPincode",
+                    "ContactInformation.mailingLocality",
+                    "ContactInformation.mailingDistrict",
+                    "ContactInformation.mailingState",
+                    "FamilyDetails",
+                    "FamilyDetails.familyMembers",
+                    "FamilyDetails.familyMembers.relationShipself",
+                    "FamilyDetails.familyMembers.relationShip",
+                    "FamilyDetails.familyMembers.maritalStatus",
+                    "FamilyDetails.familyMembers.familyMemberFirstName",
+                    "FamilyDetails.familyMembers.primaryOccupation",
+                    "FamilyDetails.familyMembers.educationStatus",
+                    "FamilyDetails.familyMembers.anualEducationFee",
+                    "FamilyDetails.familyMembers.salary",
+                    "FamilyDetails.familyMembers.incomes",
+                    "FamilyDetails.familyMembers.incomes.incomeSource",
+                    "FamilyDetails.familyMembers.incomes.incomeEarned",
+                    "FamilyDetails.familyMembers.incomes.frequency",
+                    "IndividualFinancials.expenditures",
+                    "IndividualFinancials.expenditures.expenditureSource",
+                    "IndividualFinancials.expenditures.annualExpenses",
+                    "IndividualFinancials.expenditures.frequency",
+                    "Liabilities",
+                    "Liabilities.liabilities",
+                    "Liabilities.liabilities.loanSourceCategory",
+                    "Liabilities.liabilities.loanSource",
+                    "Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanAmountInPaisa",
+                    "Liabilities.liabilities.installmentAmountInPaisa",
+                    "Liabilities.liabilities.outstandingAmountInPaisa",
+                    "Liabilities.liabilities.startDate",
+                    "Liabilities.liabilities.maturityDate",
+                    "Liabilities.liabilities.noOfInstalmentPaid",
+                    "Liabilities.liabilities.frequencyOfInstallment",
+                    "Liabilities.liabilities.liabilityLoanPurpose",
+                    "Liabilities.liabilities.interestOnly",
+                    "Liabilities.liabilities.interestRate",
+                    "Liabilities.liabilities.proofDocuments",
+                    "HouseVerification",
+                    "HouseVerification.ownership",
+                    "HouseVerification.inCurrentAddressSince",
+                    "HouseVerification.distanceFromBranch",
+                    "HouseVerification.monthlyRent",
+                    "HouseVerification.previousRentDetails",
+                    "TrackDetails",
+                    "TrackDetails.vehiclesOwned",
+                    "TrackDetails.vehiclesFinanced",
+                    "TrackDetails.vehiclesFree",
                     "ResidenceVerification",
                     "ResidenceVerification.location",
                     "ResidenceVerification.locatingHouse",
@@ -470,23 +436,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ResidenceVerification.typeOfAccomodation",
                     "ResidenceVerification.areaSQFT",
                     "ResidenceVerification.remarksOnBusiness",
-                    "assets",
-                    "assets.physicalAssets",
-                    "assets.physicalAssets.assetType",
-                    "assets.physicalAssets.ownedAssetDetails",
-                    "assets.physicalAssets.numberOfOwnedAsset",
-                    "reference",
-                    "reference.verifications",
-                    "reference.verifications.referenceFirstName",
-                    "reference.verifications.mobileNo",
-                    "reference.verifications.occupation",
-                    "reference.verifications.address",
-                    "reference.verifications.referenceCheck",
-                    "reference.verifications.referenceCheck.knownSince",
-                    "reference.verifications.referenceCheck.relationship",
-                    "reference.verifications.referenceCheck.customerResponse",
-                    "reference.verifications.referenceCheck.opinion",
-                    "reference.verifications.referenceCheck.financialStatus"
+                    "PhysicalAssets",
+                    "PhysicalAssets.physicalAssets",
+                    "PhysicalAssets.physicalAssets.assetType",
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
+                    "PhysicalAssets.physicalAssets.numberOfOwnedAsset",
+                    "IndividualReferences",
+                    "IndividualReferences.verifications",
+                    "IndividualReferences.verifications.referenceFirstName",
+                    "IndividualReferences.verifications.mobileNo",
+                    "IndividualReferences.verifications.occupation",
+                    "IndividualReferences.verifications.address",
+                    "IndividualReferences.verifications.referenceCheck",
+                    "IndividualReferences.verifications.referenceCheck.knownSince",
+                    "IndividualReferences.verifications.referenceCheck.relationship",
+                    "IndividualReferences.verifications.referenceCheck.customerResponse",
+                    "IndividualReferences.verifications.referenceCheck.opinion",
+                    "IndividualReferences.verifications.referenceCheck.financialStatus"
 
                 ];
 
@@ -629,7 +595,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "additions": [
                                 {
                                     "type": "actionbox",
-                                    "orderNo": 1000,
+                                    "orderNo": 1200,
                                     "items": [
                                         {
                                             "type": "submit",
@@ -640,7 +606,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         }
                     };
-                    self.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment2', formRequest, configFile(), model);
+
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function(repo){
+                            self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                        })
+
                     /* Form rendering ends */
                 },
 
