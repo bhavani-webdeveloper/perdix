@@ -155,6 +155,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 

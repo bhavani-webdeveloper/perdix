@@ -265,7 +265,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             },
                             "includes": getIncludes(model),
-                            "excludes": [],
+                            "excludes": [
+                                "EnterpriseInformation.referredBy",
+                                "EnterpriseInformation.referredName",
+                                "EnterpriseInformation.businessHistory",
+                                "EnterpriseInformation.noOfPartners",
+                                "EnterpriseInformation.anyPartnerOfPresentBusiness",
+                                "EnterpriseInformation.partnershipDissolvedDate",
+                                "EnterpriseInformation.businessType",
+                                "EnterpriseInformation.businessActivity",
+                                "EnterpriseInformation.businessSector",
+                                "EnterpriseInformation.businessSubsector"
+                            ],
                             "options": {
                                 "additions": [
                                     {
