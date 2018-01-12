@@ -349,6 +349,28 @@
                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                   ]
                },
+               "payeeName": {
+                   "key":"loanAccount.payeeName",
+                   "title": "payerName",
+                   "captureStages":[
+                     "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                  ]
+               },
+               "payeeMobileNumber": {
+                   "key": "loanAccount.payeeMobileNumber",
+                   "title": "payerMobileNumber",
+                   "type": "number",
+                   "captureStages":[
+                     "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                  ]
+               },
+               "payeeRelationToApplicant": {
+                   "key": "loanAccount.payeeRelationToApplicant",
+                   "title": "payerRelationToApplicant",
+                   "captureStages":[
+                     "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                  ]
+               },
                "fixedIntrestRate": {
                   "title": "moratorium period in days",
                   "type": "number",

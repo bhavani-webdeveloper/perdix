@@ -52,6 +52,9 @@ define([],function(){
                                 },
                                 "LoanDocuments": {
                                     "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -68,6 +71,9 @@ define([],function(){
                                 },
                                 "LoanDocuments": {
                                     "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -80,6 +86,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 }
                             }
@@ -94,6 +103,9 @@ define([],function(){
                                 },
                                 "LoanDocuments": {
                                     "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -106,6 +118,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
                                     "readonly": true
                                 }
                             }
@@ -149,6 +164,10 @@ define([],function(){
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
                     "LoanDocuments.loanDocuments.documentId",
+                    "PayerDetails",
+                    "PayerDetails.payeeName",
+                    "PayerDetails.payeeMobileNumber",
+                    "PayerDetails.payeeRelationToApplicant",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save"
@@ -178,7 +197,7 @@ define([],function(){
                             "additions": [
                                 {
                                     "type": "box",
-                                    "orderNo": 40,
+                                    "orderNo": 99,
                                     "title": "POST_REVIEW",
                                     "condition": "model.loanAccount.id",
                                     "items": [{
