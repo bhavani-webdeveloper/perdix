@@ -352,6 +352,7 @@
                "payeeName": {
                    "key":"loanAccount.payeeName",
                    "title": "payerName",
+                   "type":"string",
                    "captureStages":[
                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                   ]
@@ -367,6 +368,7 @@
                "payeeRelationToApplicant": {
                    "key": "loanAccount.payeeRelationToApplicant",
                    "title": "payerRelationToApplicant",
+                   "type":"string",
                    "captureStages":[
                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                   ]
