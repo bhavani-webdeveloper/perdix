@@ -34,24 +34,22 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.defer(
-            () => {
-                try {
-                    let observables = [];
+        try {
+            let observables = [];
 
-                    if (enrolmentProcess.customer.customerType == CustomerTypes.ENTERPRISE){
-                        enrolmentProcess.customer.enterprise = new Enterprise();
-                    } else {
-                        let fm: FamilyMember = new FamilyMember();
-                        let exp = new Expenditure();
-                        fm.relationShip = 'self';
-                        exp.expenditureSource = "Others";
-                        exp.frequency = 'Monthly';
-                        enrolmentProcess.customer.familyMembers.push(fm);
-                        enrolmentProcess.customer.expenditures.push(exp);
-                    }
-                    enrolmentProcess.customer.date = enrolmentProcess.customer.date || Utils.getCurrentDate();
-                    enrolmentProcess.customer.nameOfRo = enrolmentProcess.customer.nameOfRo || activeSession.getLoginname();
+            if (enrolmentProcess.customer.customerType == CustomerTypes.ENTERPRISE){
+                enrolmentProcess.customer.enterprise = new Enterprise();
+            } else {
+                let fm: FamilyMember = new FamilyMember();
+                let exp = new Expenditure();
+                fm.relationShip = 'self';
+                exp.expenditureSource = "Others";
+                exp.frequency = 'Monthly';
+                enrolmentProcess.customer.familyMembers.push(fm);
+                enrolmentProcess.customer.expenditures.push(exp);
+            }
+            enrolmentProcess.customer.date = enrolmentProcess.customer.date || Utils.getCurrentDate();
+            enrolmentProcess.customer.nameOfRo = enrolmentProcess.customer.nameOfRo || activeSession.getLoginname();
                     let proofs = formHelperData.getAddressProof();
                     let panIndex = _.findIndex(proofs, function(p) {
                        return p.name == 'Pan Card';
@@ -63,22 +61,19 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
 
                     enrolmentProcess.customer.identityProof = proofs[panIndex].name;
                     enrolmentProcess.customer.addressProof = proofs[addharIndex].name;
-                    // return Observable.merge(observables, 5)
-                    //     .concatAll()
-                    //     .last()
-                    //     .map(
-                    //         (value) => {
-                    //             return enrolmentProcess;
-                    //         }
-                    //     );
-                    return Observable.of(enrolmentProcess);
-                } catch(err) {
-                    console.error(err);
-                    return Observable.of(enrolmentProcess);
-                }
-
-            }
-        )
+            // return Observable.merge(observables, 5)
+            //     .concatAll()
+            //     .last()
+            //     .map(
+            //         (value) => {
+            //             return enrolmentProcess;
+            //         }
+            //     );
+            return Observable.of(enrolmentProcess);
+        } catch(err) {
+            console.error(err);
+            return Observable.of(enrolmentProcess);
+        }
     }
 
 }

@@ -30,45 +30,41 @@ export class LoadRelatedCustomersPolicy extends IPolicy<LoanProcess> {
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
-        return Observable.defer(
-            () => {
-                let observables = [];
-                if (_.hasIn(loanProcess, "loanAccount.loanCustomerRelations") || _.isArray(loanProcess.loanAccount.loanCustomerRelations)){
-                    for (let lcr of loanProcess.loanAccount.loanCustomerRelations){
-                        if (lcr.customerId!=null){
-                            let obs1 = EnrolmentProcess.fromCustomerID(lcr.customerId)
-                                .map(
-                                    (customer: EnrolmentProcess) => {
-                                        loanProcess.setRelatedCustomer(customer);
-                                        return customer;
-                                    }
-                                );
-                            observables.push(obs1);
-                        }
-                    }
-                }
-
-                if (_.hasIn(loanProcess, "loanAccount.customerId")){
-                    let obs2 = EnrolmentProcess.fromCustomerID(loanProcess.loanAccount.customerId)
+        let observables = [];
+        if (_.hasIn(loanProcess, "loanAccount.loanCustomerRelations") || _.isArray(loanProcess.loanAccount.loanCustomerRelations)){
+            for (let lcr of loanProcess.loanAccount.loanCustomerRelations){
+                if (lcr.customerId!=null){
+                    let obs1 = EnrolmentProcess.fromCustomerID(lcr.customerId)
                         .map(
                             (customer: EnrolmentProcess) => {
-                                loanProcess.loanCustomerEnrolmentProcess = customer;
+                                loanProcess.setRelatedCustomer(customer);
                                 return customer;
                             }
                         );
-                    observables.push(obs2);
+                    observables.push(obs1);
                 }
-
-                return Observable.merge(observables, 5)
-                    .concatAll()
-                    .last()
-                    .map(
-                        (value) => {
-                            return loanProcess;
-                        }
-                    );
             }
-        )
+        }
+
+        if (_.hasIn(loanProcess, "loanAccount.customerId")){
+            let obs2 = EnrolmentProcess.fromCustomerID(loanProcess.loanAccount.customerId)
+                .map(
+                    (customer: EnrolmentProcess) => {
+                        loanProcess.loanCustomerEnrolmentProcess = customer;
+                        return customer;
+                    }
+                );
+            observables.push(obs2);
+        }
+
+        return Observable.merge(observables, 5)
+            .concatAll()
+            .last()
+            .map(
+                (value) => {
+                    return loanProcess;
+                }
+            );
     }
 
 }

@@ -45,6 +45,7 @@ export class Customer {
     addressRationCardType: string;
     ageProof: string;
     ageProofImageId: string;
+    age: number;
     ageRationCardType: string;
     allMachinesAreOperational: string;
     altitude: string;

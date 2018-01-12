@@ -25,12 +25,7 @@ export class SelfRelationshipRequiredPolicy extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.defer(() => {
-
-            // if there is an error
-            return Observable.throw(new ValidationError("Self Relationship is mandatory!"));
-
-        })
+        return Observable.throw(new ValidationError("Self Relationship is mandatory!"));
     }
 
 }

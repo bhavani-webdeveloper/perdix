@@ -17,12 +17,10 @@ export class SampleSimplePolicy extends IPolicy<LoanProcess>{
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        return Observable.defer(() => {
-            console.log("Running simple policy");
-            console.log("Printing arguments");
-            console.log(this.args);
-            return Observable.of(loanProcess);
-        })
+        console.log("Running simple policy");
+        console.log("Printing arguments");
+        console.log(this.args);
+        return Observable.of(loanProcess);
     }
 
 }

@@ -31,21 +31,16 @@ export class EnrolmentDerivedPolicy extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.defer(
-            () => {
-                try {
+        try {
 
-                    let centers = formHelperData.getCenters();
-                    enrolmentProcess.customer.age = moment().diff(moment(enrolmentProcess.customer.dateOfBirth, 'YYYY-MM-DD'), 'years');
+            let centers = formHelperData.getCenters();
+            enrolmentProcess.customer.age = moment().diff(moment(enrolmentProcess.customer.dateOfBirth, 'YYYY-MM-DD'), 'years');
 
-                    return Observable.of(enrolmentProcess);
-                } catch(err) {
-                    console.error(err);
-                    return Observable.of(enrolmentProcess);
-                }
-
-            }
-        )
+            return Observable.of(enrolmentProcess);
+        } catch(err) {
+            console.error(err);
+            return Observable.of(enrolmentProcess);
+        }
     }
 
 }

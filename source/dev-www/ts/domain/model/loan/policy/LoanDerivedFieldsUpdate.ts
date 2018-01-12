@@ -12,14 +12,11 @@ export class LoanDerivedFieldsUpdate extends IPolicy<LoanProcess> {
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        return Observable.defer(() => {
-            if (_.hasIn(loanProcess, 'applicantEnrolmentProcess.customer.centreId') && _.isNumber(loanProcess.applicantEnrolmentProcess.customer.centreId)){
-                loanProcess.loanAccount.loanCentre = loanProcess.loanAccount.loanCentre || new LoanCentre();
-                loanProcess.loanAccount.loanCentre.centreId = loanProcess.applicantEnrolmentProcess.customer.centreId;
-            }
-            return Observable.of(loanProcess);
-        });
-
+        if (_.hasIn(loanProcess, 'applicantEnrolmentProcess.customer.centreId') && _.isNumber(loanProcess.applicantEnrolmentProcess.customer.centreId)){
+            loanProcess.loanAccount.loanCentre = loanProcess.loanAccount.loanCentre || new LoanCentre();
+            loanProcess.loanAccount.loanCentre.centreId = loanProcess.applicantEnrolmentProcess.customer.centreId;
+        }
+        return Observable.of(loanProcess);
     }
 
 }

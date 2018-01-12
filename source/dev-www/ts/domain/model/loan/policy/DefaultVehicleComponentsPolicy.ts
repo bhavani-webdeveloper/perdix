@@ -31,44 +31,38 @@ export class DefaultVehicleComponentsPolicy extends IPolicy<LoanProcess> {
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
-        return Observable.defer(
-            () => {
-                // let formHelper = ObjectFactory.getInstance("FormHelper");
-                let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
-                let data = formHelper.getVehicleComponents();
+        let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
+        let data = formHelper.getVehicleComponents();
 
-                if(_.isArray(data) && data.length > 0) {
-                    try {
+        if(_.isArray(data) && data.length > 0) {
+            try {
 
-                        let vehicleLoan = new VehicleLoanDetails();
-                        if(!_.hasIn(loanProcess.loanAccount, 'vehicleLoanDetails') || !loanProcess.loanAccount.vehicleLoanDetails) {
-                            loanProcess.loanAccount.vehicleLoanDetails = vehicleLoan;
-
-                        }
-
-                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions.length > 0) {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions;
-                            return Observable.of(loanProcess);
-                        } else {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = [];
-                        }
-                        for(let component of data) {
-                            let vehicleAsset = new VehicleAssetCondition();
-                            vehicleAsset.componentType = component.name;
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions.push(vehicleAsset);
-                        }
-                        return Observable.of(loanProcess);
-                    }
-                    catch(err) {
-                        console.log(err);
-                        return Observable.of(loanProcess);
-                    }
+                let vehicleLoan = new VehicleLoanDetails();
+                if(!_.hasIn(loanProcess.loanAccount, 'vehicleLoanDetails') || !loanProcess.loanAccount.vehicleLoanDetails) {
+                    loanProcess.loanAccount.vehicleLoanDetails = vehicleLoan;
 
                 }
-                return Observable.of(loanProcess);
 
+                if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions.length > 0) {
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions;
+                    return Observable.of(loanProcess);
+                } else {
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions = [];
+                }
+                for(let component of data) {
+                    let vehicleAsset = new VehicleAssetCondition();
+                    vehicleAsset.componentType = component.name;
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAssetConditions.push(vehicleAsset);
+                }
+                return Observable.of(loanProcess);
             }
-        )
+            catch(err) {
+                console.log(err);
+                return Observable.of(loanProcess);
+            }
+
+        }
+        return Observable.of(loanProcess);
     }
 
 }

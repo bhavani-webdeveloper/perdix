@@ -32,39 +32,34 @@ export class PreSaveCustomerPolicy extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.defer(
-            () => {
-                try {
-                    let observables = [];
-                    let fm = enrolmentProcess.customer.familyMembers;
-                    let incomes;
-                    for(var i=0;i<fm.length;i++){
-                        incomes = fm[i].incomes;
-                        if (incomes){
-                            for(var j=0;j<incomes.length;j++){
-                                switch(incomes[i].frequency){
-                                    case 'M':
-                                    case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                    case 'D':
-                                    case 'Daily': incomes[i].monthsPerYear=365; break;
-                                    case 'W':
-                                    case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                    case 'F':
-                                    case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                    case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                }
-                            }
+        try {
+            let observables = [];
+            let fm = enrolmentProcess.customer.familyMembers;
+            let incomes;
+            for(var i=0;i<fm.length;i++){
+                incomes = fm[i].incomes;
+                if (incomes){
+                    for(var j=0;j<incomes.length;j++){
+                        switch(incomes[i].frequency){
+                            case 'M':
+                            case 'Monthly': incomes[i].monthsPerYear=12; break;
+                            case 'D':
+                            case 'Daily': incomes[i].monthsPerYear=365; break;
+                            case 'W':
+                            case 'Weekly': incomes[i].monthsPerYear=52; break;
+                            case 'F':
+                            case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                            case 'Fortnightly': incomes[i].monthsPerYear=26; break;
                         }
                     }
-
-                    return Observable.of(enrolmentProcess);
-                } catch(err) {
-                    console.error(err);
-                    return Observable.of(enrolmentProcess);
                 }
-
             }
-        )
+
+            return Observable.of(enrolmentProcess);
+        } catch(err) {
+            console.error(err);
+            return Observable.of(enrolmentProcess);
+        }
     }
 
 }

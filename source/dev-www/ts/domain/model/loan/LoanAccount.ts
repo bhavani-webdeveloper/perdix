@@ -209,7 +209,7 @@ class LoanAccount {
     ornamentsAppraisals: OrnamentsAppraisal[];
 
     @Type(() => VehicleLoanDetails)
-    vehicleLoanDetails: VehicleLoanDetails[];
+    vehicleLoanDetails: VehicleLoanDetails;
 
     @Type(() => TelecallingDetail)
     telecallingDetails: TelecallingDetail[];

@@ -41,7 +41,10 @@ export class PolicyManager<T> {
                 }
                 if (policyObj && policy.arguments) {
                     policyObj.setArguments(policy.arguments);
-                    observables.push(policyObj.run(this.obj));
+                    let deferredRun = Observable.defer(() => {
+                        return policyObj.run(this.obj);
+                    });
+                    observables.push(deferredRun);
                 }
             } catch (e) {
                 console.log("Unable to apply policy :: " + policy.name + ". Skipping now.");

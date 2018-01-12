@@ -31,45 +31,39 @@ export class DefaultVehicleAccessoriesPolicy extends IPolicy<LoanProcess> {
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
-        return Observable.defer(
-            () => {
-                let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
-                let data = formHelper.getAccessorries();
+        let formHelper:IFormHelper = ObjectFactory.getInstance("FormHelper");
+        let data = formHelper.getAccessorries();
 
-                if(_.isArray(data) && data.length > 0) {
+        if(_.isArray(data) && data.length > 0) {
 
-                    try {
+            try {
 
-                        let vehicleLoanDetails = new VehicleLoanDetails();
-                        if(!_.hasIn(loanProcess.loanAccount, 'vehicleLoanDetails') || !loanProcess.loanAccount.vehicleLoanDetails) {
-                            loanProcess.loanAccount.vehicleLoanDetails = vehicleLoanDetails;
-                        }
+                let vehicleLoanDetails = new VehicleLoanDetails();
+                if(!_.hasIn(loanProcess.loanAccount, 'vehicleLoanDetails') || !loanProcess.loanAccount.vehicleLoanDetails) {
+                    loanProcess.loanAccount.vehicleLoanDetails = vehicleLoanDetails;
+                }
 
-                        if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.length > 0) {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories;
-                            return Observable.of(loanProcess);
-                        } else {
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = [];
-                        }
-                        for(let accesory of data) {
-                            let vehicleAccessory = new VehicleAccessory();
-                            vehicleAccessory.accessoryType = accesory.name;
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.push(vehicleAccessory);
-                        }
-                        return Observable.of(loanProcess);
-                    }
-                    catch(err) {
-                        console.log(err)
-                        return Observable.of(loanProcess);
-                    }
-
-
+                if(_.isArray(loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories) && loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.length > 0) {
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories;
+                    return Observable.of(loanProcess);
+                } else {
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories = [];
+                }
+                for(let accesory of data) {
+                    let vehicleAccessory = new VehicleAccessory();
+                    vehicleAccessory.accessoryType = accesory.name;
+                    loanProcess.loanAccount.vehicleLoanDetails.vehicleAccessories.push(vehicleAccessory);
                 }
                 return Observable.of(loanProcess);
-
-
             }
-        )
+            catch(err) {
+                console.log(err)
+                return Observable.of(loanProcess);
+            }
+
+
+        }
+        return Observable.of(loanProcess);
     }
 
 }

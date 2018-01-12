@@ -34,12 +34,8 @@ export class OriginationToBookingPolicy extends IPolicy<LoanProcess> {
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        return Observable.defer(
-            () => {
-                loanProcess.stage = this.args.postStage;
-                return Observable.of(loanProcess);
-            }
-        )
+        loanProcess.stage = this.args.postStage;
+        return Observable.of(loanProcess);
     }
 
 }
