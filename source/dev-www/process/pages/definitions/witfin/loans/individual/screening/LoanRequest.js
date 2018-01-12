@@ -42,6 +42,11 @@ define([],function(){
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
+                        "Screening": {
+                            "excludes": [
+                                "LoanRecommendation"
+                            ]
+                        },
                         "ScreeningReview": {
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -168,6 +173,14 @@ define([],function(){
                     "PayerDetails.payeeName",
                     "PayerDetails.payeeMobileNumber",
                     "PayerDetails.payeeRelationToApplicant",
+                    "LoanRecommendation",
+                    "LoanRecommendation.loanAmount",
+                    "LoanRecommendation.tenure",
+                    "LoanRecommendation.interestRate",
+                    "LoanRecommendation.estimatedEmi",
+                    "LoanRecommendation.processingFeePercentage",
+                    "LoanRecommendation.securityEmiRequired",
+                    "LoanRecommendation.commercialCibilCharge",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save"

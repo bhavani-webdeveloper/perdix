@@ -227,6 +227,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
+                                loanProcess.loanAccount.currentStage = 'Screening';
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];
