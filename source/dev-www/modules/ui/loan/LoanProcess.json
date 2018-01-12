@@ -1295,6 +1295,28 @@
             }
         }
     },
+    "PayerDetails": {
+        "type":"box",
+        "title": "PAYER_DETAILS",
+        "orderNo":50,
+        "items": {
+            "payeeName": {
+                "key":"loanAccount.payeeName",
+                "title": "PAYEE_NAME"
+            },
+            "payeeMobileNumber": {
+                "key": "loanAccount.payeeMobileNumber",
+                "title": "PAYEE_MOBILE_NUMBER",
+                "type": "number"
+            },
+            "payeeRelationToApplicant": {
+                "key": "loanAccount.payeeRelationToApplicant",
+                "title": "PAYEE_RELATION",
+                "type":"select",
+                "enumCode": "payerRelation"
+            }
+        }
+    },
     "actionbox": {
         "type": "actionbox",
         "items": {
