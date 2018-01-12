@@ -308,6 +308,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         autolov: true,
                         lovonly: true,
                         bindMap: {},
+                        required: true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var centres = SessionStore.getCentres();

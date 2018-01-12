@@ -88,6 +88,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 ];
             }
 
+
+
             var configFile = function() {
                 return {
                         "loanProcess.loanAccount.currentStage": {
@@ -254,6 +256,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseInformation.enterpriseType": {
                                     "title": "ENTERPRISE_TYPE",
                                     "resolver": "SoleProprietorshipBusinessConfiguration"
+                                },
+                                "EnterpriseInformation.centreId" : {
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.customerBranchId" :{
+                                    "readonly": true
                                 }
                             },
                             "includes": getIncludes(model),

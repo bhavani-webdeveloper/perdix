@@ -12,10 +12,6 @@ let config = {
             onLoad: {
                 "defaults": [
                     {
-                        "name": "LoadRelatedCustomersPolicy",
-                        "arguments": null
-                    },
-                    {
                         "name":"EnrolmentDerivedPolicy",
                         "arguments": {}
                     }
