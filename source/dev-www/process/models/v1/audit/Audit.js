@@ -27,6 +27,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 Utils.downloadFile(endpoint + "/downloadSampleSet");
             },
             getRatingByScore: function(master, score) {
+                $log.info(master)
+                $log.info("master")
                 var rating;
                 _.forOwn(master.summary_rating, function(v, k) {
                     if (master.summary_rating[k].from <= score && score <= master.summary_rating[k].to) {
@@ -85,14 +87,122 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             }
         };
 
+        // ret.online = $resource(endpoint, null, {
+        //     getAuditMaster: {
+        //         method: 'GET',
+        //         url: endpoint + '/getAuditMaster'
+        //     },
+        //     getAuditList: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/findAuditInfo'
+        //     }),
+        //     getAuditInfo: {
+        //         method: 'GET',
+        //         url: endpoint + '/getAuditInfo'
+        //     },
+        //     updateAuditInfo: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateAuditInfo'
+        //     },
+        //     getAuditFull: {
+        //         method: 'GET',
+        //         url: endpoint + '/getAuditData'
+        //     },
+        //     updateAuditFull: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateAuditData'
+        //     },
+        //     getSampleSetList: {
+        //         method: 'GET',
+        //         url: endpoint + '/getSampleSets',
+        //         isArray: true
+        //     },
+        //     findAuditScores: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/findAuditScores'
+        //     }),
+        //     getAuditScores: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/getAuditScores'
+        //     }),
+        //     findIssues: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/findIssues'
+        //     }),
+        //     getIssueDetails: {
+        //         method: 'GET',
+        //         url: endpoint + '/getIssue'
+        //     },
+        //     updateIssueDetails: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateIssue'
+        //     },
+        //     getAvailableAuditorList: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/findAvailableAuditors'
+        //     }),
+        //     getSnapAuditMaster: {
+        //         method: 'GET',
+        //         url: endpoint + '/getSnapAuditMaster'
+        //     },
+        //     createSnapAudit: {
+        //         method: 'POST',
+        //         url: endpoint + '/createSnapAudit'
+        //     },
+        //     updateSnapAudit: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateSnapAudit'
+        //     },
+        //     publishSnapAudit: {
+        //         method: 'POST',
+        //         url: endpoint + '/publishSnapAudit'
+        //     },
+        //     getSnapAuditData: {
+        //         method: 'GET',
+        //         url: endpoint + '/getSnapAudit'
+        //     },
+        //     findSample: searchResource({
+        //         method: 'GET',
+        //         url: endpoint + '/findSample'
+        //     }),
+        //     getAuditScoreSheet: {
+        //         method: 'GET',
+        //         url: endpoint + '/getAuditScoreSheet'
+        //     },
+        //     findStage: {
+        //         method: 'GET',
+        //         url: endpoint + '/findStage'
+        //     },
+        //     updateStaging: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateStaging'
+        //     },
+        //     getStageActivities: {
+        //         method: 'GET',
+        //         url: endpoint + '/getStageActivities'
+        //     },
+        //     updateStageActivities: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateStageActivities'
+        //     },
+        //     componentBasedDump: {
+        //         method: 'GET',
+        //         url: endpoint + '/componentBasedDump'
+        //     },
+        //     updateComponentBasedDump: {
+        //         method: 'POST',
+        //         url: endpoint + '/updateComponentBasedDump'
+        //     },
+        // });
+
         ret.online = $resource(endpoint, null, {
             getAuditMaster: {
                 method: 'GET',
-                url: endpoint + '/getAuditMaster'
+                url: 'process/schemas/audit/getAuditMaster.json'
             },
             getAuditList: searchResource({
                 method: 'GET',
-                url: endpoint + '/findAuditInfo'
+                url: 'process/schemas/audit/getAuditList.json'
             }),
             getAuditInfo: {
                 method: 'GET',
@@ -100,11 +210,11 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             updateAuditInfo: {
                 method: 'POST',
-                url: endpoint + '/updateAuditInfo'
+                url: endpoint + '/UpdateAuditInfo'
             },
             getAuditFull: {
                 method: 'GET',
-                url: endpoint + '/getAuditData'
+                url: 'process/schemas/audit/getAuditFull.json'
             },
             updateAuditFull: {
                 method: 'POST',
@@ -115,17 +225,25 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 url: endpoint + '/getSampleSets',
                 isArray: true
             },
-            getAuditScores: searchResource({
+            findAuditScores: searchResource({
                 method: 'GET',
-                url: endpoint + '/findAuditScores'
+                url: 'process/schemas/audit/findAuditScores.json'
             }),
-            getIssuesList: searchResource({
+            getAuditScore: {
                 method: 'GET',
-                url: endpoint + '/findIssues'
+                url: 'process/schemas/audit/getAuditScore.json'
+            },
+            // findIssues: searchResource({
+            //     method: 'GET',
+            //     url: endpoint + '/findIssues'
+            // }),
+            findIssues: searchResource({
+                method: 'GET',
+                url: 'process/schemas/audit/findIssues.json'
             }),
             getIssueDetails: {
                 method: 'GET',
-                url: endpoint + '/getIssue'
+                url: 'process/schemas/audit/getIssueDetails.json'
             },
             updateIssueDetails: {
                 method: 'POST',
@@ -154,6 +272,38 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             getSnapAuditData: {
                 method: 'GET',
                 url: endpoint + '/getSnapAudit'
+            },
+            findSample: searchResource({
+                method: 'GET',
+                url: endpoint + '/findSample'
+            }),
+            getAuditScoreSheet: {
+                method: 'GET',
+                url: endpoint + '/getAuditScoreSheet'
+            },
+            findStage: {
+                method: 'GET',
+                url: endpoint + '/findStage'
+            },
+            updateStaging: {
+                method: 'POST',
+                url: endpoint + '/updateStaging'
+            },
+            getStageActivities: {
+                method: 'GET',
+                url: endpoint + '/getStageActivities'
+            },
+            updateStageActivities: {
+                method: 'POST',
+                url: endpoint + '/updateStageActivities'
+            },
+            findDumpSamples:searchResource({
+                method: 'GET',
+                url: endpoint + '/findDumpSamples'
+            }),
+            getDumpSample: {
+                method: 'POST',
+                url: endpoint + '/getDumpSample'
             },
         });
 
@@ -328,7 +478,9 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             getAuditMaster: function() {
                 var auditMaster = irfStorageService.getMaster("auditMaster");
-                if (!auditMaster) PageHelper.setError({message:"Audit master unavailable. Refresh cache & retry"});
+                if (!auditMaster) PageHelper.setError({
+                    message: "Audit master unavailable. Refresh cache & retry"
+                });
                 return auditMaster;
             }
         };
@@ -344,7 +496,9 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
             Audit.online.getAuditMaster().$promise.then(function(response) {
                 $log.info(response)
                 var auditTypeObj = {};
-                var audit_type_enum = {data:[]};
+                var audit_type_enum = {
+                    data: []
+                };
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
                     if (rec.status == 1) {

@@ -378,6 +378,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "Enrollment
                                                     }
                                                 }
                                                 model.lead.educationStatus = f.educationStatus;
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                }
+
                                             }, function(httpRes){
                                                 PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                                             })

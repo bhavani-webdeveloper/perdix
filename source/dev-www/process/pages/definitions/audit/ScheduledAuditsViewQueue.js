@@ -211,6 +211,9 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsViewQueue"), ["$log","
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        },{
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

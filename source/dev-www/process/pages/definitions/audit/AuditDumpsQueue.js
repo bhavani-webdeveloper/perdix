@@ -213,6 +213,9 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        },{
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

@@ -213,18 +213,18 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
-                            render: function(data, type, full, meta) {
-                                return Audit.utils.auditStatusHtml(full, false) + data;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return Audit.utils.auditStatusHtml(full, false) + data;
+                            // }
                         }, {
                             title: 'AUDITOR_ID',
                             data: 'auditor_id'
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            render: function(data, type, full, meta) {
-                                return masterJson.audit_type[data].audit_type;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return masterJson.audit_type[data].audit_type;
+                            // }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -237,6 +237,9 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        },{
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

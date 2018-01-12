@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+    function($log, PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES",
@@ -41,14 +41,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var deferred = $q.defer();
                     $q.all([
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'branch_id': searchOptions.branch_id,
                             'issue_status': "A",
                             'assignee_designation_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'branch_id': searchOptions.branch_id,
                             'issue_status': "P",
                             'assignee_designation_id': searchOptions.role_id,
@@ -92,7 +92,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                     listStyle: "table",
                     itemCallback: function(item, index) {},
                     getItems: function(response, headers) {
-                        return response && response.length? response: [];
+                        return response && response.length ? response : [];
                     },
                     getListItem: function(item) {
                         return [
@@ -117,14 +117,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                         return [{
                             title: 'ISSUE',
                             data: 'id',
-                            render: function(data, type, full, meta) {
-                                return master.typeofissues[full.type_of_issue_id].description;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return master.typeofissues[full.type_of_issue_id].description;
+                            // }
                         }, {
                             title: 'STATUS',
                             data: 'status',
                             render: function(data, type, full, meta) {
-                                return data == 'A'? 'Assigned': 'Unconfirmed';
+                                return data == 'A' ? 'Assigned' : 'Unconfirmed';
                             }
                         }, {
                             title: 'AUDITOR_ID',
@@ -132,9 +132,9 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
-                            render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return master.branch_name[full.branch_id].node_code;
+                            // }
                         }, {
                             title: 'CLOSED_ON',
                             data: 'closed_on'
@@ -142,8 +142,8 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                             title: 'CLOSED_BY',
                             data: 'closed_by'
                         }, {
-                            title: 'AUDIT_REPORT_DATE',
-                            data: 'audit_report_date'
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

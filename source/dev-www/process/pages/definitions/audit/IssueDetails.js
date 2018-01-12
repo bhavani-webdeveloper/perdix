@@ -71,6 +71,21 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     type: "date",
                     "readonly": true
                 }, {
+                    "key": "auditIssue.latitude",
+                    "title": "LOCATION",
+                    "type": "geotag",
+                    "latitude": "auditIssue.latitude",
+                    "longitude": "auditIssue.longitude"
+                }, {
+                    key: "auditIssue.document",
+                    type: "file",
+                    required: true,
+                    fileType: "application/pdf",
+                    using: "scanner",
+                    title: "DRAFT_DOCUMENT",
+                    "category": "Loan",
+                    "subCategory": "COLLATERALPHOTO"
+                }, {
                     "key": "auditIssue.confirmity_status",
                     "title": "STATUS",
                     "condition": "!model.readonly && model.type=='audit'",
@@ -109,6 +124,16 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     key: "message",
                     "condition": "model.type && model.type=='operation'",
                     "title": "RESPONSE"
+                }, {
+                    type: "textarea",
+                    key: "message",
+                    "condition": "!model.readonly && model.status=='DO'",
+                    "title": "COMMENTS"
+                }, {
+                    type: "textarea",
+                    key: "message",
+                    "condition": "!model.readonly && model.status=='DR'",
+                    "title": "COMMENTS"
                 }]
             }, {
                 "type": "box",
@@ -134,22 +159,54 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 "items": [{
                     "type": "button",
                     "title": "UPDATE_ISSUE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'audit')"
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'assign')"
                 }]
             }, {
                 "type": "actionbox",
                 "condition": "!model.readonly && model.type=='operation'",
                 "items": [{
-                    "type": "button",
-                    "title": "CLOSE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
-                }
-                // ,{
-                //     "type": "button",
-                //     "title": "SEND_RESPONSE",
-                //     "onClick": "actions.updateIssue(model, formCtrl, form, 'send')"
-                // }
+                        "type": "button",
+                        "title": "CLOSE",
+                        "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
+                    }
+                    // ,{
+                    //     "type": "button",
+                    //     "title": "SEND_RESPONSE",
+                    //     "onClick": "actions.updateIssue(model, formCtrl, form, 'send')"
+                    // }
                 ]
+            }, {
+                "type": "actionbox",
+                "condition": "!model.readonly && model.status=='DO' && model.type == 'operation'",
+                "items": [{
+                    "type": "button",
+                    "title": "SUBMIT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
+                }, {
+                    "type": "button",
+                    "title": "ACCEPT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'accept')"
+                }, {
+                    "type": "button",
+                    "title": "REJECT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'reject')"
+                }]
+            }, {
+                "type": "actionbox",
+                "condition": "!model.readonly && model.status=='DR' & model.type == 'audit'",
+                "items": [{
+                    "type": "button",
+                    "title": "SUBMIT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
+                }, {
+                    "type": "button",
+                    "title": "ACCEPT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'draftAccept')"
+                }, {
+                    "type": "button",
+                    "title": "REJECT",
+                    "onClick": "actions.updateIssue(model, formCtrl, form, 'draftReject')"
+                }]
             }],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -189,7 +246,8 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                             "created_on": {
                                 "type": "string",
                                 "title": "POSTED_ON"
-                            },
+                            }
+
                         }
                     }
                 }
@@ -202,13 +260,22 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                         model.auditIssue.status = 'X';
                         model.auditIssue.closed_by = SessionStore.getLoginname();
                         model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
-                    } 
-                    // else if (actionType == 'send') {
-                    //     model.auditIssue.send_message = model.message;
-                    // } 
-                    else if (actionType == 'audit') {
+                    } else if (actionType == 'assign') {
                         if (model.auditIssue.confirmity_status == 2) {
                             model.auditIssue.status = 'A';
+                        }
+                    }
+                    if (model.status == 'DO' && model.type == 'operation') {
+                        if (actionType == 'accept') {
+                            model.auditIssue.status = 'DA';
+                        } else if (actionType == 'reject') {
+                            model.auditIssue.status = 'DR';
+                        }
+                    } else if (model.status == 'DA' && model.type == 'audit') {
+                        if (actionType == 'draftAccept') {
+                            model.auditIssue.status = 'DRA';
+                        } else if (actionType == 'draftReject') {
+                            model.auditIssue.status = 'DRR';
                         }
                     }
                     Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {

@@ -23,7 +23,7 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
             }
             var dashboardBox = {};
             var addSampleSet = function(scoringSampleSet, sampleSetId) {
-                var module = master.process_tabs[scoringSampleSet.scoring_process_type_id];
+                // var module = master.process_tabs[scoringSampleSet.scoring_process_type_id];
                 var menuDefinition = {
                     "title": scoringSampleSet.scoring_sample_type,
                     "state": "Page.Engine",

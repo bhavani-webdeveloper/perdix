@@ -16,7 +16,8 @@ function($log, PageHelper, irfNavigator, formHelper, Audit, $stateParams) {
                     audit_id: $stateParams.pageId
                 }).$promise.then(function(res) {
                     model.auditInfo = res;
-                    model.startable = moment().isBetween(moment(model.auditInfo.start_date, 'YYYY-MM-DD'), moment(model.auditInfo.end_date, 'YYYY-MM-DD'), 'days', '[]');    
+                    PageHelper.setWarning(res.days_left, "audit")
+                    model.startable = moment().isBetween(moment(model.auditInfo.start_date, 'YYYY-MM-DD'), moment(model.auditInfo.end_date, 'YYYY-MM-DD'), 'days', '[]');
                 }, function(errRes) {
                     PageHelper.showErrors(errRes);
                 }).finally(function() {
@@ -80,7 +81,7 @@ function($log, PageHelper, irfNavigator, formHelper, Audit, $stateParams) {
                     <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditInfo.messages[arrayIndex].comment}}</strong><br>'
                 }]
             }]
-        }, {        
+        }, {
             "type": "actionbox",
             "condition": "!model.readonly && !model.startable",
             "items": [{

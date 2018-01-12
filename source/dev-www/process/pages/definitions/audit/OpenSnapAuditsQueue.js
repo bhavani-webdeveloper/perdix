@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Utils", "User", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log, Utils, User , PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+    function($log, Utils, User, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
         var localFormController;
         var returnObj = {
             "type": "search-list",
@@ -122,7 +122,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
-                        'audit_type':0,
+                        'audit_type': 0,
                         'status': 'O',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
@@ -176,9 +176,9 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            render: function(data, type, full, meta) {
-                                return masterJson.audit_type[data].audit_type;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return masterJson.audit_type[data].audit_type;
+                            // }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -188,6 +188,9 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        }, {
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

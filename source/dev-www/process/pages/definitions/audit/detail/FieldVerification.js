@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                     }, {
                         "title": "URN",
                         "data": "urn"
-                    }, {
+                    }, {    
                         "title": "ENTITY",
                         "data": "book_entity_id",
                         render: function(data, type, full, meta) {

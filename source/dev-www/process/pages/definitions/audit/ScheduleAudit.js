@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
             "type": "schema-form",
             "title": "SCHEDULE_AUDIT",
             initialize: function(model, form, formCtrl) {
-                model.auditInfo = model.auditInfo || {};                
+                model.auditInfo = model.auditInfo || {};
                 model.branchName = SessionStore.getBranch();
                 model.roleUsers = model.roleUsers || {};
                 if ($stateParams.pageId) {
@@ -31,6 +31,8 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                         audit_id: $stateParams.pageId
                     }).$promise.then(function(res) {
                         model.auditInfo = res;
+                        $log.info(res);
+                        $log.info("res");
                         model.auditInfoOriginal = _.cloneDeep(res);
                     }, function(errRes) {
                         PageHelper.showErrors(errRes);

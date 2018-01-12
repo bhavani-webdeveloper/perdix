@@ -1,5 +1,4 @@
-irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
-["$log", "$state", "irfNavigator", "$stateParams", "$http", "Audit", "SessionStore", "PageHelper", "$q", "Utils",
+irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"), ["$log", "$state", "irfNavigator", "$stateParams", "$http", "Audit", "SessionStore", "PageHelper", "$q", "Utils",
     function($log, $state, irfNavigator, $stateParams, $http, Audit, SessionStore, PageHelper, $q, Utils) {
         var branch = SessionStore.getBranch();
         var returnObj = {
@@ -18,13 +17,17 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
+                 var actionsBoxItems = [];
 
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 self.form = [];
                 var auditId = $stateParams.pageId.split(':')[0];
                 var sampleTypeId = $stateParams.pageId.split(':')[1];
+                $log.info(sampleTypeId);
+                $log.info("sampleTypeId");
                 var master = Audit.offline.getAuditMaster();
                 var sampleColumnsConfig = null;
+                var sampleColumnsComponent = null;
                 var tableColumnsConfig = [{
                     "title": "S_NO",
                     "data": "sub_id",
@@ -42,13 +45,61 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     sampleColumnsConfig = master.sampling_columns_config[i];
                     if (sampleColumnsConfig.scoring_sample_type_id == sampleTypeId) {
                         for (j in sampleColumnsConfig.columns) {
-                            tableColumnsConfig.push({
-                                "title": sampleColumnsConfig.columns[j].user_friendly_name,
-                                "data": "column_values." + j
-                            });
+                            // if (sampleColumnsConfig.columns[j].display == 1) {
+                                for (k in master.components) {
+                                    if (master.components[k].component_id == sampleColumnsConfig.columns[j].component_id) {
+                                        sampleColumnsConfig.columns[j].component_name = master.components[k].component_name;
+                                        break;
+                                        actionsBoxItems.push({
+                                            "type": "button",
+                                            "title": sampleColumnsConfig.columns[j].component_name,
+                                            onClick: function(model, formCtrl, form, event) {
+                                                if (sampleColumnsConfig.columns[j].component_name == 'CUSTOMER_ID') {
+                                                    irfNavigator.go({
+                                                        'state': 'Page.Engine',
+                                                        'pageName': 'Page.Customer360',
+                                                        'pageId': sampleColumnsConfig.columns[j].component_name,
+                                                        'pageData': pageData
+                                                    }, {
+                                                        'state': 'Page.Engine',
+                                                        'pageName': 'audit.detail.processcompliance.SampleSet',
+                                                        'pageId': auditId + ":" + sampleTypeId,
+                                                        'pageData': pageData
+                                                    });
+                                                } else if (sampleColumnsConfig.columns[j].component_name == 'LOAN_ID') {
+                                                    irfNavigator.go({
+                                                        'state': 'Page.Engine',
+                                                        'pageName': 'loans.individual.screening.LoanView',
+                                                        'pageId': sampleColumnsConfig.columns[j].component_name,
+                                                        'pageData': pageData
+                                                    }, {
+                                                        'state': 'Page.Engine',
+                                                        'pageName': 'audit.detail.processcompliance.SampleSet',
+                                                        'pageId': auditId + ":" + sampleTypeId,
+                                                        'pageData': pageData
+                                                    });
+                                                }
+
+                                            }
+                                        });
+                                        tableColumnsConfig.push({
+                                            "title": sampleColumnsConfig.columns[j].user_friendly_name,
+                                            "data": "column_values." + j
+                                        });
+                                    } else {
+                                        tableColumnsConfig.push({
+                                            "title": sampleColumnsConfig.columns[j].user_friendly_name,
+                                            "data": "column_values." + j
+                                        });
+                                    }
+                                }
+                            // }
+
                         }
+
                     }
                 };
+
 
                 var processData = function(response) {
                     if (!model.$isOffline && $stateParams.pageData.auditData) {
@@ -93,7 +144,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                     isApplicable: function(item, index) {
                                         return !$stateParams.pageData.readonly && item.status != "2";
                                     }
-                                },{
+                                }, {
                                     name: "NO_ISSUES",
                                     fn: function(item, index) {
                                         item.status = "1";
@@ -102,8 +153,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                             Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                         }
                                     },
-                                     isApplicable: function(item, index) {
-                                         return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";                                       
+                                    isApplicable: function(item, index) {
+                                        return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";
                                     }
                                 }, {
                                     name: "DO_AUDIT",
@@ -111,11 +162,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                         irfNavigator.go({
                                             'state': 'Page.Engine',
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
-                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
+                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id ? item.sub_id : (item.sample_newgen_uid ? '_' + item.sample_newgen_uid : '')),
                                             'pageData': pageData
                                         }, {
                                             'state': 'Page.Engine',
-                                            'pageName': 'audit.detail.processcompliance.SampleSet',                                            
+                                            'pageName': 'audit.detail.processcompliance.SampleSet',
                                             'pageId': auditId + ":" + sampleTypeId,
                                             'pageData': pageData
                                         });
@@ -135,7 +186,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                                 }
                                             }
                                             if (model.$isOffline) {
-                                            Audit.offline.setProcessCompliance(auditId, model.processCompliance);
+                                                Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                             }
                                         });
                                     },
@@ -148,7 +199,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                         irfNavigator.go({
                                             'state': 'Page.Engine',
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
-                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
+                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id ? item.sub_id : (item.sample_newgen_uid ? '_' + item.sample_newgen_uid : '')),
                                             'pageData': pageData
                                         }, {
                                             'state': 'Page.Engine',
@@ -164,7 +215,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                             }
                         }]
                     }];
-                    var actionsBoxItems = [];
+                   
                     if (!$stateParams.pageData.readonly) {
                         actionsBoxItems.push({
                             "type": "button",

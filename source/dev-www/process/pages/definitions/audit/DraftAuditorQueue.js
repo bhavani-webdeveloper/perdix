@@ -1,33 +1,117 @@
-irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
-        var localFormController;
+irf.pageCollection.factory(irf.page("audit.DraftAuditorQueue"), ["$log", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "Utils", "PageHelper",
+    function($log, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, Utils, PageHelper) {
         var returnObj = {
             "type": "search-list",
-            "title": "OPEN_REGULAR_AUDITS",
+            "title": "DRAFT_AUDITOR_QUEUE",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
+                model.branch = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
                 localFormController = formCtrl;
                 syncCheck = false;
+                $log.info("Regular audit queue got initialized");
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
+                Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
+                    model.auditor_role_id = Number(value);
+                }, PageHelper.showErrors);
             },
             definition: {
                 title: "SEARCH_AUDITS",
-                searchForm: [
-                    "*"
+                searchForm: [{
+                        key: "bankId",
+                        readonly: true,
+                        condition: "!model.fullAccess"
+                    }, {
+                        key: "bankId",
+                        condition: "model.fullAccess"
+                    }, {
+                        key: "auditor_id",
+                        title: "AUDITOR_USERID",
+                        type: "lov",
+                        inputMap: {
+                            "userName": {
+                                "key": "user_name"
+                            },
+                            "login": {
+                                "key": "login"
+                            },
+                            "branch_id": {
+                                "key": "branch_id"
+                            }
+                        },
+                        outputMap: {
+                            "login": "auditor_id",
+                            "userName": "user_name",
+                            "branch_id": "branch_id"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return User.query({
+                                'login': inputModel.login,
+                                'userName': inputModel.userName,
+                                'roleId': model.auditor_role_id,
+                                'branchName': inputModel.branch_id,
+                            }).$promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.login + ': ' + item.userName,
+                                item.branchName
+                            ];
+                        }
+                    },
+                    "branch_id",
+                    "audit_type",
+                    "report_date",
+                    "start_date",
+                    "end_date"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
+                        "auditor_id": {
+                            "title": "AUDITOR_ID",
+                            "type": "string"
+                        },
                         "branch_id": {
                             "title": "BRANCH_ID",
                             "type": "number",
                             "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
+                        },
+                        "audit_type": {
+                            "title": "AUDIT_TYPE",
+                            "type": "number",
+                            "enumCode": "audit_type",
                             "x-schema-form": {
                                 "type": "select"
                             }
@@ -52,6 +136,14 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                             "x-schema-form": {
                                 "type": "date"
                             }
+                        },
+                        "user_name": {
+                            "title": "USER_NAME",
+                            "type": "string"
+                        },
+                        "login": {
+                            "title": "LOGIN",
+                            "type": "string"
                         }
                     }
                 },
@@ -64,14 +156,14 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                     }
                     var deferred = $q.defer();
                     Audit.online.getAuditList({
-                        'audit_id': searchOptions.audit_id,
-                        'auditor_id': SessionStore.getLoginname(),
+                        'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
+                        'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
-                        // 'audit_type': 1,
-                        // 'status': 'O',
+                        'current_stage': 'draft',
+                        'status': "D",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
@@ -111,12 +203,22 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                     },
 
                     getColumns: function() {
+                        var masterJson = Audit.offline.getAuditMaster();
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
                             render: function(data, type, full, meta) {
                                 return Audit.utils.auditStatusHtml(full, false) + data;
                             }
+                        }, {
+                            title: 'AUDITOR_ID',
+                            data: 'auditor_id'
+                        }, {
+                            title: 'AUDIT_TYPE',
+                            data: 'audit_type',
+                            // render: function(data, type, full, meta) {
+                            //     return masterJson.audit_type[data].audit_type;
+                            // }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -129,47 +231,26 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        }
-
-                        // , {
-                        //     title: 'Days left',
-                        //     data: 'days_left'
-                        // }
-                        ]
+                        }, {
+                            title: 'Days left',
+                            data: 'days_left'
+                        }]
                     },
                     getActions: function() {
                         return [{
-                            name: "SYNC",
-                            icon: "fa fa-refresh",
-                            fn: function(item, index) {
-                                PageHelper.showLoader();
-                                Audit.online.getAuditFull({
-                                    audit_id: item.audit_id
-                                }).$promise.then(function(response) {
-                                    item._offline = true;
-                                    PageHelper.showProgress("audit", "Synchronized successfully", 3000);
-                                    return Audit.offline.setAudit(item.audit_id, response);
-                                }).finally(function() {
-                                    PageHelper.hideLoader();
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return !SessionStore.session.offline && !item._offline && item._online;
-                            }
-                        }, {
-                            name: "DO_AUDIT",
-                            icon: "fa fa-pencil-square-o",
+                            name: "EDIT",
+                            icon: "fa fa-eye",
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Adhoc',
-                                    'pageName': 'audit.AuditDetails',
+                                    'pageName': 'audit.AuditDraftDetails',
                                     'pageId': item.audit_id,
                                     'pageData': {
-                                        "readonly": !(item.current_stage == 'start' || item.current_stage == 'create')
+                                        "readonly": item.type !== 'audit'
                                     }
                                 }, {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.OpenRegularAuditsQueue',
+                                    'pageName': 'audit.DraftOperationQueue',
                                     'pageData': {
                                         "page": returnObj.definition.listOptions.tableConfig.page
                                     }
@@ -178,61 +259,8 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                             isApplicable: function(item, index) {
                                 return true;
                             }
-                        }, {
-                            name: "DELETE_OFFLINE",
-                            icon: "fa fa-trash",
-                            fn: function(item, index) {
-                                Utils.confirm('Do You Want to Delete?').then(function() {
-                                    PageHelper.showLoader();
-                                    Audit.offline.deleteAudit(item.audit_id).then(function() {
-                                        item._offline = false;
-                                        delete item._dirty;
-                                        delete item._sync;
-                                    }).finally(PageHelper.hideLoader);
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return item._offline;
-                            }
                         }];
-                    },
-                    getBulkActions: function() {
-                        return [{
-                            name: "SYNC_ALL",
-                            icon: "fa fa-refresh",
-                            fn: function(items, index) {
-                                PageHelper.showLoader();
-                                var sy = function(item) {
-                                    var p = Audit.online.getAuditFull({
-                                        audit_id: item.audit_id
-                                    }).$promise;
-                                    p.then(function(response) {
-                                        PageHelper.hideLoader();
-                                        item._offline = true;
-                                        Audit.offline.setAudit(item.audit_id, response);
-                                    });
-                                    return p;
-                                };
-                                var ps = [];
-                                for (i in items) {
-                                    ps.push(sy(items[i]));
-                                }
-                                $q.all(ps).then(function() {
-                                    PageHelper.showProgress("audit", "All audits synchronized successfully", 3000);
-                                }, function() {
-                                    PageHelper.showProgress("audit", "Audits failed to synchronize", 3000);
-                                }).finally(function() {
-                                    PageHelper.hideLoader();
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                if (!SessionStore.session.offline) {
-                                    return true;
-                                }
-                                return false;
-                            }
-                        }];
-                    },
+                    }
                 }
             }
         };

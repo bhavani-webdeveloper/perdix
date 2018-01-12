@@ -48,14 +48,14 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var deferred = $q.defer();
                     $q.all([
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'branch_id': searchOptions.branch_id,
                             'user_id': searchOptions.userId,
                             'issue_status': "A",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'branch_id': searchOptions.branch_id,
                             'user_id': searchOptions.userId,
                             'issue_status': "P",
@@ -130,9 +130,9 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                         return [{
                             title: 'ISSUE',
                             data: 'id',
-                            render: function(data, type, full, meta) {
-                                return master.typeofissues[full.type_of_issue_id].description;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return master.typeofissues[full.type_of_issue_id].description;
+                            // }
                         }, {
                             title: 'STATUS',
                             data: 'status',
@@ -145,9 +145,9 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
-                            render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return master.branch_name[full.branch_id].node_code;
+                            // }
                         }, {
                             title: 'CLOSED_ON',
                             data: 'closed_on'
@@ -157,6 +157,9 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                         }, {
                             title: 'AUDIT_REPORT_DATE',
                             data: 'audit_report_date'
+                        },{
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

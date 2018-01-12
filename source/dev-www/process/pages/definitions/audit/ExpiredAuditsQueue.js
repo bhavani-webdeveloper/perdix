@@ -136,6 +136,9 @@ irf.pageCollection.factory(irf.page("audit.ExpiredAuditsQueue"), ["$log", "formH
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        },{
+                            title: 'Days left',
+                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

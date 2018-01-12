@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getIssuesList({
+                    return Audit.online.findIssues({
                         'branch_id': searchOptions.branch_id,
                         'confirmity_status': "NULL",
                         'issue_status': 'X',
@@ -86,27 +86,31 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                     getColumns: function() {
                         var master = Audit.offline.getAuditMaster();
                         return [{
-                            title: 'ISSUE',
-                            data: 'id',
-                            render: function(data, type, full, meta) {
-                                return master.typeofissues[full.type_of_issue_id].description;
+                                title: 'ISSUE',
+                                data: 'id',
+                                // render: function(data, type, full, meta) {
+                                //     return master.typeofissues[full.type_of_issue_id].description;
+                                // }
+                            }, {
+                                title: 'BRANCH_NAME',
+                                data: 'branch_id',
+                                // render: function(data, type, full, meta) {
+                                //     return master.branch_name[full.branch_id].node_code;
+                                // }
+                            }, {
+                                title: 'CLOSED_ON',
+                                data: 'closed_on'
+                            }, {
+                                title: 'CLOSED_BY',
+                                data: 'closed_by'
+                            }, {
+                                title: 'AUDIT_REPORT_DATE',
+                                data: 'audit_report_date'
+                            },{
+                                title: 'Days left',
+                                data: 'days_left'
                             }
-                        }, {
-                            title: 'BRANCH_NAME',
-                            data: 'branch_id',
-                            render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
-                            }
-                        }, {
-                            title: 'CLOSED_ON',
-                            data: 'closed_on'
-                        }, {
-                            title: 'CLOSED_BY',
-                            data: 'closed_by'
-                        }, {
-                            title: 'AUDIT_REPORT_DATE',
-                            data: 'audit_report_date'
-                        }]
+                        ]
                     },
                     getActions: function() {
                         return [{

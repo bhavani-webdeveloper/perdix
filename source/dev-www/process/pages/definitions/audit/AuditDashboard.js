@@ -1,10 +1,11 @@
-irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
-["$log", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "PageHelper", "Audit",
+irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "$q", "$stateParams", "$scope", "PagesDefinition", "SessionStore", "PageHelper", "Audit",
     function($log, $q, $stateParams, $scope, PagesDefinition, SessionStore, PageHelper, Audit) {
         $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
 
         if (!irf.appConfig.AMS_ENABLED) {
-            PageHelper.setError({message: "Audit Feature is disabled"});
+            PageHelper.setError({
+                message: "Audit Feature is disabled"
+            });
             return;
         }
 
@@ -17,6 +18,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                 "Page/Engine/audit.ScheduledAuditsViewQueue",
                 "Page/Engine/audit.DeferredAuditsQueue",
                 "Page/Engine/audit.OpenRegularAuditsQueue",
+                "Page/Engine/audit.DraftOperationQueue",
+                "Page/Engine/audit.DraftAuditorQueue",
                 "Page/Engine/audit.OpenSnapAuditsQueue",
                 "Page/Engine/audit.PublishedAuditsViewQueue",
                 "Page/Engine/audit.PublishedAuditsQueue",
@@ -138,7 +141,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
-                        'status' : 'O'
+                        'status': 'O'
                     }).$promise.then(function(data) {
                         osaq.data = data.body.length;
                     });
@@ -205,7 +208,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                 }
 
                 if (asq) {
-                    Audit.online.getAuditScores({
+                    Audit.online.findAuditScores({
                         'page': 1,
                         'per_page': 100
                     }).$promise.then(function(data) {
@@ -233,12 +236,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
 
                 if (aiq) {
                     $q.all([
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'issue_status': "A",
                             'page': 1,
                             'per_page': 100
                         }).$promise,
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'issue_status': "P",
                             'page': 1,
                             'per_page': 100
@@ -247,15 +250,15 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                         aiq.data = data[0].body.length + data[1].body.length;
                     });
                 }
-                
+
                 if (aivq) {
                     $q.all([
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'issue_status': "A",
                             'page': 1,
                             'per_page': 100
                         }).$promise,
-                        Audit.online.getIssuesList({
+                        Audit.online.findIssues({
                             'issue_status': "P",
                             'page': 1,
                             'per_page': 100
@@ -266,7 +269,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                 }
 
                 if (oiq || oivq) {
-                    Audit.online.getIssuesList({
+                    Audit.online.findIssues({
                         'confirmity_status': "NULL",
                         'issue_status': 'X',
                     }).$promise.then(function(data) {
@@ -280,7 +283,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                 }
 
                 if (ciq) {
-                    Audit.online.getIssuesList({
+                    Audit.online.findIssues({
                         'confirmity_status': "1",
                         'issue_status': "X",
                     }).$promise.then(function(data) {
@@ -295,7 +298,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"),
                 }
 
                 if (uciq) {
-                    Audit.online.getIssuesList({
+                    Audit.online.findIssues({
                         'confirmity_status': "2",
                         'issue_status': "P",
                     }).$promise.then(function(data) {

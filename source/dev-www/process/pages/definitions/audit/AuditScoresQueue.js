@@ -54,7 +54,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getAuditScores({
+                    return Audit.online.findAuditScores({
                         'audit_id': searchOptions.audit_id,
                         'branch_id': searchOptions.branch_id,
                         'branch_name': searchOptions.branch_name,
@@ -107,16 +107,21 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                         }, {
                             title: 'RATING',
                             data: 'audit_id',
-                            render: function(data, type, full, meta) {
-                                if (full.audit_score) {
-                                    var rate_flow = parseFloat(full.audit_score);
-                                    var ratingNumber = Math.round(rate_flow);
-                                    return Audit.utils.getRatingByScore(master, ratingNumber);
-                                }else{
-                                    return null;
-                                }
-                            }
-                        }]
+                            // render: function(data, type, full, meta) {
+                            //     if (full.audit_score) {
+                            //         var rate_flow = parseFloat(full.audit_score);
+                            //         var ratingNumber = Math.round(rate_flow);
+                            //         return Audit.utils.getRatingByScore(master, ratingNumber);
+                            //     }else{
+                            //         return null;
+                            //     }
+                            // }
+                        }
+                        // {
+                        //     title: 'Days left',
+                        //     data: ''
+                        // }
+                        ]
                     },
                     getActions: function() {
                         return [{

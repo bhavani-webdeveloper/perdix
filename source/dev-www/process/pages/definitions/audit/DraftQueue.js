@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "Utils", "PageHelper",
+irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "Utils", "PageHelper",
     function($log, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, Utils, PageHelper) {
         var returnObj = {
             "type": "search-list",
-            "title": "PENDING_PUBLISH",
+            "title": "DRAFT_QUEUE",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 model.branch = SessionStore.getCurrentBranch().branchId;
@@ -155,16 +155,10 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         return Audit.utils.processDisplayRecords();
                     }
                     var deferred = $q.defer();
-                    // Audit.online.getAuditList().$promise.then(function(res){
-                    //    $log.info(res);
-                    //    $log.info("response");
-                    // });
-
                     Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'audit_type': searchOptions.audit_type,
-                        'days_left': searchOptions.days_left,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
@@ -212,18 +206,18 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
-                            render: function(data, type, full, meta) {
-                                return Audit.utils.auditStatusHtml(full, false) + data;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return Audit.utils.auditStatusHtml(full, false) + data;
+                            // }
                         }, {
                             title: 'AUDITOR_ID',
                             data: 'auditor_id'
                         }, {
                             title: 'AUDIT_TYPE',
-                            data: 'audit_type'
-                                // render: function(data, type, full, meta) {
-                                //     return masterJson.audit_type[data].audit_type;
-                                // }
+                            data: 'audit_type',
+                            // render: function(data, type, full, meta) {
+                            //     return masterJson.audit_type[data].audit_type;
+                            // }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -236,14 +230,14 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        }, {
-                            title: 'DAYS_LEFT',
+                        },{
+                            title: 'Days left',
                             data: 'days_left'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW_AUDIT",
+                            name: "VIEW_DRAFT",
                             icon: "fa fa-eye",
                             fn: function(item, index) {
                                 if (item.audit_type = 1) {
@@ -281,23 +275,25 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                             isApplicable: function(item, index) {
                                 return true;
                             }
-                        }, {
-                            name: "DELETE_OFFLINE",
-                            icon: "fa fa-trash",
-                            fn: function(item, index) {
-                                Utils.confirm('Do You Want to Delete?').then(function() {
-                                    PageHelper.showLoader();
-                                    Audit.offline.deleteAudit(item.audit_id).then(function() {
-                                        item._offline = false;
-                                        delete item._dirty;
-                                        delete item._sync;
-                                    }).finally(PageHelper.hideLoader);
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return item._offline;
-                            }
-                        }];
+                        },
+                        // {
+                        //     name: "DELETE_OFFLINE",
+                        //     icon: "fa fa-trash",
+                        //     fn: function(item, index) {
+                        //         Utils.confirm('Do You Want to Delete?').then(function() {
+                        //             PageHelper.showLoader();
+                        //             Audit.offline.deleteAudit(item.audit_id).then(function() {
+                        //                 item._offline = false;
+                        //                 delete item._dirty;
+                        //                 delete item._sync;
+                        //             }).finally(PageHelper.hideLoader);
+                        //         });
+                        //     },
+                        //     isApplicable: function(item, index) {
+                        //         return item._offline;
+                        //     }
+                        // }
+                      ];
                     }
                 }
             }
