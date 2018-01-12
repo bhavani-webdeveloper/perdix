@@ -5,7 +5,7 @@ import AngularResourceService = require("../../infra/api/AngularResourceService"
  */
 
 declare var moment: Function;
-class Utils {
+export class Utils {
     static evalInContext(context: any, str: string): any{
         let out = function(str: string){
             return eval(str);
@@ -34,5 +34,3 @@ class Utils {
     }
 
 }
-
-export = Utils;

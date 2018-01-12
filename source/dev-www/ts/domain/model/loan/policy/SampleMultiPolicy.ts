@@ -4,9 +4,9 @@ import {IPolicy} from "../../../shared/IPolicy";
 import LoanRepository = require("../LoanRepository");
 import {plainToClass} from "class-transformer";
 import {map} from "@reactivex/rxjs/dist/cjs/operator/map";
-import Utils = require("../../../shared/Utils");
 import LoanAccount = require("../LoanAccount");
 import {LoanProcess} from "../LoanProcess";
+import {Utils} from "../../../shared/Utils";
 
 export interface SampleSimplePolicyArgs {
     defaultLeadStatus: string;

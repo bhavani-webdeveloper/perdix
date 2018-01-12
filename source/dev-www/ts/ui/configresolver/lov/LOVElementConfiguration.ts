@@ -1,5 +1,5 @@
 import {UIElementConfiguration} from '../UIElementConfiguration';
-import Utils = require("../../../domain/shared/Utils");
+import {Utils} from "../../../domain/shared/Utils";
 
 export abstract class LOVElementConfiguration extends UIElementConfiguration{
     protected elementType: string = 'lov';

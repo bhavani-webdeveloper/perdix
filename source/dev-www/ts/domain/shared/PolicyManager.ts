@@ -1,8 +1,8 @@
 import {Observable} from "@reactivex/rxjs";
 import {CanApplyPolicy, IPolicy, PolicyDefinition} from "./IPolicy";
-import Utils = require("./Utils");
 import {IPolicyFactory} from "./IPolicyFactory";
 import * as _ from "lodash";
+import {Utils} from "./Utils";
 /**
  * Created by shahalpk on 24/11/17.
  */

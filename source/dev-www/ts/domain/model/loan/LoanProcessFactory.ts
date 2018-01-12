@@ -8,7 +8,7 @@ import RepositoryFactory = require("../../shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../shared/RepositoryIdentifiers";
 import {LoanProcess} from "./LoanProcess";
 import {plainToClass} from "class-transformer";
-import Utils = require("../../shared/Utils");
+import {Utils} from "../../shared/Utils";
 class LoanProcessFactory {
 
     static loanRepo:ILoanRepository = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LoanProcess);

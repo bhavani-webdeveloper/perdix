@@ -4,14 +4,13 @@ import {RepositoryIdentifiers} from '../../shared/RepositoryIdentifiers';
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import {IEnrolmentRepository} from "./IEnrolmentRepository";
 import {Observable} from "@reactivex/rxjs";
-import Utils = require("../../shared/Utils");
 import {plainToClass} from "class-transformer";
 import {PolicyManager} from "../../shared/PolicyManager";
 import {Customer, CustomerTypes} from "./Customer";
 import {EnrolmentPolicyFactory} from "./policy/EnrolmentPolicyFactory";
-import {EnrolmentProcessFactory} from "./EnrolmentProcessFactory";
-import EnterpriseCustomerRelation = require("./EnterpriseCustomerRelation");
 import {LoanProcess} from "../loan/LoanProcess";
+import EnrolmentProcessFactory = require("./EnrolmentProcessFactory");
+import EnterpriseCustomerRelation = require("./EnterpriseCustomerRelation");
 
 
 declare var enrolmentProcessConfig: Object;
@@ -140,7 +139,7 @@ export class EnrolmentProcess {
         let ep = new EnrolmentProcess();
         ep.customer = new Customer();
         ep.customer.customerType = customerType;
-        let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentProcessFactory.enrolmentPolicyFactory, 'onNew', EnrolmentProcessFactory.enrolmentProcessConfig);
+        let pm: PolicyManager<EnrolmentProcess> = new PolicyManager<EnrolmentProcess>(ep, EnrolmentProcessFactory.enrolmentPolicyFactory, 'onNew', EnrolmentProcess.getProcessConfig());
         return pm.applyPolicies();
     }
 

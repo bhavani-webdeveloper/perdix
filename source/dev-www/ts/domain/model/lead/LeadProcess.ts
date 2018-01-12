@@ -7,7 +7,6 @@ import {ILeadRepository} from "./ILeadRepository";
 import {Observable} from "@reactivex/rxjs";
 import {LeadPolicyFactory} from "./policy/LeadPolicyFactory";
 import {CanApplyPolicy} from "../../shared/IPolicy";
-import Utils = require("../../shared/Utils");
 import {PolicyManager} from "../../shared/PolicyManager";
 import {LeadProcessFactory} from "./LeadProcessFactory";
 

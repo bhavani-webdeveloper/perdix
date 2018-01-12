@@ -6,7 +6,6 @@ import {Observable} from "@reactivex/rxjs";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {RxObservable} from "../../shared/RxObservable";
 import {plainToClass} from "class-transformer";
-import Utils = require("../../shared/Utils");
 import {Customer} from "./Customer";
 
 export class EnrolmentRepository implements IEnrolmentRepository {

@@ -1,6 +1,5 @@
 import AngularResourceService = require("../../infra/api/AngularResourceService");
 import {applyMixins} from "@reactivex/rxjs/dist/cjs/util/applyMixins";
-import Utils = require("./Utils");
 function getInjector(serviceName: string) {
     return AngularResourceService.getInstance().getNGService(serviceName)
 }

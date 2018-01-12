@@ -4,8 +4,8 @@ import {ILeadRepository} from "./ILeadRepository";
 import RepositoryFactory = require('../../shared/RepositoryFactory');
 import { RepositoryIdentifiers } from '../../shared/RepositoryIdentifiers';
 import {plainToClass} from "class-transformer";
-import Utils = require("../../shared/Utils");
 import {LeadProcess} from "./LeadProcess";
+import {Utils} from "../../shared/Utils";
 
 /**
  * Created by shahalpk on 21/11/17.

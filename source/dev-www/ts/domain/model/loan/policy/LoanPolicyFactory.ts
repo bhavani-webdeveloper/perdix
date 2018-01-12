@@ -3,7 +3,6 @@ import {IPolicyFactory} from "../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../shared/IPolicy";
 import {SampleSimplePolicy} from "./SampleSimplePolicy";
 import {SampleMultiPolicy} from "./SampleMultiPolicy";
-import {LoadRelatedCustomerData} from './LoadRelatedCustomerData';
 
 import {LoadRelatedCustomersPolicy} from "./LoadRelatedCustomersPolicy";
 import {DefaultRelatedCustomersPolicy} from "./DefaultRelatedCustomersPolicy";
@@ -44,9 +43,6 @@ export class LoanPolicyFactory implements IPolicyFactory{
             case 'DefaultRelatedCustomersPolicy':
                 obj = new DefaultRelatedCustomersPolicy();
                 return obj;
-            case 'LoadRelatedCustomerData':
-                return new LoadRelatedCustomerData();
-
             case 'MandatoryFieldsPolicy':
                 return new MandatoryFieldsPolicy();
             case 'OriginationToBookingPolicy':

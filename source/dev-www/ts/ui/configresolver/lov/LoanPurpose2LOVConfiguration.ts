@@ -6,7 +6,6 @@ import {ILoanRepository} from "../../../domain/model/loan/ILoanRepository";
 import RepositoryFactory = require("../../../domain/shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../../domain/shared/RepositoryIdentifiers";
 import {IQueryRepository} from "../../../domain/shared/query/IQueryRepository";
-import Utils = require("../../../domain/shared/Utils");
 import {NGHelper} from "../../../infra/helpers/NGHelper";
 
 export class LoanPurpose2LOVConfiguration extends LOVElementConfiguration{

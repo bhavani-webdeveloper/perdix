@@ -15,7 +15,6 @@ import {LeadProcess} from "../lead/LeadProcess";
 import {LoanPolicyFactory} from "./policy/LoanPolicyFactory";
 import EnrolmentProcessFactory = require("../customer/EnrolmentProcessFactory");
 import LoanCenter = require("./LoanCentre");
-import Utils = require("../../shared/Utils");
 import * as _ from 'lodash';
 import {LoanCustomerRelationTypes, LoanCustomerRelation} from "./LoanCustomerRelation";
 
