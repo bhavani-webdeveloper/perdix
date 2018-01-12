@@ -52,9 +52,17 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
                     }
                     enrolmentProcess.customer.date = enrolmentProcess.customer.date || Utils.getCurrentDate();
                     enrolmentProcess.customer.nameOfRo = enrolmentProcess.customer.nameOfRo || activeSession.getLoginname();
+                    let proofs = formHelperData.getAddressProof();
+                    let panIndex = _.findIndex(proofs, function(p) {
+                       return p.name == 'Pan Card';
+                    })
 
+                    let addharIndex = _.findIndex(proofs, function(p) {
+                        return p.name == 'Aadhar Card';
+                    })
 
-
+                    enrolmentProcess.customer.identityProof = proofs[panIndex].name;
+                    enrolmentProcess.customer.addressProof = proofs[addharIndex].name;
                     // return Observable.merge(observables, 5)
                     //     .concatAll()
                     //     .last()

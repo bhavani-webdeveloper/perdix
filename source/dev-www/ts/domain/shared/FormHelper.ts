@@ -11,6 +11,7 @@ export interface IFormHelper {
     getAccessorries(): any;
     getStages(): any;
     getCenters(): any;
+    getAddressProof(): any;
 
 }
 
@@ -55,6 +56,10 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
 
     getCenters(): any {
         return this.getInjector().enum('centre').data;
+    }
+
+    getAddressProof(): any {
+        return this.getInjector().enum('identity_proof').data;
     }
 
 

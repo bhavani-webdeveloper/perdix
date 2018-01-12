@@ -218,6 +218,13 @@ define([],function(){
                                             type: "textarea",
                                             required: true
                                         }, {
+                                            "title": "VALUATOR",
+                                            "key":"loanAccount.valuator",
+                                            "type":"select",
+                                            "titleMap": {
+                                                "test":"test"
+                                            }
+                                        }, {
                                             key: "review.proceedButton",
                                             type: "button",
                                             title: "PROCEED",

@@ -25,6 +25,7 @@ define(
                         "VehiclePrimaryInfo.firstName",
                         "VehiclePrimaryInfo.mobileNo",
                         "VehiclePrimaryInfo.AlternatemobileNo",
+                        "VehiclePrimaryInfo.registeredaddress",
                         "VehicleValuationPriliminaryInformation",
                         "VehicleValuationPriliminaryInformation.valuationPurpose",
                         "VehicleValuationPriliminaryInformation.valuationDate",

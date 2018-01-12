@@ -46,6 +46,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessSubsector",
                     "EnterpriseInformation.itrAvailable",
                     "EnterpriseInformation.enterpriseCustomerRelations",
+                    "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
+                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
+                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName",
+                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness",
+                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement",
+                    "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
                     "BusinessLiabilities",
                     "BusinessLiabilities.liabilities",
                     "BusinessLiabilities.liabilities.loanType",
@@ -77,6 +85,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
+                    "BankAccounts.customerBankAccounts.ifscCode",
+                    "BankAccounts.customerBankAccounts.customerBankName",
+                    "BankAccounts.customerBankAccounts.customerBankBranchName",
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.accountType",
+                    "BankAccounts.customerBankAccounts.bankingSince",
+                    "BankAccounts.customerBankAccounts.netBankingAvailable",
+                    "BankAccounts.customerBankAccounts.sanctionedAmount",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
@@ -84,7 +101,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
-                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto"
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
                 ];
             }
 

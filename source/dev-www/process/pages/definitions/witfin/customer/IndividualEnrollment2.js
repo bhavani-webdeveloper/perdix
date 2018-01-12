@@ -301,6 +301,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         fieldType: "number",
                         resolver: "MailingPincodeLOVConfiguration"
                     },
+                    "KYC.addressProof" :{
+                        "readonly": true
+                    },
+                    "KYC.identityProof": {
+                        "readonly": true
+                    },
                     "IndividualInformation.centreId": {
 
                         key: "customer.centreId",
