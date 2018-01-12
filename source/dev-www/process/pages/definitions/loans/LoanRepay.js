@@ -188,7 +188,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             model.loanAccount = res;
                                             model.repayment.payeeName = res.payeeName;
                                             model.repayment.payeeMobileNumber = res.payeeMobileNumber;
-                                            model.repayment.relationToApplicant = res.relationToApplicant;
+                                            model.repayment.payeeRelationToApplicant = res.payeeRelationToApplicant;
                                             var urns = [];
                                             if (!_.isNull(model.loanAccount.applicant)){
                                                 urns.push(model.loanAccount.applicant);
@@ -261,7 +261,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "type": "string"
                                 },
                                 {
-                                    "key": "repayment.relationToApplicant",
+                                    "key": "repayment.payeeRelationToApplicant",
                                     "title": "RELATIONSHIP_TO_APPLICANT",
                                     "type": "select",
                                     "enumCode": "payerRelation"
@@ -762,7 +762,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
                                     postData.loanCollection.payeeName = model.repayment.payeeName;
                                     postData.loanCollection.payeeMobileNumber = model.repayment.payeeMobileNumber;
-                                    postData.loanCollection.relationToApplicant = model.repayment.relationToApplicant;
+                                    postData.loanCollection.payeeRelationToApplicant = model.repayment.payeeRelationToApplicant;
 
                                     if (model.repayment.id) {
                                         if (postData.loanCollection.instrumentType == 'CASH') {
