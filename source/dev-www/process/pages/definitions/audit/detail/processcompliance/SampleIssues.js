@@ -293,13 +293,13 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     model.sample.issue_details = model.sample.issue_details || [];
                     // existing issues from sample
                     var issuesDataMap = {};
-                    for (i = 0; i < model.sample.issue_details.length; i++) {
-                        processIssuesForm(master.autosampling_typeofissue_sets[model.sample.issue_details[i].type_of_issue_id], i);
-                        issuesDataMap[model.sample.issue_details[i].type_of_issue_id] = true;
+                     for (idx = 0; idx < model.sample.issue_details.length; idx++) {
+                        processIssuesForm(master.autosampling_typeofissue_sets[model.sample.issue_details[idx].type_of_issue_id], idx);
+                        issuesDataMap[model.sample.issue_details[idx].type_of_issue_id] = true;
                     }
                     // new issues from master
                     var issues = master.autosampling_scoring_sample_type_sets[sampleTypeId];
-                    for (i = 0, idx = 0; i < issues.length; i++) {
+                    for (i = 0; i < issues.length; i++) {
                         if (issuesDataMap[issues[i].type_of_issue_id]) {
                             continue;
                         }
