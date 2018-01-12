@@ -54,6 +54,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
                     "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
                     "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
+                    "ContactInformation",
+                    "ContactInformation.mobilePhone",
+                    "ContactInformation.landLineNo",
+                    "ContactInformation.doorNo",
+                    "ContactInformation.street",
+                    "ContactInformation.postOffice",
+                    "ContactInformation.pincode",
+                    "ContactInformation.villageName",
+                    "ContactInformation.district",
+                    "ContactInformation.state",
+                    "ContactInformation.distanceFromBranch",
+                    "ContactInformation.businessInPresentAreaSince",
+                    "ContactInformation.businessInCurrentAddressSince",
                     "BusinessLiabilities",
                     "BusinessLiabilities.liabilities",
                     "BusinessLiabilities.liabilities.loanType",
@@ -269,6 +282,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         var formRequest = {
                             "overrides": {
                                 "EnterpriseInformation": {
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                                },
+                                "ContactInformation": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                                 },
                                 "EnterpriseInformation.enterpriseType": {
