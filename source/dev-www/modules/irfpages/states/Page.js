@@ -1,12 +1,14 @@
 irf.pages.controller("PageCtrl",
 ["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper",
-"SessionStore", "$window", "$rootScope", "irfNavigator",
+"SessionStore", "$window", "$rootScope", "irfNavigator", "$timeout",
 function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper,
-    SessionStore, $window, $rootScope, irfNavigator) {
+    SessionStore, $window, $rootScope, irfNavigator, $timeout) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
-        $rootScope.$broadcast('irf-login-success');
+        $timeout(function() {
+            $rootScope.$broadcast('irf-login-success');
+        });
 
         $scope.loginPipe = AuthPopup.promisePipe;
 
@@ -41,7 +43,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         $scope.$on('server-error', function (event, args) {
             $scope.errors = args;
-        })
+        });
+
+        $scope.$on('server-warnings', function (event, args) {
+            $scope.warnings = args;
+        });
 
         $scope.$on('page-loader', function(event, arg){
             $log.info("Inside listener for show-loader");
@@ -124,15 +130,22 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
          * @type {Array}
          */
         var errors = [];
+        var warnings = [];
 
         var clearErrorsFn = function(){
             errors = [];
             $rootScope.$broadcast('server-error', errors);
         }
 
+        var clearWarningsFn = function(){
+            warnings = [];
+            $rootScope.$broadcast('server-warnings', warnings);
+        }
+
         /* Add `clearErrors` method on $rootScope */
 
         $rootScope.clearErrors = clearErrorsFn;
+        $rootScope.clearWarnings = clearWarningsFn;
 
         return {
             clearErrors: clearErrorsFn,
@@ -154,6 +167,27 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             scrollToErrors: function () {
                 jQuery('html, body').animate({
                     scrollTop: $("#errors-wrapper").offset().top - 50
+                }, 500);
+            },
+            clearWarnings: clearWarningsFn,
+            setWarning: function (warning) {
+                $log.info("Inside setWarning");
+                $log.info(warning);
+                this.setWarnings([warning]);
+            },
+            setWarnings: function (newWarnings) {
+                $log.info("Inside setWarnings");
+                warnings = _.concat(warnings, newWarnings);
+                $rootScope.$broadcast('server-warnings', warnings);
+                this.scrollToWarnings();
+            },
+            getWarnings: function () {
+                $log.info("Inside getWarnings");
+                return warnings;
+            },
+            scrollToWarnings: function () {
+                jQuery('html, body').animate({
+                    scrollTop: $("#warnings-wrapper").offset().top - 50
                 }, 500);
             },
             scrollToTop: function(){
@@ -197,6 +231,30 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 }catch(err){
                     $log.error(err);
                 }
+            },
+            showWarnings: function(res){
+                this.clearWarnings();
+                try {
+                    var data = res.data;
+                    var warnings = [];
+                    if (_.hasIn(data, 'warnings')) {
+                        _.forOwn(data.warnings, function (keyWarnings, key) {
+                            var keyWarningsLength = keyWarnings.length;
+                            for (var i = 0; i < keyWarningsLength; i++) {
+                                var error = {"message": "<strong>" + key + "</strong>: " + keyWarnings[i]};
+                                warnings.push(error);
+                            }
+                        });
+
+                    }
+                    if (_.hasIn(data, 'warning')) {
+                        warnings.push({message: data.warning});
+                    }
+                    this.setWarnings(warnings);
+                }catch(err){
+                    $log.error(err);
+                }
+
             },
             navigateGoBack: function(){
                 return window.history.back();

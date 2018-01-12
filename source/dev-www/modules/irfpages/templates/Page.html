@@ -29,6 +29,19 @@
                 </div>
             </div>
         </div>
+        <div id="warnings-wrapper">
+            <div class="warnings-container" ng-show="warnings.length>0" style="padding: 0">
+                <div class="alert alert-warning alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #f39c12 0%,#ea7100 100%);">
+                    <button type="button" class="close" ng-click="clearWarnings()" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-warning"></i> Warnings</h4>
+                    <ol>
+                        <li ng-repeat="warning in warnings">
+                            <span ng-bind-html="warning.message"></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
         <div class="spinner-wrapper spinner-section-far-wrapper" ng-show="showSectionFarLoader">
             <div class="spinner-section-far"></div>
             <div class="spinner-section-far-text" ng-bind="showLoaderMsg"></div>
