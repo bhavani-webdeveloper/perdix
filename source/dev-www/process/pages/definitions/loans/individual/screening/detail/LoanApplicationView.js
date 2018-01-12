@@ -533,6 +533,45 @@ var navigateToQueue = function(model) {
 
                 }]
             }, {
+            "type": "box",
+            "colClass": "col-sm-12",
+            "title": "LOAN_DOCUMENTS",
+            "condition":"model.currentStage !== 'loanView'" ,
+            "items": [
+                {
+                    "type": "array",
+                    "key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "LOAN_DOCUMENT",
+                    "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
+                    "items": [
+                        {
+                            "key": "loanAccount.loanDocuments[].document",
+                            "title": "DOCUMENT_NAME",
+                            "type": "string",
+                            "required": true
+                        },
+                        {
+                            title: "Upload",
+                            key: "loanAccount.loanDocuments[].documentId",
+                            "required": true,
+                            type: "file",
+                            fileType: "application/pdf",
+                            category: "Loan",
+                            subCategory: "DOC1",
+                            using: "scanner"
+                        }
+                        // ,
+                        // {
+                        //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
+                        //     "type": "string"
+                        // }
+                    ]
+                }
+            ]
+
+        }, {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "Loan Recommendation",

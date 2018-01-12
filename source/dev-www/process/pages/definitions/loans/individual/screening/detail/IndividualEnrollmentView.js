@@ -206,7 +206,46 @@ define({
                     };
                     self.form.splice(2, 0, family);
                     //self.form.splice(4, 0, bankAccountDetail);
+
+                    if (self.formSource[self.formSource.length - 1].title != "View Uploads") {                    
+                    self.formSource.push({
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "readonly": true,
+                    "overrideType": "default-view",
+                    "title": "View Uploads",
+                    "items": [{
+                        "type": "section",
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px; "><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
+                        "items": [{
+                            "key": "customer.identityProofImageId",
+                            "type": "file",
+                            "notitle": true,
+                            "title": model.customer.identityProof,
+                            "preview": "pdf",
+                            "using": "scanner"
+                        }, {
+
+                            "key": "customer.addressProofImageId",
+                            "type": "file",
+                            "notitle": true,
+                            "title": model.customer.addressProof,
+                            "preview": "pdf",
+                            "using": "scanner"
+                        }, {
+                            "key": "customer.houseVerificationPhoto",
+                            "notitle": true,
+                            "title": "House",
+                            "type": "file",
+                            "fileType": "image/*"
+                        }]
+                    }]
                 });
+                }
+                });
+
+
+                
 
                 CreditBureau.getCBDetails({
                     "customerId": model.customerId
@@ -270,11 +309,17 @@ define({
                             }, {
                                 "key": "customer.dateOfBirth"
                             }, {
-                                "key": "customer.aadhaarNo",
-                                "title": "ID - Aadhar No."
-                            }, {
                                 "key": "customer.identityProofNo",
-                                "title": "ID - PAN no."
+                                "title": "ID Proof N0."
+                            }, {
+                                "key": "customer.identityProof",
+                                "title": "ID Proof Type"
+                            }, {
+                                "key": "customer.addressProofNo",
+                                "title": "Address Proof No."
+                            }, {
+                                "key": "customer.addressProof",
+                                "title":"Address Proof Type"
                             }, {
                                 "key": "customer.language",
                                 "title": "PREFERRED_LANGUAGE"
@@ -968,7 +1013,7 @@ define({
                             }
                         }]
                     }]
-                }, {
+                }/*, {
                     "type": "box",
                     "colClass": "col-sm-12",
                     "readonly": true,
@@ -1000,7 +1045,7 @@ define({
                             "fileType": "image/*"
                         }]
                     }]
-                }
+                }*/
 
             ],
 
