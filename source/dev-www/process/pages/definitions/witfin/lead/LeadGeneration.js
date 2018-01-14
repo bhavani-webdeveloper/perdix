@@ -81,6 +81,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "leadProfile.contactDetails.cityTownVillage",
                     "leadProfile.contactDetails.district",
                     "leadProfile.contactDetails.state",
+                    "leadProfile.contactDetails.location",
                     "productDetails",
                     "productDetails.interestedInProduct",
                     "productDetails.loanAmountRequested",

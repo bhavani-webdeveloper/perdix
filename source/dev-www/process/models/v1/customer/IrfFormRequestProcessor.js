@@ -2469,6 +2469,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.addressLine2",
                                 "title": "STREET"
                             },
+                            "location": {
+                                "key": "lead.location",
+                                "type": "geotag",
+                                "latitude": "latitude",
+                                "longitude": "longitude"
+                            },
                             "pincode": {
                                 key: "lead.pincode",
                                 type: "lov",
