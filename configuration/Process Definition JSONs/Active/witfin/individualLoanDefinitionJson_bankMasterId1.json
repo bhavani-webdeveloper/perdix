@@ -229,7 +229,7 @@
                   "minimum":1,
                   "maximum":12,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "productType":{
@@ -265,7 +265,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "doCustomerLoanAmount":{
@@ -274,7 +274,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "partnerLoanAmount":{
@@ -283,7 +283,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "doCustomerProcessingFee":{
@@ -292,7 +292,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "partnerProcessingFee":{
@@ -301,7 +301,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "linkedAccountNumber":{
@@ -319,7 +319,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                    "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal" 
+                    "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal" 
                   ]
                },
                "loanPurpose":{
@@ -665,7 +665,7 @@
                   "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
                },
 			   "loanCycle":{
@@ -674,7 +674,7 @@
                   "minimum":1,
                   "maximum":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "gstNumber":{
@@ -683,7 +683,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"loanToValue":{
                   "title":"loanToValue",
@@ -691,7 +691,7 @@
                   "minimum":0,
                   "maximum":100000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"dsaPayout":{
                   "title":"dsaPayout",
@@ -699,7 +699,7 @@
                   "minimum":0,
                   "maximum":100000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"dealIrr":{
                   "title":"dealIrr",
@@ -707,7 +707,7 @@
                   "minimum":0,
                   "maximum":100000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"valuator":{
                   "title":"valuator",
@@ -715,7 +715,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "verificationStatus":{
@@ -724,7 +724,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "verificationReason":{
@@ -733,7 +733,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "fieldInspectionDate":{
@@ -741,7 +741,7 @@
                  "type":"date",
                   
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "fieldInvestigator":{
@@ -750,7 +750,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
 			   "fieldInspectionRemarks":{
@@ -759,7 +759,7 @@
                   "minLength":1,
                   "maxLength":1000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "expectedCommercialCibilCharge":{
@@ -811,7 +811,7 @@
                   "title":"Interest Rate",
                   "type":"float",
                   "captureStages":[
-                     "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                     "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
                },
                "processingFeeInPaisa":{
@@ -825,7 +825,7 @@
                   "title":"Processing Fee Percentage",
                   "type":"number",
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                "expectedProcessingFeePercentage":{
@@ -839,7 +839,7 @@
                   "title":"SecurityEmiRequired",
                   "type":"string",
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
                   ]
                },
                "fee3":{
@@ -910,7 +910,7 @@
                   "title": "estimatedEmi",
                   "type": "number",
                   "captureStages": [
-                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                   ]
                },
                "expectedPortfolioInsurancePremium": {
@@ -1090,7 +1090,7 @@
                       "Application",
                       "ApplicationReview",
                       "FieldAppraisal",
-                      "FieldAppraisalReview",
+                      "BranchCreditAppraisal",
                       "ZonalRiskReview",
                       "CentralRiskReview",
                       "CreditCommitteeReview",
@@ -2983,7 +2983,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "ScreeningReview","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
+                       "ScreeningReview","ApplicationReview","BranchCreditAppraisal","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
                      ]
                   },
                   "mitigant":{
@@ -2992,7 +2992,7 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[
-                        "ScreeningReview","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                        "ScreeningReview","ApplicationReview","BranchCreditAppraisal","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                      ]
                   },
                   "riskScore":{
@@ -3001,7 +3001,7 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[
-                        "ScreeningReview","ApplicationReview","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                        "ScreeningReview","ApplicationReview","BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                      ]
                   }
                }
@@ -3111,7 +3111,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "document":{
@@ -3120,7 +3120,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "BranchCreditAppraisal", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                      ]
                   },
                   "remarks":{
