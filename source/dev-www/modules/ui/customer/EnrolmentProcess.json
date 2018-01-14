@@ -517,6 +517,13 @@
                 "type": "date",
                 "orderNo": 130
             },
+            "age": {
+                "key": "customer.age",
+                "title": "AGE",
+                "type": "number",
+                "orderNo": 131,
+                "readonly": true
+            },
             "religion": {
                 "key": "customer.religion",
                 "type": "select",
