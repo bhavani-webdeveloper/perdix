@@ -22,6 +22,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
                     },
+                    "leadProfile.centerName": {
+                        "lovonly": true
+                    },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
                     },

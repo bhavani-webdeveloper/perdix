@@ -64,7 +64,9 @@ define([],function(){
                             }
                         },
                         "Application": {
-
+                            "excludes": [
+                                "LoanRecommendation"
+                            ]
                         },
                         "ApplicationReview": {
                             "overrides": {
@@ -434,9 +436,6 @@ define([],function(){
 
                     },
                     sendBack: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
                         PageHelper.showLoader();
                         model.loanProcess.sendBack()
                             .finally(function () {
