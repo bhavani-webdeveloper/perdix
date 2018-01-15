@@ -163,6 +163,7 @@ define([],function(){
                     "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.expectedInterestRate",
+                    "PreliminaryInformation.calculateEmi",
                     "PreliminaryInformation.expectedEmi",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
@@ -209,6 +210,44 @@ define([],function(){
                             ""
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "PreliminaryInformation": {
+                                    "items": {
+                                        "calculateEmi": {
+                                            "title" : "CALCULATE_EMI",
+                                            "type": "button",
+                                            "onClick": function(model, formCtrl) {
+                                                var frequencyRequested;
+                                                if (model.loanAccount.expectedInterestRate && model.loanAccount.tenureRequested && model.loanAccount.frequencyRequested && model.loanAccount.loanAmountRequested) {
+                                                    switch(model.loanAccount.frequencyRequested) {
+                                                        case 'Daily':
+                                                            frequencyRequested = 365;
+                                                            break;
+                                                        case 'Fortnightly':
+                                                            frequencyRequested = parseInt(365/15);
+                                                            break;
+                                                        case 'Monthly':
+                                                            frequencyRequested = 12;
+                                                            break;
+                                                        case 'Quarterly':
+                                                            frequencyRequested = 4;
+                                                            break;
+                                                        case 'Weekly':
+                                                            frequencyRequested = 4;
+                                                            break;
+                                                        case 'Yearly': 
+                                                            frequencyRequested = 1;   
+                                                    }
+                                                    var rate = parseFloat(model.loanAccount.expectedInterestRate/1200);
+                                                    var n = parseFloat(model.loanAccount.tenureRequested * frequencyRequested);
+                                                    var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
+                                                    model.loanAccount.expectedEmi = parseInt(calculateEmi.toFixed());   
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [
                                 {
                                     "type": "box",
