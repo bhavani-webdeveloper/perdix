@@ -2,10 +2,10 @@ define({
     pageUID: "witfin.lead.LeadReject",
     pageType: "Engine",
     dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries"],
+    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
 
     $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
+        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -549,7 +549,11 @@ define({
                             });
                         } else {
                             LeadHelper.proceedData(reqData).then(function(resp) {
-                                $state.go('Page.witfinLeadDashboard', null);
+                                irfNavigator.go({
+                                    state: "Page.Adhoc",
+                                    pageName: "witfin.loans.LoanOriginationDashboard"
+                                });
+                                
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;
@@ -558,7 +562,10 @@ define({
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.witfinLeadDashboard', null);
+                                irfNavigator.go({
+                                    state: "Page.Adhoc",
+                                    pageName: "witfin.loans.LoanOriginationDashboard"
+                                });
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;
