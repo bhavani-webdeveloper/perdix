@@ -49,7 +49,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferenes.verifications.referenceCheck.financialStatus",
                                 "ResidenceVerification",
                                 "assets",
-                                "FamilyDetails.familyMembers.relationShip",
+                                
                                 "FamilyDetails.familyMembers.maritalStatus",
                                 "FamilyDetails.familyMembers.primaryOccupation",
                                 "FamilyDetails.familyMembers.educationStatus",
@@ -66,6 +66,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers": {
                                     "add": null,
                                     "remove": null
+                                },
+                                "FamilyDetails.familyMembers.relationShip": {
+                                    "readonly": true
                                 },
                                 "IndividualReferenes.verifications.referenceFirstName": {
                                     "title":"NAME_OF_NEIGHBOUR"
