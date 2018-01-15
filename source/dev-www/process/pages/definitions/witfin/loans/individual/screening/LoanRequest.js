@@ -221,8 +221,7 @@ define([],function(){
                                         titleMap: {
                                             "REJECT": "REJECT",
                                             "SEND_BACK": "SEND_BACK",
-                                            "PROCEED": "PROCEED",
-                                            "HOLD": "HOLD"
+                                            "PROCEED": "PROCEED"
                                         }
                                     }, {
                                         type: "section",
@@ -430,9 +429,6 @@ define([],function(){
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
-
-                    },
-                    holdButton: function(model, formCtrl, form, $event){
 
                     },
                     sendBack: function(model, formCtrl, form, $event){

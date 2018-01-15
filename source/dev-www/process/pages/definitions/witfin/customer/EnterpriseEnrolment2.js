@@ -119,8 +119,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 ];
             }
 
-
-
             var configFile = function() {
                 return {
                         "loanProcess.loanAccount.currentStage": {
@@ -296,6 +294,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.customerBranchId" :{
                                     "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.subDetails": {
+                                    "enumCode": "business_asset_sub_description",
+                                    "parentEnumCode": "business_asset_description",
+                                    "parentValueExpr": "model.customer.enterpriseAssets[].details"
                                 }
                             },
                             "includes": getIncludes(model),

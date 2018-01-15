@@ -1462,8 +1462,7 @@
             },
             "previousRentDetails": {
                 "key": "customer.previousRentDetails",
-                "title": "PREVIOUS_RENT_DEATLS",
-                "condition": "model.customer.udf.userDefinedFieldValues.udf29 == '1 - <3 years'"
+                "title": "PREVIOUS_RENT_DEATLS"
             }
         }
     },

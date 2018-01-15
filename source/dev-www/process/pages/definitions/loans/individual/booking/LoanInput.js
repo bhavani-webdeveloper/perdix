@@ -432,12 +432,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "loanAccount.productCategory",
                                 "type":"select",
                                 "title":"PRODUCT_CATEGORY",
-                                "enumCode":"loan_product_category"
+                                "enumCode":"loan_product_category",
+                                "required": true
                             },
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
-                                "enumCode":"loan_product_frequency"
+                                "enumCode":"loan_product_frequency",
+                                "required": true
                             },
                             {
                                 "key": "loanAccount.productCode",
@@ -472,7 +474,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key": "loanAccount.tenure",
-                                "title":"DURATION_IN_MONTHS"
+                                "title":"DURATION_IN_MONTHS",
+                                "required": true
                             },
                         ]
                     },
@@ -1568,22 +1571,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             if(_.isEmpty(model.loanAccount.applicant)){
                                                 Utils.alert("Please Select an Applicant");
                                                 model.additional.portfolioUrnSelector="";
+                                                model.loanAccount.portfolioInsuranceUrn = "";
+                                                model.loanAccount.portfolioInsuranceCustomerName = "";    
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
+                                            model.loanAccount.portfolioInsuranceCustomerName = model.loanAccount.applicantName;
                                             break;
                                         case "coapplicant":
                                             if(_.isEmpty(model.loanAccount.coBorrowers)){
-                                                Utils.alert("Please Select a Co-Applicant");
+                                                Utils.alert("Co-Applicant is not captured for this Loan");
                                                 model.additional.portfolioUrnSelector="";
+                                                model.loanAccount.portfolioInsuranceUrn = "";
+                                                model.loanAccount.portfolioInsuranceCustomerName = "";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowers[0].coBorrowerUrnNo;
                                             break;
                                         case "guarantor":
                                             if(_.isEmpty(model.loanAccount.guarantors)){
-                                                Utils.alert("Please Select a Guarantor");
+                                                Utils.alert("Guarantor is not captured for this Loan");
                                                 model.additional.portfolioUrnSelector="";
+                                                model.loanAccount.portfolioInsuranceUrn = "";
+                                                model.loanAccount.portfolioInsuranceCustomerName = "";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;

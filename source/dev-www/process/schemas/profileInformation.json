@@ -1646,7 +1646,8 @@
                 },
                 "inCurrentAddressSince": {
                     "type": ["string","null"],
-                    "title": "IN_CURRENT_ADDRESS_SINCE"
+                    "title": "IN_CURRENT_ADDRESS_SINCE",
+                    "enumCode": "years_in_current_address"
                 },
                 "inCurrentAreaSince": {
                     "type": ["string","null"],

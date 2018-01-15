@@ -53,7 +53,7 @@
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
-                "title": "EXPECTED_INTEREST_RATE",
+                "title": "ACCOUNTING_IRR",
                 "orderNo": 80
             },
             "expectedEmi": {
@@ -644,7 +644,7 @@
             "variant": {
                 "key": "loanAccount.vehicleLoanDetails.variant",
                 "required": "true",
-                "title": "VARIANT"
+                "title": "VARIANT_VERSION"
             },
             "colour": {
                 "key": "loanAccount.vehicleLoanDetails.colour",
@@ -653,7 +653,7 @@
             },
             "trailer": {
                 "key": "loanAccount.vehicleLoanDetails.trailer",
-                "title": "TRAILER"
+                "title": "TRAILER_TRANSIT"
             },
             "chasisNo": {
                 "key": "loanAccount.vehicleLoanDetails.chasisNo",

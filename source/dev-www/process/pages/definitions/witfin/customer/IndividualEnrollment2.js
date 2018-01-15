@@ -293,6 +293,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "HouseVerification.previousRentDetails": {
+                        "condition": "model.customer.inCurrentAddressSince == '1 - <3 years'"
+                    },
+                    "HouseVerification.monthlyRent": {
+                        "condition": "model.customer.ownership == 'Rental'" 
+                    },
+                    "HouseVerification.distanceFromBranch": {
+                        "required": true
+                    },
                     "ContactInformation.pincode": {
                         fieldType: "number",
                         resolver: "PincodeLOVConfiguration"
@@ -612,7 +621,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ResidenceVerification.contactInformationConfirmed",
                     "ResidenceVerification.remarks",
                     "ResidenceVerification.stayAtResidence",
-                    "ResidenceVerification.yearOfResidence",
                     "ResidenceVerification.namePlate",
                     "ResidenceVerification.localityType",
                     "ResidenceVerification.typeOfAccomodation",
@@ -740,11 +748,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "select",
                                             "enumCode":"decisionmaker",
                                             "title": "STAY_AT_RESIDENCE"
-                                        },
-                                        "yearOfResidence": {
-                                            "key": "customer.inCurrentAddressSince",
-                                            "type": "select",
-                                            "title": "YEAR_OF_RESIDENCE"
                                         },
                                         "namePlate": {
                                             "key": "customer.udf.userDefinedFieldValues.udf7",

@@ -31,7 +31,7 @@ export class SoleProprietorshipBusinessConfiguration extends SelectElementConfig
                     if (!enrolmentProcess) {
                         let applicantCustomer:Customer = model.loanProcess.applicantEnrolmentProcess.customer;
                         /* IF no enrolment present, reset to applicant */
-                        model.customer.firstName = applicantCustomer.firstName;
+                        model.customer.firstName = applicantCustomer.firstName + " - Business";
 
                         // Permanent Address
                         model.customer.doorNo = applicantCustomer.doorNo;

@@ -218,7 +218,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },*/
                     {
                         "key": "loanAccount.frequency",
-                        "readonly": true
+                        "readonly": true,
+                        "type":"select",
+                        "enumCode":"loan_product_frequency"
                     },
                     {
                         "key": "loanAccount.customer.firstName",
