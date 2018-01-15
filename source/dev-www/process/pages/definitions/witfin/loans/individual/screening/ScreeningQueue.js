@@ -25,7 +25,7 @@ define({
                 }
             },
             definition: {
-                title: "SEARCH",
+                title: "SEARCH_LOAN",
                 searchForm: [
                     "*"
                 ],

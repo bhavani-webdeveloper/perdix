@@ -17,6 +17,14 @@ define(
                                irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                                BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, irfNavigator) {
                 var self;
+
+                var overridesFields = function (bundlePageObj) {
+                return {
+                    "VehiclePrimaryInfo": {
+                        "readonly":  true
+                    }
+                }
+            }
                 var getIncludes = function (model) {
 
                     return [
@@ -139,7 +147,7 @@ define(
                             model.loanProcess = data;
                             model.loanAccount = data.loanAccount;
                                 var formRequest = {
-                                    "overrides": "",
+                                    "overrides": overridesFields(model),
                                     "includes": getIncludes(model),
                                     "excludes": [
                                         ""

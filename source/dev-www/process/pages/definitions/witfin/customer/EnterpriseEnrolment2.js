@@ -301,7 +301,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseAssets.enterpriseAssets.subDetails": {
                                     "enumCode": "business_asset_sub_description",
                                     "parentEnumCode": "business_asset_description",
-                                    "parentValueExpr": "model.customer.enterpriseAssets[].details"
+                                    "parentValueExpr": "model.customer.enterpriseAssets[arrayIndexes[0]].details"
                                 }
                             },
                             "includes": getIncludes(model),
