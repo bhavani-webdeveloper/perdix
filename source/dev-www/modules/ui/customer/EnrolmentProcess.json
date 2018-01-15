@@ -1336,11 +1336,16 @@
                         "enumCode": "liability_loan_type",
                         "orderNo": 9
                     },
+                    "loanSourceCategory": {
+                        "key": "customer.liabilities[].loanSourceCategory",
+                        "type":"select",
+                        "orderNo": 10
+                    },
                     "loanSource": {
                         "key": "customer.liabilities[].loanSource",
                         "type": "select",
                         "enumCode": "loan_source",
-                        "orderNo": 10
+                        "orderNo": 11
                     },
                     "loanAmountInPaisa": {
                         "key": "customer.liabilities[].loanAmountInPaisa",
