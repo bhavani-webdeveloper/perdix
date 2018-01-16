@@ -669,7 +669,6 @@
           "firstName",
           "gender",
           "dateOfBirth",
-          "religion",
           "mobilePhone",
           "maritalStatus"
         ],
