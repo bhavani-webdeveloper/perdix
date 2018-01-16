@@ -406,6 +406,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             .subscribe(function(){
                                 model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                model.enrolmentProcess.proceed()
+                                    .subscribe(function(enrolmentProcess) {
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    }, function(err) {
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    })
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

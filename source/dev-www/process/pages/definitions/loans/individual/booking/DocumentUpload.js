@@ -844,18 +844,36 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                         $log.info("Inside ViewLoan()");
-                        irfNavigator.go({
-                            state: "Page.Bundle",
-                            pageName: "loans.individual.screening.LoanView",
-                            pageId: model.loanAccount.id,
-                            pageData: null
-                        },
-                        {
-                            state : 'Page.Engine',
-                            pageName: $stateParams.pageName,
-                            pageId: $stateParams.pageId,
-                            pageData: $stateParams.pageData
-                        });  
+                        PagesDefinition.getPageConfig('Page/Engine/loans.individual.booking.DocumentUpload').then(function(data){	
+                            if(data.LoanViewPageName && _.isString(data.LoanViewPageName)) {
+                                irfNavigator.go({
+                                    state: "Page.Bundle",
+                                    pageName: data.LoanViewPageName,
+                                    pageId: model.loanAccount.id,
+                                    pageData: null
+                                },
+                                {
+                                    state : 'Page.Engine',
+                                    pageName: $stateParams.pageName,
+                                    pageId: $stateParams.pageId,
+                                    pageData: $stateParams.pageData
+                                });
+                            } else {
+                                irfNavigator.go({
+                                    state: "Page.Bundle",
+                                    pageName: "loans.individual.screening.LoanView",
+                                    pageId: model.loanAccount.id,
+                                    pageData: null
+                                },
+                                {
+                                    state : 'Page.Engine',
+                                    pageName: $stateParams.pageName,
+                                    pageId: $stateParams.pageId,
+                                    pageData: $stateParams.pageData
+                                });  
+                            }
+                        });
+                        
                     }); 
                 },
 
