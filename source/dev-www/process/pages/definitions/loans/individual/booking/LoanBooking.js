@@ -245,7 +245,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     },
                     {
                         "key": "loanAccount.loanApplicationDate",
-                        "readonly": true
+                        "readonly": true,
+                        "title": "LOAN_APPLICATION_DATE"
                     },
                     {
                         "key": "loanAccount.loanPurpose1",

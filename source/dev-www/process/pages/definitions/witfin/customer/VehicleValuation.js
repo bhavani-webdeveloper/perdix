@@ -157,6 +157,9 @@ define(
                         "VehiclePhotoCaptures.vehiclePhotoCaptures",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
                         "VehiclePhotoCaptures.vehiclePhotoCaptures.photoRemarks",
+                        "VehicleRecommendation",
+                        "VehicleRecommendation.recommendationStatus",
+                        "VehicleRecommendation.recommendationRemarks",
                         "actionbox",
                         "actionbox.save"
                     ];
@@ -180,9 +183,29 @@ define(
                                     "overrides": overridesFields(model),
                                     "includes": getIncludes(model),
                                     "excludes": [
-                                        ""
+                                        "VehicleRegistrationDetails.engineNo",
+                                        "VehicleInsuranceDetails.taxPaid"
                                     ],
                                     "options": {
+                                        "repositoryAdditions": {
+                                            "VehicleRecommendation": {
+                                                "type": "box",
+                                                "title": "RECOMMENDATION_STATUS",
+                                                "orderNo": 140,
+                                                "items": {
+                                                    "recommendationStatus": {
+                                                        "key": "loanAccount.vehicleLoanDetails.recommendationStatus",
+                                                        "type": "radios",
+                                                        "enumCode": "decisionmaker1",
+                                                        "title": "RECOMMENDED"
+                                                    },
+                                                    "recommendationRemarks": {
+                                                        "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
+                                                        "title": "REMARKS"
+                                                    }
+                                                }
+                                            }
+                                        },
                                         "additions": [
                                             {
                                                 "targetID": "actionbox",

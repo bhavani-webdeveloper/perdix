@@ -60,6 +60,9 @@ define([],function(){
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -80,6 +83,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
@@ -113,6 +119,9 @@ define([],function(){
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -128,6 +137,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
@@ -184,6 +196,20 @@ define([],function(){
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.commercialCibilCharge",
+                    "NewVehicleDetails",
+                    "NewVehicleDetails.vehicleType",
+                    "NewVehicleDetails.endUse",
+                    "NewVehicleDetails.usedFor",
+                    "NewVehicleDetails.segment",
+                    "NewVehicleDetails.category",
+                    "NewVehicleDetails.manufacturer",
+                    "NewVehicleDetails.make",
+                    "NewVehicleDetails.vehicleModel",
+                    "NewVehicleDetails.manufactureDate",
+                    "NewVehicleDetails.assetDetails",
+                    "NewVehicleDetails.assetSubDetails",
+                    "NewVehicleDetails.registrationNumber",
+                    "NewVehicleDetails.originalInvoiceValue",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save"

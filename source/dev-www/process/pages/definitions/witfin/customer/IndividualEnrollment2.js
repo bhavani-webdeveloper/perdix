@@ -295,6 +295,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "HouseVerification.inCurrentAddressSince": {
+                        "key": "customer.udf.userDefinedFieldValues.udf29",
+                    }
                     "HouseVerification.previousRentDetails": {
                         "condition": "model.customer.inCurrentAddressSince == '1 - <3 years'"
                     },
@@ -713,69 +716,108 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "locatingHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf1",
                                             "type": "text",
-                                            "title": "LOCATING_HOUSE"
+                                            "title": "LOCATING_HOUSE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "distanceFromHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf2",
                                             "type": "text",
-                                            "title": "DISTANCE_FROM_HOUSE"
+                                            "title": "DISTANCE_FROM_HOUSE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "visibleIndicator": {
                                             "key": "customer.udf.userDefinedFieldValues.udf3",
                                             "type": "text",
-                                            "title": "VISIBLE_INDICATOR"
+                                            "title": "VISIBLE_INDICATOR",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "commentOnLocality": {
                                             "key": "customer.udf.userDefinedFieldValues.udf4",
                                             "type": "text",
-                                            "title": "COMMENT_ON_LOCALITY"
+                                            "title": "COMMENT_ON_LOCALITY",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "residenceStatus": {
                                             "key": "customer.ownership",
                                             "type": "text",
-                                            "title": "RESIDENCE_STATUS"
+                                            "title": "RESIDENCE_STATUS",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "contactInformationConfirmed": {
                                             "key": "customer.udf.userDefinedFieldValues.udf5",
                                             "type": "select",
-                                            "title": "CONTACT_INFORMATION_CONFIRMED"
+                                            "title": "CONTACT_INFORMATION_CONFIRMED",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "remarks": {
                                             "key": "customer.udf.userDefinedFieldValues.udf5",
                                             "condition": "customer.udf.userDefinedFieldValues.udf5=='No'",
                                             "type": "text",
-                                            "title": "REMARKS"
+                                            "title": "REMARKS",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "stayAtResidence": {
                                             "key": "customer.udf.userDefinedFieldValues.udf6",
                                             "type": "select",
                                             "enumCode":"decisionmaker",
-                                            "title": "STAY_AT_RESIDENCE"
+                                            "title": "STAY_AT_RESIDENCE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "namePlate": {
                                             "key": "customer.udf.userDefinedFieldValues.udf7",
                                             "type": "select",
                                             "enumCode":"decisionmaker",
-                                            "title": "NAME_PLATE"
+                                            "title": "NAME_PLATE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "localityType": {
                                             "key": "customer.localityType",
                                             "type": "select",
-                                            "title": "LOCALITY_TYPE"
+                                            "title": "LOCALITY_TYPE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "typeOfAccomodation": {
                                             "key": "customer.accomodationType",
                                             "type": "select",
-                                            "title": "ACCOMODATION_TYPE"
+                                            "title": "ACCOMODATION_TYPE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "areaSQFT": {
                                             "key": "customer.udf.userDefinedFieldValues.udf8",
                                             "title": "AREA_SQFT",
-                                            "type":"select"
+                                            "type":"select",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                         "remarksOnBusiness": {
                                             "key": "customer.udf.userDefinedFieldValues.udf9",
-                                            "title": "REMAKRS_ON_BUISNESS"
+                                            "title": "REMAKRS_ON_BUISNESS",
+                                            "schema": {
+                                                "type": "string"
+                                            }
                                         },
                                     }
                                 }
@@ -783,11 +825,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "additions": [
                                 {
                                     "type": "actionbox",
+                                    "condition": "!model.customer.currentStage",
                                     "orderNo": 1200,
                                     "items": [
                                         {
                                             "type": "submit",
                                             "title": "SUBMIT"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "actionbox",
+                                    "condition": "model.customer.currentStage",
+                                    "orderNo": 1200,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "COMPLETE_ENROLMENT",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -955,6 +1010,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent()
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    proceed: function(model, form, formName){
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

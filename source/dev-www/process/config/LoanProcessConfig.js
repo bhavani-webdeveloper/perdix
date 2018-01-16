@@ -75,6 +75,9 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "LoanDerivedFieldsUpdation",
                             "arguments": null
+                        }, {
+                            "name": "CustomerEnrolmentCompletedPolicy",
+                            "arguments": {}
                         }
                     ],
                     "overrides": [
