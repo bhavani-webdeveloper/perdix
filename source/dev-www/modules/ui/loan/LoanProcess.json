@@ -53,7 +53,7 @@
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
-                "title": "ACCOUNTING_IRR",
+                "title": "EXPECTED_INTEREST_RATE",
                 "orderNo": 80
             },
             "expectedEmi": {
