@@ -22,7 +22,38 @@ define(
                 return {
                     "VehiclePrimaryInfo": {
                         "readonly":  true
+                    },
+                    "VehicleRegistrationDetails.reRegistered" :{
+                        "orderNo":10
+                    },
+                    "VehicleRegistrationDetails.previousRegistrationNumber": {
+                        "orderNo":20
+                    },
+                    "VehicleRegistrationDetails.registrationAsPerRcbook":{
+                        "orderNo":30
+                    },
+                    "VehicleRegistrationDetails.registrationAsPerActual": {
+                        "orderNo":40
+                    },
+                    "VehicleRegistrationDetails.numberPlateColour": {
+                        "orderNo":50
+                    },
+                    "VehicleRegistrationDetails.registeredownersname": {
+                        "orderNo":60
+                    },
+                    "VehicleRegistrationDetails.engineNo": {
+                        "orderNo":70
+                    },
+                    "VehicleRegistrationDetails.registeredAddress": {
+                        "orderNo":80
+                    },
+                    "VehicleRegistrationDetails.ownerSerialNo": {
+                        "orderNo":90
+                    },
+                    "VehicleRegistrationDetails.registrationDate": {
+                        "orderNo":100
                     }
+                    
                 }
             }
                 var getIncludes = function (model) {
@@ -42,7 +73,6 @@ define(
                         "VehicleValuationPriliminaryInformation.proposedOwnerName",
                         "VehicleValuationPriliminaryInformation.bankReferenceNumber",
                         "VehicleInspectionDetails",
-                        "VehicleInspectionDetails.firstName",
                         "VehicleInspectionDetails.inspectionDate",
                         "VehicleInspectionDetails.inspectedBy",
                         "VehicleInspectionDetails.vehicleMoved",
