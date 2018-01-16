@@ -67,21 +67,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.distanceFromBranch",
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
-                    "BusinessLiabilities",
-                    "BusinessLiabilities.liabilities",
-                    "BusinessLiabilities.liabilities.loanType",
-                    "BusinessLiabilities.liabilities.loanSource",
-                    "BusinessLiabilities.liabilities.loanAmountInPaisa",
-                    "BusinessLiabilities.liabilities.installmentAmountInPaisa",
-                    "BusinessLiabilities.liabilities.outstandingAmountInPaisa",
-                    "BusinessLiabilities.liabilities.startDate",
-                    "BusinessLiabilities.liabilities.maturityDate",
-                    "BusinessLiabilities.liabilities.noOfInstalmentPaid",
-                    "BusinessLiabilities.liabilities.frequencyOfInstallment",
-                    "BusinessLiabilities.liabilities.liabilityLoanPurpose",
-                    "BusinessLiabilities.liabilities.interestOnly",
-                    "BusinessLiabilities.liabilities.interestRate",
-                    "BusinessLiabilities.liabilities.proofDocuments",
+                    "Liabilities",
+                    "Liabilities.liabilities",
+                    "Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanSource",
+                    "Liabilities.liabilities.loanAmountInPaisa",
+                    "Liabilities.liabilities.installmentAmountInPaisa",
+                    "Liabilities.liabilities.outstandingAmountInPaisa",
+                    "Liabilities.liabilities.startDate",
+                    "Liabilities.liabilities.maturityDate",
+                    "Liabilities.liabilities.noOfInstalmentPaid",
+                    "Liabilities.liabilities.frequencyOfInstallment",
+                    "Liabilities.liabilities.liabilityLoanPurpose",
+                    "Liabilities.liabilities.interestOnly",
+                    "Liabilities.liabilities.interestRate",
+                    "Liabilities.liabilities.proofDocuments",
                     "EnterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",
@@ -127,7 +127,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "readonly": "true"
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": "true"
                                     },
                                     "EnterpriseAssets": {
@@ -143,7 +143,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -162,7 +162,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -181,7 +181,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -200,7 +200,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -219,7 +219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -238,7 +238,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseType" : {
                                         "readonly": true
                                     },
-                                    "BusinessLiabilities": {
+                                    "Liabilities": {
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
@@ -298,10 +298,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "BankAccounts": {
                                     "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
                                 },
+                                "BankAccounts.customerBankAccounts": {
+                                    startEmpty: true
+                                },
+                                "EnterpriseAssets.enterpriseAssets": {
+                                    startEmpty: true
+                                },
                                 "EnterpriseAssets.enterpriseAssets.subDetails": {
                                     "enumCode": "business_asset_sub_description",
                                     "parentEnumCode": "business_asset_description",
                                     "parentValueExpr": "model.customer.enterpriseAssets[arrayIndexes[0]].details"
+                                },
+                                "Liabilities.liabilities": {
+                                    startEmpty: true
                                 }
                             },
                             "includes": getIncludes(model),
