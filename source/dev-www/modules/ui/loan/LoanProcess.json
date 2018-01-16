@@ -177,6 +177,89 @@
             }
         }
     },
+    "NewVehicleDetails": {
+        "type": "box",
+        "title": "NEW_VEHICLE_DETAILS",
+        "items": {
+            "vehicleType": {
+               "key": "loanAccount.vehicleLoanDetails.vehicleType",
+               "type": "select",
+               "enumcode": "vehicle_type",
+               "title": "VEHICLE_TYPE"
+            },
+            "endUse": {
+               "key": "loanAccount.vehicleLoanDetails.endUse",
+               "type": "select",
+               "enumcode": "vehicle_end_use",
+               "title": "END_USE_OF_VEHICLE"
+            },
+            "usedFor": {
+               "key": "loanAccount.vehicleLoanDetails.usedFor",
+               "type": "radio",
+               "enumcode": "vehicle_used_for",
+               "title": "NATURE_OF_USE"
+            },
+            "segment": {
+               "key": "loanAccount.vehicleLoanDetails.segment",
+               "type": "select",
+               "enumcode": "vehicle_segment",
+               "title": "SEGMENT"
+            },
+            "category": {
+               "key": "loanAccount.vehicleLoanDetails.category",
+               "type": "select",
+               "enumcode": "vehicle_category",
+               "title": "CATEGORY"
+            },
+            "manufacturer": {
+               "key": "loanAccount.vehicleLoanDetails.manufacturer",
+               "type": "select",
+               "enumcode": "vehicle_manufacturer",
+               "title": "MANUFACTURER"
+            },
+            "make": {
+               "key": "loanAccount.vehicleLoanDetails.make",
+               "type": "select",
+               "enumcode": "vehicle_make",
+               "title": "MAKE"
+            },
+            "vehicleModel": {
+               "key": "loanAccount.vehicleLoanDetails.vehicleModel",
+               "type": "select",
+               "enumcode": "vehicle_model",
+               "title": "MODEL"
+            },
+            "manufactureDate": {
+               "key": "loanAccount.vehicleLoanDetails.manufactureDate",
+               "type": "date",
+               "title": "MANUFACTURER_DATE"
+            },
+            "assetDetails": {
+               "key": "loanAccount.vehicleLoanDetails.assetDetails",
+               "type": "select",
+               "title": "DESCRIPTION",
+               "enumCode": "business_asset_description"
+            },
+            "assetSubDetails": {
+               "key": "loanAccount.vehicleLoanDetails.assetSubDetails",
+               "type": "select",
+               "title": "DESCRIPTION",
+               "enumcode": "business_asset_sub_description",
+               "parentEnumCode": "business_asset_description",
+               "parentValueExpr": "model.loanAccount.vehicleLoanDetails.assetDetails"
+            },
+            "registrationNumber": {
+               "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+               "type": "text",
+               "title": "REGN_NO"
+            },
+            "originalInvoiceValue": {
+                "key": "loanAccount.vehicleLoanDetails.originalInvoiceValue",
+                "type": "number",
+                "title": "PRICE"
+            }
+        }
+    },
     "AdditionalLoanInformation": {
         "type": "box",
         "title": "ADDITIONAL_LOAN_INFORMATION",
