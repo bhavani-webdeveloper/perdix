@@ -989,7 +989,7 @@
             },
             "accidentRemarks": {
                 "key": "loanAccount.vehicleLoanDetails.accidentRemarks",
-                "condition": "model.loanAccount.vehicleLoanDetails.accident=='YES'",
+                "condition": "model.loanAccount.vehicleLoanDetails.accident==true",
                 "title": "ACCIDENT_REMARKS"
             },
             "originalInvoiceValue": {
