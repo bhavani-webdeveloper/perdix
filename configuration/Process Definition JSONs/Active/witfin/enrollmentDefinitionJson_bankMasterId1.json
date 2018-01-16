@@ -2842,9 +2842,7 @@
         "type": "object",
         "required": [
           "corporateName",
-          "businessName",
-          "businessConstitution",
-          "businessType"
+          "businessName"
         ],
         "properties": {
           "customerNumber": {
@@ -3570,9 +3568,6 @@
         "items": {
           "type": "object",
           "required": [
-            "registrationType",
-            "registrationNumber",
-            "registeredDate",
             "documentId"
           ],
           "properties": {
