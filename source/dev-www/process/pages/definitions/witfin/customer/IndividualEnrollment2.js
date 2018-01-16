@@ -700,7 +700,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "repositoryAdditions": {
                                 "ResidenceVerification": {
                                     "type": "box",
-                                    "title": "RELATIONSSHIP_VERIFICATION",
+                                    "title": "RESIDENCE_VERIFICATION",
                                     "orderNo": 999,
                                     "items": {
                                         "location": {
