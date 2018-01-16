@@ -297,7 +297,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return {
                     "HouseVerification.inCurrentAddressSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf29",
-                    }
+                    },
                     "HouseVerification.previousRentDetails": {
                         "condition": "model.customer.inCurrentAddressSince == '1 - <3 years'"
                     },
