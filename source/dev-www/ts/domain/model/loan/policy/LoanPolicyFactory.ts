@@ -13,6 +13,8 @@ import {DefaultVehicleComponentsPolicy} from './DefaultVehicleComponentsPolicy';
 import {DefaultVehicleAccessoriesPolicy} from './DefaultVehicleAccessoriesPolicy';
 import {CloseLeadonLoanSave} from './CloseLeadonLoanSave';
 import {LoanDerivedFieldsUpdate} from "./LoanDerivedFieldsUpdate";
+import {CustomerEnrolmentCompletedPolicy} from './CustomerEnrolmentCompletedPolicy';
+
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -55,6 +57,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new CloseLeadonLoanSave();
             case 'LoanDerivedFieldsUpdate':
                 return new LoanDerivedFieldsUpdate();
+            case 'CustomerEnrolmentCompletedPolicy':
+                return new CustomerEnrolmentCompletedPolicy();
             default:
                 return null;
         }

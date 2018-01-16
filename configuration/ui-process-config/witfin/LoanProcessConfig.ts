@@ -73,6 +73,9 @@ let config = {
                     {
                         "name":"LoanDerivedFieldsUpdation",
                         "arguments": null
+                    }, {
+                        "name": "CustomerEnrolmentCompletedPolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [

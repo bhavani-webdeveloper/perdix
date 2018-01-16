@@ -52,7 +52,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 "FamilyDetails.familyMembers.maritalStatus",
                                 "FamilyDetails.familyMembers.primaryOccupation",
-                                "FamilyDetails.familyMembers.educationStatus",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
                                 "FamilyDetails.familyMembers.anualEducationFee",
                                 "FamilyDetails.familyMembers.salary",
@@ -972,6 +971,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                model.enrolmentProcess.proceed()
+                                .subscribe(function(enrolmentProcess) {
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                })
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

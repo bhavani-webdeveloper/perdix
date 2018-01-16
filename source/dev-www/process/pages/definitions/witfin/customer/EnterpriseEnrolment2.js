@@ -335,7 +335,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "title": "BUSINESS_SELECTION",
                                         "items":[
                                             {
-                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null",
+                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.loanAccount.currentStage != Completed",
                                                 "type": "section",
                                                 "htmlClass": "alert alert-warning",
                                                 "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
@@ -410,6 +410,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     .subscribe(function(enrolmentProcess) {
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function(err) {
+                                        PageHelper.showErrors(err);
                                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                     })
                             }, function(err) {
