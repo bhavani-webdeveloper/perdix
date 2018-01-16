@@ -7,12 +7,53 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
 			"title": "USER_SEARCH_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
+                var bankName = SessionStore.getBankName();
+                model.branchId = SessionStore.getCurrentBranch().branchId;
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++){
+                    if(banks[i].name == bankName){
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                var userRole = SessionStore.getUserRole();
+                if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+                    model.fullAccess = true;
+                }
 			},
 			definition: {
 				title: "SEARCH_LOAN",
-				searchForm: [
-					"*"
-				],
+                searchForm: [{
+                        "type": "section",
+                        "items": [{
+                            "key": "userName",
+                            "title": "USER_NAME",
+                        }, {
+                            "key": "login",
+                            "title": "LOGIN",
+                        }, {
+                            "key": "bankId",
+                            "readonly": true,
+                            "type": "select",
+                            "condition": "!model.fullAccess"
+                        }, {
+                            "key": "bankId",
+                            "type": "select",
+                            "condition": "model.fullAccess"
+                        }, {
+                            "key": "branchId",
+                            "title": "BRANCH_NAME",
+                            "type": "select",
+                            "parentEnumCode": "bank",
+                            "parentValueExpr": "model.bankId",
+                        }, {
+                            "key": "partnerCode",
+                            "title": "Partner_Code",
+                            "type": "select",
+                            "enumCode": "partner"
+                        }]
+                    }
+                ],
 				autoSearch: true,
 				searchSchema: {
                     "type": 'object',
@@ -27,21 +68,19 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                         	"title": "LOGIN",
                         	"type": "string"
                         },
-                        "branchName": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            enumCode: "bank"
+                        },
+                        "branchId": {
                         	"title": "BRANCH_NAME",
-                        	"type": "string",
-                        	"x-schema-form": {
-                        		"type": "select",
-                        		"enumCode": "branch"
-                        	}
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id"
                         },
                         "partnerCode": {
                             "title": "Partner_Code",
                             "type": "string",
-                            "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "partner"
-                            }
                         }
                     }
                 },
@@ -49,13 +88,22 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+                    var branches = formHelper.enum('branch').data;
+                    var branchName = null;
+                    for (var i = 0; i < branches.length; i++) {
+                        var branch = branches[i];
+                        if (branch.code == searchOptions.branchId) {
+                            branchName = branch.name;
+                        }
+                    }
+
                     return User.query(
                         {
                             page: pageOpts.pageNo,
                             per_page: pageOpts.itemsPerPage,
                             userName: searchOptions.userName,
                             login: searchOptions.login,
-                            branchName: searchOptions.branchName,
+                            branchName: branchName,
                             partnerCode: searchOptions.partnerCode
 
                         }

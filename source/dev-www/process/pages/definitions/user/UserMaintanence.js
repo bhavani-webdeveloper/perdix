@@ -10,7 +10,20 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                 "title": $stateParams.pageId ? "EDIT_USER" : "NEW_USER",
                 initialize: function (model, form, formCtrl) {
                     $log.info("User Maintanance loaded");
-                    
+                    var bankName = SessionStore.getBankName();
+                    var banks = formHelper.enum('bank').data;
+                    var userRole = SessionStore.getUserRole();
+                    if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                        model.fullAccess = true;
+                    }
+
+                    for (var i = 0; i < banks.length; i++) {
+                        if (banks[i].name == bankName) {
+                            model.bankId = banks[i].value;
+                            model.bankName = banks[i].name;
+                        }
+                    }
+
                     if(!$stateParams.pageId) {
                         model.create = true;
                         model.user = {
@@ -25,7 +38,6 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             "userBranches": [
                             ]
                         };
-                        model.user.bankName = SessionStore.getBankName();
                     }
 
                     else{
@@ -98,23 +110,45 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 required: true
                             },
                             {
+                                "key": "bankId",
+                                "title": "BANK_NAME",
+                                "type": "select",
+                                enumCode: "bank",
+                                "condition": "model.fullAccess"
+                            },
+                            {
                                 key: "user.branchId",
                                 title: "HOME_BRANCH",
                                 type: "select",
                                 enumCode: "branch_id",
-                                required: true
+                                required: true,
+                                "parentEnumCode": "bank",
+                                "parentValueExpr": "model.bankId",
                             },
                             {
                                 key: "user.userBranches",
                                 type: "array",
-                                view: "fixed",
+                                //view: "fixed",
                                 title: "MAPPED_BRANCHES",
+                                startEmpty: true,
+                                onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                    //modelValue.bankId=model.bankId;
+                                },
                                 items: [
+                                    {
+                                        "key": "user.userBranches[].bankId",
+                                        "title": "BANK_NAME",
+                                        "type": "select",
+                                        enumCode: "bank",
+                                        "condition": "model.fullAccess"
+                                    },
                                     {
                                         key: "user.userBranches[].branchId",
                                         title: "BRANCH_NAME",
                                         type: "select",
                                         enumCode: "branch_id",
+                                        "parentEnumCode": "bank",
+                                        "parentValueExpr": "model.bankId",
                                         required: true
                                     }
                                 ]
