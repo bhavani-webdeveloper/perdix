@@ -529,6 +529,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ImagePath",
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
                     "IndividualInformation",
+                    "IndividualInformation.existingLoan",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
@@ -839,6 +840,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer = enrolmentProcess.customer;
                                     model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
                                     BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                }
+                                if(obj.leadCategory == 'Existing') {
+                                    model.customer.existingLoan = 'YES';
+                                } else {
+                                    model.customer.existingLoan = 'NO';
                                 }
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;

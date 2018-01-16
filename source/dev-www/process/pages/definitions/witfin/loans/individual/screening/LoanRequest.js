@@ -358,13 +358,6 @@ define([],function(){
                                                 search: function(inputModel, form, model, context) {
                                                     var stage1 = model.loanProcess.loanAccount.currentStage;
 
-                                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-                                                        stage1 = "Application";
-                                                    }
-                                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                                        stage1 = "FieldAppraisal";
-                                                    }
-
                                                     var rejectReason = formHelper.enum('application_reject_reason').data;
                                                     var out = [];
                                                     for (var i = 0; i < rejectReason.length; i++) {
