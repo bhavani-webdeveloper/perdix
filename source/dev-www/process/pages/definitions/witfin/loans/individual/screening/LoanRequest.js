@@ -274,6 +274,7 @@ define([],function(){
                                             "title": "VALUATOR",
                                             "key":"loanAccount.valuator",
                                             "type":"select",
+                                            "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview'",
                                             "titleMap": {
                                                 "test":"test"
                                             }
