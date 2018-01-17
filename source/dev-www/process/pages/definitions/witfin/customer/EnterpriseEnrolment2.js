@@ -344,7 +344,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "title": "BUSINESS_SELECTION",
                                         "items":[
                                             {
-                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.loanAccount.currentStage != Completed",
+                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.applicantEnrolmentProcess.customer.currentStage != 'Completed'",
                                                 "type": "section",
                                                 "htmlClass": "alert alert-warning",
                                                 "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",

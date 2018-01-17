@@ -100,6 +100,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
                                 "TrackDetails": {
                                     "readonly": true
                                 }
