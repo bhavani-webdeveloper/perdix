@@ -64,7 +64,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "FamilyDetails.familyMembers": {
                                     "add": null,
-                                    "remove": null
+                                    "remove": null,
+                                    "view": "fixed"
                                 },
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true

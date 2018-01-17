@@ -279,6 +279,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                                },
+                                "EnterpriseAssets.enterpriseAssets.endUse": {
+                                    "type": "select",
+                                    "enumCode": "vehicle_end_use"
+                                },
+                                "BankAccounts.customerBankAccounts.isDisbersementAccount": {
+                                    "type": "radios",
+                                    "enumCode": "decisionmaker"
+                                },
                                 "EnterpriseInformation": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                                 },
