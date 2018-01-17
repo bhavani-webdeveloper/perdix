@@ -230,7 +230,11 @@ define([],function(){
 
                     self = this;
                     var formRequest = {
-                        "overrides": "",
+                        "overrides": {
+                            "NewVehicleDetails": {
+                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
+                            }
+                        },
                         "includes": getIncludes (model),
                         "excludes": [
                             ""
