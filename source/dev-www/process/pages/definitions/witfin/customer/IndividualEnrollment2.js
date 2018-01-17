@@ -158,6 +158,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "reference": {
                                     "readonly": true
                                 },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
                                 "ResidenceVerification":{
                                     "readonly": true
                                 }
@@ -187,6 +190,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
                                     "readonly": true
                                 },
                                 "ResidenceVerification":{
@@ -220,6 +226,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "TrackDetails": {
                                     "readonly": true
                                 },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
                                 "ResidenceVerification":{
                                     "readonly": true
                                 }
@@ -251,6 +260,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "TrackDetails": {
                                     "readonly": true
                                 },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
                                 "ResidenceVerification":{
                                     "readonly": true
                                 }
@@ -277,6 +289,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "V": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
                                     "readonly": true
                                 },
                                 "TrackDetails": {
