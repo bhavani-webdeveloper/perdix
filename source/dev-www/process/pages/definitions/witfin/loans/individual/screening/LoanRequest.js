@@ -264,8 +264,8 @@ define([],function(){
                                                         case 'Yearly': 
                                                             frequencyRequested = 1;   
                                                     }
-                                                    var rate = parseFloat(model.loanAccount.expectedInterestRate/1200);
-                                                    var n = parseFloat(model.loanAccount.tenureRequested * frequencyRequested);
+                                                    var rate = parseFloat((model.loanAccount.expectedInterestRate)/(100*frequencyRequested));
+                                                    var n = parseFloat(model.loanAccount.tenureRequested);
                                                     var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
                                                     model.loanAccount.expectedEmi = parseInt(calculateEmi.toFixed());   
                                                 }
