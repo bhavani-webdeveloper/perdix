@@ -311,6 +311,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "Liabilities.liabilities": {
                                     startEmpty: true
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
+                                    "readonly": true
                                 }
                             },
                             "includes": getIncludes(model),
