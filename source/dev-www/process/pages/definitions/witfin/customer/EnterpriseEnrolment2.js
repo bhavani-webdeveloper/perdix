@@ -279,6 +279,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "Liabilities.liabilities.liabilityLoanPurpose": {
+                                    "type": "select",
+                                    "enumCode": "loan_purpose_1"
+                                },
                                 "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
                                     "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
                                 },

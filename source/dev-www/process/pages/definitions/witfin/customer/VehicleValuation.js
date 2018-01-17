@@ -471,7 +471,7 @@ define(
                             }
                         };
 
-                        if(model.loanProcess.loanAccount) {
+                        if(_.hasIn(model, 'loanProcess.loanAccount')) {
                             model.loanAccount = model.loanProcess.loanAccount;
                             var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                             p1.then(function(repo) {

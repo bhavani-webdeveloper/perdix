@@ -135,10 +135,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "FamilyDetails": {
-                                    "readonly": true,
                                     "title": "HOUSEHOLD_DETAILS"
                                 }
-                            }
+                            },
+                            "excludes": [
+                                "FamilyDetails.familyMembers.incomes"
+                            ]
                         },
                         "ApplicationReview": {
                             "overrides": {
