@@ -693,6 +693,16 @@
               "Completed"
             ]
           },
+          "distanceFromBranch": {
+            "title": "Existing Loan",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "centreId": {
             "title": "Centre",
             "type": "integer",
