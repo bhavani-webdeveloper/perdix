@@ -227,6 +227,22 @@ export class LoanProcess {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
+    hold(): any {
+        this.loanProcessAction = "SAVE";
+        let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeSave', LoanProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = null;
+        if (this.loanAccount.id){
+            obs2 = this.individualLoanRepo.update(this);
+        } else {
+            obs2 = this.individualLoanRepo.create(this);
+        }
+
+        let pmAfterUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'afterSave', LoanProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
+
     proceed(toStage: string): any {
         /* Calls all business policies assocaited with proceed */
         this.stage = toStage;

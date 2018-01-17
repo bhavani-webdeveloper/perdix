@@ -451,8 +451,24 @@ define([],function(){
                     "NomineeDetails.nominees.nomineePincode",
                     "NomineeDetails.nominees.nomineeDistrict",
                     "NomineeDetails.nominees.nomineeState",
-                    "NomineeDetails.nominees.nomineeRelationship"
+                    "NomineeDetails.nominees.nomineeRelationship",
 
+                    "PostReview",
+                    "PostReview.action",
+                    "PostReview.proceed",
+                    "PostReview.proceed.remarks",
+                    "PostReview.proceed.proceedButton",
+                    "PostReview.sendBack",
+                    "PostReview.sendBack.remarks",
+                    "PostReview.sendBack.stage",
+                    "PostReview.sendBack.sendBackButton",
+                    "PostReview.reject",
+                    "PostReview.reject.remarks",
+                    "PostReview.reject.rejectReason",
+                    "PostReview.reject.rejectButton",
+                    "PostReview.hold",
+                    "PostReview.hold.remarks",
+                    "PostReview.hold.holdButton"
                 ];
 
             }
@@ -476,6 +492,115 @@ define([],function(){
                             "excludes": [
                             ],
                             "options": {
+                                "repositoryAdditions": {
+                                    "PostReview": {
+                                        "type": "box",
+                                        "title": "POST_REVIEW",
+                                        "condition": "model.loanAccount.id",
+                                        "orderNo": 20,
+                                        "items": {
+                                            "action": {
+                                                "key": "review.action",
+                                                "type": "radios",
+                                                "titleMap": {
+                                                    "REJECT": "REJECT",
+                                                    "SEND_BACK": "SEND_BACK",
+                                                    "PROCEED": "PROCEED",
+                                                    "HOLD": "HOLD"
+                                                }
+                                            }, 
+                                            "proceed": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='PROCEED'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "review.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                    "proceedButton": {
+                                                        "key": "review.proceedButton",
+                                                        "type": "button",
+                                                        "title": "PROCEED",
+                                                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "sendBack": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='SEND_BACK'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "review.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                   "stage": {
+                                                        "key": "loanProcess.stage",
+                                                        "required": true,
+                                                        "type": "lov",
+                                                        "title": "SEND_BACK_TO_STAGE",
+                                                        "resolver": "SendBacktoStageLOVConfiguration"
+                                                    }, 
+                                                   "sendBackButton": {
+                                                        "key": "review.sendBackButton",
+                                                        "type": "button",
+                                                        "title": "SEND_BACK",
+                                                        "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "reject": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='REJECT'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "review.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                    "rejectReason": {
+                                                        "key": "loanAccount.rejectReason",
+                                                        "type": "lov",
+                                                        "autolov": true,
+                                                        "required":true,
+                                                        "title": "REJECT_REASON",
+                                                        "resolver": "RejectReasonLOVConfiguration"
+                                                    },
+                                                    "rejectButton": {
+                                                        "key": "review.rejectButton",
+                                                        "type": "button",
+                                                        "title": "REJECT",
+                                                        "required": true,
+                                                        "onClick": "actions.reject(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "hold": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='HOLD'",
+                                                "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "review.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                }, 
+                                                "holdButton": {
+                                                    "key": "review.holdButton",
+                                                    "type": "button",
+                                                    "title": "HOLD",
+                                                    "required": true,
+                                                    "onClick": "actions.holdButton(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [
                                     {
                                         "type": "actionbox",
@@ -483,40 +608,10 @@ define([],function(){
                                         "items": [
                                             {
                                                 "type": "submit",
-                                                "title": "SAVE"
+                                                "title": "SAVE",
+                                                "onClick": "actions.save(model, formCtrl, form, $event)"
                                             },
                                         ]
-                                    },
-                                    {
-                                        "type": "box",
-                                        "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id",
-                                        "orderNo": 20,
-                                        "items": [{
-                                            key: "review.action",
-                                            type: "radios",
-                                            titleMap: {
-                                                "REJECT": "REJECT",
-                                                "SEND_BACK": "SEND_BACK",
-                                                "PROCEED": "PROCEED",
-                                                "HOLD": "HOLD"
-                                            }
-                                        }, {
-                                            type: "section",
-                                            condition: "model.review.action=='PROCEED'",
-                                            items: [{
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            }, {
-                                                key: "review.proceedButton",
-                                                type: "button",
-                                                title: "PROCEED",
-                                                onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                            }]
-
-                                        }]
                                     }
                                 ]
                             }
@@ -580,11 +675,48 @@ define([],function(){
 
                     },
                     holdButton: function(model, formCtrl, form, $event){
+                        $log.info("Inside save()");
+                         if (!model.loanAccount.id){
+                            model.loanAccount.isRestructure = false;
+                            model.loanAccount.documentTracking = "PENDING";
+                            model.loanAccount.psychometricCompleted = "NO";
+
+                        }
+                        model.loanAccount.status = "HOLD";
+                        PageHelper.showProgress('loan-process', 'Updating Loan');
+                        model.loanProcess.hold()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('loan-process', 'Loan hold.', 5000);
+                                irfNavigator.goBack();
+                            }, function (err) {
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
 
                     },
                     sendBack: function(model, formCtrl, form, $event){
-
-
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                        model.loanProcess.sendBack()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                irfNavigator.goBack();
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     },
                     proceed: function(model, formCtrl, form, $event){
                         PageHelper.showProgress('enrolment', 'Updating Loan');
@@ -595,10 +727,7 @@ define([],function(){
                             .subscribe(function (value) {
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "irep.lead.ReadyForScreeningQueue"
-                                });
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -606,7 +735,23 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                         model.loanProcess.reject()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                irfNavigator.goBack();
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     }
                 }
             };

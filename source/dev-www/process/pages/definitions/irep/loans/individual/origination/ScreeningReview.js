@@ -61,14 +61,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
-                                pageName: 'irep.loans.individual.origination.CBCheck',
-                                title: 'CB_CHECK',
-                                pageClass: 'cb-check',
-                                minimum: 1,
-                                maximum: 1,
-                                order:60
-                            },
-                            {
                                 pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
@@ -77,18 +69,20 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:70
                             },
                             {
-                                pageName: 'irep.loans.individual.origination.Summary',
+                                pageName: 'loans.individual.screening.Summary',
                                 title: 'SUMMARY',
                                 pageClass: 'summary',
                                 minimum: 1,
-                                maximum: 1
+                                maximum: 1,
+                                order: 5
                             },
                             {
                                 pageName: 'loans.individual.misc.BalanceSheetHistory',
                                 title: 'BALANCE_SHEET_HISTORY',
                                 pageClass: 'balance-sheet-history',
                                 minimum: 1,
-                                maximum: 1
+                                maximum: 1,
+                                order: 90
                             },
                             {
                                 pageName: 'loans.individual.screening.Review',
@@ -172,7 +166,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
-                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanCustomerEnrolmentProcess.customer.id;
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
@@ -185,7 +179,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
-                                        cbModel: {customerId:loanAccount.applicantEnrolmentProcess.customer.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
+                                        cbModel: {
+                                            customerId:loanAccount.applicantEnrolmentProcess.customer.customerId,
+                                            loanId:bundleModel.loanId, 
+                                            scoreName:'RiskScore1'
+                                        }
                                     }
                                 });
 
@@ -200,7 +198,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanAccount.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -212,7 +211,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }

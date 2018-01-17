@@ -1,5 +1,5 @@
 define({
-    pageUID: "irep.loans.individual.screening.ScreeningQueue",
+    pageUID: "irep.loans.individual.origination.ScreeningQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {

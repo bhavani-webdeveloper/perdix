@@ -1,5 +1,5 @@
 define({
-	pageUID: "irep.loans.individual.screening.CentralRiskReviewQueue", 
+	pageUID: "irep.loans.individual.origination.CentralRiskReviewQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -185,16 +185,16 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('irep.loans.individual.screening.CentralRiskReview', {
+								entityManager.setModel('irep.loans.individual.origination.CentralRiskReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "irep.loans.individual.screening.CentralRiskReview",
+									pageName: "irep.loans.individual.origination.CentralRiskReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "irep.loans.individual.screening.CentralRiskReviewQueue"
+                                    pageName: "irep.loans.individual.origination.CentralRiskReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

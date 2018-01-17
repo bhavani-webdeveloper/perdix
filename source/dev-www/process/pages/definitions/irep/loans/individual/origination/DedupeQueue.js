@@ -1,5 +1,5 @@
 define({
-    pageUID: "irep.loans.individual.screening.DedupeQueue",    
+    pageUID: "irep.loans.individual.origination.DedupeQueue",    
     pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -186,11 +186,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('irep.loans.individual.screening.DedupeView', {
+								entityManager.setModel('irep.loans.individual.origination.DedupeView', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "irep.loans.individual.screening.DedupeView",
+									pageName: "irep.loans.individual.origination.DedupeView",
 									pageId: item.loanId
 								});
 							},

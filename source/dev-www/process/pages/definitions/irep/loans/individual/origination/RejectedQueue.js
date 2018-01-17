@@ -1,5 +1,5 @@
 define({
-	pageUID: "irep.loans.individual.screening.RejectedQueue", 
+	pageUID: "irep.loans.individual.origination.RejectedQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 		$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -178,12 +178,12 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "irep.loans.individual.screening.LoanViewList",
+									pageName: "irep.loans.individual.origination.LoanViewList",
 									pageId: item.loanId
 								},
 								{
 									state: "Page.Engine",
-									pageName: "irep.loans.individual.screening.RejectedQueue"
+									pageName: "irep.loans.individual.origination.RejectedQueue"
 								});
 							},
 							isApplicable: function(item, index) {

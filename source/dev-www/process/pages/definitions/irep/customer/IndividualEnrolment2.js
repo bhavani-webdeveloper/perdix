@@ -9,7 +9,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
-            var self;
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
             var pageParams = {
@@ -1908,8 +1907,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "HouseVerification",
                     "HouseVerification.ownership",
-                    "HouseVerification.udf29",
-                    "HouseVerification.udf30",
+                    "HouseVerification.inCurrentAddressSince",
+                    "HouseVerification.inCurrentAreaSince",
                     "HouseVerification.latitude",
                     "HouseVerification.houseVerificationPhoto",
                     "HouseVerification.date",
@@ -1998,7 +1997,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
 
                     /* Form rendering starts */
-                    self = this;
+                    var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),

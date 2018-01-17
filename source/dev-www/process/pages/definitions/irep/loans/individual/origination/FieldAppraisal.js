@@ -158,7 +158,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
-                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanCustomerEnrolmentProcess.customer.id;
 
                                 $this.bundlePages.push({
                                     pageClass: 'summary',

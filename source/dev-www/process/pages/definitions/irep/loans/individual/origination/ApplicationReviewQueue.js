@@ -1,5 +1,5 @@
 define({
-	pageUID: "irep.loans.individual.screening.ApplicationReviewQueue",
+	pageUID: "irep.loans.individual.origination.ApplicationReviewQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -165,16 +165,16 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('irep.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('irep.loans.individual.origination.ApplicationReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "irep.loans.individual.screening.ApplicationReview",
+									pageName: "irep.loans.individual.origination.ApplicationReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "irep.loans.individual.screening.ApplicationReviewQueue"
+                                    pageName: "irep.loans.individual.origination.ApplicationReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {
