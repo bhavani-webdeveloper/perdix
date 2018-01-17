@@ -1390,7 +1390,8 @@
             "payeeMobileNumber": {
                 "key": "loanAccount.payeeMobileNumber",
                 "title": "PAYEE_MOBILE_NUMBER",
-                "type": "number"
+                "inputmode": "number",
+                "numberType": "tel"
             },
             "payeeRelationToApplicant": {
                 "key": "loanAccount.payeeRelationToApplicant",
