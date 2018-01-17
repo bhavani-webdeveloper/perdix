@@ -277,7 +277,7 @@ define([],function(){
                             "additions": [
                                 {
                                     "type": "box",
-                                    "orderNo": 99,
+                                    "orderNo": 999,
                                     "title": "POST_REVIEW",
                                     "condition": "model.loanAccount.id",
                                     "items": [{
@@ -481,7 +481,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                Utils.removeNulls(value, true);
+                               
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function (err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
@@ -497,7 +497,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                Utils.removeNulls(value, true);
+                                
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
@@ -530,9 +530,6 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {
