@@ -92,7 +92,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -130,7 +131,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Application": {
                             "Includes": [
                                 "reference"
-                            ]
+                            ],
+                            "overrides": {
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                }
+                            }
                         },
                         "ApplicationReview": {
                             "overrides": {
@@ -144,7 +151,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -181,7 +189,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -215,7 +224,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -249,7 +259,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -283,7 +294,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -859,7 +871,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "COMPLETE_ENROLMENT",
+                                            "title": "UPDATE_ENROLMENT",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
