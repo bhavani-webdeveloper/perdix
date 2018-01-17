@@ -83,6 +83,7 @@
                 "items": {
                     "ifscCode": {
                         "key": "customer.customerBankAccounts[].ifscCode",
+                        "resolver": "BankIFSCLOVConfiguration",
                         "type": "lov",
                         "lovonly": true,
                         "orderNo": 10
@@ -201,7 +202,6 @@
                     },
                     "isDisbersementAccount": {
                         "key": "customer.customerBankAccounts[].isDisbersementAccount",
-                        "type": "select",
                         "orderNo": 180
                     }
                 }
@@ -836,6 +836,7 @@
                     },
                     "linkedToCustomerId": {
                         "key": "customer.enterpriseCustomerRelations[].linkedToCustomerId",
+                        "resolver": "EnterpriseCustomerIDLOVConfiguration",
                         "type": "lov",
                         "title": "CUSTOMER_ID",
                         "orderNo": 330
@@ -1248,7 +1249,7 @@
                         "key": "customer.enterpriseAssets[].assetType",
                         "title": "ASSET_TYPE",
                         "type": "select",
-                        "enumCode": "enterprice_asset_types"
+                        "enumCode": "vehicle_type"
                     },
                     "vehicleMakeModel": {
                         "key": "customer.enterpriseAssets[].vehicleMakeModel",
