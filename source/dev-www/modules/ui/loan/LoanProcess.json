@@ -180,6 +180,7 @@
     "NewVehicleDetails": {
         "type": "box",
         "title": "NEW_VEHICLE_DETAILS",
+        "orderNo": 40,
         "items": {
             "vehicleType": {
                "key": "loanAccount.vehicleLoanDetails.vehicleType",
@@ -262,6 +263,7 @@
     },
     "AdditionalLoanInformation": {
         "type": "box",
+        "orderNo": 50,
         "title": "ADDITIONAL_LOAN_INFORMATION",
         "items": {
             "estimatedDateOfCompletion": {
@@ -300,6 +302,7 @@
     "LoanRecommendation": {
         "type": "box",
         "title": "LOAN_RECOMMENDATION",
+        "orderNo": 60,
         "items": {
             "loanAmount": {
                 "key": "loanAccount.loanAmount",
@@ -348,6 +351,7 @@
     "LoanSanction": {
         "type": "box",
         "title": "LOAN_SANCTION",
+        "orderNo": 80,
         "items": {
             "sanctionDate": {
                 "key": "loanAccount.sanctionDate",
@@ -387,6 +391,7 @@
     "VehicleRouteDetails": {
         "type": "box",
         "title": "VEHICLE_ROUTE_DETAILS",
+        "orderNo": 90,
         "items": {
             "vehicleRouteDetails": {
                 "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails",
@@ -416,6 +421,7 @@
     "VehicleAssetUse": {
         "type": "box",
         "title": "VEHICLE_ASSET_USE",
+        "orderNo": 100,
         "items": {
             "segment": {
                 "key": "loanAccount.vehicleLoanDetails.segment",
@@ -467,6 +473,7 @@
     "VehicleAssetViability": {
         "type": "box",
         "title": "VEHICLE_ASSET_VIABILITY",
+        "orderNo": 120,
         "items": {
             "vehicleLoanIncomes": {
                 "type": "array",
@@ -505,6 +512,7 @@
     "CollateralInformation": {
         "type": "box",
         "title": "COLLATERAL_INFORMATION",
+        "orderNo": 140,
         "items": {
             "collateral": {
                 "key": "loanAccount.collateral",
@@ -594,7 +602,7 @@
     "VehiclePrimaryInfo": {
         "type": "box",
         "title": "PRIMARY_INFORMATION",
-        "orderNo": 10,
+        "orderNo": 150,
         "items": {
             "registrationNumber": {
                 "key": "loanAccount.vehicleLoanDetails.registrationNumber",
@@ -621,7 +629,7 @@
     "VehicleValuationPriliminaryInformation": {
         "type": "box",
         "title": "VALUATION_PRILIMINARY_INFORMATION",
-        "orderNo": 20,
+        "orderNo": 160,
         "items": {
             "valuationPurpose": {
                 "key": "loanAccount.vehicleLoanDetails.valuationPurpose",
@@ -660,7 +668,7 @@
     "VehicleInspectionDetails": {
         "type": "box",
         "title": "INSPECTION_DETAILS",
-        "orderNo": 30,
+        "orderNo": 170,
         "items": {
             "firstName": {
                 "key": "loanProcess.applicantEnrolmentProcess.customer.firstName",
@@ -713,7 +721,7 @@
     "VehicleIdentityDetails": {
         "type": "box",
         "title": "VEHICLE_IDENTITY_DETAILS",
-        "orderNo": 40,
+        "orderNo": 180,
         "items": {
             "make": {
                 "key": "loanAccount.vehicleLoanDetails.make",
@@ -785,7 +793,7 @@
     "VehicleRegistrationDetails": {
         "type": "box",
         "title": "REGISTRATION_DETAILS",
-        "orderNo": 50,
+        "orderNo": 190,
         "items": {
             "reRegistered": {
                 "key": "loanAccount.vehicleLoanDetails.reRegistered",
@@ -891,7 +899,7 @@
     "VehiclePermitAndTaxDetails": {
         "type": "box",
         "title": "PERMIT_AND_TAX_DETAILS",
-        "orderNo": 60,
+        "orderNo": 200,
         "items": {
             "permitStatus": {
                 "key": "loanAccount.vehicleLoanDetails.permitStatus",
@@ -924,7 +932,7 @@
     "VehicleInsuranceDetails": {
         "type": "box",
         "title": "INSURANCE_DETAILS",
-        "orderNo": 70,
+        "orderNo": 210,
         "items": {
             "insuranceCompany": {
                 "key": "loanAccount.vehicleLoanDetails.insuranceCompany",
@@ -968,7 +976,7 @@
     "VehicleOtherRemarks": {
         "type": "box",
         "title": "OTHER_REMARKS",
-        "orderNo": 80,
+        "orderNo": 220,
         "items": {
             "modelUnderProduction": {
                 "key": "loanAccount.vehicleLoanDetails.modelUnderProduction",
@@ -1025,7 +1033,7 @@
     "VehiclePastValuations": {
         "type": "box",
         "title": "PAST_VALUATIONS",
-        "orderNo": 90,
+        "orderNo": 230,
         "items": {
             "vehiclePastValuations": {
                 "key": "loanAccount.vehicleLoanDetails.vehiclePastValuations",
@@ -1054,7 +1062,7 @@
     "VehicleAsset": {
         "type": "box",
         "title": "CONDITION_OF_ASSETS",
-        "orderNo": 100,
+        "orderNo": 240,
         "items": {
             "vehicleAssetConditions": {
                 "type": "array",
@@ -1085,7 +1093,7 @@
     "VehicleAccessories": {
         "type": "box",
         "title": "VEHICLE_ACCESSORIES",
-        "orderNo": 110,
+        "orderNo": 250,
         "items": {
             "vehicleAccessories": {
                 "type": "array",
@@ -1112,7 +1120,7 @@
     "VehicleValuation": {
         "type": "box",
         "title": "VALUATION",
-        "orderNo": 120,
+        "orderNo": 260,
         "items": {
             "valuationRating": {
                 "key": "loanAccount.vehicleLoanDetails.valuationRating",
@@ -1144,7 +1152,7 @@
     "VehiclePhotoCaptures": {
         "type": "box",
         "title": "VEHICLE_PHOTO_CAPTURES",
-        "orderNo": 130,
+        "orderNo": 270,
         "items": {
             "vehiclePhotoCaptures": {
                 "type": "array",
@@ -1173,6 +1181,7 @@
     "LoanMitigants": {
         "type": "box",
         "title": "LOAN_MITIGANTS",
+        "orderNo": 280,
         "items": {
             "deviationParameter": {
                 "key": "deviations.deviationParameter",
@@ -1230,6 +1239,7 @@
     "CollateralDetails": {
         "type": "box",
         "title": "NEW_ASSET_DETAILS",
+        "orderNo": 290,
         "items": {
             "collateral": {
                 "key": "loanAccount.collateral",
@@ -1319,6 +1329,7 @@
     "NomineeDetails": {
         "type": "box",
         "title": "NOMINEE_DETAILS",
+        "orderNo": 300,
         "items": {
             "nominees": {
                 "key": "loanAccount.nominees",
