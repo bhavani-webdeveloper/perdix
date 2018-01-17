@@ -328,6 +328,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "IndividualInformation.existingLoan" :{
+                        "readonly": true
+                    },
                     "HouseVerification.inCurrentAddressSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf29",
                     },
@@ -929,7 +932,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
                                     BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 }
-                                if(obj.leadCategory == 'Existing') {
+                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
                                     model.customer.existingLoan = 'YES';
                                 } else {
                                     model.customer.existingLoan = 'NO';
