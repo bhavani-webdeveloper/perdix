@@ -561,6 +561,12 @@
                 "key": "customer.spouseDateOfBirth",
                 "type": "date",
                 "orderNo": 200
+            },
+            "weddingDate": {
+                "key": "customer.weddingDate",
+                "type": "date",
+                "title": "WEDDING_ANNIVERSERY",
+                "condition": "model.customer.maritalStatus==='MARRIED'"
             }
         }
     },
