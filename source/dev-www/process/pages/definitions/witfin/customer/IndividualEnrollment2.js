@@ -49,13 +49,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferenes.verifications.referenceCheck.financialStatus",
                                 "ResidenceVerification",
                                 "assets",
-<<<<<<< .mine
                                 "FamilyDetails.familyMembers.dateOfBirth",
-||||||| .r7074
-                                
-=======
-
->>>>>>> .r7076
                                 "FamilyDetails.familyMembers.maritalStatus",
                                 "FamilyDetails.familyMembers.primaryOccupation",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -63,9 +57,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.salary",
                                 "FamilyDetails.familyMembers.incomes",
                                 "FamilyDetails.expenditures"
-
-
-
                             ],
                             "overrides": {
                                 "FamilyDetails.familyMembers": {
@@ -759,7 +750,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.udf.userDefinedFieldValues.udf2",
                                             "type": "text",
                                             "title": "DISTANCE_FROM_HOUSE",
-                                            "schema": { 
+                                            "schema": {
                                                 "type": "string"
                                             }
                                         },
