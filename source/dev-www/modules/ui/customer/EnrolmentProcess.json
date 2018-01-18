@@ -14,7 +14,7 @@
                         "key": "customer.enterpriseAssets[].assetType",
                         "orderNo": 10,
                         "type": "select",
-                        "enumCode":"vehicle_type"
+                        "enumCode":"enterprise_asset_type"
                     },
                     "endUse": {
                         "key": "customer.enterpriseAssets[].endUse",
@@ -1243,30 +1243,6 @@
                 "key": "customer.enterprise.finishedGoods",
                 "title": "FINISHED_GOODS",
                 "type": "amount"
-            },
-            "enterpriseAssets": {
-                "key": "customer.enterpriseAssets",
-                "type": "array",
-                "startEmpty": true,
-                "title": "ENTERPRICE_ASSETS",
-                "items": {
-                    "assetType": {
-                        "key": "customer.enterpriseAssets[].assetType",
-                        "title": "ASSET_TYPE",
-                        "type": "select",
-                        "enumCode": "vehicle_type"
-                    },
-                    "vehicleMakeModel": {
-                        "key": "customer.enterpriseAssets[].vehicleMakeModel",
-                        "title": "VEHICLE_MAKE_MODEL",
-                        "type": "string"
-                    },
-                    "valueOfAsset": {
-                        "key": "customer.enterpriseAssets[].valueOfAsset",
-                        "title": "VALUE_OF_THE_ASSET",
-                        "type": "amount"
-                    }
-                }
             }
         }
     },
