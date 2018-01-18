@@ -47,7 +47,8 @@ define([],function(){
                                 "LoanRecommendation",
                                 "VehicleRouteDetails",
                                 "VehicleAssetUse",
-                                "VehicleAssetViability"
+                                "VehicleAssetViability",
+                                "VehiclePhotoCaptures"
                             ]
                         },
                         "ScreeningReview": {
@@ -56,6 +57,7 @@ define([],function(){
                                 "VehicleRouteDetails",
                                 "VehicleAssetUse",
                                 "VehicleAssetViability",
+                                "VehiclePhotoCaptures",
                                 "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
@@ -98,6 +100,9 @@ define([],function(){
                                 "VehicleAssetViability": {
                                     "readonly": true
                                 },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                },
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
@@ -124,6 +129,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "VehicleAssetViability": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
@@ -160,6 +168,9 @@ define([],function(){
                                 "VehicleAssetViability": {
                                     "readonly": true
                                 },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                },
                                 "PayerDetails": {
                                     "readonly": true
                                 },
@@ -194,6 +205,9 @@ define([],function(){
                                 "VehicleAssetViability": {
                                     "readonly": true
                                 },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                },
                                 "NewVehicleDetails": {
                                     "readonly": true
                                 }
@@ -214,6 +228,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
                                     "readonly": true
                                 },
                                 "LoanDocuments": {
@@ -271,6 +288,10 @@ define([],function(){
                     "VehicleAssetViability.vehicleLoanIncomes",
                     "VehicleAssetViability.vehicleLoanIncomes.incomeType",
                     "VehicleAssetViability.vehicleLoanIncomes.incomeAmount",
+                    "VehiclePhotoCaptures",
+                    "VehiclePhotoCaptures.vehiclePhotoCaptures",
+                    "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
+                    "VehiclePhotoCaptures.vehiclePhotoCaptures.photoRemarks",
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmount",
                     "LoanRecommendation.tenure",
