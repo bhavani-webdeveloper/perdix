@@ -20,6 +20,30 @@ define(
 
                 var overridesFields = function (bundlePageObj) {
                 return {
+                    "VehicleAsset.vehicleAssetConditions.componentCondition": {
+                        "condition": "!(model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear')",
+                        "orderNo": 30
+                    },
+                    "VehicleAsset.vehicleAssetConditions.make": {
+                        "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'",
+                        "enumCode": "vehicle_tyre_make",
+                        "type":"select"
+                    },
+                    "VehicleAsset.vehicleAssetConditions": {
+                        "view": "fixed"
+                    },
+                    "VehicleAsset.vehicleAssetConditions.make": {
+                        "orderNo": 10
+                    },
+                    "VehicleAsset.vehicleAssetConditions.componentType": {
+                        "orderNo": 20  
+                    },
+                    "VehicleAsset.vehicleAssetConditions.componentCondition1": {
+                        "orderNo": 40
+                    },
+                    "VehicleAsset.vehicleAssetConditions.componentRemarks": {
+                        "orderNo": 50
+                    },
                     "VehiclePrimaryInfo": {
                         "readonly":  true
                     },
@@ -140,8 +164,10 @@ define(
                         "VehiclePastValuations.vehiclePastValuations.valuation",
                         "VehicleAsset",
                         "VehicleAsset.vehicleAssetConditions",
+                        "VehicleAsset.vehicleAssetConditions.make",
                         "VehicleAsset.vehicleAssetConditions.componentType",
                         "VehicleAsset.vehicleAssetConditions.componentCondition",
+                        "VehicleAsset.vehicleAssetConditions.componentCondition1",
                         "VehicleAsset.vehicleAssetConditions.componentRemarks",
                         "VehicleAccessories",
                         "VehicleAccessories.vehicleAccessories",
@@ -437,25 +463,41 @@ define(
                                 "VehicleInsuranceDetails.taxPaid"
                             ],
                             "options": {
-                                "repositoryAdditions": {
-                                    "VehicleRecommendation": {
-                                        "type": "box",
-                                        "title": "RECOMMENDATION_STATUS",
-                                        "orderNo": 140,
-                                        "items": {
-                                            "recommendationStatus": {
-                                                "key": "loanAccount.vehicleLoanDetails.recommendationStatus",
-                                                "type": "radios",
-                                                "enumCode": "decisionmaker1",
-                                                "title": "RECOMMENDED"
-                                            },
-                                            "recommendationRemarks": {
-                                                "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
-                                                "title": "REMARKS"
-                                            }
+                            "repositoryAdditions": {
+                                "VehicleRecommendation": {
+                                    "type": "box",
+                                    "title": "RECOMMENDATION_STATUS",
+                                    "orderNo": 1400,
+                                    "items": {
+                                        "recommendationStatus": {
+                                            "key": "loanAccount.vehicleLoanDetails.recommendationStatus",
+                                            "type": "radios",
+                                            "enumCode": "decisionmaker1",
+                                            "title": "RECOMMENDED"
+                                        },
+                                        "recommendationRemarks": {
+                                            "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
+                                            "title": "REMARKS"
                                         }
                                     }
                                 },
+
+                                "VehicleAsset": {
+                                    "items": {
+                                        "vehicleAssetConditions": {
+                                            "items": {
+                                                "componentCondition1": {
+                                                    "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentCondition",
+                                                    "title": "COMPONENT_CONDITION",
+                                                    "type": "select",
+                                                    "enumCode": "vehicle_tyre_condition",
+                                                    "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
                                 "additions": [
                                     {
                                         "targetID": "actionbox",
