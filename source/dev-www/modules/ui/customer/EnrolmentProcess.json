@@ -1265,6 +1265,11 @@
                         "key": "customer.familyMembers[].familyMemberFirstName",
                         "title": "FAMILY_MEMBER_FULL_NAME"
                     },
+                    "dateOfBirth": {
+                        "key": "customer.familyMembers[].dateOfBirth",
+                        "title": "FAMILY_MEMBER_DATE_OF_BIRTH",
+                        "type": "date"
+                    },
                     "educationStatus": {
                         "key": "customer.familyMembers[].educationStatus",
                         "type": "select",
