@@ -161,8 +161,7 @@ export class LoanProcess {
      */
     public removeRelatedEnrolmentProcess(enrolmentProcess: EnrolmentProcess, relation: LoanCustomerRelationTypes) {
         if (relation == LoanCustomerRelationTypes.APPLICANT &&
-            this.applicantEnrolmentProcess.customer &&
-            customerId == this.applicantEnrolmentProcess.customer.id) {
+            this.applicantEnrolmentProcess === enrolmentProcess ) {
             this.applicantEnrolmentProcess = null;
         } else if (relation == LoanCustomerRelationTypes.CO_APPLICANT){
             let index = _.findIndex(this.coApplicantsEnrolmentProcesses, function(ep){
@@ -179,8 +178,7 @@ export class LoanProcess {
                 this.guarantorsEnrolmentProcesses.splice(index, 1);
             }
         } else if (relation == LoanCustomerRelationTypes.LOAN_CUSTOMER &&
-            this.loanCustomerEnrolmentProcess.customer &&
-            this.loanCustomerEnrolmentProcess.customer.id == customerId){
+            this.loanCustomerEnrolmentProcess === enrolmentProcess){
             this.loanCustomerEnrolmentProcess = null;
         }
 
