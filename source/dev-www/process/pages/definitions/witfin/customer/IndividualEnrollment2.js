@@ -112,15 +112,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ResidenceVerification",
                                 "PhysicalAssets",
-                                "FamilyDetails.familyMembers.relationShip",
-                                "FamilyDetails.familyMembers.maritalStatus",
-                                "FamilyDetails.familyMembers.primaryOccupation",
-                                "FamilyDetails.familyMembers.educationStatus",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.expenditures",
                                 "IndividualReferenes.mobileNo",
                                 "IndividualReferenes.occupation",
                                 "IndividualReferenes.address",
@@ -139,7 +130,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "FamilyDetails.familyMembers.incomes"
                             ]
                         },
                         "ApplicationReview": {

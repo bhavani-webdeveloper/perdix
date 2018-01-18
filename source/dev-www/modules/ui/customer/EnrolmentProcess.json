@@ -216,6 +216,7 @@
             "verifications": {
                 "key": "customer.verifications",
                 "title": "VERIFICATION",
+                "startEmpty": true,
                 "titleExpr": "model.customer.verifications[arrayIndexes[0]].referenceFirstName",
                 "type": "array",
                 "items": {
@@ -282,6 +283,7 @@
             "verifications": {
                 "key": "customer.verifications",
                 "title": "REFERENCES",
+                "startEmpty": true,
                 "type": "array",
                 "items": {
                     "relationship": {
@@ -742,6 +744,7 @@
             "enterpriseRegistrations": {
                 "key": "customer.enterpriseRegistrations",
                 "type": "array",
+                "startEmpty": true,
                 "title": "REGISTRATION_DETAILS",
                 "orderNo": 211,
                 "items": {
@@ -842,7 +845,7 @@
                         "orderNo": 330
                     },
                     "linkedToCustomerName": {
-                        "key": "customer.enterpriseCustomerRelations[].linkedToCustomerName",
+                        "key": "customer.firstName",
                         "title": "CUSTOMER_NAME",
                         "orderNo": 340
                     },
@@ -1010,7 +1013,7 @@
             "distanceFromBranch": {
                 "key": "customer.distanceFromBranch",
                 "type": "select",
-                "enumCode": "distance_from_branch",
+                "enumCode": "loan_distance_from_branch",
                 "title": "DISTANCE_FROM_BRANCH",
                 "orderNo": 230
             },
@@ -1038,6 +1041,7 @@
             "expenditures": {
                 "key": "customer.expenditures",
                 "type": "array",
+                "startEmpty": true,
                 "title": "EXPENDITURES",
                 "view": "fixed",
                 "items": {
@@ -1153,6 +1157,7 @@
             "expenditures": {
                 "key": "customer.expenditures",
                 "type": "array",
+                "startEmpty": true,
                 "title": "BUSINESS_EXPENSE",
                 "items": {
                     "expenditureSource": {
@@ -1835,6 +1840,7 @@
             "supplierDetails": {
                 "key": "customer.supplierDetails",
                 "title": "SUPPLIERS_DEATILS",
+                "startEmpty": true,
                 "type": "array",
                 "items": {
                     "supplierName": {
