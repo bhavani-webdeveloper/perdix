@@ -323,7 +323,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 }
             }
             var overridesFields = function (bundlePageObj) {
+                
                 return {
+                    "FamilyDetails.familyMembers.familyMemberFirstName": {
+                        "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
+                    },
+                    "FamilyDetails.familyMembers.dateOfBirth": {
+                        "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
+                    },
+                    "FamilyDetails.familyMembers.maritalStatus": {
+                        "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
+                    },
                     "ContactInformation.locality": {
                         "readonly" : true
                     },
