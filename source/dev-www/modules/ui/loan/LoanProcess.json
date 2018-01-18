@@ -143,6 +143,7 @@
             "estimatedEmi": {
                 "key": "loanAccount.estimatedEmi",
                 "type": "amount",
+                "readonly": true,
                 "title": "EXPECTED_SECURITY_EMI"
             }
         }
