@@ -279,6 +279,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "ContactInformation.pincode": {
+                                     fieldType: "number",
+                                     resolver: "PincodeLOVConfiguration"
+                                },
                                 "Liabilities.liabilities.liabilityLoanPurpose": {
                                     "type": "select",
                                     "enumCode": "loan_purpose_1"
@@ -294,8 +298,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "enumCode": "vehicle_end_use"
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
-                                    "type": "radios",
-                                    "enumCode": "decisionmaker"
+                                    "type": "checkbox"
                                 },
                                 "EnterpriseInformation": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"

@@ -336,8 +336,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         resolver: "PincodeLOVConfiguration"
                     },
                     "ContactInformation.mailingPincode": {
-                        fieldType: "number",
-                        resolver: "MailingPincodeLOVConfiguration"
+                        fieldType: "string",
+                        "resolver": "MailingPincodeLOVConfiguration",
+                        "condition": "!model.customer.mailSameAsResidence"
                     },
                     "KYC.addressProof" :{
                         "readonly": true
@@ -402,9 +403,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.mailingPostoffice": {
-                        "condition": "!model.customer.mailSameAsResidence"
-                    },
-                    "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.mailingLocality": {
