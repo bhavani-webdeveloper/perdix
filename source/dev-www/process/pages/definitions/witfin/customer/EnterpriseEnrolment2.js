@@ -293,6 +293,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
                                     "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
                                 },
+                                "EnterpriseAssets.enterpriseAssets.assetType": {
+                                    "required": true
+                                },
+                                "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
+                                    "required": true
+                                },
                                 "EnterpriseAssets.enterpriseAssets.endUse": {
                                     "type": "select",
                                     "enumCode": "vehicle_end_use"

@@ -4068,7 +4068,7 @@
             "assetType": {
               "title": "Asset Type",
               "type": "string",
-              "refCodeCategory": "enterprise_asset_types",
+              "refCodeCategory": "enterprise_asset_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
