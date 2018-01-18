@@ -44,10 +44,18 @@ define([],function(){
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
-                                "LoanRecommendation"
+                                "LoanRecommendation",
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability"
                             ]
                         },
                         "ScreeningReview": {
+                            "excludes": [
+                                "VehicleRouteDetails",
+                                "VehicleAssetUse",
+                                "VehicleAssetViability"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
@@ -76,6 +84,15 @@ define([],function(){
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
+                                    "readonly": true
+                                },
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
@@ -93,6 +110,15 @@ define([],function(){
                         "BranchCreditAppraisal": {
                             "overrides": {
                                 "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
@@ -114,7 +140,16 @@ define([],function(){
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
                                 "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
@@ -133,10 +168,19 @@ define([],function(){
                                 "DeductionsFromLoan": {
                                     "readonly": true
                                 },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
                                 "LoanDocuments": {
                                     "readonly": true
                                 },
                                 "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
                                     "readonly": true
                                 },
                                 "NewVehicleDetails": {
@@ -147,6 +191,12 @@ define([],function(){
                         "REJECTED": {
                             "overrides": {
                                 "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan": {
@@ -188,6 +238,25 @@ define([],function(){
                     "PayerDetails.payeeName",
                     "PayerDetails.payeeMobileNumber",
                     "PayerDetails.payeeRelationToApplicant",
+                    "VehicleRouteDetails",
+                    "VehicleRouteDetails.vehicleRouteDetails",
+                    "VehicleRouteDetails.vehicleRouteDetails.routeFrom",
+                    "VehicleRouteDetails.vehicleRouteDetails.routeTo",
+                    "VehicleRouteDetails.vehicleRouteDetails.routeVia",
+                    "VehicleAssetUse",
+                    "VehicleAssetUse.segment",
+                    "VehicleAssetUse.subSegnment",
+                    "VehicleAssetUse.entityType",
+                    "VehicleAssetUse.attachedwith",
+                    "VehicleAssetUse.attachedAddress",
+                    "VehicleAssetUse.attachedContactNumber",
+                    "VehicleAssetUse.locationAddress",
+                    "VehicleAssetUse.locationContactName",
+                    "VehicleAssetUse.locationContactNumber",
+                    "VehicleAssetViability",
+                    "VehicleAssetViability.vehicleLoanIncomes",
+                    "VehicleAssetViability.vehicleLoanIncomes.incomeType",
+                    "VehicleAssetViability.vehicleLoanIncomes.incomeAmount",
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmount",
                     "LoanRecommendation.tenure",
