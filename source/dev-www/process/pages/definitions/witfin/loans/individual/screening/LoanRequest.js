@@ -261,7 +261,6 @@ define([],function(){
                     "LoanRecommendation.loanAmount",
                     "LoanRecommendation.tenure",
                     "LoanRecommendation.interestRate",
-                    "LoanRecommendation.estimatedEmi",
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.commercialCibilCharge",

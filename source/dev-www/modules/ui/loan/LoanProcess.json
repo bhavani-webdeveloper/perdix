@@ -321,12 +321,6 @@
                 "required": true,
                 "title": "INTEREST_RATE"
             },
-            "estimatedEmi": {
-                "key": "loanAccount.estimatedEmi",
-                "type": "amount",
-                "title": "ESTIMATED_KINARA_EMI",
-                "readonly": true
-            },
             "processingFeePercentage": {
                 "key": "loanAccount.processingFeePercentage",
                 "type": "number",
