@@ -115,8 +115,12 @@
 
     var switchApp = function () {
         if (showI7) {
-            if (!linkOn8Visible) { // only under '/Page'(success login) header will be available, so like will be visible
-                autoLoginPerdix8();
+            var username = new CookieManager(i7iframe.contentDocument).readCookie('logedInUserId');
+            var access_token = new CookieManager(i7iframe.contentDocument).readCookie('oauth_token');
+            if (!linkOn8Visible || window.current_username != username || window.current_access_token != access_token) { // only under '/Page'(success login) header will be available, so like will be visible
+                window.current_username = username;
+                window.current_access_token = access_token;
+                autoLoginPerdix8(username, access_token);
                 if (typeof (integrationApi) != 'undefined') {
                     integrationApi.switchApp();
                     return;
@@ -182,9 +186,7 @@
         i7iframe.contentWindow.location.reload();
     };
 
-    var autoLoginPerdix8 = function() {
-        var username = new CookieManager(i7iframe.contentDocument).readCookie('logedInUserId');
-        var access_token = new CookieManager(i7iframe.contentDocument).readCookie('oauth_token');
+    var autoLoginPerdix8 = function(username, access_token) {
         i8iframe.contentWindow.location.hash = '#/Login/' + username + '/' + access_token;
     };
 
