@@ -608,11 +608,13 @@
             "entityId": {
                 "key": "customer.id",
                 "type": "number",
+                "readonly": true,
                 "title": "ENTITY_ID",
                 "orderNo": 30
             },
             "urnNo": {
                 "key": "customer.urnNo",
+                "readonly": true,
                 "condition": "model.customer.urnNo",
                 "title": "URN_NO",
                 "orderNo": 40

@@ -4,14 +4,6 @@ let config = {
             onLoad: {
                 "defaults": [
                     {
-                        "name": "Dumm1",
-                        "arguments": {}
-                    },
-                    {
-                        "name": "Dumm2",
-                        "arguments": {}
-                    },
-                    {
                         "name": "PopulateLeadInteractionPolicy",
                         "arguments": {
 
