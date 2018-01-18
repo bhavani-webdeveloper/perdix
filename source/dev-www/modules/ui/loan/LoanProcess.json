@@ -391,7 +391,8 @@
                 "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails",
                 "type": "array",
                 "title": "Route",
-                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeFrom . '~' . model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeTo",
+                "startEmpty": true,
+                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeFrom + '~' + model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[arrayIndexes[0]].routeTo",
                 "items": {
                     "routeFrom": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].routeFrom",
@@ -472,6 +473,7 @@
             "vehicleLoanIncomes": {
                 "type": "array",
                 "title": "VEHICLE_INCOME",
+                "startEmpty": true,
                 "items": {
                     "incomeType": {
                         "key": "loanAccount.vehicleLoanIncomes[].incomeType",
@@ -1157,6 +1159,7 @@
                 "type": "array",
                 "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures",
                 "title": "VEHICLE_PHOTO_CAPTURES",
+                "startEmpty": true,
                 "view":"fixed",
                 "items": {
                     "photoFileId": {
