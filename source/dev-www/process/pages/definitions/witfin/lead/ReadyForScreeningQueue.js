@@ -168,7 +168,6 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -190,9 +189,6 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
 						}, {
 							title: 'Screening Date',
 							data: 'screeningDate'

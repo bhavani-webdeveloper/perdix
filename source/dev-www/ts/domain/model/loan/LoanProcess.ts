@@ -116,6 +116,10 @@ export class LoanProcess {
 
             /* Need details on coBorrower */
 
+            if (!_.isNumber(coApplicant.customer.id)){
+                continue;
+            }
+
             let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
                 return item.customerId == coApplicant.customer.id;
             });
@@ -131,6 +135,9 @@ export class LoanProcess {
         for (let guarantor:EnrolmentProcess of this.guarantorsEnrolmentProcesses){
 
             /* Need details on coBorrower */
+            if (!_.isNumber(guarantor.customer.id)){
+                continue;
+            }
 
             let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
                 return item.customerId == guarantor.customer.id;
@@ -150,21 +157,27 @@ export class LoanProcess {
      * the values in LoanAccount.
      *
      * @param customerId
-     * @param relation
+     * @param re`lation
      */
-    public removeRelatedEnrolmentProcess(customerId: number, relation: LoanCustomerRelationTypes) {
+    public removeRelatedEnrolmentProcess(enrolmentProcess: EnrolmentProcess, relation: LoanCustomerRelationTypes) {
         if (relation == LoanCustomerRelationTypes.APPLICANT &&
             this.applicantEnrolmentProcess.customer &&
             customerId == this.applicantEnrolmentProcess.customer.id) {
             this.applicantEnrolmentProcess = null;
         } else if (relation == LoanCustomerRelationTypes.CO_APPLICANT){
             let index = _.findIndex(this.coApplicantsEnrolmentProcesses, function(ep){
-                return ep.customer && (ep.customer.id == customerId);
+                return ep === enrolmentProcess
             })
+            if (index > -1){
+                this.coApplicantsEnrolmentProcesses.splice(index, 1);
+            }
         } else if (relation == LoanCustomerRelationTypes.GUARANTOR){
             let index = _.findIndex(this.coApplicantsEnrolmentProcesses, function(ep){
-                return ep.customer && (ep.customer.id == customerId);
+                return ep === enrolmentProcess
             })
+            if (index > -1){
+                this.guarantorsEnrolmentProcesses.splice(index, 1);
+            }
         } else if (relation == LoanCustomerRelationTypes.LOAN_CUSTOMER &&
             this.loanCustomerEnrolmentProcess.customer &&
             this.loanCustomerEnrolmentProcess.customer.id == customerId){

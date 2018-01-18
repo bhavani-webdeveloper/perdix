@@ -2269,7 +2269,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                                 $log.info("Inside customer loaded of applicant-updated");
                                 if (model.customer.id) {
-                                    model.loanProcess.removeRelatedEnrolmentProcess(model.customer.id, 'Customer');
+                                    model.loanProcess.removeRelatedEnrolmentProcess(enrolmentProcess, 'Customer');
                                 }
                                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
 
