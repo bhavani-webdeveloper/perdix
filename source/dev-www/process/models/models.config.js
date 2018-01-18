@@ -5,6 +5,8 @@ irf.models
 		'dataUploadUrl': irf.BASE_URL + '/api/files/upload/base64',
 		'fileDeleteUrl': irf.BASE_URL + '/api/files/upload',
 		'fileStreamUrl': irf.BASE_URL + '/api/stream',
-		'responseSelector': 'fileId'
+		'responseSelector': 'fileId',
+		'compressionRatio': 80,
+		'imageCompressionRatio': 75
 	})
 ;
