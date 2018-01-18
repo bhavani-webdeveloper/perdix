@@ -382,7 +382,7 @@
                     "type":"object",
                     "properties": {
                         "odometerReading": {
-                            "type":["string", "null"]
+                            "type":["string", "null", "number"]
                         }
                     }
                 },
