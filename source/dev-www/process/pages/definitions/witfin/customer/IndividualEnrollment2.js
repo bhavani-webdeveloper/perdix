@@ -858,6 +858,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     ]
                                 },
                                 {
+                                    "targetID": "IndividualInformation",
+                                    "items":[
+                                        {
+                                            "key": "customer.centreId",
+                                            "type": "select",
+                                            "enumCode": "centre",
+                                            "title": "CENTRE_NAME",
+                                            "orderNo": 21,
+                                            "readonly": true
+                                        }
+                                    ]
+                                },
+                                {
                                     "type": "actionbox",
                                     "condition": "model.customer.currentStage",
                                     "orderNo": 1200,

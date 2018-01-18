@@ -454,7 +454,7 @@
             "centreId": {
                 "key": "customer.centreId",
                 "type": "select",
-                "title": "CENTRE_NAME",
+                "title": "CENTRE",
                 "filter": {
                     "parentCode": "branch_id"
                 },
