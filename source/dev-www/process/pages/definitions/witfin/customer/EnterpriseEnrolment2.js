@@ -151,6 +151,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BankAccounts": {
                                         "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -169,6 +172,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
                                         "readonly": true
                                     }
                                 }
@@ -189,6 +195,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BankAccounts": {
                                         "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -207,6 +216,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
                                         "readonly": true
                                     }
                                 }
@@ -227,6 +239,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "BankAccounts": {
                                         "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -245,6 +260,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
                                         "readonly": true
                                     }
                                 }
@@ -279,6 +297,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "ContactInformation.locality": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.district": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },
                                 "ContactInformation.pincode": {
                                      fieldType: "number",
                                      resolver: "PincodeLOVConfiguration"

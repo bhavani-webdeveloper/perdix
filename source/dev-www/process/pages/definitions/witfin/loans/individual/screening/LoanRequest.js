@@ -52,9 +52,11 @@ define([],function(){
                         },
                         "ScreeningReview": {
                             "excludes": [
+                                "calculateEmi",
                                 "VehicleRouteDetails",
                                 "VehicleAssetUse",
-                                "VehicleAssetViability"
+                                "VehicleAssetViability",
+                                "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -80,6 +82,9 @@ define([],function(){
                             ]
                         },
                         "ApplicationReview": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
@@ -133,6 +138,9 @@ define([],function(){
                             }
                         },
                         "HOCreditAppraisal": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
@@ -161,6 +169,9 @@ define([],function(){
                             }
                         },
                         "ManagementCommittee": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
@@ -189,6 +200,9 @@ define([],function(){
                             }
                         },
                         "REJECTED": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
@@ -226,7 +240,7 @@ define([],function(){
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.calculateEmi",
-                    "PreliminaryInformation.expectedEmi",
+                    "PreliminaryInformation.estimatedEmi",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
                     "DeductionsFromLoan.estimatedEmi",
@@ -333,13 +347,13 @@ define([],function(){
                                                         case 'Weekly':
                                                             frequencyRequested = 4;
                                                             break;
-                                                        case 'Yearly':
-                                                            frequencyRequested = 1;
+                                                        case 'Yearly': 
+                                                            frequencyRequested = 1;   
                                                     }
                                                     var rate = parseFloat((model.loanAccount.expectedInterestRate)/(100*frequencyRequested));
                                                     var n = parseFloat(model.loanAccount.tenureRequested);
                                                     var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
-                                                    model.loanAccount.expectedEmi = parseInt(calculateEmi.toFixed());
+                                                    model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());   
                                                 }
                                             }
                                         }
@@ -553,7 +567,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-
+                               
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function (err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
@@ -569,7 +583,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-
+                                
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {

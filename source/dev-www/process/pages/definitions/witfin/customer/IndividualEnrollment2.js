@@ -316,6 +316,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "ContactInformation.locality": {
+                        "readonly" : true
+                    },
+                    "ContactInformation.villageName": {
+                        "readonly": true
+                    },
+                    "ContactInformation.district": {
+                        "readonly": true
+                    },
+                    "ContactInformation.state": {
+                        "readonly": true
+                    },
                     "IndividualInformation.existingLoan" :{
                         "readonly": true
                     },
