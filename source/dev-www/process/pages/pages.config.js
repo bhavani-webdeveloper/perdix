@@ -148,3 +148,9 @@ irf.pages.config([
 
 	elemConfig.configNavigator(irfNavigatorProvider.factory);
 }]);
+irf.pages.run(["Model_ELEM_FC", "$rootScope", "SessionStore", function(Model_ELEM_FC, $rootScope, SessionStore) {
+	$rootScope.$on("irf-login-success", function() {
+		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
+		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
+	})
+}]);
