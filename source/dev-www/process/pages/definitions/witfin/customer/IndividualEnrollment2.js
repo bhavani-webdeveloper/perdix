@@ -49,7 +49,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferenes.verifications.referenceCheck.financialStatus",
                                 "ResidenceVerification",
                                 "assets",
-                                
+
                                 "FamilyDetails.familyMembers.maritalStatus",
                                 "FamilyDetails.familyMembers.primaryOccupation",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -328,7 +328,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.inCurrentAddressSince == '1 - <3 years'"
                     },
                     "HouseVerification.monthlyRent": {
-                        "condition": "model.customer.ownership == 'Rental'" 
+                        "condition": "model.customer.ownership == 'Rental'"
                     },
                     "HouseVerification.distanceFromBranch": {
                         "required": true
@@ -751,7 +751,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.udf.userDefinedFieldValues.udf2",
                                             "type": "text",
                                             "title": "DISTANCE_FROM_HOUSE",
-                                            "schema": {
+                                            "schema": { 
                                                 "type": "string"
                                             }
                                         },
