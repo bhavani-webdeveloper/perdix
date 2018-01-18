@@ -17,19 +17,17 @@ export class PopulateLeadDefaultFieldsPolicy implements IPolicy<LeadProcess> {
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
 
-        return Observable.defer(function(){
-            if (leadProcess.lead) {
-                let activeSession:ISession = ObjectFactory.getInstance("Session");
-                leadProcess.lead.eligibleForProduct = 'YES';
-                let centers = activeSession.getCenters();
-                if(_.isArray(centers) && centers.length > 0) {
-                    leadProcess.lead.centreName = centers[0].centreName;
-                    leadProcess.lead.centreId = centers[0].id;
-                }
-
+        if (leadProcess.lead) {
+            let activeSession:ISession = ObjectFactory.getInstance("Session");
+            leadProcess.lead.eligibleForProduct = 'YES';
+            let centers = activeSession.getCenters();
+            if(_.isArray(centers) && centers.length > 0) {
+                leadProcess.lead.centreName = centers[0].centreName;
+                leadProcess.lead.centreId = centers[0].id;
             }
-            return Observable.of(leadProcess);
-        })
+
+        }
+        return Observable.of(leadProcess);
     }
 
 }

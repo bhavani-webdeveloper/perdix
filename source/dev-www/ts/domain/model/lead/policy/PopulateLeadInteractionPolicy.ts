@@ -21,20 +21,18 @@ export class PopulateLeadInteractionPolicy implements LeadPolicy<PopulateLeadInt
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
 
-        return Observable.defer(function(){
-            if (leadProcess.lead && leadProcess.lead.leadInteractions) {
-                let activeSession:ISession = ObjectFactory.getInstance("Session");
-                let i = new LeadInteraction();
+        if (leadProcess.lead && leadProcess.lead.leadInteractions) {
+            let activeSession:ISession = ObjectFactory.getInstance("Session");
+            let i = new LeadInteraction();
 
-                i.loanOfficerId = activeSession.getUsername();
+            i.loanOfficerId = activeSession.getUsername();
 
-                i.interactionDate = Utils.getCurrentDate();
-                leadProcess.lead.leadInteractions.push(i);
-                leadProcess.lead.branchId = activeSession.getBranchId();
-                leadProcess.lead.branchName = activeSession.getBranch();
-            }
-            return Observable.of(leadProcess);
-        })
+            i.interactionDate = Utils.getCurrentDate();
+            leadProcess.lead.leadInteractions.push(i);
+            leadProcess.lead.branchId = activeSession.getBranchId();
+            leadProcess.lead.branchName = activeSession.getBranch();
+        }
+        return Observable.of(leadProcess);
     }
 
 }

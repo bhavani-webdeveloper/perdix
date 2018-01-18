@@ -21,13 +21,11 @@ export class LeadDerivedColumnsPolicy implements LeadPolicy<LeadDerivedColumnsPo
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
 
-        return Observable.defer(function(){
-            if (leadProcess.lead) {
-                let activeSession:ISession = ObjectFactory.getInstance("Session");
-                leadProcess.lead.age = moment().diff(moment(leadProcess.lead.dob, activeSession.getSystemDateFormat()), 'years');
-            }
-            return Observable.of(leadProcess);
-        })
+        if (leadProcess.lead) {
+            let activeSession:ISession = ObjectFactory.getInstance("Session");
+            leadProcess.lead.age = moment().diff(moment(leadProcess.lead.dob, activeSession.getSystemDateFormat()), 'years');
+        }
+        return Observable.of(leadProcess);
     }
 
 }

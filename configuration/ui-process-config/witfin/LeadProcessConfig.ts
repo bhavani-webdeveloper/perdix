@@ -63,7 +63,7 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "(this.lead.currentStage!='Inprocess' && this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'YES') && this.lead.leadStatus == 'FollowUp'",
+                        "expr": "(this.lead.interestedInProduct && this.lead.interestedInProduct.toUpperCase() == 'YES') && this.lead.leadStatus == 'FollowUp'",
                         "add": [
                             {
                                 "name": "LeadFollowupPolicy",

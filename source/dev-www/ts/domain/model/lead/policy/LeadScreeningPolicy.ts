@@ -18,12 +18,10 @@ export class LeadScreeningPolicy implements LeadPolicy<LeadScreeningPolicyArgs> 
     }
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
-        return Observable.defer(() => {
-            if (leadProcess.lead) {
-                leadProcess.stage = this.args.stageForScreening;
-            }
-            return Observable.of(leadProcess);
-        })
+        if (leadProcess.lead) {
+            leadProcess.stage = this.args.stageForScreening;
+        }
+        return Observable.of(leadProcess);
     }
 
 }

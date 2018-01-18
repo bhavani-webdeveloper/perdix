@@ -18,13 +18,10 @@ export class LeadFollowupPolicy implements LeadPolicy<LeadFollowupPolicyArgs> {
     }
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
-
-        return Observable.defer(()=>{
-            if (leadProcess.lead) {
-                leadProcess.stage = this.args.stageForFollowup;
-            }
-            return Observable.of(leadProcess);
-        })
+        if (leadProcess.lead) {
+            leadProcess.stage = this.args.stageForFollowup;
+        }
+        return Observable.of(leadProcess);
     }
 
 }

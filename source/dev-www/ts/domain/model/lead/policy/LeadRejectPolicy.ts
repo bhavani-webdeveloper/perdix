@@ -18,13 +18,10 @@ export class LeadRejectPolicy implements LeadPolicy<LeadRejectPolicyArgs> {
     }
 
     run(leadProcess: LeadProcess): Observable<LeadProcess> {
-
-        return Observable.defer(()=>{
-            if (leadProcess.lead) {
-                leadProcess.stage = this.args.stageForRejection;
-            }
-            return Observable.of(leadProcess);
-        })
+        if (leadProcess.lead) {
+            leadProcess.stage = this.args.stageForRejection;
+        }
+        return Observable.of(leadProcess);
     }
 
 }
