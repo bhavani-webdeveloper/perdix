@@ -56,8 +56,8 @@
                 "title": "EXPECTED_INTEREST_RATE",
                 "orderNo": 80
             },
-            "expectedEmi": {
-                "key": "loanAccount.expectedEmi",
+            "estimatedEmi": {
+                "key": "loanAccount.estimatedEmi",
                 "type": "amount",
                 "title": "ESTIMATED_EMI",
                 "orderNo": 90
@@ -1075,6 +1075,11 @@
                         "title": "COMPONENT_CONDITION",
                         "type": "select",
                         "enumCode": "status_scale"
+                    },
+                    "make": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].make",
+                        "title": "VEHICLE_TYRE_MAKE",
+                        "enumCode": "vehicle_tyre_make"
                     },
                     "componentRemarks": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentRemarks",
