@@ -351,12 +351,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "additions": [
                                     {
                                         "type": "actionbox",
-                                        "orderNo": 1000,
+                                        "condition": "!model.customer.currentStage",
+                                        "orderNo": 1200,
                                         "items": [
                                             {
                                                 "type": "submit",
                                                 "title": "SUBMIT"
-                                            },
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "actionbox",
+                                        "condition": "model.customer.currentStage",
+                                        "orderNo": 1200,
+                                        "items": [
+                                            {
+                                                "type": "button",
+                                                "title": "UPDATE",
+                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            }
                                         ]
                                     },
                                     {
@@ -451,7 +464,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     }
 
                 }

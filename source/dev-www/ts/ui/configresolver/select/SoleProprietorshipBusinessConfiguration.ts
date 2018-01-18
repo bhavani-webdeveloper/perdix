@@ -2,7 +2,7 @@ import {SelectElementConfiguration} from "./SelectElementConfiguration";
 import {EnrolmentProcess} from "../../../domain/model/customer/EnrolmentProcess";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {Customer} from "../../../domain/model/customer/Customer";
-
+import * as _ from 'lodash';
 export class SoleProprietorshipBusinessConfiguration extends SelectElementConfiguration {
 
     onChange:Function = function(value, form, model) {
@@ -12,6 +12,10 @@ export class SoleProprietorshipBusinessConfiguration extends SelectElementConfig
             PageHelper.showProgress("change-enterprise-type", "Applicant enrolment should be completed!", 5000);
             model.customer.enterprise.enterpriseType = null;
             return;
+        }
+        if(!_.isNumber(model.customer.id)) {
+            model.customer.customerBranchId = model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId;
+            model.customer.centreId = model.loanProcess.applicantEnrolmentProcess.customer.centreId;
         }
         if (value == 'Sole Proprietorship' && !_.isNumber(model.customer.id)) {
             PageHelper.showLoader("Loading...");
