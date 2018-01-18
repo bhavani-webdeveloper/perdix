@@ -209,6 +209,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             }
         }
 
+        var clearProduct = function(value, model) {
+            model.loanAccount.productCode = '';
+        }
+
         return {
             "type": "schema-form",
             "title": "LOAN_INPUT",
@@ -415,6 +419,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             "type": "select",
                             onChange:function(value,form,model){
                                 partnerChange(value,model);
+                                clearProduct(value, model);
                             }
                         }]
                     },
@@ -433,13 +438,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"select",
                                 "title":"PRODUCT_CATEGORY",
                                 "enumCode":"loan_product_category",
-                                "required": true
+                                "required": true,
+                                onChange: function(value, form, model) {
+                                    clearProduct(value, model);
+                                }
                             },
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
                                 "enumCode":"loan_product_frequency",
-                                "required": true
+                                "required": true,
+                                onChange: function(value, form, model) {
+                                    clearProduct(value, model);
+                                }
                             },
                             {
                                 "key": "loanAccount.productCode",
