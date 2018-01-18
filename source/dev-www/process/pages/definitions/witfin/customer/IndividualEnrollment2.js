@@ -49,7 +49,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferenes.verifications.referenceCheck.financialStatus",
                                 "ResidenceVerification",
                                 "assets",
+<<<<<<< .mine
+                                "FamilyDetails.familyMembers.dateOfBirth",
+||||||| .r7074
+                                
+=======
 
+>>>>>>> .r7076
                                 "FamilyDetails.familyMembers.maritalStatus",
                                 "FamilyDetails.familyMembers.primaryOccupation",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -111,6 +117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "ResidenceVerification",
+                                "FamilyDetails.familyMembers.dateOfBirth",
                                 "PhysicalAssets",
                                 "IndividualReferenes.mobileNo",
                                 "IndividualReferenes.occupation",
@@ -605,6 +612,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.relationShip",
                     "FamilyDetails.familyMembers.maritalStatus",
                     "FamilyDetails.familyMembers.familyMemberFirstName",
+                    "FamilyDetails.familyMembers.dateOfBirth",
                     "FamilyDetails.familyMembers.primaryOccupation",
                     "FamilyDetails.familyMembers.educationStatus",
                     "FamilyDetails.familyMembers.anualEducationFee",
