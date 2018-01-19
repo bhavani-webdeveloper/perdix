@@ -16,6 +16,10 @@ class TelecallingDetail {
     telecallingRemarks: string;
     telecallingResponse: string;
     version: number;
+    referenceFirstName: string;
+    mobileNo: number;
+    occupation: string;
+    address: string;
 }
 
 export = TelecallingDetail;

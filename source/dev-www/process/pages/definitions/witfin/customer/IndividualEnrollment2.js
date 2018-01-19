@@ -42,11 +42,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
-                                "IndividualReferenes.verifications.mobileNo",
-                                "IndividualReferenes.verifications.occupation",
-                                "IndividualReferenes.verifications.address",
-                                "IndividualReferenes.verifications.referenceCheck.relationship",
-                                "IndividualReferenes.verifications.referenceCheck.financialStatus",
+                                "PhysicalAssets",
+                                "IndividualReferences",
                                 "ResidenceVerification",
                                 "assets",
                                 "FamilyDetails.familyMembers.dateOfBirth",
@@ -79,6 +76,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "ScreeningReview": {
+                            "excludes": [
+                                "PhysicalAssets",
+                                "IndividualReferences",
+                            ],
                             "overrides": {
                                 "KYC": {
                                     "readonly": true
@@ -127,15 +128,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         },
                         "Application": {
-                            "Includes": [
-                                "reference"
-                            ],
                             "overrides": {
                                 "FamilyDetails": {
                                     "title": "HOUSEHOLD_DETAILS"
                                 }
                             },
                             "excludes": [
+                                "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "ApplicationReview": {
@@ -170,10 +169,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification":{
                                     "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-
+                                "IndividualReferences.verifications.referenceCheck"
                             ]
                         },
                         "BranchCreditAppraisal": {
@@ -205,10 +207,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification":{
                                     "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-
+                                "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "HOCreditAppraisal": {
@@ -240,10 +245,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification":{
                                     "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-
+                                "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "ManagementCommittee": {
@@ -275,10 +283,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ResidenceVerification":{
                                     "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-
+                                "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "REJECTED": {
@@ -696,12 +707,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualReferences.verifications.mobileNo",
                     "IndividualReferences.verifications.occupation",
                     "IndividualReferences.verifications.address",
-                    "IndividualReferences.verifications.referenceCheck",
-                    "IndividualReferences.verifications.referenceCheck.knownSince",
-                    "IndividualReferences.verifications.referenceCheck.relationship",
-                    "IndividualReferences.verifications.referenceCheck.customerResponse",
-                    "IndividualReferences.verifications.referenceCheck.opinion",
-                    "IndividualReferences.verifications.referenceCheck.financialStatus"
+                    "IndividualReferences.verifications.ReferenceCheck",
+                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
+                    "IndividualReferences.verifications.ReferenceCheck.relationship",
+                    "IndividualReferences.verifications.ReferenceCheck.customerResponse",
+                    "IndividualReferences.verifications.ReferenceCheck.opinion",
+                    "IndividualReferences.verifications.ReferenceCheck.financialStatus"
 
                 ];
 

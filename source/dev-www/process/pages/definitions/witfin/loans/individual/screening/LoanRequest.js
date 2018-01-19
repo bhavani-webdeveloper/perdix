@@ -48,7 +48,8 @@ define([],function(){
                                 "VehicleRouteDetails",
                                 "VehicleAssetUse",
                                 "VehicleAssetViability",
-                                "VehiclePhotoCaptures"
+                                "VehiclePhotoCaptures",
+                                "TeleVerification"
                             ]
                         },
                         "ScreeningReview": {
@@ -58,7 +59,8 @@ define([],function(){
                                 "VehicleAssetUse",
                                 "VehicleAssetViability",
                                 "VehiclePhotoCaptures",
-                                "PreliminaryInformation.calculateEmi"
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -80,12 +82,14 @@ define([],function(){
                         },
                         "Application": {
                             "excludes": [
-                                "LoanRecommendation"
+                                "LoanRecommendation",
+                                "TeleVerification"
                             ]
                         },
                         "ApplicationReview": {
                             "excludes": [
-                                "PreliminaryInformation.calculateEmi"
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -176,6 +180,9 @@ define([],function(){
                                 },
                                 "NewVehicleDetails": {
                                     "readonly": true
+                                },
+                                "TeleVerification": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -209,6 +216,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "NewVehicleDetails": {
+                                    "readonly": true
+                                },
+                                "TeleVerification": {
                                     "readonly": true
                                 }
                             }
@@ -313,6 +323,18 @@ define([],function(){
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
                     "NewVehicleDetails.originalInvoiceValue",
+                    "TeleVerification",
+                    "TeleVerification.verifications",
+                    "TeleVerification.verifications.referenceFirstName",
+                    "TeleVerification.verifications.mobileNo",
+                    "TeleVerification.verifications.occupation",
+                    "TeleVerification.verifications.address",
+                    "TeleVerification.verifications.knownSince",
+                    "TeleVerification.verifications.relationship",
+                    "TeleVerification.verifications.opinion",
+                    "TeleVerification.verifications.financialStatus",
+                    "TeleVerification.verifications.customerResponse",
+                    "TeleVerification.verifications.remarks",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save"
@@ -378,6 +400,44 @@ define([],function(){
                                                 }
                                             }
                                         }
+                                    }
+                                },
+                                "TeleVerification": {
+                                    "items": {
+                                        "verifications": {
+                                            "items": {
+                                                "referenceFirstName": {
+                                                    "key": "loanAccount.telecallingDetails[].referenceFirstName",
+                                                    "title": "CONTACT_PERSON_NAME",
+                                                    "orderNo": 10,
+                                                    "type": "string"
+                                                },
+                                                "mobileNo": {
+                                                    "key": "loanAccount.telecallingDetails[].mobileNo",
+                                                    "orderNo": 20,
+                                                    "title": "CONTACT_NUMBER",
+                                                    "type": "string",
+                                                    "inputmode": "number",
+                                                    "numberType": "tel"
+                                                },
+                                                "occupation": {
+                                                    "key": "loanAccount.telecallingDetails[].occupation",
+                                                    "orderNo": 30,
+                                                    "title": "OCCUPATION",
+                                                    "type": "select",
+                                                    "enumCode": "occupation"
+                                                },
+                                                "address": {
+                                                    "key": "loanAccount.telecallingDetails[].address",
+                                                    "orderNo": 40,
+                                                    "title": "CUSTOMER_ADDRESS",
+                                                    "type": "textarea"
+                                                }
+                                            }
+                                        }
+                                        
+                                           
+                                        
                                     }
                                 }
                             },

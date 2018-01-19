@@ -1415,6 +1415,52 @@
             }
         }
     },
+    "TeleVerification": {
+        "type": "box",
+        "title": "TELE_VERIFICATION",
+        "orderNo": 100,
+        "items": {
+            "verifications": {
+                "key": "customer.telecallingDetails",
+                "title": "TELE_CALLING_DETAILS",
+                "startEmpty": true,
+                "type": "array",
+                "items": {
+                    "knownSince": {
+                        "key": "loanAccount.telecallingDetails[].customerKnownSinceYears",
+                        "title": "KNOW_SINCE"
+                    },
+                    "relationship": {
+                        "key": "loanAccount.telecallingDetails[].relationshipWithCustomer",
+                        "title": "REFERENCE_TYPE1",
+                        "type": "select",
+                        "titleMap": {
+                            "Neighbour": "Neighbour",
+                            "Relative/friend": "Relative/friend"
+                        }
+                    },
+                    "opinion": {
+                        "key": "loanAccount.telecallingDetails[].referenceOpinionOnCustomer",
+                        "title": "RELATIONSHIP_WITH_APPLICANT"
+                    },
+                    "financialStatus": {
+                        "key": "loanAccount.telecallingDetails[].customerFinancialStatus",
+                        "title": "FINANCIAL_STATUS"
+                    },
+                    "customerResponse": {
+                        "key": "loanAccount.telecallingDetails[].telecallingResponse",
+                        "title": "CUSTOMER_RESPONSE",
+                        "type": "select",
+                        "enumCode": "customer_response"
+                    },
+                    "remarks": {
+                        "key": "loanAccount.telecallingDetails[].telecallingRemarks",
+                        "title": "CUSTOME_REMARKS"
+                    }
+                }
+            }
+        }
+    },
     "actionbox": {
         "type": "actionbox",
         "items": {

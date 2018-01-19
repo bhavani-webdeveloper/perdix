@@ -20,6 +20,10 @@ let config = {
                     {
                         "name": "LoadRelatedCustomersPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "CustomerReferencePolicy",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
