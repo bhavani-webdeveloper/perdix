@@ -386,6 +386,20 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return $q.resolve(menu);
 		};
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.BusinessProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.BusinessProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.CustomerProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.CustomerProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
 		var requestMenu = [$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecapturePhoto'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureFingerprint'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureGPS']];
