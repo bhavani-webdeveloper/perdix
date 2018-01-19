@@ -194,15 +194,16 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
         //         url: endpoint + '/updateComponentBasedDump'
         //     },
         // });
+         // url: 'process/schemas/audit/getAuditMaster.json'
 
         ret.online = $resource(endpoint, null, {
             getAuditMaster: {
                 method: 'GET',
-                url: 'process/schemas/audit/getAuditMaster.json'
+                url: 'process/schemas/audit/getAuditMaster.json'              
             },
             getAuditList: searchResource({
                 method: 'GET',
-                url: 'process/schemas/audit/getAuditList.json'
+                url: 'process/schemas/audit/getAuditList.JSON'
             }),
             getAuditInfo: {
                 method: 'GET',
@@ -210,7 +211,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             updateAuditInfo: {
                 method: 'POST',
-                url: endpoint + '/UpdateAuditInfo'
+                url: endpoint + '/updateAuditInfo'
             },
             getAuditFull: {
                 method: 'GET',
@@ -297,7 +298,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'POST',
                 url: endpoint + '/updateStageActivities'
             },
-            findDumpSamples:searchResource({
+            findDumpSamples: searchResource({
                 method: 'GET',
                 url: endpoint + '/findDumpSamples'
             }),
@@ -478,6 +479,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             getAuditMaster: function() {
                 var auditMaster = irfStorageService.getMaster("auditMaster");
+                $log.info(auditMaster);
+                $log.info("auditMaster");
                 if (!auditMaster) PageHelper.setError({
                     message: "Audit master unavailable. Refresh cache & retry"
                 });
@@ -494,20 +497,21 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
             Audit.online.getAuditMaster().$promise.then(function(response) {
-                $log.info(response)
+                $log.info(response);
+                $log.info("response");
                 var auditTypeObj = {};
                 var audit_type_enum = {
                     data: []
                 };
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
-                    if (rec.status == 1) {
+                    // if (rec.status == 1) {
                         audit_type_enum.data.push({
                             code: rec.audit_type,
                             name: rec.audit_type,
                             value: rec.audit_type_id
                         });
-                    }
+                    // }
                     auditTypeObj[rec.audit_type_id] = rec;
                 }
                 response.audit_type = auditTypeObj;
@@ -648,6 +652,12 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                     fixed_assets[response.fixed_assets[i].asset_type_id] = response.fixed_assets[i];
                 }
                 response.fixed_assets = fixed_assets;
+
+                var components = {};
+                for (i in response.components) {
+                    components[response.components[i].component_id] = response.components[i];
+                }
+                response.components = components;
 
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);

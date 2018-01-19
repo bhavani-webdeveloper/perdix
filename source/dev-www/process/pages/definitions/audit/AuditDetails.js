@@ -89,7 +89,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
                 "Page/Engine/audit.detail.AuditSummary",
-                // "Page/Adhoc/audit.AuditDraftDetails",
+                "Page/Adhoc/audit.AuditDraftDetails",
             ]
         });
 
@@ -97,10 +97,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             "title": "Audit Details",
             "iconClass": "fa fa-cube",
             "items": [
-                "Page/Engine/audit.AuditScoreDetails"
+                "Page/Adhoc/audit.AuditScoreDetails"
             ]
         }).then(function(resp) {
-            $scope.dashboardDefinition_Score = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
+            $scope.dashboardDefinition_Score = _.cloneDeep(resp.$menuMap["Page/Adhoc/audit.AuditScoreDetails"]);
         });
         var manualScoreMenuPromise = null;
         if (!$stateParams.pageData.readonly) {
@@ -131,7 +131,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
-                // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
+                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
             ];
             var reloadDashboardBox = false;
             if ($scope.dashboardDefinition_Score &&

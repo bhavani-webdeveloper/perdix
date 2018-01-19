@@ -1,0 +1,421 @@
+{
+    "general_observation": {
+        "particular_type": [{
+                "type_id": 1,
+                "value": "Normal Options"
+            },
+            {
+                "type_id": 2,
+                "value": "WM Options"
+            }
+        ],
+        "particulars": [{
+                "particular_id": 1,
+                "particular_name": "Name of employees posted to the branch",
+                "particular_type": 2,
+                "particular_order": 1,
+                "status": 1,
+                "comment": ""
+            },
+            {
+                "particular_id": 2,
+                "particular_name": "Name of employees present on the day of audit",
+                "particular_type": 2,
+                "particular_order": 2,
+                "status": 1,
+                "comment": ""
+            }
+        ],
+        "particular_options": [{
+                "option_id": 1,
+                "name": "Yes",
+                "particular_id": 3,
+                "status": 1
+            },
+            {
+                "option_id": 2,
+                "name": "No",
+                "particular_id": 3,
+                "status": 1
+            }
+        ]
+    },
+    "portfolio_stats": {
+        "cash_holding": {
+            "Coin Balance": "",
+            "notes": [{
+                "currency_id": 6,
+                "currency_type": "N",
+                "denomination": "10",
+                "status": 1
+            }],
+            "CBS Balance": ""
+        },
+        "gold_coin": [{
+            "gold_coin_id": 1,
+            "description": "1",
+            "status": 1
+        }]
+    },
+    "jewel_appraisal": {
+        "jewel_details": {
+            "account_number": "",
+            "loan_amount": "",
+            "description_of_jewel": "",
+            "gross": "",
+            "net": "",
+            "reapp_gross": "",
+            "reapp_net": "",
+            "sticker_number": "",
+            "reapp_sticker_number": "",
+            "comments": ""
+        },
+        "jewel_assets": {
+            "number_of_pouches_in_hand": "",
+            "number_of_pouches_in_hq": "",
+            "total_on_hand": ""
+        },
+        "comments": ""
+    },
+    "fixed_assets": [{
+        "asset_type_id": 51,
+        "asset_description": "Batteries",
+        "status": 1
+    }],
+    "field_verification": [{
+        "loan_type_id": 1,
+        "loan_type": "JLG",
+        "status": 1
+    }],
+    "book_entity": [{
+        "entity_id": 1,
+        "entity_name": "Not Applicable",
+        "status": 1
+    }],
+    "process": [{
+        "process_id": 1,
+        "process_name": "Account Opening/Mgmt",
+        "status": 1
+    }],
+    "subprocess": [{
+        "process_id": 1,
+        "sub_process_id": 1,
+        "sub_process_name": "Form fill up_JLG",
+        "status": 1
+    }],
+    "typeofissues": [{
+        "process_id": 1,
+        "sub_process_id": 1,
+        "type_of_issue_id": 1,
+        "description": "Overwriting, correction, wrong data entry, error or missing data  in JLG LAF",
+        "risk_classification": 0,
+        "observation_category": null,
+        "rating": null,
+        "node": null,
+        "status": 0
+    }],
+    "desgn_persons": [{
+        "designation_id": 1,
+        "designation": "Auditor",
+        "status": 1
+    }],
+    "resp_persons": [{
+        "employee_id": 0,
+        "designation_id": 1,
+        "status": 1,
+        "employee_name": "Super Admin"
+    }],
+    "branch_name": [{
+        "node_id": 4,
+        "node_code": "tnagar branch",
+        "status": 1
+    }],
+    "audit_staging": [{
+            "staging_name": "scheduled"
+        },
+        {
+            "staging_name": "postpone"
+        }
+    ],
+    "audit_type": [{
+            "audit_type_id": 0,
+            "audit_type": "Snap Audit",
+            "status": 0
+        },
+        {
+            "audit_type_id": 1,
+            "audit_type": "Regular",
+            "status": 1
+        }
+    ],
+    "regional_holidays": [{
+        "regional_holiday_id": 1,
+        "name": "Christmas Eve",
+        "date": "2013-12-25",
+        "hint": "Govt Holiday"
+    }],
+    "week_holidays": [{
+            "weekholiday_id": 6,
+            "weekdays": 0
+        },
+        {
+            "weekholiday_id": 7,
+            "weekdays": 4
+        }
+    ],
+    "issue_level_datas": [
+        "L1",
+        "L2",
+        "Fraud"
+    ],
+    "modules": [{
+            "module_id": 1,
+            "module_name": "Cash Related Areas",
+            "status": 1
+        },
+        {
+            "module_id": 2,
+            "module_name": "Client Enrollment",
+            "status": 1
+        }
+    ],
+    "sub_modules": [{
+            "module_id": 1,
+            "sub_module_id": 58,
+            "sub_module_name": "Opening of branch and cash on time",
+            "status": 1
+        },
+        {
+            "module_id": 1,
+            "sub_module_id": 59,
+            "sub_module_name": "Dual custody",
+            "status": 1
+        }
+    ],
+    "scoresheet_values": {
+        "58": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            1.25,
+            1.5,
+            1.75,
+            2,
+            2.25,
+            2.5,
+            2.75,
+            3,
+            3.25,
+            3.5,
+            3.75,
+            4,
+            "Not Applicable"
+        ],
+        "59": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            "Not Applicable"
+        ]
+    },
+    "process_tabs": [{
+            "scoring_process_type_id": 1,
+            "scoring_process_type": "Application Forms"
+        },
+        {
+            "scoring_process_type_id": 3,
+            "scoring_process_type": "Vouchers and Receipts"
+        }
+    ],
+    "scoring_sample_sets": [{
+            "scoring_process_type_id": 1,
+            "scoring_sample_type_id": 1,
+            "scoring_sample_type": "JLG",
+            "status": 1
+        },
+        {
+            "scoring_process_type_id": 1,
+            "scoring_sample_type_id": 3,
+            "scoring_sample_type": "Jewel Loan - Active accounts",
+            "status": 1
+        }
+    ],
+    "autosampling_typeofissue_sets": {
+        "1": [{
+                "scoring_process_type_id": 1,
+                "scoring_sample_type_id": 1,
+                "module_id": 3,
+                "sub_module_id": 68,
+                "type_of_issue_id": 86,
+                "options": {
+                    "type_name": "normal",
+                    "type": "dropdown",
+                    "type_of_issue_options": [{
+                            "option_id": 10,
+                            "option_label": "yes",
+                            "marks": 1
+                        },
+                        {
+                            "option_id": 11,
+                            "option_label": "no",
+                            "marks": 0
+                        }
+                    ]
+                },
+                "status": 1
+            },
+            {
+                "scoring_process_type_id": 1,
+                "scoring_sample_type_id": 1,
+                "module_id": 3,
+                "sub_module_id": 68,
+                "type_of_issue_id": 88,
+                "options": {
+                    "type_name": "normal",
+                    "type": "dropdown",
+                    "type_of_issue_options": [{
+                            "option_id": 10,
+                            "option_label": "yes",
+                            "marks": 1
+                        },
+                        {
+                            "option_id": 11,
+                            "option_label": "no",
+                            "marks": 0
+                        },
+                        {
+                            "option_id": 12,
+                            "option_label": "NA",
+                            "marks": 0
+                        }
+                    ]
+                },
+                "status": 1
+            }, {
+                "scoring_process_type_id": 1,
+                "scoring_sample_type_id": 13,
+                "module_id": 5,
+                "sub_module_id": 98,
+                "type_of_issue_id": 684,
+                "options": [],
+                "status": 1
+            }
+        ]
+    },
+    "non_autosampling_typeofissue_sets": [],
+    "non_mapped_typeofissue_sets": [{
+        "type_of_issue_id": 1,
+        "options": {
+            "type_name": "normal",
+            "type": "dropdown",
+            "type_of_issue_options": [{
+                    "option_id": 1,
+                    "option_label": "process non adherence",
+                    "marks": 1
+                },
+                {
+                    "option_id": 2,
+                    "option_label": "Policy non adherence",
+                    "marks": 1
+                },
+                {
+                    "option_id": 3,
+                    "option_label": "Deviation Lacuna",
+                    "marks": 1
+                },
+                {
+                    "option_id": 4,
+                    "option_label": "Due Deligence not adhered",
+                    "marks": 1
+                },
+                {
+                    "option_id": 5,
+                    "option_label": "Incomplete/Incorrect Info",
+                    "marks": 1
+                },
+                {
+                    "option_id": 6,
+                    "option_label": "Delay TAT",
+                    "marks": 1
+                }
+            ]
+        },
+        "status": 0
+    }],
+    "sampling_columns_config": [{
+        "scoring_sample_type_id": 1,
+        "allow_auditor_to_pick": 0,
+        "na_active": 0,
+        "gps_required": null,
+        "document_required": null,
+        "columns": [{
+                "user_friendly_name": "Entity name",
+                "column_name": "Entity",
+                "data_type": "ALPHABETIC",
+                "display": null,
+                "component_id": null
+            },
+            {
+                "user_friendly_name": "URN",
+                "column_name": "URN",
+                "data_type": "NUMERIC",
+                "display": 1,
+                "component_id": 1
+            },
+            {
+                "user_friendly_name": "product",
+                "column_name": "product",
+                "data_type": null,
+                "display": 1,
+                "component_id": 2
+            },
+            {
+                "user_friendly_name": "amount",
+                "column_name": "transaction_amount",
+                "data_type": null,
+                "display": null,
+                "component_id": null
+            }
+        ],
+        "status": 1
+    }],
+    "issue_columns_name": [
+        "SampleID",
+        "ProcessName",
+        "SubProcessName",
+        "TypeOfIssue",
+        "Option",
+        "Deviation",
+        "EmpName"
+    ],
+    "components": [{
+            "component_id": 1,
+            "component_name": "BRANCH",
+            "component_type": "SAMPLE"
+        },
+        {
+            "component_id": 2,
+            "component_name": "CENTRE",
+            "component_type": "SAMPLE"
+        }
+    ],
+    "stages": [{
+            "staging_id": 1,
+            "staging_name": "scheduled",
+            "stage_type": "AUDIT",
+            "tat_days": 2,
+            "stage_order": null
+        },
+        {
+            "staging_id": 2,
+            "staging_name": "postpone",
+            "stage_type": "AUDIT",
+            "tat_days": 3,
+            "stage_order": null
+        }
+    ]
+}
