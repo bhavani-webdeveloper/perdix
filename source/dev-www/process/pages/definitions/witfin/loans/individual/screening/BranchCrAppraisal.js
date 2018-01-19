@@ -59,13 +59,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:40
                             },
                             {
-                                pageName: 'witfin.customer.ReferenceCheck',
-                                title: 'Tele-verification',
-                                pageClass: 'reference-check',
-                                minimum: 1,
-                                maximum: 1
-                            },
-                            {
                                 pageName: 'witfin.customer.FieldInvestigation',
                                 title: 'Field Investigation',
                                 pageClass: 'field-investigation',
@@ -219,13 +212,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                 $this.bundlePages.push({
-                                    pageClass: 'reference-check',
-                                    model: {
-                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
                                 $this.bundlePages.push({
                                     pageClass: 'field-investigation',
                                     model: {
