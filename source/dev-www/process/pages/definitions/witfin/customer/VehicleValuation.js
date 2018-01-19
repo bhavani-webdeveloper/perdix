@@ -27,16 +27,14 @@ define(
                     "VehicleAsset.vehicleAssetConditions.make": {
                         "condition": "model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear'",
                         "enumCode": "vehicle_tyre_make",
-                        "type":"select"
+                        "type":"select",
+                        "orderNo": 20
                     },
                     "VehicleAsset.vehicleAssetConditions": {
                         "view": "fixed"
                     },
-                    "VehicleAsset.vehicleAssetConditions.make": {
-                        "orderNo": 10
-                    },
                     "VehicleAsset.vehicleAssetConditions.componentType": {
-                        "orderNo": 20  
+                        "orderNo": 10
                     },
                     "VehicleAsset.vehicleAssetConditions.componentCondition1": {
                         "orderNo": 40
@@ -460,7 +458,8 @@ define(
                             "includes": getIncludes(model),
                             "excludes": [
                                 "VehicleRegistrationDetails.engineNo",
-                                "VehicleInsuranceDetails.taxPaid"
+                                "VehicleInsuranceDetails.taxPaid",
+                                "VehiclePermitAndTaxDetails.taxPaid"
                             ],
                             "options": {
                             "repositoryAdditions": {
