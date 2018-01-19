@@ -18,8 +18,18 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return "Page/Engine/customer.IndividualEnrollment3";
 		}  else if (siteCode == 'saija') {
 			return "Page/Engine/customer.IndividualEnrollmentStage2";
+		} else if(siteCode == 'witfin') {
+			return "Page/Engine/witfin.customer360.CustomerProfile";
 		} else {
 			return "Page/Engine/customer360.CustomerProfile";
+		} 
+	}
+
+	var getBusinessProfilePageUrl = function() {
+		if(siteCode == 'witfin') {
+			return "Page/Engine/witfin.customer360.BuisnessProfile";
+		} else {
+			return "Page/Engine/customer360.BuisnessProfile";
 		} 
 	}
 
@@ -96,7 +106,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	var enterpriseDefinition = {
 		"title": "BUSINESS_360",
 		"items": [
-			"Page/Engine/customer360.BusinessProfile",
+			getBusinessProfilePageUrl(),
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
