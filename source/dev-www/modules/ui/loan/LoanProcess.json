@@ -625,7 +625,7 @@
     },
     "VehicleValuationPriliminaryInformation": {
         "type": "box",
-        "title": "VALUATION_PRILIMINARY_INFORMATION",
+        "title": "VALUATION_PRELIMINARY_INFORMATION",
         "orderNo": 160,
         "items": {
             "valuationPurpose": {
@@ -1081,8 +1081,7 @@
                     },
                     "make": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].make",
-                        "title": "VEHICLE_TYRE_MAKE",
-                        "enumCode": "vehicle_tyre_make"
+                        "title": "MAKE"
                     },
                     "componentRemarks": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleAssetConditions[].componentRemarks",
