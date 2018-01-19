@@ -24,6 +24,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
+            var self= this;
 
             var branch = SessionStore.getBranch();
             var centres = SessionStore.getCentres();
@@ -35,6 +36,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     allowedCentres.push(centres[i]);
                 }
             }
+            
 
             if (_.hasIn(model, 'loanRelation')){
                 console.log(model.loanRelation);
@@ -43,7 +45,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
-
+                    
                         if (model.customer.stockMaterialManagement) {
                         model.proxyIndicatorsHasValue = true;
                         $log.debug('PROXY_INDICATORS already has value');
@@ -1053,25 +1055,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 using: "scanner"
                             }
                         ]
-                    }/*,
-                    {
-                        key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_TYPE",
-                        type: "select",
-                        enumCode: "business_registration_type"
                     },
-                    {
-                        key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "customer.enterprise.registrationDate",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        type: "date",
-                        title: "REGISTRATION_DATE"
-                    }*/,
 
                     {
                         key: "customer.enterprise.businessType",
@@ -1106,20 +1090,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "string",
                         // enumCode: "decisionmaker"
                     },
-                   /* {
-                        key: "customer.enterprise.electricityAvailable",
-                        title: "ELECTRICITY_AVAIALBLE",
-                        type: "select",
-                        enumCode: "decisionmaker",
-                        required: true
-                    },
-                    {
-                        key: "customer.enterprise.spaceAvailable",
-                        title: "SPACE_AVAILABLE",
-                        type: "select",
-                        enumCode: "decisionmaker",
-                        required: true
-                    },*/
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -1419,15 +1389,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].limit",
                                 type: "amount"
                             },
-                            // {
-                            //     key:"customer.customerBankAccounts[].bankStatementDocId",
-                            //     type:"file",
-                            //     title:"BANK_STATEMENT_UPLOAD",
-                            //     fileType:"application/pdf",
-                            //     "category": "CustomerEnrollment",
-                            //     "subCategory": "IDENTITYPROOF",
-                            //     using: "scanner"
-                            // },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
@@ -2141,6 +2102,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.incomeThroughSales[].invoiceDocId",
                                         type: "file",
                                         required: true,
+                                        condition: "model.customer.incomeThroughSales[arrayIndex].incomeType != 'Cash'",
+                                        title: "INVOICE_DOCUMENT",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].invoiceDocId",
+                                        type: "file",
+                                        condition: "model.customer.incomeThroughSales[arrayIndex].incomeType =='Cash'",
                                         title: "INVOICE_DOCUMENT",
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
@@ -2257,6 +2229,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.rawMaterialExpenses[].invoiceDocId",
                                         title: "PURCHASE_BILLS",
                                         "required":true,
+                                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType != 'Cash'",
+                                        "category": "Loan",
+                                        "subCategory": "DOC1",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        using: "scanner"
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
+                                        title: "PURCHASE_BILLS",
+                                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType == 'Cash'",
                                         "category": "Loan",
                                         "subCategory": "DOC1",
                                         type: "file",
@@ -2758,7 +2741,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineImage",
                                 title:"MACHINE_IMAGE",
-                                "required":true,
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
