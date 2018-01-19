@@ -10,7 +10,8 @@ define({
             model.loanCollectionSummaryDTOs = {};
             LoanCollection.findDepositSummaries({
                 'currentStage': "BRSValidation",
-                'bankAccountNumber': model.bankAccountNumber
+                'bankAccountNumber': model.bankAccountNumber,
+                'per_page': 100
             }).$promise.then(function (results) {
                 $log.info(results)
                 model.loanCollectionSummaryDTOs = results;
