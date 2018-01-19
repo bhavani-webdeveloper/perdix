@@ -1,24 +1,28 @@
 irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead",
     function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead) {
         $log.info("Page.LoanOriginationDashboard.html loaded");
-        $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
+        $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
         var currentBranch = SessionStore.getCurrentBranch();
 
-
-        var fullDefinition = {
-            "title": "Loan Origination Dashboard",
+        var leadDefinition = {
+            "title": "Lead",
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Engine/witfin.lead.LeadGeneration",
                 "Page/Engine/witfin.lead.IncompleteLeadQueue",
                 "Page/Engine/witfin.lead.LeadFollowUpQueue",
-                "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.lead.LeadBulkUpload",
                 "Page/Engine/witfin.lead.LeadAssignmentPendingQueue",
-                // "Page/Bundle/witfin.loans.individual.screening.ScreeningInput",
+                "Page/Engine/witfin.lead.LeadRejectedQueue",
+            ]
+        };
+        var loanDefinition = {
+            "title": "Loan",
+            "iconClass": "fa fa-users",
+            "items": [
+                "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
-                "Page/Engine/witfin.lead.LeadRejectedQueue",
                 "Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue",
@@ -28,48 +32,29 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.RejectedQueue"
             ]
         };
+        
 
-        PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
-            $scope.dashboardDefinition = resp;
+        PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
+            $scope.leadDashboardDefinition = resp;
             var branchId = SessionStore.getBranchId();
             var branchName = SessionStore.getBranch();
             var centres = SessionStore.getCentres();
 
-            var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadAssignmentPendingQueue"];
-            var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadFollowUpQueue"];
-            var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.IncompleteLeadQueue"];
-            var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.ReadyForScreeningQueue"];
-            var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadRejectedQueue"];
+            var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadAssignmentPendingQueue"];
+            var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadFollowUpQueue"];
+            var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.IncompleteLeadQueue"];
+            
+            var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadRejectedQueue"];
 
             if (rMenu) rMenu.data = 0;
             if (lapqMenu) lapqMenu.data = 0;
             if (lfuqMenu) lfuqMenu.data = 0;
             if (ilqMenu) ilqMenu.data = 0;
-            if (rfqMenu) rfqMenu.data = 0;
+            
 
                _.forEach(centres, function(centre) {
 
-                if (rfqMenu) {
-                    Lead.search({
-                        'branchName': branchName,
-                        'currentStage': "ReadyForScreening",
-                        'leadName': '',
-                        'area': '',
-                        'cityTownVillage': '',
-                        'businessName': '',
-                        'page': 1,
-                        'per_page': 1,
-                        'centreName': centre.centreName
-                    }).$promise.then(function(response, headerGetter) {
-                        if (!_.isNumber(rfqMenu.data)) {
-                            rfqMenu.data = 0;
-                        }
-                        rfqMenu.data = rfqMenu.data + Number(response.headers['x-total-count']);
-                    }, function() {
-                        rfqMenu.data = '-';
-                    });
-                }
-
+                
                 if (lfuqMenu) {
                     Lead.search({
                         'branchName': branchName,
@@ -154,7 +139,42 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var sqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningQueue"];
+            
+        });
+        PagesDefinition.getUserAllowedDefinition(loanDefinition).then(function(resp) {
+
+            $scope.loanDashboardDefinition = resp;
+            var branchId = SessionStore.getBranchId();
+            var branchName = SessionStore.getBranch();
+            var centres = SessionStore.getCentres();
+
+            var rfqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.lead.ReadyForScreeningQueue"];
+            if (rfqMenu) rfqMenu.data = 0;
+            _.forEach(centres, function(centre) {
+                if (rfqMenu) {
+                    Lead.search({
+                        'branchName': branchName,
+                        'currentStage': "ReadyForScreening",
+                        'leadName': '',
+                        'area': '',
+                        'cityTownVillage': '',
+                        'businessName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreName': centre.centreName
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(rfqMenu.data)) {
+                            rfqMenu.data = 0;
+                        }
+                        rfqMenu.data = rfqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        rfqMenu.data = '-';
+                    });
+                }
+
+            });
+
+            var sqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningQueue"];
 
             if (sqMenu) {
                 sqMenu.data = 0;
@@ -178,7 +198,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue"];
+            var srqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
                     'stage': 'ScreeningReview',
@@ -196,7 +216,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var prqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
+            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
             if (prqMenu) {
                 IndividualLoan.search({
                     'stage': 'VehicleValuation',
@@ -213,26 +233,8 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     prqMenu.data = '-';
                 });
             }
-/*
-            var pqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/psychometric.Queue"];
-            if (pqMenu) {
-                IndividualLoan.search({
-                    'stage': 'Psychometric',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    pqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    pqMenu.data = '-';
-                });
-            }
-*/
-            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationQueue"];
+
+            var aqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationQueue"];
 
             if (aqMenu) {
                 aqMenu.data = 0;
@@ -256,7 +258,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue"];
+            var arqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ApplicationReviewQueue"];
             if (arqMenu) {
                 IndividualLoan.search({
                     'stage': 'ApplicationReview',
@@ -276,7 +278,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             }
 
 
-            var bcaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue"];
+            var bcaqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BranchCrAppraisalQueue"];
             if (bcaqMenu) {
                 IndividualLoan.search({
                     'stage': 'BranchCreditAppraisal',
@@ -295,7 +297,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var hocaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue"];
+            var hocaqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.HOCrAppraisalQueue"];
             if (hocaqMenu) {
                 IndividualLoan.search({
                     'stage': 'HOCreditAppraisal',
@@ -314,7 +316,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
-            var mcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"];
+            var mcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ManagementCommitteeQueue"];
             if (mcqMenu) {
                 IndividualLoan.search({
                     'stage': 'ManagementCommittee',
@@ -334,7 +336,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             }
 
 
-            var drqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
+            var drqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
             if (drqMenu) {
                 IndividualLoan.search({
                     'stage': 'Rejected',
