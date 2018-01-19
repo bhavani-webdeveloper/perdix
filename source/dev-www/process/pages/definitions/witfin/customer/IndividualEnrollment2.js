@@ -176,7 +176,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.referenceCheck"
                             ]
                         },
@@ -215,7 +215,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -254,7 +254,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -293,7 +293,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption"
+                                "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },

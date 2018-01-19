@@ -22,6 +22,10 @@ define(["require", "exports"], function (require, exports) {
                         {
                             "name": "LoadRelatedCustomersPolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "CustomerReferencePolicy",
+                            "arguments": {}
                         }
                     ],
                     "overrides": [
