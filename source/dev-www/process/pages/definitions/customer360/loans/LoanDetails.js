@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder",
-    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder) {
+ ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "$httpParamSerializer",
+    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, $httpParamSerializer) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -1709,33 +1709,34 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     "title": "LOAN_DOCUMENTS",
                     "condition": 'model.loanAccount.loanType != "JLG"',
                     "items": [{
-                        "type": "fieldset",
-                        "title": "EXISTING_LOAN_DOCUMENTS",
-                        "items": [{
-                            "type": "array",
-                            "required":false,
-                            "key": "loanDocuments.existingDocuments",
-                            "add": null,
-                            "startEmpty": true,
-                            "remove": null,
-                            "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
-                            "items": [{
-                                "title": "DOWNLOAD_FORM",
-                                "notitle": true,
-                                "fieldHtmlClass": "btn-block",
-                                "style": "btn-default",
-                                "icon": "fa fa-download",
-                                "type": "button",
-                                "readonly": false,
-                                "key": "loanAccount.loanDocs[].documentId",
-                                "onClick": function(model, form, schemaForm, event) {
-                                    var fileId = model.loanDocuments.existingDocuments[schemaForm.arrayIndex].documentId;
-                                    Utils.downloadFile(Files.getFileDownloadURL(fileId));
-                                }
+                                "type": "fieldset",
+                                "title": "EXISTING_LOAN_DOCUMENTS",
+                                "items": [{
+                                    "type": "array",
+                                    "required":false,
+                                    "key": "loanDocuments.existingDocuments",
+                                    "add": null,
+                                    "startEmpty": true,
+                                    "remove": null,
+                                    "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
+                                    "items": [{
+                                        "title": "DOWNLOAD_FORM",
+                                        "notitle": true,
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download",
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "loanAccount.loanDocs[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                            var fileId = model.loanDocuments.existingDocuments[schemaForm.arrayIndex].documentId;
+                                            Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                        }
 
-                            }]
-                        }]
-                    }, {
+                                    }]
+                                }]
+                            },
+                     {
                         "type": "fieldset",
                         "title": "ADD_LOAN_DOCUMENTS",
                         "condition": "model.loanAccount.loanType != 'JLG'",
@@ -1799,8 +1800,24 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "fileType": "*/*",
                         "category": "Loan",
                         "subCategory": "DOC1"
+                    },{
+                        "type": "fieldset",
+                        "title": "NOC_LETTER_DOWNLOAD",
+                        "condition": "model.cbsLoan.operationalStatus=='Closed'",
+                        "items": [{
+                            "type": "button",
+                            "title": "DOWNLOAD_NOC_FORM",
+                            "onClick": function(model,formCtrl, form){
+                                var requestParams = {
+                                    form_name: "loan_closure_letter",
+                                    record_id: model.loanAccount.id
+                                };
+                                url = irf.FORM_DOWNLOAD_URL + "?" + $httpParamSerializer(requestParams);
+                                Utils.downloadFile(url);
+                            }
+                        }]
                     }]
-                }, {
+                },{
                     "type": "actionbox",
                     "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode == 'KGFS'",
                     "items": [{
