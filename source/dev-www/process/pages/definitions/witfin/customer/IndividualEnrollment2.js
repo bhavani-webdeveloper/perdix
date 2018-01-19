@@ -135,6 +135,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
+                                "ContactInformation.location",
                                 "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
@@ -625,6 +626,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.landLineNo",
                     "ContactInformation.whatsAppMobileNoOption",
                     "ContactInformation.whatsAppMobileNo",
+                    "ContactInformation.location",
                     "ContactInformation.email",
                     "ContactInformation.careOf",
                     "ContactInformation.doorNo",
