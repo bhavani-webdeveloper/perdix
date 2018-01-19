@@ -928,6 +928,14 @@
                 "numberType": "tel",
                 "orderNo": 40
             },
+            "location": {
+                "key": "customer.latitude",
+                "title": "LOCATION",
+                "type": "geotag",
+                "latitude": "customer.latitude",
+                "longitude": "customer.longitude",
+                "orderNo": 50
+            },
             "email": {
                 "key": "customer.email",
                 "type": "string",
