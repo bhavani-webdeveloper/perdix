@@ -502,7 +502,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
             /* End of Deviations and Mitigations grouping */
 
-            if (_.hasIn(model, 'loanAccount.id') && _.isNumber("model.loanAccount.id")){
+            if (_.hasIn(model, 'loanAccount.id') && _.isNumber(model.loanAccount.id)){
                 $log.info('Printing Loan Account');
                 IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
                 .$promise
