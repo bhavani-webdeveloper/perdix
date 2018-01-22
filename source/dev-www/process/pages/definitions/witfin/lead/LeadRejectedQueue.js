@@ -116,6 +116,7 @@ define({
 						'branchName': searchOptions.branchName,
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
+						'leadStatus': 'Reject',
 						'businessName': searchOptions.businessName,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
