@@ -1487,14 +1487,16 @@
                 "title": "PHYSICAL_ASSETS",
                 "items": {
                     "assetType": {
-                         "key": "customer.physicalAssets[].assetType",
+                        "key": "customer.physicalAssets[].assetType",
                         "title": "ASSET_TYPE",
                         "type": "select",
                         "enumCode": "asset_type"
                     },
                     "nameOfOwnedAsset": {
                         "key": "customer.physicalAssets[].nameOfOwnedAsset",
-                        "title": "NAME_OF_OWNED_ASSET"
+                        "title": "NAME_OF_OWNED_ASSET",
+                        "type": "select",
+                        "enumCode": "asset_type"
                     },
                     "vehicleModel": {
                         "key": "customer.physicalAssets[].vehicleModel",
