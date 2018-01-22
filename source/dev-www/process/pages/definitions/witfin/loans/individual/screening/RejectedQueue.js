@@ -71,7 +71,7 @@ define({
                         'branchName':branch,
                         'screeningDate':searchOptions.screeningDate,
                         'applicantName':searchOptions.applicantName,
-                        'loanId': searchOptions.id,
+                        'id': searchOptions.id,
                         'area':searchOptions.area,
                         'status':searchOptions.status,
                         'villageName':searchOptions.cityTownVillage,
@@ -104,6 +104,7 @@ define({
                             item.screeningDate,
                             item.applicantName,
                             item.area,
+                            item.id,
                             item.villageName
                         ]
                     },

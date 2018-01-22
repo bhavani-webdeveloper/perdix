@@ -1,4 +1,4 @@
-export class Nominee {
+class Nominee {
     accountNumber: string;
     familyMemberName: string;
     guardianAddressSameAsCustomer: boolean;
@@ -34,3 +34,4 @@ export class Nominee {
     version: number;
 }
 
+export = Nominee;

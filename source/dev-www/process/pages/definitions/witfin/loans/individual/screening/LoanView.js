@@ -144,6 +144,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         bundleModel.loanId = $stateParams.pageId;
 
                         LoanProcess.get(bundleModel.loanId)
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
                             .subscribe(function(loanProcess){
                             bundleModel.loanProcess = loanProcess;
                                var loanAccount = loanProcess;
@@ -153,12 +156,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'Screening'){
-                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                    irfNavigator.goBack();
-                                    return;
-                                }
-
+                               
+                                    
+    
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -206,19 +206,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
 
 
-                                 $this.bundlePages.push({
-                                    pageClass: 'cbview',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
-
-                               $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: loanProcess.loanAccount,
-                                        }
-                                    });
+                                
 
 
                                 deferred.resolve();
