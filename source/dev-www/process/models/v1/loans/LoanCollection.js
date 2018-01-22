@@ -84,7 +84,15 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         findDepositSummaries: {
             method: "GET",
             url: endpoint + "/findDepositSummaries",
-            isArray: true
+            transformResponse: function(data, headersGetter, status){
+                data = JSON.parse(data);
+                var headers = headersGetter();
+                var response = {
+                    body: data,
+                    headers: headers
+                }
+                return response;
+            }
         },
         collectionRemainder:{
             method:'GET',

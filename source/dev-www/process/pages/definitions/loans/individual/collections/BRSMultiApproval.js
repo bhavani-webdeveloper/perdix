@@ -4,32 +4,17 @@ define({
     dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries"],
     $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries) {
         var branch = SessionStore.getBranch();
-
-        var loadBRSRecords = function (model) {
-            PageHelper.showBlockingLoader("Loading...");
-            model.loanCollectionSummaryDTOs = {};
-            LoanCollection.findDepositSummaries({
-                'currentStage': "BRSValidation",
-                'bankAccountNumber': model.bankAccountNumber,
-                'per_page': 100
-            }).$promise.then(function (results) {
-                $log.info(results)
-                model.loanCollectionSummaryDTOs = results;
-            }).finally(function () {
-                PageHelper.hideBlockingLoader();
-            });
-        }
+        var localFormCtrl;
         return {
-            "type": "schema-form",
+            "type": "search-list",
             "title": "BRS_MULTI_APPROVAL",
-            initialize: function (model, form, formCtrl) {
+             initialize: function (model, form, formCtrl) {
                 // loadBRSRecords(model);
+                localFormCtrl = formCtrl;
             },
-            form: [{
-                "type": "box",
-                colClass: "col-sm-8",
-                "title": "SEARCH",
-                "items": [
+            definition: {
+                "title": "BRS_MULTI_APPROVAL",
+                searchForm: [
                     {
                         key: "bankAccountNumber",
                         type: "lov",
@@ -42,8 +27,7 @@ define({
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.getBankAccountsByPartnerForLoanRepay(SessionStore.getGlobalSetting("mainPartner") 
-                                || "Kinara");
+                            return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -53,8 +37,12 @@ define({
                             ];
                         },
                         onSelect: function (valueObj, model, context) {
-                            loadBRSRecords(model);
+                            //loadBRSRecords(model);
                             model.bankAccountGLCode = valueObj.account_code;
+                            setTimeout(function(){
+                                localFormCtrl.submit();
+                            });
+                            
                         }
                     },
                     {
@@ -62,156 +50,195 @@ define({
                         "type": "string",
                         "title": "GL_CODE"
                     }
-                ]
-            },
-                {
-                    "type": "box",
-                    colClass: "col-sm-12",
-                    "title": "LIST",
-                    "items": [{
-                        key: "loanCollectionSummaryDTOs",
-                        condition: "model.loanCollectionSummaryDTOs.length",
-                        type: "tableview",
-                        "notitle": true,
-                        "selectable": true,
-                        "editable": true,
-                        "tableConfig": {
-                            "searching": true,
-                            "paginate": true,
-                            "pageLength": 10
+
+                ], 
+                autoSearch: false,
+               
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        "bankAccountNumber": {
+                            "title": "ACCOUNT_NUMBER",
+                            "type": ["string"]
+                            // "x-schema-form": {
+                            //     "type": "select"
+                            // }
                         },
-                        getColumns: function () {
-                            return [
-                                {
-                                    "title": "Date",
-                                    "data": "depositedOn"
-                                },
-                                {
-                                    "title": "Reference",
-                                    "data": "reference",
-                                    editable: false
-                                },
-                                {
-                                    "title": "Amount",
-                                    "data": "amount",
-                                    editable: false
-                                },
-                                {
-                                    "title": "Instrument Type",
-                                    "data": "instrumentType",
-                                    editable: false
-                                },
-                                {
-                                    "title": "Deposited BY",
-                                    "data": "depositedby",
-                                    editable: false
-                                },
-                                {
-                                    "title": "Deposited Branch",
-                                    "data": "bankBranchDetails",
-                                    editable: false
-                                }
-                            ]
-                        }
-                    }]
-                }, {
-                    type: "actionbox",
-                    condition: "model.loanCollectionSummaryDTOs.length",
-                    items: [{
-                        type: "submit",
-                        title: "Update"
-                    },
-                    {
-                        type: "button",
-                        title: "Reject",
-                        onClick: "actions.reject(model, formCtlr, form)"
-                    }]
-                }
-            ],
-            schema: {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": {
-                    "loanCollectionSummaryDTOs": {
-                        "type": "object",
-                        "properties": {}
+                        "bankAccountGLCode": {
+                            "title": "GL_CODE",
+                            "type": "string"
+                        },
                     }
-                }
-            },
-            actions: {
-                submit: function (model, form, formName) {
-                    var temp = [];
-                    for (var i = model.loanCollectionSummaryDTOs.length - 1; i >= 0; i--) {
-                        var item = model.loanCollectionSummaryDTOs[i]
-                        if (item.$selected) {
-                            temp.push(item);
-                        }
-                    }
-                    ;
-
-                    var reqData = {"loanCollectionSummaryDTOs": temp};
-                    if (model.loanCollectionSummaryDTOs.length >= 1) {
-                        Utils.confirm("Are You Sure?")
-                            .then(function () {
-                                PageHelper.showLoader();
-                                PageHelper.showProgress("brs-update", "Working");
-                                reqData.repaymentProcessAction = "PROCEED";
-                                LoanCollection.batchUpdate(reqData, function (resp, header) {
-                                    PageHelper.showProgress("brs-update", "Done", 5000);
-                                    loadBRSRecords(model);
-                                }, function (resp) {
-                                    PageHelper.showProgress("brs-update", "Failed.");
-                                    PageHelper.showErrors(resp);
-                                }).$promise.finally(function () {
-                                    PageHelper.hideLoader();
-                                });
-                            })
-                    }
-
                 },
-                reject: function(model, form, formName) {
-                    var temp = [];
-                    var instrument = null;
-                    for (var i = model.loanCollectionSummaryDTOs.length - 1; i >= 0; i--) {
-                        var item = model.loanCollectionSummaryDTOs[i]
-                        if (item.$selected) {
-                            temp.push(item);
-                            instrument = item.instrumentType;
+                getSearchFormHelper: function() {
+                    return formHelper;
+                },
+                getResultsPromise: function(searchOptions, pageOpts) { 
+                    var promise = LoanCollection.findDepositSummaries({
+                        'currentStage': "BRSValidation",
+                        'bankAccountNumber': searchOptions.bankAccountNumber,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage
+                    }).$promise;
+                    return promise;
+                },
+                paginationOptions: {
+                    "getItemsPerPage": function(response, headers) {
+                        return 20;
+                    },
+                    "getTotalItemsCount": function(response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+                listOptions: {
+                    selectable: true,
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function(item, index) {},
+                    getItems: function(response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
                         }
-                    };
+                        return [];
+                    },
+                    getListItem: function(item) {
+                        return [];
+                    },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": false,
+                            //"pageLength": 50
+                        };
+                    },
+                    getColumns: function () {
+                        return [
+                            {
+                                "title": "Date",
+                                "data": "depositedOn"
+                            },
+                            {
+                                "title": "Reference",
+                                "data": "reference"
+                            },
+                            {
+                                "title": "Amount",
+                                "data": "amount"
+                            },
+                            {
+                                "title": "Instrument Type",
+                                "data": "instrumentType"
+                            },
+                            {
+                                "title": "Deposited BY",
+                                "data": "depositedby"
+                            },
+                            {
+                                "title": "Deposited Branch",
+                                "data": "bankBranchDetails"
+                            }
+                        ]
+                    },
+                    getActions: function() {
+                        return [];
+                    },
+                    getBulkActions: function() {
+                        return [{
+                                name: "submit",
+                                desc: "",
+                                icon: "fa fa-registered",
+                                fn: function(items) {
+                                    if(items.length==0){
+                                        PageHelper.showProgress("bulk-process","Atleast one record should be selected",5000);
+                                        return false;
+                                    }
+                                    Utils.confirm("Do you wish to Process the selected records?").then(function(){
+                                        var temp = [];
+                                        for (var i = items.length - 1; i >= 0; i--) {
+                                            var item = items[i]
+                                            if (item.$selected) {
+                                                temp.push(item);
+                                            }
+                                        }
+                                        ;
 
-                    if (temp.length > 1 ) {
-                        PageHelper.showProgress("brs-reject", "Only 1 entry can be rejected at a time.", 5000);
-                        return;
+                                        var reqData = {"loanCollectionSummaryDTOs": temp};
+                                        if (items.length >= 1) {
+
+                                            PageHelper.showLoader();
+                                            PageHelper.showProgress("brs-update", "Working");
+                                            reqData.repaymentProcessAction = "PROCEED";
+                                            LoanCollection.batchUpdate(reqData, function (resp, header) {
+                                                PageHelper.showProgress("brs-update", "Done", 5000);
+                                                localFormCtrl.submit();
+                                            }, function (resp) {
+                                                PageHelper.showProgress("brs-update", "Failed.");
+                                                PageHelper.showErrors(resp);
+                                            }).$promise.finally(function () {
+                                                PageHelper.hideLoader();
+                                            });
+                                        }
+                                    });
+                                },
+                                isApplicable: function(items) {
+                                    return true;
+                                }
+                            },
+                            {
+                                name: "Reject",
+                                desc: "",
+                                fn: function(items) {
+                                    var temp = [];
+                                    var instrument = null;
+                                    if(items.length==0){
+                                        PageHelper.showProgress("bulk-process","Atleast one record should be selected",5000);
+                                        return false;
+                                    }
+                                    for (var i = items.length - 1; i >= 0; i--) {
+                                        var item = items[i]
+                                        if (item.$selected) {
+                                            temp.push(item);
+                                            instrument = item.instrumentType;
+                                        }
+                                    };
+
+                                    if (temp.length > 1 ) {
+                                        PageHelper.showProgress("brs-reject", "Only 1 entry can be rejected at a time.", 5000);
+                                        return;
+                                    }
+
+                                    var reqData = { "loanCollectionSummaryDTOs": temp };
+
+                                    if (instrument == 'CASH') {
+                                        reqData.stage = 'Deposit';
+                                    } else {
+                                        reqData.stage = 'Rejected';
+                                    }
+
+                                    Utils.confirm("Are You Sure?")
+                                        .then(function() {
+                                        PageHelper.showLoader();
+                                        PageHelper.showProgress("brs-reject", "Working");
+                                        reqData.repaymentProcessAction = "PROCEED";
+                                        LoanCollection.batchUpdate(reqData, function(resp, header) {
+                                            PageHelper.showProgress("brs-reject", "Done", 5000);
+                                            localFormCtrl.submit();
+                                        }, function(resp) {
+                                            PageHelper.showProgress("brs-reject", "Failed.");
+                                            PageHelper.showErrors(resp);
+                                        }).$promise.finally(function() {
+                                            PageHelper.hideLoader();
+                                        });
+                                    });
+                                },
+                                isApplicable: function(items) {
+                                    return true;
+                                }
+                            }
+                        ];
                     }
-
-                    var reqData = { "loanCollectionSummaryDTOs": temp };
-
-                    if (instrument == 'CASH') {
-                        reqData.stage = 'Deposit';
-                    } else {
-                        reqData.stage = 'Rejected';
-                    }
-
-                    Utils.confirm("Are You Sure?")
-                        .then(function() {
-                            PageHelper.showLoader();
-                            PageHelper.showProgress("brs-reject", "Working");
-                            reqData.repaymentProcessAction = "PROCEED";
-                            LoanCollection.batchUpdate(reqData, function(resp, header) {
-                                PageHelper.showProgress("brs-reject", "Done", 5000);
-                                loadBRSRecords(model);
-                            }, function(resp) {
-                                PageHelper.showProgress("brs-reject", "Failed.");
-                                PageHelper.showErrors(resp);
-                            }).$promise.finally(function() {
-                                PageHelper.hideLoader();
-                            });
-                        })
-
-
                 }
-
             }
         }
     }

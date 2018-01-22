@@ -113,7 +113,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
 
         var brsmMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BRSMultiApproval"];
         if (brsmMenu) {
-            LoanCollection.query({
+            LoanCollection.findDepositSummaries({
                     'currentStage':"BRSValidation"
                 }).$promise.then(function(response, headerGetter){
                     brsmMenu.data = response.headers['x-total-count'];
