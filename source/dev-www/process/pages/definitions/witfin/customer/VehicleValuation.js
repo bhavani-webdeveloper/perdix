@@ -471,11 +471,13 @@ define(
                                         "recommendationStatus": {
                                             "key": "loanAccount.vehicleLoanDetails.recommendationStatus",
                                             "type": "radios",
+                                            "required": true,
                                             "enumCode": "decisionmaker1",
                                             "title": "RECOMMENDED"
                                         },
                                         "recommendationRemarks": {
                                             "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
+                                            "required": true,
                                             "title": "REMARKS"
                                         }
                                     }

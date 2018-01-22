@@ -124,6 +124,7 @@ define({
 						'branchName': searchOptions.branchName,
 						'centreName': centreName[0],
 						'currentStage': "Inprocess",
+						'leadStatus': "FollowUp",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
 						'followUpDate': searchOptions.followUpDate,
