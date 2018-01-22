@@ -34,7 +34,7 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        "customerId": {
+                        "id": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
                         },
@@ -71,9 +71,10 @@ define({
                         'branchName':branch,
                         'screeningDate':searchOptions.screeningDate,
                         'applicantName':searchOptions.applicantName,
+                        'loanId': searchOptions.id,
                         'area':searchOptions.area,
                         'status':searchOptions.status,
-                        'villageName':searchOptions.villageName,
+                        'villageName':searchOptions.cityTownVillage,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
