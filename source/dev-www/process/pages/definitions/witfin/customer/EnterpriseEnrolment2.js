@@ -401,7 +401,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.customer.currentStage",
+                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='BranchCreditAppraisal')",
                                         "orderNo": 1200,
                                         "items": [
                                             {
