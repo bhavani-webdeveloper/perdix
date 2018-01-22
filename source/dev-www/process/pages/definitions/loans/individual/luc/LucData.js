@@ -447,8 +447,19 @@ define({
                         readonly: tempData.lucNonEditable,
                         type: "amount",
                         "onChange": function(modelValue, form, model) {
-                            var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
-                            model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
+                            if(model.loanMonitoringDetails.loanAmountUsed==0)
+                            {
+                                model.loanMonitoringDetails.amountUsedPercentage = 0;
+                                model.loanMonitoringDetails.intendedPurposeAmount = 0;
+                                model.loanMonitoringDetails.nonIntendedPurposeAmount = 0;
+                                model.loanMonitoringDetails.intendedPurposePercentage = 0;
+                                model.loanMonitoringDetails.nonIntendedPurposePercentage = 0;
+                            }
+                            else
+                            {
+                                var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
+                            }
                         },
                         test: "Shahal"
                     }, {
@@ -462,14 +473,27 @@ define({
                         readonly: tempData.lucNonEditable,
                         //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                         "onChange": function(modelValue, form, model) {
-                            if (model.loanMonitoringDetails.intendedPurposeAmount > model.loanMonitoringDetails.loanAmountUsed) {
-                                model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed;
+                            if(model.loanMonitoringDetails.intendedPurposeAmount==0)
+                            {
+                                model.loanMonitoringDetails.intendedPurposePercentage = 0;
+                                model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed;
+                                if(model.loanMonitoringDetails.loanAmountUsed == 0)
+                                    model.loanMonitoringDetails.nonIntendedPurposePercentage = 0;
+                                else{
+                                    var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                    model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+                                }
                             }
-                            var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                            model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
-                            model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
-                            var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                            model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+                            else {
+                                if (model.loanMonitoringDetails.intendedPurposeAmount > model.loanMonitoringDetails.loanAmountUsed) {
+                                    model.loanMonitoringDetails.intendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed;
+                                }
+                                var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
+                                var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+                            }
                         }
                     }, {
                         key: "loanMonitoringDetails.intendedPurposePercentage",
@@ -485,8 +509,15 @@ define({
                         type: "amount",
                         "readonly": true,
                         "onChange": function(modelValue, form, model) {
-                            var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                            model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                            if(model.loanMonitoringDetails.nonIntendedPurposeAmount == 0)
+                            {
+                                model.loanMonitoringDetails.nonIntendedPurposePercentage = 0;
+                            }
+                            else
+                            {
+                                var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                            }
                         }
                     }, {
                         key: "loanMonitoringDetails.nonIntendedPurposePercentage",
