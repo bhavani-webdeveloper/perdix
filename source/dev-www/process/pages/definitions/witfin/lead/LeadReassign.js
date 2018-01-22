@@ -3,10 +3,10 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
         pageUID: "witfin.lead.LeadReassign",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Lead", "SessionStore",
-        "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper"],
+        "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper", "irfNavigator"],
 
         $pageFn: function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
-            PageHelper, Utils, PagesDefinition, Queries, LeadHelper) {
+            PageHelper, Utils, PagesDefinition, Queries, LeadHelper, irfNavigator) {
             var leadRepo = new LeadRepository();
             return {
                 "type": "schema-form",
@@ -126,7 +126,10 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function(val) {
-                                $state.go('Page.witfinLeadDashboard', null);
+                                irfNavigator.go({
+                                    state: "Page.Adhoc",
+                                    pageName: "witfin.loans.LoanOriginationDashboard"
+                                });
                             }, function(err) {
                                 PageHelper.showErrors(err);
                             })
