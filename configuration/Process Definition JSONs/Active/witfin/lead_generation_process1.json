@@ -379,7 +379,8 @@
                   "captureStages": [
                      "Assignment Pending",
                      "Incomplete",
-                     "Inprocess"
+                     "Inprocess",
+                     "ReadyForScreening"
                   ]
                },
                "productAcceptReason": {
