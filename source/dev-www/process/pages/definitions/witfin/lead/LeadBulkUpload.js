@@ -2,9 +2,9 @@
 define({
     pageUID: "witfin.lead.LeadBulkUpload",
     pageType: "Engine",
-    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead"],
+    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator"],
 
-    $pageFn: function($log, SessionStore, $state, $stateParams, Lead) {
+    $pageFn: function($log, SessionStore, $state, $stateParams, Lead, irfNavigator) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -30,7 +30,10 @@ define({
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
                         Lead.leadBulkUpload(file, progress).then(function(resp){
-                            $state.go('Page.witfinLeadDashboard', null);
+                            irfNavigator.go({
+                                state: "Page.Adhoc",
+                                pageName: "witfin.loans.LoanOriginationDashboard"
+                            });
                         });
                     }
                 }]
