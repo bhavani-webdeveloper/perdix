@@ -212,6 +212,52 @@ var navigateToQueue = function(model) {
         return true;
     }
 
+     var computeEMI = function(model){
+
+            // Get the user's input from the form. Assume it is all valid.
+            // Convert interest from a percentage to a decimal, and convert from
+            // an annual rate to a monthly rate. Convert payment period in years
+            // to the number of monthly payments.
+
+            if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                return;
+
+            var principal = model.loanAccount.loanAmount;
+            var interest = model.loanAccount.interestRate / 100 / 12;
+            var payments;
+            if (model.loanAccount.frequencyRequested == 'Yearly')
+                payments = model.loanAccount.tenure * 12;
+            else if (model.loanAccount.frequencyRequested == 'Monthly')
+                payments = model.loanAccount.tenure;
+
+            // Now compute the monthly payment figure, using esoteric math.
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal*x*interest)/(x-1);
+
+            // Check that the result is a finite number. If so, display the results.
+            if (!isNaN(monthly) &&
+                (monthly != Number.POSITIVE_INFINITY) &&
+                (monthly != Number.NEGATIVE_INFINITY)) {
+
+                model.loanAccount.estimatedEmi = round(monthly);
+                //document.loandata.total.value = round(monthly * payments);
+                //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+            }
+            // Otherwise, the user's input was probably invalid, so don't
+            // display anything.
+            else {
+                model.loanAccount.estimatedEmi  = "";
+                //document.loandata.total.value = "";
+                //document.loandata.totalinterest.value = "";
+            }
+
+        };
+
+        // This simple method rounds a number to two decimal places.
+        function round(x) {
+          return Math.ceil(x);
+        }
+
 
         return {
             "type": "schema-form",
@@ -588,15 +634,25 @@ var navigateToQueue = function(model) {
                         }, {
                             "key": "loanAccount.loanAmount",
                             "title": "Loan Amount Recommended",
-                            "type": "amount"
+                            "type": "amount",
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         }, {
                             "key": "loanAccount.tenure",
                             "title": "Duration(months)"/*,
                             "type": "number"*/
+                            ,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         }, {
                             "key": "loanAccount.interestRate",
                             "title": "Interest Rate",
-                            "type": "number"
+                            "type": "number",
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         }]
                     }, {
                         "type": "grid",
