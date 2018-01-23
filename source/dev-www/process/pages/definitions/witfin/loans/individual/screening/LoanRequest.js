@@ -460,7 +460,7 @@ define([],function(){
                                         condition: "model.review.action=='PROCEED'",
                                         items: [{
                                             title: "REMARKS",
-                                            key: "review.remarks",
+                                            key: "loanProcess.remarks",
                                             type: "textarea",
                                             required: true
                                         }, {
@@ -483,7 +483,7 @@ define([],function(){
                                         condition: "model.review.action=='SEND_BACK'",
                                         items: [{
                                         title: "REMARKS",
-                                        key: "review.remarks",
+                                        key: "loanProcess.remarks",
                                         type: "textarea",
                                         required: true
                                     }, {
@@ -537,7 +537,7 @@ define([],function(){
                                         condition: "model.review.action=='REJECT'",
                                         items: [{
                                                 title: "REMARKS",
-                                                key: "review.remarks",
+                                                key: "loanProcess.remarks",
                                                 type: "textarea",
                                                 required: true
                                             }, {
