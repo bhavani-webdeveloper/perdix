@@ -797,11 +797,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "locatingHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf1",
-                                            "type": "text",
                                             "title": "LOCATING_HOUSE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
+                                            "type":"select",
+                                            "enumCode": "locating_house"
                                         },
                                         "distanceFromHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf2",
