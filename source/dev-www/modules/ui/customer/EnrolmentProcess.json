@@ -462,6 +462,17 @@
                 "parentValueExpr": "model.customer.customerBranchId",
                 "orderNo": 20
             },
+            "centreName": {
+                "key": "customer.centreName",
+                "type": "select",
+                "title": "CENTRE",
+                "filter": {
+                    "parentCode": "branch_id"
+                },
+                "parentEnumCode": "branch_id",
+                "parentValueExpr": "model.customer.customerBranchId",
+                "orderNo": 20
+            },
             "oldCustomerId": {
                 "key": "customer.oldCustomerId",
                 "title": "CUSTOMER_ID",
@@ -847,7 +858,7 @@
                         "orderNo": 330
                     },
                     "linkedToCustomerName": {
-                        "key": "customer.firstName",
+                        "key": "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                         "title": "CUSTOMER_NAME",
                         "orderNo": 340
                     },
@@ -1308,7 +1319,9 @@
                         "items": {
                             "incomeSource": {
                                 "key": "incomeSource",
-                                "type": "select"
+                                "title":"INCOME_SOURCE",
+                                "type": "select",
+                                "enumCode": "occupation"
                             },
                             "incomeEarned": {
                                 "key": "customer.familyMembers[].incomes[].incomeEarned"
