@@ -82,14 +82,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             "title": "Audit Details",
             "iconClass": "fa fa-cube",
             "items": [
-                "Page/Engine/audit.detail.GeneralObservation",
-                "Page/Engine/audit.detail.PortfolioStats",
-                "Page/Engine/audit.detail.JewelAppraisal",
-                "Page/Engine/audit.detail.FixedAsset",
-                "Page/Engine/audit.detail.FieldVerification",
+                // "Page/Engine/audit.detail.GeneralObservation",
+                // "Page/Engine/audit.detail.PortfolioStats",
+                // "Page/Engine/audit.detail.JewelAppraisal",
+                // "Page/Engine/audit.detail.FixedAsset",
+                // "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
                 "Page/Engine/audit.detail.AuditSummary",
-                "Page/Adhoc/audit.AuditDraftDetails",
+                // "Page/Adhoc/audit.AuditDraftDetails",
             ]
         });
 
@@ -124,14 +124,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         $q.all(allPromises).then(function() {
             var requestMenu = [
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
+                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
                 $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
-                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
+                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
+                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
+                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
+                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
+                // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
             ];
             var reloadDashboardBox = false;
             if ($scope.dashboardDefinition_Score &&
