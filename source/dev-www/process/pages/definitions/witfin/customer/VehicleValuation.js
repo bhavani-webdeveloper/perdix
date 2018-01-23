@@ -20,6 +20,11 @@ define(
 
                 var overridesFields = function (bundlePageObj) {
                 return {
+                    "VehicleRegistrationDetails.cubicCapacity":{
+                        "inputmode": "number",
+                        "numberType": "number",
+                        "type": "number"
+                    },
                     "VehicleAsset.vehicleAssetConditions.componentCondition": {
                         "condition": "!(model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Front' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'LH Rear' || model.loanAccount.vehicleLoanDetails.vehicleAssetConditions[arrayIndex].componentType == 'RH Rear')",
                         "orderNo": 30

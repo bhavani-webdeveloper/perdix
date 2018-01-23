@@ -215,7 +215,7 @@
         "items": {
             "verifications": {
                 "key": "customer.verifications",
-                "title": "VERIFICATION",
+                "title": "REFERENCES",
                 "startEmpty": true,
                 "titleExpr": "model.customer.verifications[arrayIndexes[0]].referenceFirstName",
                 "type": "array",
