@@ -403,9 +403,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof": {
                         "readonly": true
                     },
-                    "IndividualInformation.centreId": {
+                    "IndividualInformation.centreName": {
 
-                        key: "customer.centreId",
+                        key: "customer.centreName",
                         type: "lov",
                         autolov: true,
                         lovonly: true,
@@ -440,7 +440,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                         },
                         onSelect: function (valueObj, model, context) {
-                            model.customer.centreId = valueObj.id;
+                            model.customer.centreId = valueObj.centreId;
                             model.customer.centreName = valueObj.name;
                         },
                         getListDisplayItem: function (item, index) {
@@ -613,7 +613,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.customerBranchId",
-                    "IndividualInformation.centreId",
+                    
+                    "IndividualInformation.centreName",
                     "IndividualInformation.photoImageId",
                     "IndividualInformation.title",
                     "IndividualInformation.firstName",
@@ -928,19 +929,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     ]
                                 },
-                                {
-                                    "targetID": "IndividualInformation",
-                                    "items":[
-                                        {
-                                            "key": "customer.centreId",
-                                            "type": "select",
-                                            "enumCode": "centre",
-                                            "title": "CENTRE_NAME",
-                                            "orderNo": 21,
-                                            "readonly": true
-                                        }
-                                    ]
-                                },
+                                
                                 {
                                     "type": "actionbox",
                                     "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='BranchCreditAppraisal')",
