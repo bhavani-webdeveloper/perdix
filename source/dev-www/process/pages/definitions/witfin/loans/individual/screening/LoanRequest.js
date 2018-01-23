@@ -23,10 +23,6 @@ define([],function(){
                 return true;
             };
 
-
-
-
-
             var getRelationFromClass = function(relation){
                 if (relation == 'guarantor'){
                     return 'Guarantor';
@@ -356,9 +352,36 @@ define([],function(){
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "DeductionsFromLoan.estimatedEmi": {
+                                "readonly": true
+                            },
                             "NewVehicleDetails": {
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
-                            }
+                            },
+                            "PreliminaryInformation.loanAmountRequested": {
+                                onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                }
+                            },
+                            "PreliminaryInformation.estimatedEmi": {
+                                "required": true,
+                                "readonly" : true
+                            },
+                            "PreliminaryInformation.frequencyRequested": {
+                                 onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                }
+                            },
+                            "PreliminaryInformation.tenureRequested": {
+                                 onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                }
+                            },
+                            "PreliminaryInformation.expectedInterestRate": {
+                                 onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                }
+                            },
                         },
                         "includes": getIncludes (model),
                         "excludes": [

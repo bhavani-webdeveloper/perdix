@@ -345,9 +345,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 
                 return {
-                    // "Liabilities.liabilities.loanSource": {
-                    //     "condition" : "model.customer.liabilities[arrayIndex].loanSourceCategory == 'NBFC' || model.customer.liabilities[arrayIndex].loanSourceCategory == 'Bank'" 
-                    // },
+                    "Liabilities.liabilities.loanSource1": {
+                        orderNo : 12
+                    },
+                    "Liabilities.liabilities.loanSourceCategory": {
+                        onChange: function(modelValue, form, model) {
+                            if (modelValue == 'Friends') {
+                                model.customer.liabilities[form.arrayIndex].loanSource = 'Friends';
+                            } else if (modelValue == 'Relatives') {
+                                model.customer.liabilities[form.arrayIndex].loanSource = 'Relatives';
+                            }
+                        }
+                    },
+                    "Liabilities.liabilities.loanSource": {
+                        "condition" : "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Bank/NBFC'"
+                    },
                     "Liabilities.liabilities.liabilityLoanPurpose": {
                         "enumCode": "loan_purpose_1",
                         "type": "select"
@@ -677,7 +689,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities",
                     "Liabilities.liabilities.loanSourceCategory",
                     "Liabilities.liabilities.loanSource",
-                    // "Liabilities.liabilities.loanSource1",
+                    "Liabilities.liabilities.loanSource1",
                     "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
@@ -901,21 +913,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                     }
+                                },
+                                "Liabilities": {
+                                    "items": {
+                                        "liabilities": {
+                                            "items": {
+                                                "loanSource1": {
+                                                    "condition":"model.customer.liabilities[arrayIndex].loanSourceCategory == 'Friends' ||  model.customer.liabilities[arrayIndex].loanSourceCategory == 'Relatives'",
+                                                    "key": "customer.liabilities[].loanSource",
+                                                    "title":"LOAN_SOURCE",
+                                                    "readonly": true
+                                                }             
+                                            }
+                                        }
+                                    }
                                 }
-                                // "Liabilities": {
-                                //     "items": {
-                                //         "liabilities": {
-                                //             "items": {
-                                //                 "loanSource1": {
-                                //                     "condition":"model.customer.liabilities[arrayIndex].loanSourceCategory == 'Friends' ||  model.customer.liabilities[arrayIndex].loanSourceCategory == 'Relatives'",
-                                //                     "key": "customer.liabilities[].loanSource",
-                                //                     "type": "select",
-                                //                     "title":"LOAN_SOURCE"
-                                //                 }             
-                                //             }
-                                //         }
-                                //     }
-                                // }
                             },
                             "additions": [
                                 {
