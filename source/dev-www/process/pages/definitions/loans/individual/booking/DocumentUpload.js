@@ -949,12 +949,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         //$state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue', pageId: ''});
                 },
                 goBack: function(model, formCtrl, form, $event) {
-                    $state.go({
-                        state : "Page.Engine", 
-                        pageName: 'loans.individual.booking.DocumentUploadQueue',
-                        pageId: null,
-                        pageData: undefined
-                    });
+                    irfNavigator.goBack();
                 }
             }
         };

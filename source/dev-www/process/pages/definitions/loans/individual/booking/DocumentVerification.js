@@ -622,10 +622,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         })
                 },
                 goBack: function(model, formCtrl, form, $event) {
-                    $state.go("Page.Engine", {
-                        pageName: 'loans.individual.booking.PendingVerificationQueue',
-                        pageId: null
-                    });
+                    // $state.go("Page.Engine", {
+                    //     pageName: 'loans.individual.booking.PendingVerificationQueue',
+                    //     pageId: null
+                    // });
+                    irfNavigator.goBack();
                 }
             }
         };
