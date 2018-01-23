@@ -5,6 +5,7 @@ class EnterpriseCustomerRelation {
     experienceInBusiness: string;
     id: number;
     linkedToCustomerId: number;
+    linkedToCustomerName: string;
     migrationUrnNumber: string;
     otherBusinessClosed: string;
     otherBusinessClosureDate: string;
