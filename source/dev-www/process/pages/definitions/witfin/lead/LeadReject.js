@@ -15,7 +15,7 @@ define({
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
                 if (!(model.$$STORAGE_KEY$$)) {
-                    model.lead.customerType = "Enterprise";
+                    
                     model.lead.leadStatus = "Incomplete";
                     model.lead.leadInteractions = [{
                         "interactionDate": Utils.getCurrentDate(),
@@ -142,58 +142,23 @@ define({
                             items: [{
                                     key: "lead.leadName",
                                     title: "APPLICANT_NAME"
-                                }, {
-                                    key: "lead.customerType",
-                                    type: "select",
-                                    titleMap: {
-                                        "Individual": "Individual",
-                                        "Enterprise": "Individual and Enterprise"
-                                    }
-
-                                }, {
-                                    type: "fieldset",
-                                    title: "ENTERPRISE_DETAILS",
-
-                                    items: [{
-                                        type: "fieldset",
-                                        title: "INDIVIDUAL_DETAILS",
-                                        items: [{
-                                            key: "lead.gender",
-                                            type: "radios"
-                                        }, {
-                                            key: "lead.dob",
-                                            type: "date",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dob) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                                }
-                                            }
-                                        }, {
-                                            key: "lead.age",
-                                            type: "number",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.age > 0) {
-                                                    if (model.lead.dob) {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                                    } else {
-                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
-                                                    }
-                                                }
-                                            }
-                                        }, {
-                                            key: "lead.maritalStatus",
-                                            type: "select",
-                                            enumCode: "marital_status"
-                                        }, {
-                                            key: "lead.educationStatus",
-                                            type: "select",
-                                            enumCode: "education"
-                                        }]
-                                    }]
+                                }, 
+                                {
+                                    key: "lead.gender"
+                                    
                                 },
-
-
-
+                                {
+                                        key: "lead.dob"
+                                },
+                                {
+                                    key: "lead.maritalStatus"
+                                },
+                                {
+                                    key: "lead.leadCategory"
+                                },
+                                {
+                                    key: "lead.licenseType"
+                                },
                                 {
                                     type: "fieldset",
                                     title: "CONTACT_DETAILS",
