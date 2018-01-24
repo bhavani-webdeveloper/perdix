@@ -343,7 +343,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 }
             }
             var overridesFields = function (bundlePageObj) {
-                
+
                 return {
                     "Liabilities.liabilities.loanSource1": {
                         orderNo : 12
@@ -415,9 +415,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof": {
                         "readonly": true
                     },
-                    "IndividualInformation.centreName": {
-
-                        key: "customer.centreName",
+                    "IndividualInformation.centreId": {
+                        key: "customer.centreId",
                         type: "lov",
                         autolov: true,
                         lovonly: true,
@@ -625,8 +624,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.customerBranchId",
-                    
-                    "IndividualInformation.centreName",
+                    "IndividualInformation.centreId",
                     "IndividualInformation.photoImageId",
                     "IndividualInformation.title",
                     "IndividualInformation.firstName",
@@ -923,7 +921,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.liabilities[].loanSource",
                                                     "title":"LOAN_SOURCE",
                                                     "readonly": true
-                                                }             
+                                                }
                                             }
                                         }
                                     }
@@ -941,7 +939,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     ]
                                 },
-                                
+                                {
+                                    "targetID": "IndividualInformation",
+                                    "items":[
+                                        {
+                                            "key": "customer.centreId",
+                                            "type": "select",
+                                            "enumCode": "centre",
+                                            "title": "CENTRE_NAME",
+                                            "orderNo": 21,
+                                            "readonly": true
+                                        }
+                                    ]
+                                },
                                 {
                                     "type": "actionbox",
                                     "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='BranchCreditAppraisal')",

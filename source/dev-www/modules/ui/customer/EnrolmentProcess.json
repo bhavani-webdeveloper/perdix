@@ -462,17 +462,6 @@
                 "parentValueExpr": "model.customer.customerBranchId",
                 "orderNo": 20
             },
-            "centreName": {
-                "key": "customer.centreName",
-                "type": "select",
-                "title": "CENTRE",
-                "filter": {
-                    "parentCode": "branch_id"
-                },
-                "parentEnumCode": "branch_id",
-                "parentValueExpr": "model.customer.customerBranchId",
-                "orderNo": 20
-            },
             "oldCustomerId": {
                 "key": "customer.oldCustomerId",
                 "title": "CUSTOMER_ID",
