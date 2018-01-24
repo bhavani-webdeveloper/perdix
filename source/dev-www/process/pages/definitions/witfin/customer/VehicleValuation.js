@@ -473,6 +473,53 @@ define(
                             ],
                             "options": {
                             "repositoryAdditions": {
+                                "VehiclePrimaryInfo": {
+                                    "type": "box",
+                                    "title": "PRIMARY_INFORMATION",
+                                    "orderNo": 150,
+                                    "items": {
+                                        "registrationNumber": {
+                                            "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+                                            "title": "REGISTRATION_NUMBER"
+                                        },
+                                        "firstName": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.firstName",
+                                            "title": "BORROWER_NAME"
+                                        },
+                                        "mobileNo": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.mobilePhone",
+                                            "title": "MOBILE_NO"
+                                        },
+                                        "AlternatemobileNo": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.landLineNo",
+                                            "title": "ALTERNATE_MOBILE_NO"
+                                        },
+                                        "doorNo": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.doorNo",
+                                            "title": "DOOR_NO"
+                                        },
+                                        "street": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.street",
+                                            "title": "STREET"
+                                        },
+                                        "postOffice": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.postOffice",
+                                            "title": "POST_OFFICE"
+                                        },
+                                        "pincode": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.pincode",
+                                            "title": "PIN_CODE"
+                                        },
+                                        "district": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.district",
+                                            "title": "DISTRICT"
+                                        },
+                                        "state": {
+                                            "key": "loanProcess.loanCustomerEnrolmentProcess.customer.state",
+                                            "title": "STATE"
+                                        }
+                                    }
+                                },
                                 "VehicleRecommendation": {
                                     "type": "box",
                                     "title": "RECOMMENDATION_STATUS",
