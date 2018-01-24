@@ -35,7 +35,7 @@ export class CloseLeadonLoanSave extends IPolicy<LoanProcess> {
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        if (_.hasIn(loanProcess, "loanAccount.leadId" && _.isNumber(loanProcess.loanAccount.leadId))){
+        if (_.hasIn(loanProcess, "loanAccount.leadId") && _.isNumber(loanProcess.loanAccount.leadId)){
             let lead_id = loanProcess.loanAccount.leadId;
             // return Observable.throw(new Error("shahal error"));
             return LeadProcessFactory.createFromLeadId(lead_id)
@@ -47,8 +47,10 @@ export class CloseLeadonLoanSave extends IPolicy<LoanProcess> {
 
                     return Observable.of(loanProcess);
                 })
+        } else {
+            return Observable.of(loanProcess);
         }
-        return Observable.of(loanProcess);
+       
     }
 
 }
