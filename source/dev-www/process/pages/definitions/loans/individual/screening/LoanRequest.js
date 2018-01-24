@@ -337,14 +337,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 (monthly != Number.POSITIVE_INFINITY) &&
                 (monthly != Number.NEGATIVE_INFINITY)) {
 
-                model.loanAccount.expectedEmi = round(monthly);
+                model.loanAccount.estimatedEmi = round(monthly);
                 //document.loandata.total.value = round(monthly * payments);
                 //document.loandata.totalinterest.value = round((monthly * payments) - principal);
             }
             // Otherwise, the user's input was probably invalid, so don't
             // display anything.
             else {
-                model.loanAccount.expectedEmi  = "";
+                model.loanAccount.estimatedEmi  = "";
                 //document.loandata.total.value = "";
                 //document.loandata.totalinterest.value = "";
             }
@@ -457,13 +457,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
-                if(model.currentStage=='Screening' || model.currentStage=='Application') {
-                    if(model.loanAccount.estimatedEmi){
-                        model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
-                    } else {
-                        computeEstimatedEMI(model);
-                    }
-                }
+                computeEstimatedEMI(model);
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -920,7 +914,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     },
                     {
-                        key: "loanAccount.expectedEmi",
+                        key: "loanAccount.estimatedEmi",
                         type: "amount",
                         title: "ESTIMATED_KINARA_EMI",
                         readonly:true
@@ -2670,13 +2664,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 .then(function(res){
 
                                     model.loanAccount = res.loanAccount;
-                                    if(model.currentStage=='Screening' || model.currentStage=='Application') {
-                                        if(model.loanAccount.estimatedEmi){
-                                            model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
-                                        } else {
-                                            computeEstimatedEMI(model);
-                                        }
-                                    }
                                     if(model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length){
                                         for(i in model.temp.loanCustomerRelations){
                                             for(j in model.loanAccount.loanCustomerRelations){
