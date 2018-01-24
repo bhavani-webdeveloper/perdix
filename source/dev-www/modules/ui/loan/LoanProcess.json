@@ -596,33 +596,6 @@
             }
         }
     },
-    "VehiclePrimaryInfo": {
-        "type": "box",
-        "title": "PRIMARY_INFORMATION",
-        "orderNo": 150,
-        "items": {
-            "registrationNumber": {
-                "key": "loanAccount.vehicleLoanDetails.registrationNumber",
-                "title": "REGISTRATION_NUMBER"
-            },
-            "firstName": {
-                "key": "loanProcess.applicantEnrolmentProcess.customer.firstName",
-                "title": "BORROWER_NAME"
-            },
-            "mobileNo": {
-                "key": "loanProcess.applicantEnrolmentProcess.customer.mobilePhone",
-                "title": "MOBILE_NO"
-            },
-            "AlternatemobileNo": {
-                "key": "loanProcess.applicantEnrolmentProcess.customer.mobileNumber2",
-                "title": "ALTERNATE_MOBILE_NO"
-            },
-            "registeredaddress": {
-                "key": "loanAccount.vehicleLoanDetails.registeredaddress",
-                "title": "REGISTERED_ADDRESS"
-            }
-        }
-    },
     "VehicleValuationPriliminaryInformation": {
         "type": "box",
         "title": "VALUATION_PRELIMINARY_INFORMATION",
