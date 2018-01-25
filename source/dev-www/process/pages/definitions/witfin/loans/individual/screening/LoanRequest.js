@@ -118,6 +118,9 @@ define([],function(){
                             }
                         },
                         "BranchCreditAppraisal": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "readonly": true
