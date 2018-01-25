@@ -142,6 +142,9 @@ define([],function(){
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -179,6 +182,9 @@ define([],function(){
                                 },
                                 "TeleVerification": {
                                     "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -215,6 +221,9 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "TeleVerification": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
                                     "readonly": true
                                 }
                             }
