@@ -57,14 +57,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:40
-                            },
-                            {
-                                pageName: 'witfin.customer.FieldInvestigation',
-                                title: 'Field Investigation',
-                                pageClass: 'field-investigation',
-                                minimum: 1,
-                                maximum: 1
                             }
+                            
 
 
                             // {
@@ -212,13 +206,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'field-investigation',
-                                    model: {
-                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                               
 
                                //   $this.bundlePages.push({
                                //      pageClass: 'cbview',

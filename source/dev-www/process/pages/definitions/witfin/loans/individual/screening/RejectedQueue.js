@@ -34,10 +34,6 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        "id": {
-                            "title": "CUSTOMER_ID",
-                            "type": "string"
-                        },
                         "area": {
                             "title": "AREA",
                             "type": "string"
@@ -71,7 +67,6 @@ define({
                         'branchName':branch,
                         'screeningDate':searchOptions.screeningDate,
                         'applicantName':searchOptions.applicantName,
-                        'loanId': searchOptions.id,
                         'area':searchOptions.area,
                         'status':searchOptions.status,
                         'villageName':searchOptions.cityTownVillage,
