@@ -451,7 +451,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                         },
                         onSelect: function (valueObj, model, context) {
-                            model.customer.centreId = valueObj.centreId;
+                            model.customer.centreId = valueObj.id;
                             model.customer.centreName = valueObj.name;
                         },
                         getListDisplayItem: function (item, index) {

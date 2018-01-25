@@ -2329,7 +2329,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application", "LoanInitiation", "VehicleValuation"
                   ]
                },"subSegment":{
                   "title":"subSegment",
@@ -2337,7 +2337,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application", "LoanInitiation", "VehicleValuation"
                   ]
                },"entityType":{
                   "title":"entityType",
@@ -2345,7 +2345,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedWith":{
                   "title":"attachedWith",
@@ -2353,7 +2353,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedAddress":{
                   "title":"attachedAddress",
@@ -2361,7 +2361,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                },"attachedContactNumber":{
                   "title":"attachedContactNumber",
@@ -2377,7 +2377,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                },"locationContactName":{
                   "title":"locationContactName",
@@ -2385,7 +2385,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                },"locationContactNumber":{
                   "title":"locationContactNumber",
@@ -2393,7 +2393,7 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "LoanInitiation", "VehicleValuation"
+                     "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                   ]
                }
             }
@@ -2580,14 +2580,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValuation"
+                        "Screening","Application",  "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "incomeAmount":{
                      "title":"incomeAmount",
                     "type":"number",
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValuation"
+                        "Screening","Application",  "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
@@ -2638,7 +2638,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValuation"
+                        "Screening", "Application",  "LoanInitiation", "VehicleValuation"
                      ]
                   },
                   "routeTo":{
@@ -2647,7 +2647,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValuation"
+                        "Screening","Application",  "LoanInitiation", "VehicleValuation"
                      ]
                   },
 				  "routeVia":{
@@ -2656,7 +2656,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening", "LoanInitiation", "VehicleValuation"
+                        "Screening", "Application", "LoanInitiation", "VehicleValuation"
                      ]
                   }
                }
