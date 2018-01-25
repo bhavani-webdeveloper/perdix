@@ -2540,7 +2540,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource=='Existing Customer Referral'",
+                        "condition": "model.lead.leadSource=='Existing Customer Referral' || model.lead.leadSource=='Employee referral'",
                         "type": "lov",
 
                         "lovonly": true,
