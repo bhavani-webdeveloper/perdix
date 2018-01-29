@@ -11,6 +11,7 @@ define({
              initialize: function (model, form, formCtrl) {
                 // loadBRSRecords(model);
                 localFormCtrl = formCtrl;
+                model.mainPartner = SessionStore.getGlobalSetting("mainPartner");
             },
             definition: {
                 "title": "BRS_MULTI_APPROVAL",
@@ -27,7 +28,7 @@ define({
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                            return Queries.getBankAccountsByPartnerForLoanRepay(model.mainPartner);
                         },
                         getListDisplayItem: function (item, index) {
                             return [
