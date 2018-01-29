@@ -143,6 +143,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         },
                         "ApplicationReview": {
+                            "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck"
+                            ],
                             "overrides": {
                                 "KYC": {
                                     "readonly": true
@@ -178,11 +182,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "PhysicalAssets": {
                                     "readonly": true
                                 }
-                            },
-                            "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.referenceCheck"
-                            ]
+                            }
+                            
                         },
                         "BranchCreditAppraisal": {
                             "overrides": {
