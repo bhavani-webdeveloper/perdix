@@ -804,6 +804,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.latitude",
                                             "title": "LOCATION",
                                             "type": "geotag",
+                                            "orderNo": 10,
                                             "latitude": "latitude",
                                             "longitude": "longitude",
                                         },
@@ -811,11 +812,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.udf.userDefinedFieldValues.udf1",
                                             "title": "LOCATING_HOUSE",
                                             "type":"select",
+                                            "orderNo": 20,
                                             "enumCode": "locating_house"
                                         },
                                         "distanceFromHouse": {
                                             "key": "customer.udf.userDefinedFieldValues.udf2",
                                             "type": "text",
+                                            "orderNo": 30,
                                             "title": "DISTANCE_FROM_HOUSE",
                                             "schema": {
                                                 "type": "string"
@@ -823,7 +826,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "visibleIndicator": {
                                             "key": "customer.udf.userDefinedFieldValues.udf3",
-                                            "type": "text",
+                                            "type": "radios",
+                                            "enumCode": "decisionmaker",
+                                            "orderNo": 40,
                                             "title": "VISIBLE_INDICATOR",
                                             "schema": {
                                                 "type": "string"
@@ -832,6 +837,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "commentOnLocality": {
                                             "key": "customer.udf.userDefinedFieldValues.udf4",
                                             "type": "text",
+                                            "orderNo": 50,
                                             "title": "COMMENT_ON_LOCALITY",
                                             "schema": {
                                                 "type": "string"
@@ -839,25 +845,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "residenceStatus": {
                                             "key": "customer.ownership",
-                                            "type": "text",
+                                            "type": "select",
+                                            "enumCode": "residence_status",
                                             "title": "RESIDENCE_STATUS",
+                                            "orderNo": 60,
                                             "schema": {
                                                 "type": "string"
                                             }
                                         },
                                         "contactInformationConfirmed": {
                                             "key": "customer.udf.userDefinedFieldValues.udf5",
-                                            "type": "select",
+                                            "type": "radios",
                                             "title": "CONTACT_INFORMATION_CONFIRMED",
+                                            "orderNo": 70,
+                                            "enumCode": "decisionmaker",
                                             "schema": {
                                                 "type": "string"
                                             }
                                         },
                                         "remarks": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf5",
-                                            "condition": "customer.udf.userDefinedFieldValues.udf5=='No'",
+                                            "key": "customer.udf.userDefinedFieldValues.udf11",
+                                            "condition": "model.customer.udf.userDefinedFieldValues.udf5=='NO'",
                                             "type": "text",
                                             "title": "REMARKS",
+                                            "orderNo": 80,
                                             "schema": {
                                                 "type": "string"
                                             }
@@ -866,7 +877,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.udf.userDefinedFieldValues.udf6",
                                             "type": "select",
                                             "enumCode":"decisionmaker",
+                                            "orderNo": 90,
                                             "title": "STAY_AT_RESIDENCE",
+                                            "schema": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "noYearsAtResidence": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf10",
+                                            "type": "select",
+                                            "orderNo": 100,
+                                            "enumCode":"years_residence",
+                                            "title": "No_YEARS_AT_RESIDENCE",
                                             "schema": {
                                                 "type": "string"
                                             }
@@ -876,6 +898,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "select",
                                             "enumCode":"decisionmaker",
                                             "title": "NAME_PLATE",
+                                            "orderNo": 110,
                                             "schema": {
                                                 "type": "string"
                                             }
@@ -883,6 +906,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "localityType": {
                                             "key": "customer.localityType",
                                             "type": "select",
+                                            "orderNo": 120,
+                                            "enumCode": "locality_type",
                                             "title": "LOCALITY_TYPE",
                                             "schema": {
                                                 "type": "string"
@@ -891,6 +916,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "typeOfAccomodation": {
                                             "key": "customer.accomodationType",
                                             "type": "select",
+                                            "enumCode": "accomodation_type",
+                                            "orderNo": 130,
                                             "title": "ACCOMODATION_TYPE",
                                             "schema": {
                                                 "type": "string"
@@ -900,6 +927,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.udf.userDefinedFieldValues.udf8",
                                             "title": "AREA_SQFT",
                                             "type":"select",
+                                            "orderNo": 140,
+                                            "enumCode":"area_sqft",
                                             "schema": {
                                                 "type": "string"
                                             }
@@ -907,6 +936,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "remarksOnBusiness": {
                                             "key": "customer.udf.userDefinedFieldValues.udf9",
                                             "title": "REMAKRS_ON_BUISNESS",
+                                            "orderNo": 150,
                                             "schema": {
                                                 "type": "string"
                                             }
