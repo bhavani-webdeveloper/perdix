@@ -364,6 +364,12 @@ define([],function(){
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "VehicleAssetUse": {
+                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial'"
+                            },
+                            "VehicleRouteDetails": {
+                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial'"
+                            },
                             "DeductionsFromLoan.estimatedEmi": {
                                 "readonly": true
                             },
