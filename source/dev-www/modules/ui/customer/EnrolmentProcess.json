@@ -1498,7 +1498,7 @@
                         "key": "customer.physicalAssets[].nameOfOwnedAsset",
                         "title": "NAME_OF_OWNED_ASSET",
                         "type": "select",
-                        "enumCode": "asset_type"
+                        "enumCode": "physical_asset_name"
                     },
                     "vehicleModel": {
                         "key": "customer.physicalAssets[].vehicleModel",

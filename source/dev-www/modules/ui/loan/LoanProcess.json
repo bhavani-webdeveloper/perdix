@@ -197,8 +197,8 @@
             },
             "usedFor": {
                "key": "loanAccount.vehicleLoanDetails.usedFor",
-               "type": "radio",
-               "enumcode": "vehicle_used_for",
+               "type": "radios",
+               "enumCode": "vehicle_used_for",
                "title": "NATURE_OF_USE"
             },
             "segment": {
@@ -432,7 +432,8 @@
             "entityType": {
                 "key": "loanAccount.vehicleLoanDetails.entityType",
                 "title": "VEHICLE_ENTITY_TYPE",
-                "type": "select"
+                "type": "select",
+                "enumCode": "vehicle_entity_type"
             },
             "attachedwith": {
                 "key": "loanAccount.vehicleLoanDetails.attachedwith",
@@ -447,7 +448,8 @@
             "attachedContactNumber": {
                 "key": "loanAccount.vehicleLoanDetails.attachedContactNumber",
                 "title": "VEHICLE_ATTACHED_CONTACT_NUMBER",
-                "type": "string"
+                "inputmode": "number",
+                "numberType": "tel"
             },
             "locationAddress": {
                 "key": "loanAccount.vehicleLoanDetails.locationAddress",
@@ -462,7 +464,8 @@
             "locationContactNumber": {
                 "key": "loanAccount.vehicleLoanDetails.locationContactNumber",
                 "title": "PARKED_LOCATION_CONTACT_NUMBER",
-                "type": "string"
+                "inputmode": "number",
+                "numberType": "tel"
             }
         }
     },
@@ -755,7 +758,7 @@
             "usedFor": {
                 "key": "loanAccount.vehicleLoanDetails.usedFor",
                 "title": "USED_FOR",
-                "type": "select",
+                "type": "radios",
                 "enumCode": "vehicle_used_for"
             }
         }
