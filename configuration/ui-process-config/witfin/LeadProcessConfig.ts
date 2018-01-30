@@ -4,12 +4,6 @@ let config = {
             onLoad: {
                 "defaults": [
                     {
-                        "name": "PopulateLeadInteractionPolicy",
-                        "arguments": {
-
-                        }
-                    },
-                    {
                         "name":"LeadDerivedColumnsPolicy",
                         "arguments": {}
                     }
