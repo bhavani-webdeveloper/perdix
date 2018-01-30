@@ -34,21 +34,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'LOAN_REQUEST',
                                 pageClass: 'loan-request',
                                 minimum: 1,
-                                maximum: 1
+                                maximum: 1,
+                                order:60
                             },
                             {
                                 pageName: 'witfin.customer.IndividualEnrollment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
-                                maximum: 3
+                                maximum: 3,
+                                order:30
                             },
                             {
                                 pageName: 'witfin.customer.EnterpriseEnrolment2',
                                 title: 'BUSINESS',
                                 pageClass: 'business',
                                 minimum: 1,
-                                maximum: 1
+                                maximum: 1,
+                                order:20
                             },
                             {
                                 pageName: 'witfin.customer.VehicleValuation',
@@ -64,7 +67,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:80
+                                order:50
                             }
                             
 
