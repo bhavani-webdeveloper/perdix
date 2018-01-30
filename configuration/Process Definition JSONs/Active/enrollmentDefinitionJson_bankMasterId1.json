@@ -3467,7 +3467,7 @@
             "title": "limit",
             "type": "number",
             "minimum": 0,
-            "maximum": 10000000,
+            "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
