@@ -632,6 +632,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.gender",
                     "IndividualInformation.dateOfBirth",
                     "IndividualInformation.age",
+                    "IndividualInformation.licenceType",
+                    "IndividualInformation.leadSource",
+                    "IndividualInformation.referredBy",
+                    "IndividualInformation.agentName",
+                    "IndividualInformation.dealerName",
                     "IndividualInformation.language",
                     "IndividualInformation.fatherFirstName",
                     "IndividualInformation.motherName",
@@ -795,6 +800,50 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         ],
                         "options": {
                             "repositoryAdditions": {
+                                "IndividualInformation":{
+                                    "type":"box",
+                                    "items": {
+                                        "licenceType": {
+                                            "key": "customer.licenceType",
+                                            "title": "LICENCE_TYPE",
+                                            "orderNo": 132,
+                                            "readonly": true
+                                        },
+                                        "leadSource": {
+                                            "key": "customer.leadSource",
+                                            "title":"LEAD_SOURCE",
+                                            "type": "select",
+                                            "readonly": true,
+                                            "orderNo": 133,
+                                            "enumCode": "lead_source"
+                                        },
+                                        "referredBy": {
+                                            "key": "customer.referredBy",
+                                            "condition":"model.customer.leadSource=='Existing Customer Referral' || model.customer.leadSource=='Employee referral'",
+                                            "title": "REFERRED_BY",
+                                            "orderNo": 134,
+                                            "readonly": true
+                                        },
+                                        "agentName": {
+                                            "key": "customer.agentName",
+                                            "condition":"model.customer.leadSource=='Buying/Selling Agent'",
+                                            "type":"select",
+                                            "title": "AGENT_NAME",
+                                            "orderNo": 135,
+                                            "readonly": true
+                    
+                                        },
+                                        "dealerName": {
+                                            "key": "customer.dealerName",
+                                            "condition":"model.customer.leadSource=='Dealer'",
+                                            "type":"select",
+                                            "title": "DEALER_NAME",
+                                            "orderNo": 136,
+                                            "readonly": true
+                                        }
+                                    }
+
+                                },
                                 "ResidenceVerification": {
                                     "type": "box",
                                     "title": "RESIDENCE_VERIFICATION",
@@ -1068,6 +1117,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.dateOfBirth = obj.dob;
                                 model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
                                 model.customer.gender = obj.gender;
+                                model.customer.licenceType = obj.licenseType;
+                                model.customer.leadSource = obj.leadSource;
+                                model.customer.referredBy = obj.referredBy;
                                 model.customer.landLineNo = obj.alternateMobileNo;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
