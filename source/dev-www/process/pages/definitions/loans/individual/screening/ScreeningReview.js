@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                         order: 30
                     },
                     {
-                        pageName: 'customer.EnterpriseEnrolment2new',
+                        pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,

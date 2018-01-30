@@ -36,7 +36,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     allowedCentres.push(centres[i]);
                 }
             }
-            
+
 
             if (_.hasIn(model, 'loanRelation')){
                 console.log(model.loanRelation);
@@ -45,7 +45,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
-                    
+
                         if (model.customer.stockMaterialManagement) {
                         model.proxyIndicatorsHasValue = true;
                         $log.debug('PROXY_INDICATORS already has value');
@@ -2743,6 +2743,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_IMAGE",
                                 "category":"Loan",
                                 "subCategory":"DOC1",
+                                required: true,
                                 type: "file",
                                 fileType:"application/pdf",
                                 using: "scanner"
