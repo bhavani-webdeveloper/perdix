@@ -76,16 +76,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                     isApplicable: function(bundleModel) {
                         return true;
                     }
-                }, {
-                    name: "Conversation",
-                    desc: "",
-                    icon: "fa fa-comment",
-                    fn: function(bundleModel) {
-                        Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                    },
-                    isApplicable: function(bundleModel) {
-                        return true;
-                    }
                 }],
                 "offline": true,
                 "getOfflineDisplayItem": function(value, index){

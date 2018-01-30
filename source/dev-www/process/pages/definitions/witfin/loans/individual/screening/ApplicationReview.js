@@ -100,17 +100,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return out;
                     },
 
-                    bundleActions: [{
-                        name: "Conversation",
-                        desc: "",
-                        icon: "fa fa-comment",
-                        fn: function(bundleModel) {
-                            Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                        },
-                        isApplicable: function(bundleModel) {
-                            return true;
-                        }
-                    }],
+                   
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
