@@ -67,6 +67,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.distanceFromBranch",
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
+                    "EnterpriseReferences",
+                    "EnterpriseReferences.verifications",
+                    "EnterpriseReferences.verifications.referenceFirstName",
+                    "EnterpriseReferences.verifications.knownSince",
+                    "EnterpriseReferences.verifications.customerResponse",
+                    "EnterpriseReferences.verifications.opinion",
                     "Liabilities",
                     "Liabilities.liabilities",
                     "Liabilities.liabilities.loanType",
@@ -133,7 +139,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets": {
                                         "readonly": "true"
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
                             "ScreeningReview": {
                                 "overrides": {
@@ -155,7 +164,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "readonly": true
                                     }
-                                }
+                                },
+                                "excludes": [
+                                    "EnterpriseReferences"
+                                ]
                             },
                             "ApplicationReview": {
                                 "overrides": {
@@ -176,7 +188,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
                                     }
+                                    
                                 }
                             },
                             "BranchCreditAppraisal": {
@@ -197,6 +213,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
                                         "readonly": true
                                     }
                                 }
@@ -220,6 +239,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -241,6 +263,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
                                         "readonly": true
                                     }
                                 }
@@ -371,6 +396,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
                                     "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "title": "NEIGHBOUR_CHECK"
+                                },
+                                "EnterpriseReferences.verifications.referenceFirstName": {
+                                    "title":"NAME_OF_NEIGHBOUR"
+                                },
+                                "EnterpriseReferences.verifications.knownSince": {
+                                    "title":"NEIGHBOUR_RECOGNIZE_BORROWER"
+                                },
+                                "EnterpriseReferences.verifications.customerResponse": {
+                                    "title":"NEIGHBOUR_REFERENCE"
+                                },
+                                "EnterpriseReferences.verifications.opinion": {
+                                    "title":"COMMENTS_OF_NEIGHBOUR"
                                 }
                             },
                             "includes": getIncludes(model),
