@@ -4110,6 +4110,16 @@
                 "BasicEnrolment",
                 "Completed"
               ]
+            }, 
+			"details": {
+              "title": "details",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 250,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
             },
             "manufacturer": {
               "title": "manufacturer",
