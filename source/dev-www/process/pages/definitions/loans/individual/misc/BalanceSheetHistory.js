@@ -121,7 +121,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
                         angular.forEach(model.loanRepaymentHistory[0].basicLoanInfo, function(value, key){
                             var item = {
-                                key: "loanRepaymentHistory[0].basicLoanInfo." + key,
+                                key: "loanRepaymentHistory[].basicLoanInfo." + key,
                                 title: key,
                                 type: "string",
                                 readonly: true,
@@ -130,7 +130,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         });
                         angular.forEach(model.loanRepaymentHistory[0].loanOverview, function(value, key){
                             var item = {
-                                key: "loanRepaymentHistory[0].loanOverview." + key,
+                                key: "loanRepaymentHistory[].loanOverview." + key,
                                 title: key,
                                 type: "string",
                                 readonly: true,
