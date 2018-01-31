@@ -343,9 +343,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                 }
             }
+            var calculateVehiclesFree = function(modelValue, form, model) {
+                model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+            }
             var overridesFields = function (bundlePageObj) {
-
                 return {
+                    "TrackDetails.vehiclesFree": {
+                        "readonly": true
+                    },
+                    "TrackDetails.vehiclesOwned": {
+                        onChange: calculateVehiclesFree
+                    },
+                    "TrackDetails.vehiclesFinanced": {
+                        onChange: calculateVehiclesFree
+                    },
                     "Liabilities.liabilities.loanSource1": {
                         orderNo : 12
                     },
