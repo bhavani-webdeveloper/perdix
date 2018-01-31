@@ -31,6 +31,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             "activated": true,
                             "userState": "ACTIVE",
                             "userType": "A",
+                            "bankName":model.bankName,
                             "validUntil": "2010-05-26",
                             "accessType": "BRANCH",
                             "userRoles": [

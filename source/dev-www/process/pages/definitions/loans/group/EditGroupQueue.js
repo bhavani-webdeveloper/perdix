@@ -48,6 +48,7 @@ define({
 	                	},
 	                	{
 	                		key: "branchId", 
+	                		readonly:true
 	                	},
 	                	{
 	                		key: "partner",

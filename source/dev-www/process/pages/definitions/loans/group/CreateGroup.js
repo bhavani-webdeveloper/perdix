@@ -164,6 +164,7 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
+                        model.group.branchId = model.group.branchId || SessionStore.getCurrentBranch().branchId;
                         fixData(model);
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
