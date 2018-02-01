@@ -142,7 +142,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "Page
                             title: 'CLOSED_BY',
                             data: 'closed_by'
                         }, {
-                            title: 'Days left',
+                            title: 'DAYS_LEFT',
                             data: 'days_left'
                         }]
                     },

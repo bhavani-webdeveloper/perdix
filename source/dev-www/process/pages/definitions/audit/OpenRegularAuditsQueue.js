@@ -129,10 +129,11 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        } , {
-                            title: 'Days left',
-                            data: 'days_left'
-                        }
+                        } , 
+                        // {
+                        //     title: 'Days left',
+                        //     data: 'days_left'
+                        // }
                         ]
                     },
                     getActions: function() {

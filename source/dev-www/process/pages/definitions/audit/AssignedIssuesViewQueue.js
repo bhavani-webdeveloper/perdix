@@ -158,7 +158,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             title: 'AUDIT_REPORT_DATE',
                             data: 'audit_report_date'
                         },{
-                            title: 'Days left',
+                            title: 'DAYS_LEFT',
                             data: 'days_left'
                         }]
                     },

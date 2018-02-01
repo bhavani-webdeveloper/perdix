@@ -510,7 +510,7 @@
     "process_compliance": {
         "1": {
             "auto_sampling": [{
-                "scoring_sample_type_id": 1,
+                "scoring_sample_type_id": 0,
                 "sample_total": 1200010,
                 "sample_fetched": 10,
                 "sample_set": [{
@@ -4478,7 +4478,7 @@
         },       
         "3": {
             "auto_sampling": [{
-                "scoring_sample_type_id": 1,
+                "scoring_sample_type_id": 0,
                 "sample_total": 1200010,
                 "sample_fetched": 10,
                 "sample_set": [{

@@ -232,7 +232,7 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditorQueue"), ["$log", "Querie
                             title: 'END_DATE',
                             data: 'end_date'
                         }, {
-                            title: 'Days left',
+                            title: 'DAYS_LEFT',
                             data: 'days_left'
                         }]
                     },

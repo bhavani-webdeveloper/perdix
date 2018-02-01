@@ -35,6 +35,8 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                 var init = function(response) {
                     model.auditScoresheet = response;
                     model.auditScoresheet.rating_name = Audit.utils.getRatingByScore(master, Math.round(parseFloat(model.auditScoresheet.audit_score)));
+                    $log.info(model.auditScoresheet.rating_name);
+                    $log.info("model.auditScoresheet.rating_name");
                     var nodeForms = [];
                     for (i in model.auditScoresheet.node_scores) {
                         var nodeSheet = model.auditScoresheet.node_scores[i];
