@@ -102,8 +102,7 @@
                     },
                     "accountNumber": {
                         "key": "customer.customerBankAccounts[].accountNumber",
-                        "inputmode": "number",
-                        "numberType": "tel",
+                       "type":"text",
                         "required": true,
                         "orderNo": 50
                     },
@@ -299,6 +298,7 @@
     "EnterpriseReferences": {
         "type": "box",
         "title": "REFERENCES",
+        "orderNo": 110,
         "items": {
             "verifications": {
                 "key": "customer.verifications",
@@ -367,6 +367,9 @@
                         "key": "customer.verifications[].customerResponse",
                         "title": "CUSTOMER_RESPONSE",
                         "type": "select"
+                    },
+                    "opinion": {
+                        "key": "customer.verifications[].opinion"
                     }
                 }
             }
