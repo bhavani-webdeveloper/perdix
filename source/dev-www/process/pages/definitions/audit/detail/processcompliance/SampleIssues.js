@@ -93,6 +93,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     model.processCompliance = response;
                     var sampleColumnsConfig = null;
                     var componentColumns = [];
+                    var componentForm = [];
                     for (i in master.sampling_columns_config) {
                         sampleColumnsConfig = master.sampling_columns_config[i];
                         if (sampleColumnsConfig.scoring_sample_type_id == sampleTypeId) {
@@ -135,6 +136,19 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                         "searchParams": searchParams
                                     }).$promise;
                                 };
+                                columnForm.getListDisplayItem = function(item, index) {
+                                    return [
+                                        item.Entity,
+                                        item.URN,
+                                        item.product,
+                                        item.transaction_amount
+                                    ];
+                                };
+                                columnForm.onSelect =  function(valueObj, model, context) {
+                                    
+
+                                };
+                                
                                 // columnForm.inputSchema = {
                                 //     "type": 'object',
                                 //     "title": 'SEARCH_OPTIONS',

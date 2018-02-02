@@ -296,7 +296,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             findDumpSamples: searchResource({
                 method: 'GET',
-                url: endpoint + '/findDumpSamples'
+                url: 'process/schemas/audit/findDumpSamples.json'
             }),
             // getDumpSample: {
             //     method: 'POST',
