@@ -221,6 +221,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
@@ -2468,19 +2469,36 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                     $log.info("Inside ViewLoan()");
-                    irfNavigator.go({
-                            state: "Page.Bundle",
-                            pageName: "loans.individual.screening.LoanView",
-                            pageId: model.loanAccount.id,
-                            pageData: null
-                        },
-                        {
-                            state: "Page.Engine",
-                            pageName: $stateParams.pageName,
-                            pageId: $stateParams.pageId,
-                            pageData: $stateParams.pageData
-                        });
-                    })
+                        if(model.loanView) {
+                            irfNavigator.go({
+                                state: "Page.Bundle",
+                                pageName: model.loanView,
+                                pageId: model.loanAccount.id,
+                                pageData: null
+                            },
+                            {
+                                state : 'Page.Engine',
+                                pageName: $stateParams.pageName,
+                                pageId: $stateParams.pageId,
+                                pageData: $stateParams.pageData
+                            });
+                        } else {
+                            irfNavigator.go({
+                                state: "Page.Bundle",
+                                pageName: "loans.individual.screening.LoanView",
+                                pageId: model.loanAccount.id,
+                                pageData: null
+                            },
+                            {
+                                state: "Page.Engine",
+                                pageName: $stateParams.pageName,
+                                pageId: $stateParams.pageId,
+                                pageData: $stateParams.pageData
+                            });
+                        }
+                    });
+
+                    
                 },
                 holdButton: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");

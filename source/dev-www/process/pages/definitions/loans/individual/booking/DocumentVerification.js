@@ -12,7 +12,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
-
+                model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 var loanId = $stateParams['pageId'];
                 PageHelper.showProgress('loan-load', 'Loading loan details...');
                 PageHelper.showLoader();
@@ -531,15 +531,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 viewLoan: function(model, formCtrl, form, $event) {
                     Utils.confirm("Save the data before proceed").then(function() {
                         $log.info("Inside ViewLoan()");
-                        irfNavigator.go({
-                            state: "Page.Bundle",
-                            pageName: "loans.individual.screening.LoanView",
-                            pageId: model.loanAccount.id
-                        }, {
-                            state: "Page.Engine",
-                            pageName: "loans.individual.booking.DocumentVerification",
-                            pageId: model.loanAccount.id
-                        });
+                        if(model.loanView) {
+                            irfNavigator.go({
+                                state: "Page.Bundle",
+                                pageName: model.loanView,
+                                pageId: model.loanAccount.id,
+                                pageData: null
+                            },
+                            {
+                                state : 'Page.Engine',
+                                pageName: $stateParams.pageName,
+                                pageId: $stateParams.pageId,
+                                pageData: $stateParams.pageData
+                            });
+                        } else {
+                            irfNavigator.go({
+                                state: "Page.Bundle",
+                                pageName: "loans.individual.screening.LoanView",
+                                pageId: model.loanAccount.id
+                            }, {
+                                state: "Page.Engine",
+                                pageName: "loans.individual.booking.DocumentVerification",
+                                pageId: model.loanAccount.id
+                            });
+                        }
                     });
                 },
                 sendBack: function(model, formCtrl, form, $event){
