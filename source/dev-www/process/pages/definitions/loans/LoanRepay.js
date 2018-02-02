@@ -444,6 +444,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     {
                                         "name":"Suspense",
                                         "value":"Suspense"
+                                    },
+                                    {
+                                        "name":"Internal",
+                                        "value":"INTERNAL"
                                     }
                                 ]
                             },
