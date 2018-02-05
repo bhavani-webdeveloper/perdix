@@ -195,6 +195,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
             actions: {
 
                 submit: function(model, form, formName){
+                    if(PageHelper.isFormInvalid(form)) {
+                        return false;
+                    }
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
