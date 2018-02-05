@@ -49,7 +49,7 @@
     "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
     "mathjs": "^3.8.1",
     "angular-sanitize": "1.6.1",
-    "class-transformer": "^0.1.1"
+    "class-transformer": "https://github.com/typestack/class-transformer/commit/bfee63f5672aaad60c749e0f31c37140c368fca2"
   },
   "overrides": {
     "admin-lte": {
