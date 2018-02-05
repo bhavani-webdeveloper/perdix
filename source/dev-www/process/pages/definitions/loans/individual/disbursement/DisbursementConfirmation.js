@@ -140,12 +140,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     },
                     {
                         "type": "actionbox",
+                        "condition":"model.siteCode=='KGFS'",
                         "items": [{
                             "type": "submit",
                             "title": "Update"
                         },{
                             "title": "Print Receipt",
-                            "condition":"model.siteCode=='KGFS'",
+                            
                             "type": "button",
                             "onClick": function(model, formCtrl, form, $event) {
                                 var repaymentInfo = {
@@ -178,6 +179,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             }
                         }]
                     },
+                    {
+                        "type": "actionbox",
+                        
+                        "items": [{
+                            "type": "submit",
+                            "title": "Update"
+                        }]
+                    }
                 ]
             }],
             schema: function() {
