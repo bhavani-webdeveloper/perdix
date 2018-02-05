@@ -41,7 +41,7 @@
                 </div>
         </div>
     </div>
-    <div class="login-forgot-box animat" ng-show="isOnline && errorMessage">
+    <div class="login-forgot-box animat" ng-class="{'hide-login':hideLogin}" ng-show="isOnline && errorMessage">
         <a class="pull-left color-theme" href="" ui-sref="Reset({type:'forgot'})">Forgot password?</a>
         <a class="pull-right color-theme" href="" ui-sref="Reset({type:'reset'})">Reset password</a>
     </div>
