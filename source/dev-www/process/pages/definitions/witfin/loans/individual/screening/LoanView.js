@@ -51,12 +51,28 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:40
                         },
                         {
+                            pageName: 'witfin.customer.VehicleValuation',
+                            title: 'VEHICLE_VALUATION',
+                            pageClass: 'vehicle_valuation',
+                            minimum: 1,
+                            maximum: 1,
+                            order:50
+                        },
+                        {
+                            pageName: 'loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:60
+                        },
+                        {
                             pageName: 'witfin.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:70
                         }
                     ]);
                 },
@@ -186,6 +202,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-valuation',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
