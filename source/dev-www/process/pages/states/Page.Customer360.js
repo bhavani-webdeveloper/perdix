@@ -27,7 +27,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	var getBusinessProfilePageUrl = function() {
 		if(siteCode == 'witfin') {
-			return "Page/Engine/witfin.customer360.BuisnessProfile";
+			return "Page/Engine/witfin.customer360.BusinessProfile";
 		} else {
 			return "Page/Engine/customer360.BuisnessProfile";
 		} 

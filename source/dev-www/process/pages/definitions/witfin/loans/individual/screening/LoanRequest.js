@@ -386,16 +386,19 @@ define([],function(){
                                 "readonly" : true
                             },
                             "PreliminaryInformation.frequencyRequested": {
+                                "required": true,
                                  onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
                                 }
                             },
                             "PreliminaryInformation.tenureRequested": {
+                                "required": true,
                                  onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
                                 }
                             },
                             "PreliminaryInformation.expectedInterestRate": {
+                                "required": true,
                                  onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
                                 }
