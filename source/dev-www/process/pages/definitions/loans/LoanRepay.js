@@ -509,13 +509,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"REFERENCE_NUMBER",
                                 type:"string",
                                 required: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS' || model.repayment.instrument == 'INTERNAL'"
                             },
                             {
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 autolov: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
@@ -809,14 +809,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                 if (postData.loanCollection.instrumentType == 'CASH') {
                                                     resp.stage = "Deposit";
                                                 } else if (postData.loanCollection.instrumentType == 'ACH') {
-                                                    //resp.loanCollection.instrumentType = "NEFT";
+                                                    // resp.loanCollection.instrumentType = "NEFT";
                                                     resp.loanCollection.scheduleDemandAmount = resp.loanCollection.repaymentAmount;
                                                     resp.loanCollection.feeWaiverAmount = 0;
                                                     resp.loanCollection.penalInterestWaiverAmount = 0;
                                                     resp.loanCollection.feeAmount = 0;
                                                     resp.loanCollection.securityEmiAmount = 0;
                                                     resp.stage = "Completed";
-                                                } else if (postData.loanCollection.instrumentType == 'Suspense') {
+                                                } else if (postData.loanCollection.instrumentType == 'INTERNAL') {
+                                                    resp.stage = "CreditValidation";
+                                                } else if (postData.loanCollection.instrumentType == 'Suspense'){
                                                     resp.stage = "CreditValidation";
                                                     resp.loanCollection.bankAccountNumber = model.additional.suspenseCode;
                                                 } else {
