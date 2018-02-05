@@ -769,6 +769,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.payeeRelationToApplicant = model.repayment.payeeRelationToApplicant;
 
                                     if (model.repayment.id) {
+                                        postData.loanCollection.feeAmount = 0;
                                         if (postData.loanCollection.instrumentType == 'CASH') {
                                             postData.stage = "Deposit";
                                         } else if (postData.loanCollection.instrumentType == 'ACH') {
