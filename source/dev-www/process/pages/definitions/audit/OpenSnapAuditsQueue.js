@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
         var localFormController;
         var returnObj = {
             "type": "search-list",
-            "title": "OPEN_SNAP_AUDIT",
+            "title": "OPEN_SNAP_AUDIT_QUEUE",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 localFormController = formCtrl;

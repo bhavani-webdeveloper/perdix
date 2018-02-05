@@ -39,9 +39,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             $scope.model._isOnline = $scope.$isOnline;
             $scope.model.process_compliance = auditData.process_compliance;
             $log.info($scope.model.process_compliance)
-
         };
-
         var formType = {
             "type": "section",
             "htmlClass": "row",
@@ -58,10 +56,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             var ratingName = master.summary_rating[k].name;
                             var sampleSetId = sampleSet.scoring_sample_type_id;
                             if (_.hasIn(master.scoring_sample_sets[sampleSetId], 'scoring_sample_type')) {
-                                var scoringSampleSet = master.scoring_sample_sets[sampleSetId].scoring_sample_type;
-
-
-
+                                var scoringSampleSet = master.scoring_sample_sets[sampleSetId].scoring_sample_type
                             }
 
                         }
@@ -78,7 +73,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 });
                 var columnForm = {
                     "type": "box",
-                    "title": "AUDIT_ISSUES_DETAILS",
+                    "title": "AUDIT_REPORT_DETAILS",
                     "colClass": "col-sm-12",
                     "items": [{
                         "type": "tableview",
@@ -134,7 +129,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     });
                     var columnForm = {
                         "type": "box",
-                        "title": "AUDIT_ISSUES_DETAILS",
+                        "title": "AUDIT_REPORT_DETAILS",
                         "colClass": "col-sm-12",
                         "items": [{
                             "type": "tableview",
@@ -178,34 +173,26 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
 
         var riskView = function() {
-            // model.auditScoresheet.rating_name = Audit.utils.getRatingByScore(master, Math.round(parseFloat(model.auditScoresheet.audit_score)));
             var tableColumnsConfig = [];
-            for (i in $scope.model.process_compliance) {
-                var processComplianceData = $scope.model.process_compliance[i]
-                for (j in processComplianceData.auto_sampling) {
-                    var sampleSet = processComplianceData.auto_sampling[j];
-                    var sampleSetId = sampleSet.scoring_sample_type_id;
-                    var scoringSampleSet = master.scoring_sample_sets[sampleSetId];
-                    if (scoringSampleSet) {
-                        $log.info(scoringSampleSet);
-                        $log.info("scoringSampleSet");
+            for (i in master.risk_classification) {
+                var riskClassificationName = master.risk_classification[i].risk_clasification_name;
+                $log.info(riskClassificationName);
+                $log.info("riskClassificationName");
+                // if (scoringSampleSet) {
+                tableColumnsConfig.push({
+                    "title": "RATING",
+                    "data": "rating_name"
+                }, {
+                    "title": "RISK_CLASSIFICATION",
+                    "data": riskClassificationName,
 
-                        tableColumnsConfig.push({
-                            "title": "RATING",
-                            "data": rating_name
-                        }, {
-                            "title": "RISK_CLASSIFICATION",
-                            "data": scoringSampleSet.scoring_sample_type,
+                });
 
-                        });
-
-                    }
-
-                }
+                // }
             }
             var columnForm = {
                 "type": "box",
-                "title": "AUDIT_ISSUES_DETAILS",
+                "title": "AUDIT_REPORT_DETAILS",
                 "colClass": "col-sm-12",
                 "items": [{
                     "type": "tableview",
@@ -217,7 +204,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         "pageLength": 10,
                     },
                     getColumns: function() {
-                        return tableColumnsConfig; //its coming from after adding issue
+                        return tableColumnsConfig;
                     },
                     getActions: function() {
                         return [{
@@ -255,7 +242,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             if ($stateParams.pageData.auditData && $stateParams.pageData.auditData.audit_info && $stateParams.pageData.auditData.audit_info.audit_id == $this.auditId) {
                 $scope.$isOnline = true;
                 processAuditData($stateParams.pageData.auditData);
-                fileView($stateParams.pageData.auditData);
                 PageHelper.hideLoader();
                 deferred.resolve();
             } else {
@@ -273,7 +259,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             $log.info("=====FALLBACK TO ONLINE=====");
                             Utils.confirm("You may not be able to edit Audit. Do you want to continue?").then(function() {
                                 processAuditData(_auditData);
-                                fileView(_auditData);
                                 deferred.resolve();
                             }, function() {
                                 irfNavigator.goBack();
@@ -289,21 +274,40 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }).finally(PageHelper.hideLoader);
             }
         });
+        var pdp;
+        if ($scope.siteCode == 'KGFS') {
+            pdp = PagesDefinition.getUserAllowedDefinition({
+                "title": "Audit Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    "Page/Engine/audit.detail.GeneralObservation",
+                    "Page/Engine/audit.detail.PortfolioStats",
+                    "Page/Engine/audit.detail.JewelAppraisal",
+                    "Page/Engine/audit.detail.FixedAsset",
+                    "Page/Engine/audit.detail.FieldVerification",
+                    "Page/Adhoc/audit.detail.ProcessCompliance",
+                    "Page/Engine/audit.detail.AuditSummary",
+                    // "Page/Adhoc/audit.AuditDraftDetails",
+                ]
+            });
+        } else if ($scope.siteCode == 'KINARA') {
+            pdp = PagesDefinition.getUserAllowedDefinition({
+                "title": "Audit Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    // "Page/Engine/audit.detail.GeneralObservation",
+                    // "Page/Engine/audit.detail.PortfolioStats",
+                    // "Page/Engine/audit.detail.JewelAppraisal",
+                    // "Page/Engine/audit.detail.FixedAsset",
+                    // "Page/Engine/audit.detail.FieldVerification",
+                    "Page/Adhoc/audit.detail.ProcessCompliance",
+                    "Page/Engine/audit.detail.AuditSummary",
+                    // "Page/Adhoc/audit.AuditDraftDetails",
+                ]
+            });
 
-        var pdp = PagesDefinition.getUserAllowedDefinition({
-            "title": "Audit Details",
-            "iconClass": "fa fa-cube",
-            "items": [
-                // "Page/Engine/audit.detail.GeneralObservation",
-                // "Page/Engine/audit.detail.PortfolioStats",
-                // "Page/Engine/audit.detail.JewelAppraisal",
-                // "Page/Engine/audit.detail.FixedAsset",
-                // "Page/Engine/audit.detail.FieldVerification",
-                "Page/Adhoc/audit.detail.ProcessCompliance",
-                "Page/Engine/audit.detail.AuditSummary",
-                // "Page/Adhoc/audit.AuditDraftDetails",
-            ]
-        });
+        }
+
 
         var scoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
             "title": "Audit Details",
@@ -334,17 +338,34 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             allPromises.push(manualScoreMenuPromise);
         }
         $q.all(allPromises).then(function() {
-            var requestMenu = [
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
-                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
-                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
-                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
-                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
-                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
-                // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
-                // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
-            ];
+            var requestMenu = [];
+            if ($scope.siteCode == 'KGFS') {
+                requestMenu = [
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
+                    $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
+                ];
+            } else if ($scope.siteCode == 'KINARA') {
+                requestMenu = [
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
+                    $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
+                    // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
+                ];
+            }
+
+
             var reloadDashboardBox = false;
             if ($scope.dashboardDefinition_Score &&
                 ($scope.model.ai.current_stage == 'publish' ||
@@ -421,7 +442,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             }]
         }, {
             "type": "box",
-            "title": "AUDIT_ISSUES",
+            "title": "AUDIT_REPORT",
             // "condition": "!model.ai.status == 'O'",
             "items": [{
                 "key": "issueGroupType",

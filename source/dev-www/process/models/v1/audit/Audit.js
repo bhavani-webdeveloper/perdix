@@ -655,6 +655,12 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.components = components;
 
+                var risk_classification = {};
+                for (i in response.risk_classification) {
+                    risk_classification[response.risk_classification[i].risk_clasification_id] = response.risk_classification[i];
+                }
+                response.risk_classification = risk_classification;
+
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
                 deferred.resolve();

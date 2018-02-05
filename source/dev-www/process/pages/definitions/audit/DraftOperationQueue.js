@@ -243,7 +243,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Adhoc',
-                                    'pageName': 'audit.AuditDraftDetails',
+                                    'pageName': 'audit.AuditIssues',
                                     'pageId': item.audit_id,
                                     'pageData': {
                                         "readonly": item.type !== 'operation'
