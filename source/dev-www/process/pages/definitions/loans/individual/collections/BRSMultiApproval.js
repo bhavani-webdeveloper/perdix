@@ -146,9 +146,7 @@ define({
                     },
                     getBulkActions: function() {
                         return [{
-                                name: "submit",
-                                desc: "",
-                                icon: "fa fa-registered",
+                                name: "Submit",
                                 fn: function(items) {
                                     if(items.length==0){
                                         PageHelper.showProgress("bulk-process","Atleast one record should be selected",5000);
@@ -188,7 +186,6 @@ define({
                             },
                             {
                                 name: "Reject",
-                                desc: "",
                                 fn: function(items) {
                                     var temp = [];
                                     var instrument = null;

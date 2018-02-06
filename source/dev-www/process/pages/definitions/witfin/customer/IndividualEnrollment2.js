@@ -76,10 +76,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "ScreeningReview": {
-                            "excludes": [
-                                "PhysicalAssets",
-                                "IndividualReferences",
-                            ],
                             "overrides": {
                                 "KYC": {
                                     "readonly": true
@@ -119,12 +115,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.salary",
                                 "FamilyDetails.familyMembers.incomes",
                                 "FamilyDetails.expenditures",
-                                "IndividualReferenes.mobileNo",
-                                "IndividualReferenes.occupation",
-                                "IndividualReferenes.address",
-                                "IndividualReferenes.referenceCheck",
-                                "IndividualReferenes.referenceCheck.relationship",
-                                "IndividualReferenes.referenceCheck.financialStatus",
+                                "IndividualReferences",
                                 "ContactInformation.whatsAppMobileNoOption"
                             ]
                         },
@@ -869,7 +860,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "longitude": "longitude",
                                         },
                                         "locatingHouse": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf1",
+                                            "key": "customer.udf.userDefinedFieldValues.udf16",
                                             "title": "LOCATING_HOUSE",
                                             "type":"select",
                                             "orderNo": 20,
