@@ -2225,6 +2225,13 @@
                      "Screening", "LoanInitiation"
                   ]
                },
+			   "insuranceValidFrom":{
+                  "title":"insuranceValidFrom",
+                  "type":"date",
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
                "insurancePolicyType":{
                   "title":"insurancePolicyType",
                    "type":"string",
@@ -2255,6 +2262,15 @@
                    "type":"string",
                   "minLength":1,
                   "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+			   "price":{
+                  "title":"price",
+				  "type":"number",
+				  "minimum":1,
+                  "maximum":99999999,
                   "captureStages":[
                      "Screening", "LoanInitiation"
                   ]
