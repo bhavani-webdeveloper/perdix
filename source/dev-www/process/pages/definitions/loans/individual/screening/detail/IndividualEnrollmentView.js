@@ -837,7 +837,7 @@ define({
                     "condition": "model.bundlePageObj.pageClass != 'guarantor' ",
                     "items": [{
                         "type": "section",
-                        "html": '<table class="table table-responsive">' +
+                        "html": '<em ng-if="!model.psy_data">Psychometric data is not available</em><table ng-if="model.psy_data" class="table table-responsive">' +
                             '<colgroup>' +
                             '<col width="30%"> <col width="30%"> <col width="30%">' +
                             '</colgroup>' +

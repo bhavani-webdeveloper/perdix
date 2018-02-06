@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.Review"),
-["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "SessionStore", "irfCurrencyFilter", "$filter",
-function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, irfCurrencyFilter, $filter){
+["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "Messaging", "SessionStore", "irfCurrencyFilter", "$filter",
+function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, SessionStore, irfCurrencyFilter, $filter){
 	var getStageNameByStageCode = function(stageCode) {
 		var stageName;
 		switch(stageCode) {
@@ -54,24 +54,37 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 			$log.info("bundleModel");
 			$log.info(bundleModel);
 			model.currentStage = bundleModel.currentStage;
-			
+			model.conversationStatus = [];
 			if (model.loanAccount && model.loanAccount.id) {
 				PageHelper.showLoader();
 				IndividualLoan.loanRemarksSummary({id: model.loanAccount.id}).$promise.then(function (resp){
 					model.loanSummary = resp;
-					if (_.isArray(model.loanSummary) && model.loanSummary.length > 0){
+					if (_.isArray(model.loanSummary) && model.loanSummary.length > 0) {
 						var lastEntry = model.loanSummary[model.loanSummary.length - 1];
 						var aTime = new moment(lastEntry.createdDate);
 						var bTime = new moment();
 						model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
-					}
 
-					var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
-					if(model.currentStage == 'loanView') {
-						model.loanSummary[currentStage].hideCreateConversation = true;
-					}
-					model.loanSummary[currentStage].isCurrentStage = true;
-					model.loanSummary[currentStage]._conversationExpand = true;					
+						Messaging.getConversationStatus({
+		                    'process_id': model.loanAccount.id
+		                }).$promise.then(function(response) {
+		                    model.conversationStatus = response.body;
+
+							for(var i = 0; i < model.loanSummary.length; i++) {
+								if(model.loanSummary[i].action == 'PROCEED' && _.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id})) {
+									model.loanSummary[i].conversationStatus =  true;
+								}
+							}
+		                });
+
+						var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
+						if(model.currentStage == 'loanView') {
+							model.loanSummary[currentStage].hideCreateConversation = true;
+						}
+
+						model.loanSummary[currentStage].isCurrentStage = true;
+						model.loanSummary[currentStage]._conversationExpand = true;	
+					}				
 				}).finally(PageHelper.hideLoader);
 			}
 		},
@@ -106,7 +119,7 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, SessionStore, 
 				if (item.status)
 					item._bodyHtml += '<b>Status:</b> '+item.status+'<br>';
 				item._footerHtml = '<b>Remarks:</b> <div style="white-space: pre-wrap;">'+(item.remarks?item.remarks:'--')+'</div>';
-				if (item.action == 'PROCEED') {
+				if (item.conversationStatus) {
 					item._footerHtml += '<hr><a href="" style="display: inherit;text-align: center;" ng-if="!model.loanSummary['+index+']._conversationExpand" ng-click="model.loanSummary['+index+']._conversationExpand=true" class="color-theme">{{\'VIEW_CONVERSATION\'|translate}}</a>'
 						+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" hide-create-conversation="model.loanSummary['+index+'].hideCreateConversation" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
 				}
