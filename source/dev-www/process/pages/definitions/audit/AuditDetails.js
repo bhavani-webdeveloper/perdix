@@ -187,7 +187,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     "data": riskClassificationName,
 
                 });
-
                 // }
             }
             var columnForm = {
@@ -274,7 +273,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }).finally(PageHelper.hideLoader);
             }
         });
-        var pdp;
+        var pdp = null;
         if ($scope.siteCode == 'KGFS') {
             pdp = PagesDefinition.getUserAllowedDefinition({
                 "title": "Audit Details",
@@ -290,25 +289,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     // "Page/Adhoc/audit.AuditDraftDetails",
                 ]
             });
-        } else if ($scope.siteCode == 'KINARA') {
+        } else if ($scope.siteCode == 'kinara') {
             pdp = PagesDefinition.getUserAllowedDefinition({
                 "title": "Audit Details",
                 "iconClass": "fa fa-cube",
                 "items": [
-                    // "Page/Engine/audit.detail.GeneralObservation",
-                    // "Page/Engine/audit.detail.PortfolioStats",
-                    // "Page/Engine/audit.detail.JewelAppraisal",
-                    // "Page/Engine/audit.detail.FixedAsset",
-                    // "Page/Engine/audit.detail.FieldVerification",
                     "Page/Adhoc/audit.detail.ProcessCompliance",
-                    "Page/Engine/audit.detail.AuditSummary",
-                    // "Page/Adhoc/audit.AuditDraftDetails",
+                    // "Page/Engine/audit.detail.AuditSummary",
                 ]
             });
 
         }
-
-
         var scoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
             "title": "Audit Details",
             "iconClass": "fa fa-cube",
@@ -338,33 +329,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             allPromises.push(manualScoreMenuPromise);
         }
         $q.all(allPromises).then(function() {
-            var requestMenu = [];
-            if ($scope.siteCode == 'KGFS') {
-                requestMenu = [
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
-                    $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
-                ];
-            } else if ($scope.siteCode == 'KINARA') {
-                requestMenu = [
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
-                    $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
-                    $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
-                    // $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.AuditDraftDetails"],
-                ];
+            $scope.showDashboard = true;
+            if ($scope.siteCode == 'kinara' && $scope.model.ai.status == 'O' || $scope.siteCode != 'kinara') {
+                $scope.showDashboard = false;
+                return;
             }
-
+            var requestMenu = [
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
+                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"]
+            ];
 
             var reloadDashboardBox = false;
             if ($scope.dashboardDefinition_Score &&

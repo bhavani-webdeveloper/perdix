@@ -26,18 +26,32 @@ irf.pageCollection.controller(irf.controller("audit.AuditIssues"), ["$log", "$q"
             // $scope.model.issuesList = response || [];
             var tableColumnsConfig = [];
             tableColumnsConfig.push({
-                "title": "AUDIT_ID",
-                "data": "audit_id"
+                "title": "PROCESS_NAME",
+                "data": "title"
             }, {
-                "title": "DATE",
-                "data": "audit_report_date",
+                "title": "RISK_CLASSIFICATION",
+                "data": "deviation",
 
-            }, {
-                "title": "STATUS",
-                "data": "status"
-            }, {
-                "title": "Current Stage",
-                "data": "current_stage"
+            },{
+                "title": "OBSERVATION_CATEGORY",
+                "data": "deviation",
+
+            },{
+                "title": "ISSUE",
+                "data": "deviation",
+
+            },{
+                "title": "RATING",
+                "data": "deviation",
+
+            },{
+                "title": "AUDITEE_RESPONSE",
+                "data": "deviation",
+
+            },{
+                "title": "AUDITOR_RESPONSE",
+                "data": "deviation",
+
             });
 
             $scope.form = [{
@@ -95,6 +109,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditIssues"), ["$log", "$q"
             audit_id: $this.auditId
         }).$promise.then(function(data) {
             $scope.model.issueList = data.body;
+            $log.info($scope.model.issueList);
+            $log.info("issueList");
             init();
         }, function(errRes) {
             PageHelper.showErrors(errRes);

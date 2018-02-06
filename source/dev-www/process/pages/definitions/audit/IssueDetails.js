@@ -49,7 +49,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }, {
                     "key": "auditIssue.title",
                     "title": "ISSUE",
-                    "type": "textarea",
+                    "type": "html",
                     "readonly": true
                 }, {
                     "key": "auditIssue.option",
@@ -74,12 +74,20 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "key": "auditIssue.latitude",
                     "title": "LOCATION",
                     "type": "geotag",
+                    "readonly": true,
                     "latitude": "auditIssue.latitude",
                     "longitude": "auditIssue.longitude"
                 }, {
-                    key: "auditIssue.document",
+                    key: "auditIssue.document_id",
                     type: "file",
-                    required: true,
+                    fileType: "application/pdf",
+                    using: "scanner",
+                    title: "DOCUMENT",
+                    "category": "Loan",
+                    "subCategory": "COLLATERALPHOTO"
+                }, {
+                    key: "auditIssue.draft_document_id",
+                    type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
                     title: "DRAFT_DOCUMENT",
@@ -193,7 +201,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.status=='DR' & model.type == 'audit'",
+                "condition": "!model.readonly && model.status=='DR' && model.type == 'audit'",
                 "items": [{
                     "type": "button",
                     "title": "SUBMIT",

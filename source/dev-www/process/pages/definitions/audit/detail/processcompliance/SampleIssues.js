@@ -99,6 +99,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         if (sampleColumnsConfig.scoring_sample_type_id == sampleTypeId) {
                             for (j in sampleColumnsConfig.columns) {
                                 var col = sampleColumnsConfig.columns[j];
+                                $log.info(col);
+                                $log.info("col");
                                 if (col.component_id) {
                                     componentColumns.push(col);
                                     col.$index = j;
@@ -144,11 +146,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                         item.transaction_amount
                                     ];
                                 };
-                                columnForm.onSelect =  function(valueObj, model, context) {
-                                    
+                                columnForm.onSelect = function(valueObj, model, context) {
+
 
                                 };
-                                
+
                                 // columnForm.inputSchema = {
                                 //     "type": 'object',
                                 //     "title": 'SEARCH_OPTIONS',
@@ -347,6 +349,20 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     item.branchName
                                 ];
                             }
+                        }, {
+                            "key": "sample.issue_details[" + i + "].latitude",
+                            "title": "LOCATION",
+                            "type": "geotag",
+                            "latitude": "sample.issue_details[" + i + "].latitude",
+                            "longitude": "sample.issue_details[" + i + "].longitude"
+                        }, {
+                            key: "sample.issue_details[" + i + "].document_id",
+                            type: "file",
+                            fileType: "application/pdf",
+                            using: "scanner",
+                            title: "DOCUMENT",
+                            "category": "Loan",
+                            "subCategory": "COLLATERALPHOTO"
                         });
                         if (model.siteCode = "KGFS") {
                             issueDetailsForm.push({

@@ -9,7 +9,7 @@
     "report_date": "2017-08-15 00:00:00",
     "audit_type": 1,
     "days_left":9,
-    "status": "C",
+    "status": "O",
     "current_stage": "create",
     "messages": [{
         "comment": "test approve",
