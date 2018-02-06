@@ -256,7 +256,7 @@
                "title": "REGN_NO"
             },
             "originalInvoiceValue": {
-                "key": "loanAccount.vehicleLoanDetails.originalInvoiceValue",
+                "key": "loanAccount.vehicleLoanDetails.price",
                 "type": "number",
                 "title": "PRICE"
             }
