@@ -35,7 +35,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-request',
                                 minimum: 1,
                                 maximum: 1,
-                                order:60
+                                order:50
                             },
                             {
                                 pageName: 'witfin.customer.IndividualEnrollment2',
@@ -67,7 +67,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:50
+                                order:60
                             }
                             
 
