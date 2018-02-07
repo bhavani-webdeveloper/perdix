@@ -65,7 +65,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-request',
                                 minimum: 1,
                                 maximum: 1,
-                                order:50
+                                order:60
                             },
                             {
                                 pageName: 'witfin.customer.VehicleValuation',
@@ -73,7 +73,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'vehicle-valuation',
                                 minimum: 1,
                                 maximum: 1,
-                                order:60
+                                order:50
                             },
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',
