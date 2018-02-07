@@ -1797,7 +1797,7 @@
             "nameOfOwnedAsset": {
               "title": "Name Of Owned Asset",
               "type": "string",
-              "refCodeCategory": "asset_type",
+              "refCodeCategory": "physical_asset_name",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
