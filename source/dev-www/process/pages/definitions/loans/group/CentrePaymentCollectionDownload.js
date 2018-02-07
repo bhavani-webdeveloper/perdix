@@ -62,8 +62,18 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								// userId: SessionStore.getLoginname(),
 								demandDate: collectionDate
 							}, function(response) {
+								var userCentreCollectionDemands = [];
+								var userCentres = SessionStore.getCentres();
+								if(!userCentres || userCentres.length == 0) {
+									PM.pop('collection-demand', "No Collection Demands found. There are no centres mapped to user", 5000);
+									PageHelper.hideLoader();
+									return;
+								}
+								for(var i = 0; i < userCentres.length; i++) {
+									userCentreCollectionDemands = userCentreCollectionDemands.concat($filter('filter')(response.body, {centreId: userCentres[i].id, userId: SessionStore.getLoginname()}, true));
+								}
 							 	var storedData = {
-									collectionDemands: response.body,
+									collectionDemands: userCentreCollectionDemands,
 									collectionBranch: collectionBranch,
 									collectionDate: collectionDate
 								};
@@ -77,9 +87,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										if (storedData.collectionDemands.length >0) {
 											tempDataArray.push(storedData);
 											StorageService.storeJSON(model._offlineKey, tempDataArray);
-											PM.pop('collection-demand', "Collection Demands Saved Successfully", 2000);
+											PM.pop('collection-demand', "Collection Demands Saved Successfully", 3000);
 										} else {
-											PM.pop('collection-demand', "No Collection Demands found", 2000);
+											PM.pop('collection-demand', "No Collection Demands found", 3000);
 										}	
 									} else {
 										PM.pop('collection-demand', "Collection Demands already Downloaded for this date", 2000);

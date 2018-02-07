@@ -160,28 +160,27 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	                        },
 	                        initialize: function(model, form, parentModel, context) {
 	                            //model.centreName = parentModel.collectionDemandSummary.centreName;
+	                            model._centreList = parentModel._storedData.collectionDemands.map(a => a.centreId);
 	                        },
 		                    search: function (inputModel, form, model, context) {
-		                        var centres = SessionStore.getCentres();
+		                        var centres = SessionStore.getCentres(); 
 		                        $log.info("hi");
 		                        $log.info(centres);
-
-		                        var centreCode = formHelper.enum('usercentre').data;
 		                        var out = [];
 		                        if (centres && centres.length) {
-		                            for (var i = 0; i < centreCode.length; i++) {
-		                                for (var j = 0; j < centres.length; j++) {
-		                                	if(inputModel.centreName && !centres[j].centreName.toLowerCase().includes(inputModel.centreName.toLowerCase())){
-		                                		continue;
-		                                	}
-		                                    if (centreCode[i].value == centres[j].id) {
-		                                        out.push({
-		                                            name: centreCode[i].name,
-		                                            id: centreCode[i].value
-		                                        })
-		                                    }
-		                                }
-		                            }
+
+	                                for (var j = 0; j < centres.length; j++) {
+	                                	if(inputModel.centreName && !centres[j].centreName.toLowerCase().includes(inputModel.centreName.toLowerCase())){
+	                                		continue;
+	                                	}
+	                                    if (inputModel._centreList.indexOf(centres[j].id) != -1) {
+	                                        out.push({
+	                                        	code: centres[j].centreCode,
+	                                            name: centres[j].centreName,
+	                                            id: centres[j].id
+	                                        })
+	                                    }
+	                                }
 		                        }
 		                        return $q.resolve({
 		                            headers: {
@@ -232,7 +231,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		                    },
 		                    getListDisplayItem: function (item, index) {
 		                        return [
-		                            item.name
+		                            item.name,
+		                            "Code: " + item.code
 		                        ];
 		                    }
 						},
