@@ -115,6 +115,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "key": "sample.column_values[" + j + "]",
                             type: "text"
                         }
+                        columnForm.title = sampleColumnsConfig.columns[j].user_friendly_name;
                         formDetails.push(columnForm);
                         if (j == 0 && sampleType != "E") {
                             columnForm.required = true;
@@ -147,8 +148,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     ];
                                 };
                                 columnForm.onSelect = function(valueObj, model, context) {
-
-
+                                    $log.info(valueObj);
+                                    $log.info("valueObj");
+                                    for (i in sampleColumnsConfig.columns) {
+                                        model.sample.column_values[i] = valueObj[sampleColumnsConfig.columns[i].column_name];
+                                    }
                                 };
 
                                 // columnForm.inputSchema = {

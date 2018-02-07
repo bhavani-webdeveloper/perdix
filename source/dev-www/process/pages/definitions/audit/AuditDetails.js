@@ -72,7 +72,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
 
                 });
                 var columnForm = {
-                    "type": "box",
                     "title": "AUDIT_REPORT_DETAILS",
                     "colClass": "col-sm-12",
                     "items": [{
@@ -334,6 +333,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 $scope.showDashboard = false;
                 return;
             }
+
+            // if ($scope.siteCode == 'kinara' && $scope.model.ai.status == 'O' || $scope.siteCode != 'kinara') {
             var requestMenu = [
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
