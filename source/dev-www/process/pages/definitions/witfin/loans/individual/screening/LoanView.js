@@ -53,7 +53,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         {
                             pageName: 'witfin.customer.VehicleValuation',
                             title: 'VEHICLE_VALUATION',
-                            pageClass: 'vehicle_valuation',
+                            pageClass: 'vehicle-valuation',
                             minimum: 1,
                             maximum: 1,
                             order:50
