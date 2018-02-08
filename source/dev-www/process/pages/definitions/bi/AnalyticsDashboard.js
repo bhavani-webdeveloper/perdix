@@ -1,12 +1,13 @@
 irf.pageCollection.controller(irf.controller("bi.AnalyticsDashboard"),
-["$scope", "BIAnalytics", "irfNavigator", "$log", "$sce", "$window", "PageHelper",
-function($scope, BIAnalytics, irfNavigator, $log, $sce, $window, PageHelper) {
+["$scope", "BIAnalytics", "irfNavigator", "$log", "$sce", "$window", "PageHelper", "irfProgressMessage", "Account",
+function($scope, BIAnalytics, irfNavigator, $log, $sce, $window, PageHelper, irfProgressMessage, Account) {
 	var authToken;
 	PageHelper.showLoader();
-	BIAnalytics.getAnalyticsLoginToken().then(function(resp) {
-		authToken = resp.headers['www-authenticate'].substring(12)
+	irfProgressMessage.pop('Analytics', 'Analytics Page is loading. Please wait...', 10000);
+	Account.getAnalyticsToken().$promise.then(function(data) {
+		authToken = data.analyticsToken.substring(12)
 		return BIAnalytics.setCookie({
-			"authToken": resp.headers['www-authenticate'].substring(12)
+			"authToken": authToken
 		}).$promise;
 	}).then(function(resp) {
 		$log.info(resp);
@@ -18,6 +19,7 @@ function($scope, BIAnalytics, irfNavigator, $log, $sce, $window, PageHelper) {
 			if(data && data.user && data.user.teams && data.user.teams.length > 0) {
 				role = data.user.teams[0].role || role;
 			}
+			irfProgressMessage.clear();
 			$scope.analyticsDashboardURL = $sce.trustAsResourceUrl(irf.ANALYTICS_WEB_URL + "/embedded-mode/" + role + "?show-navigator=true");///TeamA/ProjectA/home
 			function setAnalyticsFrameHeight() {
 				$(".analytics-iframe, .analytics-root").css('height', ($(window).height()-139)+'px');
@@ -25,13 +27,15 @@ function($scope, BIAnalytics, irfNavigator, $log, $sce, $window, PageHelper) {
 			$($window).resize(setAnalyticsFrameHeight);
 			setAnalyticsFrameHeight();
 		}, function(err) {
+			irfProgressMessage.clear();
 			PageHelper.hideLoader();
-			PageHelper.showProgress('Analytics', 'Oops. Some error', 5000);
+			PageHelper.showProgress('Analytics', 'Analytics login failed.', 5000);
             PageHelper.showErrors(err);
 		});
 	}, function(err) {
+		irfProgressMessage.clear();
 		PageHelper.hideLoader();
-		PageHelper.showProgress('Analytics', 'Oops. Some error', 5000);
+		PageHelper.showProgress('Analytics', 'Analytics login failed.', 5000);
         PageHelper.showErrors(err);
 	});
 }]);
