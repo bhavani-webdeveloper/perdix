@@ -533,7 +533,7 @@ define(
                                             "title": "RECOMMENDED"
                                         },
                                         "recommendationRemarks": {
-                                            "key": "loanAccount.vehicleLoanDetails.recommendationRemarks",
+                                            "key": "loanProcess.remarks",
                                             "required": true,
                                             "title": "REMARKS"
                                         }
