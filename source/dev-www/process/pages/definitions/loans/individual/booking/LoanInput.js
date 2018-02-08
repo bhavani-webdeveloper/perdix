@@ -222,6 +222,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.currentStage = 'LoanInitiation';
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
+                model.loanHoldRequired = SessionStore.getGlobalSetting("loanHoldRequired");
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
@@ -2237,7 +2238,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "items": [
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'PendingForPartner' && model.siteCode!='witfin'",
+                        condition: "model.currentStage == 'PendingForPartner' && model.loanHoldRequired!='NO'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
@@ -2248,7 +2249,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'LoanInitiation' && model.siteCode!='witfin'",
+                        condition: "model.currentStage == 'LoanInitiation' && model.loanHoldRequired!='NO'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
@@ -2258,7 +2259,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'PendingForPartner' && model.siteCode=='witfin'",
+                        condition: "model.currentStage == 'PendingForPartner' && model.siteCode=='YES'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
@@ -2268,7 +2269,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'LoanInitiation'&& model.siteCode=='witfin'",
+                        condition: "model.currentStage == 'LoanInitiation'&& model.siteCode=='YES'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
