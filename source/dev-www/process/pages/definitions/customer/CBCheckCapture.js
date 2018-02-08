@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CBCheckCapture"),
-	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter", "PageHelper", "Enrollment",
-	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter, PageHelper, Enrollment){
+	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter", "PageHelper", "Enrollment","PagesDefinition",
+	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter, PageHelper, Enrollment,PagesDefinition){
 	return {
 		"type": "schema-form",
 		"title": "CREDIT_BUREAU_CHECK",
@@ -19,7 +19,11 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 					PageHelper.showErrors(resp);
                     PageHelper.hideLoader();
                 });
-
+				PagesDefinition.getRolePageConfig("Page/Engine/CBCheckCapture").then(function(config){
+                    if (config && config.forceEnabled){
+                        model.forceEnabled = true;
+                    }
+                });
 				var creditBureauTypes = formHelper.enum('creditBureauTypes').data;
 				creditBureauTypes = $filter('filter')(creditBureauTypes, {field1: 'default'});
 				model.creditBureau = creditBureauTypes && creditBureauTypes.length > 0 ? creditBureauTypes[0].value: '';
@@ -68,7 +72,12 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 					"filter": {
 						"parentCode as loan_purpose_2": "model.loanPurpose2"
 					}
-				}*/
+				}*/,
+				{
+					"key": "force",
+					"type" : "checkbox",
+					"condition": "model.forceEnabled"
+				}
 			]
 		},{
 			"type": "actionbox",
@@ -101,7 +110,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				},
 				"partner": {
 					"title": "PARTNER",
-					"type": "string",
+					"type": ["string","null"],
 					"enumCode":"partner",
 					"x-schema-form":{
 						"type":"select"
@@ -109,7 +118,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				},
 				"productCode": {
 					"title": "PRODUCT",
-					"type": "string",
+					"type": ["string","null"],
 					"enumCode":"loan_product",
 					"x-schema-form":{
 						"type":"select"
@@ -117,7 +126,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				},
 				"creditBureau": {
 					"title": "CREDIT_BUREAU",
-					"type": "string",
+					"type": ["string","null"],
 					"enumCode": "creditBureauTypes",
 					"x-schema-form":{
 						"type":"select"
@@ -125,32 +134,39 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				},
 				"loanAmount": {
 					"title": "LOAN_AMOUNT",
-					"type": "number",
+					"type": ["number","null"],
 					"x-schema-form":{
 						"type":"amount"
 					}
 				},
 				"loanPurpose1": {
 					"title": "LOAN_PURPOSE",
-					"type": "string",
+					"type": ["string","null"],
 					"enumCode": "loan_purpose_1",
 					"x-schema-form":{
 						"type":"select"
 					}
+				},
+				"force": {
+					"title": "FORCE",
+					"type": ["string", "null"]
 				}
 			}
 		},
 		actions: {
 			submit: function(model, form, formName) {
 				$log.info("form.$valid: " + form.$valid);
+				PageHelper.showLoader();
 				if (form.$valid) {
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
 					CreditBureau.postcreditBureauCheck({
 						customerId: model.customerId,
 						type: model.creditBureau,
 						purpose: model.loanPurpose1,
-						loanAmount: model.loanAmount
+						loanAmount: model.loanAmount,
+						force: model.force
 					}, function(response){
+						PageHelper.hideLoader();
 						if(response.success==true){
 							PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
 						}
@@ -159,6 +175,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 						}
 						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 					}, function(errorResponse){
+						PageHelper.hideLoader();
 						PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);
 					});
 				}
