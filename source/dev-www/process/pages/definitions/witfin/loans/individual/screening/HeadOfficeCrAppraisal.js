@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "witfin.loans.individual.screening.BranchCrAppraisal",
+            pageUID: "witfin.loans.individual.screening.HeadOfficeCrAppraisal",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams",
                             "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups",
@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries,  Utils, IndividualLoan, BundleManager) {
                 return {
                     "type": "page-bundle",
-                    "title": "BRANCH_CREDIT_APPRAISAL",
+                    "title": "HEAD_OFFICE_CREDIT_APPRAISAL",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
