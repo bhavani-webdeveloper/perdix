@@ -2237,7 +2237,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "items": [
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'PendingForPartner'",
+                        condition: "model.currentStage == 'PendingForPartner' && model.siteCode!='witfin'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
@@ -2248,12 +2248,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         key: "review.action",
-                        condition: "model.currentStage == 'LoanInitiation'",
+                        condition: "model.currentStage == 'LoanInitiation' && model.siteCode!='witfin'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
                             "PROCEED": "PROCEED",
                             "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        condition: "model.currentStage == 'PendingForPartner' && model.siteCode=='witfin'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        condition: "model.currentStage == 'LoanInitiation'&& model.siteCode=='witfin'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "PROCEED": "PROCEED"
                         }
                     },
                     {
