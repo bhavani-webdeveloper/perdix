@@ -48,7 +48,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .then(function(res) {
                         model.loanAccount = res;
                         model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
-
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                             LoanAccount.get({
                                     accountId: model.loanAccount.accountNumber
@@ -1817,7 +1816,30 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }
                         }]
                     }]
-                },{
+                },
+                {
+                    "type":"box",
+                    "title": "PAYER_DETAILS",
+                        "items": [
+                        {
+                            "key":"loanAccount.payeeName",
+                            "title": "PAYEE_NAME"
+                        },
+                        {
+                            "key": "loanAccount.payeeMobileNumber",
+                            "title": "PAYEE_MOBILE_NUMBER",
+                            "inputmode": "number",
+                            "numberType": "tel"
+                        },
+                        {
+                            "key": "loanAccount.payeeRelationToApplicant",
+                            "title": "PAYEE_RELATION",
+                            "type":"select",
+                            "enumCode": "payerRelation"
+                        }
+                    ]
+                },
+                {
                     "type": "actionbox",
                     "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode == 'KGFS'",
                     "items": [{
