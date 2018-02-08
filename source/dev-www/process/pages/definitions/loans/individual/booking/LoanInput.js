@@ -1600,6 +1600,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowers[0].coBorrowerUrnNo;
+                                            model.loanAccount.portfolioInsuranceCustomerName = model.loanAccount.coBorrowers[0].coBorrowerName;
                                             break;
                                         case "guarantor":
                                             if(_.isEmpty(model.loanAccount.guarantors)){
@@ -1610,6 +1611,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
+                                            model.loanAccount.portfolioInsuranceCustomerName = model.loanAccount.guarantors[0].guaFirstName;
                                             break;
                                     }
                                 }
