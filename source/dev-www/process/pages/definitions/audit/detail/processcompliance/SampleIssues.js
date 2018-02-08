@@ -88,9 +88,10 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 model.sample = model.sample || {};
                 self.form = [];
                 var formDetails = [];
-
                 var processSampleIssues = function(response) {
                     model.processCompliance = response;
+
+                    /* START: identifying sampleset */
                     var sampleColumnsConfig = null;
                     var componentColumns = [];
                     var componentForm = [];
@@ -99,8 +100,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         if (sampleColumnsConfig.scoring_sample_type_id == sampleTypeId) {
                             for (j in sampleColumnsConfig.columns) {
                                 var col = sampleColumnsConfig.columns[j];
-                                $log.info(col);
-                                $log.info("col");
                                 if (col.component_id) {
                                     componentColumns.push(col);
                                     col.$index = j;
@@ -109,21 +108,24 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             break; // very important break to preserve - sampleColumnsConfig
                         }
                     };
+                    /* END: identifying sampleset */
+
+                    /* START: building sample forms */
                     for (j in sampleColumnsConfig.columns) {
                         var columnForm = {
                             "title": sampleColumnsConfig.columns[j].user_friendly_name,
+                            "readonly": $stateParams.pageData.readonly || sampleType == "E",
                             "key": "sample.column_values[" + j + "]",
                             type: "text"
                         }
                         columnForm.title = sampleColumnsConfig.columns[j].user_friendly_name;
-                        formDetails.push(columnForm);
                         if (j == 0 && sampleType != "E") {
                             columnForm.required = true;
                             if (componentColumns.length) {
                                 columnForm.type = "lov";
                                 columnForm.inputMap = {};
                                 for (k in componentColumns) { // master.components[componentColumns[k].component_id]
-                                    columnForm.inputMap[componentColumns[k].column_name] = {
+                                    columnForm.inputMap[master.components[componentColumns[k].component_id].component_name] = {
                                         "key": master.components[componentColumns[k].component_id].component_name
                                     }
                                 }
@@ -136,7 +138,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     return Audit.online.findDumpSamples({
                                         "audit_id": auditId,
                                         "scoring_sample_type_id": sampleTypeId,
-                                        "searchParams": searchParams
+                                        "search_params": searchParams
                                     }).$promise;
                                 };
                                 columnForm.getListDisplayItem = function(item, index) {
@@ -148,50 +150,17 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     ];
                                 };
                                 columnForm.onSelect = function(valueObj, model, context) {
-                                    $log.info(valueObj);
-                                    $log.info("valueObj");
                                     for (i in sampleColumnsConfig.columns) {
                                         model.sample.column_values[i] = valueObj[sampleColumnsConfig.columns[i].column_name];
                                     }
                                 };
-
-                                // columnForm.inputSchema = {
-                                //     "type": 'object',
-                                //     "title": 'SEARCH_OPTIONS',
-                                //     "properties": {
-                                //         "BRANCH": {
-                                //             "title": "BRANCH_ID",
-                                //             "type": "number",
-                                //             "enumCode": "branch_id",
-                                //             "x-schema-form": {
-                                //                 "type": "select"
-                                //             }
-                                //         },
-                                //         "CENTRE": {
-                                //             "title": "CENTRE",
-                                //             "type": ["integer", "null"],
-                                //             "enumCode": "centre",
-                                //             "x-schema-form": {
-                                //                 "type": "select",
-                                //                 "parentEnumCode": "branch_id",
-                                //                 "parentValueExpr": "model.branchName"
-                                //             }
-                                //         },
-                                //         "LOAN_ID": {
-                                //             "title": "LOAN_ID",
-                                //             "type": "string"
-                                //         },
-                                //         "CUSTOMER_ID": {
-                                //             "title": "CUSTOMER_ID",
-                                //             "type": "string"
-                                //         },
-
-                                //     }
-                                // }
                             }
                         }
+                        formDetails.push(columnForm);
                     }
+                    /* END: building sample forms */
 
+                    /* START: Identifying sample and assigning to model.sample */
                     model.sampleType = sampleType;
                     var auto_sampling_set_found = false;
                     var identifySample = function(auto_sampling_set) {
@@ -241,10 +210,49 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         response.auto_sampling.push(new_auto_sampling_set);
                         identifySample(new_auto_sampling_set);
                     }
+                    /* END: Identifying sample and assigning to model.sample */
+
+                    /* START: Component buttons */
+                    if (sampleType !== "N") {
+                        for (k in componentColumns) {
+                            var component_name = master.components[componentColumns[k].component_id].component_name;
+                            var sample_column_value = model.sample.column_values[componentColumns[k].$index];
+                            if (_.indexOf(["CUSTOMER_ID", "LOAN_ID"], component_name) == -1 || !sample_column_value) continue;
+                            switch (component_name) {
+                                case "CUSTOMER_ID":
+                                    formDetails.push({
+                                        "type": "button",
+                                        "title": "Customer ("+sample_column_value+")",
+                                        onClick: function(model, formCtrl, form, event) {
+                                            irfNavigator.go({
+                                                'state': 'Page.Customer360',
+                                                'pageName': null,
+                                                'pageId': sample_column_value
+                                            });
+                                        }
+                                    });
+                                break;
+                                case "LOAN_ID":
+                                    formDetails.push({
+                                        "type": "button",
+                                        "title": "Loan ("+sample_column_value+")",
+                                        onClick: function(model, formCtrl, form, event) {
+                                            irfNavigator.go({
+                                                'state': 'Page.Bundle',
+                                                'pageName': 'loans.individual.screening.LoanView',
+                                                'pageId': sample_column_value
+                                            });
+                                        }
+                                    });
+                                break;
+                            }
+                        }
+                    }
+                    /* END: Component buttons */
+
+                    /* START: Issues processing */
                     var issueDetailsForm = [];
                     var processIssuesForm = function(issue, i) {
-                        $log.info(issue);
-                        $log.info("issue");
                         issueDetailsForm.push({
                             "type": "section",
                             "html": '<div><strong>' + (i + 1) + '.</strong> <span>' + master.typeofissues[issue.type_of_issue_id].description + '</span></div>'
@@ -365,8 +373,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             fileType: "application/pdf",
                             using: "scanner",
                             title: "DOCUMENT",
-                            "category": "Loan",
-                            "subCategory": "COLLATERALPHOTO"
+                            "category": "Audit",
+                            "subCategory": "AUDITISSUEDOC"
                         });
                         if (model.siteCode = "KGFS") {
                             issueDetailsForm.push({
@@ -399,8 +407,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             continue;
                         }
                         var typeofissue = master.typeofissues[issues[i].type_of_issue_id];
-                        $log.info(typeofissue);
-                        $log.info("typeofissue");
                         if (typeofissue.status != "1") {
                             continue; // SKIP inactive issues
                         }
@@ -418,10 +424,10 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         };
                         processIssuesForm(issues[i], idx++);
                     }
+                    /* END: Issues processing */
 
                     self.form = [{
                         "type": "box",
-                        "readonly": $stateParams.pageData.readonly || sampleType == "E",
                         "title": "SAMPLE",
                         "items": formDetails
                     }, {

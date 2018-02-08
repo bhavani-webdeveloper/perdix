@@ -346,6 +346,20 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
                         getListDisplayItem: function(item, index) {
                             return [item.login + ': ' + item.userName, item.branchName];
                         }
+                    }, {
+                        "key": "manual_issue.latitude",
+                        "title": "LOCATION",
+                        "type": "geotag",
+                        "latitude": "manual_issue.latitude",
+                        "longitude": "manual_issue.longitude"
+                    }, {
+                        key: "manual_issue.document_id",
+                        type: "file",
+                        fileType: "application/pdf",
+                        using: "scanner",
+                        title: "DOCUMENT",
+                        "category": "Audit",
+                        "subCategory": "AUDITISSUEDOC"
                     });
 
                     self.form = [{

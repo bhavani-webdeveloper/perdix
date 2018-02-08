@@ -42,7 +42,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
-            processDisplayRecords: function(onlineAudits, audit_type) {
+            processDisplayRecords: function(onlineAudits, queue_type, queue_status) {
                 var deferred = $q.defer();
                 var displayAudits = {
                     headers: {
@@ -70,7 +70,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         }
                     }
                     angular.forEach(offlineAudits, function(v, k) {
-                        if (!v.$picked && (_.isNil(audit_type) || audit_type == v.audit_type)) {
+                        if (!v.$picked && v.audit_type == queue_type && v.status == queue_status) {
                             displayAudits.body.push(v);
                             displayAudits.headers['x-total-count']++;
                         }
@@ -191,124 +191,10 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 url: endpoint + '/updateStageActivities'
             },
             findDumpSamples: searchResource({
-                method: 'GET',
+                method: 'POST',
                 url: endpoint + '/findDumpSamples'
             }),
         });
-        // url: 'process/schemas/audit/getAuditMaster.json'
-
-        // ret.online = $resource(endpoint, null, {
-        //     getAuditMaster: {
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/getAuditMaster.json'
-        //     },
-        //     getAuditList: searchResource({
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/getAuditList.JSON'
-        //     }),
-        //     getAuditInfo: {
-        //         method: 'GET',
-        //         url: endpoint + '/getAuditInfo'
-        //     },
-        //     updateAuditInfo: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateAuditInfo'
-        //     },
-        //     getAuditFull: {
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/getAuditFull.json'
-        //     },
-        //     updateAuditFull: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateAuditData'
-        //     },
-        //     getSampleSetList: {
-        //         method: 'GET',
-        //         url: endpoint + '/getSampleSets',
-        //         isArray: true
-        //     },
-        //     findAuditScores: searchResource({
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/findAuditScores.json'
-        //     }),
-        //     getAuditScore: {
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/getAuditScore.json'
-        //     },
-        //     // findIssues: searchResource({
-        //     //     method: 'GET',
-        //     //     url: endpoint + '/findIssues'
-        //     // }),
-        //     findIssues: searchResource({
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/findIssues.json'
-        //     }),
-        //     getIssueDetails: {
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/getIssueDetails.json'
-        //     },
-        //     updateIssueDetails: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateIssue'
-        //     },
-        //     getAvailableAuditorList: searchResource({
-        //         method: 'GET',
-        //         url: endpoint + '/findAvailableAuditors'
-        //     }),
-        //     getSnapAuditMaster: {
-        //         method: 'GET',
-        //         url: endpoint + '/getSnapAuditMaster'
-        //     },
-        //     createSnapAudit: {
-        //         method: 'POST',
-        //         url: endpoint + '/createSnapAudit'
-        //     },
-        //     updateSnapAudit: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateSnapAudit'
-        //     },
-        //     publishSnapAudit: {
-        //         method: 'POST',
-        //         url: endpoint + '/publishSnapAudit'
-        //     },
-        //     getSnapAuditData: {
-        //         method: 'GET',
-        //         url: endpoint + '/getSnapAudit'
-        //     },
-        //     findSample: searchResource({
-        //         method: 'GET',
-        //         url: endpoint + '/findSample'
-        //     }),
-        //     getAuditScoreSheet: {
-        //         method: 'GET',
-        //         url: endpoint + '/getAuditScoreSheet'
-        //     },
-        //     findStage: {
-        //         method: 'GET',
-        //         url: endpoint + '/findStage'
-        //     },
-        //     updateStaging: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateStaging'
-        //     },
-        //     getStageActivities: {
-        //         method: 'GET',
-        //         url: endpoint + '/getStageActivities'
-        //     },
-        //     updateStageActivities: {
-        //         method: 'POST',
-        //         url: endpoint + '/updateStageActivities'
-        //     },
-        //     findDumpSamples: searchResource({
-        //         method: 'GET',
-        //         url: 'process/schemas/audit/findDumpSamples.json'
-        //     }),
-        //     // getDumpSample: {
-        //     //     method: 'POST',
-        //     //     url: endpoint + '/getDumpSample'
-        //     // },
-        // });
-
         ret.offline = {
             setAuditInfo: function(auditId, audit_info) {
                 if (!auditId || !audit_info) return $q.reject();

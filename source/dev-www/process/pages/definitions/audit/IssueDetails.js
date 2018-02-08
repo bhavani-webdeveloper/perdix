@@ -83,16 +83,16 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     fileType: "application/pdf",
                     using: "scanner",
                     title: "DOCUMENT",
-                    "category": "Loan",
-                    "subCategory": "COLLATERALPHOTO"
+                    "category": "Audit",
+                    "subCategory": "AUDITISSUEDOC"
                 }, {
                     key: "auditIssue.draft_document_id",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
                     title: "DRAFT_DOCUMENT",
-                    "category": "Loan",
-                    "subCategory": "COLLATERALPHOTO"
+                    "category": "Audit",
+                    "subCategory": "AUDITISSUEDRAFTDOC"
                 }, {
                     "key": "auditIssue.confirmity_status",
                     "title": "STATUS",

@@ -1,34 +1,18 @@
-irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "Utils", "PageHelper",
-    function($log, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, Utils, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
+    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+        var localFormController;
         var returnObj = {
             "type": "search-list",
-            "title": "DRAFT_QUEUE",
+            "title": "DRAFT_OPERATION_QUEUE",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
-                model.branch = SessionStore.getCurrentBranch().branchId;
-                var bankName = SessionStore.getBankName();
-                var banks = formHelper.enum('bank').data;
-                for (var i = 0; i < banks.length; i++) {
-                    if (banks[i].name == bankName) {
-                        model.bankId = banks[i].value;
-                        model.bankName = banks[i].name;
-                    }
-                }
                 localFormController = formCtrl;
                 syncCheck = false;
-                $log.info("Regular audit queue got initialized");
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
-                var userRole = SessionStore.getUserRole();
-                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
-                    model.fullAccess = true;
-                }
-                Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
-                    model.auditor_role_id = Number(value);
-                }, PageHelper.showErrors);
             },
             definition: {
                 title: "SEARCH_AUDITS",
@@ -152,7 +136,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     if (SessionStore.session.offline) {
-                        return Audit.utils.processDisplayRecords();
+                        return Audit.utils.processDisplayRecords(null, 1, 'D');
                     }
                     var deferred = $q.defer();
                     Audit.online.getAuditList({
@@ -167,7 +151,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
-                        Audit.utils.processDisplayRecords(res.body).then(deferred.resolve, deferred.reject);
+                        Audit.utils.processDisplayRecords(res.body, 1, 'D').then(deferred.resolve, deferred.reject);
                     });
                     return deferred.promise;
                 },
@@ -207,18 +191,18 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
-                            // render: function(data, type, full, meta) {
-                            //     return Audit.utils.auditStatusHtml(full, false) + data;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return Audit.utils.auditStatusHtml(full, false) + data;
+                            }
                         }, {
                             title: 'AUDITOR_ID',
                             data: 'auditor_id'
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            // render: function(data, type, full, meta) {
-                            //     return masterJson.audit_type[data].audit_type;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return masterJson.audit_type[data].audit_type;
+                            }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -238,19 +222,38 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                     },
                     getActions: function() {
                         return [{
-                            name: "EDIT",
-                            icon: "fa fa-eye",
+                            name: "SYNC",
+                            icon: "fa fa-refresh",
+                            fn: function(item, index) {
+                                PageHelper.showLoader();
+                                Audit.online.getAuditFull({
+                                    audit_id: item.audit_id
+                                }).$promise.then(function(response) {
+                                    item._offline = true;
+                                    PageHelper.showProgress("audit", "Synchronized successfully", 3000);
+                                    return Audit.offline.setAudit(item.audit_id, response);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                return !SessionStore.session.offline && !item._offline && item._online;
+                            }
+                        }, {
+                            name: "DO_AUDIT",
+                            icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Adhoc',
                                     'pageName': 'audit.AuditDetails',
                                     'pageId': item.audit_id,
                                     'pageData': {
-                                        "readonly": item.type !== 'operation'
+                                        "type": "operation",
+                                        "readonly": item.current_stage !== 'draft'
                                     }
                                 }, {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.DraftOperationQueue',
+                                    'pageName': 'audit.OpenRegularAuditsQueue',
                                     'pageData': {
                                         "page": returnObj.definition.listOptions.tableConfig.page
                                     }
@@ -259,8 +262,61 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Quer
                             isApplicable: function(item, index) {
                                 return true;
                             }
+                        }, {
+                            name: "DELETE_OFFLINE",
+                            icon: "fa fa-trash",
+                            fn: function(item, index) {
+                                Utils.confirm('Do You Want to Delete?').then(function() {
+                                    PageHelper.showLoader();
+                                    Audit.offline.deleteAudit(item.audit_id).then(function() {
+                                        item._offline = false;
+                                        delete item._dirty;
+                                        delete item._sync;
+                                    }).finally(PageHelper.hideLoader);
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                return item._offline;
+                            }
                         }];
-                    }
+                    },
+                    getBulkActions: function() {
+                        return [{
+                            name: "SYNC_ALL",
+                            icon: "fa fa-refresh",
+                            fn: function(items, index) {
+                                PageHelper.showLoader();
+                                var sy = function(item) {
+                                    var p = Audit.online.getAuditFull({
+                                        audit_id: item.audit_id
+                                    }).$promise;
+                                    p.then(function(response) {
+                                        PageHelper.hideLoader();
+                                        item._offline = true;
+                                        Audit.offline.setAudit(item.audit_id, response);
+                                    });
+                                    return p;
+                                };
+                                var ps = [];
+                                for (i in items) {
+                                    ps.push(sy(items[i]));
+                                }
+                                $q.all(ps).then(function() {
+                                    PageHelper.showProgress("audit", "All audits synchronized successfully", 3000);
+                                }, function() {
+                                    PageHelper.showProgress("audit", "Audits failed to synchronize", 3000);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (!SessionStore.session.offline) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        }];
+                    },
                 }
             }
         };

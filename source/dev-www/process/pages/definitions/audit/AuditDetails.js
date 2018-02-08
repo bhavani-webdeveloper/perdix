@@ -32,13 +32,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
 </div></div></div>';
 
         var processAuditData = function(auditData) {
-            $log.info(auditData);
-            $log.info("auditData");
             $scope.model.auditData = auditData;
             $scope.model.ai = auditData.audit_info;
             $scope.model._isOnline = $scope.$isOnline;
-            $scope.model.process_compliance = auditData.process_compliance;
-            $log.info($scope.model.process_compliance)
         };
         var formType = {
             "type": "section",
@@ -48,8 +44,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
         var fileView = function() {
                 var tableColumnsConfig = [];
-                for (i in $scope.model.process_compliance) {
-                    var processComplianceData = $scope.model.process_compliance[i]
+                for (i in $scope.model.auditData.process_compliance) {
+                    var processComplianceData = $scope.model.auditData.process_compliance[i]
                     for (j in processComplianceData.auto_sampling) {
                         var sampleSet = processComplianceData.auto_sampling[j];
                         for (k in master.summary_rating) {
@@ -329,7 +325,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
-            if ($scope.siteCode == 'kinara' && $scope.model.ai.status == 'O' || $scope.siteCode != 'kinara') {
+            if ($scope.siteCode == 'kinara' && $scope.model.ai.status !== 'O') {
                 $scope.showDashboard = false;
                 return;
             }
@@ -423,7 +419,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }, {
             "type": "box",
             "title": "AUDIT_REPORT",
-            // "condition": "!model.ai.status == 'O'",
+            "condition": "!model.ai.status !== 'O'",
             "items": [{
                 "key": "issueGroupType",
                 "type": "radios",
