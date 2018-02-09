@@ -71,6 +71,13 @@
       ]
    }, {
       "order": 7,
+      "code": "Checker1",
+      "name": "Checker 1",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 8,
       "code": "LoanBooking",
       "name": "Loan Booking",
       "isAccountOpening": true,
@@ -81,7 +88,7 @@
          "RM"
       ]
    }, {
-      "order": 8,
+      "order": 9,
       "code": "ApplicationPending",
       "name": "Applications Pending",
       "isAccountOpening": false,
@@ -92,7 +99,7 @@
          "RM"
       ]
    }, {
-      "order": 9,
+      "order": 10,
       "code": "LoanDisbursement",
       "name": "Loan Disbursement",
       "isAccountOpening": false,
@@ -103,7 +110,7 @@
          "RM"
       ]
    }, {
-      "order": 10,
+      "order": 11,
       "code": "Completed",
       "name": "Completed",
       "isAccountOpening": false,
@@ -114,7 +121,7 @@
          "RM"
       ]
    }, {
-      "order": 11,
+      "order": 12,
       "code": "Rejected",
       "name": "Rejected",
       "isAccountOpening": false,
