@@ -878,6 +878,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
 
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
+                    if(_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
+                        PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
+                        return false;
+                    }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
