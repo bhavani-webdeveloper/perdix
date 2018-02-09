@@ -278,7 +278,11 @@ define([],function(){
                     "PreliminaryInformation.estimatedEmi",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
+                    "DeductionsFromLoan.dsaPayoutInPercentage",
+                    "DeductionsFromLoan.securityEmiRequired",
                     "DeductionsFromLoan.estimatedEmi",
+                    "DeductionsFromLoan.calculateDisbursedAmount",
+                    "DeductionsFromLoan.netDisbursementAmount",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -371,7 +375,8 @@ define([],function(){
                                 "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial'"
                             },
                             "DeductionsFromLoan.estimatedEmi": {
-                                "readonly": true
+                                "readonly": true,
+                                "condition": "model.loanAccount.securityEmiRequired == 'YES'"
                             },
                             "NewVehicleDetails": {
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
@@ -443,6 +448,62 @@ define([],function(){
                                                     model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());   
                                                 }
                                             }
+                                        }
+                                    }
+                                },
+                                "DeductionsFromLoan": {
+                                    "items": {
+                                        "dsaPayoutInPercentage": {
+                                            "key": "loanAccount.dsaPayout",
+                                            "title": "DSA_PAYOUT_IN_PERCENTAGE",
+                                            "orderNo": 30
+                                        },
+                                        "calculateDisbursedAmount": {
+                                            "type": "button",
+                                            "title": "CALCULATE_DISBURSED_AMOUNT",
+                                            "orderNo": 40,
+                                             onClick: function (model, formCtrl) {
+                                                var processingFee;
+                                                var dsaPayout;
+                                                processFee = (model.loanAccount.expectedProcessingFeePercentage/100)*model.loanAccount.loanAmountRequested;
+                                                dsaPayout = (model.loanAccount.dsaPayout/100)*model.loanAccount.loanAmountRequested;
+                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - dsaPayout;
+                                                if(model.loanAccount.frequencyRequested == "Monthly") {
+                                                    frequency = "M"
+                                                } else if (model.loanAccount.frequencyRequested == "Yearly") {
+                                                    frequency = "Y"
+                                                }
+                                                LoanProcess.findPreOpenSummary({
+                                                    "loanAmount": model.loanAccount.loanAmountRequested,
+                                                    "tenure": model.loanAccount.tenureRequested,
+                                                    "frequency": frequency,
+                                                    "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                    "productCode": "IRRTP",
+                                                    "moratoriumPeriod": "0",
+                                                    "openDate": Utils.getCurrentDate(),
+                                                    "branchId": model.loanAccount.branchId,
+                                                    "firstRepaymentDate": moment().add(30, 'days').format("YYYY-MM-DD"),
+                                                    "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                    "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                })
+                                                .$promise
+                                                .then(function (resp){
+                                                    $log.info(resp);
+                                                });
+                                            }
+                                        },
+                                        "netDisbursementAmount": {
+                                            "key": "netDisbursementAmount",
+                                            "title": "NET_DISBURSEMENT_AMOUNT",
+                                            "orderNo" : 50,
+                                            "type": "number",
+                                            "readonly": true
+                                        },
+                                        "securityEmiRequired": {
+                                            "key": "loanAccount.securityEmiRequired",
+                                            "title": "ADVANCE_EMI",
+                                            "type": "radios",
+                                            "orderNo": 60
                                         }
                                     }
                                 }

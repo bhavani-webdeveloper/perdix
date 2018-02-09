@@ -134,6 +134,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             url:endpoint+'/generateScheduleForSpecifiedDate',
             isArray:true
         },
+        findPreOpenSummary:{
+            method:'GET',
+            url:endpoint+'/findPreOpenSummary'
+        }
     });
 
     res.collectiondemandOfflineUpload = function(file, progress, opts) {
