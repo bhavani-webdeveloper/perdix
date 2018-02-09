@@ -1116,7 +1116,7 @@ define({
                     }
                     var reqData = _.cloneDeep(model);
                     if(model.siteCode == 'saija') {
-                        reqData.stage='LoanBooking';
+                        reqData.stage='Checker1';
                     }
                     GroupProcess.updateGroup(reqData, function(res) {
                         formHelper.newOffline.deleteOffline($stateParams.pageName, model);                        

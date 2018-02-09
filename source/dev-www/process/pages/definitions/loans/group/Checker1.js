@@ -1201,7 +1201,7 @@ return {
                 },
                 {
                     type: "section",
-                    condition: "model.action=='SEND_BACK' && model.siteCode == 'sambandh'",
+                    condition: "model.action=='SEND_BACK'",
                     items: [{
                             title: "REMARKS",
                             key: "group.groupRemarks",
