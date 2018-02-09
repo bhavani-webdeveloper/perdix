@@ -113,11 +113,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
                                             'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
                                             'pageData': pageData
-                                        }, {
-                                            'state': 'Page.Engine',
-                                            'pageName': 'audit.detail.processcompliance.SampleSet',                                            
-                                            'pageId': auditId + ":" + sampleTypeId,
-                                            'pageData': pageData
                                         });
                                     },
                                     isApplicable: function(item, index) {
@@ -150,11 +145,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
                                             'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
                                             'pageData': pageData
-                                        }, {
-                                            'state': 'Page.Engine',
-                                            'pageName': 'audit.detail.processcompliance.SampleSet',
-                                            'pageId': auditId + ":" + sampleTypeId,
-                                            'pageData': pageData
                                         });
                                     },
                                     isApplicable: function(item, index) {
@@ -175,11 +165,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                                     'pageName': 'audit.detail.processcompliance.SampleIssues',
                                     'pageId': auditId + ":" + sampleTypeId + ":NEW",
                                     'pageData': pageData
-                                }, {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.detail.processcompliance.SampleSet',
-                                    'pageId': auditId + ":" + sampleTypeId,
-                                    'pageData': pageData
                                 });
                             }
                         });
@@ -191,11 +176,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                             irfNavigator.go({
                                 'state': 'Page.Engine',
                                 'pageName': 'audit.detail.processcompliance.SampleSetSummary',
-                                'pageId': auditId + ":" + sampleTypeId,
-                                'pageData': pageData
-                            }, {
-                                'state': 'Page.Engine',
-                                'pageName': 'audit.detail.processcompliance.SampleSet',
                                 'pageId': auditId + ":" + sampleTypeId,
                                 'pageData': pageData
                             });

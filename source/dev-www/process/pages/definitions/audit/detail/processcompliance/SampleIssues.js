@@ -376,7 +376,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "category": "Audit",
                             "subCategory": "AUDITISSUEDOC"
                         });
-                        if (model.siteCode = "KGFS") {
+                        if (model.siteCode == "KGFS") {
                             issueDetailsForm.push({
                                 "key": "sample.issue_details[" + i + "].spot_fixed",
                                 "type": "checkbox",

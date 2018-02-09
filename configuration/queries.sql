@@ -48,3 +48,4 @@ dedupe.list = SELECT d.id, d.customer_id, d.duplicate_above_threshold_count, d.s
 enterpriseCustomer=select e.customer_id from  enterprise_customer_relations e where e.linked_to_customer_id = :individualCustomerId
 loanCustomerDetails.list=select c.urn_no, IFNULL(lcr.relation, IF(c.id=l.customer_id, 'Loan Customer', 'NA')) `relation`, lcr.relationship_with_applicant, c.first_name, c.mobile_phone, c.landline_no, c.mobile_number_2 `alternate_mobile_number` from customer c left join loan_accounts l on (l.customer_id = c.id) left join loan_customer_relation lcr on (lcr.customer_id = c.id) where l.id = :loanId or lcr.loan_id = :loanId
 nextInstallmentDate= SELECT MIN(installment_date) as min_date from repayment_reminder WHERE DATE(installment_date) > CURDATE()
+allusers.list=select u.user_id i, u.user_name n, ur.role_id r, bm.id b from users u, user_roles ur, branch_master bm where u.user_id = ur.user_id and u.branch_name = bm.branch_name

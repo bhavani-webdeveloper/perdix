@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils",
-    function($log, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils) {
+irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils", "User",
+    function($log, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils, User) {
         if (!$stateParams.pageId) {
             irfNavigator.goBack();
             PageHelper.showProgress("audit", "Audit ID is empty", 5000);
@@ -393,7 +393,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             "title": "AUDIT_INFORMATION",
             "items": [{
                 key: "ai.audit_id",
-                type: "string",
+                type: "text",
                 "readonly": true,
             }, {
                 key: "ai.branch_id",
@@ -412,6 +412,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 type: "date",
                 "readonly": true,
             }, {
+                key: "ai.auditor_id",
+                type: "text",
+                "readonly": true,
+            }, {
                 key: "ai.message",
                 type: "textarea",
                 "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly"
@@ -419,7 +423,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }, {
             "type": "box",
             "title": "AUDIT_REPORT",
-            "condition": "!model.ai.status !== 'O'",
+            "condition": "model.ai.status !== 'O'",
             "items": [{
                 "key": "issueGroupType",
                 "type": "radios",
@@ -460,10 +464,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "key": "ai.messages",
                 "type": "array",
                 "view": "fixed",
+                "titleExpr": "actions.getStageTitle(model.ai.messages[arrayIndex].type)",
                 "items": [{
                     "type": "section",
                     "htmlClass": "",
-                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.ai.messages[arrayIndex].created_by}}\
+                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.ai.messages[arrayIndex].created_by)}}\
                     <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.ai.messages[arrayIndex].created_on}}\
                     <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.ai.messages[arrayIndex].comment}}</strong><br>'
                 }]
@@ -554,8 +559,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             "type": "string",
                             "title": "END_DATE"
                         },
-                        "message": {
+                        "auditor_id": {
                             "type": "string",
+                            "title": "AUDITOR_ID"
+                        },
+                        "message": {
+                            "type": ["string", "null"],
                             "title": "MESSAGE"
                         }
                     }
@@ -661,7 +670,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         PageHelper.hideLoader();
                     });
                 });
+            },
+            getStageTitle: function(stage) {
+                return _.capitalize(stage)
+            },
+            getUsername: function(userId) {
+                return User.offline.getDisplayName(userId);
             }
         };
+        $scope.model.actions = $scope.actions;
     }
 ]);
