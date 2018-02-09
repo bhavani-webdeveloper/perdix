@@ -26,6 +26,10 @@ irf.models.factory('Messaging', ["$resource", "$httpParamSerializer", "BASE_URL"
             findProcess: searchResource({
                 method: 'GET',
                 url: endpoint + 'findProcess.php'
+            }),
+            getConversationStatus: searchResource({
+                method: 'GET',
+                url: endpoint + 'getConversationStatus.php'
             })
 
         });
