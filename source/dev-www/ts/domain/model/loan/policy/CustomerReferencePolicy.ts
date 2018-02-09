@@ -38,13 +38,14 @@ export class CustomerReferencePolicy extends IPolicy<LoanProcess> {
         else {
             loanProcess.loanAccount.telecallingDetails = [];
         }
-        tlc = new TelecallingDetails();
+        
         
         if(_.hasIn(loanProcess, "applicantEnrolmentProcess") && _.hasIn(loanProcess.applicantEnrolmentProcess, "customer")) {
             for(let index = 0; index < loanProcess.applicantEnrolmentProcess.customer.verifications.length; index++) {
+                tlc = new TelecallingDetails();
                 let verification = loanProcess.applicantEnrolmentProcess.customer.verifications[index];
-                tlc.referenceFirstName = verification.referenceFirstName;
-                tlc.mobileNo = verification.mobileNo;
+                tlc.personContacted = verification.referenceFirstName;
+                tlc.contactNumber = verification.mobileNo;
                 tlc.occupation = verification.occupation;
                 tlc.address = verification.address;
                 loanProcess.loanAccount.telecallingDetails.push(tlc);

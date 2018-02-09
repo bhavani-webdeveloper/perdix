@@ -333,8 +333,8 @@ define([],function(){
                     "NewVehicleDetails.originalInvoiceValue",
                     "TeleVerification",
                     "TeleVerification.verifications",
-                    "TeleVerification.verifications.referenceFirstName",
-                    "TeleVerification.verifications.mobileNo",
+                    "TeleVerification.verifications.personContacted",
+                    "TeleVerification.verifications.contactNumber",
                     "TeleVerification.verifications.occupation",
                     "TeleVerification.verifications.address",
                     "TeleVerification.verifications.knownSince",
@@ -444,44 +444,6 @@ define([],function(){
                                                 }
                                             }
                                         }
-                                    }
-                                },
-                                "TeleVerification": {
-                                    "items": {
-                                        "verifications": {
-                                            "items": {
-                                                "referenceFirstName": {
-                                                    "key": "loanAccount.telecallingDetails[].referenceFirstName",
-                                                    "title": "CONTACT_PERSON_NAME",
-                                                    "orderNo": 10,
-                                                    "type": "string"
-                                                },
-                                                "mobileNo": {
-                                                    "key": "loanAccount.telecallingDetails[].mobileNo",
-                                                    "orderNo": 20,
-                                                    "title": "CONTACT_NUMBER",
-                                                    "type": "string",
-                                                    "inputmode": "number",
-                                                    "numberType": "tel"
-                                                },
-                                                "occupation": {
-                                                    "key": "loanAccount.telecallingDetails[].occupation",
-                                                    "orderNo": 30,
-                                                    "title": "OCCUPATION",
-                                                    "type": "select",
-                                                    "enumCode": "occupation"
-                                                },
-                                                "address": {
-                                                    "key": "loanAccount.telecallingDetails[].address",
-                                                    "orderNo": 40,
-                                                    "title": "CUSTOMER_ADDRESS",
-                                                    "type": "textarea"
-                                                }
-                                            }
-                                        }
-                                        
-                                           
-                                        
                                     }
                                 }
                             },
