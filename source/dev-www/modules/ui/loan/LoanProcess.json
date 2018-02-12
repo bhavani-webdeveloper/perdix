@@ -132,19 +132,21 @@
         "items": {
             "expectedProcessingFeePercentage": {
                 "key": "loanAccount.expectedProcessingFeePercentage",
-                "type": "number",
-                "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE"
+                "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE",
+                "orderNo": 10
             },
             "expectedCommercialCibilCharge": {
                 "key": "loanAccount.expectedCommercialCibilCharge",
                 "type": "amount",
-                "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE"
+                "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE",
+                "orderNo": 20
             },
             "estimatedEmi": {
                 "key": "loanAccount.estimatedEmi",
                 "type": "amount",
                 "readonly": true,
-                "title": "EXPECTED_SECURITY_EMI"
+                "title": "EXPECTED_ADVANCE_EMI",
+                "orderNo": 70
             }
         }
     },
@@ -1398,9 +1400,26 @@
             "verifications": {
                 "key": "customer.telecallingDetails",
                 "title": "TELE_CALLING_DETAILS",
-                "startEmpty": true,
                 "type": "array",
+                "view":"fixed",
                 "items": {
+                    "personContacted": {
+                        "key":"loanAccount.telecallingDetails[].personContacted",
+                        "title": "CONTACT_PERSON_NAME"
+                    },
+                    "contactNumber": {
+                        "key":"loanAccount.telecallingDetails[].contactNumber",
+                        "title":"CONTACT_NUMBER"
+                    },
+                    "occupation": {
+                        "key":"loanAccount.telecallingDetails[].occupation",
+                        "title":"OCCUPATION"
+                    },
+                    "address": {
+                        "key":"loanAccount.telecallingDetails[].address",
+                        "title":"CUSTOMER_ADDRESS",
+                        "type": "textarea"
+                    },
                     "knownSince": {
                         "key": "loanAccount.telecallingDetails[].customerKnownSinceYears",
                         "title": "KNOW_SINCE"
@@ -1416,7 +1435,7 @@
                     },
                     "opinion": {
                         "key": "loanAccount.telecallingDetails[].referenceOpinionOnCustomer",
-                        "title": "RELATIONSHIP_WITH_APPLICANT"
+                        "title": "OPINION_ABOUT_CUSTOMER"
                     },
                     "financialStatus": {
                         "key": "loanAccount.telecallingDetails[].customerFinancialStatus",
