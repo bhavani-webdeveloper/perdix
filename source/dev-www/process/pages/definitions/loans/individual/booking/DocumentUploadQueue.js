@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
-["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator",
-function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator){
+["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter",
+function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter){
     return {
         "type": "search-list",
         "title": "DOCUMENT_EXECUTION",
@@ -47,27 +47,42 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                             "parentValueExpr": "model.branchId"
                         }
                     },
+                    "partner_code": {
+                        "title": "PARTNER_CODE",
+                        "type":["string","null"],
+                        "x-schema-form": {
+                            "type":"select",
+                            "enumCode": "partner"
+                        }
+                    },
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        "default": "1",
+                        
                         "x-schema-form": {
-                            "type": "select",
-                            /*"titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }*/
-                            "enumCode": "loan_product"
+                            "type": "lov",
+                            "lovonly": true,
+                            search: function (inputModel, form, model, context) {
+                                var loanProduct = formHelper.enum('loan_product').data;
+                                var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": products.length
+                                    },
+                                    body: products
+                                });
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                model.loan_product = valueObj.field1;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.name
+                                ];
+                            },
                         }
-                    }
+                    },
                     // "customer_name": {
                     //     "title": "CUSTOMER_NAME",
                     //     "type": "string",

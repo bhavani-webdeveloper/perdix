@@ -64,7 +64,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             "lovonly": true,
                             search: function (inputModel, form, model, context) {
                                 var loanProduct = formHelper.enum('loan_product').data;
-                                var products = $filter('filter')(loanProduct, {parentCode: model.partner_code}, true);
+                                var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
 
                                 return $q.resolve({
                                     headers: {
