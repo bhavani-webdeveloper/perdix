@@ -24,7 +24,7 @@ var buildDirectory = "www";
 gulp.task('bower', function () {
     var bowerJson = require('./bower.json');
     process.chdir('dev-www/');
-    gulp.src(['./index8.html'])
+    gulp.src(['./index.html'])
         .pipe(wiredep({
             bowerJson: bowerJson,
             directory: 'bower_components',
@@ -58,11 +58,7 @@ gulp.task('assets', function(){
         'dev-www/js/themeswitch.js',
         'dev-www/js/require.js',
         'dev-www/js/index.js',
-        'dev-www/app_manifest.json',
-        'dev-www/mobile_manifest.json',
-        'dev-www/i7.js',
-        'dev-www/i8.js',
-        'dev-www/index.html'
+        'dev-www/app_manifest.json'
         ], {base: 'dev-www/'})
         .pipe(gulp.dest(buildDirectory));
 })
@@ -73,8 +69,10 @@ gulp.task('cordovaAssets', function(){
 })
 
 gulp.task('html', function(){
-    // gulp.src(['!dev-www/index8.html', 'dev-www/*.+(json|js|html)']).pipe(gulp.dest('www/'));
-    return gulp.src('dev-www/index8.html')
+    gulp.src(['!dev-www/index.html', 'dev-www/*.+(json|js|html)']).pipe(gulp.dest(buildDirectory));
+    return gulp.src('dev-www/index.html')
+        .pipe($.inject(gulp.src('dev-www/css/irf-custom.' + argv.siteCode + '.css'), {relative: true}))
+        .pipe($.inject(gulp.src('dev-www/js/irf-config.' + argv.siteCode + '.js'), {relative: true}))
         .pipe($.useref())
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
@@ -104,11 +102,11 @@ gulp.task('androidManifestUpgrade', function(){
             }
         }))
         .pipe(gulp.dest("./"));
-})
+});
 
 gulp.task('updateLegacyURLInIndex', function(){
     var legacySystemUrl = argv.legacySystemUrl;
-    return gulp.src(['./dev-www/index.html'])
+    return gulp.src(['./dev-www/integration.html'])
         .pipe($.cheerio({
             run: function($, file){
                 console.log(file);

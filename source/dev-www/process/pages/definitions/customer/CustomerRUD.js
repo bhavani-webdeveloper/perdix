@@ -1,34 +1,8 @@
 irf.pageCollection.factory("Pages__CustomerRUD",
-    ["$log", "$q", "Enrollment","EnrollmentHelper", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state',
-        'formHelper', "BASE_URL", "$window", "SessionStore", "Utils",
-        function ($log, $q, Enrollment,EnrollmentHelper, PageHelper, irfProgressMessage, $stateParams, $state,
-                  formHelper, BASE_URL, $window, SessionStore, Utils) {
-
-            var fixData = function (model) {
-                $log.info("Before fixData");
-                Utils.removeNulls(model, true);
-                if (_.has(model.customer, 'udf.userDefinedFieldValues')){
-                    var fields = model.customer.udf.userDefinedFieldValues;
-                    $log.info(fields);
-                    fields['udf17'] = Number(fields['udf17']);
-                    fields['udf10'] = Number(fields['udf10']);
-                    fields['udf11'] = Number(fields['udf11']);
-                    fields['udf28'] = Number(fields['udf28']);
-                    fields['udf32'] = Number(fields['udf32']);
-                    fields['udf1'] = Boolean(fields['udf1']);
-                    fields['udf6'] = Boolean(fields['udf6']);
-                    fields['udf4'] = Number(fields['udf4']);
-
-                    for(var i=1; i<=40; i++){
-                        if (!_.has(model.customer.udf.userDefinedFieldValues, 'udf' + i)){
-                            model.customer.udf.userDefinedFieldValues['udf'+i] = '';
-                        }
-                    }
-                }
-                $log.info("After fixData");
-                $log.info(model);
-                return model;
-            };
+    ["$log", "$q", "Enrollment","Queries", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state',
+        'formHelper', "BASE_URL", "$window", "SessionStore", "Utils", "EnrollmentHelper",
+        function ($log, $q, Enrollment,Queries,PageHelper, irfProgressMessage, $stateParams, $state,
+                  formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
 
             return {
                 "id": "CustomerRUD",
@@ -48,33 +22,15 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         });
                     }
                     model._screenMode = 'VIEW';
-
-                    //try {
-                    //    if ($stateParams.pageId !== null) {
-                    //        if ($stateParams.pageData.intent !== undefined) {
-                    //            model._screenMode = $stateParams.pageData.intent;
-                    //        }
-                    //        else {
-                    //            $state.go('Page.Engine',{
-                    //                pageName:"CustomerSearch",
-                    //                pageId:null
-                    //            });
-                    //        }
-                    //    }
-                    //}catch(err){
-                    //    $log.error(err);
-                    //    $state.go('Page.Engine',{
-                    //        pageName:"CustomerSearch",
-                    //        pageId:null
-                    //    });
-                    //}
-
+                    model.branch = SessionStore.getCurrentBranch().branchId;
                     PageHelper.showLoader();
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...");
-                    Enrollment.getCustomerById({id: custId}, function (resp, header) {
+                    Enrollment.EnrollmentById({id: custId}, function (resp, header) {
                         PageHelper.hideLoader();
                         model.customer = _.cloneDeep(resp);
-                        model = fixData(model);
+                        model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                        //model = fixData(model);
+                        model = EnrollmentHelper.fixData(model);
                         $window.scrollTo(0, 0);
                         irfProgressMessage.pop("cust-load", "Load Complete", 2000);
                     }, function (resp) {
@@ -84,8 +40,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             pageName: "CustomerSearch",
                             pageId: null
                         });
-
                     });
+
                 },
                 form: [
                     {
@@ -117,35 +73,60 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 key:"customer.photoImageId",
                                 type:"file",
                                 fileType:"image/*",
-                                "offline": true
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
                             },
                             {
-                                key: "customer.centreCode",
+                                key: "customer.centreId",
                                 type: "select",
-                                filter: {
-                                    "parentCode as branch": "model.customer.kgfsName"
-                                }
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.customer.customerBranchId",
                             },
                             {
                                 key: "customer.enrolledAs",
                                 type: "radios"
                             },
                             {
-                                key: "customer.firstName",
+                                key: "customer.fullName",
+                                "readonly":true,
                                 title: "FULL_NAME"
                             },
-
-
                             {
                                 key: "customer.gender",
                                 type: "radios"
                             },
                             {
+                                key: "customer.age",
+                                "readonly":true,
+                                title: "AGE",
+                                type: "number",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.age > 0) {
+                                        if (model.customer.dateOfBirth) {
+                                            model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                        } else {
+                                            model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                        }
+                                    }
+                                }
+                            }, {
                                 key: "customer.dateOfBirth",
-                                type: "date"
+                                "readonly":true,
+                                type: "date",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
                             },
                             {
-                                key: "customer.fatherFirstName",
+                                key: "customer.fatherFullName",
+                                "readonly":true,
                                 title: "FATHER_FULL_NAME"
                             },
                             {
@@ -154,18 +135,41 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.spouseFirstName",
-                                title: "SPOUSE_FULL_NAME",
-                                condition: "model.customer.maritalStatus==='MARRIED'"
+                                title: "Spouse First name",
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                type: "qrcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    $log.info(aadhaarData);
+                                    model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                                    model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                    model.customer.spouseFirstName = aadhaarData.name;
+                                    if (aadhaarData.yob) {
+                                        model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                    }
+                                }
                             },
+                            {
+                                key: "customer.spouseFullName",
+                                "readonly":true,
+                                title: "Spouse Full Name",
+                            }, 
                             {
                                 key: "customer.spouseDateOfBirth",
                                 type: "date",
-                                condition: "model.customer.maritalStatus==='MARRIED'"
-                            },
-                            {
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                "onChange": function(modelValue, form, model) {
+                                    if (model.customer.spouseDateOfBirth) {}
+                                }
+                            }, {
                                 key: "customer.udf.userDefinedFieldValues.udf1",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
-                                title: "SPOUSE_LOAN_CONSENT"
+                                title: "SPOUSE_LOAN_CONSENT",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
 
                             }
 
@@ -200,7 +204,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 },
                                 "customer.stdCode",
                                 "customer.landLineNo",
-                                "customer.mobilePhone",
+                                {
+                                    key:"customer.mobilePhone",
+                                    "readonly":true
+                                },
+                                //"customer.mobilePhone",
                                 "customer.mailSameAsResidence"
                             ]
                         }, {
@@ -224,75 +232,260 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             ]
                         }
                         ]
-                    }, {
+                    }, 
+                    {
                         type: "box",
                         title: "KYC",
-                        items: [
-                            {
+                        items: [{
+                                "key": "customer.aadhaarNo",
+                                type: "qrcode",
+                                onChange: "actions.setProofs(model)",
+                                onCapture: function(result, model, form) {
+                                    PageHelper.showLoader();
+                                    var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                    Queries.searchPincodes(
+                                        aadhaarData.pc
+                                    ).then(function(response) {
+                                        $log.info(response);
+                                        if (response.body && response.body.length) {
+                                            model.customer.district = response.body[0].district;
+                                            model.customer.state = response.body[0].state;
+                                        }
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                                //onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                            }, {
                                 type: "fieldset",
                                 title: "IDENTITY_PROOF",
-                                items: [
-                                    {
-                                        key: "customer.identityProof",
-                                        type: "select"
+                                items: [{
+                                    key: "customer.identityProof",
+                                    type: "select"
+                                }, {
+                                    key: "customer.identityProofImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.identityProofImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
+                                    //"offline": true
+                                }, {
+                                    key: "customer.identityProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.identityProofReverseImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
-                                    },
-                                    "customer.identityProofNo",
-                                    {
-                                        key: "customer.idProofIssueDate",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.idProofValidUptoDate",
-                                        type: "date"
+                                    //"offline": true
+                                }, {
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
                                     }
-                                ]
-                            },
-                            {
+                                }, {
+                                    key: "customer.idProofIssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.idProofValidUptoDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.addressProofSameAsIdProof"
+                                }]
+                            }, {
+                                type: "fieldset",
+                                title: "SPOUSE_IDENTITY_PROOF",
+                                condition: "model.customer.maritalStatus==='MARRIED'",
+                                items: [{
+                                    key: "customer.udf.userDefinedFieldValues.udf33",
+                                    type: "select",
+                                    onChange: function(modelValue) {
+                                        $log.info(modelValue);
+                                    }
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf34",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
+                                    },
+                                    //"offline": true
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf35",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
+                                    },
+                                    //"offline": true
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf36",
+                                    condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result); // spouse id proof
+                                        model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                    }
+                                }, {
+                                    key: "customer.udf.userDefinedFieldValues.udf36",
+                                    condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                    type: "qrcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result); // spouse id proof
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        $log.info(aadhaarData);
+                                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                        model.customer.spouseFirstName = aadhaarData.name;
+                                        if (aadhaarData.yob) {
+                                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                        }
+                                    }
+                                }]
+                            }, {
                                 type: "fieldset",
                                 title: "ADDRESS_PROOF",
                                 condition: "!model.customer.addressProofSameAsIdProof",
-                                items: [
-                                    {
-                                        key: "customer.addressProof",
-                                        type: "select"
+                                items: [{
+                                    key: "customer.addressProof",
+                                    type: "select"
+                                }, {
+                                    key: "customer.addressProofImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.addressProofImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
+                                    //"offline": true
+                                }, {
+                                    key: "customer.addressProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*",
+                                    "viewParams": function(modelValue, form, model) {
+                                        return {
+                                            customerId: model.customer.id
+                                        };
                                     },
-                                    {
-                                        key:"customer.addressProofReverseImageId",
-                                        type:"file",
-                                        fileType:"image/*",
-                                        "offline": true
+                                    //"offline": true
+                                }, {
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
                                     },
-                                    "customer.addressProofNo",
-                                    {
-                                        key: "customer.addressProofIssueDate",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.addressProofValidUptoDate",
-                                        type: "date"
-                                    },
-                                ]
+                                    "schema":{
+                                        "pattern":"^[a-zA-Z0-9]*$"
+                                    }
+                                }, {
+                                    key: "customer.addressProofIssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.addressProofValidUptoDate",
+                                    type: "date"
+                                }, ]
                             }
 
                         ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "ADDITIONAL_KYC",
+                        "items": [{
+                            "key": "customer.additionalKYCs",
+                            "type": "array",
+                            "startEmpty": true,
+                            "schema": {
+                                "maxItems": 1
+                            },
+                            "title": "ADDITIONAL_KYC",
+                            "items": [{
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
+
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ProofType",
+                                required: true,
+                                type: "select"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ImagePath",
+                                type: "file",
+                                required: true,
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1IssueDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc1ValidUptoDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ProofNumber",
+                                type: "barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
+                                }
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ProofType",
+                                type: "select"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2IssueDate",
+                                type: "date"
+                            }, {
+                                key: "customer.additionalKYCs[].kyc2ValidUptoDate",
+                                type: "date"
+                            }]
+                        }]
                     },
                     {
                         "type": "box",
@@ -302,57 +495,152 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             type: "array",
                             items: [
                                 {
-                                    key: "customer.familyMembers[].customerId"
+                            key:"customer.familyMembers[].customerId",
+                            type:"lov",
+                            "inputMap": {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME"
                                 },
-                                {
-                                    key: "customer.familyMembers[].familyMemberFirstName",
-                                    title: "FAMILY_MEMBER_FULL_NAME"
-                                },
-                                {
-                                    key: "customer.familyMembers[].relationShip",
-                                    title: "T_RELATIONSHIP"
-                                },
-                                {
-                                    key: "customer.familyMembers[].gender",
-                                    type: "radios",
-                                    title: "T_GENDER"
-                                },
-                                {
-                                    key: "customer.familyMembers[].dateOfBirth",
-                                    "required":true,
-                                    title: "T_DATEOFBIRTH"
-                                },
-                                {
-                                    key: "customer.familyMembers[].educationStatus",
-                                    type: "select",
-                                    title: "T_EDUCATION_STATUS"
-                                },
-                                {
-                                    key: "customer.familyMembers[].maritalStatus",
-                                    type: "select",
-                                    title: "T_MARITAL_STATUS"
-                                },
-                                "customer.familyMembers[].mobilePhone",
-                                {
-                                    key: "customer.familyMembers[].healthStatus"
-                                },
-                                {
-                                    key: "customer.familyMembers[].incomes",
-                                    type: "array",
-                                    items: [
-                                        {
-                                            key: "customer.familyMembers[].incomes[].incomeSource",
-                                            type:"select"
-                                        },
-                                        "customer.familyMembers[].incomes[].incomeEarned",
-                                        {
-                                            key: "customer.familyMembers[].incomes[].frequency",
-                                            type:"select"
-                                        }
+                                "branchName": {
+                                    "key": "customer.kgfsName",
+                                    "type": "select"
+                                }/*,
+                                "centreCode": {
+                                    "key": "customer.centreCode",
+                                    "type": "select"
+                                }*/
+                            },
+                            "outputMap": {
+                                "id": "customer.familyMembers[arrayIndex].customerId",
+                                "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var promise = Enrollment.search({
+                                    'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                    'firstName': inputModel.firstName,
+                                }).$promise;
+                                return promise;
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                var rowIndex = context.arrayIndex;
+                                PageHelper.showLoader();
+                                Enrollment.EnrollmentById({id: valueObj.id}, function (resp, header) {
+                                    
+                                            model.customer.familyMembers[rowIndex].gender = resp.gender;
+                                            model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
+                                            model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
+                                            model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
+                                            model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                            model.customer.familyMembers[rowIndex].relationShip = "";
 
-                                    ]
-
+                                           var selfIndex = _.findIndex(resp.familyMembers, function(o) { return o.relationShip.toUpperCase() == 'SELF' });
+                                           
+                                            if (selfIndex != -1) {
+                                                 model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
+                                                 model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
+                                            }
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                                }, function (resp) {
+                                    PageHelper.hideLoader();
+                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)           
+                                });
+                                    
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' '),
+                                    data.id
+                                ];
+                            }
+                        },
+                        {
+                            key:"customer.familyMembers[].familyMemberFirstName",
+                            title:"FAMILY_MEMBER_FULL_NAME"
+                        },
+                        {
+                            key:"customer.familyMembers[].familyMemberLastName",
+                            title:"FAMILY_MEMBER_LAST_NAME"
+                        },
+                        {
+                            key:"customer.familyMembers[].relationShip",
+                            type:"select",
+                            title: "T_RELATIONSHIP"
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            type: "radios",
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            title: "AGE",
+                            type:"number",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
                                 }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            type:"date",
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key:"customer.familyMembers[].educationStatus",
+                            type:"select",
+                            title: "T_EDUCATION_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        "customer.familyMembers[].mobilePhone",
+                        {
+                            key:"customer.familyMembers[].healthStatus",
+                            type:"radios",
+                            titleMap:{
+                                "GOOD":"GOOD",
+                                "BAD":"BAD"
+                            },
+                        },
+                                {
+                            key:"customer.familyMembers[].incomes",
+                            type:"array",
+                            startEmpty: true,
+                            items:[
+                                {
+                                    key: "customer.familyMembers[].incomes[].incomeSource",
+                                    type:"select"
+                                },
+                                "customer.familyMembers[].incomes[].incomeEarned",
+                                {
+                                    key: "customer.familyMembers[].incomes[].frequency",
+                                    type: "select"
+                                },
+                                {
+                                    key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                    "schema":{
+                                        "minimum": 1,
+                                        "maximum": 12,
+                                    }
+                                }
+                            ]
+                        }
                             ]
                         },
                             {
@@ -492,7 +780,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         key:"customer.udf.userDefinedFieldValues.udf15"
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf26"
+                                        key:"customer.udf.userDefinedFieldValues.udf26",
+                                        type: "checkbox",
+                                        "schema": {
+                                            "default": false
+                                        }
                                     },
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf27",
@@ -500,7 +792,10 @@ irf.pageCollection.factory("Pages__CustomerRUD",
 
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf28"
+                                        key:"customer.udf.userDefinedFieldValues.udf28",
+                                        "schema": {
+                                            "type": "number"
+                                        }
                                     }
                                 ]
                             }
@@ -512,6 +807,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         "title": "T_ASSETS",
                         "items": [{
                             key: "customer.physicalAssets",
+                            titleExpr: "model.customer.physicalAssets[arrayIndex].assetType",
                             type: "array",
                             items: [
                                {
@@ -616,9 +912,13 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         ];
                                    }
                                },
-                               "customer.physicalAssets[].numberOfOwnedAsset",
+                               {
+                                key:"customer.physicalAssets[].numberOfOwnedAsset",
+                                "title": "NUMBER_OF_OWNED_ASSET",
+                               },
                                {
                                    key: "customer.physicalAssets[].ownedAssetValue",
+                                   "title": "OWNED_ASSET_VALUE"
                                }
                             ]
                         },
@@ -705,92 +1005,160 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         ]
                     },
                     {
-                        "type": "box",
-                        "title": "T_HOUSE_VERIFICATION",
-                        "items": [
-                            {
-                                key:"customer.nameInLocalLanguage"
-                            },
-                            {
-                                key:"customer.addressInLocalLanguage"
-                            },
+                "type": "box",
+                "title": "T_HOUSE_VERIFICATION",
+                "items": [
+                    {
+                        "key": "customer.fullName",
+                        "title": "CUSTOMER_NAME",
+                        "readonly": true
+                    },
+                    {
+                        key:"customer.nameInLocalLanguage"
+                    },
+                    {
+                        key:"customer.addressInLocalLanguage",
+                        type:"textarea"
+                    },
 
+                    {
+                        key:"customer.religion",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.caste",
+                        "required":true,
+                        type:"select"
+                    },
+                    {
+                        key:"customer.language",
+                        "required":true,
+                        type:"select"
+                    },
+                    {
+                        type:"fieldset",
+                        title:"HOUSE_DETAILS",
+                        items:[
                             {
-                                key:"customer.religion"
+                                key:"customer.udf.userDefinedFieldValues.udf3",
+                                type:"select"
+
                             },
                             {
-                                key:"customer.caste"
+                                key:"customer.udf.userDefinedFieldValues.udf2",
+                                condition:"model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
                             },
                             {
-                                key:"customer.language"
+                                key:"customer.udf.userDefinedFieldValues.udf4",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
-                                type:"fieldset",
-                                title:"HOUSE_DETAILS",
-                                items:[
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf3",
-                                        type:"select"
+                                key:"customer.udf.userDefinedFieldValues.udf5",
+                                type:"radios"
 
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf2",
-                                        condition:"model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf4",
-
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf5",
-                                        type:"radios"
-
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf31",
-                                        "type":"select",
-                                        //"enumCode":"house_build_type",
-                                        "titleMap":{
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf31",
+                                title:"BUILD_TYPE",
+                                "type":"select",
+                                "titleMap":{
                                             "CONCRETE":"CONCRETE",
                                             "MUD":"MUD",
                                             "BRICK":"BRICK"
-                                        }
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf32"
-
-                                    },
-                                    {
-                                        key:"customer.udf.userDefinedFieldValues.udf6"
-                                    }
-                                ]
+                                },
+                                "schema":{
+                                    "type":"string"
+                                }
                             },
                             {
-                                "key": "customer.latitude",
-                                "title": "House Location",
-                                "type": "geotag",
-                                "latitude": "customer.latitude",
-                                "longitude": "customer.longitude",
-                                "onChange": "fillGeolocation(modelValue, form)"
-                            },
-                            "customer.nameOfRo",
-                            {
-                                type: 'section',
-                                html: '<center><img ng-src="' + BASE_URL + '/api/stream/{{model.customer.houseVerificationPhoto}}" height="200" style="height:200px;max-width:100%" src="" /></center>'
+                                key:"customer.udf.userDefinedFieldValues.udf32",
+                                title:"NUMBER_OF_ROOMS",
+                                "type":"number",
+                                "schema":{
+                                    "type":"number"
+                                }
                             },
                             {
-                                key: "customer.date",
-                                type:"text"
-                            },
-                            "customer.place"
+                                key:"customer.udf.userDefinedFieldValues.udf6",
+                                type:"checkbox",
+                                "schema":{
+                                    "default":false
+                                }
+                            }
                         ]
                     },
                     {
+                        "key": "customer.latitude",
+                        "title": "HOUSE_LOCATION",
+                        "type": "geotag",
+                        //readonly: true,
+                        "latitude": "customer.latitude",
+                        "longitude": "customer.longitude",
+                        "onChange": "fillGeolocation(modelValue, form)"
+                    },
+                    "customer.nameOfRo",
+                    {
+                        key:"customer.houseVerificationPhoto",
+                        //offline: true,
+                        type:"file",
+                        fileType:"image/*",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                    },
+                    {
+                        "key":"customer.verifications",
+                        "title":"VERIFICATION",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                key:"customer.verifications[].houseNo",
+                                "required":true,
+                            },
+                            {
+                                key:"customer.verifications[].houseNoIsVerified1",
+                                "type":"checkbox",
+                                "title": "HOUSE_NO_IS_VERIFIED",
+                                "required":true,
+                                "schema":{
+                                    "default":false
+                                }
+                            },
+                            {
+                                key:"customer.verifications[].referenceFirstName",
+                                "required":true,
+                            },
+                            {
+                                key: "customer.verifications[].referenceLastName",
+                                "condition": "model.customer.verifications[arrayIndex].referenceLastName"
+                            },
+                            {
+                                key:"customer.verifications[].relationship",
+                                "required":true,
+                                type:"select"
+                            }
+
+                        ]
+                    },
+                    {
+                        key: "customer.date",
+                        type:"date"
+                    },
+                    {
+                        key:"customer.place",
+                        "required":true
+                    }
+                ]
+            },
+                    {
                         "type": "actionbox",
                         "items": [{
-                            "type": "save",
-                            "title": "SAVE_OFFLINE",
-                        }, {
                             "type": "submit",
                             "title": "SUBMIT"
                         }]
@@ -847,13 +1215,32 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         if (window.confirm("Update - Are You Sure?")) {
                             PageHelper.showLoader();
                             irfProgressMessage.pop('cust-update', 'Working...');
-                            model.enrollmentAction = "SAVE";
+                            model.customer.title=String(model.customer.addressProofSameAsIdProof);
                             $log.info(model);
+                            if (!(EnrollmentHelper.validateDate(model))) {
+                                return false;
+                            }
+                            if (model.customer.verifications && model.customer.verifications.length) {
+                                for (i in model.customer.verifications) {
+                                    if (model.customer.verifications[i].houseNoIsVerified1) {
+                                        model.customer.verifications[i].houseNoIsVerified = (model.customer.verifications[i].houseNoIsVerified1 == true) ? 1 : 0;
+                                    }
+                                }
+                            }
                             var reqData = _.cloneDeep(model);
+                            EnrollmentHelper.fixData(reqData);
+                            if (reqData.customer.currentStage == 'Completed'){ 
+                                reqData['enrollmentAction'] = 'PROCEED';
+                            } else {
+                                reqData['enrollmentAction'] = 'SAVE';
+                            };
 
-                            Enrollment.updateEnrollment(reqData, function (res, headers) {
+                            Enrollment.updateCustomer(reqData, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
+                                model.customer = _.clone(res.customer);
+                                model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
+                                model = EnrollmentHelper.fixData(model);
                                 $state.go("Page.Engine", {
                                     pageName: "CustomerRUD",
                                     pageId: model.customer.id,

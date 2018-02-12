@@ -1,74 +1,164 @@
-irf.pageCollection.factory("Pages__Cgt2Queue", ["$log", "formHelper", "Groups","$state","entityManager",
-    "SessionStore","groupCommons","Queries","PageHelper",
-    function($log, formHelper, Groups,$state,entityManager,SessionStore,groupCommons,Queries,PageHelper){
+define({
+	pageUID: "loans.group.Cgt2Queue",
+	pageType: "Engine",
+	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+	],
+	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-        var listOptions= {
-            itemCallback: function(item, index) {
-                // This will not be called in case of selectable = true in definitions             
-                Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
-                {
-                    PageHelper.showLoader();
-                    PageHelper.clearErrors();
-                    if(moment().format()>=moment(item.cgtDate1, 'YYYY-MM-DD').add('days', result).format())
-                    {
+		var branchId = SessionStore.getBranchId();
+		var branchName = SessionStore.getBranch();
 
-                            $log.info(item);
-                            entityManager.setModel('Cgt2', {_request:item});
-                            $state.go("Page.Engine",
-                            {
-                                 pageName:"Cgt2",
-                                 pageId:null
-                            });
-                            PageHelper.hideLoader();
-                    }
-                    else
-                    {
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 Date : ('+item.cgtDate1+')',5000);
-                                  
-                    }
-                },function(data)
-                {
-                     PageHelper.hideLoader();
-                     PageHelper.showProgress('CgtProgress', 'Oops some error happend in getting CGT Cooling Days',5000);
-                     PageHelper.showErrors(data);
-                });
-            },
-            getItems: function(response, headers){
-                if (response!=null && response.length && response.length!=0){
-                    return response;
-                }
-                return [];
-            },
-            getListItem: function(item){
-                return [
+		return {
+			"type": "search-list",
+			"title": "CGT2 Queue",
+			"subTitle": "",
+			initialize: function(model, form, formCtrl) {
+				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+			},
+			definition: {
+				title: "CGT2 QUEUE",
+				searchForm: [{
+					"key": "partner",
+					"readonly": true,
+					"condition": "!model.isPartnerChangeAllowed"
+				}, {
+					"key": "partner",
+					"condition": "model.isPartnerChangeAllowed"
+				}],
+				autoSearch: true,
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"partner": {
+							"type": "string",
+							"title": "PARTNER",
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "partner"
+							}
+						}
+					},
+					"required": []
+				},
 
-                    'Group ID : ' + item.id,
-                    'Group Name : '+item.groupName,
-                    null
-                ]
-            },
-            getActions: function(){
-                return [
+				getSearchFormHelper: function() {
+					return formHelper;
+				},
+				getResultsPromise: function(searchOptions, pageOpts) {
+					return GroupProcess.search({
+						'branchId': branchId,
+						'partner': searchOptions.partner,
+						'groupStatus': true,
+						'currentStage': "CGT2",
+						'page': pageOpts.pageNo,
+						'per_page': pageOpts.itemsPerPage
+					}).$promise;
+				},
+				paginationOptions: {
+					"getItemsPerPage": function(response, headers) {
+						return 100;
+					},
+					"getTotalItemsCount": function(response, headers) {
+						return headers['x-total-count']
+					}
+				},
+				listOptions: {
+					selectable: false,
+					expandable: true,
+					listStyle: "table",
+					itemCallback: function(item, index) {},
+					getItems: function(response, headers) {
+						if (response != null && response.length && response.length != 0) {
+							return response;
+						}
+						return [];
+					},
+					getListItem: function(item) {
+						return []
+					},
+					getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+					},
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'groupName'
+						}]
+					},
+					getActions: function() {
+						return [{
+							name: "CGT",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+			                    PageHelper.clearErrors();				                	
+			                    PageHelper.showLoader();
+								Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
+				                {
+				                    if(moment().format()>=moment(item.cgtEndDate1, 'YYYY-MM-DD').add('days', result).format())
+				                    {
 
-                ];
-            }
-        };
-        var definition = groupCommons.getSearchDefinition('Stage05',listOptions);
+				                            $log.info(item);
+				                           irfNavigator.go({
+												state: "Page.Engine",
+												pageName: "loans.group.CGT2",
+												pageId:item.id
+											}, {
+												state: "Page.Engine",
+												pageName: "loans.group.Cgt2Queue",
+											});
+				                            PageHelper.hideLoader();
+				                    }
+				                    else
+				                    {
+				                        PageHelper.hideLoader();
+				                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 End Date : ('+item.cgtEndDate1+')',5000);
+				                                  
+				                    }
+				                },function(data)
+				                {
+				                     PageHelper.hideLoader();
+				                     PageHelper.showProgress('CgtProgress', 'Oops some error happend in getting CGT Cooling Days',5000);
+				                     PageHelper.showErrors(data);
+				                });
+							},
+							isApplicable: function(item, index) {
 
-        return {
-            "id": "cgt2queue",
-            "type": "search-list",
-            "name": "Cgt2Queue",
-            "title": "CGT 2 Queue",
-            "subTitle": "",
-            "uri":"Groups/CGT 2 Queue",
-            //offline: true,
-            getOfflineDisplayItem: groupCommons.getOfflineDisplayItem(),
-            getOfflinePromise: groupCommons.getOfflinePromise('Stage05'),
-            initialize: function (model, form, formCtrl) {
-                $log.info("CGT 2 Q got initialized");
-            },
-            definition: definition
-        };
-    }]);
+								return true;
+							}
+						}];
+					}
+				},
+				offlineListOptions: {
+					pageName: "loans.group.CGT2",
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'model.group.id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'model.group.partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'model.group.groupName'
+						}]
+					}
+				}
+			}
+		};
+	}
+})

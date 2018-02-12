@@ -1,22 +1,35 @@
 <div>
-    <section class="content-header">
+    <section ng-hide="error" class="content-header">
         <h1>
-            <span><a href ng-click="expandCollapseView()" style="color:#333"><i ng-if="showCollapsedViewButton" class="fa {{collapsedView?'fa-plus-square-o':'fa-minus-square-o'}}">&nbsp;</i>
-            {{ page.title | translate }}</a></span> <small>{{ page.subTitle | translate }}</small>
-            <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
+            <span>{{ page.title | translate }}</span> <small>{{ page.subTitle | translate }}</small>
+            <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'OFFLINE_SAVED_RECORDS'|translate}}</a></small></span>
+            <span class="button-holder pull-right">
+                <button ng-show="page.newOffline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i> {{ (model.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
+            </span>
         </h1>
-<!--         <ol ng-if="breadcrumb" class="breadcrumb">
-            <li ng-repeat="bc in breadcrumb" ng-class="{active:$last}">
-                <a ng-if="!$last" href="#"><i ng-if="$first" class="fa fa-map-signs"></i>{{ bc }}</a>{{ $last ? bc : '' }}
-            </li>
-        </ol> -->
     </section>
 
-    <section class="content">
+    <section ng-show="showHeads" class="content">
+        <ul class="nav nav-pills nav-justified">
+            <li>
+                <div ng-repeat="head in boxHeads" class="box" ng-class="{'box-danger':head.error, 'box-theme':!head.error}" style="margin-bottom: 0">
+                    <a href="#" ng-click="openHead(head, $event)">
+                        <div class="box-header" style="height: 60px">
+                            <h3 class="box-title" ng-bind-html="head.title"></h3>
+                        </div>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- <div id="bottom-card-selector"><span class="title">hi</span></div> -->
+
+    <section ng-hide="error" class="content">
         <div ng-switch="page.type" class="row page-row">
             <irf-sf ng-switch-when="schema-form"
-                initialize="page.initialize(model, form, formCtrl)"
-                irf-schema="page.schema"
+                initialize="initialize(model, form, formCtrl)"
+                irf-schema="schema"
                 irf-form="page.form"
                 irf-actions="page.actions"
                 irf-model="model"
@@ -30,5 +43,21 @@
                 initialize="page.initialize(model, form, formCtrl)"
                 irf-model="model"></irf-resource-search-wrapper>
         </div>
+    </section>
+
+    <section ng-show="error" class="content">
+        <div class="modal-dialog">
+            <div class="modal-content effect2">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{'Page is missing/having errors' | translate}}</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 style="position:absolute;top:10%;left:0;width:100%;text-align:center" ng-bind-html="pageNameHtml"></h4>
+                    <div style="padding:10px">
+                        <img src="img/404.png" class="img-responsive">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </section>
 </div>

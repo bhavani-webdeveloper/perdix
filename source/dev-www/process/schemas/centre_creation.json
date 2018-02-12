@@ -1,0 +1,127 @@
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "properties": {
+      "centre": {
+         "type": "object",
+         "required": 
+         [
+            "branchId",
+            "centreAddress",
+            "centreAltitude",
+            "centreCode",
+            "centreName"
+         ],
+         "properties": 
+         { 
+            "branchId":{
+               "type": ["number", "null"],
+               "title": "BRANCH_ID"
+            },
+            "centreAddress": {
+               "type": ["string", "null"],
+               "title": "ADDRESS"
+            },
+            "centreAltitude": {
+              "type": ["string", "null"],
+              "title": "LOCATION"
+            },          
+            "centreCode": {
+               "type": ["string", "null"],
+               "title": "CENTRE_CODE1"
+            },
+            "centreId": {
+               "type": ["object", "null"],
+               "title": "CENTRE_CODE1"
+            },
+            "centreGpsCaptureDate": {
+                  "type": ["string", "null"],
+                  "title": "GPS_CAPTURE_DATE"
+            },
+            "centreLeaderUrn": {
+               "type": ["string", "null"],
+               "title": "CENTRE_LEADER_URN"
+            },
+            "centreLatitude": {
+               "type": ["string", "null"],
+               "title": "LOCATION"
+            },
+            "centreName": {
+               "type": ["string", "null"],
+               "title": "CENTRE_NAME_"
+            },
+            "employee": {
+               "type": ["string", "null"],
+               "title": "EMPLOYEE_CODE"
+            },
+            "employeeName": {
+               "type": ["string", "null"],
+               "title": "EMPLOYEE_NAME"
+            },
+            "firstName": {
+               "type": ["string", "null"],
+               "title": "FIRST_NAME"
+            },
+            "monthlyMeeting": {
+               "type": ["string", "null"],
+               "title": "MONTHLY_MEETING"
+            },
+            "monthlyMeetingDate": {
+               "type": ["string", "null"],
+               "title": "DATE"
+            },
+            "monthlyMeetingDateNumber": {
+               "type": ["string", "null"],
+               "title": "WEEK"
+            },
+            "monthlyMeetingDay": {
+               "type": ["string", "null"],
+               "title": "DAY"
+            },
+            "monthlyMeetingTime": {
+               "type": ["object", "null"],
+               "title": "TIME"
+            },
+            "status": {
+               "type": ["string", "null"],
+               "title": "STATUS"
+            },
+            "weeklyMeetingDay": {
+               "type": ["string", "null"],
+               "title": "WEEKLY_MEETING_DAY_"
+            },
+            "weeklyMeetingTime": {
+               "type": ["object", "null"],
+               "title": "WEEEKLY_MEETING_TIME"
+            },
+            "pincode": {
+                "type": ["integer","null"]
+            },
+            "state": {
+              "type": ["string","null"],
+              "title": "STATE",
+              "enumCode":"state_master"
+            },
+            "district": {
+              "type": ["string","null"],
+              "title": "DISTRICT",
+              "enumCode":"district"
+            },
+            "villageName": {
+              "type": ["string","null"],
+              "title": "VILLAGE_NAME",
+              "enumCode":"village"
+            },
+            "locality": {
+              "type": ["string","null"],
+              "title": "LOCALITY"
+            }
+         }
+   }
+}
+}
+
+
+
+
+

@@ -2,13 +2,11 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
     ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams",
         function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams){
             return {
-                "id": "ViewLoans",
                 "type": "search-list",
-                "name": "View Loans",
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
-                "uri":"Loans/View Loans",
                 initialize: function (model, form, formCtrl) {
+                    model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     $log.info("ViewLoans initialiized");
                 },
                 offline: false,
@@ -16,7 +14,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                     title: "Loans",
                     autoSearch:true,
                     searchForm: [
-                        "*"
+                        //"*"
                     ],
                     searchSchema: {
                         "type": 'object',
@@ -30,7 +28,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         },
                         "required":["branch"]
                     },
-                    getSearchFormHelper: function() {
+                    getSearchFormHelper: function() { 
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
@@ -53,6 +51,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
+                                //var arrLength = response.length;
+                                //for (var i=0; i<arrLength; i++){
+                                //    if (!_.isNull(response[i]) && _.isObject(response[i])){
+                                //        _.remove()
+                                //    }
+                                //}
+                                _.pullAll(response, [null]);
                                 return response;
                             }
                             return [];
@@ -60,8 +65,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         getListItem: function(item){
                             return [
                                 item.accountNumber,
-                                'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode,
-                                'Application Status: ' + item.applicationStatus
+                                'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode
                             ]
                         },
                         getActions: function(){
@@ -71,30 +75,67 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: irf.page('loans.ViewLoanDetails'),
-                                            pageId: item.accountNumber
+                                            pageName: 'customer360.loans.LoanDetails',
+                                            pageId: item.accountId
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        //if (index%2==0){
-                                        //	return false;
-                                        //}
-                                        return true;
+                                        if (item.accountNumber){
+                                        	return true;
+                                        }
+                                        return false;
                                     }
                                 },
-                                // {
-                                //     name: "Repay",
-                                //     desc: "",
-                                //     fn: function(item, index){
-                                //         $state.go('Page.Engine', {
-                                //             pageName: 'loans.LoanRepay',
-                                //             pageId: [item.accountNumber,item.urnNo,item.customerId].join(".")
-                                //         })
-                                //     },
-                                //     isApplicable: function(item, index){
-                                //         return true;
-                                //     }
-                                // }
+                                {
+                                    name: "Repay",
+                                    desc: "",
+                                    fn: function(item, model){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.LoanRepay',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, model){
+                                        return false;
+                                    }
+                                },
+                                {
+                                    name: "Amend",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.LoanAmend',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return false;
+                                    }
+                                },
+                                 {
+                                    name: "Unmark NPA",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.UnmarkNPA',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return false;
+                                    }
+                                }, {
+                                    name: "FREEZE_ACCOUNT",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.UnmarkNPA',
+                                            pageId: [item.accountNumber,item.partner].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return false;
+                                    }
+                                },
                             ];
                         }
                     }

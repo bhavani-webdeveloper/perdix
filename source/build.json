@@ -1,16 +1,16 @@
 {
     "android": {
         "debug": {
-            "keystore": "../configuration/mobile/perdix_kgfs_debug_key.keystore",
-            "storePassword": "KGFS@123",
-            "alias": "perdix_kgfs_debug",
-            "password" : "KGFS@123",
+            "keystore": "../configuration/mobile/perdix_kinara_debug_key.keystore",
+            "storePassword": "Kinara@blr",
+            "alias": "perdix_kinara_debug",
+            "password" : "Kinara@blr",
             "keystoreType": ""
         },
         "release": {
-            "keystore": "../configuration/mobile/perdix_kgfs_release_key.keystore",
+            "keystore": "../configuration/mobile/perdix_kinara_release_key.keystore",
             "storePassword": "",
-            "alias": "perdix_kgfs",
+            "alias": "perdix_kinara",
             "password" : "",
             "keystoreType": ""
         }

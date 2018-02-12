@@ -1,10 +1,12 @@
 irf.pageCollection.factory("Pages__CentrePaymentCollection",
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","authService", "$rootScope",
+"$filter", "elementsUtils", "Utils","authService", "$rootScope","PagesDefinition",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,authService, $rootScope){
+	$filter, elementsUtils, Utils,authService, $rootScope,PagesDefinition ){
+
+	var showDenomination = false;
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -13,27 +15,65 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		"title": "CENTRE_PAYMENT_COLLECTION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-			model._offlineKey = formCtrl.$name + "__" + SessionStore.getBranch();
-			model._storedData = StorageService.retrieveJSON(model._offlineKey);
-			if (!model.$$STORAGE_KEY$$) {
-				model.collected = 0;
-				$timeout(function() {
-					model.groupCollectionDemand = [];
-				});
-			} else {
-				formCtrl.disabled = true;
-				model._mode = 'VIEW';
-			}
-			if (model._storedData && model._storedData.collectionDate) {
-				var cDate = moment(model._storedData.collectionDate);
-				model._storedData.formatedCollectionDate = SessionStore.getFormatedDate(cDate);
-				if (!cDate.startOf('day').isSame(moment(new Date()).startOf('day')))
-					model._storedData.expired = true;
+
+
+
+			if(!model.$$STORAGE_KEY$$){
+
+				model.showDenomination = showDenomination;
+				
+				PagesDefinition.getPageConfig("Page/Engine/CentrePaymentCollection").then(function(data){
+                    if(data.showDenomination != undefined && data.showDenomination !== null && data.showDenomination !=""){
+                        model.showDenomination = data.showDenomination;
+                        if(model.showDenomination){	
+							model.collectionDemandSummary.denominationFifty = null;
+							model.collectionDemandSummary.denominationFive = null;
+							model.collectionDemandSummary.denominationFiveHundred = null;
+							model.collectionDemandSummary.denominationHundred = null;
+							model.collectionDemandSummary.denominationOne = null;
+							model.collectionDemandSummary.denominationTen =null;
+							model.collectionDemandSummary.denominationThousand = null;
+							model.collectionDemandSummary.denominationTwenty = null;
+							model.collectionDemandSummary.denominationTwo = null;
+						};
+                    }
+                    console.log(model.showDenomination);
+                });
+
+                
+
+				model._offlineKey = formCtrl.$name+"Download" + "__" + SessionStore.getBranch();
+				var collectionData = StorageService.retrieveJSON(model._offlineKey);
+				model._storedData  = $stateParams.pageData;
+				model.collectionDemandSummary.centre = null;
+				var branch1 = formHelper.enum('branch_id').data;
+	            for (var i = 0; i < branch1.length; i++) {
+	                if ((branch1[i].name) == SessionStore.getBranch()) {
+	                    model.customerBranchId = branch1[i].value;
+	                }
+	            }
 				if (!model.$$STORAGE_KEY$$) {
-					model.collectionDemandSummary.demandDate = model._storedData.collectionDate;
+					model.collected = 0;
+					$timeout(function() {
+						model.groupCollectionDemand = [];
+					});
+				} else {
+					formCtrl.disabled = true;
+					model._mode = 'VIEW';
 				}
+				if (model._storedData && model._storedData.collectionDate) {
+					var cDate = moment(model._storedData.collectionDate);
+					model._storedData.formatedCollectionDate = SessionStore.getFormatedDate(cDate);
+					// if (!cDate.startOf('day').isSame(moment(new Date()).startOf('day')))
+						model._storedData.expired = false;
+					if (!model.$$STORAGE_KEY$$) {
+						model.collectionDemandSummary.demandDate = model._storedData.collectionDate;
+					}
+				}
+				$log.info("I got initialized");
 			}
-			$log.info("I got initialized");
+
+			
 		},
 		offline: true,
 		getOfflineDisplayItem: function(item, index){
@@ -58,66 +98,27 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					+")"
 				},
 				{
-					"type": "button",
-					"notitle": true,
-					"fieldHtmlClass": "btn-block",
-					"title": "DL_SAVE_BRANCH_COLLECTION",
-					"condition": "!model._storedData || model._storedData.expired",
-					"onClick": function(model, form, formName){
-						$log.info("Downloading branch Collection data..");
-						PageHelper.showLoader();
-						PM.pop('collection-demand', "Downloading Collection Demands...", 2000);
-						var collectionBranch = SessionStore.getBranch();
-						var collectionDate = moment(new Date()).format('YYYY-MM-DD');
-						authService.getUser().then(function(data){
-							LoanProcess.collectionDemandSearch(
-								{branch:collectionBranch,userId:data.login, demandDate:collectionDate},
-								function(response){
-									model._storedData = {
-										collectionDemands: response.body,
-										collectionBranch: collectionBranch,
-										collectionDate: collectionDate
-
-									};
-									model.collectionDemandSummary.centre = null;
-									$log.info(model._storedData);
-									setTimeout(function() {
-										model.groupCollectionDemand = [];
-									});
-									StorageService.storeJSON(model._offlineKey, model._storedData);
-									PageHelper.hideLoader();
-									PM.pop('collection-demand', "Collection Demands Saved Successfully", 2000);
-								},
-								function(errorResponse){
-									PageHelper.hideLoader();
-									PM.pop('collection-demand', "Couldn't fetch branch Collection Demands", 5000);
-								}
-							);
-
-						},function(resp){
-							PageHelper.hideLoader();
-							PM.pop('collection-demand', "Couldn't fetch branch Collection Demands", 5000);
-						});
-
-					}
-				},
-				{
 					"type": "fieldset",
 					"title": "CHOOSE_CENTRE",
-					"condition": "model._storedData && !model._storedData.expired",
+					// "condition": "model._storedData && !model._storedData.expired",
 					"items": [
 						{
 							"key":"collectionDemandSummary.demandDate",
 							"type": "date",
-							"readonly": true
+							"readonly": false
 						},
 						{
 							"key":"collectionDemandSummary.centre",
 							"type":"select",
-							"enumCode":"centre",
-							"filter": {
-								"field1 as branch": "model._storedData.collectionBranch"
-							},
+							"title": "CENTRE",
+							"enumCode": "centre",
+							filter: {
+                         				"parentCode": "branch_id"
+                         			},
+                        	parentEnumCode:"branch_id",
+                        	parentValueExpr:"model.customerBranchId",
+
+
 							"condition": "model._mode!=='VIEW'",
 							"onChange": function(modelValue, form, model) {
 								model.totalToBeCollected = 0;
@@ -141,16 +142,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								});
 								model.totalToBeCollected = model.collected = totalToBeCollected;
 							}
-						},
-						{
-							"key":"collectionDemandSummary.centre",
-							"type":"select",
-							"enumCode":"centre",
-							"filter": {
-								"field1 as branch": "model._storedData.collectionBranch"
-							},
-							"condition": "model._mode==='VIEW'",
-							"readonly": true
 						},
 						{
 							"key": "collectionDemandSummary.photoOfCentre",
@@ -181,7 +172,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		},{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._mode!=='VIEW' && model._storedData && !model._storedData.expired && model.collectionDemandSummary.centre",
+			"condition": "model._mode!=='VIEW' && model._storedData && model.collectionDemandSummary.centre",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
 				"fullwidth": true,
@@ -334,7 +325,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				{
 					"type": "fieldset",
 					"title": "DENOMINATIONS",
-					"condition": "model._mode!=='VIEW'",
+					"condition": "model._mode!=='VIEW' && model.showDenomination",
 					"items": [{
 						"type": "section",
 						"htmlClass": "row",
@@ -670,7 +661,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						deferred.resolve();
 					});
 				} else {
-					model._storedData = null;
+					//model._storedData = null;
 					model.$$STORAGE_KEY$$ = skey;
 					deferred.resolve();
 				}
@@ -697,11 +688,48 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							});
 						});
 
+						var cashDenomination = {"denominationFifty": 0,
+										      "denominationFive": 0,
+										      "denominationFiveHundred": 0,
+										      "denominationHundred": 0,
+										      "denominationOne": 0,
+										      "denominationTen": 0,
+										      "denominationThousand": 1,
+										      "denominationTwenty": 0,
+										      "denominationTwo": 0,
+										      "denominationTwoThousand": 0
+										      };
+						
+						//var collectionDemandSummary = _.clone(cds);
+						var collectionDemandSummary = {};
+						collectionDemandSummary.centre = cds.centre;
+						collectionDemandSummary.demandDate = cds.demandDate = moment(cds.demandDate).format('YYYY-MM-DD');
+						collectionDemandSummary.latitude = cds.latitude;
+						collectionDemandSummary.longitude = cds.longitude;
+						collectionDemandSummary.photoOfCentre = cds.photoOfCentre;
+						collectionDemandSummary.totalAmount = cds._denominationTotal;
+						
+						if(model.showDenomination){	
+							cashDenomination.denominationFifty = model.collectionDemandSummary.denominationFifty;
+							cashDenomination.denominationFive = model.collectionDemandSummary.denominationFive;
+							cashDenomination.denominationFiveHundred = model.collectionDemandSummary.denominationFiveHundred;
+							cashDenomination.denominationHundred = model.collectionDemandSummary.denominationHundred;
+							cashDenomination.denominationOne = model.collectionDemandSummary.denominationOne;
+							cashDenomination.denominationTen = model.collectionDemandSummary.denominationTen;
+							cashDenomination.denominationThousand = model.collectionDemandSummary.denominationThousand;
+							cashDenomination.denominationTwenty = model.collectionDemandSummary.denominationTwenty;
+							cashDenomination.denominationTwo = model.collectionDemandSummary.denominationTwo;
+
+							collectionDemandSummary.cashDenomination = cashDenomination;
+						};
+
+						
+						
 						var requestObj = {
-							collectionDemandSummary: _.clone(cds),
+							collectionDemandSummary: collectionDemandSummary,
 							collectionDemands: _.clone(cd)
 						};
-						requestObj.collectionDemandSummary.centre = model._centreName;
+						//requestObj.collectionDemandSummary.centre = model._centreName;
 						$log.info(requestObj);
 						PM.pop('collection-demand', 'Submitting...');
 						LoanProcess.collectionDemandUpdate(requestObj,
@@ -729,7 +757,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					"properties": {
 						"centre": {
 							"title": "CENTRE",
-							"type": "string"
+							"type": ["string", "number"]
 						},
 						"allAttendance": {
 							"title": "ALL_ATTENDANCE",

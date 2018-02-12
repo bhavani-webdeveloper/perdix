@@ -7,9 +7,9 @@ userRole.get=SELECT * FROM roles r, user_roles u WHERE u.role_id = r.id AND u.us
 userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, rpa.page_config pageConfig from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
 account.list=select * from loan_accounts
 pincode.list=SELECT p.pincode, p.division, p.region, p.taluk, p.district, p.state FROM pincode_master p WHERE p.pincode like concat(:pincode,'%') AND LOWER(p.district) LIKE concat(LOWER(:district), '%') AND LOWER(p.state) like concat(LOWER(:state),'%')
-translations.list=SELECT label_code code, en, hi, ta FROM translations
 loan_products.list=SELECT * from loan_account_documents where product_code = :product_code and process = :process and stage = :stage
-globalSettings.list=SELECT * from global_settings where name = :name
+globalSettings.one=SELECT * from global_settings where name = :name
+globalSettings.list=SELECT * from global_settings
 customerBankAccounts.list=SELECT * from customer_bank_accounts where customer_id = :customer_id
 bankAccounts.list=SELECT * from bank_account_master
 bankAccountsByPartnerCode.list=SELECT * from bank_account_master where partner_code=:partner_code
@@ -25,19 +25,24 @@ customersBankAccounts.list=SELECT cb.*, c.urn_no, c.first_name from customer_ban
 loanCustomerRelations.list=select l.urn, l.relation, c.first_name from loan_customer_relation l left join customer c on (l.urn = c.urn_no) where l.loan_id = (select id from loan_accounts where account_number = :accountNumber)
 collectionsBranchSet.list=select * from collections_branch_set
 cbsBanks.list=select * from cbs_banks
-userbank.list=select * from bank_master where bank_name= :bankName
 unApprovedPaymentForAccount.list=SELECT id, account_number, current_stage, repayment_amount from loan_collections where account_number=:account_number and current_stage not in ('Completed', 'Rejected')
 Allloanpurpose1.list=SELECT DISTINCT lm.loan_purpose_first_level purpose1 FROM loan_purpose_mapping_master lm where lm.loan_purpose_first_level NOT IN ('Line of credit','Debt Consolidation')
 Allloanpurpose2.list=SELECT DISTINCT lm.loan_purpose_second_level purpose2 FROM loan_purpose_mapping_master lm WHERE lm.loan_purpose_first_level = :purpose1
+Allloanpurpose3.list=SELECT DISTINCT lm.loan_purpose purpose3 FROM loan_purpose_mapping_master lm WHERE lm.loan_purpose_first_level = :purpose1 and loan_purpose_second_level = :purpose2
 loanParameters.list=SELECT p.ParameterDisplayName AS `Parameter`, ci.UserInput AS `Deviation`, (select GROUP_CONCAT(mitigant SEPARATOR '|') from sc_mitigants scm where scm.ParameterName = p.ParameterName) as `Mitigant`, (0.0+ci.ParamterScore) AS `ParameterScore`, ci.mitigant as `MitigantStored` FROM sc_calculation_inputs ci LEFT JOIN sc_parameters p on (ci.ParameterName = p.ParameterName and p.ScoreName = :score) WHERE ci.score_calc_id=(select max(id) from sc_calculation where ApplicationId = :loanId and ScoreName = :score) AND (0 < (select count(1) from sc_mitigants scm_1 where scm_1.ParameterName = p.ParameterName )) AND (ci.ParamterScore + 0)<4 AND CHAR_LENGTH(ci.UserInput) > 0
 loanMitigants.list=SELECT DISTINCT lm.mitigant mitigant FROM sc_mitigants lm WHERE lm.ParameterName = :mitigant
 searchLoanForPsychometric=SELECT * FROM loan_accounts la WHERE (la.psychometric_completed IS NULL OR la.psychometric_completed != 'Completed') AND la.customer_id in (SELECT c.id FROM customer c LEFT JOIN enterprise e ON c.enterprise_id = e.id WHERE c.id = la.customer_id AND (:pincode IS NULL OR :pincode = '' OR e.pincode = :pincode) AND c.first_name LIKE CONCAT(:first_name, '%') AND (:area = '' OR c.area LIKE CONCAT(:area, '%')) AND (:village_name = '' OR c.village_name LIKE CONCAT(:village_name, '%')))
-userBranches.list=SELECT u.branch_id, u.user_id, b.branch_name, b.branch_code from user_branches u left join branch_master b on (u.branch_id = b.id) where user_id = :user_id
+userBranches.list=SELECT u.branch_id, u.user_id, b.branch_name, b.branch_code, b.bank_id from user_branches u left join branch_master b on (u.branch_id = b.id) where user_id = :user_id
 loanAccountsByAccountNumber=SELECT * from loan_accounts where account_number = :accountNumber
 queryForScore1=select (select ss.score from score_segment ss  where ss.score_name = 'PLSCORE' and ss.customer_id = (SELECT customer_id from loan_customer_relation lcr where lcr.loan_id = :loanId and lcr.relation = 'Applicant')) as cbScore, (select ecr.business_involvement from enterprise_customer_relations ecr where ecr.linked_to_customer_id= (SELECT customer_id from loan_customer_relation lcr where lcr.loan_id = :loanId and lcr.relation = 'Applicant') and ecr.customer_id = (select customer_id from loan_accounts where id = :loanId)) as businessInvolvement
-familyMembers.list=select fa.family_member_first_name as nomineeFirstName, fa.gender as nomineeGender, fa.date_of_birth as nomineeDOB from family_details fa, loan_customer_relation lcr where lcr.loan_id = :loanId and fa.customer_id = lcr.customer_id and lcr.relation != 'Guarantor' and relationship != 'self'
+familyMembers.list=select fa.family_member_first_name as nomineeFirstName, fa.gender as nomineeGender, fa.date_of_birth as nomineeDOB, fa.relationship as nomineeRelationship from family_details fa, loan_customer_relation lcr where lcr.loan_id = :loanId and fa.customer_id = lcr.customer_id and lcr.relation != 'Guarantor' and relationship != 'self'
 globalSettingsIn.list=SELECT * from global_settings where name in (:names)
 enterpriseRelations.list= (SELECT id,`first_name` as firstName FROM `customer` WHERE `urn_no`in (SELECT `urn` FROM `loan_customer_relation` WHERE `loan_id`in (SELECT id FROM `loan_accounts` WHERE `customer_id`=:customerId)) )union(SELECT id,`first_name` as firstName FROM `customer` WHERE `id`in (SELECT `linked_to_customer_id` FROM `enterprise_customer_relations` WHERE `customer_id`=:customerId)) 
 LoanRepayBankAccountsByPartnerCode.list=SELECT * from bank_account_master where allow_collection = 1 and partner_code LIKE :partner_code
+loanProductCode.list=SELECT `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `product_category`=:productCategory and `partner_code`=:partner and `frequency`=:frequency
 UserList.list=select user_name as user_id from oauth_access_token where user_name != :userId
+CBCheck.customerList=select max(created_at) as created_at, customer_id from highmark_interface where customer_id in (:customerIds) and status = 'PROCESSED' group by customer_id
+groupProcess.remarksHistory = SELECT pre_stage as stage, actions as action, group_remarks as remarks, created_by as updatedBy, created_at as updatedOn  FROM jlg_groups_snapshot where group_id = :groupId and group_remarks IS NOT NULL 
+groupLoanProductsByPartner.list=SELECT product_name as productName, `product_code` as productCode, tenure_from, tenure_to, frequency FROM `loan_products` WHERE `partner_code`=:partner and loan_type = 'JLG'
+feesFormMapping.list = select * from invoice_form_mapping
 

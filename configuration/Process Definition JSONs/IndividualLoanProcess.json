@@ -1,0 +1,1407 @@
+{
+  "customerMinAgeGenericProduct": 18,
+  "customerMaxGenericAge": 60,
+  "customerMaxAgeBcProduct": 58,
+  "customerAgeLimitForSingleFemale": 35,
+  "stages": [
+    {
+      "order": 1,
+      "code": "LoanInitiation",
+      "name": "Loan Input",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
+      "order": 2,
+      "code": "LoanBooking",
+      "name": "Loan Booking",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
+      "order": 3,
+      "code": "DocumentUpload",
+      "name": "Document Download and Upload",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
+      "order": 4,
+      "code": "DocumentVerification",
+      "name": "Document Verification",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
+    }
+  ],
+  "schema": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Comment",
+    "required": [
+      "accountDetails",
+      "collateral",
+      "loanDocument",
+      "disbursementSchedules",
+      "loanCentre"
+    ],
+    "properties": {
+      "accountDetails": {
+        "title": "Account Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [
+          "productCode",
+          "loanPurpose",
+          "loanApplicationDate",
+          "relation",
+          "husbandOrFatherFirstName",
+          "husbandOrFatherMiddleName",
+          "husbandOrFatherLastName",
+          "loanAmountRequested",
+          "numberOfDisbursements",
+          "sanctionDate",
+          "disbursementFromBankAccountNumber",
+          "originalAccountNumber",
+          "customerBankAccountNumber",
+          "customerBankIfscCode"
+        ],
+        "properties": {
+          "loanType": {
+            "title": "Loan Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "processType": {
+            "title": "Process Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "productType": {
+            "title": "Product Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "productCode": {
+            "title": "Product Code",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanAmount": {
+            "title": "Loan Amount",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanPurpose": {
+            "title": "Loan Purpose",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanApplicationDate": {
+            "title": "Loan Application Date",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanDisbursementDate": {
+            "title": "Loan Disbursement Date",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "relation": {
+            "title": "Relation",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "relationship"
+          },
+          "husbandOrFatherFirstName": {
+            "title": "Husband Or Father First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "husbandOrFatherMiddleName": {
+            "title": "Husband Or Father Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "husbandOrFatherLastName": {
+            "title": "Husband Or Father Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "borrowerIlliterate": {
+            "title": "Borrower Illiterate",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "literateWitnessFirstName": {
+            "title": "Literate Witness First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "literateWitnessMiddleName": {
+            "title": "Literate Witness Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "literateWitnessLastName": {
+            "title": "Literate Witness Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "witnessRelationship": {
+            "title": "Witness Relationship",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "relationship"
+          },
+          "witnessFirstName": {
+            "title": "Witness First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "witnessMiddleName": {
+            "title": "Witness Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "witnessLastName": {
+            "title": "Witness Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanAmountRequested": {
+            "title": "LoanAmount Requested",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "disbursedAmountInPaisa": {
+            "title": "Disbursed Amount In Paisa",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "coBorrowerUrnNo": {
+            "title": "Co Borrower Urn Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "applicationFileName": {
+            "title": "Application File Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "numberOfDisbursements": {
+            "title": "Number Of Disbursement",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "applicant": {
+            "title": "Applicant",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "coApplicant": {
+            "title": "Co-Applicant",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "sanctionDate": {
+            "title": "Sanction Date",
+            "type": "date",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "disbursementFromBankAccountNumber": {
+            "title": "Disbursement From Bank Account Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "originalAccountNumber": {
+            "title": "Original Account Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "customerBankAccountNumber": {
+            "title": "Customer Bank Account Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "customerBankIfscCode": {
+            "title": "Customer Bank Ifsc Code",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "oldAccountNO": {
+            "title": "Old Account Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceFee": {
+            "title": "Insurance Fee",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "commercialCibilCharge": {
+            "title": "Commercial Cibil Charge",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "securityEmi": {
+            "title": "Security Emi",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "otherFee": {
+            "title": "Other Fee",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "nominee": {
+        "title": "Nominee Details",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [],
+        "properties": {
+          "nomineeFirstName": {
+            "title": "Nominee First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeMiddleName": {
+            "title": "Nominee Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeLastName": {
+            "title": "Nominee Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeRelationship": {
+            "title": "Nominee Relationship",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "relationship"
+          },
+          "nomineeDoorNo": {
+            "title": "Nominee Door No",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeStreet": {
+            "title": "Nominee Street",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeLocality": {
+            "title": "Nominee Locality",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeDistrict": {
+            "title": "Nominee District",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "district"
+          },
+          "nomineeState": {
+            "title": "Nominee State",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineePincode": {
+            "title": "nomineePincode",
+            "type": "string",
+            "minimum": 6,
+            "maximum": 6,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeDOB": {
+            "title": "Nominee DOB",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "nomineeGender": {
+            "title": "Nominee Gender",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "gender"
+          },
+          "nomineeMinor": {
+            "title": "Nominee Minor",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianTitle": {
+            "title": "Guardian Title",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianFirstName": {
+            "title": "Guardian First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianMiddleName": {
+            "title": "Guardian Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianLastName": {
+            "title": "Guardian Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianRelationWithMinor": {
+            "title": "Guardian Relation With Minor",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "relationship"
+          },
+          "guardianDOB": {
+            "title": "Guardian DOB",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianDoorNo": {
+            "title": "Guardian Door No",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianStreet": {
+            "title": "Guardian Street",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianLocality": {
+            "title": "Guardian Locality",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianDistrict": {
+            "title": "Guardian District",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "district"
+          },
+          "guardianState": {
+            "title": "Guardian State",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianPincode": {
+            "title": "Guardian Pincode",
+            "type": "string",
+            "minimum": 6,
+            "maximum": 6,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guardianGender": {
+            "title": "Guardian Gender",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "gender"
+          }
+        }
+      },
+      "guarantor": {
+        "title": "Guarantor Details",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [
+          "guaUrnNo"
+        ],
+        "properties": {
+          "guaCustomerId": {
+            "title": "Guarantor Customer Id ",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1000000,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaUrnNo": {
+            "title": "Guarantor Urn Number",
+            "type": "number",
+            "minimum": 16,
+            "maximum": 16,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaFirstName": {
+            "title": "Guarantor First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaMiddleName": {
+            "title": "Guarantor Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaLastName": {
+            "title": "Guarantor Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "relationship": {
+            "title": "Relation With Minor",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "relationship"
+          },
+          "relationFirstName": {
+            "title": "Relation First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "relationMiddleName": {
+            "title": "Relation Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "relationLastName": {
+            "title": "Relation Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaDob": {
+            "title": "Guarantor DOB",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "address": {
+            "title": "Address",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "dscIntegrationId": {
+            "title": "Dsc Integration Id",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "guaDscOverride": {
+            "title": "Guarantor Dsc Override",
+            "type": "boolean",
+            "captureStages": [
+              "Stage04"
+            ]
+          },
+          "guaDscRemarks": {
+            "title": "Guarantor Dsc Remarks",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "Stage04"
+            ]
+          },
+          "assetDetails": {
+            "title": "Asset Details",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "totalLiabilities": {
+            "title": "Total Liabilities",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "insuranceDetails": {
+        "title": "Insurance Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [
+          "insuranceType",
+          "insuranceFrom",
+          "insuranceId",
+          "insuranceExpiryDate",
+          "insuranceCompany",
+          "insuranceHypothecation",
+          "sumInsured"
+        ],
+        "properties": {
+          "insuranceType": {
+            "title": "Insurance Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceFrom": {
+            "title": "Insurance From",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceId": {
+            "title": "Insurance From",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceExpiryDate": {
+            "title": "Insurance ExpiryDate",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceCompany": {
+            "title": "Insurance Company",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "insuranceHypothecation": {
+            "title": "Insurance Hypothecation",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "sumInsured": {
+            "title": "Sum Insured",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "bcAccount": {
+        "title": "Bc Account Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [],
+        "properties": {
+          "maritalStatus": {
+            "title": "Marital Status",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "marital_status"
+          },
+          "outstandingLoanAmount": {
+            "title": "Outstanding Loan Amount",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "cmsDisbursementDate": {
+            "title": "CMS Disbursement Date",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "fldgFlag": {
+            "title": "Fldg Flag",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "fldgUpdatedBy": {
+            "title": "Fldg Updated By",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "fldgUpdatedAt": {
+            "title": "Fldg Updated At",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "agreementStatus": {
+            "title": "Agreement Status",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "agreementStatusUpdatedOn": {
+            "title": "AgreementStatusUpdatedOn",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "agreementStatusUpdatedBy": {
+            "title": "Agreement Status Updated By",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "agreementFileName": {
+            "title": "Agreement File Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "agreementFileId": {
+            "title": "Agreement File Id",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "jewelLoanDetails": {
+        "title": "Jewel Loan Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [],
+        "properties": {
+          "jewelPouchLocationType": {
+            "title": "Jewel Pouch Location Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "jewelPouchLocationId": {
+            "title": "Jewel Pouch Location Id",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "jewelPouchNo": {
+            "title": "Jewel Pouch Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "jewelPouchMovementId": {
+            "title": "Jewel Pouch Movement Id",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "transitRequest": {
+            "title": "Transit Request",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "encoreClosed": {
+            "title": "Encore Closed",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "ornaments": {
+        "title": "Ornaments",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [],
+        "properties": {
+          "ornamentsDescription": {
+            "title": "Ornaments Description",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "noOfArticles": {
+            "title": "No Of Articles",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "grossWeightInGrams": {
+            "title": "Gross Weight In Grams",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "netWeightInGrams": {
+            "title": "Net Weight In Grams",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "qualityInCarats": {
+            "title": "Quality In Carats",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "ratePerGramInPaisa": {
+            "title": "Rate Per Gram In Paisa",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "ratePerGram22CaratInPaisa": {
+            "title": "Rate Per Gram22 CaratInPaisa",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "marketValueInPaisa": {
+            "title": "Market Value In Paisa",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "stoneDescription": {
+            "title": "Stone Description",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "jewelDefects": {
+            "title": "Jewel Defects",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "collateral": {
+        "title": "Collateral Details",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [
+          "collateralType",
+          "collateralDescription",
+          "collateralValue"
+        ],
+        "properties": {
+          "collateralType": {
+            "title": "Collateral Type",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ],
+            "refCodeCategory": "collateral_type"
+          },
+          "collateralDescription": {
+            "title": "Collateral Description",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "collateralValue": {
+            "title": "Collateral Value",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanToValue": {
+            "title": "Loan To Value",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "marginValue": {
+            "title": "Margin Value",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "manufacturer": {
+            "title": "Manufacturer",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "modelNo": {
+            "title": "Model Number",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "totalValue": {
+            "title": "Total Value",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "isMachineOld": {
+            "title": "Is Machine Old",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "userDefinedFields": {
+        "title": "User Defined Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [
+          "udf1",
+          "udf2"
+        ],
+        "properties": {
+          "udf1": {
+            "title": "Distance From Highway (in KM)",
+            "type": "number",
+            "minLength": 1,
+            "maxLength": 500,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "udf2": {
+            "title": "Availed Any MFI service?",
+            "type": "boolean",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "userDefinedDateFields": {
+        "title": "User Defined Date Details",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [
+          "udfDate1",
+          "udfDate2"
+        ],
+        "properties": {
+          "udfDate1": {
+            "title": "date1",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "udfDate2": {
+            "title": "date2",
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "loanCentre": {
+        "title": "Loan Center",
+        "type": "object",
+        "maxItems": null,
+        "items": null,
+        "required": [
+          "centreId"
+        ],
+        "properties": {
+          "centreId": {
+            "title": "Centre Id",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      },
+      "loanDocument": {
+        "title": "Loan Document",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [
+          "document",
+          "documentId"
+        ],
+        "properties": {
+          "documentId": {
+            "title": "Document Id",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "DocumentUpload"
+            ]
+          },
+          "document": {
+            "title": "Document",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "DocumentUpload"
+            ]
+          },
+          "remarks": {
+            "title": "Remarks",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "DocumentVerification"
+            ]
+          }
+        }
+      },
+      "disbursementSchedules": {
+        "title": "Disbursement Schedule",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "items": []
+        },
+        "required": [],
+        "properties": {
+          "customerAccountNumber": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "customerSignatureDate": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "disbursementAmount": {
+            "type": "integer",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "disbursementFromBankAccountNumber": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "ifscCode": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "loanId": {
+            "type": "integer",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "scheduledDisbursementDate": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          },
+          "trancheNumber": {
+            "type": "string",
+            "captureStages": [
+              "LoanInitiation"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

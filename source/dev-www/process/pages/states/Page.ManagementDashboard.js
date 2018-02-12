@@ -7,7 +7,7 @@ irf.pages.controller("PageManagementDashboardCtrl",
 	$scope.role = SessionStore.getRole();
 
 	$scope.dashboardDefinition = {
-		"title": "OPERATIONS",
+		"title": "MANAGEMENT_DASHBOARD",
 		"items": [
 			{
 				"id": "VillageSearch",

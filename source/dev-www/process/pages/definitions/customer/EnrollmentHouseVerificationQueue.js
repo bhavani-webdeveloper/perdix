@@ -1,16 +1,14 @@
-irf.pageCollection.factory("Pages__EnrollmentHouseVerificationQueue",
+irf.pageCollection.factory(irf.page("EnrollmentHouseVerificationQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
+	var branch = SessionStore.getBranch();
 	return {
-		"id": "EnrollmentHouseVerificationQueue",
-		"type": "search-list",
-		"name": "House Verification Pending Queue",
+		"type": "search-list", 
 		"title": "T_HOUSE_VERIFICATION_PENDING_QUEUE",
 		"subTitle": "T_ENROLLMENTS_PENDING",
-		"uri":"Customer Enrollment/Stage 2",
 		initialize: function (model, form, formCtrl) {
 			$log.info("search-list sample got initialized");
-			model.branch = SessionStore.getBranch();
+			model.branch = SessionStore.getCurrentBranch().branchId;
 			model.stage = 'Stage02';
 		},
 		offline: true,
@@ -23,7 +21,7 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 		getOfflinePromise: function(searchOptions){      /* Should return the Promise */
 			var promise = Enrollment.search({
 				'branchName': searchOptions.branch,
-				'centreCode': searchOptions.centre,
+				'centreId': searchOptions.centre,
 				'firstName': searchOptions.first_name,
 				'lastName': searchOptions.last_name,
 				'page': 1,
@@ -57,8 +55,8 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 					},
 					"branch": {
 						"title": "BRANCH_NAME",
-						"type": "string",
-						"enumCode": "branch",
+						"type": ["integer", "null"],
+						"enumCode": "branch_id",
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true
@@ -66,14 +64,13 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "string",
+						"type": ["integer", "null"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
-							"screenFilter": true
+							"parentEnumCode": "branch_id",
+							"parentValueExpr": "model.branch",
+							"screenFilter": true	
 						}
 					}
 				}
@@ -81,10 +78,19 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+			getResultsPromise: function(searchOptions, pageOpts){    /* Should return the Promise */
+				var branches = formHelper.enum('branch').data;
+				var branchName = null;
+				for (var i=0;i<branches.length; i++){
+					var branch = branches[i];
+					 if (branch.code == searchOptions.branch){
+					 	branchName = branch.name;
+					 }
+				}
+				
 				var promise = Enrollment.search({
-					'branchName': searchOptions.branch,
-					'centreCode': searchOptions.centre,
+					'branchName': branchName,
+					'centreId': searchOptions.centre,
 					'firstName': searchOptions.first_name,
 					'lastName': searchOptions.lastName,
 					'page': pageOpts.pageNo,

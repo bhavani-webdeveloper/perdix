@@ -3,5 +3,15 @@ String.prototype.startsWith = function(sub) {
 };
 
 $(document).ready(function(){
-    angular.bootstrap($("html"), ['MainApp']);
+	angular.bootstrap($("html"), ['MainApp']);
 });
+
+(function($){
+	$.event.special.destroyed = {
+		remove: function(o) {
+			if (o.handler && o.type !== 'destroyed') {
+				o.handler()
+			}
+		}
+	}
+})(jQuery);

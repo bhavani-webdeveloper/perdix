@@ -1,6 +1,8 @@
-irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,searchResource){
+irf.models.factory('Groups',
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "$q", "irfSimpleModal",
+function($resource,$httpParamSerializer,BASE_URL,searchResource, $q, irfSimpleModal){
     var endpoint = BASE_URL + '/api/groups';
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint+"/:service/:action"
@@ -43,7 +45,6 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
         post:{
             method:'POST',
             url:endpoint+'/:service/:action'
-
         },
         dscQuery:{
             method:'POST',
@@ -58,11 +59,32 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
             method:'POST',
             url:endpoint+'/:service/:action'
         },
-        getDisbursementDetails: {
+        getDisbursementDetails:searchResource( {
             method: 'GET',
             url: BASE_URL + '/api/loanaccounts/groupdisbursement/:partnerCode/:groupCode',
-            isArray: true
-
-        }
+        }),
     });
-});
+
+    resource.getDSCDataHtml = function(dscId) {
+        var deferred = $q.defer();
+        resource.getDSCData({
+            dscId: dscId
+        }, function(resp, headers) {
+            var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+            dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+            dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
+            dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+            dataHtml += "</table>"
+            deferred.resolve(dataHtml);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
+    resource.showDscDataPopup = function(dscId) {
+        resource.getDSCDataHtml(dscId).then(function(dataHtml) {
+            irfSimpleModal('DSC Check Details', dataHtml);
+        });
+    };
+
+    return resource;
+}]);

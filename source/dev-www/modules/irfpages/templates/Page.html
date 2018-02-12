@@ -2,12 +2,23 @@
     <irf-header theme="theme"></irf-header>
     <irf-main-menu></irf-main-menu>
 
+    <div class="content-wrapper bg-tint-theme" ng-style="showLoaderBlocking?{position:initial}:{}">
+        <ol class="breadcrumb" ng-show="breadcrumb.callstack.length || breadcrumb.current()">
+            <li ng-repeat="callstack in breadcrumb.callstack">
+                <a href="#" ng-click="breadcrumb.goBackTo($event, $index)" class="color-theme">
+                    <i ng-show="callstack.$definition.iconClass" class="{{callstack.$definition.iconClass}}">&nbsp;</i>
+                    <span ng-bind="callstack.$definition.title|translate"></span>
+                </a>
+            </li>
+            <li ng-if="breadcrumb.current()" class="color-theme active">
+                <i ng-show="breadcrumb.current().$definition.iconClass" class="{{breadcrumb.current().$definition.iconClass}}">&nbsp;</i>
+                <span ng-bind="breadcrumb.current().$definition.title|translate"></span>
+            </li>
+        </ol>
 
-
-    <div class="content-wrapper bg-tint-theme">
         <div id="errors-wrapper">
-            <div class="errors-container" ng-show="errors.length>0">
-                <div class="alert alert-danger alert-dismissible">
+            <div class="errors-container" ng-show="errors.length>0" style="padding: 0">
+                <div class="alert alert-danger alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%);">
                     <button type="button" class="close" ng-click="clearErrors()" aria-hidden="true">×</button>
                     <h4><i class="icon fa fa-ban"></i> Errors</h4>
                     <ol>
@@ -20,7 +31,7 @@
         </div>
         <div class="spinner-wrapper spinner-section-far-wrapper" ng-show="showSectionFarLoader">
             <div class="spinner-section-far"></div>
-            <!--<div class="spinner-jovey-timer"></div>-->
+            <div class="spinner-section-far-text" ng-bind="showLoaderMsg"></div>
         </div>
 
         <ui-view onload="" ng-class="slide">
@@ -30,9 +41,7 @@
     </div>
 
     <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 0.1.4 | Alpha
-        </div>
-        <strong>Copyright &copy; 2016 IFMR Rural Finance.</strong> All rights reserved.
+        <div class="footer-version pull-right hidden-xs">{{$parent.appManifest.version}}</div>
+        <strong>Copyright &copy; 2017 IFMR Rural Finance.</strong> All rights reserved.
     </footer>
 </div>

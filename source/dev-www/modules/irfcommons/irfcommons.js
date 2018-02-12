@@ -56,17 +56,45 @@ irf.commons.filter("age", function() {
 	}
 });
 
+irf.initCap = function(input) {
+	return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+};
+
 irf.commons.filter("initcap", function() {
-	return function(input) {
-		return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-	}
+	return irf.initCap;
 });
 
+irf.commons.filter("userDate", ["SessionStore", function(SessionStore) {
+	return function(rawDate) {
+		if (rawDate)
+			return SessionStore.getFormatedDate(moment(rawDate, SessionStore.getSystemDateFormat()));
+		return rawDate;
+	}
+}]);
 
-irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
+irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 	var isCordovaFlag = typeof cordova !== 'undefined';
 	return {
 		isCordova: isCordovaFlag,
+
+		downloadFile:function(url){
+			try {
+
+				try {
+					cordova.InAppBrowser.open(url, '_system', 'location=yes');
+					return true;
+				} catch (err) {
+					window.open(url, '_blank', 'location=yes');
+					return true;
+				}
+			}catch(err){
+				console.error(err);
+			}
+			return false;
+		},
+		roundToDecimal: function(amount){
+			return (Math.round( amount * 1e2 ) / 1e2);
+		},
 		getFullName: function(f, m, l) {
 			return f + (m&l?' '+m:'') + (l?' '+l:'');
 		},
@@ -87,6 +115,8 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 			if (typeof cordova === 'undefined') {
 				if (window.confirm(message))
 					deferred.resolve();
+				else 
+					deferred.reject();
 			} else {
 				navigator.notification.confirm(
 					message,
@@ -119,14 +149,21 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 		},
 		getCurrentDate:function(){
             //TODO : format date
-            var date = new Date();
-            var y = date.getFullYear();
-            var m = (date.getMonth()+1);
-            var d = date.getDate();
-            m = (m.toString().length<2)?("0"+m):m;
-            d = (d.toString().length<2)?("0"+d):d;
+            // var date = new Date();
+            // var y = date.getFullYear();
+            // var m = (date.getMonth()+1);
+            // var d = date.getDate();
+            // m = (m.toString().length<2)?("0"+m):m;
+            // d = (d.toString().length<2)?("0"+d):d;
 
-            return y+"-"+m+"-"+d;
+            return moment().format('YYYY-MM-DD');
+        },
+		getCurrentDateTime:function(){
+            return moment().format();
+        },
+        convertJSONTimestampToDate: function(jsonTimestamp){
+            var a = moment.utc(jsonTimestamp);
+            return a.format("YYYY-MM-DD");
         },
 		removeNulls:function(obj, recurse) {
 
@@ -154,8 +191,86 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 				}
 			}
 			return obj;
-		}
+		},
+        ceil: function(x){
+            if (!_.isNumber(x)){
+                try{
+                    x = x * 1;
+                } catch(e){
+                    return x;
+                }
 
+            }
+
+            if (_.isNumber(x)){
+                return Math.ceil(x);
+            }
+
+        },
+        /**
+         * Compare two dates and return 1 if aData>bDate, 0 if equals, -1 otherwise
+         * @param  {string} aDate In format "Y-m-d". E.g : 2016-12-12
+         * @param  {string} bDate In format "Y-m-d"
+         * @return {int}       [description]
+         */
+        compareDates: function(aDate, bDate){
+    		var aMDate = moment(aDate);
+    		var bMDate = moment(bDate);
+    		if (aDate > bDate){
+    			return 1;
+    		} else if (aDate == bDate){
+    			return 0
+    		} else {
+    			return -1;
+    		}
+        },
+		millisecondsToStr: function(milliseconds) {
+			// TIP: to find current time in milliseconds, use:
+			// var  current_time_milliseconds = new Date().getTime();
+
+			function numberEnding (number) {
+				return (number > 1) ? 's' : '';
+			}
+
+			var temp = Math.floor(milliseconds / 1000);
+			var years = Math.floor(temp / 31536000);
+			if (years) {
+				return years + ' year' + numberEnding(years);
+			}
+			//TODO: Months! Maybe weeks? 
+			var days = Math.floor((temp %= 31536000) / 86400);
+			if (days) {
+				return days + ' day' + numberEnding(days);
+			}
+			var hours = Math.floor((temp %= 86400) / 3600);
+			if (hours) {
+				return hours + ' hour' + numberEnding(hours);
+			}
+			var minutes = Math.floor((temp %= 3600) / 60);
+			if (minutes) {
+				return minutes + ' minute' + numberEnding(minutes);
+			}
+			var seconds = temp % 60;
+			if (seconds) {
+				return seconds + ' second' + numberEnding(seconds);
+			}
+			return 'less than a second'; //'just now' //or other string you like;
+		},
+        dateToLocalTZ: function(mysqlDate){
+        	var localUtcOffset = moment().utcOffset();
+        	return moment.utc(mysqlDate).utcOffset(localUtcOffset);
+        },
+        randomString: function(length){
+        	return Math.random().toString(36).substring(2, length+2);
+        },
+		generateUUID: function() {
+			var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+				return v.toString(16);
+			});
+			$log.info("Generated UUID: " + uuid);
+			return uuid;
+		}
 	};
 }]);
 
@@ -296,5 +411,26 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 			}
 			return deferred.promise;
 		}
+	}
+}])
+
+irf.commons.factory("irfLazyLoader", ["$state", "$log", "$timeout", function($state, $log, $timeout){
+	return {
+		loadPage: function(toState, toParams, options){
+			var pageDefPath = "pages/" + toParams.pageName.replace(/\./g, "/");
+        	require([pageDefPath], function(pageDefObj){
+        		/* Page is loaded, now bind it to pages */
+        		$log.info("[REQUIRE] Done loading page(" + toParams.pageName + ")");
+        		irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+        		options.reload = true;
+
+        		$timeout(function(){
+        			$state.go(toState.name, toParams, options);	
+        		}, 10)
+        	}, function(err){
+        		$log.info("[REQUIRE] Error loading page(" + toParams.pageName + ")");
+        		$log.error(err);
+        	})
+		} 
 	}
 }])

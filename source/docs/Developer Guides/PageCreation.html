@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<title>IRF SF Developer document</title>
+
+<xmp theme="spacelab" style="display:none;">
+
+#Creating a new Page
+
+The following basic types of pages can be created by the framework
+1. Dashboard
+2. Search and List
+3. Forms (for Create/View/Edit/Delete pages)
+
+##The Page Definition - Forms
+
+The Page definition, as the name suggests, defines the page.
+It will contain the view, data and actions that will be available in the
+page for the end-user. Hence, the creation of a new page in the framework
+starts with writing the page definition.
+
+A simple page definition is given below
+
+```
+irf.pageCollection.factory(irf.page("demo.Demo"),
+["$log", "Enrollment", "SessionStore",
+    function($log, Enrollment, SessionStore){
+
+        var branch = SessionStore.getBranch();
+
+        return {
+            "type": "schema-form",
+            "title": "Demo Page",
+            "subTitle": "Demo Page secondary title",
+            initialize: function (model, form, formCtrl) {
+                $log.info("Demo Customer Page got initialized");
+            },
+            form: [],
+            schema: {
+
+            },
+            actions: {
+                submit: function(model, form, formName){
+                }
+            }
+        };
+    }
+]);
+
+
+```
+
+* Each page is an [AngularJS Factory Recipe](https://docs.angularjs.org/guide/providers).
+* The Factory Name must be generated using `irf.page` function.
+* If the page is defined inside the _pages/demo/Demo.js_, the page name generator must be
+invoked as `irf.page("demo.Demo")`
+* The demo page can be accessed by the url [http://localhost/perdix/ir-perdix-view/dev-www/#/Page/Engine/Demo](http://localhost/perdix/ir-perdix-view/dev-www/#/Page/Engine/Demo)
+* The demo page definition can be located at `dev-www\process\pages\definitions\demo`
+* The `initialize` function can be used to initialize the form values (eg: fetch data from server and prepopulate form model)
+* `Schema` represents the data structure and `Form` is how and what data should be shown to the end-user
+* `Schema` can be generated for a given set of data using [json-schema-generator](http://jsonschema.net/#/)
+* More `form` and `schema` references can be found at
+    - [JSON Schema](http://json-schema.org/)
+    - [Angularjs Schema Forms](http://schemaform.io/)
+    - [Schema Forms GitHub](https://github.com/json-schema-form/angular-schema-form/blob/master/docs/index.md)
+    - [Examples](http://schemaform.io/examples/bootstrap-example.html)
+* The above page definition with a form and schema will look as follows
+
+ ```
+ irf.pageCollection.factory("Pages__Demo",
+ ["$log", "Enrollment", "SessionStore",
+     function($log, Enrollment, SessionStore){
+
+         var branch = SessionStore.getBranch();
+
+         return {
+             "type": "schema-form",
+             "title": "Demo Page",
+             "subTitle": "Demo Page secondary title",
+             initialize: function (model, form, formCtrl) {
+                 $log.info("Demo Customer Page got initialized");
+             },
+             form: [
+                 {
+                     "type":"box",
+                     "title":"Details",
+                     "items":[
+                         "address.streetAddress",
+                         {
+                             key:"address.city",
+                             type:"select",
+                             titleMap:{
+                                 "city_A":"City A",
+                                 "city_B":"City B"
+                             }
+
+                         },
+                         "phoneNumber"
+                     ]
+                 }
+
+             ],
+             schema: {
+                 "$schema": "http://json-schema.org/draft-04/schema#",
+                 "type": "object",
+                 "properties": {
+                     "address": {
+                         "type": "object",
+                         "title":"Address",
+                         "properties": {
+                             "streetAddress": {
+                                 "type": "string",
+                                 "title":"Street Address"
+                             },
+                             "city": {
+                                 "type": "string",
+                                 "title":"City"
+                             }
+                         },
+                         "required": [
+                             "streetAddress",
+                             "city"
+                         ]
+                     },
+                     "phoneNumber": {
+                         "type": "array",
+                         "title":"Phone Numbers",
+                         "items": {
+                             "type": "object",
+                             "title":"Phone#",
+                             "properties": {
+                                 "location": {
+                                     "type": "string",
+                                     "title":"Location"
+                                 },
+                                 "code": {
+                                     "type": "integer",
+                                     "title":"Code"
+                                 },
+                                 "number":{
+                                     "type":"integer",
+                                     "title":"Number"
+                                 }
+                             },
+                             "required": [
+                                 "code",
+                                 "number"
+                             ]
+                         }
+                     }
+                 },
+                 "required": [
+                     "address",
+                     "phoneNumber"
+                 ]
+             },
+             actions: {
+                 submit: function(model, form, formName){
+                 }
+             }
+         };
+     }
+ ]);
+
+ ```
+
+
+</xmp>
+
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+</html>

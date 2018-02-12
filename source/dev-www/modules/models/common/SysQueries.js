@@ -15,50 +15,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return resource.query({queryName:id}, {identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
-	resource.getPagesDefinition = function(userId, skip_relogin) {
+	resource.getGlobalSettings = function() {
 		var deferred = $q.defer();
-		$log.info("Inside getPagesDefinition --- SPK");
-		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
-			if (records && records.results) {
-				var def = {};
-				_.each(records.results, function(v, k){
-					var d = {
-						"uri": v.uri,
-						"offline": v.offline,
-						"directAccess": v.directAccess,
-						"title": v.title,
-						"shortTitle": v.shortTitle,
-						"iconClass": v.iconClass,
-						"state": v.state,
-						"stateParams": {
-							"pageName": v.pageName,
-							"pageId": v.pageId
-						},
-						"config": v.pageConfig
-					};
-					if (v.addlParams) {
-						try {
-							var ap = JSON.parse(v.addlParams);
-							angular.extend(d.stateParams, ap);
-						} catch (e) {}
-					}
-					if (v.pageConfig) {
-						try {
-							var pc = JSON.parse(v.pageConfig);
-							d.config = pc;
-						} catch (e) {}
-					}
-					def[v.uri] = d;
-				});
-				deferred.resolve(def);
+		resource.getResult('globalSettings.list', {}).then(function(res) {
+			if (res && res.results && res.results.length) {
+				var globalSettings = _.reduce(res.results, function(map, v) { map[v.name] = v.value; return map; }, {})
+				deferred.resolve(globalSettings);
+			} else {
+				deferred.reject(res);
 			}
 		}, deferred.reject);
 		return deferred.promise;
-	};
+	}
 
-	resource.getUserBranches = function(userId){
+	resource.getUserBranches = function(userId) {
 		var deferred = $q.defer();
-    	resource.getResult("userBranches.list", {"user_id": userId}).then(function(records){
+		resource.getResult("userBranches.list", {"user_id": userId}).then(function(records){
 			if (records && records.results) {
 				var result = {
 					headers: {
@@ -68,8 +40,8 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				};
 				deferred.resolve(result);
 			}
-    	}, deferred.reject);
-    	return deferred.promise;
+		}, deferred.reject);
+		return deferred.promise;
 	}
 
 	return resource;

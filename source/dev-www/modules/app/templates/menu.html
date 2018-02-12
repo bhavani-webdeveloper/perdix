@@ -7,9 +7,9 @@
             <div class="pull-left image">
                 <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
             </div>
-            <div class="pull-left info">
-                <p>{{ ss.getUsername() }}</p>
-                <a href="#"><i class="fa fa-building text-danger"></i> {{ ss.getBranch() | translate }} {{ 'BRANCH' | translate }}</a>
+            <div class="pull-left info" style="padding-top: 0">
+                <p style="margin-bottom: 0">{{ ss.getUsername() }}</p>
+                <a href="#"><i class="fa fa-building text-danger"></i> {{ currentBranch.branchName | translate }}<br><i class="fa fa-clock-o text-gray"></i> <b>{{ ss.getFormatedCBSDate() }}</b></a>
             </div>
         </div>
         <!-- search form -->
@@ -47,10 +47,10 @@
                                 <a ng-if="subsubMenu.offline" ng-click="loadOfflinePage($event, subsubMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
                             </li>
                         </ul>
-                        <a ng-if="!subMenu.items && subMenu.offline" ng-click="loadOfflinePage($event, subMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
+                        <a ng-if="subMenu.offline" ng-click="loadOfflinePage($event, subMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
                     </li>
                 </ul>
-                <a ng-if="!menu.items && menu.offline" ng-click="loadOfflinePage($event, menu)" href="#" class="offline-link pull-right"><i class="fa fa-save"></i></a>
+                <a ng-if="menu.offline" ng-click="loadOfflinePage($event, menu)" href="#" class="offline-link pull-right"><i class="fa fa-save"></i></a>
             </li>
         </ul>
     </section>

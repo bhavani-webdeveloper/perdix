@@ -53,6 +53,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
+                                _.pullAll(response, [null]);
                                 return response;
                             }
                             return [];
@@ -66,7 +67,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                         },
                         getActions: function(){
                             return [
-                                {
+                                /*{
                                     name: "View Details",
                                     desc: "",
                                     fn: function(item, index){
@@ -81,13 +82,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         //}
                                         return true;
                                     }
-                                },
+                                },*/
                                 {
                                     name: "Repay",
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: 'loans.LoanRepay',
+                                            pageName: 'loans.DirectLoanRepay',
                                             pageId: [item.accountNumber,item.urnNo,item.customerId,item.bcAccountNumber,item.partner].join(".")
                                         })
                                     },

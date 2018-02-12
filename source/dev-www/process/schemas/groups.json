@@ -128,7 +128,7 @@
                 "frequency": {
                     "type": "string",
                     "title": "FREQUENCY",
-                    "enumCode":"frequency"
+                    "enumCode":"loan_product_frequency"
                     
                 },
                 "groupCode": {
@@ -155,15 +155,9 @@
                     "title": "GroupStatus"
                     
                 },
-                "grtDate": {
-                    "type": "string",
-                    "title": "GRT_DATE"
-                    
-                },
                 "grtDoneBy": {
                     "type": "string",
-                    "title": "GRT_DONE_BY"
-                    
+                    "title": "GRT_DONE_BY"   
                 },
                 "grtLatitude": {
                     "type": "string",
@@ -255,7 +249,7 @@
                                 
                             },
                             "husbandOrFatherFirstName": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "HUSBAND_OR_FATHER_NAME"
                                 
                             },
@@ -287,12 +281,6 @@
                             "literateWitnessMiddleName": {
                                 "type": "string",
                                 "title": "LiterateWitnessMiddleName"
-                                
-                            },
-                            "outStandingLoanAmount": {
-                                "type": "integer",
-                                "title": "LOAN_AMOUNT",
-                                "minimum":0
                                 
                             },
                             "loanAmount": {
@@ -417,7 +405,6 @@
                             "dscOverrideRemarks",
                             "dscStatus",
                             "groupId",
-                            "husbandOrFatherFirstName",
                             "husbandOrFatherLastName",
                             "husbandOrFatherMiddleName",
                             "id",
@@ -835,36 +822,7 @@
                     "title": "TenureInYear"
                     
                 },
-                "udf1": {
-                    "type": "boolean",
-                    "title": "QUESTION_1"
-                    
-                },
-                "udf2": {
-                    "type": "boolean",
-                    "title": "QUESTION_2"
-                    
-                },
-                "udf3": {
-                    "type": "boolean",
-                    "title": "QUESTION_3"
-                    
-                },
-                "udf4": {
-                    "type": "boolean",
-                    "title": "QUESTION_4"
-                    
-                },
-                "udf5": {
-                    "type": "boolean",
-                    "title": "QUESTION_5"
-                    
-                },
-                "udf6": {
-                    "type": "boolean",
-                    "title": "QUESTION_6"
-                    
-                },
+                
                 "udf7": {
                     "type": "boolean",
                     "title": "QUESTION_7"
@@ -961,6 +919,7 @@
                 "frequency",
                 "groupCode",
                 "centreCode",
+                "groupName",
                 "groupFormationDate",
                 "groupStatus",
                 "grtDate",

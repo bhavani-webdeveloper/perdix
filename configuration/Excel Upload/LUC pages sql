@@ -1,0 +1,5 @@
+INSERT INTO `pages` (`id`, `uri`, `title`, `short_title`, `icon_class`, `direct_access`, `offline`, `state`, `page_name`, `page_id`, `addl_params`) VALUES 
+(NULL, 'Page/Engine/loans.individual.luc.LucRiskQueue', 'LUC Risk Queue', '', '', '1', '0', 'Page.Engine', 'loans.individual.luc.LucRiskQueue', '', ''),
+(NULL, 'Page/Engine/loans.individual.luc.LucScheduleQueue', 'LUC Schedule Queue', '', 'fa fa-tasks', '1', '0', 'Page.Engine', 'loans.individual.luc.LucScheduleQueue', '', ''),
+ (NULL, 'Page/Engine/loans.individual.luc.LucRescheduledQueue', 'LUC Reschedule Queue', '', 'fa fa-tasks', '1', '0', 'Page.Engine', 'loans.individual.luc.LucRescheduledQueue', '', ''),
+(NULL, 'Page/Engine/loans.individual.luc.LucData', 'LUC Data Capture', '', 'fa fa-edit', '1', '0', 'Page.Engine', 'loans.individual.luc.LucData', '', '');

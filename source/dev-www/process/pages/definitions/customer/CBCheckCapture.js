@@ -1,10 +1,8 @@
-irf.pageCollection.factory("Pages__CBCheckCapture",
-	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage",
-	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM){
+irf.pageCollection.factory(irf.page("CBCheckCapture"),
+	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter", "PageHelper", "Enrollment",
+	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter, PageHelper, Enrollment){
 	return {
-		"id": "CustomerCBCheckCapture",
 		"type": "schema-form",
-		"name": "CustomerCBCheckCapture",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "LOAN_DATA_CAPTURE",
 		initialize: function (model, form, formCtrl) {
@@ -12,6 +10,19 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 			if (model._request) {
 				model.customerName = model._request.firstName;
 				model.customerId = model._request.id;
+				PageHelper.showLoader();
+				Enrollment.getCustomerById({id:model.customerId},function(resp,header){
+					model.loanAmount = resp.requestedLoanAmount;
+					model.loanPurpose1 = resp.requestedLoanPurpose;
+					PageHelper.hideLoader();
+				}, function(resp){
+					PageHelper.showErrors(resp);
+                    PageHelper.hideLoader();
+                });
+
+				var creditBureauTypes = formHelper.enum('creditBureauTypes').data;
+				creditBureauTypes = $filter('filter')(creditBureauTypes, {field1: 'default'});
+				model.creditBureau = creditBureauTypes && creditBureauTypes.length > 0 ? creditBureauTypes[0].value: '';
 			} else {
 				$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 			}
@@ -43,6 +54,7 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 						"name": "Highmark - Base"
 					}]
 				},*/
+				"creditBureau",
 				"loanAmount",
 				"loanPurpose1"/*,
 				{
@@ -106,7 +118,7 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 				"creditBureau": {
 					"title": "CREDIT_BUREAU",
 					"type": "string",
-					"enum":["AOR", "Base"],
+					"enumCode": "creditBureauTypes",
 					"x-schema-form":{
 						"type":"select"
 					}
@@ -133,13 +145,18 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 				$log.info("form.$valid: " + form.$valid);
 				if (form.$valid) {
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
-					CreditBureau.creditBureauCheck({
+					CreditBureau.postcreditBureauCheck({
 						customerId: model.customerId,
-                        highmarkType: model.creditBureau,
+						type: model.creditBureau,
 						purpose: model.loanPurpose1,
 						loanAmount: model.loanAmount
 					}, function(response){
-						PM.pop('cbcheck-submit', 'CB Check successfully sent for ' + model.customerName, 5000);
+						if(response.success==true){
+							PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
+						}
+						else{
+							PM.pop('cbcheck-submit', 'CB Check Failed' + model.customerName, 5000);
+						}
 						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 					}, function(errorResponse){
 						PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);

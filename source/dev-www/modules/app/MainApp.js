@@ -1,11 +1,32 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore", "$state", "$timeout",
-function($scope, $log, SessionStore, $state, $timeout) {
+["$scope", "$log", "SessionStore", "Queries", "$state", "$timeout",
+function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
-	document.mainTitle = "Perdix";
+	document.mainTitle = "Perdix Mobility";
+
+	$scope.isCordova = typeof(cordova) !== 'undefined';
+
+	var checkLatestVersion = function() {
+		$scope.latest_apk_url = '';
+		$scope.latest_apk_force_upgrade = false;
+		if ($scope.isCordova) {
+			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
+				$scope.latest_version = value;
+				if ($scope.appManifest.version != $scope.latest_version) {
+					Queries.getGlobalSettings('cordova.latest_apk_url').then(function(url){
+						$log.debug('latest_apk_url:'+url);
+						$scope.latest_apk_url = url;
+						Queries.getGlobalSettings('cordova.latest_apk_force_upgrade').then(function(val){
+							$scope.latest_apk_force_upgrade = val === 'Y';
+						});
+					});
+				}
+			});
+		}
+	};
 
 	$timeout(function() {
 		if ($state.current.name === irf.REDIRECT_STATE) {
@@ -13,6 +34,20 @@ function($scope, $log, SessionStore, $state, $timeout) {
 			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 		}
 	}, 300);
+
+	$.getJSON("app_manifest.json", function(json) {
+		$scope.$apply(function(){
+			irf.appManifest = json;
+			$scope.appManifest = irf.appManifest;
+			$scope.appName = irf.appManifest.title;
+		});
+		document.mainTitle = irf.appManifest.name;
+	});
+	$scope.appConfig = irf.appConfig;
+
+	$scope.$on('irf-login-success', function($event){
+		checkLatestVersion();
+	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;
 	if ($.AdminLTE.options.navbarMenuSlimscroll && typeof $.fn.slimscroll != 'undefined') {
@@ -37,4 +72,10 @@ function($scope, $log, SessionStore, $state, $timeout) {
 	};
 	$(window).resize(menuResize);
 	menuResize();
+
+	$("body").on('collapsed.pushMenu expanded.pushMenu', function() {
+		setTimeout(function() {
+			try { $('.irf-table-view .root-table').dataTable().fnAdjustColumnSizing(); } catch (e) {}
+		}, 301);
+	});
 }]);

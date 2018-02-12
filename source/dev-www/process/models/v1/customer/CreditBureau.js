@@ -3,8 +3,8 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
 
     var ret = $resource(endpoint, null, {
         creditBureauCheck: {
-            method:'POST',
-            url: endpoint + '/check'
+            method:'GET',
+            url: endpoint + '/check/:customerId/:highMarkType/:purpose/:loanAmount'
         },
         listCreditBureauStatus: searchResource({
             method: "GET",
@@ -16,7 +16,15 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
         },
         reinitiateCBCheck: {
             method: 'GET',
-            url: endpoint + '/reinitiate/:creditBureauId'
+            url: endpoint + '/reinitiate/:inqUnqRefNo'
+        },
+        postcreditBureauCheck: {
+            method: 'POST',
+            url: endpoint + '/check'
+        },
+        getCBDetails: {
+            method: 'GET',
+            url: endpoint + '/find'
         }
     });
 

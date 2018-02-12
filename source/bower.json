@@ -38,8 +38,16 @@
     "pikaday": "~1.4.0",
     "Swipe": "swipe#~2.0.0",
     "angular-ladda": "~0.3.4",
-    "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#8.2.1",
     "moment": "^2.13.0",
+    "angular-ui-select": "~0.19.4",
+    "datatables.net": "^1.10.12",
+    "jquery": "~3.1.1",
+    "datatables.net-responsive": "~2.1.0",
+    "selectize": "~0.12.3",
+    "select2": "~4.0.3",
+    "datatables.net-bs": "^1.10.12",
+    "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
+    "mathjs": "^3.8.1",
     "angular-sanitize": "1.6.1"
   },
   "overrides": {
@@ -48,7 +56,9 @@
         "dist/css/skins/_all-skins.min.css",
         "plugins/slimScroll/jquery.slimscroll.min.js",
         "plugins/fastclick/fastclick.min.js",
-        "dist/js/app.min.js"
+        "dist/js/app.min.js",
+        "bootstrap/css/bootstrap.min.css",
+        "plugins/datatables/dataTables.bootstrap.css"
       ]
     },
     "irf-elements": {
@@ -70,11 +80,21 @@
       "dependencies": {
         "moment": "~2.13.0"
       }
+    },
+    "selectize": {
+      "main": [
+        "dist/css/selectize.bootstrap3.css"
+      ]
+    },
+    "select2": {
+      "main": [
+        "dist/css/select2.min.css"
+      ]
     }
   },
   "resolutions": {
     "angular": "~1.5.0",
     "angular-translate": "~2.11.0",
-    "jquery": "~3.1.1"
+    "jquery": "^2.2.3"
   }
 }

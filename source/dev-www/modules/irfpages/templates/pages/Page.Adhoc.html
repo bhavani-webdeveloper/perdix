@@ -1,0 +1,19 @@
+<div>
+	<irf-page-adhoc ng-hide="error"></irf-page-adhoc>
+
+    <section ng-show="error" class="content">
+        <div class="modal-dialog">
+            <div class="modal-content effect2">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{'Page is missing/having errors' | translate}}</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 style="position:absolute;top:10%;left:0;width:100%;text-align:center" ng-bind-html="pageNameHtml"></h4>
+                    <div style="padding:10px">
+                        <img src="img/404.png" class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

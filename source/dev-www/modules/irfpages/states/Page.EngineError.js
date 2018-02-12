@@ -2,5 +2,6 @@ irf.pages.controller("PageEngineErrorCtrl", ["$log", "$scope", "$state", "$state
 	var self = this;
 	$log.info("Page.Engine.Error.html loaded");
 
-	$scope.pageName = $stateParams.pageName;
+	// $scope.pageName = $stateParams.pageName;
+	$scope.pageNameHtml = $stateParams.pageName.split('.').join('<br/>');
 }]);

@@ -15,17 +15,17 @@ MainApp.directive('irfMainMenu', function(){
 });
 
 MainApp.controller("irfMainMenuController", [
-	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition",
-	function($scope, $log, $http, $state, SessionStore, PagesDefinition) {
+	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition", "irfNavigator",
+	function($scope, $log, $http, $state, SessionStore, PagesDefinition, irfNavigator) {
 
 	$scope.ss = SessionStore;
 
 	$scope.photo = SessionStore.getPhoto();
 
+	$scope.currentBranch = SessionStore.getCurrentBranch();
+
 	$http.get("process/MenuDefinition.json").then(function(response){
-		PagesDefinition
-		.getUserAllowedDefinition($scope.ss.getLoginname(), response.data)
-		.then(function(resp){
+		PagesDefinition.getUserAllowedDefinition(response.data).then(function(resp){
 			$scope.definition = resp;
 			$.AdminLTE.layout.activate();
 			$.AdminLTE.tree('.sidebar');
@@ -55,10 +55,18 @@ MainApp.controller("irfMainMenuController", [
 	$scope.loadPage = function(event, menu) {
 		event.preventDefault();
 		if (menu && menu.state) {
-			$state.go(menu.state, menu.stateParams);
+			irfNavigator.go({
+				"state": menu.state,
+				"pageName": menu.stateParams.pageName,
+				"pageId": menu.stateParams.pageId,
+				"pageData": menu.stateParams.pageData
+			}, null, true);
 			adminLteSidemenuFixOnSmallScreen();
 			updateAppTitle(menu.title);
 			window.scrollTo(0,0);
+		}
+		if (angular.isFunction(menu.onClick)) {
+			menu.onClick(event, menu);
 		}
 	};
 

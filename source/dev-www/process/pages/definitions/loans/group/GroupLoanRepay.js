@@ -1,16 +1,13 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
  ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts','Queries',
+    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts,Queries) {
+        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
 
         function backToQueue() {
-            $state.go("Page.Engine", {
-                pageName: "loans.groups.GroupLoanRepaymentQueue",
-                pageId: null
-            });
+            irfNavigator.goBack();
         }
 
         function deriveAmount(txnType, repaymentObj) {
@@ -69,31 +66,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
-                model.bank={};
-
                 //pageId = PartnerCode.GroupCode.isLegacy
                 model.bankName = SessionStore.getBankName();
                 model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
                 model.branchCode = SessionStore.getBranchCode();
                 var groupParams = $stateParams.pageId.toString().split(".");
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 var isLegacy = false;
                 try {
                     isLegacy = groupParams[2] == "true";
                 } catch (err) {
                     isLegacy = false;
                 }
-
-                Queries.getUserBankDetails(model.bankName).then(function(value) {
-                    model.bank = value.body;
-                    model.helpline = value.body[0].help_line_no;
-
-                    $log.info(model.bank);
-                    $log.info(model.bank);
-                    $log.info("bank details:available");
-                }, function(err) {
-                    $log.info("bank details is not available");
-                });
 
                 var promise = LoanAccount.getGroupRepaymentDetails({
                     partnerCode: groupParams[0],
@@ -103,7 +88,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                 promise.then(function(resp) { /* SUCCESS */
                         delete resp.$promise;
                         delete resp.$resolved;
-
                         console.warn(resp);
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
@@ -165,7 +149,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 model.repayments.push(aRepayment);
 
                                 model.total += aRepayment.amount; //parseInt(Number(repData.equatedInstallment));
-
                             }
                             if (model.repayments.length < 1) {
                                 PageHelper.showProgress("group-repayment", "No Records", 3000);
@@ -178,19 +161,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                                 var accountNumber=model.loanDemandScheduleDto[i].accountNumber;
                                 $log.info(accountNumber);
-
-                                /*LoanProcess.getAxisdemand( {
-                                  accountNumber: accountNumber
-                                }).$promise.then(function(data){
-                                    $log.info(data);
-                                    r=model.loanDemandScheduleDto[i];
-
-                                    $log.info(data.installmentAmountInPaisa/100);
-                                    $log.info(data.pendingAmountInPaisa/100);
-
-                                    r.installmentAmount=(data.installmentAmountInPaisa/100);;
-                                    r.pendingAmount=(data.pendingAmountInPaisa/100);
-                                });*/
 
                                 model.loanDemandScheduleDto[i].isAdvanceDemand = false;
                                 
@@ -323,9 +293,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 }
                             }, {
                                 key: "repayments[].cashCollectionRemark",
+                                "condition": "model.siteCode == 'KGFS'",
                                 "type": "select",
                                 "titleMap": cashCollectionRemarks
                             },
+
                             {
                             key: "repayments[].receiptNumber",
                             "title":"Receipt Number",
@@ -428,6 +400,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                 }, {
                     "type": "button",
                     "style": "btn-theme",
+                    "condition": "model.siteCode == 'KGFS'",
                     "title": "PRINT",
                     "onClick": function(model, formCtrl, formName) {
                         function PrinterConstants() {
@@ -519,8 +492,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 });
                             }
 
-                            
+                            //var curTime = moment();
                             var today = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
+                            //var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
                             pData.addLine(opts['entity_name'], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_BOLD
@@ -622,7 +596,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         }
 
                         var fullPrintData = new PrinterData();
-                        var helpline=model.helpline||"";
 
                         var opts = {
                             'branch': model.branch,
@@ -633,10 +606,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             'address2': 'Kanagam Village, Taramani',
                             'address3': 'Chennai - 600113, Phone: 91 44 66687000',
                             'website': "http://ruralchannels.kgfs.co.in",
-                            'helpline': helpline,
+                            'helpline': '18001029370',
                             'branch_id': model.branchId,
-                            'branch_code': model.branchCode,
-
+                            'branch_code': model.branchCode
                         };
 
                         if (model._partnerCode != "AXIS") {
@@ -653,7 +625,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                             $log.info(resp);
                                             if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                                 for (i = 0; i < resp.repaymentSchedule.length; i++) {
-                                                    if (resp.repaymentSchedule[i].status == 'true') {
+                                                    if(resp.repaymentSchedule[i].status == 'true') {
                                                         if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
                                                             totalSatisfiedDemands++;
                                                             $log.info("inc s");
@@ -678,20 +650,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 for (var i = 0; i < model.repayments.length; i++) {
                                     if (model.repayments[i].amount != 0) {
                                         var r = model.repayments[i];
-                                        var repaymentInfo = {
-                                            'repaymentDate': r.repaymentDate,
-                                            'customerURN': r.urnNo,
-                                            'accountNumber': r.accountId,
-                                            'transactionType': r.transactionName,
-                                            'customerName': r.customerName,
-                                            'transactionID': r.paymentResponse.transactionId,
-                                            'demandAmount': r.demandAmount,
-                                            'amountPaid': r.amount,
-                                            'payOffAmount': r.payOffAmount,
-                                            'accountName': r.accountName,
-                                            'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                            'productCode': r.productCode,
-                                        };
+                                        var repaymentInfo = {};
+                                        repaymentInfo.repaymentDate=r.repaymentDate;
+                                        repaymentInfo.customerURN=r.urnNo;
+                                        repaymentInfo.accountNumber=r.accountId;
+                                        repaymentInfo.transactionType= r.transactionName;
+                                        repaymentInfo.customerName=r.customerName;
+                                        repaymentInfo.demandAmount=r.demandAmount;
+                                        repaymentInfo.amountPaid=r.amount;
+                                        repaymentInfo.payOffAmount= r.payOffAmount;
+                                        repaymentInfo.accountName=r.accountName;
+                                        repaymentInfo.demandsPaidAndPending=r.totalSatisfiedDemands + " / " + r.pendingInstallment;
+                                        repaymentInfo.productCode=r.productCode;
+                                        //repaymentInfo.transactionID=r.paymentResponse.transactionId;
                                         $log.info(repaymentInfo);
                                         var pData = getPrintReceipt(repaymentInfo, opts);
                                         $log.info(pData);
@@ -701,12 +672,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         $log.info(fullPrintData);
                                     }
                                 }
+
+                                $log.info("outside print");
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
                                 }, function(err) {
                                     console.error(err);
+                                    $log.info("cordova not there");
                                     console.log("errr collback");
                                 }, fullPrintData.getLines());
+
                             });
                         } else
                         {
@@ -722,7 +697,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         $log.info(resp);
                                         if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
                                             for (i = 0; i < resp.repaymentSchedule.length; i++) {
-                                                if (resp.repaymentSchedule[i].status == 'true') {
+                                                if(resp.repaymentSchedule[i].status == 'true') {
                                                     if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
                                                         totalSatisfiedDemands++;
                                                         $log.info("inc s");
@@ -999,11 +974,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     $log.info("Inside submit");
                     console.log(formCtrl);
                     var reqData = _.cloneDeep(model);
-                    
                     var repaymentsData = [];
                     var loanDemandScheduleDtoData = [];
+
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
+                            reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
+
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
                             }
@@ -1012,6 +989,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     }
                     if (reqData.loanDemandScheduleDto && reqData.loanDemandScheduleDto.length) {
                         for (var i = 0; i < reqData.loanDemandScheduleDto.length; i++) {
+                            reqData.loanDemandScheduleDto[i].repaymentDate=SessionStore.getCBSDate();
                             if (reqData.loanDemandScheduleDto[i].amount != 0) {
                                 loanDemandScheduleDtoData.push(reqData.loanDemandScheduleDto[i]);
                             }
@@ -1021,7 +999,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     
                     var msg = "";
                     if (model._partnerCode != "AXIS") {
-
                         reqData.advanceRepayment = false;
                         for (var i = 0; i < reqData.repayments.length; i++) {
                             reqData.repayments[i].cashCollectionRemark= reqData.repayments[i].cashCollectionRemark + reqData.repayments[i].receiptNumber;
@@ -1031,8 +1008,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     reqData.advanceRepayment = true;
                                     msg = "There are Advance Repayments - ";
                                 }
-
-
                                 //check for larger amounts
                                 try {
                                     if (typeof reqData.repayments[i].additional.accountBalance !== "undefined") {
@@ -1052,13 +1027,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                     if (window.confirm(msg + "Are you Sure?")) {
                         PageHelper.showLoader();
-
-
                         LoanAccount.groupRepayment(reqData, function(resp, headers) {
                             console.log(resp);
                             try {
                                 alert(resp.response);
-
                                 model.repaymentResponse = resp;
                                 model.ui.submissionDone = true;
 
@@ -1067,6 +1039,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         'accountId': repayment.accountId
                                     })
                                 })
+
+                                PageHelper.showProgress("group-repay", "Done.", 3000);
+                                if(model.siteCode == 'sambandh' || model.siteCode == 'saija') {
+                                    irfNavigator.goBack();
+                                }
                             } catch (err) {
                                 console.error(err);
                                 PageHelper.showProgress("group-repay", "Oops. An Error Occurred", 3000);

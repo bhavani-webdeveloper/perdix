@@ -1,0 +1,62 @@
+
+ Change in configuration for perdix8
+ *****application-dev.yml
+ datasource:
+        driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        url: jdbc:mysql://localhost:3306/financialForms_uat?useUnicode=true&characterEncoding=utf8 ## change DB name
+        name:
+        username: financialForms
+        password: financialForms
+
+
+application:
+    datasource: # Application-specific configuration, in addition to the standard spring.datasource properties
+        serverName:
+        catalog: financialForms_uat  ## change DB name
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+        spark:
+            enabled: false
+            host: localhost
+            port: 9995 ## Need to change the port
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2009 ## Need to change the port
+            prefix: application
+ 		encore:
+	        address: http://52.4.230.141/encore_uat ## Change the encore url without port
+	        port: 82 ## Change the encore running port
+	        keyStoreFilePath:
+	        keyStorePassword: test1234
+
+*****application.yml
+shell:
+    ssh:
+        port: 2004
+
+default-domain: perdix
+
+ cachePrefix: perdix-server
+
+file:
+        fileSize: 1
+        fileFormats: jpg,gif,png,tif,JPG,pdf,PDF,csv,CSV
+
+storagePaths:
+         /data/kgfs
+
+    *******Perdix7
+    1.  prod-consolidated-loan-app.properties - productParamApp.documentsBaseDirectory=/data/kgfs/
+    2.  app.property
+    a.  app.photoAndFingerPrintFolderName=/data/kgfs/photo_finger_prints
+    b.  app.deletedPhotoAndFingerPrintFolderName=/data/kgfs/deleted_photo_finger_prints
+    c.  app.photoAndFingerPrintISOFolderName=/data/kgfs/photo_finger_prints_ISO
+    d.  app.deletedPhotoAndFingerPrintISOFolderName=/data/kgfs/deleted_photo_finger_prints_ISO
+    e.  app.offlineFolderName=/data/kgfs/offline
+    f.  app.kycImagesFolderName=/data/kgfs/kyc_images
+    g.  app.portfolioInsuranceOutputFolder=/data/kgfs/portfolio_insurance
+

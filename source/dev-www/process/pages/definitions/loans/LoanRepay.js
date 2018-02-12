@@ -1,636 +1,749 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
- ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils",'Queries',
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils,Queries) {
+    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+        ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection) {
 
-        function backToLoansList() {
-            try {
-                var urnNo = ($stateParams.pageId.split("."))[1];
-                $state.go("Page.Engine", {
-                    pageName: "customer360.loans.View",
-                    pageId: urnNo
-                });
-            } catch (err) {
-                console.log(err);
-                // @TODO : Where to redirect if no page params present
+            function backToLoansList(){
+                try {
+                    var urnNo = ($stateParams.pageId.split("."))[1];
+                    $state.go("Page.Engine", {
+                        pageName: "customer360.loans.View",
+                        pageId: urnNo
+                    });
+                }catch(err){
+                    console.log(err);
+                    //@TODO : Where to redirect if no page params present
+                }
             }
-        }
 
-        function formatAmount(amount) {
-            if (typeof(amount) == "string") {
-                amount = parseFloat(amount);
+
+
+            var _pageGlobals = {};
+            var pageData = {};
+
+            function defaultPageParams(){
+                _pageGlobals = {
+                    hideTransactionName: false
+                };
+                pageData = $stateParams.pageData;
             }
-            return $filter('currency')(amount, "Rs.", 2);
-        }
 
-        function deriveAmount(txnType, repaymentObj) {
-            var amount = 0;
-            switch (txnType) {
-                case 'Pre-closure':
-                    amount = parseFloat(repaymentObj.payOffAndDueAmount);
-                    break;
-                case 'Scheduled Demand':
-                    amount = parseFloat(repaymentObj.totalDemandDue);
-                    break;
-                default:
-                    amount = 0;
-                    break;
+            function pageInit(){
+                defaultPageParams();
+
+                $log.info("PageData is ::");
+                $log.info(pageData);
+                if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true){
+                    _pageGlobals.transactionName = "Scheduled Demand";
+                    _pageGlobals.hideTransactionName = true;
+                }
             }
-            return amount;
-        }
 
-        return {
-            "id": "LoanRepay",
-            "type": "schema-form",
-            "name": "LoanRepay",
-            "title": "LOAN_REPAYMENT",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                PageHelper.showLoader();
-                irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
+            return {
+                "type": "schema-form",
+                "title": "LOAN_REPAYMENT",
+                "subTitle": "",
+                initialize: function (model, form, formCtrl) {
 
-                model.bankName = SessionStore.getBankName();
-                model.branch = SessionStore.getBranch();
-                model.branchId = SessionStore.getBranchId();
-                model.branchCode = SessionStore.getBranchCode();
-                //PageHelper
-                var loanAccountNo = ($stateParams.pageId.split("."))[0];
-                var customerId = ($stateParams.pageId.split("."))[2];
-                var bcaccountnumber = ($stateParams.pageId.split("."))[3];
-                var partner = ($stateParams.pageId.split("."))[4];
+                    pageInit();
 
-                Queries.getUserBankDetails(model.bankName).then(function(value) {
-                    model.bank = value.body;
-                    model.helpline = value.body[0].help_line_no;
+                    var config = {
+                        fingerprintEnabled: false
+                    };
 
-                    $log.info(model.bank);
-                    $log.info(model.bank);
-                    $log.info("bank details:available");
-                }, function(err) {
-                    $log.info("bank details is not available");
-                });
+                    model.additional = {
+                        unapprovedAmount: 0,
+                        unapprovedTransactionsCount: 0
+                    };
 
-                $log.info(bcaccountnumber);
+                    model.$pageConfig = config;
+                    model._pageGlobals = _pageGlobals;
+                    model.repayment = {};
 
-                $log.info(customerId);
-                model.customer = {};
-                model.loanAccount = {};
-                model.repay = {};
-                Enrollment.get({
-                        id: customerId,
-                    },
-                    function(res) {
-                        _.assign(model.customer, res);
-                        $log.info(model.customer);
-                        model = Utils.removeNulls(model, true);
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("page-init", "Done.", 2000);
-                    },
-                    function(res) {
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("page-init", "Error in loading customer.", 2000);
-                        PageHelper.showErrors(res);
+                    if (_pageGlobals.hideTransactionName == true && !_.isNull(_pageGlobals.transactionName)){
+                        model.repayment.transactionName = _pageGlobals.transactionName;
                     }
-                );
 
-                var promise = LoanAccount.get({
-                    accountId: loanAccountNo
-                }).$promise;
+                    model.workingDate = model.repayment.repaymentDate = SessionStore.getCBSDate();
 
-                promise.then(function(data) {
-                        model.loanAccount = data;
-                        console.log(data);
-                        model.repayment = {
-                            'accountId': data.accountId,
-                            'totalDemandDue': data.totalDemandDue,
-                            'payOffAndDueAmount': data.payOffAndDueAmount,
-                            'urnNo': data.customerId1,
-                            'productCode': data.productCode,
-                        };
-                        if(partner=="AXIS")
-                        {
-                          model.repayment.accountId =bcaccountnumber;
-                        }
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
+                    //PageHelper
+                    var loanAccountNo = ($stateParams.pageId.split("."))[0];
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    promise.then(function (data) { /* SUCCESS */
+                        model.cbsLoanData = data;
+                        model.repayment.productCode=data.productCode;
+                        model.repayment.urnNo=data.customerId1;
+                        model.repayment.instrument='CASH';
+                        model.repayment.authorizationUsing='';
+                        model.repayment.remarks='';
+                        model.repayment.accountNumber = data.accountId;
+                        //model.repayment.amount = 0;
+                        model.repayment.customerName = data.customer1FirstName;
 
-                        var txName = (data.totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
+                        model.repayment.productCode = data.productCode;
+                        model.repayment.urnNo = data.customerId1;
+                        model.repayment.payOffAndDueAmount = Utils.ceil(data.payOffAndDueAmount);
+                        model.repayment.totalFeeDue = Utils.roundToDecimal(data.totalFeeDue);
+                        model.repayment.recoverableInterest = Utils.roundToDecimal(data.recoverableInterest);
+                        model.repayment.principalNotDue = Utils.roundToDecimal(data.principalNotDue);
+                        model.repayment.totalNormalInterestDue  = Utils.roundToDecimal(data.totalNormalInterestDue);
+                        model.repayment.preclosureFee = Utils.roundToDecimal(data.preclosureFee);
+                        model.repayment.payOffAmount = Utils.roundToDecimal(data.payOffAmount);
+                        model.repayment.totalDemandDue = Utils.roundToDecimal(data.totalDemandDue);
+                        model.repayment.totalDue = Utils.roundToDecimal(data.totalDemandDue + data.totalFeeDue + data.totalSecurityDepositDue);
+                        model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
+                        model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
+                        model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
+                        model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
 
-                        model.repayment.transactionName=txName;
-
-                        if(model.repayment.transactionName=='Scheduled Demand')
-                        {
-                            model.repayment.amount= parseFloat(data.totalDemandDue + data.totalFeeDue);
-
-                        }
-                        model.repayment.accountNumber =loanAccountNo;
-
-                        var currDate = moment(new Date()).format("YYYY-MM-DD");
-                        model.repayment.repaymentDate = currDate;
+                        //_pageGlobals.totalDemandDue = data.totalDemandDue;
+                    
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
-                    }, function(resData) {
+                    }, function (resData) {
                         irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
                         PageHelper.showErrors(resData);
-                        //backToLoansList();
-                    })
-                    .finally(function() {
-                        PageHelper.hideLoader();
-                    })
+                        backToLoansList();
+                    });
 
-            },
-            offline: false,
-            form: [{
-                    "type": "box",
-                    "title": "REPAY",
-                    "items": [{
-                            key: "repayment.accountId",
-                            readonly: true
-                        }, {
-                            key: "repayment.transactionName",
-                            required:true,
-                            "type": "select",
-                            "titleMap": {
-                                "Advance Repayment": "Advance Repayment",
-                                "Scheduled Demand": "Scheduled Demand",
-                                "Fee Payment": "Fee Payment",
-                                "Pre-closure": "Pre-closure",
-                                "Prepayment": "Prepayment"
-                            },
-                            onChange: function(value, form, model) {
-                                model.repayment.amount = deriveAmount(value, model.repayment);
+                    var p3 = LoanCollection.query({"currentStage":"Initiation","accountNumber":loanAccountNo}).$promise
+                            .then(function (resp){
+                                if(resp.body && resp.body.length > 0)
+                                    model.repayment.id = resp.body[0].id;
+                            }, function(httperr){});
+
+                    var p4 = Queries.getUnApprovedPaymentsForAccount(loanAccountNo)
+                        .then(
+                            function(res){
+                                var rows = res.body;
+                                var rowsCount = rows.length;
+                                var totalAmount = 0;
+                                for (var i=0;i<rowsCount;i++){
+                                    totalAmount= totalAmount + rows[i].repayment_amount;
+                                }
+                                model.additional.unapprovedAmount = totalAmount;
+                                model.additional.unapprovedTransactionsCount = rowsCount;
                             }
-                        },
-                        {
-                            key:"repayment.amount",
-                            required:true,
-                        },
-                        "repayment.repaymentDate",
-                        {
-                            key: "repayment.cashCollectionRemark",
-                            type:"select",
-                            required:true,
-                            enumCode:"Cash_collection_remarks"
-                        },
-                        {
-                            key: "repayment.receiptNumber",
-                            "title":"Receipt Number",
-                            condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
-                        },
-                        "additional.override_fp", 
-                        {
-                            "key": "repayment.authorizationRemark",
-                            "condition": "model.additional.override_fp==true"
-                        },
-                         
-                        {
-                            type: "fieldset",
-                            condition: "!model.additional.override_fp",
-                            title: "VALIDATE_BIOMETRIC",
-                            items: [{
-                                key: "customer.isBiometricValidated",
-                                "title": "CHOOSE_A_FINGER_TO_VALIDATE",
-                                type: "validatebiometric",
-                                category: 'CustomerEnrollment',
-                                subCategory: 'FINGERPRINT',
-                                helper: formHelper,
-                                biometricMap: {
-                                    leftThumb: "model.customer.leftHandThumpImageId",
-                                    leftIndex: "model.customer.leftHandIndexImageId",
-                                    leftMiddle: "model.customer.leftHandMiddleImageId",
-                                    leftRing: "model.customer.leftHandRingImageId",
-                                    leftLittle: "model.customer.leftHandSmallImageId",
-                                    rightThumb: "model.customer.rightHandThumpImageId",
-                                    rightIndex: "model.customer.rightHandIndexImageId",
-                                    rightMiddle: "model.customer.rightHandMiddleImageId",
-                                    rightRing: "model.customer.rightHandRingImageId",
-                                    rightLittle: "model.customer.rightHandSmallImageId"
+                        )
+
+                    var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+                        var records = res.body;
+
+                        if(records && _.isArray(records) && records.length > 0){
+
+                            var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
+                            if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
+                            model.repayment.bankAccountNumber = defaultBank[0].account_number;
+                        }
+                    });
+
+
+
+                    $q.all([promise, p3, p4, defaultAccountPromise])
+                        .finally(
+                            function(){
+                                PageHelper.hideLoader();
+                            }
+                        )
+
+                    /* Load loan Information */
+                    IndividualLoan.search({
+                        'accountNumber': loanAccountNo,
+                        'stage' : 'Completed'
+                    }).$promise.then(
+                        function(res){
+                            if (_.isArray(res.body) && res.body.length>0){
+                                var item = res.body[0];
+                                IndividualLoan.get({id: item.loanId})
+                                    .$promise
+                                    .then(
+                                        function(res){
+                                            model.loanAccount = res;
+                                            var urns = [];
+                                            if (!_.isNull(model.loanAccount.applicant)){
+                                                urns.push(model.loanAccount.applicant);
+                                            }
+                                            if (!_.isNull(model.loanAccount.coBorrowerUrnNo)){
+                                                urns.push(model.loanAccount.coBorrowerUrnNo)
+                                            }
+                                            Queries.getCustomerBasicDetails({"urns":urns}).then(
+                                                function(resQuery) {
+                                                    // console.log(resQuery);
+                                                    // console.log(resQuery.urns[model.achIndividualLoanSearch.applicant].first_name);
+                                                    if (!_.isNull(model.loanAccount.applicant)){
+                                                        model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name
+                                                    }
+                                                    if (!_.isNull(model.loanAccount.coBorrowerUrnNo)){
+                                                        model.loanAccount.coBorrowerUrnNo = resQuery.urns[model.loanAccount.coBorrowerUrnNo].first_name
+                                                    }
+                                                },
+                                                function(errQuery) {
+                                                }
+                                            )
+                                        }
+                                    )
+                            } else {
+                                /* Loan Account not in perdix. Go back to Collections Dashboard */
+                            }
+                        }
+                    )
+
+                },
+                offline: false,
+                form: [
+                    {
+                        "type": "box",
+                        "title": "REPAY",
+                        "items": [
+                            {
+                                "type": "section",
+                                "htmlClass": "alert alert-warning",
+                                "condition": "model.additional.unapprovedAmount > 0",
+                                "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unapprovedTransactionsCount}} Unapproved Payment(s) Found!</h4>Payment(s) of {{ model.additional.unapprovedAmount | currency:'Rs.':2 }} is not yet approved for this account."
+                            },
+                            {
+                                key:"repayment.accountNumber",
+                                title: "LOAN_ACCOUNT_NUMBER",
+                                readonly:true
+                            },
+                            {
+                                key: "repayment.customerName",
+                                title: "CUSTOMER_NAME",
+                                readonly: true
+                            },
+                            {
+                                key: "loanAccount.applicantName",
+                                title: "APPLICANT_NAME",
+                                readonly: true
+                            },
+                            /*{
+                                key: "loanAccount.coApplicantName",
+                                title: "COAPPLICANT_NAME",
+                                readonly: true,
+                                condition: "model.loanAccount.coBorrowerUrnNo!=null"
+                            },*/
+                            {
+                                key:"repayment.transactionName",
+                                type: "string",
+                                readonly: true,
+                                condition: "model._pageGlobals.hideTransactionName"
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "!model._pageGlobals.hideTransactionName",
+                                titleMap: {
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
+                                    "Prepayment":"Prepayment"
                                 },
-                                viewParams: function(modelValue, form, model) {
-                                    return {
-                                        customerId: model.customer.id
-                                    };
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    } else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                type: "fieldset",
+                                title: "PRECLOSURE_BREAKUP",
+                                condition: "model.repayment.transactionName=='Pre-closure'",
+                                items: [
+                                    {
+                                        key: "repayment.principalNotDue",
+                                        readonly: true,
+                                        title: "PRINCIPAL_NOT_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.bookedNotDueNormalInterest",
+                                        readonly: true,
+                                        title: "BOOKED_NOT_DUE_NORMAL_INTEREST",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.bookedNotDuePenalInterest",
+                                        readonly: true,
+                                        title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.recoverableInterest",
+                                        readonly: true,
+                                        title: "RECOVERABLE_INTEREST",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.securityDeposit",
+                                        readonly: true,
+                                        title: "SECURITY_DEPOSIT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.preclosureFee",
+                                        readonly: true,
+                                        title: "PRECLOSURE_FEE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalFeeDue",
+                                        readonly: true,
+                                        title: "TOTAL_FEE_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.netPayoffAmount",
+                                        readonly: true,
+                                        title: "NET_PAYOFF_AMOUNT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        type: "section",
+                                        html: "<hr />"
+                                    }
+                                ]
+                            },
+                            {
+                                key: "repayment.totalDemandDue",
+                                readonly: true,
+                                condition: "model.repayment.transactionName=='Scheduled Demand'",
+                                title: "TOTAL_DEMAND_DUE",
+                                type: "amount"
+                            },
+                            // {
+                            //     key: "repayment.totalSecurityDepositDue",
+                            //     readonly: true,
+                            //     title: "TOTAL_SECURITY_DEPOSIT_DUE",
+                            //     condition: "model.repayment.transactionName=='Scheduled Demand' && model.repayment.totalSecurityDepositDue > 0",
+                            //     type: "amount"
+                            // },
+                            {
+                                key: "repayment.totalFeeDue",
+                                readonly: true,
+                                condition: "model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName=='Fee Payment'",
+                                title: "TOTAL_FEE_DUE",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.totalDue",
+                                readonly: true,
+                                title: "TOTAL_DUE",
+                                condition: "model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName == 'Advance Repayment'",
+                                type: "amount"
+                            },
+                            {
+                                key: "repayment.amount",
+                                type: "number"
+                            },
+                            {
+                                key: "repayment.repaymentDate",
+                                type: "date"
+                            },
+                            "repayment.cashCollectionRemark",
+                            {
+                                "type": "fieldset",
+                                "title": "Fingerprint",
+                                "condition": "model.$pageConfig.fingerprintEnabled==true",
+                                "items": [
+                                    {
+                                        "key": "additional.override_fp",
+                                        "condition": "model.$pageConfig.fingerprintEnabled==true"
+                                    },
+                                    {
+                                        "key": "repayment.authorizationRemark",
+                                        "condition": "model.additional.override_fp==true"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "repayment.instrument",
+                                "type": "select",
+                                "required": true,
+                                "titleMap": [
+                                    {
+                                        name: "Cash",
+                                        value: "CASH"
+                                    },
+                                    {
+                                        "name":"Cheque",
+                                        "value":"CHQ"
+                                    },
+                                    {
+                                        "name":"NEFT",
+                                        "value":"NEFT"
+                                    },
+                                    {
+                                        "name":"RTGS",
+                                        "value":"RTGS"
+                                    }
+
+                                ]
+                            },
+                            {
+                                key:"repayment.reference",
+                                title:"CHEQUE_NUMBER",
+                                "schema": {
+                                    type:"string",
+                                    maxLength:6,
+                                    minLength:6
                                 },
-                            }]
+                                required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='CHQ'",
+                                title:"REPAYMENT_TO_ACCOUNT",
+                                required: true,
+                                bindMap: {
+
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
+                            },
+                            {
+                                key:"repayment.instrumentDate",
+                                title:"CHEQUE_DATE",
+                                type:"date",
+                                required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key: "repayment.photoId",
+                                title: "CHEQUE_PHOTO",
+                                condition:"model.repayment.instrument=='CHQ'",
+                                type: "file",
+                                fileType: "image/*",
+                                category: "Repayment",
+                                subCategory: "Cheque"
+                            },
+                            {
+                                key:"repayment.reference",
+                                title:"REFERENCE_NUMBER",
+                                type:"string",
+                                required: true,
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'",
+                                title:"REPAYMENT_TO_ACCOUNT",
+                                required: true,
+                                bindMap: {
+
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccountsByPartnerForLoanRepay();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
+                            },
+                            {
+                                key:"repayment.instrumentDate",
+                                title:"DATE",
+                                type:"date",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                            }
+                        ]
+                    },
+                    {
+                        "type":"actionbox",
+                        "items": [
+                            {
+                                "type":"submit",
+                                "style":"btn-theme",
+                                "title":"SUBMIT"
+
+                            }
+                        ]
+                    }
+                ],
+                schema: {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "type": "object",
+                    "properties": {
+                        "repayment": {
+                            "type": "object",
+                            "properties": {
+                                "accountNumber": {
+                                    "type": "string",
+                                    "title":"ACCOUNT_ID"
+                                },
+                                "amount": {
+                                    "type": "number",
+                                    "title":"AMOUNT_PAID"
+
+                                },
+                                "authorizationRemark": {
+                                    "type": "string",
+                                    "title":"AUTHORIZATION_REMARK"
+                                },
+                                "authorizationUsing": {
+                                    "type": "string",
+                                    "title":"AUTHORIZATION_USING"
+                                },
+                                "cashCollectionRemark": {
+                                    "type": "string",
+                                    "title":"CASH_COLLECTION_REMARK"
+                                },
+                                "groupCode": {
+                                    "type": "string",
+                                    "title":"GROUP_CODE"
+                                },
+                                "instrument": {
+                                    "type": "string",
+                                    "title": "INSTRUMENT_TYPE",
+                                    "required": true
+                                },
+                                "productCode": {
+                                    "type": "string",
+                                    "title":"PRODUCT_CODE"
+                                },
+                                "remarks": {
+                                    "type": "string",
+                                    "title":"REMARKS"
+                                },
+                                "ifscCode": {
+                                    "type": "string",
+                                    "title":"IFSC_CODE"
+                                },
+                                "customerBankName": {
+                                    "type": "string",
+                                    "title":"CUSTOMER_BANK_NAME"
+                                },
+                                "bankBranchDetails": {
+                                    "type": "string",
+                                    "title":"BANK_BRANCH_DETAILS"
+                                },
+                                "repaymentDate": {
+                                    "type": "string",
+                                    "title":"REPAYMENT_DATE",
+                                    "x-schema-form": {
+                                        "type": "date"
+                                    }
+                                },
+                                "transactionId": {
+                                    "type": "string",
+                                    "title":"TRANSACTION_ID"
+                                },
+                                "transactionName": {
+                                    "type": "string",
+                                    "title":"TRANSACTION_NAME"
+                                },
+                                "urnNo": {
+                                    "type": "string",
+                                    "title":"URN_NO"
+                                }
+                            },
+                            required: [
+                                'instrument'
+                            ]
                         },
+                        "additional": {
+                            "type": "object",
+                            "properties": {
+                                "override_fp": {
+                                    "type": "boolean",
+                                    "title":"OVERRIDE_FINGERPRINT",
+                                    "default": false
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "accountNumber",
+                        "amount",
+                        "authorizationRemark",
+                        "authorizationUsing",
+                        "cashCollectionRemark",
+                        "groupCode",
+                        "productCode",
+                        "remarks",
+                        "repaymentDate",
+                        "transactionId",
+                        "transactionName",
+                        "urnNo"
                     ]
                 },
-
-                {
-                    "type": "actionbox",
-                    "condition": "model.customer.isBiometricValidated ||model.additional.override_fp",
-                    "items": [{
-                        "type": "submit",
-                        "style": "btn-theme",
-                        "title": "SUBMIT"
-                    }]
-                },
-
-                {
-                    "type": "actionbox",
-                    "condition": "model.repay.submissionDone",
-                    "items": [{
-                        "type": "button",
-                        "style": "btn-theme",
-                        "title": "PRINT",
-                        "onClick": function(model, formCtrl, formName) {
-                            function PrinterConstants() {
-
-                            }
-                            PrinterConstants.FONT_LARGE_BOLD = 2;
-                            PrinterConstants.FONT_LARGE_NORMAL = 1;
-                            PrinterConstants.FONT_SMALL_NORMAL = 3;
-                            PrinterConstants.FONT_SMALL_BOLD = 4;
-
-                            function PrinterData() {
-                                this.lines = [];
-                            }
-
-                            PrinterData.prototype.getLineLength = function(font) {
-                                if (font == PrinterConstants.FONT_LARGE_BOLD || font == PrinterConstants.FONT_LARGE_NORMAL) {
-                                    return 24;
-                                } else {
-                                    return 42;
-                                }
-                            }
-
-                            PrinterData.prototype.addLine = function(text, opts) {
-                                opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                opts['center'] = _.has(opts, 'center') && _.isBoolean(opts['center']) ? opts['center'] : false;
-                                var obj = {
-                                    "bFont": opts['font'],
-                                    "text": text,
-                                    "style": {
-                                        "center": opts['center']
-                                    }
-                                };
-                                this.lines.push(obj);
-                                return this;
-                            }
-
-                            PrinterData.prototype.addKeyValueLine = function(key, value, opts) {
-                                opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                var keyLength = parseInt(this.getLineLength(opts['font']) / 2) - 1;
-                                var line = _.padEnd(key, keyLength, ' ') + ': ' + value;
-                                var obj = {
-                                    "bFont": opts['font'],
-                                    "text": line,
-                                    "style": {
-                                        "center": false
-                                    }
-                                };
-                                this.lines.push(obj);
-                                return this;
-                            }
-
-                            PrinterData.prototype.addStrRepeatingLine = function(str, opts) {
-                                opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                var lineLength = this.getLineLength(opts['font']);
-                                var line = _.padEnd("", lineLength, '-')
-                                var obj = {
-                                    "bFont": opts['font'],
-                                    "text": line,
-                                    "style": {
-                                        "center": false
-                                    }
-                                };
-                                this.lines.push(obj);
-                                return this;
-                            }
-
-                            PrinterData.prototype.addLines = function(lines) {
-                                this.lines = this.lines.concat(lines);
-                            }
-
-                            PrinterData.prototype.getLines = function() {
-                                return this.lines;
-                            }
-
-                            var getPrintReceipt = function(repaymentInfo, opts) {
-                                opts['duplicate'] = opts['duplicate'] || false;
-                                var pData = new PrinterData();
-                                if (opts['duplicate']) {
-                                    pData.addLine('DUPLICATE', {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    });
-                                } else {
-                                    pData.addLine('RECEIPT', {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    });
-                                }
-
-                                
-                                var today = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
-                                pData.addLine(opts['entity_name'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    .addLine(opts['branch'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    }).addLine("Date : " + today, {
-                                        'center': false,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                    .addLine("LOAN REPAYMENT", {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_LARGE_BOLD
-                                    })
-                                    .addLine("", {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    .addKeyValueLine("Branch Code", opts['branch_code'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Loan A/C No", repaymentInfo['accountNumber'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Transaction Type", repaymentInfo['transactionType'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Transaction ID", repaymentInfo['transactionID'], {
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addKeyValueLine("Demand Amount", parseFloat(repaymentInfo['demandAmount']) == 0 ? "Nil" : formatAmount(repaymentInfo["demandAmount"]), {
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount'])), {
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                    .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {
-                                        font: PrinterConstants.FONT_SMALL_BOLD
-                                    })
-                                    .addStrRepeatingLine("-", {
-                                        font: PrinterConstants.FONT_LARGE_BOLD
-                                    })
-                                    .addLine(opts['company_name'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine("CIN :" + opts['cin'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine(opts['address1'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine(opts['address2'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine(opts['address3'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine("Website :" + opts['website'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine("Helpline No :" + opts['helpline'], {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine("", {})
-                                    .addLine("", {})
-                                    .addLine("Signature not required as this is an", {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    })
-                                    .addLine("electronically generated receipt.", {
-                                        'center': true,
-                                        font: PrinterConstants.FONT_SMALL_NORMAL
-                                    });
-                                return pData;
-                            }
-
-                            var fullPrintData = new PrinterData();
-
-                            var helpline=model.helpline||"";
-
-                            var opts = {
-                                'branch': model.branch,
-                                'entity_name': model.bankName + " KGFS",
-                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                'cin': 'U74990TN2011PTC081729',
-                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                'address2': 'Kanagam Village, Taramani',
-                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                'website': "http://ruralchannels.kgfs.co.in",
-                                'helpline': helpline,
-                                'branch_id': model.branchId,
-                                'branch_code': model.branchCode
-                            };
-
-                            var r = model.repay;
-                            var s=model.loanAccount;
-                            var totalSatisfiedDemands = 0;
-                            var pendingInstallment= 0;
-                            //r.accountId
-
-                            LoanAccount.get({
-                                accountId: r.accountNumber
-                            }).$promise.then(function(resp) {
-                                $log.info(resp);
-                                if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
-                                    for (i = 0; i < resp.repaymentSchedule.length; i++) {
-                                        if (resp.repaymentSchedule[i].status == 'true') {
-                                            if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
-                                                totalSatisfiedDemands++;
-                                                $log.info("inc s");
-                                            } else if (resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') {
-                                                pendingInstallment++;
-                                                $log.info("inc p");
-                                            }
-                                        }
-                                    }
-                                }
-                                $log.info(totalSatisfiedDemands);
-                                $log.info(pendingInstallment);
-                                r.totalSatisfiedDemands = totalSatisfiedDemands;
-                                r.pendingInstallment = pendingInstallment;
-                                r.accountName = resp.accountName;
-                                r.payOffAndDueAmount = resp.payOffAndDueAmount;
-                                r.totalDemandDue = resp.equatedInstallment;
-                                r.customerName1 = resp.customer1FirstName;
-                                r.customerName2 = resp.customer1LastName;
-
-                                    var repaymentInfo = {
-                                        'repaymentDate': r.repaymentDate,
-                                        'customerURN': r.urnNo,
-                                        'accountNumber': r.accountId,
-                                        'transactionType': r.transactionName,
-                                        'customerName': r.customerName1 + r.customerName2,
-                                        'transactionID': r.transactionId,
-                                        'demandAmount': r.totalDemandDue,
-                                        'amountPaid': r.amount,
-                                        'payOffAmount': r.payOffAndDueAmount,
-                                        'accountName': r.accountName,
-                                        'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                        'productCode': r.productCode,
-                                    };
-
-                                $log.info(repaymentInfo);
-                                $log.info(opts);
-
-                                var pData = getPrintReceipt(repaymentInfo, opts);
-                                pData.addLine("", {});
-                                pData.addLine("", {});
-                                fullPrintData.addLines(pData.getLines());
-
-                                $log.info(fullPrintData);
-
-                                cordova.plugins.irfBluetooth.print(function() {
-                                    console.log("succc callback");
-                                }, function(err) {
-                                    console.error(err);
-                                    console.log("errr collback");
-                                }, fullPrintData.getLines());
-                            });
-                        }
-                    }]
-                }
-            ],
-            schema: {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": {
-                    "repayment": {
-                        "type": "object",
-                        "properties": {
-                            "accountId": {
-                                "type": "string",
-                                "title": "ACCOUNT_ID"
-                            },
-                            "amount": {
-                                "type": "string",
-                                "title": "AMOUNT"
-                            },
-                            "authorizationRemark": {
-                                "type": "string",
-                                "title": "AUTHORIZATION_REMARK"
-                            },
-                            "authorizationUsing": {
-                                "type": "string",
-                                "title": "AUTHORIZATION_USING"
-                            },
-                            "cashCollectionRemark": {
-                                "type": "string",
-                                "title": "CASH_COLLECTION_REMARK"
-                            },
-                            "groupCode": {
-                                "type": "string",
-                                "title": "GROUP_CODE"
-                            },
-                            "productCode": {
-                                "type": "string",
-                                "title": "PRODUCT_CODE"
-                            },
-                            "remarks": {
-                                "type": "string",
-                                "title": "REMARKS"
-                            },
-                            "repaymentDate": {
-                                "type": "string",
-                                "title": "REPAYMENT_DATE",
-                                "x-schema-form": {
-                                    "type": "date"
-                                }
-                            },
-                            "transactionId": {
-                                "type": "string",
-                                "title": "TRANSACTION_ID"
-                            },
-                            "transactionName": {
-                                "type": "string",
-                                "title": "TRANSACTION_NAME"
-
-                            },
-                            "urnNo": {
-                                "type": "string",
-                                "title": "URN_NO"
-                            }
-                        },
+                actions: {
+                    preSave: function (model, formCtrl) {
+                        var deferred = $q.defer();
+                        model._storedData = null;
+                        deferred.resolve();
+                        return deferred.promise;
                     },
-                    "additional": {
-                        "type": "object",
-                        "properties": {
-                            "override_fp": {
-                                "type": "boolean",
-                                "title": "OVERRIDE_FINGERPRINT",
-                                "default": false
-                            }
+                    submit: function (model, formCtrl, formName) {
+                        if (model.repayment.demandAmount > 0 && model.repayment.transactionName == "Advance Repayment"){
+                            PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
+                            return false;
                         }
-                    }
-                },
-                "required": [
-                    "accountId",
-                    "amount",
-                    "authorizationRemark",
-                    "authorizationUsing",
-                    "cashCollectionRemark",
-                    "groupCode",
-                    "productCode",
-                    "remarks",
-                    "repaymentDate",
-                    "transactionId",
-                    "transactionName",
-                    "urnNo"
-                ]
-            },
-            actions: {
-                preSave: function(model, formCtrl) {
-                    var deferred = $q.defer();
-                    model._storedData = null;
-                    deferred.resolve();
-                    return deferred.promise;
-                },
-                submit: function(model, formCtrl, formName) {
-                    $log.info("Inside submit");
-                    if (window.confirm("Are you Sure?")) {
-                        PageHelper.showLoader();
-                        model.repayment.cashCollectionRemark= model.repayment.cashCollectionRemark + model.repayment.receiptNumber;
-                        var postData = _.cloneDeep(model.repayment);
-                        postData.amount = parseInt(Number(postData.amount)) + "";
-                        LoanAccount.repay(postData, function(resp, header) {
-                            $log.info(resp);
-                            try {
-                                alert(resp.response);
+
+                        if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
+                        }
+
+                        if (Utils.compareDates(model.repayment.repaymentDate, model.workingDate) == 1){
+                            PageHelper.showProgress('validation-error', 'Future dated payments are not allowed. Please check your repayment date', 4000);
+                            return false;
+                        }
+
+                        if (model.repayment.instrument == 'CHQ'){
+                            if(isNaN(parseInt(model.repayment.reference))){
+                                PageHelper.showProgress("loan-repay","Not a valid cheque number.",5000);
+                                return;
+                            } else if (parseInt(model.repayment.reference) == 0){
+                                PageHelper.showProgress("loan-repay","Zero is not a valid cheque number.",5000);
+                                return;
+                            }
+
+                            // var currDate = Utils.getCurrentDate();
+                            // var cheqDate = model.repayment.chequeDate;
+
+                            // if (Utils.compareDates(cheqDate, currDate) === -1){
+                            //     PageHelper.showProgress("loan-repay","Back dated cheques are not accepted.",5000);
+                            //     return;
+                            // }
+
+                        }
+                        
+                        // if (model._screen && model._screen =='BounceQueue'){
+                        //     if (model.repayment.amount > model.repayment.totalDue){
+                        //         PageHelper.showProgress("loan-repay","Amount paid cannot be more than the Total due",5000);
+                        //         return;
+                        //     }
+                        // }
+
+                        $log.info("Inside submit");
+                        if(window.confirm("Are you Sure?")){
+                            PageHelper.showLoader();
+                            /*var postData = _.cloneDeep(model.repayment);
+                            postData.amount = parseInt(Number(postData.amount))+"";
+                            postData.instrument = model.repayment.instrument;
+                            LoanAccount.repay(postData,function(resp,header){
                                 $log.info(resp);
-                                model.repay = resp;
-                                model.repay.submissionDone = "yes";
-                                model.repay.accountNumber=model.repayment.accountNumber;
-                            } catch (err) {
+                                try{
+                                    alert(resp.response);
+                                    PageHelper.navigateGoBack();
+                                }catch(err){
 
+                                }
+                            */
+                            var postData = {"loanCollection":{}};
+                            postData.loanCollection.accountNumber = model.repayment.accountNumber;
+                            postData.loanCollection.bankAccountNumber = model.repayment.bankAccountNumber;
+                            
+                            if (model.repayment.transactionName == 'Scheduled Demand'){
+                                postData.loanCollection.demandAmount = model.repayment.totalDue;    
+                            } else if (model.repayment.transactionName == 'Pre-closure') {
+                                postData.loanCollection.demandAmount = model.repayment.totalPayoffAmountToBePaid;    
+                            } else if (model.repayment.transactionName == 'Fee Payment'){
+                                postData.loanCollection.demandAmount = model.repayment.totalFeeDue;    
                             }
-                        }, function(resp) {
-                            try {
+
+                            postData.loanCollection.demandDate = "";
+                            postData.loanCollection.feeDue = model.repayment.totalFeeDue;
+                            postData.loanCollection.installmentAmount = model.cbsLoanData.equatedInstallment;
+                            postData.loanCollection.instrumentDate = model.repayment.instrumentDate;
+                            postData.loanCollection.instrumentType = model.repayment.instrument;
+                            postData.loanCollection.interestAmount = model.repayment.totalNormalInterestDue;
+                            postData.loanCollection.overdueAmount = model.repayment.totalDemandDue;
+                            postData.loanCollection.penalInterestDue = model.cbsLoanData.totalPenalInterestDue;
+                            postData.loanCollection.principalDue = model.cbsLoanData.totalPrincipalDue;
+                            postData.loanCollection.reference = model.repayment.reference;
+                            postData.loanCollection.remarks = model.repayment.remarks;
+                            postData.loanCollection.repaymentAmount = model.repayment.amount;
+                            postData.loanCollection.repaymentDate = model.repayment.repaymentDate;
+                            postData.loanCollection.repaymentType = model.repayment.transactionName;
+                            postData.loanCollection.transactionName = model.repayment.transactionName;
+                            postData.loanCollection.agentTrxn = false;
+                            postData.loanCollection.unapprovedAmount = model.additional.unapprovedAmount;
+                            postData.loanCollection.feeAmount = 0;
+
+                            if(model.repayment.id){
+                                if(postData.loanCollection.instrument == 'CASH')
+                                    postData.stage="Deposit";
+                                else
+                                    postData.stage="CreditValidation";
+                                postData.repaymentProcessAction = "PROCEED";
+                                postData.loanCollection.id = model.repayment.id;
+                                LoanCollection.update(postData,function(resp,header){
+                                $log.info(resp);
+                                try{
+                                    PageHelper.navigateGoBack();
+                                }catch(err){
+
+                                }
+                            },function(resp){
                                 PageHelper.showErrors(resp);
-                            } catch (err) {
-                                console.error(err);
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
                             }
-                        }).$promise.finally(function() {
-                            PageHelper.hideLoader();
-                        });
+                            else{
+                                postData.repaymentProcessAction = "SAVE";
+                                LoanCollection.save(postData,function(resp,header){
+                                    $log.info(resp);
+                                    try{
+                                        if(postData.loanCollection.instrumentType == 'CASH')
+                                            resp.stage="Deposit";
+                                        else
+                                            resp.stage="CreditValidation";
+                                        resp.repaymentProcessAction = "PROCEED";
 
+                                        LoanCollection.update(resp).$promise
+                                            .then(function(res,head){
+                                                PageHelper.showProgress('action-succes', 'Repayment done succesfully.', 5000);
+                                                PageHelper.navigateGoBack();
+                                            },function(httpres){
+
+                                            })
+                                    }catch(err){
+
+                                    }
+                                },function(resp){
+                                    PageHelper.showErrors(resp);
+                                }).$promise.finally(function(){
+                                    PageHelper.hideLoader();
+                                });
+                            }
+
+                        }
                     }
                 }
             }
-        }
-    }
-]);
+        }]);

@@ -1,0 +1,48 @@
+.header-corporate-logo .header-corporate-logo-img,
+.login-corporate-logo .login-corporate-logo-img {
+	-webkit-filter: none;
+	filter: none;
+}
+
+@base-bg: #727376; // #e76526;
+@base-border: darken(@base-bg, 10%);
+.skin-green-light {
+	.main-header {
+		li.user-header {
+			background-color: @base-bg;
+		}
+		.navbar {
+			background-color: @base-bg !important;
+			.nav>li>a:hover,
+			.nav>li>a:focus,
+			.nav>li>a:active,
+			.nav>li>a.active {
+				background-color: @base-border !important;
+			}
+			.sidebar-toggle:hover {
+				background-color: @base-border !important;
+			}
+		}
+		.logo {
+			background-color: @base-bg !important;
+		}
+		.logo:hover {
+			background-color: lighten(@base-bg, 10%) !important;
+		}
+	}
+	.login-box .widget-user-header.bg-theme {
+		background-color: @base-bg !important;
+	}
+	.navbar-custom-menu>.navbar-nav>li.user-menu>ul>li.user-header {
+		background-color: @base-bg !important;
+	}
+}
+
+.cantina-loader {
+    &:after {
+        border-top-color: #e76526 !important;
+    }
+}
+.spinner-section-far:before {
+    border-top-color: #e76526 !important;
+}

@@ -1,0 +1,37 @@
+<style type="text/css">
+    .currency { text-align: right; }
+
+    .bold { font-weight: bold; }
+</style>
+<div ng-if = 'tableData' class='table-responsive'>
+    <table ng-if = 'tableData.columns' class='table table-striped table-condensed'>
+        <thead>
+            <tr>
+                <th ng-repeat='column in tableData.columns' style='vertical-align : top;' ng-class = 'getStyleClass(column)'>     {{column.title | translate}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='record in tableData.data'>
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="!record.data" 
+                ng-switch = 'column.format' 
+                ng-click = 'column.onClick && column.onClick(record)'>
+                    <dummy  ng-switch-when="currency">{{record[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-switch-when="pct">
+                    {{(record[column.data] !== null && record[column.data] !== undefined) ? ((record[column.data] | 
+                    number : 2) + '%') : record[column.data]}}
+                    </dummy>
+                    <dummy ng-switch-default>{{record[column.data]}}</dummy>
+                </td>
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data" 
+                ng-switch = "getDisplayFormat(column, record)">
+                    <dummy  ng-switch-when="currency">{{record.data[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-switch-when="pct">
+                    {{(record.data[column.data] !== null && record.data[column.data] !== undefined) ? ((record.data[column.data] | number : 2) + '%') : record.data[column.data]}}
+                    </dummy>
+                    <dummy ng-switch-default>{{record.data[column.data]}}</dummy>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

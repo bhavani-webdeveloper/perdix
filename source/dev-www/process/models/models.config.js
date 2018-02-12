@@ -1,4 +1,3 @@
-
 irf.models
 	.constant('BASE_URL', irf.BASE_URL)
 	.constant('Model_ELEM_FC', {

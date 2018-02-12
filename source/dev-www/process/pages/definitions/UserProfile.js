@@ -1,14 +1,15 @@
-irf.pageCollection.factory("Pages__UserProfile",
-["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper",
-function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, irfElementsConfig,PageHelper) {
+irf.pageCollection.factory(irf.page("UserProfile"),
+["$log", "$q", "SessionStore", "languages", "dateFormats", "$translate", "irfProgressMessage",
+	"irfStorageService", "irfElementsConfig","PageHelper", "formHelper", "irfTranslateLoader", "Account", "PagesDefinition", "translateFilter",
+function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
+	irfStorageService, irfElementsConfig,PageHelper, formHelper, irfTranslateLoader, Account, PagesDefinition, translateFilter) {
 
-	var languageTitleMap = [];
+	var languageTitleMap = []; var systemAllowedLanguages = SessionStore.getSystemAllowedLanguages();
 	_.each(languages, function(v, k){
-		languageTitleMap.push({value:v.code, name:v.titleEnglish + ' - ' + v.titleLanguage});
+		if (systemAllowedLanguages.indexOf(k) !== -1)
+			languageTitleMap.push({value:v.code, name:v.titleEnglish + ' - ' + v.titleLanguage});
 	});
 
-	var dateFormats = ["YYYY-DD-MM", "DD-MM-YYYY", "DD-MMM-YYYY", "Do MMM YYYY", "dddd Do MMM YYYY"];
 	var dateTitleMap = [];
 	var now = moment(new Date());
 	_.each(dateFormats, function(v,k){
@@ -24,10 +25,18 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 		initialize: function (model, form, formCtrl) {
 			$log.info("I got initialized");
 			var m = irfStorageService.getJSON(formCtrl.$name, model.profile.login);
+			if(model.settings) {
+				model.settings.language = SessionStore.getLanguage();
+			}
 			if (m && m.profile && m.settings) {
 				model.profile = m.profile;
 				model.settings = m.settings;
 			}
+			model.profile.userName = SessionStore.getUsername();
+			model.profile.openChangePassword = false;
+
+			model.landing = irf.HOME_PAGE;
+			model.settings.landingHtml = '<i class="{{model.landing.iconClass}}">&nbsp;</i>{{model.landing.title|translate}}<button irf-lov irf-model-value="model.landing" irf-form="form" irf-model="model" class="pull-right btn btn-default btn-xs">Change</button>';
 		},
 		modelPromise: function(pageId) {
 			var deferred = $q.defer();
@@ -41,10 +50,39 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 		form: [{
 			type: "box",
 			title: "PROFILE_INFORMATION",
-			readonly: true,
 			items: [
-				"profile.login",
-				"profile.firstName"
+				{
+					key: "profile.login",
+					readonly: true
+				},
+				{
+					key: "profile.userName",
+					readonly: true
+				},
+				{
+					title: "CHANGE_PASSWORD",
+					condition: "!model.profile.openChangePassword",
+					type: "button",
+					onClick: "model.profile.openChangePassword = true"
+				},
+				{
+					key: "profile.oldPassword",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					key: "profile.newPassword",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					key: "profile.newPassword2",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					title: "CHANGE_PASSWORD",
+					condition: "model.profile.openChangePassword",
+					type: "button",
+					onClick: "actions.changePassword(model, formCtrl, form)"
+				}
 			]
 		},{
 			type: "box",
@@ -55,11 +93,48 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 				"settings.loginMode",
 				"settings.offlinePin",
 				{
+					key: "settings.landingHtml",
+					title: "Home Page",
+					type: "html",
+					searchHelper: formHelper,
+					search: function(inputModel, form, model, context) {
+						var deferred = $q.defer();
+						PagesDefinition.getUserAllowedPages().then(function(resp) {
+							var pagesArray = [];
+							_.forOwn(_.cloneDeep(resp), function(v, k) {
+								if (v.directAccess) pagesArray.push(v)
+							});
+							deferred.resolve({
+								headers: {
+									"x-total-count": pagesArray.length
+								},
+								body: pagesArray
+							});
+						}, deferred.reject);
+						return deferred.promise;
+					},
+					onSelect: function(valueObj, model, context) {
+						model.landing = valueObj;
+						irf.HOME_PAGE = {
+							"url": valueObj.uri,
+							"to": valueObj.state,
+							"params": valueObj.stateParams,
+							"iconClass": valueObj.iconClass,
+							"title": valueObj.title
+						};
+						localStorage.setItem("UserHomePage", JSON.stringify(irf.HOME_PAGE));
+					},
+					getListDisplayItem: function(item, index) {
+						return ['<span><i class="'+item.iconClass+'">&nbsp;</i>'+translateFilter(item.title)+'<span class="pull-right">'+irf.pageNameHtml(item.stateParams.pageName&&item.stateParams.pageName.match('(^.+)[.]')&&item.stateParams.pageName.match('(^.+)[.]')[1]||item.stateParams.pageName||item.state)+'</span></span>'];
+					}
+				},
+				{
 					type: "fieldset",
 					title: "LOGGING",
 					items: [
 						{
 							key: "settings.consoleLog",
+							fullwidth: true,
 							onChange: function(modelValue, form, model) {
 								if (!modelValue) {
 									model.settings.consoleLogAutoClear = false;
@@ -68,10 +143,12 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 						},
 						{
 							key: "settings.consoleLogAutoClear",
+							fullwidth: true,
 							condition: "model.settings.consoleLog"
 						},
 						{
 							key: "settings.consoleLogAutoClearDuration",
+							fullwidth: true,
 							condition: "model.settings.consoleLogAutoClear"
 						}
 					]
@@ -85,6 +162,7 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 			},{
 				"type":"button",
 				"icon":"fa fa-refresh",
+				"fieldHtmlClass": "pull-right",
 				"title":"REFRESH_CACHE",
 				"onClick":"actions.refreshMasters()"
 			}]
@@ -92,15 +170,19 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 		actions: {
 			refreshMasters:function(){
 				PageHelper.showLoader();
-				irfStorageService.cacheAllMaster(true,true).then(function(){
-					PageHelper.hideLoader();
+				var p = [
+					irfStorageService.cacheAllMaster(true,true),
+					irfTranslateLoader({forceServer: true})
+				];
+				$q.all(p).then(function(){
 					PM.pop('cache-master',"Synced Successfully.",5000);
 				},function(){
-					PageHelper.hideLoader();
 					PM.pop('cache-master',"Sync Failed, Please Try Again.",5000);
+				}).finally(function(){
+					PageHelper.hideLoader();
+					window.location.hash = '#/' + irf.HOME_PAGE.url;
+					window.location.reload();
 				});
-
-
 			},
 			preSave: function(model, formCtrl, formName) {
 				var deferred = $q.defer();
@@ -119,6 +201,22 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 				}
 				// deferred.reject();
 				return deferred.promise;
+			},
+			changePassword: function(model, formCtrl, form) {
+				PageHelper.clearErrors();
+				if (model.profile.newPassword !== model.profile.newPassword2) {
+					PageHelper.setError({message:'New password & re-enter password are different.'});
+					return false;
+				}
+				Account.changeExpiredPassword({
+					"username": model.profile.login,
+					"oldPassword": model.profile.oldPassword,
+					"newPassword": model.profile.newPassword
+				}).$promise.then(function() {
+					PageHelper.showProgress('user-profile', 'Password changed successfully, Pl Relogin to continue..', 5000);
+				}, function(err) {
+					PageHelper.showErrors(err);
+				});
 			}
 		},
 		schema: {
@@ -131,13 +229,34 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 							"title": "LOGIN",
 							"type": "string"
 						},
-						firstName: {
+						userName: {
 							"title": "USERNAME",
 							"type": "string"
 						},
 						lastName: {
 							"title": "LASTNAME",
 							"type": "string"
+						},
+						oldPassword: {
+							"title": "CURRENT_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
+						},
+						newPassword: {
+							"title": "NEW_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
+						},
+						newPassword2: {
+							"title": "REENTER_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
 						}
 					}
 				},
@@ -156,7 +275,7 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 						language: {
 							"title": "PREFERRED_LANGUAGE",
 							"type": "string",
-							"default": "en",
+							//"default": "en",
 							"x-schema-form": {
 								"type": "select",
 								"titleMap": languageTitleMap
