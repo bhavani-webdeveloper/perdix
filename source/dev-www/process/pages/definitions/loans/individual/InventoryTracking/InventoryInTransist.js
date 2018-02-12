@@ -49,27 +49,27 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
             },
 
             form: [
-            
-
                 {
                     type: "box",
                     title: "INVENTORY_DETAILS",
                     condition:"model.inventory.inventoryTrackerDto.currentStage=='Courier'",
-                    readonly:true,
                     items: [{
                             key: "inventory.inventoryTrackerDto.branchId",
                             "type": "select",
                             "enumCode": "branch_id",
+                            readonly: true
                         },
                         {
                             key: "inventory.inventoryTrackerDto.id",
                             condition:"model.inventory.inventoryTrackerDto.id",
-                            title:"INVENTORY_ID"
+                            title:"INVENTORY_ID",
+                            readonly: true
                         },
                         {
                             key: "inventory.inventoryTrackerDto.batchNumber",
                             condition:"model.inventory.inventoryTrackerDto.id",
-                            "title": "BATCH_NUMBER"
+                            "title": "BATCH_NUMBER",
+                            readonly: true
                         },
                          {
                             key: "inventory.inventoryTrackerDto.consumableInventoryDetailsDTOs",
