@@ -65,17 +65,6 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, Ses
 						var bTime = new moment();
 						model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
 
-						Messaging.getConversationStatus({
-		                    'process_id': model.loanAccount.id
-		                }).$promise.then(function(response) {
-		                    model.conversationStatus = response.body;
-
-							for(var i = 0; i < model.loanSummary.length; i++) {
-								if(model.loanSummary[i].action == 'PROCEED' && _.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id})) {
-									model.loanSummary[i].conversationStatus =  true;
-								}
-							}
-		                });
 
 						var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
 						if(model.currentStage == 'loanView') {
@@ -84,6 +73,18 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, Ses
 
 						model.loanSummary[currentStage].isCurrentStage = true;
 						model.loanSummary[currentStage]._conversationExpand = true;	
+
+						Messaging.getConversationStatus({
+		                    'process_id': model.loanAccount.id
+		                }).$promise.then(function(response) {
+		                    model.conversationStatus = response.body;
+
+							for(var i = 0; i < model.loanSummary.length; i++) {
+								if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
+									model.loanSummary[i].conversationStatus =  true;
+								}
+							}
+		                });
 					}				
 				}).finally(PageHelper.hideLoader);
 			}

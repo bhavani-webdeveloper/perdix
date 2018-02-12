@@ -96,7 +96,7 @@ irf.models.directive("irfMessaging", [function() {
             </div>
         </div>
     </div>
-    <span ng-if="!conversation.messages && readonly" style="text-align: center;display: block;">Conversation is not available</span>
+    
     <div ng-hide="readonly || conversation.messages.length || hideCreateConversation" class="box-footer">
         <img class="img-responsive img-circle img-sm" src="img/unknownUser.jpg">
         <div class="img-push">
