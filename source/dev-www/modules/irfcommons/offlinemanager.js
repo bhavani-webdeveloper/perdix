@@ -67,6 +67,54 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
             irfStorageService.putJSON(getMasterKey(collectionName), item);
             return item.$$STORAGE_KEY$$;
         },
+        storeSqliteItem: function(collectionName, collectionId, item, offlineStrategy) {
+            var deferred = $q.defer();
+            if (offlineStrategy == 'SQLITE' && Utils.isCordova) {
+                if (!item.$$STORAGE_KEY$$) {
+                    item.$$STORAGE_KEY$$ = getOfflineKey(collectionId);
+                    var Storekey = getMasterKey(collectionName);
+                    cordova.plugins.irfSqlite.offlineStoreItem(function(a) {
+                            $log.info("succ callback" + a);
+                            deferred.resolve(item.$$STORAGE_KEY$$);
+                        },
+                        function(b) {
+                            $log.info("err callback" + b);
+                            deferred.reject(b);
+                        }, [{
+                            collection_name: Storekey,
+                            collection_id: item.$$STORAGE_KEY$$,
+                            item: JSON.stringify(item)
+                        }]);
+                } else {
+                    var Storekey = getMasterKey(collectionName);
+                    cordova.plugins.irfSqlite.offlineUpdateItem(function(a) {
+                            $log.info("succ callback" + a);
+                            deferred.resolve(item.$$STORAGE_KEY$$);
+                        },
+                        function(b) {
+                            $log.info("err callback" + b);
+                            deferred.reject(b);
+                        }, [{
+                            collection_name: Storekey,
+                            collection_id: item.$$STORAGE_KEY$$,
+                            item: JSON.stringify(item)
+                        }]);
+                }
+            } else {
+                try {
+                    if (!item.$$STORAGE_KEY$$)
+                        item.$$STORAGE_KEY$$ = getOfflineKey(collectionId);
+
+                    irfStorageService.putJSON(getMasterKey(collectionName), item);
+                    deferred.resolve(item.$$STORAGE_KEY$$);
+                } catch (e) {
+                    deferred.reject(e);
+                }
+
+            }
+            return deferred.promise;
+
+        },
         retrieveItem: function(collectionName, offlineKey) {
             irfStorageService.getJSON(getMasterKey(collectionName), offlineKey);
         },
