@@ -408,31 +408,20 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         if (_.isFunction($scope.bundlePage.preSave)) {
             prePromise = $scope.bundlePage.preSave(offlineData);
         }
-        if (prePromise && _.isFunction(prePromise.then)) {
-            prePromise.then(function() {
-                var offlineSqliteStore = OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
-                offlineSqliteStore.then(function(success) {
-                    $scope.bundleModel.$$STORAGE_KEY$$ = success;
-                    PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
-                    deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
-
-                }, function(err) {
-                    $log.info(err);
-                    deferred.reject(err);
-                })
-            });
-        } else {
-            var offlineSqliteStore = OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
-            offlineSqliteStore.then(function(success) {
-            $scope.bundleModel.$$STORAGE_KEY$$ = success;
-            PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
-            deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
-
-        }, function(err) {
-            $log.info(err);
-            deferred.reject(err);
+        $q.when(prePromise)
+        .then(function(){
+            return OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
         })
-        }
+        .then(
+            function(success){
+                $scope.bundleModel.$$STORAGE_KEY$$ = success;
+                PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
+                deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
+            }, function(err){
+                $log.info(err);
+                deferred.reject(err);
+            }
+        )
         return deferred.promise;
     };
 

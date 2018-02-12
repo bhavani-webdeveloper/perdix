@@ -67,7 +67,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
             irfStorageService.putJSON(getMasterKey(collectionName), item);
             return item.$$STORAGE_KEY$$;
         },
-        storeSqliteItem: function(collectionName, collectionId, item, offlineStrategy) {
+        storeItem_v2: function(collectionName, collectionId, item, offlineStrategy) {
             var deferred = $q.defer();
             if (offlineStrategy == 'SQLITE' && Utils.isCordova) {
                 if (!item.$$STORAGE_KEY$$) {
@@ -184,7 +184,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                     }
                 } else {
                     deferred.reject(error("NODATA", [table, key]));
-                } 
+                }
             }
             return deferred.promise;
         },
@@ -225,7 +225,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                     deferred.resolve(tableData);
                 } else {
                     deferred.reject(error("NODATA", [table, '']));
-                } 
+                }
             }
             return deferred.promise;
         }

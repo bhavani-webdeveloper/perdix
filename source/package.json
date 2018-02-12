@@ -15,7 +15,7 @@
     "chalk": "^1.1.1",
     "class-transformer": "^0.1.8",
     "com.lampa.startapp": "https://github.com/stalingino/com.lampa.startapp.git",
-    "cordova-android": "^6.4.0",
+    "cordova-android": "^6.3.0",
     "cordova-browser": "~4.0.0",
     "cordova-plugin-camera": "~2.1.1",
     "cordova-plugin-datepicker": "~0.9.3",
@@ -27,7 +27,7 @@
     "gulp-cheerio": "^0.6.2",
     "gulp-inject": "^4.2.0",
     "gulp-json-modify": "^1.0.2",
-    "irf-bluetooth-plugin": "~1.1.0",
+    "irf-bluetooth-plugin": "^1.2.0",
     "js-logger": "^1.4.1",
     "npm-git-install": "^0.2.0",
     "phonegap-plugin-barcodescanner": "~4.1.0",
@@ -69,8 +69,8 @@
       "cordova-plugin-geolocation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-whitelist": {},
-      "irf-bluetooth-plugin": {},
-      "phonegap-plugin-barcodescanner": {}
+      "phonegap-plugin-barcodescanner": {},
+      "irf-bluetooth-plugin": {}
     }
   }
 }
