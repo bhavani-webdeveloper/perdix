@@ -149,7 +149,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         'branchId': searchOptions.branchId || SessionStore.getBranchId(),
                         'centreId': searchOptions.centre,
                         'customerName': searchOptions.first_name,
-                        'promisreToPayDate': searchOptions.promisreToPayDate,
+                        'promiseToPayDate': searchOptions.promisreToPayDate,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'assignedTo': searchOptions.assignedTo
