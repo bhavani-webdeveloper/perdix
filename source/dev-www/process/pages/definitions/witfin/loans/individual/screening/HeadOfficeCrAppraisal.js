@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries,  Utils, IndividualLoan, BundleManager) {
                 return {
                     "type": "page-bundle",
-                    "title": "HEAD_OFFICE_CREDIT_APPRAISAL",
+                    "title": "HO_CREDIT_APPRAISAL_QUEUE",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
