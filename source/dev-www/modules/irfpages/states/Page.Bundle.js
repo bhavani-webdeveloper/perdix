@@ -410,14 +410,28 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
         if (prePromise && _.isFunction(prePromise.then)) {
             prePromise.then(function() {
-                $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-                PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
-                deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
+                var offlineSqliteStore = OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
+                offlineSqliteStore.then(function(success) {
+                    $scope.bundleModel.$$STORAGE_KEY$$ = success;
+                    PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
+                    deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
+
+                }, function(err) {
+                    $log.info(err);
+                    deferred.reject(err);
+                })
             });
         } else {
-            $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-            PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
+            var offlineSqliteStore = OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
+            offlineSqliteStore.then(function(success) {
+            $scope.bundleModel.$$STORAGE_KEY$$ = success;
+            PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
             deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
+
+        }, function(err) {
+            $log.info(err);
+            deferred.reject(err);
+        })
         }
         return deferred.promise;
     };
