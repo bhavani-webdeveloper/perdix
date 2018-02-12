@@ -14,7 +14,8 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                 "Page/Engine/loans.individual.documentTracking.BatchInTransitQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingVerificationQueue",
                 "Page/Engine/loans.individual.documentTracking.QualityCheckQueue",
-                "Page/Engine/loans.individual.documentTracking.PendingFilingQueue"
+                "Page/Engine/loans.individual.documentTracking.PendingFilingQueue",
+                "Page/Engine/loans.individual.documentTracking.BulkFiling"
             ]
         };
 

@@ -39,5 +39,26 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             url:endpoint+'/getbyAccountNumber'
         }
     });
+
+    resource.BulkFileUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/accountDocumentTracking/bulkFileUpload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp) {
+                // TODO handle success
+                PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp) {
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
+
+
     return resource;
 }]);
