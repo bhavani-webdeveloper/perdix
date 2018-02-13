@@ -162,6 +162,7 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                                     'pageName': 'audit.AuditDetails',
                                     'pageId': item.audit_id,
                                     'pageData': {
+                                        "type": "audit",
                                         "readonly": !(item.current_stage == 'start' || item.current_stage == 'create')
                                     }
                                 }, {

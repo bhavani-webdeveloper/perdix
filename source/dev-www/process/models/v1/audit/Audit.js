@@ -9,6 +9,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
 
         ret.utils = {
             auditStatusHtml: function(auditInfo, withText) {
+                if (!auditInfo) return false;
                 var audit_flag_html = '';
                 if (auditInfo._sync === false) {
                     audit_flag_html = '<i class="fa fa-warning text-yellow">&nbsp;</i>' + (withText ? 'Non sync ' : '');
@@ -17,7 +18,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 } else if (auditInfo._online && auditInfo._offline) {
                     audit_flag_html = '<i class="fa fa-check text-green">&nbsp;</i>' + (withText ? 'In Sync ' : '');
                 } else if (auditInfo._offline) {
-                    audit_flag_html = '<i class="fa fa-recycle text-darkgray">&nbsp;</i>' + (withText ? 'Trash ' : '');
+                    audit_flag_html = '<i class="fa fa-recycle text-darkgray">&nbsp;</i>' + (withText ? 'Offline ' : '');
                 } else {
                     audit_flag_html = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
@@ -27,9 +28,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 Utils.downloadFile(endpoint + "/downloadSampleSet");
             },
             isIssueApplicable: function(typeOfIssueId, responsibilityType, roleId) {
-                var draftIssues = master.typeofissues[typeOfIssueId].responsibility
-                    // if(typeOfIssueId ==)
-
+                return typeOfIssueId && responsibilityType && roleId && master.typeofissues[typeOfIssueId].responsibility
+                    && _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
             },
             getRatingByScore: function(master, score) {
                 $log.info(master)
@@ -61,6 +61,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                                 } else {
                                     offlineAuditInfo._sync = false;
                                 }
+                                offlineAuditInfo._online = true;
+                                ret.offline.setAuditInfo(offlineAuditInfo.audit_id, offlineAuditInfo);
                                 offlineAuditInfo.$picked = true;
                                 onlineAuditInfo = offlineAuditInfo;
                             }

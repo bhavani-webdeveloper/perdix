@@ -15,7 +15,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
 
         $scope.pageName = $stateParams.pageName;
         $scope.model = {
-            "readonly": $stateParams.pageData.readonly
+            "readonly": $stateParams.pageData.readonly,
+            "type": $stateParams.pageData.type
         };
         $scope.formHelper = formHelper;
         $scope.siteCode = SessionStore.getGlobalSetting('siteCode');
@@ -29,6 +30,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         <i ng-if="item.icon" class="{{item.icon}}">&nbsp;</i>\
         {{item.title | translate}}\
     </button>\
+    <span class="pull-right" style="padding-top: 6px;padding-right: 15px;" ng-bind-html="model.actions.getOfflineStatus(model.ai)"></span>\
 </div></div></div>';
 
         var processAuditData = function(auditData) {
@@ -36,77 +38,44 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             $scope.model.ai = auditData.audit_info;
             $scope.model._isOnline = $scope.$isOnline;
         };
-        var formType = {
+        var reportForm = {
             "type": "section",
             "htmlClass": "row",
             "colClass": "col-sm-12",
             "items": []
         }
-        var fileView = function() {
-                var tableColumnsConfig = [];
-                for (i in $scope.model.auditData.process_compliance) {
-                    var processComplianceData = $scope.model.auditData.process_compliance[i]
-                    for (j in processComplianceData.auto_sampling) {
-                        var sampleSet = processComplianceData.auto_sampling[j];
-                        for (k in master.summary_rating) {
-                            var ratingName = master.summary_rating[k].name;
-                            var sampleSetId = sampleSet.scoring_sample_type_id;
-                            if (_.hasIn(master.scoring_sample_sets[sampleSetId], 'scoring_sample_type')) {
-                                var scoringSampleSet = master.scoring_sample_sets[sampleSetId].scoring_sample_type
-                            }
 
+        var userRole = SessionStore.getUserRole();
+        var reportView = {
+            SAMPLE: function(responsibilityType) {
+                var as = $scope.model.auditData.process_compliance.auto_sampling;
+                var sampleMap = {};
+                for (i in as) {
+                    for (j in as[i].sample_set) {
+                        var sample = as[i].sample_set[j];
+                        if (sample.status === "0") {
+                            var sMap = sampleMap[sample.sample_id];
+                            if (!sMap) {
+                                sMap = {
+                                    type: 'SAMPLE',
+                                    id: sample.sample_id,
+                                    name: sample.column_values[0],
+                                    count: 0
+                                };
+                                sampleMap[sample.sample_id] = sMap;
+                            }
+                            for (k in sample.issue_details) {
+                                var issue = sample.issue_details[k];
+                                if (Audit.Utils.isIssueApplicable(issue.type_of_issue_id, responsibilityType, userRole.id)) {
+                                    sMap.count ++;
+                                }
+                            }
                         }
-                        // break;
                     }
                 }
-                tableColumnsConfig.push({
-                    "title": "RATING",
-                    "data": 'ratingName'
-                }, {
-                    "title": "SAMPLES",
-                    "data": 'scoringSampleSet',
-
-                });
-                var columnForm = {
-                    "title": "AUDIT_REPORT_DETAILS",
-                    "colClass": "col-sm-12",
-                    "items": [{
-                        "type": "tableview",
-                        "selectable": false,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": true,
-                            "paginate": true,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return tableColumnsConfig; //its coming from after adding issue
-                        },
-                        getActions: function() {
-                            return [{
-                                name: "REVIEW_DETAILS",
-                                icon: "fa fa-pencil-square-o",
-                                fn: function(item, index) {
-                                    irfNavigator.go({
-                                        'state': 'Page.Engine',
-                                        'pageName': 'audit.AuditIssues',
-                                        'pageId': item.id + ":" + viewType + ":" + viewTypeId,
-                                        'pageData': {
-                                            "readonly": $scope.model.readonly,
-                                            "type": $scope.model.type
-                                        }
-                                    });
-                                },
-                                isApplicable: function(item, index) {
-                                    return true;
-                                }
-                            }];
-                        }
-                    }]
-                }
-                return columnForm;
+                return fileViewForm;
             }
-            // return $scope.model.type;
+        };
 
         var processView = function() {
             for (i in master.summary_rating) {
@@ -364,6 +333,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     v.onClick = function(event, menu) {
                         var pageData = {};
                         pageData.readonly = $stateParams.pageData.readonly;
+                        pageData.type = $stateParams.pageData.type;
                         if ($scope.$isOnline) {
                             pageData.auditData = $scope.model.auditData;
                         }
@@ -418,7 +388,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             }, {
                 key: "ai.message",
                 type: "textarea",
-                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly"
+                "condition": "actions.showAddMessage(model)"
             }]
         }, {
             "type": "box",
@@ -438,22 +408,40 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     "value": "RISK"
                 }],
                 onChange: function(value, form, model) {
-                    switch (value) {
-                        case "SAMPLE":
-                            var groupForm = fileView();
-                            formType.items[0] = groupForm;
-                            break;
-                        case "PROCESS":
-                            var groupForm = processView();
-                            formType.items[0] = groupForm;
-                            break;
-                        case "RISK":
-                            var groupForm = riskView();
-                            formType.items[0] = groupForm;
-                            break;
-                    }
+                    $scope.model.report = reportView[value]('draft'); // TODO: next phase dev: responsibilityType [draft|fix]
                 }
-            }, formType]
+            }, {
+                "type": "tableview",
+                "key": "model.report",
+                getColumns: function() {
+                    return [{
+                        "title": "SAMPLE_NAME",
+                        "data": 'name'
+                    }, {
+                        "title": "NO_OF_ISSUES",
+                        "data": 'count'
+                    }];
+                },
+                getActions: function() {
+                    return [{
+                        "name": "VIEW_ISSUES",
+                        fn: function(item, index) {
+                            irfNavigator.go({
+                                'state': 'Page.Engine',
+                                'pageName': 'audit.AuditIssues',
+                                'pageId': $this.auditId + ":" + item.type + ":" + item.id,
+                                'pageData': {
+                                    "readonly": $scope.model.readonly,
+                                    "type": $scope.model.type
+                                }
+                            });
+                        },
+                        isApplicable: function(item, index) {
+                            return true;
+                        }
+                    }];
+                }
+            }]
 
         }, {
             "type": "box",
@@ -487,43 +475,22 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "onClick": "actions.resyncAuditData(model)"
             }, {
                 "type": "button",
-                "condition": "model.ai._dirty",
+                "condition": "model.ai._dirty && model.type == 'audit'",
                 "title": "UPLOAD",
                 "icon": "fa fa-upload",
                 "onClick": "actions.uploadAuditData(model)"
             }, {
                 "type": "button",
-                "condition": "!model.ai._dirty && (model.ai.current_stage == 'start' || model.ai.current_stage == 'create')",
-                "title": "PUBLISH",
-                "onClick": "actions.moveStage(model)"
+                "condition": "actions.showProceed(model)",
+                "title": "PROCEED",
+                "onClick": "actions.proceed(model)"
             }, {
                 "type": "button",
-                "condition": "model.ai.status == 'O' && model.ai.draft_count > 0",
-                "title": "DRAFT",
-                "onClick": "actions.moveStage(model)"
-            }, {
-                "type": "button",
-                "condition": "!model.ai._dirty && model.ai.current_stage == 'publish'",
-                "title": "APPROVE",
-                "onClick": "actions.moveStage(model)"
-            }, {
-                "type": "button",
-                "condition": "!model.ai._dirty && model.ai.current_stage == 'publish'",
+                "condition": "actions.showReject(model)",
                 "title": "REJECT",
-                "onClick": "actions.moveStage(model, true)"
-            }, {
-                "type": "button",
-                "condition": "!model.ai._dirty && model.ai.current_stage == 'L1-approve'",
-                "title": "APPROVE",
-                "onClick": "actions.moveStage(model)"
-            }, {
-                "type": "button",
-                "condition": "!model.ai._dirty && model.ai.current_stage == 'L1-approve'",
-                "title": "REJECT",
-                "onClick": "actions.moveStage(model, true)"
+                "onClick": "actions.reject(model)"
             }]
         }];
-
 
 
         $scope.form.push();
@@ -573,50 +540,91 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         };
 
         $scope.actions = {
-            moveStage: function(model, sendBack) {
-                var nextStage = '';
-                if (sendBack) {
-                    switch (model.ai.current_stage) {
-                        case 'publish':
-                            nextStage = 'start';
-                            break;
-                        case 'L1-approve':
-                            nextStage = 'publish';
-                            break;
-                        default:
-                            return;
-                    }
-                    if (!model.ai.message) {
-                        PageHelper.setError({
-                            message: 'Audit reject message is required'
-                        });
-                        return;
-                    }
-                } else {
+            showAddMessage: function(model) {
+                if (!model.ai) return;
+                if (!model.ai._dirty && !model.readonly && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'start':
                         case 'create':
-                            nextStage = 'publish';
-                            break;
+                        case 'draft':
                         case 'publish':
-                            if ($scope.siteCode == 'KGFS')
-                                nextStage = 'approve';
-                            else
-                                nextStage = 'L1-approve';
-                            break;
                         case 'L1-approve':
-                            nextStage = 'approve';
-                            break;
-                        default:
-                            return;
-                    }
-                    if (!model.ai.message) {
-                        PageHelper.setError({
-                            message: 'Audit ' + nextStage + ' message is required'
-                        });
-                        return;
+                            return true;
                     }
                 }
+                return false;
+            },
+            showProceed: function(model) {
+                if (!model.ai) return;
+                if (!model.ai._dirty && model.type == 'audit') {
+                    return true;
+                }
+                return false;
+            },
+            showReject: function(model) {
+                if (!model.ai) return;
+                if (!model.ai._dirty && model.type == 'audit') {
+                    switch (model.ai.current_stage) {
+                        case 'publish':
+                        case 'L1-approve':
+                            return true;
+                    }
+                }
+                return false;
+            },
+            proceed: function(model) {
+                if (!model.ai) return;
+                var nextStage = '';
+                switch (model.ai.current_stage) {
+                    case 'start':
+                    case 'create':
+                        nextStage = $scope.siteCode == 'kinara'? 'draft': 'publish';
+                        break;
+                    case 'draft':
+                        nextStage = 'publish';
+                        break;
+                    case 'publish':
+                        if ($scope.siteCode == 'KGFS')
+                            nextStage = 'approve';
+                        else
+                            nextStage = 'L1-approve';
+                        break;
+                    case 'L1-approve':
+                        nextStage = 'approve';
+                        break;
+                    default:
+                        return;
+                }
+                if (!model.ai.message) {
+                    PageHelper.setError({
+                        message: 'Audit ' + nextStage + ' message is required'
+                    });
+                    return;
+                }
+                $scope.actions.moveStage(model, nextStage);
+            },
+            reject: function(model) {
+                if (!model.ai) return;
+                var rejectStage = '';
+                switch (model.ai.current_stage) {
+                    case 'publish':
+                        rejectStage = 'start';
+                        break;
+                    case 'L1-approve':
+                        rejectStage = 'publish';
+                        break;
+                    default:
+                        return;
+                }
+                if (!model.ai.message) {
+                    PageHelper.setError({
+                        message: 'Audit reject message is required'
+                    });
+                    return;
+                }
+                $scope.actions.moveStage(model, rejectStage);
+            },
+            moveStage: function(model, nextStage) {
                 PageHelper.clearErrors();
                 Utils.confirm("All unsaved data will be lost, Do you want to proceed?").then(function() {
                     var reqData = $scope.model.ai;
@@ -662,9 +670,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         audit_id: $this.auditId
                     }).$promise.then(function(response) {
                         PageHelper.hideLoader();
+                        response.audit_info._online = true;
                         response.audit_info._offline = true;
                         response.audit_info._dirty = false;
                         Audit.offline.setAudit($this.auditId, response);
+                        processAuditData(response);
                         PageHelper.showProgress("audit", "Synchronized successfully", 3000);
                     }).finally(function() {
                         PageHelper.hideLoader();
@@ -676,6 +686,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             },
             getUsername: function(userId) {
                 return User.offline.getDisplayName(userId);
+            },
+            getOfflineStatus: function(auditInfo) {
+                return Audit.utils.auditStatusHtml(auditInfo, true);
             }
         };
         $scope.model.actions = $scope.actions;
