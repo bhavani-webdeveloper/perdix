@@ -321,6 +321,10 @@ define([],function(){
                     "DeductionsFromLoan.estimatedEmi",
                     "DeductionsFromLoan.calculateDisbursedAmount",
                     "DeductionsFromLoan.netDisbursementAmount",
+                    "DeductionsFromLoan.actualFranking",
+                    "DeductionsFromLoan.vehicleInsurance",
+                    "DeductionsFromLoan.personalInsurance",
+                    "DeductionsFromLoan.irr",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -365,10 +369,9 @@ define([],function(){
                     "NewVehicleDetails.usedFor",
                     "NewVehicleDetails.segment",
                     "NewVehicleDetails.category",
-                    "NewVehicleDetails.manufacturer",
+                    "NewVehicleDetails.manufactureDate",
                     "NewVehicleDetails.make",
                     "NewVehicleDetails.vehicleModel",
-                    "NewVehicleDetails.manufactureDate",
                     "NewVehicleDetails.assetDetails",
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
@@ -446,6 +449,46 @@ define([],function(){
                                     model.loanAccount.estimatedEmi = null;
                                 }
                             },
+                            "NewVehicleDetails.vehicleType": {
+                                "orderNo": 10,
+                                "enumCode": "enterprise_asset_type"
+                            },
+                            "NewVehicleDetails.endUse": {
+                                "orderNo": 20
+                            },
+                            "NewVehicleDetails.usedFor": {
+                                "orderNo": 30
+                            },
+                            "NewVehicleDetails.segment":{
+                                "orderNo": 40,
+                                "enumCode": "vehicle_segment"
+                            },
+                            "NewVehicleDetails.category": {
+                                "orderNo": 50,
+                                "enumCode": "vehicle_type"
+                            },
+                            "NewVehicleDetails.make": {
+                                "orderNo": 60
+                            },
+                            "NewVehicleDetails.vehicleModel":{
+                                "orderNo": 70
+                            },
+                            "NewVehicleDetails.manufactureDate": {
+                                "orderNo": 80
+                            },
+                            "NewVehicleDetails.assetDetails":{
+                                "orderNo": 90
+                            },
+                            "NewVehicleDetails.assetSubDetails":{
+                                "orderNo": 100,
+                                "title": "SUB_DESCRIPTION"
+                            },
+                            "NewVehicleDetails.registrationNumber":{
+                                "orderNo": 110
+                            },
+                            "NewVehicleDetails.originalInvoiceValue":{
+                                "orderNo": 120
+                            }
                         },
                         "includes": getIncludes (model),
                         "excludes": [
@@ -475,7 +518,7 @@ define([],function(){
                                                             frequencyRequested = 4;
                                                             break;
                                                         case 'Weekly':
-                                                            frequencyRequested = 4;
+                                                            frequencyRequested = parseInt(365/7);
                                                             break;
                                                         case 'Yearly': 
                                                             frequencyRequested = 1;   
@@ -496,44 +539,105 @@ define([],function(){
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
                                             "orderNo": 30
                                         },
+                                        "actualFranking": {
+                                            "key": "loanAccount.fee3",
+                                            "title": "ACTUAL_FRANKING",
+                                            "orderNo": 40
+                                        },
+                                        "personalInsurance": {
+                                            "key": "loanAccount.expectedPortfolioInsurancePremium",
+                                            "title": "PERSONAL_INSURANCE",
+                                            "orderNo": 50
+                                        },
+                                        "vehicleInsurance": {
+                                            "key": "loanAccount.fee4",
+                                            "title": "VEHICLE_INSURANCE",
+                                            "orderNo": 60
+                                        },
+                                        "irr": {
+                                            "key": "xirr",
+                                            "title": "XIRR",
+                                            "orderNo": 110,
+                                            "readonly": true
+                                        },
                                         "calculateDisbursedAmount": {
                                             "type": "button",
                                             "title": "CALCULATE_DISBURSED_AMOUNT",
-                                            "orderNo": 40,
+                                            "orderNo": 90,
                                              onClick: function (model, formCtrl) {
                                                 var processingFee;
                                                 var dsaPayout;
+                                                var frankingCharge;
+                                                var frequency;
+                                                var frequencyRequested;
                                                 processFee = (model.loanAccount.expectedProcessingFeePercentage/100)*model.loanAccount.loanAmountRequested;
                                                 dsaPayout = (model.loanAccount.dsaPayout/100)*model.loanAccount.loanAmountRequested;
-                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - dsaPayout;
-                                                if(model.loanAccount.frequencyRequested == "Monthly") {
-                                                    frequency = "M"
-                                                } else if (model.loanAccount.frequencyRequested == "Yearly") {
-                                                    frequency = "Y"
+                                                frankingCharge = model.loanAccount.fee3;
+                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - dsaPayout - frankingCharge;
+                                                switch(model.loanAccount.frequencyRequested) {
+                                                    case 'Monthly':
+                                                        frequency = "MONTH";
+                                                        break;
+                                                    case 'Weekly':
+                                                        frequency = "WEEK";
+                                                        break;
+                                                    case 'Yearly':
+                                                        frequency = "YEAR";
+                                                        break;
+                                                    case 'Fortnightly':
+                                                        frequency = "FORTNIGHT";
+                                                        break;
+                                                    case 'Quarterly':
+                                                        frequency = "QUARTER";
+                                                        break;
+                                                    case 'Daily':
+                                                        frequency = "DAY";
+                                                        break;      
                                                 }
-                                                LoanProcess.findPreOpenSummary({
-                                                    "loanAmount": model.loanAccount.loanAmountRequested,
-                                                    "tenure": model.loanAccount.tenureRequested,
-                                                    "frequency": frequency,
-                                                    "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                    "productCode": "IRRTP",
-                                                    "moratoriumPeriod": "0",
-                                                    "openDate": Utils.getCurrentDate(),
-                                                    "branchId": model.loanAccount.branchId,
-                                                    "firstRepaymentDate": moment().add(30, 'days').format("YYYY-MM-DD"),
-                                                    "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                    "scheduledDisbursementAmount": model.netDisbursementAmount
-                                                })
-                                                .$promise
-                                                .then(function (resp){
-                                                    $log.info(resp);
-                                                });
+                                                switch(model.loanAccount.frequencyRequested) {
+                                                        case 'Daily':
+                                                            frequencyRequested = 1;
+                                                            break;
+                                                        case 'Fortnightly':
+                                                            frequencyRequested = 15;
+                                                            break;
+                                                        case 'Monthly':
+                                                            frequencyRequested = 30;
+                                                            break;
+                                                        case 'Quarterly':
+                                                            frequencyRequested =120;
+                                                            break;
+                                                        case 'Weekly':
+                                                            frequencyRequested = 7;
+                                                            break;
+                                                        case 'Yearly': 
+                                                            frequencyRequested = 365;   
+                                                    }
+
+                                                    LoanProcess.findPreOpenSummary({
+                                                        "loanAmount": model.loanAccount.loanAmountRequested,
+                                                        "tenure": model.loanAccount.tenureRequested,
+                                                        "frequency": frequency,
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "productCode": "IRRTP",
+                                                        "moratoriumPeriod": "0",
+                                                        "openDate": Utils.getCurrentDate(),
+                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId, 
+                                                        "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                    })
+                                                    .$promise
+                                                    .then(function (resp){
+                                                        $log.info(resp);
+                                                        model.xirr = resp.xirr;
+                                                    });
                                             }
                                         },
                                         "netDisbursementAmount": {
                                             "key": "netDisbursementAmount",
                                             "title": "NET_DISBURSEMENT_AMOUNT",
-                                            "orderNo" : 50,
+                                            "orderNo" : 100,
                                             "type": "number",
                                             "readonly": true
                                         },
@@ -541,7 +645,7 @@ define([],function(){
                                             "key": "loanAccount.securityEmiRequired",
                                             "title": "ADVANCE_EMI",
                                             "type": "radios",
-                                            "orderNo": 60
+                                            "orderNo": 70
                                         }
                                     }
                                 }

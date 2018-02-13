@@ -779,6 +779,20 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getVehiclePrice = function (vehicleId){
+            var deferred = $q.defer();
+            var request = {};
+            request.vehicleId = vehicleId;
+            resource.getResult("vehiclePriceEvaluation.list", request)
+                .then(function(response){
+                    if (response && _.isArray(response.results) && response.results.length > 0) {
+                        deferred.resolve(response.results[0]);
+                    } else {
+                        deferred.resolve(null);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        };
 
         return resource;
     }
