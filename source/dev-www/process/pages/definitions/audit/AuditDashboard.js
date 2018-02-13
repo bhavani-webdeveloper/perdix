@@ -154,8 +154,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (doaq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
-                        'audit_type': 0,
-                        'status': 'O'
+                        'current_stage': 'draft',
+                        'status': 'D'
                     }).$promise.then(function(data) {
                         doaq.data = data.body.length;
                     });
@@ -164,8 +164,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (daaq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
-                        'audit_type': 0,
-                        'status': 'O'
+                        'current_stage': 'draft',
+                        'status': 'D'
                     }).$promise.then(function(data) {
                         daaq.data = data.body.length;
                     });

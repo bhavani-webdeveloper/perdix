@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Utils", "PageHelper", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore","User", "Queries",
+    function($log, Utils, PageHelper, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore, User, Queries) {
         var localFormController;
         var returnObj = {
             "type": "search-list",
@@ -13,6 +13,21 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
+                    model.auditor_role_id = Number(value);
+                }, PageHelper.showErrors);
             },
             definition: {
                 title: "SEARCH_AUDITS",
@@ -60,7 +75,6 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                         }
                     },
                     "branch_id",
-                    "audit_type",
                     "report_date",
                     "start_date",
                     "end_date"
@@ -88,14 +102,6 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                             "title": "BRANCH_ID",
                             "type": "number",
                             "enumCode": "branch_id",
-                            "x-schema-form": {
-                                "type": "select"
-                            }
-                        },
-                        "audit_type": {
-                            "title": "AUDIT_TYPE",
-                            "type": "number",
-                            "enumCode": "audit_type",
                             "x-schema-form": {
                                 "type": "select"
                             }
@@ -142,7 +148,6 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                     Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
-                        'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
@@ -197,13 +202,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                         }, {
                             title: 'AUDITOR_ID',
                             data: 'auditor_id'
-                        }, {
-                            title: 'AUDIT_TYPE',
-                            data: 'audit_type',
-                            render: function(data, type, full, meta) {
-                                return masterJson.audit_type[data].audit_type;
-                            }
-                        }, {
+                        },{
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
                         }, {
@@ -253,7 +252,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                                     }
                                 }, {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.OpenRegularAuditsQueue',
+                                    'pageName': 'audit.DraftOperationQueue',
                                     'pageData': {
                                         "page": returnObj.definition.listOptions.tableConfig.page
                                     }
