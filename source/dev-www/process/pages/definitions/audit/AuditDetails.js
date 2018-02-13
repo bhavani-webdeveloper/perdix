@@ -66,14 +66,18 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             }
                             for (k in sample.issue_details) {
                                 var issue = sample.issue_details[k];
-                                if (Audit.Utils.isIssueApplicable(issue.type_of_issue_id, responsibilityType, userRole.id)) {
+                                if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, userRole.id)) {
                                     sMap.count ++;
                                 }
                             }
                         }
                     }
                 }
-                return fileViewForm;
+                var sampleReport = [];
+                _.forOwn(sampleMap, function(v, k) {
+                    sampleReport.push(v);
+                });
+                return sampleReport;
             }
         };
 
@@ -412,7 +416,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }
             }, {
                 "type": "tableview",
-                "key": "model.report",
+                "condition": "model.report",
+                "key": "report",
                 getColumns: function() {
                     return [{
                         "title": "SAMPLE_NAME",
@@ -556,14 +561,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             },
             showProceed: function(model) {
                 if (!model.ai) return;
-                if (!model.ai._dirty && model.type == 'audit') {
+                if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
                     return true;
                 }
                 return false;
             },
             showReject: function(model) {
                 if (!model.ai) return;
-                if (!model.ai._dirty && model.type == 'audit') {
+                if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'publish':
                         case 'L1-approve':
@@ -673,6 +678,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         response.audit_info._online = true;
                         response.audit_info._offline = true;
                         response.audit_info._dirty = false;
+                        response.audit_info._sync = true;
                         Audit.offline.setAudit($this.auditId, response);
                         processAuditData(response);
                         PageHelper.showProgress("audit", "Synchronized successfully", 3000);

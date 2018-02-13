@@ -15,7 +15,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                     audit_flag_html = '<i class="fa fa-warning text-yellow">&nbsp;</i>' + (withText ? 'Non sync ' : '');
                 } else if (auditInfo._dirty) {
                     audit_flag_html = '<i class="fa fa-pencil text-blue">&nbsp;</i>' + (withText ? 'Dirty ' : '');
-                } else if (auditInfo._online && auditInfo._offline) {
+                } else if (auditInfo._online && auditInfo._offline && !SessionStore.session.offline) {
                     audit_flag_html = '<i class="fa fa-check text-green">&nbsp;</i>' + (withText ? 'In Sync ' : '');
                 } else if (auditInfo._offline) {
                     audit_flag_html = '<i class="fa fa-recycle text-darkgray">&nbsp;</i>' + (withText ? 'Offline ' : '');
@@ -27,7 +27,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             downloadSampleSet: function(auditId, sampleSetId) {
                 Utils.downloadFile(endpoint + "/downloadSampleSet");
             },
-            isIssueApplicable: function(typeOfIssueId, responsibilityType, roleId) {
+            isIssueApplicable: function(master, typeOfIssueId, responsibilityType, roleId) {
                 return typeOfIssueId && responsibilityType && roleId && master.typeofissues[typeOfIssueId].responsibility
                     && _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
             },
