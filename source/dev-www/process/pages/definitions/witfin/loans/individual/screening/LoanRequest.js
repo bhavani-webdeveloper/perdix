@@ -407,10 +407,10 @@ define([],function(){
                     var formRequest = {
                         "overrides": {
                             "VehicleAssetUse": {
-                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial'"
+                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial' && (model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' ||model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                             },
                             "VehicleRouteDetails": {
-                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial'"
+                                "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial' && (model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' ||model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                             },
                             "DeductionsFromLoan.estimatedEmi": {
                                 "readonly": true,
