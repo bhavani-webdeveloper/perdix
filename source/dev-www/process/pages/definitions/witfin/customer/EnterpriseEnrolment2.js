@@ -293,6 +293,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             }
 
+                        },
+                        "loanProcess.loanAccount.isReadOnly": {
+                            "Yes": {
+                                "overrides": {
+                                    "EnterpriseInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseType" : {
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                }
+                               
+                            }
                         }
                     }
             }

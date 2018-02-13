@@ -256,6 +256,44 @@ define([],function(){
                                 }
                             }
                         }
+                    },
+                    "loanProcess.loanAccount.isReadOnly": {
+                        "Yes": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi",
+                                "TeleVerification",
+                                "actionbox"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetUse": {
+                                    "readonly": true
+                                },
+                                "VehicleRouteDetails": {
+                                    "readonly": true
+                                },
+                                "VehicleAssetViability": {
+                                    "readonly": true
+                                },
+                                "VehiclePhotoCaptures": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "NewVehicleDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        }
                     }
 
                 }
@@ -513,7 +551,7 @@ define([],function(){
                                     "type": "box",
                                     "orderNo": 999,
                                     "title": "POST_REVIEW",
-                                    "condition": "model.loanAccount.id",
+                                    "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes'",
                                     "items": [{
                                         key: "review.action",
                                         type: "radios",

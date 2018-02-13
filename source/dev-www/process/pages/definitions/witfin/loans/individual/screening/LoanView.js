@@ -155,6 +155,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         })
                             .subscribe(function(loanProcess){
                             bundleModel.loanProcess = loanProcess;
+                            bundleModel.loanProcess.loanAccount.isReadOnly = "Yes";
                                var loanAccount = loanProcess;
                                 // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
