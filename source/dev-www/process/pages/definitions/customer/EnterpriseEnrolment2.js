@@ -3500,7 +3500,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "type": "button",
                         "icon": "fa fa-circle-o",
                         "title": "SUBMIT",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                        "onClick": "actions.save(model, formCtrl, form, $event)",
+                        "buttonType": "submit"
                     }
                 ]
             },

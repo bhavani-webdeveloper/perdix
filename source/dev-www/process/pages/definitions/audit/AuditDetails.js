@@ -46,157 +46,55 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
 
         var userRole = SessionStore.getUserRole();
-        var reportView = {
-            SAMPLE: function(responsibilityType) {
-                var as = $scope.model.auditData.process_compliance.auto_sampling;
-                var sampleMap = {};
-                for (i in as) {
-                    for (j in as[i].sample_set) {
-                        var sample = as[i].sample_set[j];
-                        if (sample.status === "0") {
-                            var sMap = sampleMap[sample.sample_id];
-                            if (!sMap) {
-                                sMap = {
-                                    type: 'SAMPLE',
-                                    id: sample.sample_id,
-                                    name: sample.column_values[0],
-                                    count: 0
-                                };
-                                sampleMap[sample.sample_id] = sMap;
-                            }
-                            for (k in sample.issue_details) {
-                                var issue = sample.issue_details[k];
-                                if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, userRole.id)) {
-                                    sMap.count ++;
+        var reportView = function(reportType, responsibilityType) {
+            var as = $scope.model.auditData.process_compliance.auto_sampling;
+            var reportMap = {};
+            for (i in as) {
+                for (j in as[i].sample_set) {
+                    var sample = as[i].sample_set[j];
+                    if (sample.status === "0") {
+                        for (k in sample.issue_details) {
+                            var issue = sample.issue_details[k];
+                            if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, userRole.id)) {
+                                var reportKey = null;
+                                var reportKeyName = null;
+                                switch (reportType) {
+                                    case 'SAMPLE':
+                                        reportKey = sample.sample_id;
+                                        reportKeyName = sample.column_values[0];
+                                    break;
+                                    case 'PROCESS':
+                                        reportKey = master.typeofissues[issue.type_of_issue_id].process_id;
+                                        reportKeyName = master.process[reportKey].process_name;
+                                    break;
+                                    case 'RISK':
+                                        reportKey = master.typeofissues[issue.type_of_issue_id].risk_classification;
+                                        reportKeyName = master.risk_classification[master.typeofissues[issue.type_of_issue_id].risk_classification].risk_classification_name;
+                                    break;
                                 }
+                                if (!reportKey || !reportKeyName) continue;
+                                var reportEntry = reportMap[reportKey];
+                                if (!reportEntry) {
+                                    reportEntry = {
+                                        type: reportType,
+                                        id: reportKey,
+                                        name: reportKeyName,
+                                        count: 0
+                                    };
+                                    reportMap[reportKey] = reportEntry;
+                                }
+                                reportEntry.count ++;
                             }
                         }
                     }
                 }
-                var sampleReport = [];
-                _.forOwn(sampleMap, function(v, k) {
-                    sampleReport.push(v);
-                });
-                return sampleReport;
             }
+            var report = [];
+            _.forOwn(reportMap, function(v, k) {
+                report.push(v);
+            });
+            return report;
         };
-
-        var processView = function() {
-            for (i in master.summary_rating) {
-                var ratingName = master.summary_rating[i].name;
-                for (j in master.process) {
-                    var processName = master.process[j].process_name
-                    var tableColumnsConfig = [];
-                    tableColumnsConfig.push({
-                        "title": "RATING",
-                        "data": ratingName
-                    }, {
-                        "title": "PROCESS",
-                        "data": processName,
-
-                    });
-                    var columnForm = {
-                        "type": "box",
-                        "title": "AUDIT_REPORT_DETAILS",
-                        "colClass": "col-sm-12",
-                        "items": [{
-                            "type": "tableview",
-                            "selectable": false,
-                            "editable": false,
-                            "tableConfig": {
-                                "searching": true,
-                                "paginate": true,
-                                "pageLength": 10,
-                            },
-                            getColumns: function() {
-                                return tableColumnsConfig; //its coming from after adding issue
-                            },
-                            getActions: function() {
-                                return [{
-                                    name: "REVIEW_DETAILS",
-                                    icon: "fa fa-pencil-square-o",
-                                    fn: function(item, index) {
-                                        irfNavigator.go({
-                                            'state': 'Page.Engine',
-                                            'pageName': 'audit.AuditIssues',
-                                            'pageId': item.id + ":" + viewType + ":" + viewTypeId,
-                                            'pageData': {
-                                                "readonly": $scope.model.readonly,
-                                                "type": $scope.model.type
-                                            }
-                                        });
-                                    },
-                                    isApplicable: function(item, index) {
-                                        return true;
-                                    }
-                                }];
-                            }
-                        }]
-                    }
-                }
-
-
-            }
-            return columnForm;
-        }
-
-        var riskView = function() {
-            var tableColumnsConfig = [];
-            for (i in master.risk_classification) {
-                var riskClassificationName = master.risk_classification[i].risk_clasification_name;
-                $log.info(riskClassificationName);
-                $log.info("riskClassificationName");
-                // if (scoringSampleSet) {
-                tableColumnsConfig.push({
-                    "title": "RATING",
-                    "data": "rating_name"
-                }, {
-                    "title": "RISK_CLASSIFICATION",
-                    "data": riskClassificationName,
-
-                });
-                // }
-            }
-            var columnForm = {
-                "type": "box",
-                "title": "AUDIT_REPORT_DETAILS",
-                "colClass": "col-sm-12",
-                "items": [{
-                    "type": "tableview",
-                    "selectable": false,
-                    "editable": false,
-                    "tableConfig": {
-                        "searching": true,
-                        "paginate": true,
-                        "pageLength": 10,
-                    },
-                    getColumns: function() {
-                        return tableColumnsConfig;
-                    },
-                    getActions: function() {
-                        return [{
-                            name: "REVIEW_DETAILS",
-                            icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.AuditIssues',
-                                    'pageId': item.id + ":" + viewType + ":" + viewTypeId,
-                                    'pageData': {
-                                        "readonly": $scope.model.readonly,
-                                        "type": $scope.model.type
-                                    }
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        }];
-                    }
-                }]
-            }
-            return columnForm;
-        }
 
         var deferred = $q.defer();
         PageHelper.showLoader();
@@ -412,7 +310,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     "value": "RISK"
                 }],
                 onChange: function(value, form, model) {
-                    $scope.model.report = reportView[value]('draft'); // TODO: next phase dev: responsibilityType [draft|fix]
+                    $scope.model.report = reportView(value, 'draft'); // TODO: next phase dev: responsibilityType [draft|fix]
                 }
             }, {
                 "type": "tableview",
