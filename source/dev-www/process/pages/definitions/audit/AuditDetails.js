@@ -330,7 +330,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         "name": "VIEW_ISSUES",
                         fn: function(item, index) {
                             irfNavigator.go({
-                                'state': 'Page.Adhoc',
+                                'state': 'Page.Engine',
                                 'pageName': 'audit.AuditIssues',
                                 'pageId': $this.auditId + ":" + item.type + ":" + item.id,
                                 'pageData': {
