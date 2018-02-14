@@ -146,7 +146,7 @@
                 "type": "amount",
                 "readonly": true,
                 "title": "EXPECTED_ADVANCE_EMI",
-                "orderNo": 70
+                "orderNo": 80
             }
         }
     },
@@ -188,13 +188,13 @@
             "vehicleType": {
                "key": "loanAccount.vehicleLoanDetails.vehicleType",
                "type": "select",
-               "enumcode": "vehicle_type",
+               "enumCode": "vehicle_type",
                "title": "VEHICLE_TYPE"
             },
             "endUse": {
                "key": "loanAccount.vehicleLoanDetails.endUse",
                "type": "select",
-               "enumcode": "vehicle_end_use",
+               "enumCode": "vehicle_end_use",
                "title": "END_USE_OF_VEHICLE"
             },
             "usedFor": {
@@ -206,31 +206,31 @@
             "segment": {
                "key": "loanAccount.vehicleLoanDetails.segment",
                "type": "select",
-               "enumcode": "vehicle_segment",
+               "enumCode": "vehicle_segment",
                "title": "SEGMENT"
             },
             "category": {
                "key": "loanAccount.vehicleLoanDetails.category",
                "type": "select",
-               "enumcode": "vehicle_category",
+               "enumCode": "vehicle_category",
                "title": "CATEGORY"
             },
             "manufacturer": {
                "key": "loanAccount.vehicleLoanDetails.manufacturer",
                "type": "select",
-               "enumcode": "vehicle_manufacturer",
+               "enumCode": "vehicle_manufacturer",
                "title": "MANUFACTURER"
             },
             "make": {
                "key": "loanAccount.vehicleLoanDetails.make",
                "type": "select",
-               "enumcode": "vehicle_make",
+               "enumCode": "vehicle_make",
                "title": "MAKE"
             },
             "vehicleModel": {
                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                "type": "select",
-               "enumcode": "vehicle_model",
+               "enumCode": "vehicle_model",
                "title": "MODEL"
             },
             "manufactureDate": {
@@ -248,7 +248,7 @@
                "key": "loanAccount.vehicleLoanDetails.assetSubDetails",
                "type": "select",
                "title": "DESCRIPTION",
-               "enumcode": "business_asset_sub_description",
+               "enumCode": "business_asset_sub_description",
                "parentEnumCode": "business_asset_description",
                "parentValueExpr": "model.loanAccount.vehicleLoanDetails.assetDetails"
             },
