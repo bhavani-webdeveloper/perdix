@@ -565,15 +565,15 @@ define([],function(){
                                             "title": "CALCULATE_DISBURSED_AMOUNT",
                                             "orderNo": 90,
                                              onClick: function (model, formCtrl) {
-                                                var processingFee;
+                                                var processFee;
                                                 var dsaPayout;
-                                                var frankingCharge;
                                                 var frequency;
                                                 var frequencyRequested;
+                                                var advanceEmi = model.loanAccount.estimatedEmi;
                                                 processFee = (model.loanAccount.expectedProcessingFeePercentage/100)*model.loanAccount.loanAmountRequested;
                                                 dsaPayout = (model.loanAccount.dsaPayout/100)*model.loanAccount.loanAmountRequested;
                                                 frankingCharge = model.loanAccount.fee3;
-                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - dsaPayout - frankingCharge;
+                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
                                                 switch(model.loanAccount.frequencyRequested) {
                                                     case 'Monthly':
                                                         frequency = "MONTH";
