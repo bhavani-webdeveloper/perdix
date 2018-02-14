@@ -50,3 +50,4 @@ loanCustomerDetails.list=select c.urn_no, IFNULL(lcr.relation, IF(c.id=l.custome
 nextInstallmentDate= SELECT MIN(installment_date) as min_date from repayment_reminder WHERE DATE(installment_date) > CURDATE()
 allusers.list=select u.user_id i, u.user_name n, ur.role_id r, bm.id b from users u, user_roles ur, branch_master bm where u.user_id = ur.user_id and u.branch_name = bm.branch_name
 vehiclePriceEvaluation.list = SELECT * from vehicle_price_evaluation_master 
+AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_purpose_second_level as purpose2,loan_purpose as purpose3 from loan_purpose_mapping_master
