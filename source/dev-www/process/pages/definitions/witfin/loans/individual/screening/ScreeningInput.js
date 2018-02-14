@@ -301,6 +301,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                             })
                     }
 
+                    Queries.getVehiclePrice()
+                        .then(function (response) {
+                            BundleManager.broadcastEvent("get-vehicle-price", response); 
+                        })
                     Queries.getCibilHighmarkMandatorySettings()
                         .then(function(settings){
                             BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
