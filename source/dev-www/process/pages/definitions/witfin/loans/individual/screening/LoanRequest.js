@@ -320,7 +320,6 @@ define([],function(){
                     "DeductionsFromLoan.securityEmiRequired",
                     "DeductionsFromLoan.estimatedEmi",
                     "DeductionsFromLoan.calculateDisbursedAmount",
-                    "DeductionsFromLoan.netDisbursementAmount",
                     "DeductionsFromLoan.actualFranking",
                     "DeductionsFromLoan.vehicleInsurance",
                     "DeductionsFromLoan.personalInsurance",
@@ -664,39 +663,42 @@ define([],function(){
                                         },
                                         "calculateDisbursedAmount": {
                                             "type": "button",
-                                            "title": "CALCULATE_DISBURSED_AMOUNT",
+                                            "title": "CALCULATE_XIRR",
                                             "orderNo": 90,
-                                             onClick: function (model, formCtrl) {
-                                                var processFee;
-                                                var dsaPayout;
-                                                var frequency;
-                                                var frequencyRequested;
-                                                var advanceEmi = model.loanAccount.estimatedEmi;
-                                                processFee = (model.loanAccount.expectedProcessingFeePercentage/100)*model.loanAccount.loanAmountRequested;
-                                                dsaPayout = (model.loanAccount.dsaPayout/100)*model.loanAccount.loanAmountRequested;
-                                                frankingCharge = model.loanAccount.fee3;
-                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
-                                                switch(model.loanAccount.frequencyRequested) {
-                                                    case 'Monthly':
-                                                        frequency = "MONTH";
-                                                        break;
-                                                    case 'Weekly':
-                                                        frequency = "WEEK";
-                                                        break;
-                                                    case 'Yearly':
-                                                        frequency = "YEAR";
-                                                        break;
-                                                    case 'Fortnightly':
-                                                        frequency = "FORTNIGHT";
-                                                        break;
-                                                    case 'Quarterly':
-                                                        frequency = "QUARTER";
-                                                        break;
-                                                    case 'Daily':
-                                                        frequency = "DAY";
-                                                        break;      
-                                                }
-                                                switch(model.loanAccount.frequencyRequested) {
+                                            onClick: function(model, formCtrl) {
+                                                if (model.loanAccount.estimatedEmi != null) {
+                                                    PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 5000);
+                                                } else {
+                                                    var processFee;
+                                                    var dsaPayout;
+                                                    var frequency;
+                                                    var frequencyRequested;
+                                                    var advanceEmi = model.loanAccount.estimatedEmi;
+                                                    processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
+                                                    dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                    frankingCharge = model.loanAccount.fee3;
+                                                    model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
+                                                    switch (model.loanAccount.frequencyRequested) {
+                                                        case 'Monthly':
+                                                            frequency = "MONTH";
+                                                            break;
+                                                        case 'Weekly':
+                                                            frequency = "WEEK";
+                                                            break;
+                                                        case 'Yearly':
+                                                            frequency = "YEAR";
+                                                            break;
+                                                        case 'Fortnightly':
+                                                            frequency = "FORTNIGHT";
+                                                            break;
+                                                        case 'Quarterly':
+                                                            frequency = "QUARTER";
+                                                            break;
+                                                        case 'Daily':
+                                                            frequency = "DAY";
+                                                            break;
+                                                    }
+                                                    switch (model.loanAccount.frequencyRequested) {
                                                         case 'Daily':
                                                             frequencyRequested = 1;
                                                             break;
@@ -707,41 +709,35 @@ define([],function(){
                                                             frequencyRequested = 30;
                                                             break;
                                                         case 'Quarterly':
-                                                            frequencyRequested =120;
+                                                            frequencyRequested = 120;
                                                             break;
                                                         case 'Weekly':
                                                             frequencyRequested = 7;
                                                             break;
-                                                        case 'Yearly': 
-                                                            frequencyRequested = 365;   
+                                                        case 'Yearly':
+                                                            frequencyRequested = 365;
                                                     }
 
                                                     LoanProcess.findPreOpenSummary({
-                                                        "loanAmount": model.loanAccount.loanAmountRequested,
-                                                        "tenure": model.loanAccount.tenureRequested,
-                                                        "frequency": frequency,
-                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                        "productCode": "IRRTP",
-                                                        "moratoriumPeriod": "0",
-                                                        "openDate": Utils.getCurrentDate(),
-                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId, 
-                                                        "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
-                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                        "scheduledDisbursementAmount": model.netDisbursementAmount
-                                                    })
-                                                    .$promise
-                                                    .then(function (resp){
-                                                        $log.info(resp);
-                                                        model.xirr = resp.xirr;
-                                                    });
+                                                            "loanAmount": model.loanAccount.loanAmountRequested,
+                                                            "tenure": model.loanAccount.tenureRequested,
+                                                            "frequency": frequency,
+                                                            "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                            "productCode": "IRRTP",
+                                                            "moratoriumPeriod": "0",
+                                                            "openDate": Utils.getCurrentDate(),
+                                                            "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
+                                                            "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
+                                                            "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                            "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                        })
+                                                        .$promise
+                                                        .then(function(resp) {
+                                                            $log.info(resp);
+                                                            model.xirr = resp.xirr;
+                                                        });
+                                                }
                                             }
-                                        },
-                                        "netDisbursementAmount": {
-                                            "key": "netDisbursementAmount",
-                                            "title": "NET_DISBURSEMENT_AMOUNT",
-                                            "orderNo" : 100,
-                                            "type": "number",
-                                            "readonly": true
                                         },
                                         "securityEmiRequired": {
                                             "key": "loanAccount.securityEmiRequired",

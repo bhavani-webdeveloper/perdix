@@ -76,7 +76,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities",
                     "Liabilities.liabilities",
                     "Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanSourceCategory",
                     "Liabilities.liabilities.loanSource",
+                    "Liabilities.liabilities.loanSource1",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
@@ -370,6 +372,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "type": "select",
                                     "enumCode": "loan_purpose_1"
                                 },
+                                "Liabilities.liabilities.loanSource1": {
+                                    orderNo: 12
+                                },
+                                "Liabilities.liabilities.loanSourceCategory": {
+                                    onChange: function(modelValue, form, model) {
+                                        if (modelValue == 'Friends') {
+                                            model.customer.liabilities[form.arrayIndex].loanSource = 'Friends';
+                                        } else if (modelValue == 'Relatives') {
+                                            model.customer.liabilities[form.arrayIndex].loanSource = 'Relatives';
+                                        }
+                                    }
+                                },
+                                "Liabilities.liabilities.loanSource": {
+                                    "condition": "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Bank/NBFC'"
+                                },
                                 "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
                                     "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
                                 },
@@ -456,6 +473,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseInformation.businessSubsector"
                             ],
                             "options": {
+                                "repositoryAdditions": {
+                                    "Liabilities": {
+                                        "items": {
+                                            "liabilities": {
+                                                "items": {
+                                                    "loanSource1": {
+                                                        "condition": "model.customer.liabilities[arrayIndex].loanSourceCategory == 'Friends' ||  model.customer.liabilities[arrayIndex].loanSourceCategory == 'Relatives'",
+                                                        "key": "customer.liabilities[].loanSource",
+                                                        "title": "LOAN_SOURCE",
+                                                        "readonly": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [
                                     {
                                         "type": "actionbox",
