@@ -235,6 +235,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
                         BundleManager.broadcastEvent('origination-stage', 'Application');
+                        Queries.getVehiclePrice()
+                        .then(function (response) {
+                            BundleManager.broadcastEvent("get-vehicle-price", response); 
+                        });
                     },
                     eventListeners: {
                         "on-customer-load": function(pageObj, bundleModel, params){
