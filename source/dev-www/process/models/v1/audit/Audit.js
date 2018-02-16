@@ -73,6 +73,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                     }
                     angular.forEach(offlineAudits, function(v, k) {
                         if (!v.$picked && v.audit_type == queue_type && v.status == queue_status) {
+                            v._online = false;
+                            ret.offline.setAuditInfo(v.audit_id, v);
                             displayAudits.body.push(v);
                             displayAudits.headers['x-total-count']++;
                         }
