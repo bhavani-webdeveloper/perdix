@@ -1,10 +1,13 @@
-irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log, PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
-        var returnObj = {
-            "type": "search-list",
+irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "elementsUtils", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
+    function($log, Utils, elementsUtils, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
+        var branch = SessionStore.getBranch();
+        return {
+            "type": "schema-form",
             "title": "AUDIT_ISSUES",
             initialize: function(model, form, formCtrl) {
-                model.Audits = model.Audits || {};
+                var self = this;
+                self.form = [];
+                model.audit_issues = model.audit_issues || {};
                 localFormController = formCtrl;
                 syncCheck = false;
                 if (!$stateParams.pageId) {
@@ -12,147 +15,163 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "PageHelper",
                     PageHelper.showProgress("audit", "Audit ID is empty", 5000);
                     return;
                 }
-                $stateParams.pageData = $stateParams.pageData || {};
+                $stateParams.pageData = $stateParams.pageData || [];
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-                var $this = this;
-                if ($stateParams.pageData && $stateParams.pageData.page) {
-                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
-                } else {
-                    returnObj.definition.listOptions.tableConfig.page = 0;
+
+                var ids = $stateParams.pageId.split(':');
+                if (ids.length != 3) {
+                    irfNavigator.goBack();
+                    return;
                 }
+                model.auditId = Number(ids[0]);
+                model.viewType = String(ids[1]);
+                model.viewTypeId = Number(ids[2]);
+
                 model.role_id = SessionStore.getUserRole().id;
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
-            },
-            definition: {
-                title: "SEARCH_ISSUES",
-                searchForm: [
-                    "*"
-                ],
-                autoSearch: true,
-                searchSchema: {
-                    "type": 'object',
-                    "title": 'SEARCH_OPTIONS',
-                    "properties": {
-                        "branch_id": {
-                            "title": "BRANCH_ID",
-                            "type": "number",
-                            "enumCode": "branch_id",
-                            "x-schema-form": {
-                                "type": "select"
-                            }
-                        }
-                    },
-                    "required": []
-                },
-                getSearchFormHelper: function() {
-                    return formHelper;
-                },
-                getResultsPromise: function(searchOptions, pageOpts) {
-                    var deferred = $q.defer();
-                    $q.all([
-                        Audit.online.findIssues({
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "",
-                            'issue_publish': "NO",
-                            'assignee_designation_id': searchOptions.role_id,
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise,
-                    ]).then(function(data) {
-                        var returnObj = {
-                            headers: {},
-                            body: data[0].body
-                        };
-                        var maxCount = 0;
-                        if (data[0].headers['x-total-count']) {
-                            maxCount = returnObj.headers['x-total-count'] = Number(data[0].headers['x-total-count']);
-                        }
-                        deferred.resolve(returnObj);
-                    }, function(data) {
-                        deferred.reject(data[0]);
-                    });
-                    return deferred.promise;
-                },
-                paginationOptions: {
-                    "getItemsPerPage": function(response, headers) {
-                        return 15;
-                    },
-                    "getTotalItemsCount": function(response, headers) {
-                        return headers['x-total-count']
-                    }
-                },
-                listOptions: {
-                    selectable: false,
-                    expandable: true,
-                    listStyle: "table",
-                    itemCallback: function(item, index) {},
-                    getItems: function(response, headers) {
-                        return response && response.length ? response : [];
-                    },
-                    getListItem: function(item) {
-                        return [
-                            item.auditor_id,
-                            item.branch_id,
-                            item.start_date,
-                            item.end_date,
-                            item.report_date
-                        ]
-                    },
-                    tableConfig: {
-                        "serverPaginate": true,
-                        "paginate": false,
-                        "pageLength": 15
-                    },
-                    getTableConfig: function() {
-                        return this.tableConfig;
-                    },
-                    getColumns: function() {
-                        var master = Audit.offline.getAuditMaster();
-                        return [{
-                            title: 'ISSUE',
-                            data: 'id',
-                            render: function(data, type, full, meta) {
-                                return master.typeofissues[full.type_of_issue_id].description;
-                            }
-                        }, {
-                            title: 'AUDITOR_ID',
-                            data: 'auditor_id'
-                        }, {
-                            title: 'BRANCH_NAME',
-                            data: 'branch_id',
-                            render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id].node_code;
-                            }
-                        }]
-                    },
-                    getActions: function() {
-                        return [{
-                            name: "UPDATE_ISSUE",
-                            icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.IssueDetails',
-                                    'pageId': item.id,
-                                    'pageData': {
-                                        "readonly": $stateParams.pageData.readonly,
-                                        "type": $stateParams.pageData.type
+                var master = Audit.offline.getAuditMaster();
+                var processData = function(issuesList) {
+                    $log.info(issuesList);
+                    $log.info("issues1");
+                    var issueMap = {};
+                    model.issues = [];
+                    if (issuesList) {
+                        switch (model.viewType) {
+                            case 'SAMPLE':
+                                _.map(issuesList, function(iss) {
+                                    if (iss.sample_id == model.viewTypeId) {
+                                        model.issues.push(iss);
                                     }
-                                }, {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.AuditIssues'
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        }];
+                                })
+                                break;
+                            case 'PROCESS':
+                                _.map(issuesList, function(iss) {
+                                    if (iss.process_id == model.viewTypeId) {
+                                        model.issues.push(iss);
+                                    }
+                                })
+                                break;
+                            case 'RISK':
+                                _.map(issuesList, function(iss) {
+                                    if (iss.type_of_issue_id == model.viewTypeId) {
+                                        model.issues.push(iss);
+                                    }
+                                })
+                                break;
+                        }
                     }
+
                 }
+                self.form = [{
+                    "type": "box",
+                    "colClass": "col-md-12",
+                    "items": [{
+                        "key": "issues",
+                        "type": "tableview",
+                        "title": "AUDIT_ISSUES",
+                        "selectable": false,
+                        "editable": false,
+                        "tableConfig": {
+                            "searching": true,
+                            "paginate": true,
+                            "pageLength": 10,
+                        },
+                        getColumns: function() {
+                            var master = Audit.offline.getAuditMaster();
+                            return [{
+                                "title": "OBSERVATION",
+                                "data": "id",
+                                render: function(data, type, full, meta) {
+                                    return master.typeofissues[full.type_of_issue_id].description;
+                                }
+                            }, {
+                                "title": "BRANCH_ID",
+                                "data": "branch_id"
+                            }, {
+                                "title": "AUDITOR_ID",
+                                "data": "auditor_id",
+                                render: function(data, type, full, meta) {
+                                    return master.branch_name[full.branch_id].node_code;
+                                }
+                            }];
+                        },
+                        getActions: function() {
+                            return [{
+                                name: "VIEW_ISSUE",
+                                fn: function(item, index) {
+                                    irfNavigator.go({
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.IssueDetails',
+                                        'pageId': item.id,
+                                        'pageData': {
+                                            "type": "draft",
+                                        }
+                                    }, {
+                                        'state': 'Page.Engine',
+                                        'pageName': 'audit.AuditIssues'
+                                    });
+                                },
+                                isApplicable: function(item, index) {
+                                    return true;
+                                }
+                            }];
+                        }
+                    }]
+                }]
+                PageHelper.showLoader();
+                Audit.online.findIssues({
+                    'audit_id': model.auditId,
+                    'issue_publish': "NO"
+                }).$promise.then(function(data) {
+                    processData(data.body);
+                }, function(errRes) {
+                    PageHelper.showErrors(errRes);
+                }).finally(function() {
+                    PageHelper.hideLoader();
+                });
+            },
+            form: [],
+
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "add_fv": {
+                        "type": "object",
+                        "properties": {
+                            "urn": {
+                                "type": ["string", "null"],
+                                "title": "URN",
+                                "maxLength": 16,
+                                "minLength": 16
+                            },
+                            "field_verify_date": {
+                                "type": ["string", "null"],
+                                "title": "FIELD_VERIFY_DATE"
+                            },
+                            "amount": {
+                                "type": "number",
+                                "title": "AMOUNT"
+                            },
+                            "loan_type": {
+                                "type": ["string", "null"],
+                                "title": "LOAN_TYPE"
+                            },
+
+                            "comments": {
+                                "type": ["string", "null"],
+                                "title": "COMMENTS"
+                            },
+                        },
+
+                    }
+                },
+            },
+            actions: {
+
             }
         };
-        return returnObj;
     }
 ]);
