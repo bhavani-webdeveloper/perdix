@@ -144,7 +144,9 @@
       "type": "object",
       "title": "Comment",
       "required": [
-         "groupDetails"
+         "groupDetails",
+         "cgt",
+         "grt"
       ],
       "fields": {
          "groupDetails": {
@@ -540,7 +542,8 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+               ],
                "properties": {
                   "loanPurpose": {
                      "title": "Loan Purpose",
@@ -870,7 +873,7 @@
                }
             }
          },
-		"memberLoanAccount": {
+      "memberLoanAccount": {
         "type":"object",
             "maxItems":null,
             "items":null,
@@ -891,7 +894,7 @@
               "title": "applicationStatus",
               "type": "string",
               "captureStages": [
-			      "GroupCreation",
+               "GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -907,7 +910,7 @@
                "Checker1"
               ]
             },
-			 "applicationStatusUpdatedOn": {
+          "applicationStatusUpdatedOn": {
               "title": "applicationStatusUpdatedOn",
               "type": "date",
               "captureStages": [
@@ -917,7 +920,7 @@
                "Checker1"
               ]
             },
-			 "chk1FileUploadId": {
+          "chk1FileUploadId": {
               "title": "chk1FileUploadId",
               "type": "string",
               "captureStages": [
@@ -927,8 +930,8 @@
                "Checker1"
               ]
             },
-			  
-			 "agreementStatus": {
+           
+          "agreementStatus": {
               "title": "agreementStatus",
               "type": "string",
               "captureStages": [
@@ -938,7 +941,7 @@
                "Checker1"
               ]
             },
-			 "agreementStatusUpdatedBy": {
+          "agreementStatusUpdatedBy": {
               "title": "agreementStatusUpdatedBy",
               "type": "string",
               "captureStages": [
@@ -948,7 +951,7 @@
                "Checker1"
               ]
             },
-			 "agreementStatusUpdatedOn": {
+          "agreementStatusUpdatedOn": {
               "title": "agreementStatusUpdatedOn",
               "type": "date",
               "captureStages": [
@@ -958,7 +961,7 @@
                "Checker1"
               ]
             },
-			"agreementFileId": {
+         "agreementFileId": {
               "title": "agreementFileId",
               "type": "string",
               "captureStages": [
@@ -977,7 +980,25 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+                  "cgt1DoneBy",
+                  "cgt1Photo",
+                  "cgt1EndPhoto",
+                  "cgt1Remarks",
+                  "cgtDate1",
+                  "cgtEndDate1",
+                  "cgt2DoneBy",
+                  "cgt2Photo",
+                  "cgt2EndPhoto",
+                  "cgtDate2",
+                  "cgt2Remarks",
+                  "cgtEndDate2",
+                  "cgt3Photo",
+                  "cgt3EndPhoto",
+                  "cgtDate3",
+                  "cgtEndDate3",
+                  "cgt3Remarks"
+               ],
                "properties": {
                   "cgt1DoneBy": {
                      "title": "CGT1 Done By",
@@ -1192,7 +1213,14 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+                  "grtDoneBy",
+                  "grtPhoto",
+                  "grtEndPhoto",
+                  "grtRemarks",
+                  "grtDate",
+                  "grtEndDate"
+               ],
                "properties": {
                   "grtDoneBy": {
                      "title": "GRT Done By",
