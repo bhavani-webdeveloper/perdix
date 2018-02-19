@@ -84,7 +84,8 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     using: "scanner",
                     title: "DOCUMENT",
                     "category": "Audit",
-                    "subCategory": "AUDITISSUEDOC"
+                    "subCategory": "AUDITISSUEDOC",
+                    "readonly": true
                 }, {
                     key: "auditIssue.draft_document_id",
                     type: "file",
@@ -129,18 +130,13 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "condition": "!model.readonly && model.type=='audit' && model.auditIssue.confirmity_status == 2"
                 }, {
                     type: "textarea",
-                    key: "message",
+                    key: "messages",
                     "condition": "model.type && model.type=='operation'",
                     "title": "RESPONSE"
                 }, {
                     type: "textarea",
-                    key: "message",
-                    "condition": "!model.readonly && model.status=='DO'",
-                    "title": "COMMENTS"
-                }, {
-                    type: "textarea",
-                    key: "message",
-                    "condition": "!model.readonly && model.status=='DR'",
+                    key: "messages",
+                    "condition": "!model.readonly",
                     "title": "COMMENTS"
                 }]
             }, {
@@ -173,19 +169,13 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 "type": "actionbox",
                 "condition": "!model.readonly && model.type=='operation'",
                 "items": [{
-                        "type": "button",
-                        "title": "CLOSE",
-                        "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
-                    }
-                    // ,{
-                    //     "type": "button",
-                    //     "title": "SEND_RESPONSE",
-                    //     "onClick": "actions.updateIssue(model, formCtrl, form, 'send')"
-                    // }
-                ]
+                    "type": "button",
+                    "title": "CLOSE",
+                    "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
+                }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.status=='DO' && model.type == 'operation'",
+                "condition": "!model.readonly && model.auditIssue.status=='DO' && model.type == 'operation'",
                 "items": [{
                     "type": "button",
                     "title": "SUBMIT",
@@ -201,7 +191,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.status=='DR' && model.type == 'audit'",
+                "condition": "!model.readonly && model.auditIssue.status=='DR' && model.type == 'audit'",
                 "items": [{
                     "type": "button",
                     "title": "SUBMIT",
@@ -273,13 +263,13 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                             model.auditIssue.status = 'A';
                         }
                     }
-                    if (model.status == 'DO' && model.type == 'operation') {
+                    if (model.auditIssue.status == 'DO' && model.type == 'operation') {
                         if (actionType == 'accept') {
                             model.auditIssue.status = 'DA';
                         } else if (actionType == 'reject') {
                             model.auditIssue.status = 'DR';
                         }
-                    } else if (model.status == 'DA' && model.type == 'audit') {
+                    } else if (model.auditIssue.status == 'DA' && model.type == 'audit') {
                         if (actionType == 'draftAccept') {
                             model.auditIssue.status = 'DRA';
                         } else if (actionType == 'draftReject') {
