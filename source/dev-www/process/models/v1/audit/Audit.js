@@ -32,8 +32,6 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                     && _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
             },
             getRatingByScore: function(master, score) {
-                $log.info(master)
-                $log.info("master")
                 var rating;
                 _.forOwn(master.summary_rating, function(v, k) {
                     if (master.summary_rating[k].from <= score && score <= master.summary_rating[k].to) {
@@ -370,8 +368,6 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             getAuditMaster: function() {
                 var auditMaster = irfStorageService.getMaster("auditMaster");
-                $log.info(auditMaster);
-                $log.info("auditMaster");
                 if (!auditMaster) PageHelper.setError({
                     message: "Audit master unavailable. Refresh cache & retry"
                 });
@@ -388,8 +384,6 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
             Audit.online.getAuditMaster().$promise.then(function(response) {
-                $log.info(response);
-                $log.info("response");
                 var auditTypeObj = {};
                 var audit_type_enum = {
                     data: []

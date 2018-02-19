@@ -19,7 +19,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-
+                model.type = $stateParams.pageData.type;
                 var ids = $stateParams.pageId.split(':');
                 if (ids.length != 3) {
                     irfNavigator.goBack();
@@ -33,8 +33,6 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 var master = Audit.offline.getAuditMaster();
                 var processData = function(issuesList) {
-                    $log.info(issuesList);
-                    $log.info("issues1");
                     var issueMap = {};
                     model.issues = [];
                     if (issuesList) {
@@ -106,7 +104,8 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                         'pageName': 'audit.IssueDetails',
                                         'pageId': item.id,
                                         'pageData': {
-                                            "type": "draft",
+                                            "type": model.type,
+                                            "readonly": $stateParams.pageData.readonly
                                         }
                                     }, {
                                         'state': 'Page.Engine',
@@ -138,34 +137,9 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "add_fv": {
+                    "audit_issues": {
                         "type": "object",
-                        "properties": {
-                            "urn": {
-                                "type": ["string", "null"],
-                                "title": "URN",
-                                "maxLength": 16,
-                                "minLength": 16
-                            },
-                            "field_verify_date": {
-                                "type": ["string", "null"],
-                                "title": "FIELD_VERIFY_DATE"
-                            },
-                            "amount": {
-                                "type": "number",
-                                "title": "AMOUNT"
-                            },
-                            "loan_type": {
-                                "type": ["string", "null"],
-                                "title": "LOAN_TYPE"
-                            },
-
-                            "comments": {
-                                "type": ["string", "null"],
-                                "title": "COMMENTS"
-                            },
-                        },
-
+                        "properties": {},
                     }
                 },
             },
