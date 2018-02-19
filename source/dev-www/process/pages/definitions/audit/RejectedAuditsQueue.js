@@ -195,9 +195,9 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            // render: function(data, type, full, meta) {
-                            //     return masterJson.audit_type[data].audit_type;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return masterJson.audit_type[data].audit_type;
+                            }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'

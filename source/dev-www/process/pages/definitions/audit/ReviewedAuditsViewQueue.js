@@ -256,11 +256,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsViewQueue"), ["$log", "
                                     var goparam = {
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',
-                                        'pageId': item.audit_id,
-                                        // 'pageData': {
-                                        //     "page": returnObj.definition.listOptions.tableConfig.page,
-                                        //     "readonly": true
-                                        // }
+                                        'pageId': item.audit_id
                                     };
                                     var backparam = {
                                         'state': 'Page.Engine',

@@ -176,9 +176,9 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            // render: function(data, type, full, meta) {
-                            //     return masterJson.audit_type[data].audit_type;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return masterJson.audit_type[data].audit_type;
+                            }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
@@ -201,10 +201,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                                 irfNavigator.go({
                                     'state': 'Page.Engine',
                                     'pageName': 'audit.detail.SnapAuditDetails',
-                                    'pageId': item.audit_id,
-                                    // 'pageData': {
-                                    //     "readonly": item.current_stage !== 'start'
-                                    // }
+                                    'pageId': item.audit_id
                                 }, {
                                     'state': 'Page.Engine',
                                     'pageName': 'audit.OpenSnapAuditsQueue',

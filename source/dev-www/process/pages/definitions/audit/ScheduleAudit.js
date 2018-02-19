@@ -31,8 +31,6 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                         audit_id: $stateParams.pageId
                     }).$promise.then(function(res) {
                         model.auditInfo = res;
-                        $log.info(res);
-                        $log.info("res");
                         model.auditInfoOriginal = _.cloneDeep(res);
                     }, function(errRes) {
                         PageHelper.showErrors(errRes);

@@ -259,10 +259,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsQueue"), ["$log", "Quer
                                     irfNavigator.go({
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',
-                                        'pageId': item.audit_id,
-                                        // 'pageData': {
-                                        //     "readonly": item.current_stage !== 'L1-approve'
-                                        // }
+                                        'pageId': item.audit_id                                       
                                     }, {
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.ReviewedAuditsQueue',

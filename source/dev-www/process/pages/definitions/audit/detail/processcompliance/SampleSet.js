@@ -58,7 +58,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSet"),
                     for (i in response.auto_sampling) {
                         if (response.auto_sampling[i].scoring_sample_type_id == sampleTypeId) {
                             model.sampleSet = response.auto_sampling[i].sample_set;
-                            $log.info(response.auto_sampling[i].sample_set)
                             break;
                         }
                     }

@@ -169,9 +169,6 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditQueue"), ["$log", "Utils", 
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        }, {
-                            title: 'DAYS_LEFT',
-                            data: 'days_left'
                         }]
                     },
                     getActions: function() {

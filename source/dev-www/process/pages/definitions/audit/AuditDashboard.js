@@ -9,6 +9,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
             return;
         }
 
+        var role_id = SessionStore.getUserRole().id;
+
         PagesDefinition.getUserAllowedDefinition({
             "title": "AUDIT_DASHBOARD",
             "items": [
@@ -97,10 +99,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                             'auditor_id': auditor_id,
                             'current_stage': 'scheduled',
                         }).$promise
-                        // Audit.online.getAuditList({
-                        //     'auditor_id': auditor_id,
-                        //     'current_stage': 'reassign',
-                        // }).$1
                     ]).then(function(data) {
                         saqMenu.data = data[0].body.length;
                     });
@@ -111,9 +109,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         Audit.online.getAuditList({
                             'current_stage': 'scheduled'
                         }).$promise
-                        // Audit.online.getAuditList({
-                        //     'current_stage': 'reassign'
-                        // }).$promise
                     ]).then(function(data) {
                         savqMenu.data = data[0].body.length;
                     });
@@ -172,7 +167,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (pavq || paq) {
-                    Audit.online.getAuditList({
+                    Audit.online.getAuditList({                        
+                        'auditor_id': auditor_id,
                         'current_stage': 'publish'
                     }).$promise.then(function(data) {
                         if (pavq) {
@@ -262,11 +258,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     $q.all([
                         Audit.online.findIssues({
                             'issue_status': "A",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise,
                         Audit.online.findIssues({
                             'issue_status': "P",
+                            'assignee_designation_id': role_id,
                             'page': 1,
                             'per_page': 100
                         }).$promise

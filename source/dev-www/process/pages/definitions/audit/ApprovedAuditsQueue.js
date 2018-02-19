@@ -155,11 +155,6 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         return Audit.utils.processDisplayRecords();
                     }
                     var deferred = $q.defer();
-                    // Audit.online.getAuditList().$promise.then(function(res){
-                    //    $log.info(res);
-                    //    $log.info("response");
-                    // });
-
                     Audit.online.getAuditList({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
@@ -212,18 +207,18 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id',
-                            // render: function(data, type, full, meta) {
-                            //     return Audit.utils.auditStatusHtml(full, false) + data;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return Audit.utils.auditStatusHtml(full, false) + data;
+                            }
                         }, {
                             title: 'AUDITOR_ID',
                             data: 'auditor_id'
                         }, {
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
-                            // render: function(data, type, full, meta) {
-                            //     return masterJson.audit_type[data].audit_type;
-                            // }
+                            render: function(data, type, full, meta) {
+                                return masterJson.audit_type[data].audit_type;
+                            }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'

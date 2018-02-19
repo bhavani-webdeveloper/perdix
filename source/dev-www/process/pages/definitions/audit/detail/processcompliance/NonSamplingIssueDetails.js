@@ -5,8 +5,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
             var tempIssueDetails = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
-                $log.info(id);
-                $log.info("id");
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
                 if (issue.options.type == "dropdown") {
                     for (j in issue.options.type_of_issue_options) {
@@ -16,14 +14,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
                                     message: "Issue: <strong>" + (Number(i) + 1) + "</strong>Requires responsible person to be given"
                                 });
                                 return false;
-                            }
-                            $log.info(tempIssueDetails);
+                            }                            
                             tempIssueDetails.push(id);
                         } else if ((issue.options.type_of_issue_options[j].option_id == id.option_id) == null && id.deviation == "") {
                             for (var i = id.length - 1; i <= 0; i--) {
                                 id.splice(i, 1);
                             }
-                            // tempIssueDetails.push(id);
                         }
                     }
                 }

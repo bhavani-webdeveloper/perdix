@@ -142,9 +142,9 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsQueue"), ["$log", "for
                         }, {
                             title: 'STAGE',
                             data: 'current_stage',
-                            // render: function(data, type, full, meta) {
-                            //     return data == 'scheduled' ? 'Scheduled' : 'Reassigned';
-                            // }
+                            render: function(data, type, full, meta) {
+                                return data == 'scheduled' ? 'Scheduled' : 'Reassigned';
+                            }
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'

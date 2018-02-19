@@ -88,12 +88,23 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "readonly": true
                 }, {
                     key: "auditIssue.draft_document_id",
+                    "condition": "!model.readonly && model.type",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
                     title: "DRAFT_DOCUMENT",
                     "category": "Audit",
                     "subCategory": "AUDITISSUEDRAFTDOC"
+                }, {
+                    key: "auditIssue.draft_document_id",
+                    "condition": "model.readonly",
+                    type: "file",
+                    fileType: "application/pdf",
+                    using: "scanner",
+                    title: "DRAFT_DOCUMENT",
+                    "category": "Audit",
+                    "subCategory": "AUDITISSUEDRAFTDOC",
+                    "readonly": true
                 }, {
                     "key": "auditIssue.confirmity_status",
                     "title": "STATUS",
@@ -131,13 +142,8 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }, {
                     type: "textarea",
                     key: "messages",
-                    "condition": "model.type && model.type=='operation'",
-                    "title": "RESPONSE"
-                }, {
-                    type: "textarea",
-                    key: "messages",
                     "condition": "!model.readonly",
-                    "title": "COMMENTS"
+                    "title": "REMARKS"
                 }]
             }, {
                 "type": "box",

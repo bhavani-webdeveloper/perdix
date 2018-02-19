@@ -88,15 +88,15 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                         return [{
                                 title: 'ISSUE',
                                 data: 'id',
-                                // render: function(data, type, full, meta) {
-                                //     return master.typeofissues[full.type_of_issue_id].description;
-                                // }
+                                render: function(data, type, full, meta) {
+                                    return master.typeofissues[full.type_of_issue_id].description;
+                                }
                             }, {
                                 title: 'BRANCH_NAME',
                                 data: 'branch_id',
-                                // render: function(data, type, full, meta) {
-                                //     return master.branch_name[full.branch_id].node_code;
-                                // }
+                                render: function(data, type, full, meta) {
+                                    return master.branch_name[full.branch_id].node_code;
+                                }
                             }, {
                                 title: 'CLOSED_ON',
                                 data: 'closed_on'
@@ -106,11 +106,7 @@ irf.pageCollection.factory(irf.page("audit.OutstandingIssuesQueue"), ["$log", "f
                             }, {
                                 title: 'AUDIT_REPORT_DATE',
                                 data: 'audit_report_date'
-                            },{
-                                title: 'Days left',
-                                data: 'days_left'
-                            }
-                        ]
+                            }]
                     },
                     getActions: function() {
                         return [{

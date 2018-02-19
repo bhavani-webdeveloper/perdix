@@ -136,7 +136,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                 return tableColumnsConfig;
                             },
                             initializeDataTable: function(dataTable, datatableConfig, tableData) {
-                                // $log.info(dataTable);
                             },
                             getActions: function() {
                                 return [{

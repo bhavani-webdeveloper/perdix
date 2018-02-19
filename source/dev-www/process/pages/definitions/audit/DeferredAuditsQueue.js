@@ -217,9 +217,6 @@ irf.pageCollection.factory(irf.page("audit.DeferredAuditsQueue"), ["$log", "Page
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        },{
-                            title: 'Days left',
-                            data: 'days_left'
                         }]
                     },
                     getActions: function() {
