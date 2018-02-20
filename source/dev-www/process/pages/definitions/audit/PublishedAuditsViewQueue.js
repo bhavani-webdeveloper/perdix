@@ -15,6 +15,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                     }
                 }
                 localFormController = formCtrl;
+                model.type = 'audit';
                 syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
@@ -226,7 +227,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        },{
+                        }, {
                             title: 'Days left',
                             data: 'days_left'
                         }]
@@ -242,7 +243,8 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                                         'pageName': 'audit.AuditDetails',
                                         'pageId': item.audit_id,
                                         'pageData': {
-                                            "readonly": true
+                                            "readonly": true,
+                                            "type": "audit"
                                         }
                                     };
                                     var backparam = {

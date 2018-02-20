@@ -240,7 +240,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                                         'pageId': item.audit_id,
                                         'pageData': {
                                             "page": returnObj.definition.listOptions.tableConfig.page,
-                                            "readonly": true
+                                            "readonly": true,
+                                            "type": "audit"
                                         }
                                     };
                                     var backparam = {

@@ -32,7 +32,6 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
             },
             definition: {
                 title: "SEARCH_AUDITS",
-                autoSearch: true,
                 searchForm: [{
                         key: "bankId",
                         readonly: true,
@@ -81,7 +80,8 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                     "report_date",
                     "start_date",
                     "end_date"
-                ],                
+                ],
+                autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
@@ -237,7 +237,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        },{
+                        }, {
                             title: 'Days left',
                             data: 'days_left'
                         }]
@@ -253,7 +253,8 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                                         'pageName': 'audit.AuditDetails',
                                         'pageId': item.audit_id,
                                         'pageData': {
-                                            "readonly": item.current_stage !== 'publish'
+                                            "readonly": item.current_stage !== 'publish',
+                                            "type": "audit"
                                         }
                                     }, {
                                         'state': 'Page.Engine',

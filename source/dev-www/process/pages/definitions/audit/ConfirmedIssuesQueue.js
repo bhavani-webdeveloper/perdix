@@ -119,7 +119,8 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedIssuesQueue"), ["$log", "irf
                                     'pageName': 'audit.IssueDetails',
                                     'pageId': item.id,
                                     'pageData': {
-                                        "readonly": true
+                                        "readonly": true,
+                                        "type": "audit"
                                     }
                                 }, {
                                     'state': 'Page.Engine',

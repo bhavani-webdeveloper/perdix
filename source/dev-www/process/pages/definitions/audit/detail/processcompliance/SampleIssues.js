@@ -7,17 +7,17 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
-                if (issue.options.type == "dropdown") {
-                    if (id.option_id || id.deviation) {
-                        if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
-                            PageHelper.setError({
-                                message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires responsible person to be given"
-                            });
-                            return false;
-                        }
-                        tempIssueDetails.push(id);
+                // if (issue.options.type == "dropdown") {
+                if (id.option_id || id.deviation) {
+                    if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
+                        PageHelper.setError({
+                            message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires responsible person to be given"
+                        });
+                        return false;
                     }
+                    tempIssueDetails.push(id);
                 }
+                //}
             }
             sample.issue_details = tempIssueDetails;
             return true;
@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 case "CUSTOMER_ID":
                                     formDetails.push({
                                         "type": "button",
-                                        "title": "Customer ("+sample_column_value+")",
+                                        "title": "Customer (" + sample_column_value + ")",
                                         onClick: function(model, formCtrl, form, event) {
                                             irfNavigator.go({
                                                 'state': 'Page.Customer360',
@@ -231,11 +231,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                             });
                                         }
                                     });
-                                break;
+                                    break;
                                 case "LOAN_ID":
                                     formDetails.push({
                                         "type": "button",
-                                        "title": "Loan ("+sample_column_value+")",
+                                        "title": "Loan (" + sample_column_value + ")",
                                         onClick: function(model, formCtrl, form, event) {
                                             irfNavigator.go({
                                                 'state': 'Page.Bundle',
@@ -244,7 +244,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                             });
                                         }
                                     });
-                                break;
+                                    break;
                             }
                         }
                     }
@@ -385,6 +385,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     "default": false
                                 },
                                 "title": "SPOT_FIX"
+                            }, {
+                                "key": "sample.issue_details[" + i + "].spot_action",
+                                "condition": "model.sample.issue_details[" + i + "].spot_fixed == '1'",
+                                "type": "textarea",
+                                "title": "SPOT_ACTION"
                             });
                         }
                         issueDetailsForm.push({
