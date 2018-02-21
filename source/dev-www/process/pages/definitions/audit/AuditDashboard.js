@@ -182,6 +182,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (raq || ravq) {
                     Audit.online.getAuditList({
+                        'auditor_id': auditor_id,
                         'current_stage': 'L1-approve'
                     }).$promise.then(function(data) {
                         if (raq) {
@@ -194,7 +195,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (aaq || aavq) {
-                    Audit.online.getAuditList({
+                    Audit.online.getAuditList({                      
+                        'auditor_id': auditor_id,
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {

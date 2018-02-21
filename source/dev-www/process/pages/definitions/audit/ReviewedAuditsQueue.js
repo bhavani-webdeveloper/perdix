@@ -230,7 +230,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsQueue"), ["$log", "Quer
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
-                        },{
+                        }, {
                             title: 'Days left',
                             data: 'days_left'
                         }]
@@ -246,7 +246,8 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsQueue"), ["$log", "Quer
                                         'pageName': 'audit.AuditDetails',
                                         'pageId': item.audit_id,
                                         'pageData': {
-                                            "readonly": item.current_stage !== 'L1-approve'
+                                            "readonly": item.current_stage !== 'L1-approve',
+                                            "type": "audit"
                                         }
                                     }, {
                                         'state': 'Page.Engine',
@@ -259,7 +260,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsQueue"), ["$log", "Quer
                                     irfNavigator.go({
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',
-                                        'pageId': item.audit_id                                       
+                                        'pageId': item.audit_id
                                     }, {
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.ReviewedAuditsQueue',

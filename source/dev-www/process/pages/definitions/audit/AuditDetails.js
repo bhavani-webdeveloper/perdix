@@ -62,15 +62,15 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                                     case 'SAMPLE':
                                         reportKey = sample.sample_id;
                                         reportKeyName = sample.column_values[0];
-                                    break;
+                                        break;
                                     case 'PROCESS':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].process_id;
                                         reportKeyName = master.process[reportKey].process_name;
-                                    break;
+                                        break;
                                     case 'RISK':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].risk_classification;
                                         reportKeyName = master.risk_classification[master.typeofissues[issue.type_of_issue_id].risk_classification].risk_classification_name;
-                                    break;
+                                        break;
                                 }
                                 if (!reportKey || !reportKeyName) continue;
                                 var reportEntry = reportMap[reportKey];
@@ -83,7 +83,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                                     };
                                     reportMap[reportKey] = reportEntry;
                                 }
-                                reportEntry.count ++;
+                                reportEntry.count++;
                             }
                         }
                     }
@@ -460,7 +460,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             showProceed: function(model) {
                 if (!model.ai) return;
                 if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
-                    return true;
+                    switch (model.ai.current_stage) {
+                        case 'start':
+                        case 'create':
+                        case 'draft':
+                        case 'publish':
+                        case 'L1-approve':
+                            return true;
+                    }
                 }
                 return false;
             },
@@ -481,7 +488,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 switch (model.ai.current_stage) {
                     case 'start':
                     case 'create':
-                        nextStage = $scope.siteCode == 'kinara'? 'draft': 'publish';
+                        nextStage = $scope.siteCode == 'kinara' ? 'draft' : 'publish';
                         break;
                     case 'draft':
                         nextStage = 'publish';
