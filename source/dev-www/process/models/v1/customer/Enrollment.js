@@ -314,18 +314,18 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             }
         }
 
-        if (model.customer.currentStage == 'Completed' && ) {
-            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-            model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-            model.customer.middleName = "";
-            model.customer.lastName = "";
-            model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-            model.customer.fatherMiddleName = "";
-            model.customer.fatherLastName = "";
-            model.customer.spouseFirstName = Utils.getFullName(model.customer.spouseFirstName, model.customer.spouseMiddleName, model.customer.spouseLastName);
-            model.customer.spouseMiddleName = "";
-            model.customer.spouseLastName = "";
-        }
+       
+        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
+        model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+        model.customer.middleName = "";
+        model.customer.lastName = "";
+        model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.fatherMiddleName = "";
+        model.customer.fatherLastName = "";
+        model.customer.spouseFirstName = Utils.getFullName(model.customer.spouseFirstName, model.customer.spouseMiddleName, model.customer.spouseLastName);
+        model.customer.spouseMiddleName = "";
+        model.customer.spouseLastName = "";
+        
 
         Utils.removeNulls(model,true);
         return model;
