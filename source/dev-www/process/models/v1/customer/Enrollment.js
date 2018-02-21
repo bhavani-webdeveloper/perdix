@@ -314,18 +314,18 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             }
         }
 
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        if(model.customer.fatherFirstName){
-         model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);   
+        if (model.customer.currentStage == 'Completed' && ) {
+            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
+            model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+            model.customer.middleName = "";
+            model.customer.lastName = "";
+            model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+            model.customer.fatherMiddleName = "";
+            model.customer.fatherLastName = "";
+            model.customer.spouseFirstName = Utils.getFullName(model.customer.spouseFirstName, model.customer.spouseMiddleName, model.customer.spouseLastName);
+            model.customer.spouseMiddleName = "";
+            model.customer.spouseLastName = "";
         }
-
-        if(model.customer.spouseFirstName){
-          model.customer.spouseFullName = Utils.getFullName(model.customer.spouseFirstName,model.customer.spouseMiddleName,model.customer.spouseLastName);  
-        }
-        
-        
-
-
 
         Utils.removeNulls(model,true);
         return model;

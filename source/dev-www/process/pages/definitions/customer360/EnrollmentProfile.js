@@ -19,8 +19,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         if (_.isArray(centres) && centres.length > 0){
             model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
     return {
         "id": "ProfileBasic",
@@ -59,12 +57,12 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     readonly: true
                 },
                 {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
                     condition:"!model.EditBasicCustomerInfo",
                 },
                 {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
                     readonly:true,
                     condition:"model.EditBasicCustomerInfo",
@@ -119,13 +117,13 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     type:"date",
                 },
                 {
-                    key: "customer.fatherFullName",
+                    key: "customer.fatherFirstName",
                     condition:"model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
                     readonly: true
                 },
                 {
-                    key: "customer.fatherFullName",
+                    key: "customer.fatherFirstName",
                     condition:"!model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
                 },
@@ -135,7 +133,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 },
                 {
                     key: "customer.spouseFirstName",
-                    title: "Spouse First Name",
+                    title: "Spouse Full Name",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     type:"qrcode",
                     onCapture: function(result, model, form) {
@@ -149,11 +147,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
                         }
                     }
-                },
-                {
-                    key: "customer.spouseFullName",
-                    "readonly": true,
-                    title: "Spouse Full Name",
                 },
                 {
                     key:"customer.spouseDateOfBirth",
@@ -1053,7 +1046,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             "title": "T_HOUSE_VERIFICATION",
             "items": [
                 {
-                    "key": "customer.fullName",
+                    "key": "customer.firstName",
                     "title": "CUSTOMER_NAME",
                     "readonly": true
                 },
@@ -1285,9 +1278,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     Enrollment.updateCustomer(reqData, function (res, headers) {
                         if (res.customer) {
                             model.customer = res.customer;
-                            model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-                            model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-                            model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
                             model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                             model = EnrollmentHelper.fixData(model);
                         }

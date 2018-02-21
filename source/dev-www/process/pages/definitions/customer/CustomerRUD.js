@@ -92,7 +92,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 type: "radios"
                             },
                             {
-                                key: "customer.fullName",
+                                key: "customer.firstName",
                                 "readonly":true,
                                 title: "FULL_NAME"
                             },
@@ -125,7 +125,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }
                             },
                             {
-                                key: "customer.fatherFullName",
+                                key: "customer.fatherFirstName",
                                 "readonly":true,
                                 title: "FATHER_FULL_NAME"
                             },
@@ -135,7 +135,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.spouseFirstName",
-                                title: "Spouse First name",
+                                title: "Spouse Full name",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 type: "qrcode",
                                 onCapture: function(result, model, form) {
@@ -150,11 +150,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     }
                                 }
                             },
-                            {
-                                key: "customer.spouseFullName",
-                                "readonly":true,
-                                title: "Spouse Full Name",
-                            }, 
                             {
                                 key: "customer.spouseDateOfBirth",
                                 type: "date",
@@ -1009,7 +1004,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                 "title": "T_HOUSE_VERIFICATION",
                 "items": [
                     {
-                        "key": "customer.fullName",
+                        "key": "customer.firstName",
                         "title": "CUSTOMER_NAME",
                         "readonly": true
                     },
