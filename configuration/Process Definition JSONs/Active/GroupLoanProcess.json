@@ -144,7 +144,9 @@
       "type": "object",
       "title": "Comment",
       "required": [
-         "groupDetails"
+         "groupDetails",
+         "cgt",
+         "grt"
       ],
       "fields": {
          "groupDetails": {
@@ -515,7 +517,7 @@
                   "title": "groupRemarks",
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 250,
+                  "maxLength": 500,
                   "captureStages": [
                      "GroupCreation",
                      "GRT",
@@ -979,7 +981,25 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+                  "cgt1DoneBy",
+                  "cgt1Photo",
+                  "cgt1EndPhoto",
+                  "cgt1Remarks",
+                  "cgtDate1",
+                  "cgtEndDate1",
+                  "cgt2DoneBy",
+                  "cgt2Photo",
+                  "cgt2EndPhoto",
+                  "cgtDate2",
+                  "cgt2Remarks",
+                  "cgtEndDate2",
+                  "cgt3Photo",
+                  "cgt3EndPhoto",
+                  "cgtDate3",
+                  "cgtEndDate3",
+                  "cgt3Remarks"
+               ],
                "properties": {
                   "cgt1DoneBy": {
                      "title": "CGT1 Done By",
@@ -1194,7 +1214,14 @@
             "maxItems": null,
             "items": {
                "type": "object",
-               "required": [],
+               "required": [
+                  "grtDoneBy",
+                  "grtPhoto",
+                  "grtEndPhoto",
+                  "grtRemarks",
+                  "grtDate",
+                  "grtEndDate"
+               ],
                "properties": {
                   "grtDoneBy": {
                      "title": "GRT Done By",

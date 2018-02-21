@@ -17,10 +17,18 @@
 // irf.PSYCHOMETRIC_BASE_URL = "http://34.232.182.192:8080/psychometric";
 
 //Sambandh UAT
+// var irf = irf || {};
+// irf.BASE_URL = 'http://34.201.142.63:8080/perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://34.201.142.63:8081/management';
+// irf.FORM_DOWNLOAD_URL = 'http://34.201.142.63:8080/forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://34.201.142.63:8081/bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://34.201.142.63:8080/psychometric";
+
+//KGFS UAT2
 var irf = irf || {};
-irf.BASE_URL = 'http://34.201.142.63:8080/perdix-server';
-irf.MANAGEMENT_BASE_URL = 'http://34.201.142.63:8081/management';
-irf.FORM_DOWNLOAD_URL = 'http://34.201.142.63:8080/forms/formPrint.jsp';
-irf.BI_BASE_URL = "http://34.201.142.63:8081/bi";
-irf.PSYCHOMETRIC_BASE_URL = "http://34.201.142.63:8080/psychometric";
+irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
+irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
+irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
+irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";
+
 
