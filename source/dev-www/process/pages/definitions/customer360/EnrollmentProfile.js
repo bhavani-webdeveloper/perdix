@@ -19,10 +19,17 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
         if (_.isArray(centres) && centres.length > 0){
             model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
+
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.firstName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
+        model.customer.middleName= "";
+        model.customer.lastName="";
+        model.customer.fatherFirstName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
+        model.customer.fatherMiddleName="";
+        model.customer.fatherLastName="";
         model.customer.spouseFirstName=Utils.getFullName(model.customer.spouseFirstName,model.customer.spouseMiddleName,model.customer.spouseLastName);
+        model.customer.spouseMiddleName="";
+        model.customer.spouseLastName="";
         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
     };
     return {
@@ -62,12 +69,12 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     readonly: true
                 },
                 {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
                     condition:"!model.EditBasicCustomerInfo",
                 },
                 {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
                     readonly:true,
                     condition:"model.EditBasicCustomerInfo",
@@ -122,13 +129,13 @@ function($log, Enrollment, EnrollmentHelper,PagesDefinition, SessionStore,$state
                     type:"date",
                 },
                 {
-                    key: "customer.fatherFullName",
+                    key: "customer.fatherFirstName",
                     condition:"model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
                     readonly: true
                 },
                 {
-                    key: "customer.fatherFullName",
+                    key: "customer.fatherFirstName",
                     condition:"!model.EditBasicCustomerInfo",
                     title: "FATHER_FULL_NAME",
                 },
