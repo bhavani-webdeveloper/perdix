@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.screening.detail.IndividualEnrollmentView",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig"],
-    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig) {
+    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter"],
+    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter) {
         return {
             "type": "schema-form",
             "title": "INDIVIDUAL_ENROLLMENT",
@@ -238,7 +238,14 @@ define({
                             "title": "House",
                             "type": "file",
                             "fileType": "image/*"
-                        }]
+                        }, {
+                            "key": "customer.latitude",
+                            "notitle": true,
+                            "title": $filter("translate")("HOUSE_LOCATION"),
+                            "type": "geotag",
+                            "latitude": "customer.latitude",
+                            "longitude": "customer.longitude"
+                        },]
                     }]
                 });
                 }

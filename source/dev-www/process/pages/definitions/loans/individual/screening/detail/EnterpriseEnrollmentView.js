@@ -2,10 +2,10 @@ define({
     pageUID: "loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter", "$filter"
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter, $filter) {
         return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
@@ -193,8 +193,17 @@ define({
                             "category": "Loan",
                             "subCategory": "DOC1",
                             "type": "file",
-                            "preview": "pdf"
+                            "preview": "pdf",
+                            using: "scanner"
                         })
+                    fileForms.push({
+                        "key": "customer.latitude",
+                        "notitle": true,
+                        "title": $filter("translate")("BUSINESS_LOCATION"),
+                        "type": "geotag",
+                        "latitude": "customer.latitude",
+                        "longitude": "customer.longitude"
+                    })
 
                     self.form.push({
                         "type": "box",
