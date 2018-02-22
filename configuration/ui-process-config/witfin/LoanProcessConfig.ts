@@ -40,6 +40,16 @@ let config = {
                                 "arguments": {}
                             }
                         ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal'",
+                        "add": [
+                            {
+                                "name": "CustomerReferencePolicy",
+                                "arguments": {}
+                            }
+                        ]
                     }
                 ]
             },
