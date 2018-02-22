@@ -2626,6 +2626,16 @@
               "Completed"
             ]
           },
+          "businessSignboardImage": {
+            "title": "businessSignboardImage",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "shopOrganized": {
             "title": "shopOrganized",
             "type": "string",
