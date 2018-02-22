@@ -752,32 +752,7 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
-			   "fieldInspectionDate":{
-                  "title":"fieldInspectionDate",
-                 "type":"date",
-                  
-                  "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-               },
-			   "fieldInvestigator":{
-                  "title":"fieldInvestigator",
-                 "type":"string",
-                  "minLength":1,
-                  "maxLength":1000,
-                  "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-               },
-			   "fieldInspectionRemarks":{
-                  "title":"fieldInspectionRemarks",
-                 "type":"string",
-                  "minLength":1,
-                  "maxLength":1000,
-                  "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-               },
+			   			   
 			    "payeeName":{
                   "title":"payeeName",
                  "type":"string",
@@ -1891,6 +1866,33 @@
                    "type":"string",
                   "minLength":1,
                   "maxLength":100,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+			   "yearOfManufacture":{
+                  "title":"yearOfManufacture",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":45,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+			   "vehicleUseSegment":{
+                  "title":"vehicleUseSegment",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":50,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
+			   "vehicleUseSubSegment":{
+                  "title":"vehicleUseSubSegment",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":50,
                   "captureStages":[
                      "Screening", "LoanInitiation"
                   ]
