@@ -114,19 +114,15 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedIssuesQueue"), ["$log", "f
                             name: "VIEW_ISSUE",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                var goparam = {
+                                irfNavigator.go({
                                     'state': 'Page.Engine',
                                     'pageName': 'audit.IssueDetails',
                                     'pageId': item.id,
                                     'pageData': {
-                                        "readonly": true
+                                        "readonly": true,
+                                        "type": "audit"
                                     }
-                                };
-                                var backparam = {
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.UnconfirmedIssuesQueue'
-                                };
-                                irfNavigator.go(goparam, backparam);
+                                });
                             },
                             isApplicable: function(item, index) {
                                 return true;

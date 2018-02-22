@@ -165,7 +165,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.type=='audit'",
+                "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status=='X'",
                 "items": [{
                     "type": "button",
                     "title": "UPDATE_ISSUE",
@@ -173,7 +173,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.type=='operation'",
+                "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status =='A' || model.auditIssue.status =='P')",
                 "items": [{
                     "type": "button",
                     "title": "CLOSE",
@@ -181,7 +181,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.auditIssue.status=='DO' && model.type == 'operation'",
+                "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
                 "items": [{
                     "type": "button",
                     "title": "SUBMIT",
@@ -197,7 +197,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.auditIssue.status=='DR' && model.type == 'audit'",
+                "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
                 "items": [{
                     "type": "button",
                     "title": "SUBMIT",
@@ -262,11 +262,13 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     if (actionType == 'close') {
                         model.auditIssue.close_message = model.message;
                         model.auditIssue.status = 'X';
+                        model.auditIssue.next_stage = 'close';
                         model.auditIssue.closed_by = SessionStore.getLoginname();
                         model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
                     } else if (actionType == 'assign') {
                         if (model.auditIssue.confirmity_status == 2) {
                             model.auditIssue.status = 'A';
+                            model.auditIssue.next_stage = 'assign';
                         }
                     }
                     if (model.auditIssue.status == 'DO' && model.type == 'operation') {
