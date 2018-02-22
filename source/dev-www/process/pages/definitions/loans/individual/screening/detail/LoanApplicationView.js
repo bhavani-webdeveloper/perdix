@@ -2,11 +2,19 @@ define({
     pageUID: "loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
     ],
     $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess) {
-        
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
+        var strongRender = function(data, type, full, meta) {
+            return '<strong>'+data+'</strong>';
+        }
+        var currencyRightRender = function(data) {
+            if(data<0)
+                return '-'+irfElementsConfig.currency.iconHtml+irfCurrencyFilter(Math.abs(data), null, null, "decimal");
+
+            return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
+        }
 var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
@@ -76,51 +84,10 @@ var navigateToQueue = function(model) {
                         $state.go('Page.LoanOriginationDashboard', null);
                 }
 
-        var getStageNameByStageCode = function(stageCode) {
-            var stageName;
-            switch(stageCode) {
-                case 'Screening':
-                    stageName = $filter('translate')('SCREENING');
-                    break;
-                case 'Dedupe':
-                    stageName = $filter('translate')('DEDUPE');
-                    break;
-                case 'ScreeningReview':
-                    stageName = $filter('translate')('SCREENING_REVIEW');
-                    break;
-                case 'Application':
-                    stageName = $filter('translate')('APPLICATION');
-                    break;
-                case 'ApplicationReview':
-                    stageName = $filter('translate')('APPLICATION_REVIEW');
-                    break;
-                case 'FieldAppraisal':
-                    stageName = $filter('translate')('FIELD_APPRAISAL');
-                    break;
-                case 'FieldAppraisalReview':
-                    stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
-                    break;
-                case 'ZonalRiskReview':
-                    stageName = $filter('translate')('ZONAL_RISK_REVIEW');
-                    break;
-                case 'CentralRiskReview':
-                    stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
-                    break;
-                case 'CreditCommitteeReview':
-                    stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
-                    break;
-                case 'Sanction':
-                    stageName = $filter('translate')('SANCTION');
-                    break;
-                case 'Rejected':
-                    stageName = $filter('translate')('REJECTED');
-                    break;
-                default:
-                    stageName = stageCode;
-                    break;
-            }
-            return stageName;
-        };
+            var getStageNameByStageCode = function(stageCode) {
+                var stageName = $filter('translate')(stageCode) || stageCode;
+                return stageName;
+            };
 
         var preLoanSaveOrProceed = function(model){
         var loanAccount = model.loanAccount;
@@ -278,19 +245,22 @@ var navigateToQueue = function(model) {
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
-                    model.asset_details = {
-                        "collateralDescription": model.loanAccount.collateral[0].collateralDescription,
-                        "collateralValue": model.loanAccount.collateral[0].collateralValue,
-                        "expectedIncome": model.loanAccount.collateral[0].expectedIncome,
-                        "collateralType": model.loanAccount.collateral[0].collateralType,
-                        "manufacturer": model.loanAccount.collateral[0].manufacturer,
-                        "modelNo": model.loanAccount.collateral[0].modelNo,
-                        "serialNo": model.loanAccount.collateral[0].serialNo,
-                        "expectedPurchaseDate": model.loanAccount.collateral[0].expectedPurchaseDate,
-                        "machineAttachedToBuilding": model.loanAccount.collateral[0].machineAttachedToBuilding,
-                        "hypothecatedToBank": model.loanAccount.collateral[0].hypothecatedToBank,
-                        "electricityAvailable": model.loanAccount.collateral[0].electricityAvailable,
-                        "spaceAvailable": model.loanAccount.collateral[0].spaceAvailable
+                    model.asset_details = [];
+                    for (i in model.loanAccount.collateral) {
+                         model.asset_details.push({
+                            "collateralDescription": model.loanAccount.collateral[i].collateralDescription,
+                            "collateralValue": model.loanAccount.collateral[i].collateralValue,
+                            "expectedIncome": model.loanAccount.collateral[i].expectedIncome,
+                            "collateralType": model.loanAccount.collateral[i].collateralType,
+                            "manufacturer": model.loanAccount.collateral[i].manufacturer,
+                            "modelNo": model.loanAccount.collateral[i].modelNo,
+                            "serialNo": model.loanAccount.collateral[i].serialNo,
+                            "expectedPurchaseDate": model.loanAccount.collateral[i].expectedPurchaseDate,
+                            "machineAttachedToBuilding": model.loanAccount.collateral[i].machineAttachedToBuilding,
+                            "hypothecatedToBank": model.loanAccount.collateral[i].hypothecatedToBank,
+                            "electricityAvailable": model.loanAccount.collateral[i].electricityAvailable,
+                            "spaceAvailable": model.loanAccount.collateral[i].spaceAvailable
+                        });
                     }
                 }
 
@@ -473,57 +443,58 @@ var navigateToQueue = function(model) {
                 /*
                                     "condition":"model.loanAccount.loanPurpose1==model.asset_Details.Assetpurchase"*/
                 "condition": "model.loanAccount.collateral.length!=0",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "asset_details.collateralDescription",
-                            "title": "Machine"
-                        }, {
-                            "key": "asset_details.collateralValue",
-                            "title": "Purchase Price",
-                            "type": "amount"
-                        }, {
-                            "key": "asset_details.expectedIncome",
-                            "title": "Expected Income",
-                            "type": "amount"
-                        }, {
-                            "key": "asset_details.collateralType",
-                            "title": "Machine Type"
-                        }, {
-                            "key": "asset_details.manufacturer",
-                            "title": "Manufacturer Name"
-                        }, {
-                            "key": "asset_details.modelNo",
-                            "title": "Machine Model"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "asset_details.serialNo",
-                            "title": "Serial No"
-                        }, {
-                            "key": "asset_details.expectedPurchaseDate",
-                            "title": "Expected Purchase Date"
-                        }, {
-                            "key": "asset_details.machineAttachedToBuilding",
-                            "title": "Machine Permanently Fixed To Building"
-                        }, {
-                            "key": "asset_details.hypothecatedToBank",
-                            "title": "HYPOTHECATED_TO_KINARA"
-                        }, {
-                            "key": "asset_details.electricityAvailable",
-                            "title": "Electricity Available"
-                        }, {
-                            "key": "asset_details.spaceAvailable",
-                            "title": "Space Available"
-                        }]
-                    }]
-                }]
+                "items": [
+                    {
+                        "type": "tableview",
+                        "key": "asset_details",
+                        "notitle": true,
+                        "transpose": true,
+                        getColumns: function() {
+                            return [{
+                                "title": "Machine",
+                                "data": "collateralDescription",
+                                "render": strongRender
+                            }, {
+                                "title": "Purchase Price",
+                                "data": "collateralValue",
+                                 "className": "text-right",
+                                "render": currencyRightRender
+                            }, {
+                                "data": "expectedIncome",
+                                "title": "Expected Income",
+                                "className": "text-right",
+                                "render": currencyRightRender
+                            }, {
+                                "data": "collateralType",
+                                "title": "Machine Type"
+                            }, {
+                                "data": "manufacturer",
+                                "title": "Manufacturer Name"
+                            }, {
+                                "data": "modelNo",
+                                "title": "Machine Model"
+                            }, {
+                                "data": "serialNo",
+                                "title": "Serial No"
+                            }, {
+                                "data": "expectedPurchaseDate",
+                                "title": "Expected Purchase Date"
+                            }, {
+                                "data": "machineAttachedToBuilding",
+                                "title": "Machine Permanently Fixed To Building"
+                            }, {
+                                "data": "hypothecatedToBank",
+                                "title": "HYPOTHECATED_TO_KINARA"
+                            }, {
+                                "data": "electricityAvailable",
+                                "title": "Electricity Available"
+                            }, {
+                                "data": "spaceAvailable",
+                                "title": "Space Available"
+                            },];
+                        }
+                    }
+                ]
             }, {
                 "type": "box",
                 "readonly": true,
