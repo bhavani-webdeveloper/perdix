@@ -45,7 +45,7 @@ export class CustomerReferencePolicy extends IPolicy<LoanProcess> {
                 let existing = _.findIndex(loanProcess.loanAccount.telecallingDetails, function(item){
                     return item.contactNumber == loanProcess.applicantEnrolmentProcess.customer.verifications[index].mobileNo;
                 });
-                if (existing){
+                if (existing == -1){
                     continue;
                 }
                 tlc = new TelecallingDetails();

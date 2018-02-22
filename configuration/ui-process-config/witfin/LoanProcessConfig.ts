@@ -104,6 +104,16 @@ let config = {
                                 }
                             }
                         ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='Application'",
+                        "add": [{
+                            "name": "CollateralFieldPolicy",
+                            "arguments": {
+                                "postStage": "ApplicationReview"
+                            }
+                        }]
                     }
                 ]
             }

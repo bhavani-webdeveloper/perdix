@@ -42,6 +42,16 @@ define(["require", "exports"], function (require, exports) {
                                     "arguments": {}
                                 }
                             ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal'",
+                            "add": [
+                                {
+                                    "name": "CustomerReferencePolicy",
+                                    "arguments": {}
+                                }
+                            ]
                         }
                     ]
                 },
@@ -96,6 +106,16 @@ define(["require", "exports"], function (require, exports) {
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='Application'",
+                            "add": [{
+                                    "name": "CollateralFieldPolicy",
+                                    "arguments": {
+                                        "postStage": "ApplicationReview"
+                                    }
+                                }]
                         }
                     ]
                 }

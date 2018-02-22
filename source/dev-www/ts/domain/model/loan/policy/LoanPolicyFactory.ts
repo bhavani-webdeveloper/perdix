@@ -15,6 +15,8 @@ import {CloseLeadonLoanSave} from './CloseLeadonLoanSave';
 import {LoanDerivedFieldsUpdate} from "./LoanDerivedFieldsUpdate";
 import {CustomerEnrolmentCompletedPolicy} from './CustomerEnrolmentCompletedPolicy';
 import {CustomerReferencePolicy} from './CustomerReferencePolicy';
+import {CollateralFieldPolicy} from './CollateralFieldPolicy';
+
 
 
 export class LoanPolicyFactory implements IPolicyFactory{
@@ -62,6 +64,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new CustomerEnrolmentCompletedPolicy();
             case 'CustomerReferencePolicy':
                 return new CustomerReferencePolicy();
+            case 'CollateralFieldPolicy': 
+                return new CollateralFieldPolicy();  
             default:
                 return null;
         }
