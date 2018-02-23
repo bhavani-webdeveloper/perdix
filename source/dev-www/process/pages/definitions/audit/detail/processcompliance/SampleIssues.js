@@ -1,13 +1,11 @@
 irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues"), ["$log", "$state", "irfNavigator", "SessionStore", "$stateParams", "$http", "Audit", "PageHelper", "$q", "elementsUtils", "formHelper", "User",
     function($log, $state, irfNavigator, SessionStore, $stateParams, $http, Audit, PageHelper, $q, elementsUtils, formHelper, User) {
         var master = null;
-
         var validateKgfs = function(sample) {
             var tempIssueDetails = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
-                // if (issue.options.type == "dropdown") {
                 if (id.option_id || id.deviation) {
                     if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
                         PageHelper.setError({
@@ -15,20 +13,17 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         });
                         return false;
                     }
-                    tempIssueDetails.push(id);
-                } else if (id.assignee_det || id.assignee_det.length || id.assignee_det[0].assignee_id) {
+                } else if (id.assignee_det && id.assignee_det.length && id.assignee_det[0].assignee_id) {
                     PageHelper.setError({
                         message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires deviation to be given"
                     });
                     return false;
-                    tempIssueDetails.push(id);
                 }
-                //}
+                tempIssueDetails.push(id);
             }
             sample.issue_details = tempIssueDetails;
             return true;
         };
-
         var validateKinara = function(sample) {
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
