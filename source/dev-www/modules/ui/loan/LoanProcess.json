@@ -931,8 +931,8 @@
                 "key": "loanAccount.vehicleLoanDetails.taxPaid",
                 "title": "TAX_PAID"
             },
-            "insurancevalidfrom": {
-                "key": "loanAccount.vehicleLoanDetails.insurancevalidfrom",
+            "insuranceValidFrom": {
+                "key": "loanAccount.vehicleLoanDetails.insuranceValidFrom",
                 "type": "date",
                 "title": "INSURANCE_VALID_FROM"
             },
@@ -1401,7 +1401,7 @@
                 "key": "loanAccount.telecallingDetails",
                 "title": "TELE_CALLING_DETAILS",
                 "type": "array",
-                "view":"fixed",
+                "startEmpty":true,
                 "items": {
                     "personContacted": {
                         "key":"loanAccount.telecallingDetails[].personContacted",
