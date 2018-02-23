@@ -25,13 +25,13 @@ export class CollateralFieldPolicy extends IPolicy<LoanProcess> {
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
         console.log(loanProcess);
         let col;
-        if(_.hasIn(loanProcess.loanAccount, "vehicleLoanDetails") && loanProcess.loanAccount.vehicleLoanDetails != null) {
+        if(_.hasIn(loanProcess.loanAccount, "collateral") && loanProcess.loanAccount.collateral.length == 0) {
             col = new Collateral();
             let vehicleDetails = loanProcess.loanAccount.vehicleLoanDetails;
             col.electricityAvailable = vehicleDetails.segment;
             col.expectedPurchaseDate = null;
             col.collateralDescription = vehicleDetails.category;
-            col.manufacturer = vehicleDetails.manufacturer;
+            col.manufacturer = vehicleDetails.make;
             col.modelNo = vehicleDetails.vehicleModel;
             col.serialNo = vehicleDetails.registrationNumber;
             loanProcess.loanAccount.collateral.push(col); 

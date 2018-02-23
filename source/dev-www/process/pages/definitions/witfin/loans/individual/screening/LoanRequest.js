@@ -368,7 +368,7 @@ define([],function(){
                     "NewVehicleDetails.usedFor",
                     "NewVehicleDetails.segment",
                     "NewVehicleDetails.category",
-                    "NewVehicleDetails.manufactureDate",
+                    "NewVehicleDetails.yearOfManufacture",
                     "NewVehicleDetails.make",
                     "NewVehicleDetails.vehicleModel",
                     "NewVehicleDetails.assetDetails",
@@ -451,38 +451,43 @@ define([],function(){
                             },
                             "NewVehicleDetails.vehicleType": {
                                 "orderNo": 10,
-                                "enumCode": "enterprise_asset_type"
+                                "enumCode": "enterprise_asset_type",
+                                "required": true
                             },
                             "NewVehicleDetails.endUse": {
-                                "orderNo": 20
+                                "orderNo": 20,
+                                "required": true
                             },
                             "NewVehicleDetails.usedFor": {
-                                "orderNo": 30
+                                "orderNo": 30,
+                                "required": true
                             },
                             "NewVehicleDetails.segment":{
                                 "orderNo": 40,
                                 "enumCode": "vehicle_segment",
                                 onChange: function (modelValue, form, model) {
-                                    loanChannels.category = null;
-                                    model.vehiclePriceDetails.make = null
-                                    model.vehiclePriceDetails.vehicleModel = null;
-                                    model.vehiclePriceDetails.manufactureDate = null;
-                                    model.vehiclePriceDetails.price = null;
-                                }
+                                    model.loanAccount.vehicleLoanDetails.category = null;
+                                    model.loanAccount.vehicleLoanDetails.make = null
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                    model.vehiclePriceDetails.yearOfManufacture = null;
+                                    model.loanAccount.vehicleLoanDetails.price = null;
+                                },
+                                "required": true
                             },
                             "NewVehicleDetails.category": {
                                 "orderNo": 50,
                                 "enumCode": "vehicle_type",
                                 onChange: function (modelValue, form, model) {
-                                    model.vehiclePriceDetails.make = null
-                                    model.vehiclePriceDetails.vehicleModel = null;
-                                    model.vehiclePriceDetails.manufactureDate = null;
-                                    model.vehiclePriceDetails.price = null;
-                                }
+                                    model.loanAccount.vehicleLoanDetails.make = null
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                    model.vehiclePriceDetails.yearOfManufacture = null;
+                                    model.loanAccount.vehicleLoanDetails.price = null;
+                                },
+                                "required": true
                             },
                             "NewVehicleDetails.make": {
                                 "orderNo": 60,
-                                "key": "loanAccount.vehiclePriceDetails.make",
+                                "key": "loanAccount.vehicleLoanDetails.make",
                                 "type": "lov",
                                 "autolov": true,
                                 "lovonly":true,
@@ -502,20 +507,21 @@ define([],function(){
                                     });
                                 },
                                 onSelect: function(valueObj, model, context) {
-                                    model.vehiclePriceDetails.make = valueObj.manufacturer;
-                                    model.vehiclePriceDetails.vehicleModel = null;
-                                    model.vehiclePriceDetails.manufactureDate = null;
-                                    model.vehiclePriceDetails.price = null;
+                                    model.loanAccount.vehicleLoanDetails.make = valueObj.manufacturer;
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                    model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.manufacturer
                                     ];
-                                }
+                                },
+                                "required": true
                             },
                             "NewVehicleDetails.vehicleModel":{
                                 "orderNo": 70,
-                                "key": "loanAccount.vehiclePriceDetails.vehicleModel",
+                                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
                                 "type": "lov",
                                 "autolov": true,
                                 "lovonly":true,
@@ -524,7 +530,7 @@ define([],function(){
                                 search: function(inputModel, form, model, context) {
                                     var vehiclePriceDetails = model.vehiclePriceDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.vehiclePriceDetails.segment , 'asset_type': model.vehiclePriceDetails.category, 'manufacturer': model.vehiclePriceDetails.make}, true);
+                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make}, true);
                                     out = _.uniqBy(res,'model');
                                     return $q.resolve({
                                         headers: {
@@ -534,19 +540,20 @@ define([],function(){
                                     });
                                 },
                                 onSelect: function(valueObj, model, context) {
-                                    model.vehiclePriceDetails.vehicleModel = valueObj.model;
-                                    model.vehiclePriceDetails.manufactureDate = null;
-                                    model.vehiclePriceDetails.price = null;
+                                    model.loanAccount.vehicleLoanDetails.vehicleModel = valueObj.model;
+                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                    model.loanAccount.vehicleLoanDetails.price = null;
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.model
                                     ];
-                                }
+                                },
+                                "required": true
                             },
-                            "NewVehicleDetails.manufactureDate": {
+                            "NewVehicleDetails.yearOfManufacture": {
                                 "orderNo": 80,
-                                "key": "loanAccount.vehiclePriceDetails.manufactureDate",
+                                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                 "title": "MANUFACTURER_YEAR",
                                 "type": "lov",
                                 "autolov": true,
@@ -556,7 +563,7 @@ define([],function(){
                                 search: function(inputModel, form, model, context) {
                                     var vehiclePriceDetails = model.vehiclePriceDetails;
                                     var out = [];
-                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.vehiclePriceDetails.segment , 'asset_type': model.vehiclePriceDetails.category, 'manufacturer': model.vehiclePriceDetails.make, 'model': model.vehiclePriceDetails.vehicleModel}, true);
+                                    var res = $filter('filter')(vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make, 'model': model.loanAccount.vehicleLoanDetails.vehicleModel}, true);
                                     out = _.uniqBy(res,'year_of_manufacture');
                                     return $q.resolve({
                                         headers: {
@@ -566,30 +573,34 @@ define([],function(){
                                     });
                                 },
                                 onSelect: function(valueObj, model, context) {
-                                    model.vehiclePriceDetails.manufactureDate = valueObj.year_of_manufacture;
-                                    var res = $filter('filter')(model.vehiclePriceDetails, {'segment': model.vehiclePriceDetails.segment , 'asset_type': model.vehiclePriceDetails.category, 'manufacturer': model.vehiclePriceDetails.make, 'model': model.vehiclePriceDetails.vehicleModel, 'year_of_manufacture': model.vehiclePriceDetails.manufactureDate}, true);
-                                    model.vehiclePriceDetails.price = Number(res[0].price);
+                                    model.loanAccount.vehicleLoanDetails.yearOfManufacture = valueObj.year_of_manufacture;
+                                    var res = $filter('filter')(model.vehiclePriceDetails, {'segment': model.loanAccount.vehicleLoanDetails.segment , 'asset_type': model.loanAccount.vehicleLoanDetails.category, 'manufacturer': model.loanAccount.vehicleLoanDetails.make, 'model': model.loanAccount.vehicleLoanDetails.vehicleModel, 'year_of_manufacture': model.loanAccount.vehicleLoanDetails.yearOfManufacture}, true);
+                                    model.loanAccount.vehicleLoanDetails.price = Number(res[0].price);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.year_of_manufacture
                                     ];
-                                }
+                                },
+                                "required": true
                             },
                             "NewVehicleDetails.assetDetails":{
-                                "orderNo": 90
+                                "orderNo": 90,
+                                // "required": true
                             },
                             "NewVehicleDetails.assetSubDetails":{
                                 "orderNo": 100,
-                                "title": "SUB_DESCRIPTION"
+                                "title": "SUB_DESCRIPTION",
+                                // "required": true
                             },
                             "NewVehicleDetails.registrationNumber":{
-                                "orderNo": 110
+                                "orderNo": 110,
+                                "required": true
                             },
                             "NewVehicleDetails.originalInvoiceValue":{
                                 "orderNo": 120,
                                 "readonly": true,
-
+                                "required": true
                             }
                         },
                         "includes": getIncludes (model),

@@ -2446,7 +2446,7 @@
                             "Application"
                         ]
                     },
-                    "manufactureDate": {
+                    "yearOfManufacture": {
                         "title": "manufactureDate",
                         "type": "string",
                         "minLength": 1,
@@ -2938,8 +2938,8 @@
                             "Application"
                         ]
                     },
-                    "originalInvoiceValue": {
-                        "title": "originalInvoiceValue",
+                    "price": {
+                        "title": "PRICE",
                         "type": "number",
                         "minimum": 1,
                         "maximum": 99999999,
