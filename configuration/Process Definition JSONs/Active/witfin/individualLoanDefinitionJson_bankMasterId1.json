@@ -2882,6 +2882,16 @@
                             "Application"
                         ]
                     },
+                    "insuranceValidFrom": {
+                        "title": "insuranceValidFrom",
+                        "type": "date",
+                        "captureStages": [
+                            "Screening",
+                            "LoanInitiation",
+                            "VehicleValuation",
+                            "Application"
+                        ]
+                    },
                     "insuranceValidTo": {
                         "title": "insuranceValidTo",
                         "type": "date",

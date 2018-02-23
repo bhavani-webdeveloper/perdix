@@ -46,6 +46,8 @@ export class SoleProprietorshipBusinessConfiguration extends SelectElementConfig
                         model.customer.villageName = applicantCustomer.villageName;
                         model.customer.district = applicantCustomer.district;
                         model.customer.state = applicantCustomer.state;
+                        model.customer.mobilePhone = applicantCustomer.mobilePhone;
+                        model.customer.landLineNo = applicantCustomer.mobileNumber2;
 
                         // Mailing Address
                         model.customer.mailSameAsResidence = applicantCustomer.mailSameAsResidence;

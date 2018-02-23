@@ -107,11 +107,11 @@ let config = {
                     },
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='Application'",
+                        "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal' || this.loanAccount.currentStage=='HOCreditAppraisal' || this.loanAccount.currentStage=='ManagementCommittee'",
                         "add": [{
                             "name": "CollateralFieldPolicy",
                             "arguments": {
-                                "postStage": "ApplicationReview"
+                                "postStage": "LoanInitiation"
                             }
                         }]
                     }

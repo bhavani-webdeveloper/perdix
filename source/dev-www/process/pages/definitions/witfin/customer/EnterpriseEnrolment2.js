@@ -443,8 +443,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "readonly": true
                                 },
                                 "EnterpriseReferences": {
-                                    "title": "NEIGHBOUR_CHECK",
-                                    "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
+                                    "title": "NEIGHBOUR_CHECK"
                                 },
                                 "EnterpriseReferences.verifications.referenceFirstName": {
                                     "title":"NAME_OF_NEIGHBOUR"

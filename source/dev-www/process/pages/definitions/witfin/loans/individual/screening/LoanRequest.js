@@ -387,6 +387,9 @@ define([],function(){
                     "TeleVerification.verifications.financialStatus",
                     "TeleVerification.verifications.customerResponse",
                     "TeleVerification.verifications.remarks",
+                    "FieldInvestigationDetails",
+                    "FieldInvestigationDetails.fieldInvestigationDecision",
+                    "FieldInvestigationDetails.fieldInvestigationReason",
                     "LoanChannel",
                     "LoanChannel.loanChannels",
                     "actionbox",
@@ -773,6 +776,27 @@ define([],function(){
                                                 "Yellow": "Yellow",
                                                 "Red": "Red"
                                             }
+                                        }
+                                    }
+                                },
+                                "FieldInvestigationDetails": {
+                                    "type": "box",
+                                    "orderNo" : 300,
+                                    "title": "FIELD_INVESTIGATION_DETAILS",
+                                    "items": {
+                                        "fieldInvestigationDecision": {
+                                            "key": "loanAccount.udf10",
+                                            "type": "select",
+                                            "title": "FI_DECISION",
+                                            "enumCode": "fi_decision"
+                                        },
+                                        "fieldInvestigationReason": {
+                                            "key": "loanAccount.udf11",
+                                            "type": "select",
+                                            "title": "FI_REASON",
+                                            "enumCode": "fi_reason",
+                                            "parentEnumCode": "fi_decision",
+                                            "parentValueExpr": "model.loanAccount.udf10"
                                         }
                                     }
                                 }

@@ -154,7 +154,7 @@ define(
                         "VehicleInsuranceDetails.insurancePolicyNumber",
                         "VehicleInsuranceDetails.insuranceIdv",
                         "VehicleInsuranceDetails.taxPaid",
-                        "VehicleInsuranceDetails.insurancevalidfrom",
+                        "VehicleInsuranceDetails.insuranceValidFrom",
                         "VehicleInsuranceDetails.insuranceValidTo",
                         "VehicleInsuranceDetails.insurancePolicyType",
                         "VehicleOtherRemarks",
