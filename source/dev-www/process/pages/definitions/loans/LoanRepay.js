@@ -455,7 +455,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 }, {
                                     "name": "Suspense",
                                     "value": "Suspense"
-                                }],
+                                },
+                                {
+                                    "name": "Internal",
+                                    "value": "INTERNAL"
+                                }
+                                ],
                                 onChange: function(value, form, model) {
                                     if (value == 'PDC') {
                                         PageHelper.showLoader();
@@ -491,11 +496,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                             }
                                             model.repayment.demandAmount = model.repayment.amount || 0;
                                         }
-                                    },
-                                    {
-                                        "name":"Internal",
-                                        "value":"INTERNAL"
-                                    }
+                                    }   
                                 }
                             },
                             {
