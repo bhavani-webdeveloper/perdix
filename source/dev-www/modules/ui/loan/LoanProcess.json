@@ -233,9 +233,9 @@
                "enumCode": "vehicle_model",
                "title": "MODEL"
             },
-            "manufactureDate": {
-               "key": "loanAccount.vehicleLoanDetails.manufactureDate",
-               "type": "date",
+            "yearOfManufacture": {
+               "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+               "type": "string",
                "title": "MANUFACTURER_DATE"
             },
             "assetDetails": {
@@ -257,7 +257,7 @@
                "type": "text",
                "title": "REGN_NO"
             },
-            "originalInvoiceValue": {
+            "price": {
                 "key": "loanAccount.vehicleLoanDetails.price",
                 "type": "number",
                 "title": "PRICE"
@@ -1398,7 +1398,7 @@
         "orderNo": 100,
         "items": {
             "verifications": {
-                "key": "customer.telecallingDetails",
+                "key": "loanAccount.telecallingDetails",
                 "title": "TELE_CALLING_DETAILS",
                 "type": "array",
                 "view":"fixed",
