@@ -394,7 +394,21 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             },
                             {
                                 key: "repayment.amount",
-                                type: "number"
+                                type: "number",
+                                condition:"!model.repayment.chequeNumber"
+                            },
+                            {
+                                key: "repayment.amount",
+                                type: "number",
+                                "readonly":true,
+                                condition:"model.repayment.chequeNumber"
+                            },
+                            {
+                                key: "repayment.chequeNumber",
+                                type: "string",
+                                "readonly":true,
+                                "title":"CHEQUE_NUMBER",
+                                condition:"model.repayment.chequeNumber"
                             },
                             {
                                 key: "repayment.repaymentDate",
@@ -420,36 +434,69 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "key": "repayment.instrument",
                                 "type": "select",
                                 "required": true,
-                                "titleMap": [
-                                    {
-                                        name: "Cash",
-                                        value: "CASH"
-                                    },
-                                    {
-                                        "name":"Cheque",
-                                        "value":"CHQ"
-                                    },
-                                    {
-                                        "name":"NEFT",
-                                        "value":"NEFT"
-                                    },
-                                    {
-                                        "name":"RTGS",
-                                        "value":"RTGS"
-                                    },
-                                    {
-                                        "name":"ACH",
-                                        "value":"ACH"
-                                    },
-                                    {
-                                        "name":"Suspense",
-                                        "value":"Suspense"
+                                "titleMap": [{
+                                    name: "Cash",
+                                    value: "CASH"
+                                }, {
+                                    "name": "Cheque",
+                                    "value": "CHQ"
+                                }, {
+                                    "name": "NEFT",
+                                    "value": "NEFT"
+                                }, {
+                                    "name": "RTGS",
+                                    "value": "RTGS"
+                                }, {
+                                    "name": "ACH",
+                                    "value": "ACH"
+                                }, {
+                                    "name": "PDC",
+                                    "value": "PDC"
+                                }, {
+                                    "name": "Suspense",
+                                    "value": "Suspense"
+                                }],
+                                onChange: function(value, form, model) {
+                                    if (value == 'PDC') {
+                                        PageHelper.showLoader();
+                                        Queries.getPDCDemands({
+                                            "accountNumber": model.repayment.accountNumber
+                                        }).then(
+                                            function(resQuery) {
+                                                $log.info(resQuery);
+                                                if (resQuery && resQuery.length && resQuery.length > 0) {
+                                                    model.repayment.amount = resQuery[0].repayment_amount;
+                                                    model.repayment.chequeNumber = resQuery[0].cheque_number;
+                                                }
+                                                PageHelper.hideLoader();
+                                            },
+                                            function(errQuery) {
+                                                PageHelper.hideLoader();
+                                            }
+                                        )
+                                    } else {
+                                        model.repayment.chequeNumber = "";
+                                        model.repayment.amount = "";
+                                        if (model.repayment.transactionName) {
+                                            if (model.repayment.transactionName == 'Pre-closure') {
+                                                if(model.repayment.totalPayoffAmountToBePaid){
+                                                    model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                                }   
+                                            } else if (model.repayment.transactionName == 'Scheduled Demand') {
+                                                if(model.repayment.totalDue){
+                                                    model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                                }   
+                                            } else {
+                                                model.repayment.amount = null;
+                                            }
+                                            model.repayment.demandAmount = model.repayment.amount || 0;
+                                        }
                                     },
                                     {
                                         "name":"Internal",
                                         "value":"INTERNAL"
                                     }
-                                ]
+                                }
                             },
                             {
                                 key:"repayment.reference",

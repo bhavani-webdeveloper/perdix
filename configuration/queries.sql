@@ -51,3 +51,4 @@ nextInstallmentDate= SELECT MIN(installment_date) as min_date from repayment_rem
 allusers.list=select u.user_id i, u.user_name n, ur.role_id r, bm.id b from users u, user_roles ur, branch_master bm where u.user_id = ur.user_id and u.branch_name = bm.branch_name
 vehiclePriceEvaluation.list = SELECT * from vehicle_price_evaluation_master 
 AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_purpose_second_level as purpose2,loan_purpose as purpose3 from loan_purpose_mapping_master
+PDCDemands.list= select repayment_amount, cheque_number from repayment_batch_details  where account_number=:accountNumber and repayment_type='PDC' and processing_status='FAILURE' order by id desc limit 1

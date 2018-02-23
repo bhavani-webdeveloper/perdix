@@ -638,6 +638,18 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getPDCDemands = function(accountNumber) {
+            var deferred = $q.defer();
+            resource.getResult("PDCDemands.list",{
+                "accountNumber": accountNumber.accountNumber
+            }).then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getFamilyRelations = function(loanId) {
             var deferred = $q.defer();
             resource.getResult("familyMembers.list", {
