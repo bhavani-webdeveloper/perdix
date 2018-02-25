@@ -112,6 +112,23 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                 });
             }
 
+             var bfMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.BulkFiling"];
+            if (bfMenu) {
+                DocumentTracking.search({
+                    'stage': 'PendingFiling',
+                    'branchId': null,
+                    'centerId': null,
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    bfMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    bfMenu.data = '-';
+                });
+            }
+            
+
+
         });
     }
 ]);
