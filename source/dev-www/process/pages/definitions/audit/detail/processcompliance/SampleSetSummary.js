@@ -28,13 +28,13 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                 var tableColumnsConfig = [{
                     "title": "SAMPLE",
                     "data": "sub_id",
-                       render: function(data, type, full, meta) {
-                                if (full.sample_newgen_uid) {
-                                   return data = 'NEW';
-                                }else{
-                                     return data = data;
-                                }
-                            }
+                    render: function(data, type, full, meta) {
+                        if (full.sample_newgen_uid) {
+                            return data = 'NEW';
+                        } else {
+                            return data = data;
+                        }
+                    }
                 }];
                 for (i in master.sampling_columns_config) {
                     sampleColumnsConfig = master.sampling_columns_config[i];
@@ -52,33 +52,52 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                     "data": "issue_details",
                     "className": "none",
                     render: function(data, type, full, meta) {
-                        var columns = ["Process", "Sub Process", "Issue", "Option", "Comment", "Responsibility"];
+                        var columns = null;
+                        if (model.siteCode == "KGFS") {
+                            columns = ["Process", "Sub Process", "Issue", "Comment", "Responsibility", "Additional Responsibility", "Spot fix", "Spot action"];
+                        } else if (model.siteCode == "kinara") {
+                            columns = ["Process", "Sub Process", "Issue", "Option", "Comment", "Responsibility", "Additional Responsibility"];
+                        }
+
                         var table = [
-                            '<tr style="border-bottom:1px solid lightgray"><th>&nbsp;'+columns.join('&nbsp;</th><th>&nbsp;')+'&nbsp;</th></tr>'
+                            '<tr style="border-bottom:1px solid lightgray"><th>&nbsp;' + columns.join('&nbsp;</th><th>&nbsp;') + '&nbsp;</th></tr>'
                         ];
                         for (i in data) {
                             var r = data[i];
-                            var row = [
-                                master.process[master.typeofissues[r.type_of_issue_id].process_id].process_name,
-                                master.subprocess[master.typeofissues[r.type_of_issue_id].sub_process_id].sub_process_name,
-                                master.typeofissues[r.type_of_issue_id].description
-                            ];
-                            var options = master.autosampling_typeofissue_sets[r.type_of_issue_id].options.type_of_issue_options;
-                            for (j in options) {
-                                if (options[j].option_id == r.option_id) {
-                                    row.push(options[j].option_label);
-                                    break;
+                            if (r.assignee_det[0].assignee_id || r.deviation) {
+                                var row = [
+                                    master.process[master.typeofissues[r.type_of_issue_id].process_id].process_name,
+                                    master.subprocess[master.typeofissues[r.type_of_issue_id].sub_process_id].sub_process_name,
+                                    master.typeofissues[r.type_of_issue_id].description
+                                ];
+                                if (model.siteCode == "kinara") {
+                                    var options = master.autosampling_typeofissue_sets[r.type_of_issue_id].options.type_of_issue_options;
+                                    for (j in options) {
+                                        if (options[j].option_id == r.option_id) {
+                                            row.push(options[j].option_label);
+                                            break;
+                                        }
+                                    }
+                                    if (row.length == 3) {
+                                        row.push('&nbsp;');
+                                    }
                                 }
+                                row.push(r.deviation || '&nbsp;');
+                                row.push(r.assignee_det[0].assignee_id || '&nbsp;');
+                                if (r.assignee_det[1]) {
+                                    row.push(r.assignee_det[1].assignee_id || '&nbsp;');
+                                } else {
+                                    row.push('&nbsp;');
+                                }
+                                if (model.siteCode == "kinara") {
+                                    row.push(r.spot_fixed || '&nbsp;');
+                                    row.push(r.spot_action || '&nbsp;');
+                                }
+                                table.push('<tr style="border-bottom:1px solid lightgray"><td>' + row.join('</td><td>') + '</td></tr>');
                             }
-                            if (row.length == 3) {
-                                row.push('&nbsp;');
-                            }
-                            row.push(r.deviation || '&nbsp;');
-                            row.push(r.assignee_det[0].assignee_id || '&nbsp;');
-
-                            table.push('<tr style="border-bottom:1px solid lightgray"><td>'+row.join('</td><td>')+'</td></tr>');
                         }
-                        return data && data.length ? '<table style="border:1px solid lightgray;margin-top:5px"><caption style="border:1px solid lightgray;border-bottom:0;text-align:center;padding:0">Issues</caption>'+table.join('')+'</table>' : '';
+
+                        return data && data.length ? '<table style="border:1px solid lightgray;margin-top:5px"><caption style="border:1px solid lightgray;border-bottom:0;text-align:center;padding:0">Issues</caption>' + table.join('') + '</table>' : '';
                     }
                 });
 
@@ -94,7 +113,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                             break;
                         }
                     }
-                    for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++) if (model.sampleSet[i].status == "0") model.sampleSetSummary.push(model.sampleSet[i]);
+                    for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++)
+                        if (model.sampleSet[i].status == "0") model.sampleSetSummary.push(model.sampleSet[i]);
                     self.form = [{
                         "type": "box",
                         "colClass": "col-md-12",
@@ -108,25 +128,28 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                             "tableConfig": {
                                 "searching": true,
                                 "paginate": true,
-                                "lengthMenu": [[1,2,5,10,25,50,-1],[1,2,5,10,25,50,"All"]],
+                                "lengthMenu": [
+                                    [1, 2, 5, 10, 25, 50, -1],
+                                    [1, 2, 5, 10, 25, 50, "All"]
+                                ],
                                 "pageLength": 5,
                                 "responsive": {
                                     "details": {
                                         "display": $.fn.dataTable.Responsive.display.childRowImmediate,
                                         renderer: function(api, rowIdx, columns) {
-                                            var html = '<ul data-dtr-index="'+rowIdx+'" class="dtr-details">';
+                                            var html = '<ul data-dtr-index="' + rowIdx + '" class="dtr-details">';
                                             var issuesIndex = columns.length - 2;
                                             for (i in columns) {
                                                 if (columns[i].hidden) {
                                                     if (i != issuesIndex) {
-                                                        html += '<li data-dtr-index="'+columns[i].rowIndex+'" data-dt-row="'+rowIdx+'" data-dt-column="'+columns[i].rowIndex+'">'+
-                                                            '<span class="dtr-title">'+columns[i].title+'</span>'+
-                                                            '<span class="dtr-data">'+columns[i].data+'</span>'+
-                                                        '</li>';
+                                                        html += '<li data-dtr-index="' + columns[i].rowIndex + '" data-dt-row="' + rowIdx + '" data-dt-column="' + columns[i].rowIndex + '">' +
+                                                            '<span class="dtr-title">' + columns[i].title + '</span>' +
+                                                            '<span class="dtr-data">' + columns[i].data + '</span>' +
+                                                            '</li>';
                                                     }
                                                 }
                                             }
-                                            return html+'</ul>'+columns[issuesIndex].data;
+                                            return html + '</ul>' + columns[issuesIndex].data;
                                         }
                                     }
                                 },
@@ -136,6 +159,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                 return tableColumnsConfig;
                             },
                             initializeDataTable: function(dataTable, datatableConfig, tableData) {
+                                // $log.info(dataTable);
                             },
                             getActions: function() {
                                 return [{
@@ -144,7 +168,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                     fn: function(item, index) {
                                         item.status = "0";
                                         delete item.issue_details;
-                                        for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++) if (model.sampleSet[i].status == "0") model.sampleSetSummary.push(model.sampleSet[i]);
+                                        for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++)
+                                            if (model.sampleSet[i].status == "0") model.sampleSetSummary.push(model.sampleSet[i]);
                                         if (model.$isOffline) {
                                             Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                         }
@@ -152,19 +177,20 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                     isApplicable: function(item, index) {
                                         return !$stateParams.pageData.readonly && item.status != "0";
                                     }
-                                },{
+                                }, {
                                     name: "NO_ISSUES",
                                     icon: "",
                                     fn: function(item, index) {
                                         item.status = "1";
                                         delete item.issue_details;
-                                        for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++) if (model.sampleSet[i].status == "1") model.sampleSetSummary.push(model.sampleSet[i]);
+                                        for (i = 0, model.sampleSetSummary = []; i < model.sampleSet.length; i++)
+                                            if (model.sampleSet[i].status == "1") model.sampleSetSummary.push(model.sampleSet[i]);
                                         if (model.$isOffline) {
                                             Audit.offline.setProcessCompliance(auditId, model.processCompliance);
                                         }
                                     },
                                     isApplicable: function(item, index) {
-                                         return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";                                       
+                                        return model.siteCode == 'KGFS' && !$stateParams.pageData.readonly && item.status != "1";
                                     }
                                 }, {
                                     name: "DO_AUDIT",
@@ -173,11 +199,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                         irfNavigator.go({
                                             'state': 'Page.Engine',
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
-                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
+                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id ? item.sub_id : (item.sample_newgen_uid ? '_' + item.sample_newgen_uid : '')),
                                             'pageData': pageData
                                         }, {
                                             'state': 'Page.Engine',
-                                            'pageName': 'audit.detail.processcompliance.SampleSetSummary',                                            
+                                            'pageName': 'audit.detail.processcompliance.SampleSetSummary',
                                             'pageId': auditId + ":" + sampleTypeId,
                                             'pageData': pageData
                                         });
@@ -192,7 +218,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                         irfNavigator.go({
                                             'state': 'Page.Engine',
                                             'pageName': 'audit.detail.processcompliance.SampleIssues',
-                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id? item.sub_id: (item.sample_newgen_uid? '_'+item.sample_newgen_uid: '')),
+                                            'pageId': auditId + ":" + sampleTypeId + ":" + (item.sub_id ? item.sub_id : (item.sample_newgen_uid ? '_' + item.sample_newgen_uid : '')),
                                             'pageData': pageData
                                         }, {
                                             'state': 'Page.Engine',

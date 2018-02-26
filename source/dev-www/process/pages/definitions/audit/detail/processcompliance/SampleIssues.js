@@ -381,6 +381,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             issueDetailsForm.push({
                                 "key": "sample.issue_details[" + i + "].spot_fixed",
                                 "type": "checkbox",
+                                "condition": "model.sample.issue_details[" + i + "].assignee_det[0].assignee_id",
                                 "fullwidth": true,
                                 "schema": {
                                     "default": false
@@ -390,7 +391,8 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 "key": "sample.issue_details[" + i + "].spot_action",
                                 "condition": "model.sample.issue_details[" + i + "].spot_fixed == '1'",
                                 "type": "textarea",
-                                "title": "SPOT_ACTION"
+                                "title": "SPOT_ACTION",
+                                "required": true
                             });
                         }
                         issueDetailsForm.push({
