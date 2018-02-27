@@ -449,7 +449,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "title":"NAME_OF_NEIGHBOUR"
                                 },
                                 "EnterpriseReferences.verifications.knownSince": {
-                                    "title":"NEIGHBOUR_RECOGNIZE_BORROWER"
+                                    "title":"KNOWN_SINCE_(_IN_YEARS_)",
+                                    "type" : "number"
                                 },
                                 "EnterpriseReferences.verifications.customerResponse": {
                                     "title":"NEIGHBOUR_REFERENCE"

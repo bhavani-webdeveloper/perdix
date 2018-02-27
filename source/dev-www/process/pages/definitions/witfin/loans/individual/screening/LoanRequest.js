@@ -316,14 +316,14 @@ define([],function(){
                     "PreliminaryInformation.estimatedEmi",
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
-                    "DeductionsFromLoan.dsaPayoutInPercentage",
+                    "DeductionsFromLoan.dsaPayout",
                     "DeductionsFromLoan.securityEmiRequired",
                     "DeductionsFromLoan.estimatedEmi",
                     "DeductionsFromLoan.calculateDisbursedAmount",
-                    "DeductionsFromLoan.actualFranking",
-                    "DeductionsFromLoan.vehicleInsurance",
-                    "DeductionsFromLoan.personalInsurance",
-                    "DeductionsFromLoan.irr",
+                    "DeductionsFromLoan.fee3",
+                    "DeductionsFromLoan.fee4",
+                    "DeductionsFromLoan.expectedPortfolioInsurancePremium",
+                    "DeductionsFromLoan.dealIrr",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -347,10 +347,14 @@ define([],function(){
                     "VehicleAssetUse.locationAddress",
                     "VehicleAssetUse.locationContactName",
                     "VehicleAssetUse.locationContactNumber",
-                    "VehicleAssetViability",
-                    "VehicleAssetViability.vehicleLoanIncomes",
-                    "VehicleAssetViability.vehicleLoanIncomes.incomeType",
-                    "VehicleAssetViability.vehicleLoanIncomes.incomeAmount",
+                    "VehicleLoanIncomesInformation",
+                    "VehicleLoanIncomesInformation.VehicleLoanIncomes",
+                    "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeType",
+                    "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount",
+                    "VehicleExpensesInformation",
+                    "VehicleExpensesInformation.VehicleExpenses",
+                    "VehicleExpensesInformation.VehicleExpenses.expenseType",
+                    "VehicleExpensesInformation.VehicleExpenses.expenseAmount",
                     "VehiclePhotoCaptures",
                     "VehiclePhotoCaptures.vehiclePhotoCaptures",
                     "VehiclePhotoCaptures.vehiclePhotoCaptures.photoFileId",
@@ -588,13 +592,11 @@ define([],function(){
                                 "required": true
                             },
                             "NewVehicleDetails.assetDetails":{
-                                "orderNo": 90,
-                                // "required": true
+                                "orderNo": 90
                             },
                             "NewVehicleDetails.assetSubDetails":{
                                 "orderNo": 100,
-                                "title": "SUB_DESCRIPTION",
-                                // "required": true
+                                "title": "SUB_DESCRIPTION"
                             },
                             "NewVehicleDetails.registrationNumber":{
                                 "orderNo": 110,
@@ -604,6 +606,9 @@ define([],function(){
                                 "orderNo": 120,
                                 "readonly": true,
                                 "required": true
+                            },
+                            "VehiclePhotoCaptures": {
+                                "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
                             }
                         },
                         "includes": getIncludes (model),
@@ -650,29 +655,31 @@ define([],function(){
                                 },
                                 "DeductionsFromLoan": {
                                     "items": {
-                                        "dsaPayoutInPercentage": {
+                                        "dsaPayout": {
                                             "key": "loanAccount.dsaPayout",
+                                            "type": "number",
                                             "title": "DSA_PAYOUT_IN_PERCENTAGE",
                                             "orderNo": 30
                                         },
-                                        "actualFranking": {
+                                        "fee3": {
                                             "key": "loanAccount.fee3",
                                             "title": "ACTUAL_FRANKING",
                                             "orderNo": 40
                                         },
-                                        "personalInsurance": {
+                                        "expectedPortfolioInsurancePremium": {
                                             "key": "loanAccount.expectedPortfolioInsurancePremium",
                                             "title": "PERSONAL_INSURANCE",
                                             "orderNo": 50
                                         },
-                                        "vehicleInsurance": {
+                                        "fee4": {
                                             "key": "loanAccount.fee4",
                                             "title": "VEHICLE_INSURANCE",
                                             "orderNo": 60
                                         },
-                                        "irr": {
-                                            "key": "xirr",
+                                        "dealIrr": {
+                                            "key": "loanAccount.dealIrr",
                                             "title": "XIRR",
+                                            "type": "number",
                                             "orderNo": 110,
                                             "readonly": true
                                         },
@@ -749,7 +756,7 @@ define([],function(){
                                                         .$promise
                                                         .then(function(resp) {
                                                             $log.info(resp);
-                                                            model.xirr = resp.xirr;
+                                                            model.loanAccount.dealIrr = Number(resp.xirr.substr(0,resp.xirr.length-1));
                                                         });
                                                 }
                                             }
@@ -794,6 +801,7 @@ define([],function(){
                                             "key": "loanAccount.udf11",
                                             "type": "select",
                                             "title": "FI_REASON",
+                                            "condition": "model.loanAccount.udf10 == 'Negative' || model.loanAccount.udf10 == 'Refer to Credit'",
                                             "enumCode": "fi_reason",
                                             "parentEnumCode": "fi_decision",
                                             "parentValueExpr": "model.loanAccount.udf10"
@@ -955,6 +963,9 @@ define([],function(){
 
                     p1.then(function(repo) {
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                    }, function(err){
+                        console.log(err);
+
                     })
 
                 },

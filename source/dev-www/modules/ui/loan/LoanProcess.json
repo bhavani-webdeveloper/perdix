@@ -471,46 +471,64 @@
             }
         }
     },
-    "VehicleAssetViability": {
+
+    "VehicleLoanIncomesInformation": {
         "type": "box",
-        "title": "VEHICLE_ASSET_VIABILITY",
-        "orderNo": 120,
+        "title": "VEHICLE_LOAN_INCOME",
         "items": {
-            "vehicleLoanIncomes": {
-                "type": "array",
-                "title": "VEHICLE_INCOME",
-                "startEmpty": true,
+            "VehicleLoanIncomes":{
+                "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes",
+                "type":"array",
+                "add": null,
+                "remove": null,
+                "view": "fixed",
+                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[arrayIndexes[0]].incomeType",
                 "items": {
-                    "incomeType": {
-                        "key": "loanAccount.vehicleLoanIncomes[].incomeType",
-                        "title": "VEHICLE_INCOME_TYPE",
-                        "type": "select"
+                    "incomeType":{
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes[].incomeType",
+                        "title": "VEHICLE_LOAN_INCOME_TYPE",
+                        "type": "select",
+                        "enumCode": "vehicle_income_types"
                     },
-                    "incomeAmount": {
-                        "key": "loanAccount.vehicleLoanIncomes[].incomeAmount",
-                        "title": "VEHICLE_INCOME_AMOUNT",
+                    "incomeAmount":{
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes[].incomeAmount",
+                        "title": "VEHICLE_LOAN_INCOME_AMOUNT",
                         "type": "amount"
                     }
                 }
-            },
-            "vehicleLoanExpenses": {
-                "type": "array",
+            }
+        }         
+    },
+
+    "VehicleExpensesInformation": {
+        "type": "box",
+        "title": "VEHICLE_EXPENSE",
+        "items": {
+            "VehicleExpenses" :{
+                "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses",
                 "title": "VEHICLE_EXPENSE",
+                "type": "array",
+                "add": null,
+                "remove": null,
+                "view": "fixed",
+                "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[arrayIndexes[0]].expenseType",
                 "items": {
-                    "expenseType": {
-                        "key": "loanAccount.vehicleLoanExpenses[].expenseType",
-                        "title": "VEHICLE_INCOME_TYPE",
-                        "type": "select"
+                    "expenseType" :{
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses[].expenseType",
+                        "title": "VEHICLE_EXPENSE_TYPE",
+                        "type": "select",
+                        "enumCode": "vehicle_expense_types"
                     },
-                    "expenseAmount": {
-                        "key": "loanAccount.vehicleLoanExpenses[].expenseAmount",
-                        "title": "VEHICLE_INCOME_AMOUNT",
-                        "type": "amount"
+                    "expenseAmount" :{
+                        "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses[].expenseAmount",
+                        "type": "amount",
+                        "title": "VEHICLE_EXPENSE_AMOUNT"
                     }
                 }
             }
         }
     },
+
     "CollateralInformation": {
         "type": "box",
         "title": "COLLATERAL_INFORMATION",

@@ -50,6 +50,20 @@ let config = {
                                 "arguments": {}
                             }
                         ]
+                    },
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage == 'Application'",
+                        "add": [
+                            {
+                                "name": "DefaultIncomeTypePolicy",
+                                "arguments": {}
+                            },
+                            {
+                                "name": "DefaultExpensePolicy",
+                                "arguments": {}
+                            }
+                        ]
                     }
                 ]
             },

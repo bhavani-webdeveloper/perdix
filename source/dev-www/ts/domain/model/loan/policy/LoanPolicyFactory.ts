@@ -16,7 +16,8 @@ import {LoanDerivedFieldsUpdate} from "./LoanDerivedFieldsUpdate";
 import {CustomerEnrolmentCompletedPolicy} from './CustomerEnrolmentCompletedPolicy';
 import {CustomerReferencePolicy} from './CustomerReferencePolicy';
 import {CollateralFieldPolicy} from './CollateralFieldPolicy';
-
+import {DefaultExpensePolicy} from './DefaultExpensePolicy'
+import {DefaultIncomeTypePolicy} from './DefaultIncomeTypePolicy'
 
 
 export class LoanPolicyFactory implements IPolicyFactory{
@@ -65,7 +66,11 @@ export class LoanPolicyFactory implements IPolicyFactory{
             case 'CustomerReferencePolicy':
                 return new CustomerReferencePolicy();
             case 'CollateralFieldPolicy': 
-                return new CollateralFieldPolicy();  
+                return new CollateralFieldPolicy();
+            case 'DefaultExpensePolicy':
+                return new DefaultExpensePolicy();
+            case 'DefaultIncomeTypePolicy':
+                return new DefaultIncomeTypePolicy();
             default:
                 return null;
         }

@@ -120,11 +120,11 @@
                 },
                 "dsaPayout": {
                     "title": "DSA_LAYOUT",
-                    "type": ["string", "null"]
+                    "type": "number"
                 },
                 "dealIrr": {
                     "title": "DSA_LAYOUT",
-                    "type": ["string", "null"]
+                    "type": "number"
                 },
                 "valuator": {
                     "title": "VALUATOR",

@@ -166,7 +166,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"!model.siteCode || model.siteCode == 'kinara'",
+                        "condition":"!model.siteCode || model.siteCode == 'kinara' || model.siteCode == 'witfin'",
                         "title": "MODE_OF_DISBURSEMENT", 
                         "required": true,  
                         "type": "select",

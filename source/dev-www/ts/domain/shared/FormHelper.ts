@@ -11,7 +11,8 @@ export interface IFormHelper {
     getStages(): any;
     getCenters(): any;
     getAddressProof(): any;
-
+    getIncomeType(): any;
+    getExpenseType(): any;
 }
 
 export abstract class NeedsAngularInjector {
@@ -61,5 +62,11 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
         return this.getInjector().enum('identity_proof').data;
     }
 
+    getIncomeType(): any {
+        return this.getInjector().enum('vehicle_income_types').data;
+    }
 
+    getExpenseType(): any {
+        return this.getInjector().enum('vehicle_expense_types').data;
+    }
 }
