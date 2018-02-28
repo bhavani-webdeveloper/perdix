@@ -53,7 +53,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                 break;
                             case 'RISK':
                                 _.map(issuesList, function(iss) {
-                                    if (iss.type_of_issue_id == model.viewTypeId) {
+                                    if (master.typeofissues[iss.type_of_issue_id].risk_classification == model.viewTypeId) {
                                         model.issues.push(iss);
                                     }
                                 })
