@@ -317,6 +317,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "type": "tableview",
                 "condition": "model.report",
                 "key": "report",
+                "tableConfig": {
+                    "searching": false
+                },
                 getColumns: function() {
                     return [{
                         "title": "SAMPLE_NAME",

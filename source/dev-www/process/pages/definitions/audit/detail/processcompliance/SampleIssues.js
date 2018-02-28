@@ -264,11 +264,16 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
 
                         if (issue.options.type == "dropdown") {
                             var dropdownTitleMap = [];
+                            var optionId = model.sample.issue_details[i].option_id;
                             for (j in issue.options.type_of_issue_options) {
                                 dropdownTitleMap.push({
                                     "name": issue.options.type_of_issue_options[j].option_label,
                                     "value": issue.options.type_of_issue_options[j].option_id
                                 });
+                                // Default option id to NA
+                                if (!optionId && issue.options.type_of_issue_options[j].option_label == 'NA') {
+                                    model.sample.issue_details[i].option_id = issue.options.type_of_issue_options[j].option_id;
+                                }
                             }
                             issueDetailsForm.push({
                                 "key": "sample.issue_details[" + i + "].option_id",

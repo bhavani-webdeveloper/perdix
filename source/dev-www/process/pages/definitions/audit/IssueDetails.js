@@ -108,7 +108,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }, {
                     "key": "auditIssue.confirmity_status",
                     "title": "STATUS",
-                    "condition": "!model.readonly && model.type=='audit'",
+                    "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status == 'X'",
                     "type": "radios",
                     "titleMap": [{
                         "name": "Confirm",

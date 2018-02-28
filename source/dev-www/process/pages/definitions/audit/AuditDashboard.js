@@ -148,7 +148,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (doaq) {
                     Audit.online.getAuditList({
-                        'auditor_id': auditor_id,
                         'current_stage': 'draft',
                         'status': 'D'
                     }).$promise.then(function(data) {
