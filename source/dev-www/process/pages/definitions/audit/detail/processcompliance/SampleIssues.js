@@ -30,6 +30,9 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
                 if (issue.options.type == "dropdown") {
                     for (j in issue.options.type_of_issue_options) {
+                        if (issue.options.type_of_issue_options[j].option_label == 'NA') {
+                            continue;
+                        }
                         if (issue.options.type_of_issue_options[j].option_id == id.option_id) {
                             if (issue.options.type_of_issue_options[j].marks === 0) {
                                 if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
