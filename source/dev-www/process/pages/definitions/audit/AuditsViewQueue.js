@@ -267,7 +267,8 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                                         'pageName': 'audit.AuditDetails',
                                         'pageId': item.audit_id,
                                         'pageData': {
-                                            "page": returnObj.definition.listOptions.tableConfig.page,
+                                            "type": "audit",
+                                            "view": "all",
                                             "readonly": true
                                         }
                                     };
@@ -285,10 +286,9 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                                         'state': 'Page.Engine',
                                         'pageName': 'audit.detail.SnapAuditDetails',
                                         'pageId': item.audit_id,
-                                        // 'pageData': {
-                                        //     "page": returnObj.definition.listOptions.tableConfig.page,
-                                        //     "readonly": true
-                                        // }
+                                        'pageData': {
+                                            "readonly": true
+                                        }
                                     };
                                     var backparam = {
                                         'state': 'Page.Engine',

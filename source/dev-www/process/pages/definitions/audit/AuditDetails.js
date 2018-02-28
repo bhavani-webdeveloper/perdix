@@ -197,7 +197,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
-            if ($scope.siteCode == 'kinara' && $scope.model.ai.status !== 'O') {
+            if ($stateParams.pageData.view != 'all' && $scope.siteCode == 'kinara' && $scope.model.ai.status !== 'O') {
                 $scope.showDashboard = false;
                 return;
             }
