@@ -70,7 +70,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                                         break;
                                     case 'RISK':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].risk_classification;
-                                        reportKeyName = master.risk_classification[master.typeofissues[issue.type_of_issue_id].risk_classification].risk_classification_name;
+                                        reportKeyName = master.risk_classification[reportKey].risk_clasification_name;
                                         break;
                                 }
                                 if (!reportKey || !reportKeyName) continue;
