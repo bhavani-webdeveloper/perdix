@@ -436,7 +436,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 "desgn_id": 0 // TODO global_settings audit.issue_assigned_to_role_id
                             }],
                             "input_datas": "",
-                            "spot_fixed": "0"
+                            "spot_fixed": "0",
+                            "document_id": null,
+                            "draft_document_id": null,
+                            "latitude": null,
+                            "longitude": null
                         };
                         processIssuesForm(issues[i], idx++);
                     }
