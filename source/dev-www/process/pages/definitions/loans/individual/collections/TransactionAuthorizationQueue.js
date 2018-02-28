@@ -82,7 +82,11 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                     'currentStage':"PartialPayment",
                     'accountCentreId': searchOptions.centre,
                     'accountBranchId': searchOptions.branch_id,
-                    'accountNumber': searchOptions.accountNumber
+                    'customerName': searchOptions.first_name,
+                    'accountNumber': searchOptions.accountNumber,
+                    'sortBy': '+repaymentDate',
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage 
                 }).$promise;
 
                 return promise;
@@ -114,7 +118,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.demandAmount,
+                        'Amount Due: ' + item.demandAmount  + "    " + 'Repayment Date: ' + item.repaymentDate,
                         'Amount Paid: ' + item.repaymentAmount,
                         'Payment Type: ' + item.instrumentType
                     ]
