@@ -533,12 +533,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             actions: {
                 submit: function(model, formCtrl, form, $event) {
                     PageHelper.clearErrors();
-                    if (model.siteCode = "kinara") {
+                    if (model.siteCode == "kinara") {
                         if (!validateKinara(model.sample)) {
                             return;
                         }
                     }
-                    if (model.siteCode = "KGFS") {
+                    if (model.siteCode == "KGFS") {
                         if (!validateKgfs(model.sample)) {
                             return;
                         }

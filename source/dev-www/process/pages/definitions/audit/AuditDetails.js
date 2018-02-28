@@ -459,7 +459,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             },
             showProceed: function(model) {
                 if (!model.ai) return;
-                if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
+                if (!model.ai._dirty && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'start':
                         case 'create':
