@@ -184,7 +184,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
                 "items": [{
                     "type": "button",
-                    "title": "SUBMIT",
+                    "title": "UPDATE_ISSUE",
                     "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
                 }, {
                     "type": "button",

@@ -472,6 +472,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             return true;
                     }
                 }
+                if (!model.ai._dirty && model.type == 'operation') {
+                    switch (model.ai.current_stage) {
+                        case 'draft':
+                            return true;
+                }
                 return false;
             },
             showReject: function(model) {
