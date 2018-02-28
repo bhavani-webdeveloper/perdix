@@ -1330,7 +1330,7 @@
                         "startEmpty": true,
                         "items": {
                             "incomeSource": {
-                                "key": "incomeSource",
+                                "key": "customer.familyMembers[].incomes[].incomeSource",
                                 "title":"INCOME_SOURCE",
                                 "type": "select",
                                 "enumCode": "occupation"

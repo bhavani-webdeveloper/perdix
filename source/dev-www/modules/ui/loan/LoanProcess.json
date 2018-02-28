@@ -475,6 +475,7 @@
     "VehicleLoanIncomesInformation": {
         "type": "box",
         "title": "VEHICLE_LOAN_INCOME",
+        "orderNo": 310,
         "items": {
             "VehicleLoanIncomes":{
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes",
@@ -497,12 +498,13 @@
                     }
                 }
             }
-        }         
+        }
     },
 
     "VehicleExpensesInformation": {
         "type": "box",
         "title": "VEHICLE_EXPENSE",
+        "orderNo": 320,
         "items": {
             "VehicleExpenses" :{
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses",
