@@ -715,7 +715,7 @@
                   "minimum":0,
                   "maximum":100000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"dealIrr":{
                   "title":"dealIrr",
@@ -723,7 +723,7 @@
                   "minimum":0,
                   "maximum":100000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },"valuator":{
                   "title":"valuator",
@@ -891,14 +891,14 @@
                   "title":"Fee3",
                   "type":"number",
                   "captureStages":[
-                     "Screening", "LoanInitiation"
+                     "Screening", "LoanInitiation","Application"
                   ]
                },
                "fee4":{
                   "title":"fee4",
                   "type":"number",
                   "captureStages":[
-                     "Screening", "LoanInitiation"
+                     "Screening", "LoanInitiation", "Application"
                   ]
                },
                "fee5":{
@@ -962,7 +962,7 @@
                   "title": "expectedPortfolioInsurancePremium",
                   "type": "string",
                   "captureStages": [
-                      "Screening", "ScreeningReview","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "Screening", "ScreeningReview", "Application","FieldAppraisal","SanctionInput", "LoanInitiation"
                   ]
                },
                "productCategory": {
