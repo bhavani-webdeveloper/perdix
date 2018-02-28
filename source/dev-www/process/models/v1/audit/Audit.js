@@ -28,8 +28,11 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 Utils.downloadFile(endpoint + "/downloadSampleSet");
             },
             isIssueApplicable: function(master, typeOfIssueId, responsibilityType, roleId) {
-                return typeOfIssueId && responsibilityType && roleId && master.typeofissues[typeOfIssueId].responsibility
+                if (roleId) {
+                    return typeOfIssueId && responsibilityType && master.typeofissues[typeOfIssueId].responsibility
                     && _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
+                }
+                return true;
             },
             getRatingByScore: function(master, score) {
                 var rating;

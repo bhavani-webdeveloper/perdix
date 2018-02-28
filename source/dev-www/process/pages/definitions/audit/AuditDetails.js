@@ -55,7 +55,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     if (sample.status === "0") {
                         for (k in sample.issue_details) {
                             var issue = sample.issue_details[k];
-                            if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, userRole.id)) {
+                            var roleId = $scope.model.type == 'operation'? userRole.id: null;
+                            if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, roleId)) {
                                 var reportKey = null;
                                 var reportKeyName = null;
                                 switch (reportType) {
@@ -463,7 +464,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     switch (model.ai.current_stage) {
                         case 'start':
                         case 'create':
-                        case 'draft':
                         case 'publish':
                         case 'L1-approve':
                             return true;
