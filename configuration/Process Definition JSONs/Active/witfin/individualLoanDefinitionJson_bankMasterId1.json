@@ -928,6 +928,7 @@
                             "Sanction",
                             "LoanInitiation",
                             "ApplicationReview",
+                            "Application",
                             "ScreeningReview",
                             "BranchCreditAppraisal",
                             "ZonalRiskReview",
@@ -946,6 +947,7 @@
                             "Screening",
                             "Sanction",
                             "LoanInitiation",
+                            "Application",
                             "ApplicationReview",
                             "ScreeningReview",
                             "BranchCreditAppraisal",
@@ -1201,7 +1203,8 @@
                         "type": "number",
                         "captureStages": [
                             "Screening",
-                            "LoanInitiation"
+                            "LoanInitiation",
+                            "Application"
                         ]
                     },
                     "fee4": {
@@ -1209,7 +1212,8 @@
                         "type": "number",
                         "captureStages": [
                             "Screening",
-                            "LoanInitiation"
+                            "LoanInitiation",
+                            "Application"
                         ]
                     },
                     "fee5": {
@@ -1307,7 +1311,8 @@
                             "Application",
                             "FieldAppraisal",
                             "SanctionInput",
-                            "LoanInitiation"
+                            "LoanInitiation",
+                            "Application"
                         ]
                     },
                     "productCategory": {
