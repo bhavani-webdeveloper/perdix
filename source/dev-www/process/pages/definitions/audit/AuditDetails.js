@@ -322,7 +322,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 },
                 getColumns: function() {
                     return [{
-                        "title": "SAMPLE_NAME",
+                        "title": "NAME",
                         "data": 'name'
                     }, {
                         "title": "NO_OF_ISSUES",

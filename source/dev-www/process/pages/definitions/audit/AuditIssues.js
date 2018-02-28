@@ -107,9 +107,6 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                             "type": model.type,
                                             "readonly": $stateParams.pageData.readonly
                                         }
-                                    }, {
-                                        'state': 'Page.Engine',
-                                        'pageName': 'audit.AuditIssues'
                                     });
                                 },
                                 isApplicable: function(item, index) {

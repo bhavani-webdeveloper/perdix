@@ -88,7 +88,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "readonly": true
                 }, {
                     key: "auditIssue.draft_document_id",
-                    "condition": "!model.readonly && model.type",
+                    "condition": "!model.readonly && model.type == 'operation'",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
@@ -97,7 +97,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     "subCategory": "AUDITISSUEDRAFTDOC"
                 }, {
                     key: "auditIssue.draft_document_id",
-                    "condition": "model.readonly",
+                    "condition": "model.readonly || model.type == 'audit'",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
@@ -133,16 +133,16 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }, {
                     type: "textarea",
                     key: "auditIssue.comments",
-                    "condition": "(model.readonly || model.type!='audit') && model.auditIssue.confirmity_status == 2",
+                    "condition": "model.readonly || model.type != 'audit' || model.auditIssue.confirmity_status != 2",
                     "readonly": true
                 }, {
                     type: "textarea",
                     key: "auditIssue.comments",
-                    "condition": "!model.readonly && model.type=='audit' && model.auditIssue.confirmity_status == 2"
+                    "condition": "!model.readonly && (model.auditIssue.confirmity_status == 2 || model.auditIssue.status == 'DO' || model.auditIssue.status == 'DR')"
                 }, {
                     type: "textarea",
-                    key: "messages",
-                    "condition": "!model.readonly",
+                    key: "message",
+                    "condition": "!model.readonly && model.type == 'operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
                     "title": "REMARKS"
                 }]
             }, {
@@ -173,7 +173,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "actionbox",
-                "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status =='A' || model.auditIssue.status =='P')",
+                "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
                 "items": [{
                     "type": "button",
                     "title": "CLOSE",
@@ -200,7 +200,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
                 "items": [{
                     "type": "button",
-                    "title": "SUBMIT",
+                    "title": "UPDATE_ISSUE",
                     "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
                 }, {
                     "type": "button",
@@ -270,18 +270,21 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                             model.auditIssue.status = 'A';
                             model.auditIssue.next_stage = 'assign';
                         }
-                    }
-                    if (model.auditIssue.status == 'DO' && model.type == 'operation') {
+                    } else if (model.auditIssue.status == 'DO' && model.type == 'operation') {
                         if (actionType == 'accept') {
                             model.auditIssue.status = 'DA';
+                            model.auditIssue.next_stage = 'draftaccept';
                         } else if (actionType == 'reject') {
                             model.auditIssue.status = 'DR';
+                            model.auditIssue.next_stage = 'draftreject';
                         }
                     } else if (model.auditIssue.status == 'DA' && model.type == 'audit') {
                         if (actionType == 'draftAccept') {
                             model.auditIssue.status = 'DRA';
+                            model.auditIssue.next_stage = 'draftrejectaccept';
                         } else if (actionType == 'draftReject') {
                             model.auditIssue.status = 'DRR';
+                            model.auditIssue.next_stage = 'draftrejectreject';
                         }
                     }
                     Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {

@@ -239,7 +239,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                                 return !SessionStore.session.offline && !item._offline && item._online;
                             }
                         }, {
-                            name: "DO_AUDIT",
+                            name: "VIEW_DRAFT",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
