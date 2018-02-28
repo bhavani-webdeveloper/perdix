@@ -476,6 +476,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     switch (model.ai.current_stage) {
                         case 'draft':
                             return true;
+                    }
                 }
                 return false;
             },
