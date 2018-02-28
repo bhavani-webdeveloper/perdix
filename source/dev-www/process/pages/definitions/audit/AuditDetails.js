@@ -448,7 +448,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
 
         $scope.actions = {
             showAddMessage: function(model) {
-                if (!model.ai) return;
+                if (!model.ai || model.readonly) return false;
                 if (!model.ai._dirty && !model.readonly && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'start':
@@ -459,10 +459,16 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             return true;
                     }
                 }
+                if (!model.ai._dirty && !model.readonly && model.type == 'operation') {
+                    switch (model.ai.current_stage) {
+                        case 'draft':
+                            return true;
+                    }
+                }
                 return false;
             },
             showProceed: function(model) {
-                if (!model.ai) return;
+                if (!model.ai) return false;
                 if (!model.ai._dirty && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'start':
@@ -481,7 +487,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 return false;
             },
             showReject: function(model) {
-                if (!model.ai) return;
+                if (!model.ai) return false;
                 if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'publish':
