@@ -1,7 +1,6 @@
-irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigator", "Audit", "$state", "$stateParams", "SessionStore",
-    "formHelper", "$q", "PageHelper", "Queries",
-    function($log, irfNavigator, Audit, $state, $stateParams, SessionStore, formHelper, $q, PageHelper, Queries) {
-        var branch = SessionStore.getBranch();
+irf.pageCollection.factory(irf.page("audit.IssueDetails"),
+["irfNavigator", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
+    function(irfNavigator, Audit, $stateParams, SessionStore, PageHelper, User) {
         return {
             "type": "schema-form",
             "title": "ISSUE_DETAILS",
@@ -34,6 +33,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                     irfNavigator.goBack();
                     return;
                 }
+                model.actions = self.actions;
             },
             form: [{
                 "type": "box",
@@ -147,20 +147,20 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                 }]
             }, {
                 "type": "box",
-                "title": "RESPONSE",
+                "title": "MESSAGE_HISTORY",
                 "items": [{
                     "key": "auditIssue.messages",
                     "type": "array",
                     "add": null,
                     "remove": null,
                     "view": "fixed",
-                    "title": "RESPONSE",
+                    "titleExpr": "actions.getStageTitle(model.auditIssue.messages[arrayIndex].stage)",
                     "items": [{
                         "type": "section",
                         "htmlClass": "",
-                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].employee_id}}\
+                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
                         <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
-                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comments}}</strong><br>'
+                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
                     }]
                 }]
             }, {
@@ -291,6 +291,12 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["$log", "irfNavigato
                         PageHelper.showProgress("audit", "Issue Updated Successfully.", 3000);
                         irfNavigator.goBack();
                     }, PageHelper.showErrors).finally(PageHelper.hideLoader);
+                },
+                getStageTitle: function(stage) {
+                    return _.capitalize(stage)
+                },
+                getUsername: function(userId) {
+                    return User.offline.getDisplayName(userId);
                 }
             }
         };
