@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", "$state", "Enrollment", "IrfFormRequestProcessor", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$stateParams", "Lead",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$stateParams", "Lead", "LeadHelper",
     function($log, $state, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $stateParams, Lead) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $stateParams, Lead, LeadHelper) {
         var branch = SessionStore.getBranch();
         var getOverrides = function (model) {
 
@@ -602,6 +602,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         .$promise
                         .then(function(res){
                             PageHelper.showProgress('Enrollment-input', 'Done.', 5000);
+                            model._lead = res;
                             model.customer.mobilePhone = res.mobileNo;
                             model.customer.gender = res.gender;
                             model.customer.firstName = res.leadName;
@@ -770,6 +771,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                             return false;
                         }
                     }
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 
@@ -845,6 +847,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res) {
+                            if(model._lead) {
+                                var leadReqData = {
+                                    lead: _.cloneDeep(model._lead),
+                                    stage: "Completed"
+                                }
+                                leadReqData.lead.leadStatus = "Complete";
+                                LeadHelper.proceedData(leadReqData);
+                            }
                             EnrollmentHelper.proceedData(res).then(function(resp) {
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 $state.go('Page.Landing', null);
