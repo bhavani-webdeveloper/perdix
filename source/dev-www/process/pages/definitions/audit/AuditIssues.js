@@ -89,10 +89,14 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                 "data": "branch_id"
                             }, {
                                 "title": "AUDITOR_ID",
-                                "data": "auditor_id",
+                                "data": "auditor_id"
+                            }, {
+                                "title": "ISSUE_STATUS",
+                                "data": "status",
                                 render: function(data, type, full, meta) {
-                                    return master.branch_name[full.branch_id].node_code;
+                                    return data?  data : 'Draft Operation';
                                 }
+
                             }];
                         },
                         getActions: function() {

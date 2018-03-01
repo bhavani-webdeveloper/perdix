@@ -2,7 +2,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsViewQueue"), ["$log", "
     function($log, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
         var returnObj = {
             "type": "search-list",
-            "title": "APPROVED_AUDITS",
+            "title": "APPROVED_AUDITS_VIEW",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 model.branch = SessionStore.getCurrentBranch().branchId;
