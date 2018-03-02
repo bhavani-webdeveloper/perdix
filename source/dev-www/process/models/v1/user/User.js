@@ -33,6 +33,9 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, irfStorageSe
     });
 
     resource.offline = {
+        isOffline: function() {
+            return irf.appConfig.OFFLINE_USERS && (irf.appConfig.OFFLINE_USERS == "mobile" && Utils.isCordova() || irf.appConfig.OFFLINE_USERS == "all") && irfStorageService.getMaster("ALL_USERS");
+        },
         getUser: function(userId) {
             var au = irfStorageService.getMaster("ALL_USERS");
             return (au && au[userId])? {
