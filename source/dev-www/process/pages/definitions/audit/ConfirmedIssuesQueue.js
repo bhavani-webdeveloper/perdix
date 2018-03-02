@@ -42,6 +42,7 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedIssuesQueue"), ["$log", "irf
                         'branch_id': searchOptions.branch_id,
                         'confirmity_status': "1",
                         'issue_status': "X",
+                        'issue_publish': "YES",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

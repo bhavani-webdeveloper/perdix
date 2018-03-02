@@ -52,6 +52,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             'branch_id': searchOptions.branch_id,
                             'user_id': searchOptions.userId,
                             'issue_status': "A",
+                            'issue_publish': "YES",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
@@ -59,6 +60,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             'branch_id': searchOptions.branch_id,
                             'user_id': searchOptions.userId,
                             'issue_status': "P",
+                            'issue_publish': "YES",
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise
