@@ -240,6 +240,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             pageData.readonly = true;
                         }
                         pageData.type = $stateParams.pageData.type;
+                        pageData.view = $stateParams.pageData.view;
                         if ($scope.$isOnline) {
                             pageData.auditData = $scope.model.auditData;
                         }
