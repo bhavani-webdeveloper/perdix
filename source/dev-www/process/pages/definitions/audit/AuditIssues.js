@@ -85,8 +85,8 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                     return master.typeofissues[full.type_of_issue_id].description;
                                 }
                             }, {
-                                "title": "BRANCH_ID",
-                                "data": "branch_id"
+                                "title": "DEVIATION",
+                                "data": "deviation"
                             }, {
                                 "title": "AUDITOR_ID",
                                 "data": "auditor_id"
@@ -94,7 +94,15 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                 "title": "ISSUE_STATUS",
                                 "data": "status",
                                 render: function(data, type, full, meta) {
-                                    return data?  data : 'Draft Operation';
+                                    switch (data) {
+                                        case 'DO': return 'Draft';
+                                        case 'DA': return 'Issue Accepted';
+                                        case 'DR': return 'Reject Claimed';
+                                        case 'DRA': return 'Claim Accepted (Not an issue)';
+                                        case 'DRR': return 'Claim Rejected (Issue)';
+                                        case 'IN': return 'Not an issue';
+                                    }
+                                    return 'Issue';
                                 }
 
                             }];

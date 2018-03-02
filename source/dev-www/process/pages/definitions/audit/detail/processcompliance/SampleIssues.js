@@ -29,15 +29,16 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 var id = sample.issue_details[i];
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
                 if (issue.options.type == "dropdown") {
-                    for (j in issue.options.type_of_issue_options) {
-                        if (issue.options.type_of_issue_options[j].option_label == 'NA') {
-                            continue;
-                        }
-                        if (issue.options.type_of_issue_options[j].option_id == id.option_id) {
-                            if (issue.options.type_of_issue_options[j].marks === 0) {
+                    var dropdowOptions = issue.options.type_of_issue_options;
+                    for (j in dropdowOptions) {
+                        if (dropdowOptions[j].option_id == id.option_id) {
+                            if (dropdowOptions[j].option_label == 'NA') {
+                                continue;
+                            }
+                            if (dropdowOptions[j].marks === 0) {
                                 if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
                                     PageHelper.setError({
-                                        message: "Issue: <strong>" + (Number(i) + 1) + "</strong> option: <strong>" + issue.options.type_of_issue_options[j].option_label + "</strong> has 0 marks, which requires responsible person to be given"
+                                        message: "Issue: <strong>" + (Number(i) + 1) + "</strong> option: <strong>" + dropdowOptions[j].option_label + "</strong> has 0 marks, which requires responsible person to be given"
                                     });
                                     return false;
                                 }
@@ -271,14 +272,15 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         if (issue.options.type == "dropdown") {
                             var dropdownTitleMap = [];
                             var optionId = model.sample.issue_details[i].option_id;
-                            for (j in issue.options.type_of_issue_options) {
+                            var dropdowOptions = issue.options.type_of_issue_options;
+                            for (j in dropdowOptions) {
                                 dropdownTitleMap.push({
-                                    "name": issue.options.type_of_issue_options[j].option_label,
-                                    "value": issue.options.type_of_issue_options[j].option_id
+                                    "name": dropdowOptions[j].option_label,
+                                    "value": dropdowOptions[j].option_id
                                 });
                                 // Default option id to NA
-                                if (!optionId && issue.options.type_of_issue_options[j].option_label == 'NA') {
-                                    model.sample.issue_details[i].option_id = issue.options.type_of_issue_options[j].option_id;
+                                if (!optionId && dropdowOptions[j].option_label == 'NA') {
+                                    model.sample.issue_details[i].option_id = dropdowOptions[j].option_id;
                                 }
                             }
                             issueDetailsForm.push({

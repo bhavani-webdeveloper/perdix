@@ -133,17 +133,12 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"),
                 }, {
                     type: "textarea",
                     key: "auditIssue.comments",
-                    "condition": "model.readonly || model.type != 'audit' || model.auditIssue.confirmity_status != 2",
+                    "condition": "model.actions.showComments(model, true)",
                     "readonly": true
                 }, {
                     type: "textarea",
                     key: "auditIssue.comments",
-                    "condition": "!model.readonly && (model.auditIssue.confirmity_status == 2 || model.auditIssue.status == 'DO' || model.auditIssue.status == 'DR')"
-                }, {
-                    type: "textarea",
-                    key: "message",
-                    "condition": "!model.readonly && model.type == 'operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
-                    "title": "REMARKS"
+                    "condition": "model.actions.showComments(model, false)"
                 }]
             }, {
                 "type": "box",
@@ -257,10 +252,23 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"),
                 }
             },
             actions: {
+                showComments: function(model, readonly) {
+                    if (!model.readonly) {
+                        if (model.auditIssue.status.startsWith('D')
+                            || (model.type == 'operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P'))
+                            || (model.type == 'audit' && model.auditIssue.confirmity_status != 1)) {
+                            return !readonly;
+                        } else {
+                            return readonly;
+                        }
+                    } else {
+                        return readonly;
+                    }
+                },
                 updateIssue: function(model, form, formName, actionType) {
                     PageHelper.showLoader();
                     if (actionType == 'close') {
-                        model.auditIssue.close_message = model.message;
+                        model.auditIssue.close_message = model.auditIssue.comments;
                         model.auditIssue.status = 'X';
                         model.auditIssue.next_stage = 'close';
                         model.auditIssue.closed_by = SessionStore.getLoginname();

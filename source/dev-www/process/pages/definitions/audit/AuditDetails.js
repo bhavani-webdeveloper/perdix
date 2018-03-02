@@ -57,6 +57,16 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                             var issue = sample.issue_details[k];
                             var roleId = $scope.model.type == 'operation'? userRole.id: null;
                             if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, roleId)) {
+                                var dropdownOptions = master.autosampling_typeofissue_sets[issue.type_of_issue_id].options.type_of_issue_options;
+                                for (o in dropdownOptions) {
+                                    if (issue.option_id == dropdownOptions[o].option_id && dropdownOptions[o].option_label != 'no') {
+                                        dropdownOptions = null;
+                                        break;
+                                    }
+                                }
+                                if (!dropdownOptions) {
+                                    continue;
+                                }
                                 var reportKey = null;
                                 var reportKeyName = null;
                                 switch (reportType) {
@@ -140,46 +150,33 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }).finally(PageHelper.hideLoader);
             }
         });
-        var pdp = null;
-        if ($scope.siteCode == 'KGFS') {
-            pdp = PagesDefinition.getUserAllowedDefinition({
-                "title": "Audit Details",
-                "iconClass": "fa fa-cube",
-                "items": [
-                    "Page/Engine/audit.detail.GeneralObservation",
-                    "Page/Engine/audit.detail.PortfolioStats",
-                    "Page/Engine/audit.detail.JewelAppraisal",
-                    "Page/Engine/audit.detail.FixedAsset",
-                    "Page/Engine/audit.detail.FieldVerification",
-                    "Page/Adhoc/audit.detail.ProcessCompliance",
-                    // "Page/Engine/audit.detail.AuditSummary",
-                    // "Page/Adhoc/audit.AuditDraftDetails",
-                ]
-            });
-        } else if ($scope.siteCode == 'kinara') {
-            pdp = PagesDefinition.getUserAllowedDefinition({
-                "title": "Audit Details",
-                "iconClass": "fa fa-cube",
-                "items": [
-                    "Page/Adhoc/audit.detail.ProcessCompliance",
-                    // "Page/Engine/audit.detail.AuditSummary",
-                ]
-            });
-        }
-        pdp.then(function(resp) {
+        var ddPromise = PagesDefinition.getUserAllowedDefinition({
+            "title": "Audit Details",
+            "iconClass": "fa fa-cube",
+            "items": [
+                "Page/Engine/audit.detail.GeneralObservation",
+                "Page/Engine/audit.detail.PortfolioStats",
+                "Page/Engine/audit.detail.JewelAppraisal",
+                "Page/Engine/audit.detail.FixedAsset",
+                "Page/Engine/audit.detail.FieldVerification",
+                "Page/Adhoc/audit.detail.ProcessCompliance",
+                "Page/Engine/audit.detail.AuditSummary"
+            ]
+        });
+        ddPromise.then(function(resp) {
             $scope.dashboardDefinition = _.cloneDeep(resp);
         });
 
-        var allPromises = [deferred.promise, pdp];
+        var allPromises = [deferred.promise, ddPromise];
         allPromises.push(
             PagesDefinition.getUserAllowedDefinition({
                 "title": "Audit Details",
                 "iconClass": "fa fa-cube",
                 "items": [
-                    "Page/Adhoc/audit.AuditScoreDetails"
+                    "Page/Engine/audit.AuditScoreDetails"
                 ]
             }).then(function(resp) {
-                $scope.viewScoreMenu = _.cloneDeep(resp.$menuMap["Page/Adhoc/audit.AuditScoreDetails"]);
+                $scope.viewScoreMenu = _.cloneDeep(resp.$menuMap["Page/Engine/audit.AuditScoreDetails"]);
             })
         );
         if (!$stateParams.pageData.readonly) {
@@ -244,11 +241,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         irfNavigator.go({
                             "state": menu.state,
                             "pageName": menu.stateParams.pageName,
-                            "pageId": $this.auditId,
-                            "pageData": pageData
-                        }, {
-                            "state": "Page.Adhoc",
-                            "pageName": "audit.AuditDetails",
                             "pageId": $this.auditId,
                             "pageData": pageData
                         });
@@ -394,9 +386,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 "onClick": "actions.proceed(model)"
             }, {
                 "type": "button",
-                "condition": "actions.showReject(model)",
+                "condition": "actions.showSendBack(model)",
                 "title": "SEND_BACK",
-                "onClick": "actions.reject(model)"
+                "onClick": "actions.sendBack(model)"
             }]
         }];
 
@@ -486,7 +478,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }
                 return false;
             },
-            showReject: function(model) {
+            showSendBack: function(model) {
                 if (!model.ai) return false;
                 if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
                     switch (model.ai.current_stage) {
@@ -503,9 +495,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 switch (model.ai.current_stage) {
                     case 'start':
                     case 'create':
-                        nextStage = $scope.siteCode == 'kinara' ? 'draft' : 'publish';
+                        nextStage = ($scope.siteCode == 'kinara' && !model.ai.draft_count) ? 'draft' : 'publish';
                         break;
                     case 'draft':
+                        model.ai.draft_count = 1;
                         nextStage = 'publish';
                         break;
                     case 'publish':
@@ -528,26 +521,26 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 }
                 $scope.actions.moveStage(model, nextStage);
             },
-            reject: function(model) {
+            sendBack: function(model) {
                 if (!model.ai) return;
-                var rejectStage = '';
+                var sendBackStage = '';
                 switch (model.ai.current_stage) {
                     case 'publish':
-                        rejectStage = 'start';
+                        sendBackStage = 'start';
                         break;
                     case 'L1-approve':
-                        rejectStage = 'publish';
+                        sendBackStage = 'publish';
                         break;
                     default:
                         return;
                 }
                 if (!model.ai.message) {
                     PageHelper.setError({
-                        message: 'Audit reject message is required'
+                        message: 'Audit send back message is required'
                     });
                     return;
                 }
-                $scope.actions.moveStage(model, rejectStage);
+                $scope.actions.moveStage(model, sendBackStage);
             },
             moveStage: function(model, nextStage) {
                 PageHelper.clearErrors();
