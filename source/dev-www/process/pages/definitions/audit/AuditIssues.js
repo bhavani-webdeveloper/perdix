@@ -104,7 +104,15 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                     }
                                     return 'Issue';
                                 }
-
+                            }, {
+                                "title": "RESPONSE",
+                                "data": "assignee_designation_id",
+                                render: function(data, type, full, meta) {
+                                    if (full.messages && full.messages.length) {
+                                        return full.messages[0].comment;
+                                    }
+                                    return '';
+                                }
                             }];
                         },
                         getActions: function() {
