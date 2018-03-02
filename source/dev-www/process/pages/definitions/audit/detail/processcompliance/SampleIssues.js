@@ -13,9 +13,15 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         });
                         return false;
                     }
+                    if (!id.deviation) {
+                        PageHelper.setError({
+                            message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
+                        });
+                        return false;
+                    }
                 } else if (id.assignee_det && id.assignee_det.length && id.assignee_det[0].assignee_id) {
                     PageHelper.setError({
-                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires deviation to be given"
+                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
                     });
                     return false;
                 }

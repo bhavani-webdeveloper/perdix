@@ -278,7 +278,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"),
                             model.auditIssue.status = 'DR';
                             model.auditIssue.next_stage = 'draftreject';
                         }
-                    } else if (model.auditIssue.status == 'DA' && model.type == 'audit') {
+                    } else if (model.auditIssue.status == 'DR' && model.type == 'audit') {
                         if (actionType == 'draftAccept') {
                             model.auditIssue.status = 'DRA';
                             model.auditIssue.next_stage = 'draftrejectaccept';
