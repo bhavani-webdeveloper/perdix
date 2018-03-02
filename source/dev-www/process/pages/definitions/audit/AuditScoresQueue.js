@@ -96,6 +96,9 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                     getColumns: function() {
                         var master = Audit.offline.getAuditMaster();
                         return [{
+                            title: 'AUDIT_ID',
+                            data: 'audit_id'
+                        }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_name'
                         }, {
@@ -108,13 +111,13 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                             title: 'RATING',
                             data: 'audit_id',
                             render: function(data, type, full, meta) {
+                                var rating = "";
                                 if (full.audit_score) {
                                     var rate_flow = parseFloat(full.audit_score);
                                     var ratingNumber = Math.round(rate_flow);
-                                    return Audit.utils.getRatingByScore(master, ratingNumber);
-                                }else{
-                                    return null;
+                                    rating = Audit.utils.getRatingByScore(master, ratingNumber) || "";
                                 }
+                                return rating;
                             }
                         }]
                     },
