@@ -244,8 +244,8 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW_AUDIT",
-                            icon: "fa fa-eye",
+                            name: "REVIEW_AUDIT",
+                            icon: "fa fa-pencil",
                             fn: function(item, index, model) {
                                 if (item.audit_type = 1) {
                                     irfNavigator.go({

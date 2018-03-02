@@ -230,7 +230,7 @@ irf.pageCollection.factory(irf.page("audit.ReviewedAuditsViewQueue"), ["$log", "
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW_AUDIT",
+                            name: "APPROVE_AUDIT",
                             icon: "fa fa-eye",
                             fn: function(item, index) {
                                 if (item.audit_type = 1) {
