@@ -152,7 +152,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     "Page/Engine/audit.detail.FixedAsset",
                     "Page/Engine/audit.detail.FieldVerification",
                     "Page/Adhoc/audit.detail.ProcessCompliance",
-                    "Page/Engine/audit.detail.AuditSummary",
+                    // "Page/Engine/audit.detail.AuditSummary",
                     // "Page/Adhoc/audit.AuditDraftDetails",
                 ]
             });
@@ -165,35 +165,35 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     // "Page/Engine/audit.detail.AuditSummary",
                 ]
             });
-
-        }
-        var scoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
-            "title": "Audit Details",
-            "iconClass": "fa fa-cube",
-            "items": [
-                "Page/Adhoc/audit.AuditScoreDetails"
-            ]
-        }).then(function(resp) {
-            $scope.dashboardDefinition_Score = _.cloneDeep(resp.$menuMap["Page/Adhoc/audit.AuditScoreDetails"]);
-        });
-        var manualScoreMenuPromise = null;
-        if (!$stateParams.pageData.readonly) {
-            manualScoreMenuPromise = PagesDefinition.getUserAllowedDefinition({
-                "title": "Score Sheet Details",
-                "iconClass": "fa fa-cube",
-                "items": [
-                    "Page/Engine/audit.detail.ScoreSheet"
-                ]
-            }).then(function(resp) {
-                $scope.dashboardDefinition_ManualScore = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.ScoreSheet"]);
-            });
         }
         pdp.then(function(resp) {
             $scope.dashboardDefinition = _.cloneDeep(resp);
         });
-        var allPromises = [deferred.promise, pdp, scoreMenuPromise];
-        if (manualScoreMenuPromise) {
-            allPromises.push(manualScoreMenuPromise);
+
+        var allPromises = [deferred.promise, pdp];
+        allPromises.push(
+            PagesDefinition.getUserAllowedDefinition({
+                "title": "Audit Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    "Page/Adhoc/audit.AuditScoreDetails"
+                ]
+            }).then(function(resp) {
+                $scope.viewScoreMenu = _.cloneDeep(resp.$menuMap["Page/Adhoc/audit.AuditScoreDetails"]);
+            })
+        );
+        if (!$stateParams.pageData.readonly) {
+            allPromises.push(
+                PagesDefinition.getUserAllowedDefinition({
+                    "title": "Score Sheet Details",
+                    "iconClass": "fa fa-cube",
+                    "items": [
+                        "Page/Engine/audit.detail.ScoreSheet"
+                    ]
+                }).then(function(resp) {
+                    $scope.editScoreMenu = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.ScoreSheet"]);
+                })
+            );
         }
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
@@ -215,17 +215,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             ];
 
             var reloadDashboardBox = false;
-            if ($scope.dashboardDefinition_Score &&
-                ($scope.model.ai.current_stage == 'publish' ||
-                    $scope.model.ai.current_stage == 'L1-approve' ||
-                    $scope.model.ai.current_stage == 'approve')) {
-                requestMenu.push($scope.dashboardDefinition_Score);
-                $scope.dashboardDefinition.items.push($scope.dashboardDefinition_Score);
+            if ($scope.viewScoreMenu && ($scope.model.ai.status == 'P' || $scope.model.ai.status == 'A')) {
+                requestMenu.push($scope.viewScoreMenu);
+                $scope.dashboardDefinition.items.push($scope.viewScoreMenu);
                 reloadDashboardBox = true;
             }
-            if ($scope.dashboardDefinition_ManualScore) {
-                requestMenu.push($scope.dashboardDefinition_ManualScore);
-                $scope.dashboardDefinition.items.push($scope.dashboardDefinition_ManualScore);
+            if ($scope.editScoreMenu && $scope.model.ai.status == 'O') {
+                requestMenu.push($scope.editScoreMenu);
+                $scope.dashboardDefinition.items.push($scope.editScoreMenu);
                 reloadDashboardBox = true;
             }
             if (reloadDashboardBox) {
