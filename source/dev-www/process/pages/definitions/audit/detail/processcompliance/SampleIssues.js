@@ -13,12 +13,6 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         });
                         return false;
                     }
-                    if (!id.deviation) {
-                        PageHelper.setError({
-                            message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
-                        });
-                        return false;
-                    }
                 } else if (id.assignee_det && id.assignee_det.length && id.assignee_det[0].assignee_id) {
                     PageHelper.setError({
                         message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
@@ -44,6 +38,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
                                     PageHelper.setError({
                                         message: "Issue: <strong>" + (Number(i) + 1) + "</strong> option: <strong>" + issue.options.type_of_issue_options[j].option_label + "</strong> has 0 marks, which requires responsible person to be given"
+                                    });
+                                    return false;
+                                }
+                                if (!id.deviation) {
+                                    PageHelper.setError({
+                                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
                                     });
                                     return false;
                                 }

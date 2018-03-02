@@ -244,6 +244,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                                         'pageId': item.audit_id,
                                         'pageData': {
                                             "readonly": true,
+                                            "view": "all",
                                             "type": "audit"
                                         }
                                     };

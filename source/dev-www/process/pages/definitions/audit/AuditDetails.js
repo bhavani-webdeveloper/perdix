@@ -197,7 +197,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
         }
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
-            if ($stateParams.pageData.view != 'all' && $scope.siteCode == 'kinara' && $scope.model.ai.status !== 'O') {
+            if ($stateParams.pageData.view != 'all' && $scope.model.ai.status != 'O') {
                 $scope.showDashboard = false;
                 return;
             }
@@ -236,6 +236,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     v.onClick = function(event, menu) {
                         var pageData = {};
                         pageData.readonly = $stateParams.pageData.readonly;
+                        if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O') {
+                            pageData.readonly = true;
+                        }
                         pageData.type = $stateParams.pageData.type;
                         if ($scope.$isOnline) {
                             pageData.auditData = $scope.model.auditData;
@@ -394,11 +397,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             }, {
                 "type": "button",
                 "condition": "actions.showReject(model)",
-                "title": "REJECT",
+                "title": "SEND_BACK",
                 "onClick": "actions.reject(model)"
             }]
         }];
-
 
         $scope.form.push();
 

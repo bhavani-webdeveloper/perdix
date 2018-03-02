@@ -241,6 +241,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsViewQueue"), ["$log", "
                                         'pageData': {
                                             "page": returnObj.definition.listOptions.tableConfig.page,
                                             "readonly": true,
+                                            "view": "all",
                                             "type": "audit"
                                         }
                                     };

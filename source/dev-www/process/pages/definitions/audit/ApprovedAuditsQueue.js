@@ -248,6 +248,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                                         'pageId': item.audit_id,
                                         'pageData': {
                                             "readonly": item.current_stage !== 'approve',
+                                            "view": "all",
                                             "type": "audit"
                                         }
                                     }, {

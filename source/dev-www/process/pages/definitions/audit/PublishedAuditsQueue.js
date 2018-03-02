@@ -254,6 +254,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                                         'pageId': item.audit_id,
                                         'pageData': {
                                             "readonly": item.current_stage !== 'publish',
+                                            "view": "all",
                                             "type": "audit"
                                         }
                                     }, {
