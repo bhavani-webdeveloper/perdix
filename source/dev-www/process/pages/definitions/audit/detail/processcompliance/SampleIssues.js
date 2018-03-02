@@ -431,6 +431,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "sub_process_id": typeofissue.sub_process_id,
                             "type_of_issue_id": typeofissue.type_of_issue_id,
                             "option_id": null,
+                            "deviation": "",
                             "assignee_det": [{
                                 "assignee_id": null,
                                 "desgn_id": 0 // TODO global_settings audit.issue_assigned_to_role_id
