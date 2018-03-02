@@ -38,9 +38,6 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
                         return false;
                     }
                 };
-                if (!$scope.$isOffline) {
-                    menuDefinition.stateParams.pageData.auditData = $stateParams.pageData.auditData;
-                }
                 dashboardBox[scoringSampleSet.scoring_process_type_id] = dashboardBox[scoringSampleSet.scoring_process_type_id] || [];
                 dashboardBox[scoringSampleSet.scoring_process_type_id].push(menuDefinition);
             };
