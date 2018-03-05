@@ -43,7 +43,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
-            processDisplayRecords: function(onlineAudits, queue_type, queue_status) {
+            processDisplayRecords: function(onlineAudits, queue_type, queue_status, queue_stage) {
                 var deferred = $q.defer();
                 var displayAudits = {
                     headers: {
@@ -73,7 +73,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         }
                     }
                     angular.forEach(offlineAudits, function(v, k) {
-                        if (!v.$picked && v.audit_type == queue_type && v.status == queue_status) {
+                        if (!v.$picked && v.audit_type == queue_type && (queue_status && v.status == queue_status || queue_stage && v.current_stage == queue_stage)) {
                             v._online = false;
                             ret.offline.setAuditInfo(v.audit_id, v);
                             displayAudits.body.push(v);
