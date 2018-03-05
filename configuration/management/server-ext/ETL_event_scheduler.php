@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 include_once("bootload.php");
 use Illuminate\Database\Capsule\Manager as DB;
