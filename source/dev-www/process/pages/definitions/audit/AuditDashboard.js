@@ -158,7 +158,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (daaq) {
                     Audit.online.getAuditList({
                         'auditor_id': auditor_id,
-                        'current_stage': 'draft',
+                        'current_stage': 'draft-review',
                         'status': 'D'
                     }).$promise.then(function(data) {
                         daaq.data = data.body.length;
