@@ -200,7 +200,7 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditQueue"), ["$log", "Utils", 
                                     'pageId': item.audit_id,
                                     'pageData': {
                                         "type": "audit",
-                                        "readonly": item.current_stage !== 'draft'
+                                        "readonly": item.current_stage !== 'draft-review'
                                     }
                                 }, {
                                     'state': 'Page.Engine',
