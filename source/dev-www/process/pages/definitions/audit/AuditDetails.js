@@ -446,6 +446,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         case 'start':
                         case 'create':
                         case 'draft':
+                        case 'draft-review':
                         case 'publish':
                         case 'L1-approve':
                             return true;
