@@ -146,7 +146,7 @@ define({
                                 // }
                                 irfNavigator.go({
                                     state: "Page.Engine",
-                                    pageName: "loans.group.DSCOverride",
+                                    pageName: "loans.group.DscOverride",
                                     pageId: item.dscIntegration.id,
                                     pageData: {
                                         jlgGroup: item.jlgGroup,

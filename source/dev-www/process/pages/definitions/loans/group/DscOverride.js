@@ -1,5 +1,5 @@
 define({
-    pageUID: "loans.group.DSCOverride",
+    pageUID: "loans.group.DscOverride",
     pageType: "Engine",
     dependencies: ["$log", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
