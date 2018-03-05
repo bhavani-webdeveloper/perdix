@@ -133,6 +133,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.maritalStatus",
+                                "readonly":true,
                                 type: "select"
                             },
                             {
@@ -261,6 +262,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.identityProofImageId",
                                     type: "file",
+                                    "readonly":true,
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
                                         return {
@@ -271,6 +273,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.identityProofReverseImageId",
                                     type: "file",
+                                    "readonly":true,
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
                                         return {
@@ -356,6 +359,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     type: "select"
                                 }, {
                                     key: "customer.addressProofImageId",
+                                    "readonly":true,
                                     type: "file",
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
@@ -366,6 +370,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     //"offline": true
                                 }, {
                                     key: "customer.addressProofReverseImageId",
+                                    "readonly":true,
                                     type: "file",
                                     fileType: "image/*",
                                     "viewParams": function(modelValue, form, model) {
