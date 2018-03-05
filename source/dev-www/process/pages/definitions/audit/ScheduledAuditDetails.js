@@ -16,7 +16,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     }).$promise.then(function(res) {
                         model.auditInfo = res;
                         PageHelper.setWarning({
-                            message: model.auditInfo.days_left  +  "days left to complete the Audit"
+                            message: model.auditInfo.days_left+  " days left to start"
                         });
                         model.startable = moment().isBetween(moment(model.auditInfo.start_date, 'YYYY-MM-DD'), moment(model.auditInfo.end_date, 'YYYY-MM-DD'), 'days', '[]');
                     }, function(errRes) {
