@@ -89,7 +89,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.enrolledAs",
-                                type: "radios"
+                                type: "radios",
+                                "readonly":true
                             },
                             {
                                 key: "customer.firstName",
@@ -98,7 +99,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             },
                             {
                                 key: "customer.gender",
-                                type: "radios"
+                                type: "radios",
+                                "readonly":true,
                             },
                             {
                                 key: "customer.age",
@@ -635,7 +637,24 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     }
                                 }
                             ]
-                        }
+                        },
+                        {
+                            key: "customer.familyMembers[].enroll",
+                            type: "button",
+                            condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            title: "ENROLL_AS_CUSTOMER",
+                            onClick: function(model, formCtrl, context) {
+                                model.family = {};
+                                model.family = model.customer;
+                                model.family.familydata = model.customer.familyMembers[context.arrayIndex];
+                                $state.go("Page.Engine", {
+                                    pageName: "ProfileInformation",
+                                    pageId: undefined,
+                                    pageData: model.family
+                                    //pageData:model.customer.familyMembers[context.arrayIndex]
+                                });
+                            }
+                        },
                             ]
                         },
                             {

@@ -87,12 +87,12 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 {
                     key:"customer.enrolledAs",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.gender",
                     type:"radios",
-                    readonly: true
+                    //readonly: true
                 },
                 {
                     key:"customer.age",
@@ -450,7 +450,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         },
                     ]
                 }
-
             ]
         },
         {
@@ -684,23 +683,23 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             }
                         ]
                     },
-                    {
-                        key:"customer.familyMembers[].enroll",
-                        type:"button",
-                        condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
-                        title:"ENROLL_AS_CUSTOMER",
-                        onClick: function(model, formCtrl,context) {
-                            model.family={};
-                            model.family=model.customer;
-                            model.family.familydata=model.customer.familyMembers[context.arrayIndex];
-                                $state.go("Page.Engine", {
-                                    pageName: "ProfileInformation",
-                                    pageId:undefined,
-                                    pageData:model.family
-                                    //pageData:model.customer.familyMembers[context.arrayIndex]
-                                });
-                        }
-                    },
+                    // {
+                    //     key:"customer.familyMembers[].enroll",
+                    //     type:"button",
+                    //     condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                    //     title:"ENROLL_AS_CUSTOMER",
+                    //     onClick: function(model, formCtrl,context) {
+                    //         model.family={};
+                    //         model.family=model.customer;
+                    //         model.family.familydata=model.customer.familyMembers[context.arrayIndex];
+                    //             $state.go("Page.Engine", {
+                    //                 pageName: "ProfileInformation",
+                    //                 pageId:undefined,
+                    //                 pageData:model.family
+                    //                 //pageData:model.customer.familyMembers[context.arrayIndex]
+                    //             });
+                    //     }
+                    // },
                 ]
             }]
         },
