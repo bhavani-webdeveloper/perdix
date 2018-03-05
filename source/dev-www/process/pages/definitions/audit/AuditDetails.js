@@ -465,6 +465,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     switch (model.ai.current_stage) {
                         case 'start':
                         case 'create':
+                        case 'draft':
+                        case 'draft-review':
                         case 'publish':
                         case 'L1-approve':
                             return true;
@@ -498,6 +500,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                         nextStage = ($scope.siteCode == 'kinara' && !model.ai.draft_count) ? 'draft' : 'publish';
                         break;
                     case 'draft':
+                        nextStage = 'draft-review';
+                        break;
+                    case 'draft-review':
                         model.ai.draft_count = 1;
                         nextStage = 'publish';
                         break;
