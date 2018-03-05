@@ -83,10 +83,20 @@ define({
                 GroupProcess.getGroup({
                     groupId: model.group.id
                 }, function(response, headersGetter) {
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop('group-dsc-override-req', 'DSC Override Requested', 2000);
-                    model.group = _.cloneDeep(response);
-                    fixData(model);
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = "SAVE";
+
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        model.group = _.cloneDeep(res.group);
+                        fixData(model);
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('group-dsc-override-req', 'DSC Override Requested.', 2000);
+                    }, function(err) {
+                        $log.error(err);
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
+                        PageHelper.showErrors(err);
+                    });
                 }, function(resp) {
                     $log.error(resp);
                     PageHelper.hideLoader();
