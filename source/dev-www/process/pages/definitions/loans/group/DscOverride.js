@@ -18,7 +18,7 @@ define({
         	PageHelper.clearErrors();
             if (model.group.dscOverrideRemarks) {
                 irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                Groups.post({
+                Groups.overrideDsc({
                     service: "overridedsc",
                     urnNo: model.jlgGroupMember.urnNo,
                     groupCode: model.group.groupCode,
