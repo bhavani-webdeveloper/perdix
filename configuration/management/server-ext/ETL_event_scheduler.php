@@ -14,7 +14,7 @@ try {
     if(isset($currentDate[0]->current_working_date)) {
         $currentWorkingDate = $currentDate[0]->current_working_date;
         $eventIdetifier = date("Y-m-d");
-        $currentWorkingDate = "2018-12-31";
+        
         $parameter = json_encode(["currentDate"=>$currentWorkingDate]);
 
         $eventList[] = array("event_parameter"=>$parameter, "event_name"=>"EOD", "event_identifier"=>$eventIdetifier);
