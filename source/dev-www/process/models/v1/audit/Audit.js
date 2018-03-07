@@ -8,6 +8,9 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
         var ret = {};
 
         ret.utils = {
+            dateRenderer: function(dateobj) {
+                return SessionStore.getFormatedDate(moment(dateobj));
+            },
             auditStatusHtml: function(auditInfo, withText) {
                 if (!auditInfo) return false;
                 var audit_flag_html = '';
@@ -29,8 +32,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             isIssueApplicable: function(master, typeOfIssueId, responsibilityType, roleId) {
                 if (roleId) {
-                    return typeOfIssueId && responsibilityType && master.typeofissues[typeOfIssueId].responsibility
-                    && _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
+                    return typeOfIssueId && responsibilityType && master.typeofissues[typeOfIssueId].responsibility &&
+                        _.indexOf(master.typeofissues[typeOfIssueId].responsibility[responsibilityType], roleId) >= 0;
                 }
                 return true;
             },

@@ -103,7 +103,8 @@ irf.pageCollection.factory(irf.page("audit.AuditScoresQueue"), ["$log", "$stateP
                             data: 'branch_name'
                         }, {
                             title: 'AUDIT_START_DATE',
-                            data: 'start_date'
+                            data: 'start_date',
+                            render: Audit.utils.dateRenderer
                         }, {
                             title: 'SCORE',
                             data: 'audit_score'

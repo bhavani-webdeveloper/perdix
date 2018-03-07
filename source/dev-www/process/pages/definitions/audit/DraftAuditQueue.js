@@ -162,13 +162,16 @@ irf.pageCollection.factory(irf.page("audit.DraftAuditQueue"), ["$log", "Utils", 
                             data: 'branch_name'
                         }, {
                             title: 'REPORT_DATE',
-                            data: 'report_date'
+                            data: 'report_date',
+                            render: Audit.utils.dateRenderer
                         }, {
                             title: 'START_DATE',
-                            data: 'start_date'
+                            data: 'start_date',
+                            render: Audit.utils.dateRenderer
                         }, {
                             title: 'END_DATE',
-                            data: 'end_date'
+                            data: 'end_date',
+                            render: Audit.utils.dateRenderer
                         }]
                     },
                     getActions: function() {

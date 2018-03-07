@@ -122,7 +122,8 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "
                             data: 'closed_by'
                         }, {
                             title: 'AUDIT_REPORT_DATE',
-                            data: 'audit_report_date'
+                            data: 'audit_report_date',
+                            render: Audit.utils.dateRenderer
                         }]
                     },
                     getActions: function() {
