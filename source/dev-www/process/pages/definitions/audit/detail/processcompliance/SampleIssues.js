@@ -408,6 +408,45 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 "type": "textarea",
                                 "title": "SPOT_ACTION",
                                 "required": true
+                            }, {
+                                "key": "sample.issue_details[" + i + "].assignee_det[0].spot_assignee_id",
+                                "condition": "model.sample.issue_details[" + i + "].spot_fixed == '1'",
+                                "type": "lov",
+                                "lovonly": true,
+                                "required": true,
+                                "title": "SPOTFIX_RESPONSIBILITY",
+                                "inputMap": {
+                                    "branch_id": {
+                                        "key": "branch_id"
+                                    },
+                                    "role_id": {
+                                        "key": "role_id"
+                                    },
+                                    "login": {
+                                        "key": "login"
+                                    },
+                                    "userName": {
+                                        "key": "user_name"
+                                    }
+                                },
+                                "outputMap": {
+                                    "login": "sample.issue_details[" + i + "].assignee_det[0].spot_assignee_id"
+                                },
+                                "searchHelper": formHelper,
+                                search: function(inputModel, form, model) {
+                                    return User.query({
+                                        'login': inputModel.login,
+                                        'userName': inputModel.userName,
+                                        'roleId': inputModel.role_id,
+                                        'branchName': inputModel.branch_id,
+                                    }).$promise;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.login + ': ' + item.userName,
+                                        item.branchName
+                                    ];
+                                }
                             });
                         }
                         issueDetailsForm.push({

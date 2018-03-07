@@ -139,7 +139,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                 PageHelper.showLoader();
                 Audit.online.findIssues({
                     'audit_id': model.auditId,
-                    'issue_publish': "NO"
+                    'issue_publish': "ALL"
                 }).$promise.then(function(data) {
                     processData(data.body);
                 }, function(errRes) {
