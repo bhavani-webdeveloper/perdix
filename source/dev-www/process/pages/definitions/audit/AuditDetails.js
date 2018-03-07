@@ -212,7 +212,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             ];
 
             var reloadDashboardBox = false;
-            if ($scope.viewScoreMenu && ($scope.model.ai.status == 'P' || $scope.model.ai.status == 'A')) {
+            if ($scope.viewScoreMenu && $scope.model.ai.status == 'A') {
                 requestMenu.push($scope.viewScoreMenu);
                 $scope.dashboardDefinition.items.push($scope.viewScoreMenu);
                 reloadDashboardBox = true;
