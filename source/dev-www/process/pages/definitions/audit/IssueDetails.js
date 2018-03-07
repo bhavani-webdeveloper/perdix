@@ -96,7 +96,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Aud
                     "subCategory": "AUDITISSUEDRAFTDOC"
                 }, {
                     key: "auditIssue.draft_document_id",
-                    "condition": "model.readonly || model.type == 'audit'",
+                    "condition": "!(!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO')",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
