@@ -1,5 +1,4 @@
-irf.pageCollection.factory(irf.page("audit.IssueDetails"),
-["irfNavigator", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
+irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
     function(irfNavigator, Audit, $stateParams, SessionStore, PageHelper, User) {
         return {
             "type": "schema-form",
@@ -254,9 +253,9 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"),
             actions: {
                 showComments: function(model, readonly) {
                     if (!model.readonly) {
-                        if (model.auditIssue.status.startsWith('D')
-                            || (model.type == 'operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P'))
-                            || (model.type == 'audit' && model.auditIssue.confirmity_status != 1)) {
+                        if (model.auditIssue.status.startsWith('D') ||
+                            (model.type == 'operation' && (model.auditIssue.current_stage == 'assign')) ||
+                            (model.type == 'audit' && (model.auditIssue.current_stage == 'close' || model.auditIssue.current_stage == 'unconfirm'))) {
                             return !readonly;
                         } else {
                             return readonly;
@@ -277,6 +276,9 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"),
                         if (model.auditIssue.confirmity_status == 2) {
                             model.auditIssue.status = 'A';
                             model.auditIssue.next_stage = 'assign';
+                        } else if (model.auditIssue.confirmity_status == 1) {
+                            model.auditIssue.status = 'X';
+                            model.auditIssue.next_stage = 'confirm';
                         }
                     } else if (model.auditIssue.status == 'DO' && model.type == 'operation') {
                         if (actionType == 'accept') {

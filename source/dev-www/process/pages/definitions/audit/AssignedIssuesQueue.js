@@ -39,46 +39,13 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log", "Page
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var deferred = $q.defer();
-                    $q.all([
-                        Audit.online.findIssues({
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "A",
-                            'assignee_designation_id': searchOptions.role_id,
-                            'issue_publish': "YES",
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise,
-                        Audit.online.findIssues({
-                            'branch_id': searchOptions.branch_id,
-                            'issue_status': "P",
-                            'assignee_designation_id': searchOptions.role_id,
-                            'issue_publish': "YES",
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise
-                    ]).then(function(data) {
-                        var returnObj = {
-                            headers: {},
-                            body: data[0].body
-                        };
-                        var maxCount = 0;
-                        if (data[0].headers['x-total-count']) {
-                            maxCount = returnObj.headers['x-total-count'] = Number(data[0].headers['x-total-count']);
-                        }
-                        if (data[1].headers['x-total-count']) {
-                            var c2 = Number(data[1].headers['x-total-count']);
-                            if (c2 > maxCount) {
-                                maxCount = c2;
-                            }
-                        }
-                        returnObj.headers['x-total-count'] = String(maxCount);
-                        returnObj.body.push.apply(returnObj.body, data[1].body);
-                        deferred.resolve(returnObj);
-                    }, function(data) {
-                        deferred.reject(data[0]);
-                    });
-                    return deferred.promise;
+                    return Audit.online.findIssues({
+                        'branch_id': searchOptions.branch_id,
+                        'current_stage': "assign",
+                        'assignee_designation_id': searchOptions.role_id,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage
+                    }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {

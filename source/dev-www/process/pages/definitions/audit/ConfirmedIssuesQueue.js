@@ -40,9 +40,7 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedIssuesQueue"), ["$log", "irf
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Audit.online.findIssues({
                         'branch_id': searchOptions.branch_id,
-                        'confirmity_status': "1",
-                        'issue_status': "X",
-                        'issue_publish': "YES",
+                        'current_stage': "confirm",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

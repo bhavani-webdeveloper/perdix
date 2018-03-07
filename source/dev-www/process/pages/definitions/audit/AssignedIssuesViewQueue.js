@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log", "PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+    function($log, PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
             "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
@@ -46,49 +46,13 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var deferred = $q.defer();
-                    $q.all([
-                        Audit.online.findIssues({
-                            'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
-                            'issue_status': "A",
-                            'issue_publish': "YES",
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise,
-                        Audit.online.findIssues({
-                            'branch_id': searchOptions.branch_id,
-                            'user_id': searchOptions.userId,
-                            'issue_status': "P",
-                            'issue_publish': "YES",
-                            'page': pageOpts.pageNo,
-                            'per_page': pageOpts.itemsPerPage
-                        }).$promise
-                    ]).then(function(data) {
-                        var returnObj = {
-                            headers: {},
-                            body: data[0].body
-                        };
-                        returnObj.headers['max-total-count'] = 0;
-                        if (data[0].headers['x-total-count']) {
-                            var c1 = Number(data[0].headers['x-total-count']);
-                            returnObj.headers['x-total-count'] = c1;
-                            returnObj.headers['max-total-count'] = c1;
-                        }
-                        if (data[1].headers['x-total-count']) {
-                            var c1 = returnObj.headers['max-total-count'];
-                            var c2 = Number(data[1].headers['x-total-count']);
-                            if (c2 > c1) {
-                                returnObj.headers['max-total-count'] = c2;
-                            }
-                            returnObj.headers['x-total-count'] += c2;
-                        }
-                        returnObj.body.push.apply(returnObj.body, data[1].body);
-                        deferred.resolve(returnObj);
-                    }, function(data) {
-                        deferred.reject(data[0]);
-                    });
-                    return deferred.promise;
+                    return Audit.online.findIssues({
+                        'branch_id': searchOptions.branch_id,
+                        'current_stage': "assign",
+                        'assignee_designation_id': searchOptions.role_id,
+                        'page': pageOpts.pageNo,
+                        'per_page': pageOpts.itemsPerPage
+                    }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -139,7 +103,7 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","P
                             title: 'STATUS',
                             data: 'status',
                             render: function(data, type, full, meta) {
-                                return data == 'A'? 'Assigned': 'Unconfirmed';
+                                return data == 'A' ? 'Assigned' : 'Unconfirmed';
                             }
                         }, {
                             title: 'AUDITOR_ID',

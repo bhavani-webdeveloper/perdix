@@ -166,7 +166,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (pavq || paq) {
-                    Audit.online.getAuditList({                        
+                    Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'current_stage': 'publish'
                     }).$promise.then(function(data) {
@@ -194,7 +194,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (aaq || aavq) {
-                    Audit.online.getAuditList({                      
+                    Audit.online.getAuditList({
                         'auditor_id': auditor_id,
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
@@ -255,46 +255,22 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
-                if (aiq) {
-                    $q.all([
-                        Audit.online.findIssues({
-                            'issue_status': "A",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise,
-                        Audit.online.findIssues({
-                            'issue_status': "P",
-                            'assignee_designation_id': role_id,
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise
-                    ]).then(function(data) {
-                        aiq.data = data[0].body.length + data[1].body.length;
-                    });
-                }
-
-                if (aivq) {
-                    $q.all([
-                        Audit.online.findIssues({
-                            'issue_status': "A",
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise,
-                        Audit.online.findIssues({
-                            'issue_status': "P",
-                            'page': 1,
-                            'per_page': 100
-                        }).$promise
-                    ]).then(function(data) {
-                        aivq.data = data[0].body.length + data[1].body.length;
+                if (aiq || aivq) {
+                    Audit.online.findIssues({
+                    'current_stage': "assign",
+                    }).$promise.then(function(data) {
+                        if (aiq) {
+                            aiq.data = data.body.length;
+                        }
+                        if (aivq) {
+                            aivq.data = data.body.length;
+                        }
                     });
                 }
 
                 if (oiq || oivq) {
                     Audit.online.findIssues({
-                        'confirmity_status': "NULL",
-                        'issue_status': 'X',
+                        'current_stage': 'close',
                     }).$promise.then(function(data) {
                         if (oiq) {
                             oiq.data = data.body.length;
@@ -307,8 +283,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (ciq) {
                     Audit.online.findIssues({
-                        'confirmity_status': "1",
-                        'issue_status': "X",
+                        'current_stage': "confirm",
                     }).$promise.then(function(data) {
                         var returnObj = {
                             headers: {
@@ -322,8 +297,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (uciq) {
                     Audit.online.findIssues({
-                        'confirmity_status': "2",
-                        'issue_status': "P",
+                        'current_stage': "unconfirm",
                     }).$promise.then(function(data) {
                         var returnObj = {
                             headers: {
