@@ -87,7 +87,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Aud
                     "readonly": true
                 }, {
                     key: "auditIssue.draft_document_id",
-                    "condition": "!model.readonly && model.type == 'operation'",
+                    "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO'",
                     type: "file",
                     fileType: "application/pdf",
                     using: "scanner",
@@ -277,7 +277,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Aud
                             model.auditIssue.status = 'A';
                             model.auditIssue.next_stage = 'assign';
                         } else if (model.auditIssue.confirmity_status == 1) {
-                            model.auditIssue.status = 'X';
+                            model.auditIssue.status = '';
                             model.auditIssue.next_stage = 'confirm';
                         }
                     } else if (model.auditIssue.status == 'DO' && model.type == 'operation') {
