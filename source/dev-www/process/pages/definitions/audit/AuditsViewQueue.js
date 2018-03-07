@@ -254,6 +254,9 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                         }, {
                             title: 'END_DATE',
                             data: 'end_date'
+                        }, {
+                            title: 'STAGE',
+                            data: 'current_stage'
                         }]
                     },
                     getActions: function() {
