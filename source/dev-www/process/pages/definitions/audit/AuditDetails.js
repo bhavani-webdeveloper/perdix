@@ -483,7 +483,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
             },
             showSendBack: function(model) {
                 if (!model.ai) return false;
-                if (!model.ai._dirty && model.ai._sync && model.type == 'audit') {
+                if (!model.ai._dirty && model.type == 'audit') {
                     switch (model.ai.current_stage) {
                         case 'publish':
                         case 'L1-approve':
