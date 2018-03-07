@@ -71,7 +71,6 @@ irf.pageCollection.factory(irf.page("audit.OpenRegularAuditsQueue"), ["$log", "U
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
                         'audit_type': 1,
-                        'current_stage':'create',
                         'status': 'O',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
