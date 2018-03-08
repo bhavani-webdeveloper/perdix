@@ -55,7 +55,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                     if (sample.status === "0") {
                         for (k in sample.issue_details) {
                             var issue = sample.issue_details[k];
-                            var roleId = $scope.model.type == 'operation'? userRole.id: null;
+                            var roleId = $scope.model.type == 'operation' ? userRole.id : null;
                             if (Audit.utils.isIssueApplicable(master, issue.type_of_issue_id, responsibilityType, roleId)) {
                                 var dropdownOptions = master.autosampling_typeofissue_sets[issue.type_of_issue_id].options.type_of_issue_options;
                                 for (o in dropdownOptions) {
@@ -607,7 +607,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q
                 });
             },
             getStageTitle: function(stage) {
-                return _.capitalize(stage)
+                return translateFilter(master.stage_names[stage].stage_label);
             },
             getUsername: function(userId) {
                 return User.offline.getDisplayName(userId);

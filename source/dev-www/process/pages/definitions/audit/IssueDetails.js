@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
-    function(irfNavigator, Audit, $stateParams, SessionStore, PageHelper, User) {
+irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
+    function(irfNavigator, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
         return {
             "type": "schema-form",
             "title": "ISSUE_DETAILS",
@@ -303,7 +303,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "Aud
                     }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                 },
                 getStageTitle: function(stage) {
-                    return _.capitalize(stage)
+                    return translateFilter(master.stage_names[stage].stage_label);
                 },
                 getUsername: function(userId) {
                     return User.offline.getDisplayName(userId);
