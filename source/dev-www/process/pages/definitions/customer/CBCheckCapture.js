@@ -162,7 +162,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 					CreditBureau.postcreditBureauCheck({
 						customerId: model.customerId,
 						type: model.creditBureau,
-						purpose: model.loanPurpose1,
+						purpose: model.creditBureau == 'CIBIL'? 'Business Loan - General': model.loanPurpose1,
 						loanAmount: model.loanAmount,
 						force: model.force
 					}, function(response){
