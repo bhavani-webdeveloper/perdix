@@ -3,7 +3,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
         'formHelper', "BASE_URL", "$window", "SessionStore", "Utils", "EnrollmentHelper",
         function ($log, $q, Enrollment,Queries,PageHelper, irfProgressMessage, $stateParams, $state,
                   formHelper, BASE_URL, $window, SessionStore, Utils, EnrollmentHelper) {
-
             return {
                 "id": "CustomerRUD",
                 "type": "schema-form",
@@ -41,7 +40,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             pageId: null
                         });
                     });
-
                 },
                 form: [
                     {
@@ -160,7 +158,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "onChange": function(modelValue, form, model) {
                                     if (model.customer.spouseDateOfBirth) {}
                                 }
-                            }, {
+                            }, 
+                            {
                                 key: "customer.udf.userDefinedFieldValues.udf1",
                                 condition: "model.customer.maritalStatus==='MARRIED'",
                                 title: "SPOUSE_LOAN_CONSENT",
@@ -168,9 +167,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "schema":{
                                     "default":false
                                 }
-
                             }
-
                         ]
                     }, {
                         "type": "box",
@@ -179,7 +176,6 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             type: "fieldset",
                             title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                             items: [
-
                                 "customer.doorNo",
                                 "customer.street",
                                 "customer.locality",
@@ -620,7 +616,99 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "BAD":"BAD"
                             },
                         },
-                                {
+                        {
+                            "type":"fieldset",
+                            "title":"Enroll URN",
+                             condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            "items":[
+                            {
+                                key: "customer.familyMembers[].enrollURN",
+                                "title": "URN_NO",
+                                type: "lov",
+                                "inputMap": {
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.kgfsName",
+                                        "type": "select"
+                                    }
+                                },
+                                "outputMap": {
+                                    "urnNo": "customer.familyMembers[arrayIndex].enrollURN",
+                                    "firstName": "customer.familyMembers[arrayIndex].enrollfirstName"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                    }).$promise;
+                                    return promise;
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.familyMembers[].enrollfirstName",
+                                "title": "FIRST_NAME",
+                            },
+                            {
+                                key: "customer.familyMembers[].enroll",
+                                //"condition":"model.customer.familyMembers[arrayIndex].enrollURN",
+                                type: "button",
+                                title: "Link To Household",
+                                onClick: function(model, formCtrl, context) {
+                                    PageHelper.showLoader();
+                                    var request={
+                                        "alert": false,
+                                        "familySequenceId": model.customer.familyMembers[context.arrayIndex].familySequenceId,
+                                        "primaryUrn": model.customer.urnNo,
+                                        "secondaryUrn": model.customer.familyMembers[context.arrayIndex].enrollURN
+                                    }
+                                   
+                                    Enrollment.houseHoldLink(request).$promise.then(function(response){
+                                       PageHelper.hideLoader();
+                                       $log.info("inside Response");
+                                       $log.info(response);
+                                       PageHelper.showProgress("houseHoldLink", "houseHoldLink success" + '  ' +response.message, 3000);
+                                    },function(err){
+                                        PageHelper.hideLoader();
+                                        $log.info("inside error");
+                                        $log.info(err);
+                                        PageHelper.showProgress("houseHoldLink", "houseHoldLink Failed" + '  ' +err.data.errors.secondaryUrn[0], 3000);
+                                    });
+                                }
+                            },
+                            ]
+                        },
+                        {
+                            key: "customer.familyMembers[].enroll",
+                            type: "button",
+                            condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            title: "Enroll as customer",
+                            onClick: function(model, formCtrl, context) {
+                                model.family = {};
+                                model.family = model.customer;
+                                model.family.familydata = model.customer.familyMembers[context.arrayIndex];
+                                $state.go("Page.Engine", {
+                                    pageName: "ProfileInformation",
+                                    pageId: undefined,
+                                    pageData: model.family
+                                    //pageData:model.customer.familyMembers[context.arrayIndex]
+                                });
+                            }
+                        },
+                        {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
                             startEmpty: true,
@@ -643,24 +731,8 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }
                             ]
                         },
-                        {
-                            key: "customer.familyMembers[].enroll",
-                            type: "button",
-                            condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
-                            title: "ENROLL_AS_CUSTOMER",
-                            onClick: function(model, formCtrl, context) {
-                                model.family = {};
-                                model.family = model.customer;
-                                model.family.familydata = model.customer.familyMembers[context.arrayIndex];
-                                $state.go("Page.Engine", {
-                                    pageName: "ProfileInformation",
-                                    pageId: undefined,
-                                    pageData: model.family
-                                    //pageData:model.customer.familyMembers[context.arrayIndex]
-                                });
-                            }
-                        },
-                            ]
+                        
+                        ]
                         },
                             {
                                 "type": "fieldset",

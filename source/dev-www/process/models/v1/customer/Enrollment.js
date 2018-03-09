@@ -59,8 +59,14 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         },
         update:{
             method:'PUT',
-            url:endpoint+'/:service'
+            url:endpoint+'/:service'   
         },
+
+        houseHoldLink:{
+            method:'POST',
+            url:endpoint+'/linkhousehold'
+        },
+
         post:{
             method:'POST',
             url:endpoint+'/:service/:format',
