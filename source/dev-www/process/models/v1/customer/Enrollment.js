@@ -1,5 +1,7 @@
 irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
+    var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
+    var snapshotTo  = 'snapshotIdTo=';
 
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
@@ -78,6 +80,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             transformRequest: function (data) {
                 return $httpParamSerializer(data);
             }
+        },
+        getSanpshotDiff: {
+            method: 'GET',
+            url: endpoint + snapshotFrom + ':id1' + "&" + snapshotTo + ':id2'
         },
         postWithFile:{
             method:'POST',
