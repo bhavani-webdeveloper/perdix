@@ -804,7 +804,24 @@ irf.models.factory('Queries', [
                 }, deferred.reject)
             return deferred.promise;
         };
-
+    resource.getAllLoanPurposesMapping = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("AllLoanPurposeMapping.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getLookUpCodeByFrequencyList = function(frequency) {
+        var deferred = $q.defer();
+        var request = {
+            "frequency": frequency
+        };
+        resource.getResult("LookUpCodeByFrequency.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    }
         return resource;
     }
 ]);
