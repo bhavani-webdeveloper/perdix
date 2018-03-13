@@ -44,8 +44,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
     resource.BulkFileUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
-                method: 'POST',
-                url: BASE_URL + "/api/accountDocumentTracking/bulkFileUpload",
+                url: BASE_URL + "/api/feed/bulkDocumentFilingUpload",
                 data: {
                     file: file
                 }
