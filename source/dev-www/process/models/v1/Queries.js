@@ -791,6 +791,24 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+
+        resource.getLoanAccountsByUrnAndStage = function(urn, currentStage){
+            var deferred = $q.defer();
+            var request = {};
+            request.urn = urn;
+            request.currentStage = (currentStage && !angular.isArray(currentStage) ) ? [currentStage] : currentStage ;
+            resource.getResult("loanAccountsByUrnAndStage.list", request)
+                .then(function(response){
+                    if (response && _.isArray(response.results) && response.results.length > 0) {
+                        deferred.resolve(response.results);
+                    } else {
+                        deferred.resolve(null);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        };
+
+
         resource.getVehiclePrice = function (){
             var deferred = $q.defer();
             var request = {};
