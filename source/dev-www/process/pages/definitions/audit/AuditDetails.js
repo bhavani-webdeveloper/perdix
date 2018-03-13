@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils", "User",
-    function($log, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils, User) {
+irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "translatefilter", "$q", "Utils", "$stateParams", "$scope", "PagesDefinition", "PageHelper", "irfNavigator", "Audit", "formHelper", "SessionStore", "elementsUtils", "User",
+    function($log, translatefilter, $q, Utils, $stateParams, $scope, PagesDefinition, PageHelper, irfNavigator, Audit, formHelper, SessionStore, elementsUtils, User) {
         if (!$stateParams.pageId) {
             irfNavigator.goBack();
             PageHelper.showProgress("audit", "Audit ID is empty", 5000);
