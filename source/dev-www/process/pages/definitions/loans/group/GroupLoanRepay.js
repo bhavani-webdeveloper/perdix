@@ -477,9 +477,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             return this.lines;
                         }
 
-                        var getPrintReceipt = function(repaymentInfo, opts) {
+                        var pData = new PrinterData();
+
+                        var getPrintHeader = function(opts) {
                             opts['duplicate'] = opts['duplicate'] || false;
-                            var pData = new PrinterData();
+
                             if (opts['duplicate']) {
                                 pData.addLine('DUPLICATE', {
                                     'center': true,
@@ -515,14 +517,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {
+                                .addLine(opts['accountName'] + "-" + opts["productCode"], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
                                 .addKeyValueLine("Branch Code", opts['branch_code'], {
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
+                            return pData;
+                        }
+
+                        var getPrintReceipt = function(repaymentInfo, opts) {
+                            //var pData = {};
+                            pData.addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
                                 .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {
@@ -550,7 +557,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
-                                .addStrRepeatingLine("-", {
+                                return pData;
+
+                        }
+
+                        var getPrintFooter = function(opts) {
+                            //var pData = {};
+                            pData.addStrRepeatingLine("-", {
                                     font: PrinterConstants.FONT_LARGE_BOLD
                                 })
                                 .addLine(opts['company_name'], {
@@ -591,7 +604,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 });
-
                             return pData;
                         }
 
@@ -613,6 +625,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                         if (model._partnerCode != "AXIS") {
                             var promise = [];
+                            var pData;
                             for (var i = 0; i < model.repayments.length; i++) {
                                 if (model.repayments[i].amount != 0) {
                                     (function(i) {
@@ -647,6 +660,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             $q.all(promise).finally(function() {
 
+                                opts.accountName= model.repayments[0].accountName;
+                                opts.productCode=model.repayments[0].productCode;
+                                getPrintHeader(opts);
                                 for (var i = 0; i < model.repayments.length; i++) {
                                     if (model.repayments[i].amount != 0) {
                                         var r = model.repayments[i];
@@ -664,15 +680,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repaymentInfo.productCode=r.productCode;
                                         //repaymentInfo.transactionID=r.paymentResponse.transactionId;
                                         $log.info(repaymentInfo);
-                                        var pData = getPrintReceipt(repaymentInfo, opts);
-                                        $log.info(pData);
+                                        getPrintReceipt(repaymentInfo, opts);
                                         pData.addLine("", {});
                                         pData.addLine("", {});
-                                        fullPrintData.addLines(pData.getLines());
-                                        $log.info(fullPrintData);
                                     }
                                 }
 
+                                getPrintFooter(opts);
+                                $log.info(pData);
                                 $log.info("outside print");
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
@@ -691,6 +706,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     var r = model.repaymentResponse.loanDemandScheduleDto[i];
                                     var totalSatisfiedDemands = 0;
                                     var pendingInstallment = 0;
+                                    var pData;
+
                                     promise[i] = LoanAccount.get({
                                         accountId: r.encoreAccountNo
                                     }).$promise.then(function(resp) {
@@ -730,6 +747,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             $log.info(promise);
                             $q.all(promise).finally(function() {
+                                opts.accountName= model.repaymentResponse.loanDemandScheduleDto[0].accountName;
+                                opts.productCode=model.repaymentResponse.loanDemandScheduleDto[0].productCode;
+                                getPrintHeader(opts);
                                 for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
                                     var r = model.repaymentResponse.loanDemandScheduleDto[i];
                                     $log.info(r);
@@ -748,25 +768,24 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         'productCode': r.product
                                     };
                                     $log.info(repaymentInfo);
-                                    var pData = getPrintReceipt(repaymentInfo, opts);
-
-                                    $log.info(pData);
+                                    getPrintReceipt(repaymentInfo, opts);
                                     pData.addLine("", {});
                                     pData.addLine("", {});
-                                    fullPrintData.addLines(pData.getLines());
-                                    $log.info(fullPrintData);
                                 }
+                                getPrintFooter(opts);
+                                $log.info(pData);
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
                                 }, function(err) {
                                     console.error(err);
                                     console.log("errr collback");
-                                }, fullPrintData.getLines());
+                                }, pData.getLines());
                             });
                         }
                     }
                 }]
             }],
+
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
