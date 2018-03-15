@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 				
 			},
 			definition: {
-				title: "SEARCH INVENTORY",
+				title: "SEARCH_INVENTORY",
 				searchForm: [
 					"*"
 				],
@@ -84,11 +84,11 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 					},
 					getColumns: function() {
 						return [{
-							title: 'Inventory Name',
+							title: 'INVENTORY_NAME',
 							data: 'inventoryName'
 						},
 						{
-							title: 'Number Of Inventories',
+							title: 'NO_OF_INVENTORIES',
 							data: 'numberOfInventories'
 						}]
 					},
