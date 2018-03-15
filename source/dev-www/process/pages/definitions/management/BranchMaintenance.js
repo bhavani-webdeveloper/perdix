@@ -1,127 +1,294 @@
 define({
     pageUID: "management.BranchMaintenance",
     pageType: "Engine",
-    dependencies: ["$log","Pages_ManagementHelper","Enrollment", "$q",'PageHelper', 'formHelper','irfProgressMessage',
+    dependencies: ["$log","Pages_ManagementHelper","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
         'SessionStore', "$state", "$stateParams", "Masters", "authService"],
-    $pageFn: function($log,Pages_ManagementHelper,Enrollment, $q, PageHelper, formHelper, irfProgressMessage,
+    $pageFn: function($log,Pages_ManagementHelper,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
         SessionStore, $state, $stateParams, Masters, authService) {
 
-        var populateData = function(model) {
-            PageHelper.showLoader();
-            Masters.get({
-                action: 'centre',
-                id: model.centre.id
-            }, function(resp, header) {
-
-                var centre = model.centre;
-                var cm = resp.centre_master;
-                var rc = resp.reference_code;
-                var ts = resp.translation;
-
-                centre.id = cm.id;
-                centre.centre_name = cm.centre_name;
-                centre.version = Number(cm.version);
-                centre.centre_code = cm.centre_code;
-                centre.centre_address = cm.centre_address;
-                centre.status = cm.status;
-                centre.weekly_meeting_day = cm.weekly_meeting_day || "";
-                centre.monthly_meeting_date = cm.monthly_meeting_date || "";
-                centre.monthly_meeting_day = cm.monthly_meeting_day || "";
-                centre.monthly_meeting_time = cm.monthly_meeting_time || "";
-                centre.centre_name_in_local = ts.t_value;
-                centre.language_code = ts.language_code;
-                centre.created_by = cm.created_by;
-                centre.field3 = rc.field3 || "";
-                centre.field4 = rc.field4 || "";
-                centre.field5 = rc.field5 || "";
-                PageHelper.hideLoader();
-            }, function(resp) {
-                PageHelper.showProgress('error', "Oops an error occurred", 2000);
-                PageHelper.showErrors(resp);
-                PageHelper.hideLoader();
-            });
-        };
         return {
-            "name": "CREATE_BRANCH",
+            "name": "Create Branch",
             "type": "schema-form",
-            "title": $stateParams.pageId ? "EDIT_BRANCH" : "CREATE_BRANCH",
+            "title": "Create Branch",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Create Branch Page loaded");
+                model.branch= model.branch||{};
 
-                if (!$stateParams.pageId) {
+                if ($stateParams.pageId) {
                     PageHelper.showLoader();
-                    authService.getUser().then(function(data) {
-                        PageHelper.hideLoader();
-                        model.centre.created_by = data.login;
-                    }, function(resp) {
-                        PageHelper.hideLoader();
-                    });
+                    PageHelper.showProgress("page-init", "Loading...");
+                    BranchCreationResource.getBranchByID({
+                            id: $stateParams.pageId
+                        },
+                        function(res) {
+                            _.assign(model.branch, res);
+                            $log.info(model.branch);
+                            model.branch.kgfsBankName = model.branch.kgfsBankName||SessionStore.getBankName();
+                            var banks = formHelper.enum('bank').data;
+                            for (var i = 0; i < banks.length; i++) {
+                                if (banks[i].name == model.branch.kgfsBankName) {
+                                    model.branch.bankId = model.branch.bankId||banks[i].value;
+                                    model.branch.bankName = model.branch.bankName||banks[i].name;
+                                    break;
+                                }
+                            }
+                            PageHelper.hideLoader();
+                        },
+                        function(err){
+                            $log.info(err);
+                        }
+                    );
                 } else {
-                    model.centre.id = $stateParams.pageId;
-                    populateData(model);
-                }
+                    model.branch.kgfsBankName = SessionStore.getBankName();
+                    var banks = formHelper.enum('bank').data;
+                    for (var i = 0; i < banks.length; i++) {
+                        if (banks[i].name == model.branch.kgfsBankName) {
+                            model.branch.bankId = banks[i].value;
+                            model.branch.bankName = banks[i].name;
+                            break;
+                        }
+                    }
+                }    
             },
 
-            form: [{
+            form: [
+            {
                 "type": "box",
-                "title": "CENTRE",
+                "title": "BRANCH_DETAILS",
                 "items": [
-                    "centre.centre_name",
-                    "centre.centre_name_in_local",
-                    "centre.language_code",
-                    "centre.centre_code", {
-                        key: "branch",
-                        readonly: true,
-                        title: "BRANCH"
-
-                    }, {
-                        key: "centre.centre_address",
-                        type: "textarea"
-                    }, {
-                        key: "centre.status",
-                        type: "select"
-
+                {
+                    "key": "branch.bankId",
+                    "required":true,
+                    "title": "BANK_NAME",
+                    "type": "select",
+                    "readonly":true,
+                    enumCode: "bank",
+                },{
+                    "key": "branch.hubId",
+                    "required":true,
+                    "type": "number",
+                    "title": "BRANCH_HUB_NAME",
+                    "condition":"!model.branch.id"
+                },{
+                    "key": "branch.hubId",
+                    "readonly":true,
+                    "type": "number",
+                    "title": "BRANCH_HUB_NAME",
+                    "condition":"model.branch.id"
+                }, {
+                    "key": "branch.branchName",
+                    "required":true,
+                    "type": "string",
+                    "title": "BRANCH_NAME",
+                    "condition":"!model.branch.id"
+                },{
+                    "key": "branch.branchName",
+                    "readonly":true,
+                    "type": "string",
+                    "title": "BRANCH_NAME",
+                    "condition":"model.branch.id"
+                }, {
+                    "key": "branch.branchCode",
+                    "required":true,
+                    "type": "string",
+                    "title": "BRANCH_CODE",
+                    "condition":"!model.branch.id"
+                }, {
+                    "key": "branch.branchCode",
+                    "readonly":true,
+                    "type": "string",
+                    "title": "BRANCH_CODE",
+                    "condition":"model.branch.id"
+                },{
+                    "key": "branch.branchMailId",
+                    "required":true,
+                    "type": "string",
+                    "title": "BRANCH_MAIL_ID"
+                },{
+                    "key": "branch.branchContactNo",
+                    "type": "string",
+                    "title": "BRANCH_CONTACT_NO"
+                }, {
+                    "key": "branch.pinCode",
+                    "required":true,
+                    "type": "number",
+                    "title": "PIN_CODE"
+                }, {
+                    "key": "branch.districtId",
+                    //"required":true,
+                    "type": "select",
+                    // "enumCode":"district_master",
+                    // parentEnumCode: "bankname",
+                    // parentValueExpr: "model.branch.kgfsBankName",
+                    "title": "DISTRICT"
+                },{
+                    "key": "branch.stateId",
+                    //"required":true,
+                    "type":"select",
+                    // "enumCode": "state_master",
+                    // parentEnumCode: "bankname",
+                    // parentValueExpr: "model.branch.kgfsBankName",
+                    "title": "STATE"
+                },{
+                    "key": "branch.branchOpenDate",
+                    "required":true,
+                    "type": "date",
+                    "title": "BRANCH_OPEN_DATE"
+                },{
+                    "key": "branch.branchOpenTime",
+                     type: "time",
+                    "title": "BRANCH_OPEN_TIME"
+                },{
+                    "key": "branch.branchCloseTime",
+                    type: "time",
+                    "title": "BRANCH_CLOSED_TIME"
+                },{
+                    "key": "branch.bufferTime",
+                    type: "number",
+                    "title": "BUFFER_TIME_IN_MINS",
+                    "schema":{
+                        "minimum":0,
+                        "maximum":60
+                    }
+                },{
+                    "key": "branch.branchLatitude",
+                    "type": "geotag",
+                    "latitude": "branch.branchLatitude",
+                    "longitude": "branch.branchLongitude",
+                    "title": "BRANCH_LOCATION"
+                },
+                // {
+                //     "key": "branch.branchLongitude",
+                //     "type": "number",
+                //     "title": "BRANCH_LONGITUDE"
+                // },{
+                //     "key": "branch.branchAltitude",
+                //     "type": "number",
+                //     "title": "BRANCH_ALTITUDE"
+                // },
+                {
+                    "key": "branch.branchAddress1",
+                    "type": "string",
+                    "title": "BRANCH_ADDRESS_1"
+                },{
+                    "key": "branch.branchAddress2",
+                    "type": "string",
+                    "title": "BRANCH_ADDRESS_2"
+                }]
+            },
+            {
+                "type": "box",
+                "title": "ADDITIONAL_DETAILS",
+                "items": [{
+                    "key": "branch.cashLimit",
+                    "required":true,
+                    "type": "amount",
+                    "title": "BRANCH_CASH_LIMIT"
+                },{
+                    "key": "branch.jewelInsuranceLimit",
+                    "type":"amount",
+                    "title": "JEWEL_INSURENCE_LIMIT"
+                },{
+                    "key": "branch.wuAgentCode",
+                    "title": "WU_AGENT_CODE"
+                },{
+                    "key": "branch.xmAgentCode",
+                    "title": "XM_AGENT_CODE"
+                },{
+                    "key": "branch.nlccCode",
+                    "title": "NPS_NLCC_CODE"
+                },{
+                    "key": "branch.solId",
+                    "title": "SOL_ID"
+                }, {
+                    "key": "branch.fingerPrintDeviceType",
+                    "required":true,
+                    "type": "select",
+                    "titleMap": {
+                        "SAGEM": "SAGEM",
+                        "SECUGEN": "SECUGEN"
                     },
-                    "centre.weekly_meeting_day",
-                    "centre.weekly_meeting_time",
-                    "centre.monthly_meeting_date",
-                    "centre.monthly_meeting_day",
-                    "centre.monthly_meeting_time",
-                    "centre.created_by"
-                ]
-
-
-            }, {
+                    "title": "FINGER_PRINT_DEVICE_TYPE"
+                }, {
+                    "key": "branch.eodAuthenticationType",
+                    "required":true,
+                    "type": "select",
+                    "titleMap": {
+                        "PASSWORD": "PASSWORD",
+                        "FINGERPRINT": "FINGERPRINT"
+                    },
+                    "title": "EOD_AUTHENTICATION_TYPE"
+                }]
+            },
+            {
+                "type": "box",
+                "title": "PARTNER_DETAILS",
+                "items": [{
+                    "key": "branch.ankurBranchCode",
+                    "title": "ANKUR_BRANCH_CODE",
+                }, {
+                    "key": "branch.abgBranchCode",
+                    "title": "ABG_BRANCH_CODE"
+                }, {
+                    "key": "branch.edelweissBranchCode",
+                    "title": "EDELWEISS_BRANCH_CODE"
+                }, {
+                    "key": "branch.axisBranchCode",
+                    "title": "AXIS_BRANCH_CODE"
+                },{
+                    "key": "branch.tclBranchCode",
+                    "title": "TCL_BRANCH_CODE"
+                }, {
+                    "key": "branch.tclVendorId",
+                    "title": "TCL_VENDOR_ID"
+                }]
+            },
+            {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
-                    "title": "SAVE"
+                    "title": "SUBMIT"
                 }]
             }],
             schema: function() {
-                return Pages_ManagementHelper.getCentreSchemaPromise();;
+                return Pages_ManagementHelper.getCentreSchemaPromise();
                
             },
             actions: {
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     console.warn(model);
-                    if (window.confirm("Save?") && model.centre) {
-                        PageHelper.showLoader();
-                        if (isNaN(model.centre.version)) model.centre.version = 0;
-                        model.centre.version = Number(model.centre.version) + 1;
-                        Masters.post({
-                            action: "AddCentre",
-                            data: model.centre
-                        }, function(resp, head) {
-                            PageHelper.hideLoader();
-                            PageHelper.showProgress("add-centre", "Done. Centre ID :" + resp.id, 2000);
-                            console.log(resp);
-                        }, function(resp) {
-                            PageHelper.hideLoader();
-                            PageHelper.showErrors(resp);
-                        });
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("Journal Save", "Working...");
+                    if (model.branch.id) {
+                        BranchCreationResource.branchEdit(model.branch)
+                            .$promise
+                            .then(function(res) {
+                                PageHelper.showProgress("Branch Save", "Branch Updated with id" + '  ' + res.id, 3000);
+                                $log.info(res);
+                                model.branch = res;
+                                //$state.go('Page.JournalMaintenanceDashboard', null);
+                            }, function(httpRes) {
+                                PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                    } else {
+                        BranchCreationResource.branchCreation(model.branch)
+                            .$promise
+                            .then(function(res) {
+                                PageHelper.showProgress("Branch Save", "Branch Created with id" + '  ' + res.id, 3000);
+                                $log.info(res);
+                                model.branch = res;
+                                //$state.go('Page.JournalMaintenanceDashboard', null);
+                            }, function(httpRes) {
+                                PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            })
                     }
                 }
             }

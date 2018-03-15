@@ -73,6 +73,7 @@
                 "Page/Engine/management.MasterDataMaintenance",
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
+                "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
                 "Page/Adhoc/bank.Survey.SurveyDashboard"
