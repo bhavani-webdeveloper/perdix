@@ -1,0 +1,182 @@
+{
+    "LenderAccountDetails":{
+        "type": "box",
+        "title": "LENDER_ACCOUNT_DETAILS",
+        "items": {
+            "lenderId":{
+                "key":"lender.liabilityAccounts.lenderId",
+                "type":"lov",
+                "title":"LENDER_ID"
+            },
+            "lenderAccountNumber":{
+                "key":"lender.liabilityAccounts.lenderAccountNumber",
+                "type":"string"
+            }
+        }
+    },
+    "DisbursementDetails":{
+        "type":"box",
+        "title":"LOAN_AMOUNT_DEDUCTION",
+        "items":{
+            "productType":{
+                "key":"lender.liabilityAccounts.productType",
+                "type":"string"
+            },
+            "loanAmount":{
+                "key":"lender.liabilityAccounts.loanAmount",
+                "type":"number"
+            },
+            "disbursementDate":{
+                "key":"lender.liabilityAccounts.disbursementDate",
+                "type":"date"
+            },
+            "interestRateType":{
+                "key":"lender.liabilityAccounts.interestRateType",
+                "type":"select",
+                "enumCode":"----"
+            },
+            "rateOfInterest":{
+                "key":"lender.liabilityAccounts.rateOfInterest",
+                "type":"string"
+            },
+            "markUpOrDown":{
+                "key":"lender.liabilityAccounts.markUpOrDown",
+                "type":"number"
+            },
+            "interestCalculationMethod":{
+                "key":"lender.liabilityAccounts.interestCalculationMethod",
+                "type":"select",
+                "enumCode":"---"
+            },
+            "repaymentTenure":{
+                "key":"lender.liabilityAccounts.repaymentTenure",
+                "type":"number"
+            },
+            "repaymentFrequency":{
+                "key":"lender.liabilityAccounts.repaymentFrequency",
+                "type":"select",
+                "enumCode":"frequency"
+            },
+            "repaymentMode":{
+                "key":"lender.liabilityAccounts.repaymentMode",
+                "type":"select",
+                "enumcode":"---"
+            }
+
+        }
+    },
+    "LoanAmountDeduction":{
+        "type": "box",
+        "title": "LOAN_AMOUNT_DEDUCTION",
+        "items": {
+            "liabilityFeeDetails": {
+                "key": "lender.liabilityAccounts.liabilityFeeDetails",
+                "type": "array",
+                "title": "LOAN_AMOUNT_DEDUCTION",
+                "items":{
+                    "feeName": {
+                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeName",
+                        "type":"string"
+                    },
+                    "feeType": {
+                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeType",
+                        "type":"string"
+                    },
+                    "feeAmount": {
+                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeAmount",
+                        "orderNo": 40
+                    },
+                }
+            },
+            "securityAmount":{
+                "key":"lender.liabilityAccounts.securityAmount",
+                "type":"number"
+            },
+            "totalDeductions":{
+                "key":"lender.liabilityAccounts.totalDeductions",
+                "type":"number"
+            },
+            "netDisbursementAmount":{
+                "key":"lender.liabilityAccounts.netDisbursementAmount",
+                "type":"number"
+            },
+            "expectedDisbursementDate":{
+                "key":"lender.liabilityAccounts.expectedDisbursementDate",
+                "type":"date"
+            },
+            "installmentAmount":{
+                "key":"lender.liabilityAccounts.installmentAmount",
+                "type":"number"
+            }
+        }
+    },
+    "LenderDocumentation":{
+        "type": "box",
+        "title": "LENDER_DEDUCTION",
+        "items": {
+            "liabilityLenderDocuments": {
+                "key": "lender.liabilityAccounts.liabilityLenderDocuments",
+                "type": "array",
+                "title": "LENDER_DEDUCTION",
+                "items":{
+                    "documentType": {
+                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].documentType",
+                        "type":"select",
+                        "enumcode":"----"
+                    },
+                    "isSignOff":{
+                        "key":"lender.liabilityAccounts.liabilityLenderDocuments[].isSignOff",
+                        "type":"radio",
+                        "titleMap": [{
+                            "value": true,
+                            "name": "Yes"
+                        },{
+                            "value": false,
+                            "name": "No"
+                        }]
+                    },
+                    "uploadedDate":{
+                        "key":"lender.liabilityAccounts.liabilityLenderDocuments[].uploadedDate",
+                        "type":"date"
+                    }
+
+                } 
+            } 
+        } 
+    },
+    "LegalCompliance":{
+         "type": "box",
+        "title": "LEGALCOMPLIANCE",
+        "items": {
+            "liabilityComplianceDocuments": {
+                "key": "lender.liabilityAccounts.liabilityComplianceDocuments",
+                "type": "array",
+                "title": "LENDER_DEDUCTION",
+                "items":{
+                    "documentType": {
+                        "key": "lender.liabilityAccounts.liabilityComplianceDocuments[].documentType",
+                        "type":"select",
+                        "enumcode":"----"
+                    },
+                    "isSignOff":{
+                        "key":"lender.liabilityAccounts.liabilityComplianceDocuments[].isSignOff",
+                        "type":"radio",
+                        "titleMap": [{
+                            "value": true,
+                            "name": "Yes"
+                        },{
+                            "value": false,
+                            "name": "No"
+                        }]
+                    },
+                    "uploadedDate":{
+                        "key":"lender.liabilityAccounts.liabilityComplianceDocuments[].uploadedDate",
+                        "type":"date"
+                    }
+
+                } 
+            } 
+        }
+
+    }
+}
