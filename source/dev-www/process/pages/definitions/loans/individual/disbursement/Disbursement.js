@@ -38,6 +38,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.additional.firstRepaymentDate = resp[0].firstRepaymentDate;
                         model.additional.loanamount=resp[0].amount;
                         model.additional.feeamount=resp[0].fees;
+                        model.additional.transactionType = resp[0].transactionType;
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
                             for (var i = 0; i < resp[0].fees.length; i++){
@@ -118,6 +119,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 "title": "DISBURSEMENT_DETAILS", // sample label code
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
+                    {
+                        "key": "additional.transactionType",
+                        "type":"string",
+                        "title":"TRANSACTION_TYPE",
+                        "readonly":true
+                    },
                     {
                         "key": "additional.accountNumber",
                         "title":"ACCOUNT_NUMBER",

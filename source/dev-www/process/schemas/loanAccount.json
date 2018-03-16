@@ -1130,6 +1130,10 @@
                 },
                 "wmName": {
                     "type": ["string", "null"]
+                },
+                "transactionType": {
+                    "type": ["string", "null"],
+                    "enumCode":"loan_transaction_type"
                 }
             },
             "required": [
@@ -1198,7 +1202,8 @@
                 "witnessLastName",
                 "witnessMiddleName",
                 "witnessRelationship",
-                "wmName"
+                "wmName",
+                "transactionType"
             ]
         }
     }

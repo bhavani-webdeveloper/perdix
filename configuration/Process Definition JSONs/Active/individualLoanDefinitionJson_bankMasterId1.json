@@ -798,6 +798,15 @@
                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
+               "transactionType":{
+                  "title":"transactionType",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":1000,
+                  "captureStages":[
+                     "LoanInitiation"
+                  ]
+               },
 			    "assignedTo":{
                   "title":"assignedTo",
                  "type":"string",

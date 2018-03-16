@@ -730,6 +730,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title": "LOAN_DETAILS",
                         "items": [
                             {
+                                "key": "loanAccount.transactionType",
+                                "type":"select",
+                                "title":"TRANSACTION_TYPE"
+                            },
+                            {
                                 "key": "loanAccount.loanAmount",
                                 "type":"amount",
                                 "title":"LOAN_AMOUNT",
