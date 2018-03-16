@@ -81,5 +81,6 @@ include_once(__DIR__.'/global_functions.php');
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($settings['db'], 'default');
 $capsule->addConnection($settings['bi_db'], 'bi_db');
+$capsule->addConnection($settings['encore_db'], 'encore_db');
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
