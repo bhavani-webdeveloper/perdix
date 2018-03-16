@@ -202,6 +202,27 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'POST',
                 url: endpoint + '/findDumpSamples'
             }),
+            getStageActivities: searchResource({
+                method: 'GET',
+                url: endpoint + '/getStageActivities'
+            }),
+            findStage: searchResource({
+                method: 'GET',
+                url: endpoint + '/findStage'
+            }),
+            findActivity: searchResource({
+                method: 'GET',
+                url: endpoint + '/findActivity'
+            }),
+            updateStageActivities: {
+                method: 'POST',
+                url: endpoint + '/updateStageActivities',
+                isArray: true
+            },
+            updateStage: {
+                method: 'POST',
+                url: endpoint + '/updateStage'
+            }
         });
         ret.offline = {
             setAuditInfo: function(auditId, audit_info) {
@@ -556,7 +577,7 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.risk_classification = risk_classification;
 
-                var stages = {};
+                var stage_names = {};
                 for (i in response.stages) {
                     stages[response.stages[i].stage_name] = response.stages[i];
                 }

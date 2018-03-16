@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
     function(irfNavigator, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
+        var master = Audit.offline.getAuditMaster();
         return {
             "type": "schema-form",
             "title": "ISSUE_DETAILS",
@@ -303,7 +304,11 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                     }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                 },
                 getStageTitle: function(stage) {
-                    return translateFilter(master.stage_names[stage].stage_label);
+                    if (stage) {
+                        return translateFilter(master.stage_names[stage].stage_label);
+                    } else {
+                        return "";
+                    }
                 },
                 getUsername: function(userId) {
                     return User.offline.getDisplayName(userId);

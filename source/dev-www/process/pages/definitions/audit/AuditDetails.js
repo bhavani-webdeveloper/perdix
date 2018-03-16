@@ -607,7 +607,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 });
             },
             getStageTitle: function(stage) {
-                return translateFilter(master.stage_names[stage].stage_label);
+                if (stage) {
+                    return translateFilter(master.stage_names[stage].stage_label);
+                } else {
+                    return "";
+                }
             },
             getUsername: function(userId) {
                 return User.offline.getDisplayName(userId);

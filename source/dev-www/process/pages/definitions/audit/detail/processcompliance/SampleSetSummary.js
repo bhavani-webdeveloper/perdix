@@ -54,7 +54,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                     render: function(data, type, full, meta) {
                         var columns = null;
                         if (model.siteCode == "KGFS") {
-                            columns = ["Process", "Sub Process", "Issue", "Comment", "Responsibility", "Additional Responsibility", "Spot fix", "Spot action"];
+                            columns = ["Process", "Sub Process", "Issue", "Comment", "Responsibility", "Additional Responsibility", "Spot fix", "Spot action", "Spotfix Responsibility"];
                         } else if (model.siteCode == "kinara") {
                             columns = ["Process", "Sub Process", "Issue", "Option", "Comment", "Responsibility", "Additional Responsibility"];
                         }
@@ -89,9 +89,14 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleSetSum
                                 } else {
                                     row.push('&nbsp;');
                                 }
-                                if (model.siteCode == "kinara") {
+                                if (model.siteCode == "KGFS") {
                                     row.push(r.spot_fixed || '&nbsp;');
                                     row.push(r.spot_action || '&nbsp;');
+                                    if (r.assignee_det[0]) {
+                                        row.push(r.assignee_det[0].spot_assignee_id || '&nbsp;');
+                                    } else {
+                                        row.push('&nbsp;');
+                                    }
                                 }
                                 table.push('<tr style="border-bottom:1px solid lightgray"><td>' + row.join('</td><td>') + '</td></tr>');
                             }

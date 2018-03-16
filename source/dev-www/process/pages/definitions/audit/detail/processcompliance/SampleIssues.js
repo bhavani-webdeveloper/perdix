@@ -13,13 +13,24 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         });
                         return false;
                     }
+                    tempIssueDetails.push(id);
                 } else if (id.assignee_det && id.assignee_det.length && id.assignee_det[0].assignee_id) {
                     PageHelper.setError({
-                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
+                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires deviation to be given"
+                    });
+                    return false;
+                } else if (id.spot_fixed == '1') {
+                    PageHelper.setError({
+                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires deviation to be given"
                     });
                     return false;
                 }
-                tempIssueDetails.push(id);
+            }
+            if (tempIssueDetails.length == 0) {
+                PageHelper.setError({
+                    message: "There are no issues captured."
+                });
+                return false;
             }
             sample.issue_details = tempIssueDetails;
             return true;
@@ -483,7 +494,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 "desgn_id": 0 // TODO global_settings audit.issue_assigned_to_role_id
                             }],
                             "input_datas": "",
-                            "spot_fixed": "0",
+                            // "spot_fixed": "0",
                             "document_id": null,
                             "draft_document_id": null,
                             "latitude": null,

@@ -1,8 +1,7 @@
 {
     "title": "Main navigation",
     "items": [
-        "Page/Landing",
-        {
+        "Page/Landing", {
             "title": "CUSTOMER",
             "iconClass": "fa fa-user",
             "items": [
@@ -22,8 +21,7 @@
         "Page/LeadDashboard",
         "Page/LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
-        "Page/DocumentTrackingDashboard",
-        {
+        "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",
             "items": [
@@ -47,8 +45,7 @@
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
         "Page/Adhoc/loans.group.GroupDashboard",
-        "Page/Engine/CentrePaymentCollectionDownload",
-        {
+        "Page/Engine/CentrePaymentCollectionDownload", {
             "title": "JOURNAL_ENTRY",
             "iconClass": "fa fa-exchange",
             "items": [
@@ -56,8 +53,7 @@
                 "Page/JournalPostingDashboard",
                 "Page/JournalMultiPostingDashboard"
             ]
-        },
-        {
+        }, {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",
             "items": [
@@ -76,10 +72,16 @@
                 "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
-                "Page/Adhoc/bank.Survey.SurveyDashboard"
+                "Page/Adhoc/bank.Survey.SurveyDashboard", {
+                    "title": "AUDIT_MANAGEMENT",
+                    "iconClass": "fa fa-cubes",
+                    "items": [
+                        "Page/Engine/management.audit.AuditStage",
+                        "Page/Engine/management.audit.AuditStageActivities"
+                    ]
+                }
             ]
-        },
-        {
+        }, {
             "title": "PSYCHOMETRIC",
             "iconClass": "fa fa-puzzle-piece",
             "items": [
