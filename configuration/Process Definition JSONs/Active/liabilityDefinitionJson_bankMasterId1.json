@@ -70,11 +70,11 @@
       "type":"object",
       "title":"Comment",
       "required":[
-         "liabilityAccounts"		 
+         "liabilityAccount"		 
 		 
       ],
       "properties":{
-         "liabilityAccounts":{
+         "liabilityAccount":{
             "title":"Liability Account Details",
             "type":"object",
             "maxItems":null,
@@ -173,6 +173,15 @@
                       "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
+			   "loanAccountStatus":{
+                  "title":"loanAccountStatus",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
                "repaymentFrequency":{
                   "title":"repaymentFrequency",
                   "type":"string",
@@ -221,7 +230,39 @@
                "expectedDisbursementDate":{
                   "title":"expectedDisbursementDate",
                   "type":"date",
-                 
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "scheduleStartDate":{
+                  "title":"scheduleStartDate",
+                  "type":"date",
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "firstInstallmentDate":{
+                  "title":"firstInstallmentDate",
+                  "type":"date",
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "maturityDate":{
+                  "title":"expectedDisbursementDate",
+                  "type":"date",
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "expectedDisbursementDate":{
+                  "title":"maturityDate",
+                  "type":"date",
+                                 
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
@@ -265,9 +306,18 @@
                   },
                   "feeAmount":{
                      "title":"feeAmount",
-                     "type":"string",
-                     "minLength":1,
-                     "maxLength":100,
+                   "type":"number",
+                  "minimum":1,
+                  "maximum":10000000,
+                     "captureStages":[
+                        "LiabilityAccount", "DisbursementConfirmation"
+                     ]
+                  },
+				  "processingFeeInPercentage":{
+                     "title":"processingFeeInPercentage",
+                     "type":"number",
+                  "minimum":1,
+                  "maximum":10000000,
                      "captureStages":[
                         "LiabilityAccount", "DisbursementConfirmation"
                      ]
