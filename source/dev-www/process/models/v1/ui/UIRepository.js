@@ -12,6 +12,10 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getEnrolmentProcessUIRepository: {
             method: "GET",
             url: 'modules/ui/customer/EnrolmentProcess.json'
+        },
+        getLenderLiabilitiesLoanAccountBookingProcess :{
+            method : "GET",
+            url :'modules/ui/lender/LenderLiabilitiesLoanAccountBookngProcess.json'
         }
 
     });
