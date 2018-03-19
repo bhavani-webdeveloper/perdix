@@ -15,7 +15,7 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         },
         getLenderLiabilitiesLoanAccountBookingProcess :{
             method : "GET",
-            url :'modules/ui/lender/LenderLiabilitiesLoanAccountBookngProcess.json'
+            url :'modules/ui/lender/LenderLiabilitiesLoanAccountBookingProcess.json'
         }
 
     });
