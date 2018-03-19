@@ -1,4 +1,3 @@
-
 irf.commons.value('RefCodeCache',{
 	refCodes: null
 });
@@ -354,6 +353,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 				}
 			};
 			var codeAsNumberToValue = function(s, o) {
+			
 				for (i in o.data) {
 					o.data[i].value = Number(o.data[i].code);
 				}
@@ -410,6 +410,8 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("p2p_customer_category", "p2p_customer_category", codeToValue);
 			createEnum("creditBureauTypes", "creditBureauTypes", codeToValue);
 			createEnum("origination_stage", "origination_stage", codeToValue);
+			createEnum("investor_id", "investor_id", codeAsNumberToValue);
+
 
 			return $q.resolve();
 		});
