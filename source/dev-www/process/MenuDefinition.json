@@ -18,6 +18,7 @@
                 "Page/Engine/customer360.RecaptureQueue"
             ]
         },
+        "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
         "Page/LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
