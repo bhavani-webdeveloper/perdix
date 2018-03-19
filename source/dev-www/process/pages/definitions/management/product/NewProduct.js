@@ -233,6 +233,7 @@ define({
                 }, {
                     "key": "product.tenureSlabs",
                     "type": "array",
+                    "startEmpty":true,
                     "items": [{
                         "key": "product.tenureSlabs[].tenure",
                     }]
@@ -256,6 +257,7 @@ define({
                 }, {
                     "key": "product.amountSlabs",
                     "type": "array",
+                    "startEmpty":true,
                     "items": [{
                         "key": "product.amountSlabs[].amount",
                     }]
@@ -284,6 +286,7 @@ define({
                 }, {
                     "key": "product.numberOfGuarantors",
                     "type": "select",
+                    "required": true,
                     "titleMap": [{
                         "name": 0,
                         "value": 0
@@ -338,23 +341,23 @@ define({
                 }],
             }, {
                 "type": "box",
-                "condition": "model.product.purposes.length",
+              //  "condition": "model.product.purposes.length",
                 "title": "LOAN_PURPOSES",
                 "items": [{
                     key: "product.allLoanPurposesApplicable",
                     "onChange": function(modelValue, form, model) {
                         $log.info(model.product.allLoanPurposesApplicable == true)
-                        var ap = model.allPurposes;
-                        model.allPurposes = null;
-                        $timeout(function() {
-                            for (i in ap) {
-                                if (ap[i].$selected === undefined || ap[i].$selected == false || model.product.allLoanPurposesApplicable == true) {
-                                    ap[i].$selected = true;
-                                } else {
-                                    ap[i].$selected = false;
+                            var ap = model.allPurposes;
+                            model.allPurposes = null;
+                            $timeout(function() {
+                                for (i in ap) {
+                                    if (ap[i].$selected === undefined || ap[i].$selected == false || model.product.allLoanPurposesApplicable == true) {
+                                        ap[i].$selected = true;
+                                    } else {
+                                        ap[i].$selected = false;
+                                    }
                                 }
-                            }
-                            model.allPurposes = ap;
+                                model.allPurposes = ap;
                         });
                     }
                 }, {
@@ -370,9 +373,9 @@ define({
                         return [{
                             title: 'PURPOSE1',
                             data: 'purpose1',
-                            render: function(data, type, full, meta) {
-                                return (full.purpose1 === 'Business Development' ? '<input type="checkbox" value= data.Checked checked>' : '<input type="checkbox" value="Checked">') + data;
-                            }
+                            // render: function(data, type, full, meta) {
+                            //     return (full.purpose1 === 'Business Development' ? '<input type="checkbox" value= data.Checked checked>' : '<input type="checkbox" value="Checked">') + data;
+                            // }
                         }, {
                             title: 'PURPOSE2',
                             data: 'purpose2'
@@ -387,8 +390,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                "title": "CUSTOME_TEXT_FIELDS",
-
+                "title": "CUSTOM_TEXT_FIELDS",
                 "items": [{
                     "key": "product.userDefinedFields",
                     "type": "array",
@@ -422,7 +424,7 @@ define({
                 }],
             }, {
                 "type": "box",
-                "title": "CUSTOME_DATA_FIELDS",
+                "title": "CUSTOM_DATA_FIELDS",
                 "items": [{
                     "key": "product.userDefinedDateFields",
                     "type": "array",
@@ -466,7 +468,8 @@ define({
                     }, {
                         "key": "product.lmsProductMasters[].investorId",
                         "type": "select",
-                        "enumCode": "investor_id"
+                        "enumCode": "investor_id",
+                        "required": true,
                     }, {
                         "key": "product.lmsProductMasters[].smsProductName",
                         "type": "string",
@@ -549,28 +552,34 @@ define({
                             },
                             "minInterestRate": {
                                 "type": "number",
-                                "title": "MIN_INTEREST_RATE"
+                                "title": "MIN_INTEREST_RATE",
+                                "maxLength": 2,
+
                             },
                             "maxInterestRate": {
                                 "type": "number",
-                                "title": "MAX_INTEREST_RATE"
+                                "title": "MAX_INTEREST_RATE",
+                                "maxLength": 2
                             },
                             "groupMemberMinimum": {
-
                                 "type": "number",
-                                "title": "MINIMUM_MEMBERS"
+                                "title": "MINIMUM_MEMBERS",
+                                "maxLength": 2,
                             },
                             "groupMemberMaximum": {
                                 "type": "number",
-                                "title": "MAXIMUM_MEMBERS"
+                                "title": "MAXIMUM_MEMBERS",
+                                "maxLength": 2,
                             },
                             "tenureFrom": {
                                 "type": "number",
-                                "title": "MIN_TENURE"
+                                "title": "MIN_TENURE",
+                                "maxLength": 2,
                             },
                             "tenureTo": {
                                 "type": "number",
-                                "title": "MAX_TENURE"
+                                "title": "MAX_TENURE",
+                                "maxLength": 2,
                             },
                             "tenureSlabs": {
                                 "type": "array",
@@ -733,6 +742,7 @@ define({
                             },
                             "userDefinedFields": {
                                 "type": "array",
+                                "title":"USER_DEFINED_FIELDS",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -761,6 +771,7 @@ define({
                             },
                             "userDefinedDateFields": {
                                 "type": "array",
+                                "title":"USER_DEFINED_DATE_FIELDS",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -777,6 +788,7 @@ define({
                             },
                             "moduleConfigMasters": {
                                 "type": "array",
+                                "title":"MODULE_CONFIG_MASTERS",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -805,6 +817,7 @@ define({
                             },
                             "lmsProductMasters": {
                                 "type": "array",
+                                "title":"LMS_PRODUCT_MASTER",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -836,6 +849,12 @@ define({
                             "expiryDate",
                             "minInterestRate",
                             "maxInterestRate",
+                            "groupMemberMinimum",
+                            "groupMemberMaximum",
+                            "numberOfGuarantors",
+                            "lmsProductMasters[].investorId",
+                            "lmsProductMasters[].bankId",
+                            "status",
                         ]
                     }
                 }
@@ -858,7 +877,7 @@ define({
                     model.product.lmsProductMasters.minAmt = 0;
                     model.product.lmsProductMasters.newProduct = 'Y';
                     model.product.purposes = [];
-                    if (model.product.tenureSlabs)
+                    //if (model.product.allPurposes)
                         _.filter(model.allPurposes, function(allPurposesValues) {
                             if (allPurposesValues.$selected == true) {
                                 model.product.purposes.push(allPurposesValues);

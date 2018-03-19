@@ -16,18 +16,28 @@ define({
                         PageHelper.hideLoader();
                         model.branchProductMapping = response.branchProductMappings;
                         model.branchProductMappings = [];
-                        for (i = 0; i < model.productTypeMasterData.length; i++) {
-                            for (j = 0; j < model.branchProductMapping.length; j++) {
-                                if (model.branchProductMapping[j].productCode == model.productTypeMasterData[i].productName) {
-                                    model.branchProductMappings.push({
-                                        "productCode": model.productTypeMasterData[i].productName,
-                                        "agentAccess": model.branchProductMapping[j].agentAccess,
-                                        "wmAccess": model.branchProductMapping[j].wmAccess,
-                                        "checked": true
-                                    })
-                                    break;
-                                } else {
-                                    if (j == model.branchProductMapping.length - 1) {
+                            for (i = 0; i < model.productTypeMasterData.length; i++) {
+                                for (j = 0; j <= model.branchProductMapping.length; j++) {
+                                    if (model.branchProductMapping.length != 0 && j < model.branchProductMapping.length ) {
+                                        if (model.branchProductMapping[j].productCode == model.productTypeMasterData[i].productName) {
+                                            model.branchProductMappings.push({
+                                                "productCode": model.productTypeMasterData[i].productName,
+                                                "agentAccess": model.branchProductMapping[j].agentAccess,
+                                                "wmAccess": model.branchProductMapping[j].wmAccess,
+                                                "checked": true
+                                            })
+                                            break;
+                                        } else {
+                                            if (j == model.branchProductMapping.length) {
+                                                model.branchProductMappings.push({
+                                                    "productCode": model.productTypeMasterData[i].productName,
+                                                    "agentAccess": false,
+                                                    "wmAccess": false,
+                                                    "checked": false
+                                                })
+                                            }
+                                        }
+                                    } else {
                                         model.branchProductMappings.push({
                                             "productCode": model.productTypeMasterData[i].productName,
                                             "agentAccess": false,
@@ -37,7 +47,6 @@ define({
                                     }
                                 }
                             }
-                        }
                     },
                     function(err) {
                         console.log("error")
@@ -53,6 +62,25 @@ define({
             "title": "PRODUCT_MAINTENANCE",
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
+                model.myClick = function(cond,productData){
+                    var ap = productData;
+                        model.branchProductMappings = null;
+                        $timeout(function() {
+                            for (i in ap){
+                                if (ap[i].checked === undefined || ap[i].checked == false || cond == true) {
+                                    ap[i].checked = true;
+                                    ap[i].wmAccess = true;
+                                } else {
+                                    model.selectAll = false
+                                    ap[i].checked  = false;
+                                    ap[i].agentAccess = false;
+                                    ap[i].wmAccess = false
+                                }
+                            }
+                            model.branchProductMappings = ap;
+                            console.log(model.branchProductMappings);
+                        });
+                };
                 Product.getProductTypeMaster().$promise.then(function(response) {
                     model.productTypeMasterData = response;
                     PageHelper.hideLoader();
@@ -82,6 +110,7 @@ define({
                     type: "section",
                     htmlClass: "col-sm-12",
                     html: '<div class="table-responsive">' +
+                        '<div>'+'<input type="checkbox" ng-model="data1.selectAll"  ng-change="model.myClick(data1.selectAll,model.branchProductMappings)">'+'<span>SelectAll</span>'+'</div>'+
                         '<table class="table table-bordered">' + '<thead class="thead-default">' +
                         '<tr>' +
                         '<th style="text-align: center">Select</th>' +

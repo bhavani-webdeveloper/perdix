@@ -166,7 +166,40 @@ define({
                             data: 'processType'
                         }, {
                             title: 'FREQUENCY',
-                            data: 'frequency'
+                            data: 'frequency',
+                            render: function(data, type, full, meta) {
+                                switch (data) {
+                                    case 'W':
+                                        return "Weekly";
+                                        break;
+                                    case 'M':
+                                        return "Monthly";
+                                        break;
+                                    case 'Y':
+                                        return "Yearly";
+                                        break;
+                                    case 'Q':
+                                        return "Quarterly";
+                                        break;
+                                    case 'D':
+                                        return "Daily";
+                                        break;
+                                    case 'A':
+                                        return "Annually";
+                                        break;
+                                    case 'F':
+                                        return "Fortnightly";
+                                        break;
+                                    case 'H':
+                                        return "Half yearly";
+                                        break;
+                                    case 'B':
+                                        return "Bullet";
+                                        break;
+                                    default:
+                                        return;
+                                }
+                            }
                         }]
                     },
                     getActions: function() {
