@@ -85,6 +85,11 @@
                 "type": "array",
                 "title": "LOAN_AMOUNT_DEDUCTION",
                 "items":{
+                    "processingFeeInPercentage": {
+                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].processingFeeInPercentage",
+                        "type":"number",
+                        "title":"PROCESSING_FEE_IN_PERCENTAGE"
+                    },
                     "feeName": {
                         "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeName",
                         "type":"string",
@@ -126,6 +131,27 @@
                 "key":"lender.liabilityAccounts.installmentAmount",
                 "type":"number",
                 "title":"INSTALLMENT_AMOUNT"
+            },
+            "scheduleStartDate": {
+                "key":"lender.liabilityAccounts.scheduleStartDate",
+                "type":"date",
+                "title":"SCHEDULE_START_DATE"
+            },
+            "firstInstallmentDate": {
+                "key":"lender.liabilityAccounts.firstInstallmentDate",
+                "type":"date",
+                "title":"FIRST_INSTALLMENT_DATE"
+            },
+            "maturityDate": {
+                "key":"lender.liabilityAccounts.maturityDate",
+                "type":"date",
+                "title":"MATURITY_DATE"
+            },
+            "loanAccountStatus": {
+                "key":"lender.liabilityAccounts.maturityDate",
+                "type":"select",
+                "enumcode":"",
+                "title":"LOAN_ACCOUNT_STATUS"
             }
         }
     },
