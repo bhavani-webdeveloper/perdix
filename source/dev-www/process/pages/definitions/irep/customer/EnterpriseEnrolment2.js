@@ -2196,7 +2196,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-
+                    console.log("model information");
+                    console.log(model);
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
                     p1.then(function(repo){
@@ -2208,12 +2209,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "additions": [
                                     {
                                         "type": "actionbox",
-                                        "orderNo": 1000,
+                                        "condition": "!model.customer.currentStage",
+                                        "orderNo": 1200,
                                         "items": [
                                             {
                                                 "type": "submit",
                                                 "title": "SUBMIT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "actionbox",
+                                        "condition": "model.customer.currentStage",
+                                        "orderNo": 1200,
+                                        "items": [
+                                            {
+                                                "type": "button",
+                                                "title": "UPDATE",
+                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "orderNo": 1,
+                                        "type": "box",
+                                        "title": "BUSINESS_SELECTION",
+                                        "items":[
+                                            {
+                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.applicantEnrolmentProcess.customer.currentStage != 'Completed'",
+                                                "type": "section",
+                                                "htmlClass": "alert alert-warning",
+                                                "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
+                                                "orderNo": 10
                                             },
+                                            "EnterpriseInformation.enterpriseType"
                                         ]
                                     }/*,
                                     {
@@ -2309,6 +2338,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     submit: function(model, form, formName){
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
 
@@ -2319,6 +2352,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             .subscribe(function(){
                                 model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                model.enrolmentProcess.proceed()
+                                    .subscribe(function(enrolmentProcess) {
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    }, function(err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                    })
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
@@ -2327,7 +2367,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     }
 
                 }

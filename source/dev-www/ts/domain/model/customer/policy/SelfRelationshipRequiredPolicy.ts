@@ -14,7 +14,7 @@ export class SelfRelationshipRequiredPolicy extends IPolicy<EnrolmentProcess> {
 
     enrolmentRepo: IEnrolmentRepository;
 
-    constructor(){
+    constructor() {
         super();
         this.enrolmentRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.Enrolment);
     }
@@ -25,7 +25,25 @@ export class SelfRelationshipRequiredPolicy extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.throw(new ValidationError("Self Relationship is mandatory!"));
+       // return Observable.throw("Self Relationship is mandatory!");
+        if (_.hasIn(enrolmentProcess, 'customer.familyMembers') && _.isArray(enrolmentProcess.customer.familyMembers)){
+            let selfExist = false
+            for (let i=0;i<enrolmentProcess.customer.familyMembers.length; i++){
+                let f = enrolmentProcess.customer.familyMembers[i];
+                if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                    selfExist = true;
+                    break;
+                }
+            }
+            if (selfExist == false){
+                return Observable.throw(new Error("Self Relationship is mandatory!"));
+               // PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory",5000);
+                // return false;
+            }
+        } else {
+            //PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory",5000);
+           // return false;
+           return Observable.throw(new Error("Family Members section is missing. Self Relationship is Mandatory"));
+        }        
     }
-
 }

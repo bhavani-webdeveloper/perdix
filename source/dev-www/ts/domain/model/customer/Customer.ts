@@ -16,6 +16,7 @@ import FinancialAsset = require("./FinancialAsset");
 import FinancialSummary = require("./FinancialSummary");
 import FixedAssetsMachinary = require("./FixedAssetsMachinary");
 import IncomeThroughSale = require("./IncomeThroughSale");
+import LenderContactDetail = require("./LenderContactDetail");
 import Liability = require("./Liability");
 import MeFamilyMapping = require("./MeFamilyMapping");
 import OtherBusinessIncome = require("./OtherBusinessIncome");
@@ -28,7 +29,8 @@ import Verification = require("./Verification");
 
 export enum CustomerTypes {
     INDIVIDUAL = "Individual",
-    ENTERPRISE = "Enterprise"
+    ENTERPRISE = "Enterprise",
+    LENDER = "Lender"
 }
 
 
@@ -199,6 +201,7 @@ export class Customer {
     selfServicePinNoUpdatedOn: Date;
     selfServiceRegisteredNo: string;
     shopOrganized: string;
+    source: string;
     spouseDateOfBirth: string;
     spouseFirstName: string;
     spouseLastName: string;
@@ -274,6 +277,9 @@ export class Customer {
 
     @Type(() => IncomeThroughSale)
     incomeThroughSales: IncomeThroughSale[];
+
+    @Type(()=>LenderContactDetail)
+    lenderContactDetails: LenderContactDetail[];
 
     @Type(() => Liability)
     liabilities: Liability[];

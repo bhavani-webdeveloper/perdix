@@ -42,6 +42,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Screening": {
                             "excludes": [
                                 "IndividualFinancials",
+                                "FamilyDetails",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
                                 "FamilyDetails.familyMembers.anualEducationFee",
                                 "FamilyDetails.familyMembers.salary",
@@ -2008,11 +2009,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "additions": [
                                 {
                                     "type": "actionbox",
+                                    "condition": "!model.customer.currentStage",
                                     "orderNo": 1000,
                                     "items": [
                                         {
                                             "type": "submit",
-                                            "title": "SUBMIT"
+                                            "title": "SUBMIT",
+                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "actionbox",
+                                    "condition": "model.customer.currentStage",
+                                    "orderNo": 1200,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "UPDATE_ENROLMENT",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -2126,7 +2141,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         });
                     },
                     save: function (model, formCtrl, form, $event) {
-
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         formCtrl.scope.$broadcast('schemaFormValidate');
 
                         if (formCtrl && formCtrl.$invalid) {
@@ -2143,6 +2161,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.clearErrors();
                                 BundleManager.pushEvent()
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
@@ -2150,8 +2169,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.hideLoader();
                             });
                     },
-                    submit: function (model, form, formName) {
+                    proceed: function(model, form, formName){
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    submit: function (model, form, formName) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -2159,7 +2205,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function (enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                model.enrolmentProcess.proceed()
+                                .subscribe(function(enrolmentProcess) {
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                })
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
