@@ -172,7 +172,11 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         getWithHistory: {
             method: 'GET',
             url: endpoint+'/withhistory/:id'
-        }
+        },
+        lenderSearch: searchResource({
+            method: 'GET',
+            url: endpoint + '/findInternal/'
+        })
     });
 });
 
