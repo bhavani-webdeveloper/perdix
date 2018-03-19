@@ -240,7 +240,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                     var promise = Inventory.captureInventory(reqData).$promise;
                     promise.then(function(response) {
                         $log.info(response);
-                        PageHelper.showProgress('inventory', 'Inventory Updated.', 5000);
+                        PageHelper.showProgress('inventory', 'Data Updated.', 5000);
                         model.inventory = response;
                         $state.go('Page.InventoryDashboard', null);
 
