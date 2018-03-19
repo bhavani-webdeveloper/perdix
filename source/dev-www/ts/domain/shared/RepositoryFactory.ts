@@ -3,6 +3,9 @@ import LeadRepository = require('../model/lead/LeadRepository');
 import { RepositoryIdentifiers } from './RepositoryIdentifiers';
 import {EnrolmentProcess} from "../model/customer/EnrolmentProcess";
 import {EnrolmentRepository} from "../model/customer/EnrolmentRepository";
+import {LiabilityLoanAccountBookingRepository} from "../model/lender/LoanBooking/LiabilityLoanAccountBookingRepository";
+import {LiabilityLoanAccountBookingProcess} from "../model/lender/LoanBooking/LiabilityLoanAccountBookingProcess";
+
 import {QueryRepository} from "./query/QueryRepository";
 
 class RepositoryFactory {
@@ -18,6 +21,8 @@ class RepositoryFactory {
                 return new EnrolmentRepository;
             case RepositoryIdentifiers.Queries:
                 return new QueryRepository();
+            case RepositoryIdentifiers.LiabilityLoanAccountBookingProcess:
+                return new LiabilityLoanAccountBookingProcess();
     		default:
     			return null;
     	}
