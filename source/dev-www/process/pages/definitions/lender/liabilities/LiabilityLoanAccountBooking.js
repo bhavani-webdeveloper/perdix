@@ -1,5 +1,5 @@
-define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
-    EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProcess', 'perdix/infra/api/AngularResourceService'], function (LiabilityLoanAccountBookingProcess, AngularResourceService) {
+    LiabilityLoanAccountBookingProcess = LiabilityLoanAccountBookingProcess['LiabilityLoanAccountBookingProcess'];
     return {
         pageUID: "lender.liabilities.LiabilityLoanAccountBooking",
         pageType: "Engine",
@@ -82,7 +82,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "title": "LIABILITY_REGISTRATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
-
                     var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
@@ -105,11 +104,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     };
 
-                    var p1 = UIRepository.getLenderLiabilitiesLoanBookingProcessUIRepository().$promise;
+                    var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
                     p1.then(function(repo){
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
                     })
 
+
+
+                    LiabilityLoanAccountBookingProcess.createNewProcess()
+                            .subscribe(function(res) {
+                            model.LiabilityLoanAccountBookingProcess = res; 
+                            console.log(model);
+                            model.LiabilityLoanAccountBookingProcess.lender = model.lender.liabilityAccounts; 
+                                console.log(res);
+                            });
                     /* Form rendering ends */
                 },
 
@@ -139,8 +147,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
 
+                        console.log(model);
+
                         // $q.all start
-                        model.enrolmentProcess.save()
+                        model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
