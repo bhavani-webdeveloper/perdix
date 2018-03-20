@@ -4,12 +4,12 @@
         "title": "LENDER_ACCOUNT_DETAILS",
         "items": {
             "lenderId":{
-                "key":"lender.liabilityAccounts.lenderId",
+                "key":"liabilityAccount.lenderId",
                 "type":"lov",
                 "title":"LENDER_ID"
             },
             "lenderAccountNumber":{
-                "key":"lender.liabilityAccounts.lenderAccountNumber",
+                "key":"liabilityAccount.lenderAccountNumber",
                 "type":"string",
                 "title": "LENDER_ACCOUNT_NUMBER"
             }
@@ -20,56 +20,56 @@
         "title":"DISBURSEMENT_DETAILS",
         "items":{
             "productType":{
-                "key":"lender.liabilityAccounts.productType",
+                "key":"liabilityAccount.productType",
                 "type":"select",
                 "title": "PRODUCT_TYPE",
                 "enumCode":"lender_product_type"
             },
             "loanAmount":{
-                "key":"lender.liabilityAccounts.loanAmount",
+                "key":"liabilityAccount.loanAmount",
                 "type":"number",
                 "title":"LOAN_AMOUNT"
             },
             "disbursementDate":{
-                "key":"lender.liabilityAccounts.disbursementDate",
+                "key":"liabilityAccount.disbursementDate",
                 "type":"date",
                 "title":"DISBURSEMENT_DATE"
             },
             "interestRateType":{
-                "key":"lender.liabilityAccounts.interestRateType",
+                "key":"liabilityAccount.interestRateType",
                 "type":"select",
                 "title":"INTEREST_RATE_TYPE",
                 "enumCode":"interest_rate_type"
             },
             "rateOfInterest":{
-                "key":"lender.liabilityAccounts.rateOfInterest",
+                "key":"liabilityAccount.rateOfInterest",
                 "type":"string",
                 "title":"RATE_OF_INTEREST"
             },
             "markUpOrDown":{
-                "key":"lender.liabilityAccounts.markUpOrDown",
+                "key":"liabilityAccount.markUpOrDown",
                 "type":"number",
                 "title":"MARKUP_OR_DOWN"
             },
             "interestCalculationMethod":{
-                "key":"lender.liabilityAccounts.interestCalculationMethod",
+                "key":"liabilityAccount.interestCalculationMethod",
                 "type":"select",
                 "enumCode":"interest_calculation_method",
                 "title":"INTEREST_CALCULATION_METHOD"
             },
             "repaymentTenure":{
-                "key":"lender.liabilityAccounts.repaymentTenure",
+                "key":"liabilityAccount.repaymentTenure",
                 "type":"number",
                 "title":"REPAYMENT_TENURE"
             },
             "repaymentFrequency":{
-                "key":"lender.liabilityAccounts.repaymentFrequency",
+                "key":"liabilityAccount.repaymentFrequency",
                 "type":"select",
                 "enumCode":"frequency",
                 "title": "REPAYMENT_FREQUENCY"
             },
             "repaymentMode":{
-                "key":"lender.liabilityAccounts.repaymentMode",
+                "key":"liabilityAccount.repaymentMode",
                 "type":"select",
                 "enumCode":"payment_mode",
                 "title":"REPAYMENT_MODE"
@@ -82,74 +82,74 @@
         "title": "LOAN_AMOUNT_DEDUCTION",
         "items": {
             "liabilityFeeDetails": {
-                "key": "lender.liabilityAccounts.liabilityFeeDetails",
+                "key": "liabilityAccount.liabilityFeeDetails",
                 "type": "array",
                 "title": "LOAN_AMOUNT_DEDUCTION",
                 "items":{
                     "processingFeeInPercentage": {
-                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].processingFeeInPercentage",
+                        "key": "liabilityAccount.liabilityFeeDetails[].processingFeeInPercentage",
                         "type":"number",
                         "title":"PROCESSING_FEE_IN_PERCENTAGE"
                     },
                     "feeName": {
-                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeName",
+                        "key": "liabilityAccount.liabilityFeeDetails[].feeName",
                         "type":"string",
                         "title":"FEE_NAME"
                     },
                     "feeType": {
-                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeType",
+                        "key": "liabilityAccount.liabilityFeeDetails[].feeType",
                         "type":"string",
                         "title":"FEE_TYPE"
                     },
                     "feeAmount": {
-                        "key": "lender.liabilityAccounts.liabilityFeeDetails[].feeAmount",
+                        "key": "liabilityAccount.liabilityFeeDetails[].feeAmount",
                         "type":"number",
                         "title":"FEE_AMOUNT"
                     }
                 }
             },
             "securityAmount":{
-                "key":"lender.liabilityAccounts.securityAmount",
+                "key":"liabilityAccount.securityAmount",
                 "type":"number",
                 "title":"SECURITY_AMOUNT"
             },
             "totalDeductions":{
-                "key":"lender.liabilityAccounts.totalDeductions",
+                "key":"liabilityAccount.totalDeductions",
                 "type":"number",
                 "title":"TOTAL_DEDUCTIONS"
             },
             "netDisbursementAmount":{
-                "key":"lender.liabilityAccounts.netDisbursementAmount",
+                "key":"liabilityAccount.netDisbursementAmount",
                 "type":"number",
                 "title":"NET_DISBURSEMENT_AMOUNT"
             },
             "expectedDisbursementDate":{
-                "key":"lender.liabilityAccounts.expectedDisbursementDate",
+                "key":"liabilityAccount.expectedDisbursementDate",
                 "type":"date",
                 "title":"EXPECTED_DISBURSEMENT_DATE"
             },
             "installmentAmount":{
-                "key":"lender.liabilityAccounts.installmentAmount",
+                "key":"liabilityAccount.installmentAmount",
                 "type":"number",
                 "title":"INSTALLMENT_AMOUNT"
             },
             "scheduleStartDate": {
-                "key":"lender.liabilityAccounts.scheduleStartDate",
+                "key":"liabilityAccount.scheduleStartDate",
                 "type":"date",
                 "title":"SCHEDULE_START_DATE"
             },
             "firstInstallmentDate": {
-                "key":"lender.liabilityAccounts.firstInstallmentDate",
+                "key":"liabilityAccount.firstInstallmentDate",
                 "type":"date",
                 "title":"FIRST_INSTALLMENT_DATE"
             },
             "maturityDate": {
-                "key":"lender.liabilityAccounts.maturityDate",
+                "key":"liabilityAccount.maturityDate",
                 "type":"date",
                 "title":"MATURITY_DATE"
             },
             "loanAccountStatus": {
-                "key":"lender.liabilityAccounts.loanAccountStatus",
+                "key":"liabilityAccount.loanAccountStatus",
                 "type":"select",
                 "enumcode":"loan_account_status",
                 "title":"LOAN_ACCOUNT_STATUS"
@@ -161,18 +161,18 @@
         "title": "LENDER_DEDUCTION",
         "items": {
             "liabilityLenderDocuments": {
-                "key": "lender.liabilityAccounts.liabilityLenderDocuments",
+                "key": "liabilityAccount.liabilityLenderDocuments",
                 "type": "array",
                 "title": "LENDER_DEDUCTION",
                 "items":{
                     "documentType": {
-                        "key": "lender.liabilityAccounts.liabilityLenderDocuments[].documentType",
+                        "key": "liabilityAccount.liabilityLenderDocuments[].documentType",
                         "type":"select",
                         "enumcode":"----",
                         "title":"DOCUMENT_TYPE"
                     },
                     "isSignOff":{
-                        "key":"lender.liabilityAccounts.liabilityLenderDocuments[].isSignOff",
+                        "key":"liabilityAccount.liabilityLenderDocuments[].isSignOff",
                         "type":"radios",
                         "title":"IS_SIGNOFF",
                         "titleMap": [{
@@ -184,7 +184,7 @@
                         }]
                     },
                     "uploadedDate":{
-                        "key":"lender.liabilityAccounts.liabilityLenderDocuments[].uploadedDate",
+                        "key":"liabilityAccount.liabilityLenderDocuments[].uploadedDate",
                         "type":"date",
                         "title":"UPLOAD_DATE"
                     }
@@ -198,18 +198,18 @@
         "title": "LEGAL_COMPLIANCE",
         "items": {
             "liabilityComplianceDocuments": {
-                "key": "lender.liabilityAccounts.liabilityComplianceDocuments",
+                "key": "liabilityAccount.liabilityComplianceDocuments",
                 "type": "array",
                 "title": "LEGAL_COMPLIANCE",
                 "items":{
                     "documentType": {
-                        "key": "lender.liabilityAccounts.liabilityComplianceDocuments[].documentType",
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].documentType",
                         "type":"select",
                         "enumcode":"----",
                         "title":"DOCUMENT_TYPE"
                     },
                     "isSignOff":{
-                        "key":"lender.liabilityAccounts.liabilityComplianceDocuments[].isSignOff",
+                        "key":"liabilityAccount.liabilityComplianceDocuments[].isSignOff",
                         "type":"radios",
                         "title":"IS_SIGNOFF",
                         "titleMap": [{
@@ -221,7 +221,7 @@
                         }]
                     },
                     "uploadedDate":{
-                        "key":"lender.liabilityAccounts.liabilityComplianceDocuments[].uploadedDate",
+                        "key":"liabilityAccount.liabilityComplianceDocuments[].uploadedDate",
                         "type":"date",
                         "title": "UPLOAD_DATE"
                     }
