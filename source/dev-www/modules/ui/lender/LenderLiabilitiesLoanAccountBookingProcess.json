@@ -17,12 +17,13 @@
     },
     "DisbursementDetails":{
         "type":"box",
-        "title":"LOAN_AMOUNT_DEDUCTION",
+        "title":"DISBURSEMENT_DETAILS",
         "items":{
             "productType":{
                 "key":"lender.liabilityAccounts.productType",
-                "type":"string",
-                "title": "PRODUCT_TYPE"
+                "type":"select",
+                "title": "PRODUCT_TYPE",
+                "enumCode":"lender_product_type"
             },
             "loanAmount":{
                 "key":"lender.liabilityAccounts.loanAmount",
@@ -38,7 +39,7 @@
                 "key":"lender.liabilityAccounts.interestRateType",
                 "type":"select",
                 "title":"INTEREST_RATE_TYPE",
-                "enumCode":"----"
+                "enumCode":"interest_rate_type"
             },
             "rateOfInterest":{
                 "key":"lender.liabilityAccounts.rateOfInterest",
@@ -53,7 +54,7 @@
             "interestCalculationMethod":{
                 "key":"lender.liabilityAccounts.interestCalculationMethod",
                 "type":"select",
-                "enumCode":"---",
+                "enumCode":"interest_calculation_method",
                 "title":"INTEREST_CALCULATION_METHOD"
             },
             "repaymentTenure":{
@@ -70,7 +71,7 @@
             "repaymentMode":{
                 "key":"lender.liabilityAccounts.repaymentMode",
                 "type":"select",
-                "enumcode":"---",
+                "enumCode":"payment_mode",
                 "title":"REPAYMENT_MODE"
             }
 
@@ -148,9 +149,9 @@
                 "title":"MATURITY_DATE"
             },
             "loanAccountStatus": {
-                "key":"lender.liabilityAccounts.maturityDate",
+                "key":"lender.liabilityAccounts.loanAccountStatus",
                 "type":"select",
-                "enumcode":"",
+                "enumcode":"loan_account_status",
                 "title":"LOAN_ACCOUNT_STATUS"
             }
         }
@@ -172,7 +173,7 @@
                     },
                     "isSignOff":{
                         "key":"lender.liabilityAccounts.liabilityLenderDocuments[].isSignOff",
-                        "type":"radio",
+                        "type":"radios",
                         "title":"IS_SIGNOFF",
                         "titleMap": [{
                             "value": true,
@@ -209,8 +210,8 @@
                     },
                     "isSignOff":{
                         "key":"lender.liabilityAccounts.liabilityComplianceDocuments[].isSignOff",
-                        "type":"radio",
-                        "title":"DOCUMENT_TYPE",
+                        "type":"radios",
+                        "title":"IS_SIGNOFF",
                         "titleMap": [{
                             "value": true,
                             "name": "Yes"
