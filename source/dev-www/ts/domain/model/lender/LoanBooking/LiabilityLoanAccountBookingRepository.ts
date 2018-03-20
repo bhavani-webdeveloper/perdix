@@ -3,7 +3,6 @@ import {LiabilityLoanAccountBookingProcess} from "./LiabilityLoanAccountBookingP
 import { RxObservable as Ro} from '../../../shared/RxObservable';
 import {Observable} from "@reactivex/rxjs";
 import AngularResourceService = require("../../../../infra/api/AngularResourceService");
-import {RxObservable} from "../../../shared/RxObservable";
 import {plainToClass} from "class-transformer";
 
 
@@ -16,7 +15,10 @@ export class LiabilityLoanAccountBookingRepository implements ILiabilityLoanAcco
     }
 
     saveLiabilityLoanAccount(reqData: Object): Observable<any> {
-        return Ro.fromPromise(this.liabilityLoanAccountBookingService.save(reqData).$promise);
+    	console.log("LiabilityLoanAccountBookingRepository");
+    	delete reqData['LiabilityLoanAccountBookingProcessRepo'];
+    	console.log(reqData);
+		return Ro.fromPromise(this.liabilityLoanAccountBookingService.save(reqData).$promise);
     }
 
 }
