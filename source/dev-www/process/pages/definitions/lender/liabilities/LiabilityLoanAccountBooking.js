@@ -29,82 +29,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LegalCompliance": {
                         "orderNo": 50
-                    },
-                    "LenderAccountDetails.lenderId": {
-                        "required": true
-                    },
-                    "LenderAccountDetails.lenderAccountNumber": {
-                        "required": true
-                    },
-
-                    "DisbursementDetails.productType": {
-                        "required": true
-                    },
-                    "DisbursementDetails.loanAmount": {
-                        "required": true
-                    },
-                    "DisbursementDetails.disbursementDate": {
-                        "required": true
-                    },
-                    "DisbursementDetails.interestRateType": {
-                        "required": true
-                    },
-                    "DisbursementDetails.rateOfInterest": {
-                        "required": true
-                    },
-                    "DisbursementDetails.markUpOrDown": {
-                        "required": true
-                    },
-                    "DisbursementDetails.interestCalculationMethod": {
-                        "required": true
-                    },
-                    "DisbursementDetails.repaymentTenure": {
-                        "required": true
-                    },
-                    "DisbursementDetails.repaymentFrequency": {
-                        "required": true
-                    },
-                    "DisbursementDetails.repaymentMode": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.liabilityFeeDetails.feeName": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.liabilityFeeDetails.feeType": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.liabilityFeeDetails.feeAmount": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.totalDeductions": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.netDisbursementAmount": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.expectedDisbursementDate": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.installmentAmount": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.scheduleStartDate": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.firstInstallmentDate": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.maturityDate": {
-                        "required": true
-                    },
-                    "LoanAmountDeduction.loanAccountStatus": {
-                        "required": true
-                    },
-                    "LenderDocumentation.liabilityLenderDocuments.documentType": {
-                        "required": true
-                    },
-                    "LegalCompliance.liabilityComplianceDocuments.documentType": {
-                        "required": true
                     }
                 }
             }
@@ -121,7 +45,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DisbursementDetails.disbursementDate",
                     "DisbursementDetails.interestRateType",
                     "DisbursementDetails.rateOfInterest",
-                    "DisbursementDetails.markUpOrDown",
                     "DisbursementDetails.interestCalculationMethod",
                     "DisbursementDetails.repaymentTenure",
                     "DisbursementDetails.repaymentFrequency",
@@ -129,7 +52,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
                     "LoanAmountDeduction",
                     "LoanAmountDeduction.liabilityFeeDetails",
-                    "LoanAmountDeduction.liabilityFeeDetails.processingFeeInPercentage",
                     "LoanAmountDeduction.liabilityFeeDetails.feeName",
                     "LoanAmountDeduction.liabilityFeeDetails.feeType",
                     "LoanAmountDeduction.liabilityFeeDetails.feeAmount",
@@ -138,10 +60,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.netDisbursementAmount",
                     "LoanAmountDeduction.expectedDisbursementDate",
                     "LoanAmountDeduction.installmentAmount",
-                    "LoanAmountDeduction.scheduleStartDate",
-                    "LoanAmountDeduction.firstInstallmentDate",
-                    "LoanAmountDeduction.maturityDate",
-                    "LoanAmountDeduction.loanAccountStatus",
 
                     "LenderDocumentation",
                     "LenderDocumentation.liabilityLenderDocuments",
@@ -185,20 +103,15 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             ]
                         }
                     };
-
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
                     p1.then(function(repo){
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
                     })
-
-
-
                     LiabilityLoanAccountBookingProcess.createNewProcess()
                             .subscribe(function(res) {
                             model.LiabilityLoanAccountBookingProcess = res; 
+                            model.liabilityAccount = res.liabilityAccount;
                             console.log(model);
-                            model.LiabilityLoanAccountBookingProcess.lender = model.lender.liabilityAccounts; 
-                                console.log(res);
                             });
                     /* Form rendering ends */
                 },
@@ -218,6 +131,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 },
                 actions: {
                     save: function (model, formCtrl, form, $event) {
+                        console.log(model, formCtrl, form, $event)
+                        ;
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
@@ -237,8 +152,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                formHelper.resetFormValidityState(formCtrl);
-                                Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
                                 PageHelper.clearErrors();
                             }, function (err) {
