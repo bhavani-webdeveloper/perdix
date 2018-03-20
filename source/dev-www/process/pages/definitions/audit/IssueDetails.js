@@ -80,8 +80,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                 }, {
                     key: "auditIssue.document_id",
                     type: "file",
-                    fileType: "application/pdf",
-                    using: "scanner",
+                    "fileType": "*/*",
                     title: "DOCUMENT",
                     "category": "Audit",
                     "subCategory": "AUDITISSUEDOC",
@@ -90,8 +89,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                     key: "auditIssue.draft_document_id",
                     "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO'",
                     type: "file",
-                    fileType: "application/pdf",
-                    using: "scanner",
+                    "fileType": "*/*",
                     title: "DRAFT_DOCUMENT",
                     "category": "Audit",
                     "subCategory": "AUDITISSUEDRAFTDOC"
@@ -99,8 +97,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                     key: "auditIssue.draft_document_id",
                     "condition": "!(!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO')",
                     type: "file",
-                    fileType: "application/pdf",
-                    using: "scanner",
+                    "fileType": "*/*",
                     title: "DRAFT_DOCUMENT",
                     "category": "Audit",
                     "subCategory": "AUDITISSUEDRAFTDOC",
@@ -143,7 +140,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
             }, {
                 "type": "box",
                 "title": "MESSAGE_HISTORY",
-                "condition":"model.auditIssue.messages.length",
+                "condition": "model.auditIssue.messages.length",
                 "items": [{
                     "key": "auditIssue.messages",
                     "type": "array",

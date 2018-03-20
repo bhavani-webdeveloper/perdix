@@ -345,7 +345,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
 
         }, {
             "type": "box",
-            "condition": "model.ai.messages.length",
+            "condition": "model.ai.messages.length && model.type == 'audit'",
             "title": "MESSAGE_HISTORY",
             "readonly": true,
             "items": [{

@@ -141,8 +141,10 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             type: "text"
                         }
                         columnForm.title = sampleColumnsConfig.columns[j].user_friendly_name;
-                        if (j == 0 && sampleType != "E") {
+                        if (sampleColumnsConfig.columns[j].display == 1 && sampleType != "E") {
                             columnForm.required = true;
+                        }
+                        if (j == 0 && sampleType != "E") {
                             if (false && componentColumns.length) { // TODO: commenting feature, to be enabled later
                                 columnForm.type = "lov";
                                 columnForm.inputMap = {};
@@ -398,8 +400,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         }, {
                             key: "sample.issue_details[" + i + "].document_id",
                             type: "file",
-                            fileType: "application/pdf",
-                            using: "scanner",
+                            "fileType": "*/*",
                             title: "DOCUMENT",
                             "category": "Audit",
                             "subCategory": "AUDITISSUEDOC"
