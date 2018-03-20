@@ -143,6 +143,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
             }, {
                 "type": "box",
                 "title": "MESSAGE_HISTORY",
+                "condition":"model.auditIssue.messages.length",
                 "items": [{
                     "key": "auditIssue.messages",
                     "type": "array",
