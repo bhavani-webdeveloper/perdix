@@ -352,7 +352,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "key": "ai.messages",
                 "type": "array",
                 "view": "fixed",
-                "titleExpr": "actions.getStageTitle(model.ai.messages[arrayIndex].type)",
+                "titleExpr": "actions.getStageTitle(model, arrayIndex)",
                 "items": [{
                     "type": "section",
                     "htmlClass": "",
@@ -606,12 +606,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                     });
                 });
             },
-            getStageTitle: function(stage) {
-                if (stage) {
-                    return translateFilter(master.stage_names[stage].stage_label);
-                } else {
-                    return "";
-                }
+            getStageTitle: function(model, arrayIndex) {
+                var preStage =  model.ai.messages.length - 1 == arrayIndex? '': model.ai.messages[arrayIndex + 1].type;
+                var postStage = model.ai.messages[arrayIndex].type;
+                preStage = preStage? translateFilter(master.stages[preStage].stage_label) || preStage: '*';
+                postStage = translateFilter(master.stages[postStage].stage_label) || postStage;
+                return preStage == '*'? postStage: preStage + ' ⤑ ' + postStage; // &DDotrahd;
             },
             getUsername: function(userId) {
                 return User.offline.getDisplayName(userId);

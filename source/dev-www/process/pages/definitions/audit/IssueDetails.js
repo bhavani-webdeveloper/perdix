@@ -149,7 +149,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                     "add": null,
                     "remove": null,
                     "view": "fixed",
-                    "titleExpr": "actions.getStageTitle(model.auditIssue.messages[arrayIndex].stage)",
+                    "titleExpr": "actions.getStageTitle(model, arrayIndex)",
                     "items": [{
                         "type": "section",
                         "htmlClass": "",
@@ -303,12 +303,12 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                         irfNavigator.goBack();
                     }, PageHelper.showErrors).finally(PageHelper.hideLoader);
                 },
-                getStageTitle: function(stage) {
-                    if (stage) {
-                        return translateFilter(master.stage_names[stage].stage_label);
-                    } else {
-                        return "";
-                    }
+                getStageTitle: function(model, arrayIndex) {
+                    var preStage = model.auditIssue.messages.length - 1 == arrayIndex ? '' : model.auditIssue.messages[arrayIndex + 1].stage;
+                    var postStage = model.auditIssue.messages[arrayIndex].stage;
+                    preStage = preStage ? translateFilter(master.stages[preStage].stage_label) || preStage : '*';
+                    postStage = translateFilter(master.stages[postStage].stage_label) || postStage;
+                    return preStage == '*' ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
                 },
                 getUsername: function(userId) {
                     return User.offline.getDisplayName(userId);
