@@ -695,7 +695,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     console.error(err);
                                     $log.info("cordova not there");
                                     console.log("errr collback");
-                                }, fullPrintData.getLines());
+                                }, pData.getLines());
 
                             });
                         } else
