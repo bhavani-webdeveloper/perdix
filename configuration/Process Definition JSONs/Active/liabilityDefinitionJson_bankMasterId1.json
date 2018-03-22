@@ -116,7 +116,7 @@
                   "title":"loanAmount",
                   "type":"number",
                   "minimum":1,
-                  "maximum":12,
+                  "maximum":1000000000,
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
