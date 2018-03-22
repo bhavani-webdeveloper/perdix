@@ -691,6 +691,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
+                                // console.log(data[0]);
                             }, function(reason){
                                 console.log(reason);
                             })
@@ -888,7 +889,7 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
             },
             {
                 "type": "actionbox",
-                "condition":"model.customer.currentStage=='Stage02'",
+                // "condition":"model.customer.currentStage=='Stage02'",
                 "items": [{
                     "type": "save",
                     "title": "Save Offline",

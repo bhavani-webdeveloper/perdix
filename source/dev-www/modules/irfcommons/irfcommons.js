@@ -278,7 +278,7 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 	};
 }]);
 
-irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
+irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce', function($log, $q,irfSimpleModal,$sce){
 
 	return {
         getLabel: function(fingerId){
@@ -410,6 +410,89 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 				}, function(error){
 					deferred.reject('ERR_BIOMETRIC_CAPTURE_FAILED');
 				});
+			} else if (navigator.userAgent.indexOf("Trident") > 0 || navigator.userAgent.indexOf("MSIE") > 0 || (navigator.userAgent.indexOf("Firefox") > 0 && parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]) < 60)) {
+				var BiometricHTML = '\
+                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"></applet>\
+                    <button ng-click="$close(model.takeData())">Confirm</button>';
+                var result = [];
+                var out = null;
+
+                var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+                	
+                	"result": result,
+                	"takeData": function() {
+                		var applet = document.getElementById('webCaptureApplet');
+                		result = applet.getFingerPrints();
+                		var tableField = null;
+                		var thumb = null;
+                		var obj = {};
+                		for (var i = 0; i < result.length; i++) {
+							
+							switch (i) {
+                                    case 0:
+                                        tableField = 'leftHandThumpImageId';
+                                        thumb = 'LeftThumb';
+                                        break;
+                                    case 1:
+                                        tableField = 'leftHandIndexImageId';
+                                        thumb = 'LeftIndex';
+                                        break;
+                                    case 2:
+                                        tableField = 'leftHandMiddleImageId';
+                                        thumb = 'LeftMiddle';
+                                        break;
+                                    case 3:
+                                        tableField = 'leftHandRingImageId';
+                                        thumb = 'LeftRing';
+                                        break;
+                                    case 4:
+                                        tableField = 'leftHandSmallImageId';
+                                        thumb = 'LeftLittle';
+                                        break;
+                                    case 5:
+                                        tableField = 'rightHandThumpImageId';
+                                        thumb = 'RightThumb';
+                                        break;
+                                    case 6:
+                                        tableField = 'rightHandIndexImageId';
+                                        thumb = 'RightIndex';
+                                        break;
+                                    case 7:
+                                        tableField = 'rightHandMiddleImageId';
+                                        thumb = 'RightMiddle';
+                                        break;
+                                    case 8:
+                                        tableField = 'rightHandRingImageId';
+                                        thumb = 'RightRing';
+                                        break;
+                                    case 9:
+                                        tableField = 'rightHandSmallImageId';
+                                        thumb = 'RightLittle';
+                                        break;
+                                }
+                                if (tableField!=null) {                                	
+                                    obj[thumb] = {};
+                                    obj[thumb]['data'] = result[i];
+                                    obj[thumb]['table_field'] = tableField;
+                                }
+
+							             			
+                		}
+                		
+                		return obj;
+                		
+                		// deferred.resolve(result);
+                	}
+                });
+               
+
+                BiometricModal.result.then(function(obj) {
+                	console.log(obj)
+                	deferred.resolve(obj);
+                }, function(){
+                	console.log("Modal closed by user");
+                	deferred.reject();
+                })
 			} else {
 				deferred.reject('ERR_BIOMETRIC_PLUGIN_MISSING');
 			}
