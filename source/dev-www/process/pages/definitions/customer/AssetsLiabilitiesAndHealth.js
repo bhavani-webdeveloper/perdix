@@ -691,7 +691,26 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
                                 model.customer.$fingerprint = data;
-                                // console.log(data[0]);
+                            }, function(reason){
+                                console.log(reason);
+                            })
+                        }
+                    },
+                    {
+                        type: "button",
+                        title: "VALIDATE_DATA",
+                        notitle: true,
+                        fieldHtmlClass: "btn-block",
+                        onClick: function(model, form, formName){
+                            
+                            var fingerprintObj = {
+                                'LeftThumb': model.customer.leftHandThumpImageId,
+                                'LeftIndex': model.customer.leftHandIndexImageId
+
+                            }
+                            var promise = BiometricService.validate(fingerprintObj);
+                            promise.then(function(data){
+                                model.customer.$fingerprint = data;
                             }, function(reason){
                                 console.log(reason);
                             })

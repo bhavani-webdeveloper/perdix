@@ -206,5 +206,9 @@ gulp.task('watch', ['ts:scripts', 'ts:perdixConfig'], function() {
     gulp.watch('../configuration/ui-process-config/**/*.ts', ['ts:perdixConfig'])
 });
 
+gulp.task("resources", function(){
+     return gulp.src('dev-www/resources/')
+        .pipe(gulp.dest(buildDirectory + '/resources')); 
+})
 gulp.task('build', ['html', 'assets', 'fonts']);
 
