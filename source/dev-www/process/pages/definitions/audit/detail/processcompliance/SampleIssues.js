@@ -141,6 +141,23 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             type: "text"
                         }
                         columnForm.title = sampleColumnsConfig.columns[j].user_friendly_name;
+                        switch (sampleColumnsConfig.columns[j].data_type) {
+                            case 'ALPHABETIC':
+                                columnForm.type = "string"
+                                break;
+                            case 'NUMERIC':
+                                columnForm.type = "number"
+                                break;
+                            case 'AMOUNT':
+                                columnForm.type = "amount"
+                                break;
+                            case 'DATE':
+                                columnForm.type = "date"
+                                break;
+                            case 'ALPHANUMERIC':
+                                columnForm.type = "string"
+                                break;
+                        }
                         if (sampleColumnsConfig.columns[j].display == 1 && sampleType != "E") {
                             columnForm.required = true;
                         }
