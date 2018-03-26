@@ -1,20 +1,25 @@
-irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
-["$log", "PageHelper", "User", "irfNavigator", "formHelper", "Audit", "$stateParams", "SessionStore", "$q",
+irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper", "User", "irfNavigator", "formHelper", "Audit", "$stateParams", "SessionStore", "$q",
     function($log, PageHelper, User, irfNavigator, formHelper, Audit, $stateParams, SessionStore, $q) {
         var validateDates = function(model) {
             var reportDate = moment(model.auditInfo.report_date, SessionStore.getSystemDateFormat());
             var startDate = moment(model.auditInfo.start_date, SessionStore.getSystemDateFormat());
             var endDate = moment(model.auditInfo.end_date, SessionStore.getSystemDateFormat());
             if (reportDate.isBefore(moment(), 'days')) {
-                PageHelper.setError({message: "Report date should not be past date"});
+                PageHelper.setError({
+                    message: "Report date should not be past date"
+                });
                 return false;
             }
             if (startDate.isBefore(reportDate, 'days')) {
-                PageHelper.setError({message: "Start date should not be before report date"});
+                PageHelper.setError({
+                    message: "Start date should not be before report date"
+                });
                 return false;
             }
             if (startDate.isAfter(endDate, 'days')) {
-                PageHelper.setError({message: "End date should not be before start date"});
+                PageHelper.setError({
+                    message: "End date should not be before start date"
+                });
                 return false;
             }
             return true;
@@ -121,7 +126,9 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                                 'to_date': model.auditInfo.end_date
                             }).$promise;
                         } else {
-                            PageHelper.setError({message:"Branch ID, Start date, End date are required to find available auditors"});
+                            PageHelper.setError({
+                                message: "Branch ID, Start date, End date are required to find available auditors"
+                            });
                             return $q.reject();
                         }
                     },
@@ -224,8 +231,33 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                     PageHelper.clearErrors();
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateDates(model)) return;
+                        if (model.auditInfo.current_stage == 'postpone') {
+                            if (model.auditInfo.start_date == model.auditInfoOriginal.start_date && model.auditInfo.end_date == model.auditInfoOriginal.end_date) {
+                                PageHelper.setError({
+                                    message: "Start date/end date should be different"
+                                });
+                                return false;
+                            } else if (model.auditInfo.auditor_id != model.auditInfoOriginal.auditor_id) {
+                                PageHelper.setError({
+                                    message: "Auditor should be a same user"
+                                });
+                                return false;
+                            }
+                        } else if (model.auditInfo.current_stage == 'cancel') {
+                            if (model.auditInfo.auditor_id == model.auditInfoOriginal.auditor_id) {
+                                PageHelper.setError({
+                                    message: "Auditor should be a different user"
+                                });
+                                return false;
+                            } else if (model.auditInfo.start_date != model.auditInfoOriginal.start_date || model.auditInfo.end_date != model.auditInfoOriginal.end_date) {
+                                PageHelper.setError({
+                                    message: "Start date/end date should be same"
+                                });
+                                return false;
+                            }
+                        }
                         model.auditInfo.next_stage = nextStage;
-                        model.auditInfo.audit_type  = 1;
+                        model.auditInfo.audit_type = 1;
                         model.auditInfo.status = "S";
                         PageHelper.showLoader();
                         Audit.online.updateAuditInfo(model.auditInfo).$promise.then(function(res) {
