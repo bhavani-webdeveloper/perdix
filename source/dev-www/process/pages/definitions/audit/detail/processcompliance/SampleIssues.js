@@ -115,6 +115,43 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     }
                 }
 
+                var userSearch = function(inputModel, form, model) {
+                    if (User.offline.isOffline()) {
+                        return User.offline.query(inputModel);
+                    } else {
+                        return User.query({
+                            'login': inputModel.login,
+                            'userName': inputModel.userName,
+                            'roleId': inputModel.role_id,
+                            'branchName': inputModel.branch_id,
+                        }).$promise;
+                    }
+                };
+                var userSearchList = function(item, index) {
+                    if (User.offline.isOffline()) {
+                        return [
+                            item.i,
+                            item.n
+                        ];
+                    } else {
+                        return [
+                            item.login,
+                            item.userName,
+                            item.branchName
+                        ];
+                    }
+                };
+                var onSelectUser = function(i, callback) {
+                    return function(valueObj, model, context) {
+                        var login = null;
+                        if (User.offline.isOffline()) {
+                            callback(model.sample.issue_details[i], valueObj.i);
+                        } else {
+                            callback(model.sample.issue_details[i], valueObj.login);
+                        }
+                    }
+                }
+
                 master = Audit.offline.getAuditMaster();
                 model.sample = model.sample || {};
                 self.form = [];
@@ -182,7 +219,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 columnForm.inputMap = {};
                                 for (k in componentColumns) { // master.components[componentColumns[k].component_id]
                                     columnForm.inputMap[master.components[componentColumns[k].component_id].component_name] = {
-                                        "key": master.components[componentColumns[k].component_id].component_name
+                                        "key": "components." + master.components[componentColumns[k].component_id].component_name
                                     }
                                 }
                                 columnForm.searchHelper = formHelper;
@@ -198,12 +235,11 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     }).$promise;
                                 };
                                 columnForm.getListDisplayItem = function(item, index) {
-                                    return [
-                                        item.Entity,
-                                        item.URN,
-                                        item.product,
-                                        item.transaction_amount
-                                    ];
+                                    var a = [];
+                                    for (i in sampleColumnsConfig.columns) {
+                                        a.push(sampleColumnsConfig.columns[i].column_name + ": " + item[sampleColumnsConfig.columns[i].column_name]);
+                                    }
+                                    return a;
                                 };
                                 columnForm.onSelect = function(valueObj, model, context) {
                                     for (i in sampleColumnsConfig.columns) {
@@ -367,24 +403,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     "key": "user_name"
                                 }
                             },
-                            "outputMap": {
-                                "login": "sample.issue_details[" + i + "].assignee_det[0].assignee_id"
-                            },
                             "searchHelper": formHelper,
-                            search: function(inputModel, form, model) {
-                                return User.query({
-                                    'login': inputModel.login,
-                                    'userName': inputModel.userName,
-                                    'roleId': inputModel.role_id,
-                                    'branchName': inputModel.branch_id,
-                                }).$promise;
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.login + ': ' + item.userName,
-                                    item.branchName
-                                ];
-                            }
+                            search: userSearch,
+                            getListDisplayItem: userSearchList,
+                            onSelect: onSelectUser(i, function(indexedObj, login) {
+                                indexedObj.assignee_det[0].assignee_id = login;
+                            })
                         }, {
                             "key": "sample.issue_details[" + i + "].assignee_det[1].assignee_id",
                             "type": "lov",
@@ -405,24 +429,13 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     "key": "user_name"
                                 }
                             },
-                            "outputMap": {
-                                "login": "sample.issue_details[" + i + "].assignee_det[1].assignee_id"
-                            },
                             "searchHelper": formHelper,
-                            search: function(inputModel, form, model) {
-                                return User.query({
-                                    'login': inputModel.login,
-                                    'userName': inputModel.userName,
-                                    'roleId': inputModel.role_id,
-                                    'branchName': inputModel.branch_id,
-                                }).$promise;
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.login + ': ' + item.userName,
-                                    item.branchName
-                                ];
-                            }
+                            search: userSearch,
+                            getListDisplayItem: userSearchList,
+                            onSelect: onSelectUser(i, function(indexedObj, login) {
+                                indexedObj.assignee_det[1] = indexedObj.assignee_det[1] || {};
+                                indexedObj.assignee_det[1].assignee_id = login;
+                            })
                         }, {
                             "key": "sample.issue_details[" + i + "].latitude",
                             "title": "LOCATION",
@@ -473,24 +486,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                         "key": "user_name"
                                     }
                                 },
-                                "outputMap": {
-                                    "login": "sample.issue_details[" + i + "].assignee_det[0].spot_assignee_id"
-                                },
                                 "searchHelper": formHelper,
-                                search: function(inputModel, form, model) {
-                                    return User.query({
-                                        'login': inputModel.login,
-                                        'userName': inputModel.userName,
-                                        'roleId': inputModel.role_id,
-                                        'branchName': inputModel.branch_id,
-                                    }).$promise;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.login + ': ' + item.userName,
-                                        item.branchName
-                                    ];
-                                }
+                                search: userSearch,
+                                getListDisplayItem: userSearchList,
+                                onSelect: onSelectUser(i, function(indexedObj, login) {
+                                    indexedObj.assignee_det[0].spot_assignee_id = login;
+                                })
                             });
                         }
                         issueDetailsForm.push({
@@ -581,7 +582,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 "properties": {
                     "branch_id": {
                         "title": "BRANCH",
-                        "type": "string",
+                        "type": ["null", "string"],
                         "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
@@ -597,40 +598,43 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     },
                     "role_id": {
                         "title": "ROlE_ID",
-                        "type": "number",
+                        "type": ["null", "number"],
                         "enumCode": "roles",
                         "x-schema-form": {
                             "type": "select"
                         }
                     },
-                    "BRANCH": {
-                        "title": "BRANCH_ID",
-                        "type": "number",
-                        "enumCode": "branch_id",
-                        "x-schema-form": {
-                            "type": "select"
+                    "components": {
+                        "type": "object",
+                        "properties": {
+                            "BRANCH": {
+                                "title": "BRANCH_ID",
+                                "type": "number",
+                                "enumCode": "branch_id",
+                                "x-schema-form": {
+                                    "type": "select"
+                                }
+                            },
+                            "CENTRE": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "enumCode": "centre",
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "parentEnumCode": "branch_id",
+                                    "parentValueExpr": "model.branchName"
+                                }
+                            },
+                            "LOAN_ID": {
+                                "title": "LOAN_ID",
+                                "type": "string"
+                            },
+                            "CUSTOMER_ID": {
+                                "title": "CUSTOMER_ID",
+                                "type": "string"
+                            }
                         }
-                    },
-                    "CENTRE": {
-                        "title": "CENTRE",
-                        "type": ["integer", "null"],
-                        "enumCode": "centre",
-                        "x-schema-form": {
-                            "type": "select",
-                            "parentEnumCode": "branch_id",
-                            "parentValueExpr": "model.branchName"
-                        }
-                    },
-                    "LOAN_ID": {
-                        "title": "LOAN_ID",
-                        "type": "string"
-                    },
-                    "CUSTOMER_ID": {
-                        "title": "CUSTOMER_ID",
-                        "type": "string"
-                    },
-
-
+                    }
                 }
             },
             actions: {

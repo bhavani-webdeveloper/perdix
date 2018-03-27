@@ -1,5 +1,5 @@
-irf.models.factory('User', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "irfStorageService",
-function($resource, $httpParamSerializer, BASE_URL, searchResource, irfStorageService) {
+irf.models.factory('User', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "irfStorageService", "$q", "formHelper", "filterFilter",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, irfStorageService, $q, formHelper, filter) {
     var endpoint = BASE_URL + '/api/users';
     var resource = $resource(endpoint, null, {
         query: searchResource({
@@ -35,6 +35,25 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, irfStorageSe
     resource.offline = {
         isOffline: function() {
             return irf.appConfig.OFFLINE_USERS && (irf.appConfig.OFFLINE_USERS == "mobile" && Utils.isCordova() || irf.appConfig.OFFLINE_USERS == "all") && irfStorageService.getMaster("ALL_USERS");
+        },
+        query: function(inputModel) {
+            var users = Object.values(_.pickBy(irfStorageService.getMaster("ALL_USERS"), function(v, k) {
+                var branch_id = null
+                if (inputModel.branch_id) {
+                    branch_id = filter(formHelper.enum("branch").data, {name: inputModel.branch_id}, true)[0].code;
+                }
+                return (!inputModel.login || k.startsWith(inputModel.login)) &&
+                    (!inputModel.userName || v.n.startsWith(inputModel.userName)) &&
+                    (!inputModel.role_id || v.r == inputModel.role_id) &&
+                    (!branch_id || v.b == branch_id);
+            }))
+            users.length = 30;
+            return $q.resolve({
+                headers: {
+                    "x-total-count": users.length
+                },
+                body: users
+            });
         },
         getUser: function(userId) {
             var au = irfStorageService.getMaster("ALL_USERS");
@@ -74,6 +93,7 @@ function(irfStorageService, User, PageHelper, $q, $log, Utils, SysQueries) {
                 if (records && records.results && records.results.length) {
                     var userMap = records.results.reduce(function(map, val, i) {
                         map[val.i] = {
+                            i: val.i,
                             n: val.n,
                             r: val.r,
                             b: val.b

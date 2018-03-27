@@ -445,6 +445,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         };
 
         $scope.actions = {
+            isVisited: function(ai) {
+                if (!ai.messages || !ai.messages.length) {
+                    return false;
+                }
+                for (i = 1; i < ai.messages.length; i++) {
+                    if (ai.current_stage == ai.messages[i].type) {
+                        return true;
+                    }
+                }
+                return false;
+            },
             showAddMessage: function(model) {
                 if (!model.ai || model.readonly) return false;
                 if (!model.ai._dirty && !model.readonly && model.type == 'audit') {
@@ -493,7 +504,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                     switch (model.ai.current_stage) {
                         case 'publish':
                         case 'L1-approve':
-                            return true;
+                            return !$scope.actions.isVisited(model.ai);
                     }
                 }
                 return false;

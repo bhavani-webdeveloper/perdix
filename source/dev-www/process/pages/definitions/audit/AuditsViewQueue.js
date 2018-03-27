@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Queries", "User", "Audit", "formHelper", "$stateParams", "irfNavigator", "$state", "$stateParams", "irfNavigator", "SessionStore", "PageHelper",
-    function($log, $q, Queries, User, Audit, formHelper, $stateParams, irfNavigator, $state, $stateParams, irfNavigator, SessionStore, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Queries", "User", "Audit", "formHelper", "$stateParams", "irfNavigator", "$state", "$stateParams", "irfNavigator", "SessionStore", "PageHelper", "translateFilter",
+    function($log, $q, Queries, User, Audit, formHelper, $stateParams, irfNavigator, $state, $stateParams, irfNavigator, SessionStore, PageHelper, translateFilter) {
         var returnObj = {
             "type": "search-list",
             "title": "AUDIT_VIEW",
@@ -229,7 +229,7 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                     },
 
                     getColumns: function() {
-                        var masterJson = Audit.offline.getAuditMaster();
+                        var master = Audit.offline.getAuditMaster();
                         return [{
                             title: 'AUDIT_ID',
                             data: 'audit_id'
@@ -240,7 +240,7 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                             title: 'AUDIT_TYPE',
                             data: 'audit_type',
                             render: function(data, type, full, meta) {
-                                return masterJson.audit_type[data].audit_type;
+                                return master.audit_type[data].audit_type;
                             }
                         }, {
                             title: 'BRANCH_NAME',
@@ -259,7 +259,10 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                             render: Audit.utils.dateRenderer
                         }, {
                             title: 'STAGE',
-                            data: 'current_stage'
+                            data: 'current_stage',
+                            render: function(data) {
+                                return (data && master.stages[data])? (translateFilter(master.stages[data].stage_label) || data): data;
+                            }
                         }]
                     },
                     getActions: function() {
