@@ -20,6 +20,9 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                     $stateParams.pageData.readonly = true;
                 }
                 model.type = $stateParams.pageData.type;
+                if ($stateParams.pageData.item) {
+                    model.item = $stateParams.pageData.item;
+                }
                 var ids = $stateParams.pageId.split(':');
                 if (ids.length != 3) {
                     irfNavigator.goBack();
@@ -33,6 +36,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 var master = Audit.offline.getAuditMaster();
                 var processData = function(issuesList) {
+                    model.processView = [];
                     var issueMap = {};
                     model.issues = [];
                     if (issuesList) {
@@ -40,6 +44,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'SAMPLE':
                                 _.map(issuesList, function(iss) {
                                     if (iss.sample_id == model.viewTypeId) {
+                                        iss.sampleName = model.item.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -47,6 +52,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'PROCESS':
                                 _.map(issuesList, function(iss) {
                                     if (iss.process_id == model.viewTypeId) {
+                                        iss.sampleName = model.item.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -54,6 +60,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'RISK':
                                 _.map(issuesList, function(iss) {
                                     if (master.typeofissues[iss.type_of_issue_id].risk_classification == model.viewTypeId) {
+                                        iss.sampleName = model.item.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -78,42 +85,168 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                         },
                         getColumns: function() {
                             var master = Audit.offline.getAuditMaster();
-                            return [{
-                                "title": "OBSERVATION",
-                                "data": "id",
-                                render: function(data, type, full, meta) {
-                                    return master.typeofissues[full.type_of_issue_id].description;
-                                }
-                            }, {
-                                "title": "DEVIATION",
-                                "data": "deviation"
-                            }, {
-                                "title": "AUDITOR_ID",
-                                "data": "auditor_id"
-                            }, {
-                                "title": "ISSUE_STATUS",
-                                "data": "status",
-                                render: function(data, type, full, meta) {
-                                    switch (data) {
-                                        case 'DO': return 'Draft';
-                                        case 'DA': return 'Issue Accepted';
-                                        case 'DR': return 'Reject Claimed';
-                                        case 'DRA': return 'Claim Accepted (Not an issue)';
-                                        case 'DRR': return 'Claim Rejected (Issue)';
-                                        case 'IN': return 'Not an issue';
+                            if (model.viewType == "SAMPLE") {
+                                var columns = [{
+                                    "title": "PROCESS_NAME",
+                                    "data": "process_id",
+                                    render: function(data, type, full, meta) {
+                                        return master.process[full.process_id].process_name;
                                     }
-                                    return 'Issue';
-                                }
-                            }, {
-                                "title": "RESPONSE",
-                                "data": "assignee_designation_id",
-                                render: function(data, type, full, meta) {
-                                    if (full.messages && full.messages.length) {
-                                        return full.messages[0].comment;
+                                }, {
+                                    "title": "RISK_CLASSIFICATION",
+                                    "data": "process_id",
+                                    render: function(data, type, full, meta) {
+                                        return master.risk_classification[full.process_id].risk_clasification_name;
                                     }
-                                    return '';
-                                }
-                            }];
+                                }, {
+                                    "title": "OBSERVATION",
+                                    "data": "id",
+                                    render: function(data, type, full, meta) {
+                                        return master.typeofissues[full.type_of_issue_id].description;
+                                    }
+                                }, {
+                                    "title": "DEVIATION",
+                                    "data": "deviation"
+                                }, {
+                                    "title": "AUDITOR_ID",
+                                    "data": "auditor_id"
+                                }, {
+                                    "title": "ISSUE_STATUS",
+                                    "data": "status",
+                                    render: function(data, type, full, meta) {
+                                        switch (data) {
+                                            case 'DO':
+                                                return 'Draft';
+                                            case 'DA':
+                                                return 'Issue Accepted';
+                                            case 'DR':
+                                                return 'Reject Claimed';
+                                            case 'DRA':
+                                                return 'Claim Accepted (Not an issue)';
+                                            case 'DRR':
+                                                return 'Claim Rejected (Issue)';
+                                            case 'IN':
+                                                return 'Not an issue';
+                                        }
+                                        return 'Issue';
+                                    }
+                                }, {
+                                    "title": "RESPONSE",
+                                    "data": "assignee_designation_id",
+                                    render: function(data, type, full, meta) {
+                                        if (full.messages && full.messages.length) {
+                                            return full.messages[0].comment;
+                                        }
+                                        return '';
+                                    }
+                                }];
+                            } else if (model.viewType == "PROCESS") {
+                                var columns = [{
+                                    "title": "SAMPLE_NAME",
+                                    "data": "sampleName"
+                                }, {
+                                    "title": "RISK_CLASSIFICATION",
+                                    "data": "process_id",
+                                    render: function(data, type, full, meta) {
+                                        return master.risk_classification[full.process_id].risk_clasification_name;
+                                    }
+                                }, {
+                                    "title": "OBSERVATION",
+                                    "data": "id",
+                                    render: function(data, type, full, meta) {
+                                        return master.typeofissues[full.type_of_issue_id].description;
+                                    }
+                                }, {
+                                    "title": "DEVIATION",
+                                    "data": "deviation"
+                                }, {
+                                    "title": "AUDITOR_ID",
+                                    "data": "auditor_id"
+                                }, {
+                                    "title": "ISSUE_STATUS",
+                                    "data": "status",
+                                    render: function(data, type, full, meta) {
+                                        switch (data) {
+                                            case 'DO':
+                                                return 'Draft';
+                                            case 'DA':
+                                                return 'Issue Accepted';
+                                            case 'DR':
+                                                return 'Reject Claimed';
+                                            case 'DRA':
+                                                return 'Claim Accepted (Not an issue)';
+                                            case 'DRR':
+                                                return 'Claim Rejected (Issue)';
+                                            case 'IN':
+                                                return 'Not an issue';
+                                        }
+                                        return 'Issue';
+                                    }
+                                }, {
+                                    "title": "RESPONSE",
+                                    "data": "assignee_designation_id",
+                                    render: function(data, type, full, meta) {
+                                        if (full.messages && full.messages.length) {
+                                            return full.messages[0].comment;
+                                        }
+                                        return '';
+                                    }
+                                }];
+                            } else if (model.viewType == "RISK") {
+                                var columns = [{
+                                    "title": "PROCESS_NAME",
+                                    "data": "process_id",
+                                    render: function(data, type, full, meta) {
+                                        return master.process[full.process_id].process_name;
+                                    }
+                                }, {
+                                    "title": "SAMPLE_NAME",
+                                    "data": "sampleName"
+                                }, {
+                                    "title": "OBSERVATION",
+                                    "data": "id",
+                                    render: function(data, type, full, meta) {
+                                        return master.typeofissues[full.type_of_issue_id].description;
+                                    }
+                                }, {
+                                    "title": "DEVIATION",
+                                    "data": "deviation"
+                                }, {
+                                    "title": "AUDITOR_ID",
+                                    "data": "auditor_id"
+                                }, {
+                                    "title": "ISSUE_STATUS",
+                                    "data": "status",
+                                    render: function(data, type, full, meta) {
+                                        switch (data) {
+                                            case 'DO':
+                                                return 'Draft';
+                                            case 'DA':
+                                                return 'Issue Accepted';
+                                            case 'DR':
+                                                return 'Reject Claimed';
+                                            case 'DRA':
+                                                return 'Claim Accepted (Not an issue)';
+                                            case 'DRR':
+                                                return 'Claim Rejected (Issue)';
+                                            case 'IN':
+                                                return 'Not an issue';
+                                        }
+                                        return 'Issue';
+                                    }
+                                }, {
+                                    "title": "RESPONSE",
+                                    "data": "assignee_designation_id",
+                                    render: function(data, type, full, meta) {
+                                        if (full.messages && full.messages.length) {
+                                            return full.messages[0].comment;
+                                        }
+                                        return '';
+                                    }
+                                }];
+                            }
+                            return columns;
+
                         },
                         getActions: function() {
                             return [{

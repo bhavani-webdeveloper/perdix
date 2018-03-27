@@ -73,14 +73,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                     case 'SAMPLE':
                                         reportKey = sample.sample_id;
                                         reportKeyName = sample.column_values[0];
+                                        sampleName = sample.column_values[0];
                                         break;
                                     case 'PROCESS':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].process_id;
                                         reportKeyName = master.process[reportKey].process_name;
+                                        sampleName = sample.column_values[0];
                                         break;
                                     case 'RISK':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].risk_classification;
                                         reportKeyName = master.risk_classification[reportKey].risk_clasification_name;
+                                        sampleName = sample.column_values[0];
                                         break;
                                 }
                                 if (!reportKey || !reportKeyName) continue;
@@ -90,6 +93,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                         type: reportType,
                                         id: reportKey,
                                         name: reportKeyName,
+                                        sampleName: sampleName,
                                         count: 0
                                     };
                                     reportMap[reportKey] = reportEntry;
@@ -284,7 +288,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             }, {
                 key: "ai.message",
                 type: "textarea",
-                "condition": "actions.showAddMessage(model)"
+                "condition": "actions.showAddMessage(model)",
+                "required": true
             }]
         }, {
             "type": "box",
@@ -332,7 +337,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                 'pageId': $this.auditId + ":" + item.type + ":" + item.id,
                                 'pageData': {
                                     "readonly": $scope.model.readonly,
-                                    "type": $scope.model.type
+                                    "type": $scope.model.type,
+                                    "item": item
                                 }
                             });
                         },
@@ -431,7 +437,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         },
                         "message": {
                             "type": ["string", "null"],
-                            "title": "MESSAGE"
+                            "title": "Message"
                         }
                     }
                 }
@@ -607,11 +613,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 });
             },
             getStageTitle: function(model, arrayIndex) {
-                var preStage =  model.ai.messages.length - 1 == arrayIndex? '': model.ai.messages[arrayIndex + 1].type;
+                var preStage = model.ai.messages.length - 1 == arrayIndex ? '' : model.ai.messages[arrayIndex + 1].type;
                 var postStage = model.ai.messages[arrayIndex].type;
-                preStage = preStage? translateFilter(master.stages[preStage].stage_label) || preStage: '*';
+                preStage = preStage ? translateFilter(master.stages[preStage].stage_label) || preStage : '*';
                 postStage = translateFilter(master.stages[postStage].stage_label) || postStage;
-                return preStage == '*'? postStage: preStage + ' ⤑ ' + postStage; // &DDotrahd;
+                return preStage == '*' ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
             },
             getUsername: function(userId) {
                 return User.offline.getDisplayName(userId);
