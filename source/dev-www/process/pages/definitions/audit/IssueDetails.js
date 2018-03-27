@@ -136,7 +136,8 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                 }, {
                     type: "textarea",
                     key: "auditIssue.comments",
-                    "condition": "model.actions.showComments(model, false)"
+                    "condition": "model.actions.showComments(model, false)",
+                    "required": true
                 }]
             }, {
                 "type": "box",
