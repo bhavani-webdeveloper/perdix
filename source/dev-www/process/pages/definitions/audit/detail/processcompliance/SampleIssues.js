@@ -177,7 +177,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             }
                         }
                         if (j == 0 && sampleType != "E") {
-                            if (false && componentColumns.length) { // TODO: commenting feature, to be enabled later
+                            if (componentColumns.length) {
                                 columnForm.type = "lov";
                                 columnForm.inputMap = {};
                                 for (k in componentColumns) { // master.components[componentColumns[k].component_id]
