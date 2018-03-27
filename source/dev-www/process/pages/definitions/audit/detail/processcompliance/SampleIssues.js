@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             return true;
         };
         var validateKinara = function(sample) {
+            var tempIssueDetailsKinara = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
                 var issue = master.autosampling_typeofissue_sets[id.type_of_issue_id];
@@ -60,10 +61,18 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     return false;
                                 }
                             }
+                            tempIssueDetailsKinara.push(id);
                         }
                     }
                 }
             }
+            if (tempIssueDetailsKinara.length == 0) {
+                PageHelper.setError({
+                    message: "There are no issues captured."
+                });
+                return false;
+            }
+            sample.issue_details = tempIssueDetailsKinara;
             return true;
         };
         return {
@@ -151,16 +160,16 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     columnForm.schema = schema;
                                     break;
                                 case 'NUMERIC':
-                                    columnForm.type = "number"
+                                    columnForm.type = "number";
                                     break;
                                 case 'AMOUNT':
-                                    columnForm.type = "amount"
+                                    columnForm.type = "amount";
                                     break;
                                 case 'DATE':
-                                    columnForm.type = "date"
+                                    columnForm.type = "date";
                                     break;
                                 case 'ALPHANUMERIC':
-                                    columnForm.type = "text"
+                                    columnForm.type = "text";
                                     break;
                             }
                             if (sampleColumnsConfig.columns[j].display == 1) {
