@@ -14,11 +14,18 @@ export class LiabilityLoanAccountBookingRepository implements ILiabilityLoanAcco
         this.liabilityLoanAccountBookingService = AngularResourceService.getInstance().getNGService('LiabilityAccountProcess');
     }
 
+    getLenderLoan(id: number):Observable<any> {
+		let observable = Ro.fromPromise(this.liabilityLoanAccountBookingService.get({id: id}).$promise);
+		return observable;
+	}
+
     saveLiabilityLoanAccount(reqData: Object): Observable<any> {
-    	console.log("LiabilityLoanAccountBookingRepository");
-    	delete reqData['LiabilityLoanAccountBookingProcessRepo'];
-    	console.log(reqData);
+    	//delete reqData['LiabilityLoanAccountBookingProcessRepo'];
 		return Ro.fromPromise(this.liabilityLoanAccountBookingService.save(reqData).$promise);
+    }
+
+    proceedLiabilityLoanAccount(reqData: Object): Observable<any> {
+        return Ro.fromPromise(this.liabilityLoanAccountBookingService.proceed(reqData).$promise);
     }
 
 }

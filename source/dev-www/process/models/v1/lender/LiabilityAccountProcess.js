@@ -6,10 +6,22 @@ irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerialize
                 method: 'GET',
                 url: 'process/schemas/Leadgeneration.json'
             },
+            get: {
+                method: 'GET',
+                url: endpoint+"/:id"
+            },
             save: {
                 method: 'POST',
                 url: endpoint
             },
+            proceed: {
+                method: 'PUT',
+                url: endpoint
+            },
+            search: searchResource({
+                method: 'GET',
+                url: endpoint
+            })
         });
         return resource;
     }

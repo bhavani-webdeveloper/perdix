@@ -4,10 +4,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         pageUID: "lender.liabilities.LiabilityLoanAccountBooking",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
             var configFile = function () {
                 return {
@@ -29,7 +29,82 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LegalCompliance": {
                         "orderNo": 50
-                    }
+                    },
+                   /* "LenderAccountDetails.lenderId": {
+                        "required": true
+                    },*/
+                    "LenderAccountDetails.lenderAccountNumber": {
+                        "required": true
+                    },
+                    "DisbursementDetails.productType": {
+                        "required": true
+                    },
+                    "DisbursementDetails.loanAmount": {
+                        "required": true
+                    },
+                    "DisbursementDetails.disbursementDate": {
+                        "required": true
+                    },
+                    "DisbursementDetails.interestRateType": {
+                        "required": true
+                    },
+                    "DisbursementDetails.rateOfInterest": {
+                        "required": true
+                    },
+                    "DisbursementDetails.markUpOrDown": {
+                        "required": true
+                    },
+                    "DisbursementDetails.interestCalculationMethod": {
+                        "required": true
+                    },
+                    "DisbursementDetails.repaymentTenure": {
+                        "required": true
+                    },
+                    "DisbursementDetails.repaymentFrequency": {
+                        "required": true
+                    },
+                    "DisbursementDetails.repaymentMode": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.liabilityFeeDetails.feeName": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.liabilityFeeDetails.feeType": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.liabilityFeeDetails.feeAmount": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.totalDeductions": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.netDisbursementAmount": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.expectedDisbursementDate": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.installmentAmount": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.scheduleStartDate": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.firstInstallmentDate": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.maturityDate": {
+                        "required": true
+                    },
+                    "LoanAmountDeduction.loanAccountStatus": {
+                        "required": true
+                    }/*,
+                    "LenderDocumentation.liabilityLenderDocuments.documentType": {
+                        "required": true
+                    },
+                    "LegalCompliance.liabilityComplianceDocuments.documentType": {
+                        "required": true
+                    }*/
                 }
             }
             var getIncludes = function (model) {
@@ -45,6 +120,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DisbursementDetails.disbursementDate",
                     "DisbursementDetails.interestRateType",
                     "DisbursementDetails.rateOfInterest",
+                    "DisbursementDetails.markUpOrDown",
                     "DisbursementDetails.interestCalculationMethod",
                     "DisbursementDetails.repaymentTenure",
                     "DisbursementDetails.repaymentFrequency",
@@ -52,6 +128,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
                     "LoanAmountDeduction",
                     "LoanAmountDeduction.liabilityFeeDetails",
+                    "LoanAmountDeduction.liabilityFeeDetails.processingFeeInPercentage",
                     "LoanAmountDeduction.liabilityFeeDetails.feeName",
                     "LoanAmountDeduction.liabilityFeeDetails.feeType",
                     "LoanAmountDeduction.liabilityFeeDetails.feeAmount",
@@ -60,6 +137,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.netDisbursementAmount",
                     "LoanAmountDeduction.expectedDisbursementDate",
                     "LoanAmountDeduction.installmentAmount",
+                    "LoanAmountDeduction.scheduleStartDate",
+                    "LoanAmountDeduction.firstInstallmentDate",
+                    "LoanAmountDeduction.maturityDate",
+                    "LoanAmountDeduction.loanAccountStatus",
 
                     "LenderDocumentation",
                     "LenderDocumentation.liabilityLenderDocuments",
@@ -90,13 +171,26 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "options": {
                             "additions": [
                                 {
+                                    "condition": "!model.liabilityAccount.id",
                                     "type": "actionbox",
                                     "orderNo": 10000,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "SUBMIT",
+                                            "title": "SAVE",
                                             "onClick": "actions.save(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "condition": "model.liabilityAccount.id",
+                                    "type": "actionbox",
+                                    "orderNo": 10000,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "PROCEED",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -106,13 +200,26 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
                     p1.then(function(repo){
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    })
-                    LiabilityLoanAccountBookingProcess.createNewProcess()
-                            .subscribe(function(res) {
-                            model.LiabilityLoanAccountBookingProcess = res; 
-                            model.liabilityAccount = res.liabilityAccount;
-                            console.log(model);
+                    });
+
+                    if(_.hasIn($stateParams, 'pageId')) {
+                        LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
+                            .subscribe(function(res){
+                                if(res.liabilityAccount.currentStage != "LiabilityAccount") {
+                                    irfNavigator.goBack();
+                                }
+                                model.LiabilityLoanAccountBookingProcess = res; 
+                                model.liabilityAccount = res.liabilityAccount;
                             });
+                    } else {
+                        LiabilityLoanAccountBookingProcess.createNewProcess()
+                            .subscribe(function(res) {
+                                model.LiabilityLoanAccountBookingProcess = res; 
+                                model.liabilityAccount = res.liabilityAccount;
+                                console.log("liabilities account");
+                                console.log(model);
+                            });
+                    }
                     /* Form rendering ends */
                 },
 
@@ -125,14 +232,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 getOfflineDisplayItem: function (item, index) {
                 },
                 form: [],
-
                 schema: function () {
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
                     save: function (model, formCtrl, form, $event) {
-                        console.log(model, formCtrl, form, $event)
-                        ;
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
@@ -140,22 +244,52 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         formCtrl.scope.$broadcast('schemaFormValidate');
 
                         if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
 
-                        console.log(model);
-
-                        // $q.all start
                         model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.showProgress('loan', 'Loan Saved.', 5000);
                                 PageHelper.clearErrors();
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                                irfNavigator.go({
+                                    state: 'Page.Adhoc',
+                                    pageName: "lender.liabilities.LoanBookingDashboard"
+                                });
+                            });
+                    },
+                    proceed: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+
+                        model.LiabilityLoanAccountBookingProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
+                                PageHelper.clearErrors();
+                                irfNavigator.go({
+                                    state: 'Page.Adhoc',
+                                    pageName: "lender.liabilities.LoanBookingDashboard"
+                                });
+                            }, function (err) {
+                                PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });

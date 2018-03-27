@@ -151,7 +151,7 @@
             "loanAccountStatus": {
                 "key":"liabilityAccount.loanAccountStatus",
                 "type":"select",
-                "enumcode":"loan_account_status",
+                "enumCode":"loan_account_status",
                 "title":"LOAN_ACCOUNT_STATUS"
             }
         }
