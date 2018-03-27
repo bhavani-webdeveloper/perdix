@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper", "User", "irfNavigator", "formHelper", "Audit", "$stateParams", "SessionStore", "$q",
-    function($log, PageHelper, User, irfNavigator, formHelper, Audit, $stateParams, SessionStore, $q) {
+irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateFilter", "PageHelper", "User", "irfNavigator", "formHelper", "Audit", "$stateParams", "SessionStore", "$q",
+    function($log, translateFilter, PageHelper, User, irfNavigator, formHelper, Audit, $stateParams, SessionStore, $q) {
         var validateDates = function(model) {
             var reportDate = moment(model.auditInfo.report_date, SessionStore.getSystemDateFormat());
             var startDate = moment(model.auditInfo.start_date, SessionStore.getSystemDateFormat());
@@ -31,6 +31,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper
                 model.auditInfo = model.auditInfo || {};
                 model.branchName = SessionStore.getBranch();
                 model.roleUsers = model.roleUsers || {};
+                model.master = Audit.offline.getAuditMaster();
                 if ($stateParams.pageId) {
                     Audit.online.getAuditInfo({
                         audit_id: $stateParams.pageId
@@ -45,6 +46,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper
                 } else {
                     model.auditInfo = {};
                 };
+                model.actions = this.actions;
             },
             form: [{
                 "type": "box",
@@ -154,10 +156,11 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper
                     "key": "auditInfo.messages",
                     "type": "array",
                     "view": "fixed",
+                    "titleExpr": "actions.getStageTitle(model, arrayIndex)",
                     "items": [{
                         "type": "section",
                         "htmlClass": "",
-                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.auditInfo.messages[arrayIndex].created_by}}\
+                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditInfo.messages[arrayIndex].created_by)}}\
                         <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditInfo.messages[arrayIndex].created_on}}\
                         <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditInfo.messages[arrayIndex].comment}}</strong><br>'
                     }]
@@ -289,6 +292,16 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "PageHelper
                             PageHelper.hideLoader();
                         });
                     });
+                },
+                getUsername: function(userId) {
+                    return User.offline.getDisplayName(userId);
+                },
+                getStageTitle: function(model, arrayIndex) {
+                    var preStage = model.auditInfo.messages.length - 1 == arrayIndex ? '' : model.auditInfo.messages[arrayIndex + 1].type;
+                    var postStage = model.auditInfo.messages[arrayIndex].type;
+                    preStage = preStage ? translateFilter(model.master.stages[preStage].stage_label) || preStage : '*';
+                    postStage = translateFilter(model.master.stages[postStage].stage_label) || postStage;
+                    return preStage == '*' ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
                 }
             }
         };

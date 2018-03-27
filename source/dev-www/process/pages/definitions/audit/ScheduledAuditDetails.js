@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "PageHelper", "irfNavigator", "formHelper", "Audit", "$stateParams",
-    function($log, PageHelper, irfNavigator, formHelper, Audit, $stateParams) {
+irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "PageHelper", "User", "translateFilter", "irfNavigator", "formHelper", "Audit", "$stateParams",
+    function($log, PageHelper, User, translateFilter, irfNavigator, formHelper, Audit, $stateParams) {
         return {
             "type": "schema-form",
             "title": "SCHEDULED_AUDIT_DETAILS",
@@ -7,6 +7,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
+                model.master = Audit.offline.getAuditMaster();
                 model.auditInfo = model.auditInfo || {};
                 model.readonly = $stateParams.pageData.readonly;
                 if ($stateParams.pageId) {
@@ -16,7 +17,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     }).$promise.then(function(res) {
                         model.auditInfo = res;
                         PageHelper.setWarning({
-                            message: model.auditInfo.days_left+  " days left to start"
+                            message: model.auditInfo.days_left + " days left to start"
                         });
                         model.startable = moment().isBetween(moment(model.auditInfo.start_date, 'YYYY-MM-DD'), moment(model.auditInfo.end_date, 'YYYY-MM-DD'), 'days', '[]');
                     }, function(errRes) {
@@ -28,6 +29,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     irfNavigator.goBack();
                     return;
                 };
+                model.actions = this.actions;
             },
             form: [{
                 "type": "box",
@@ -74,10 +76,11 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                     "type": "array",
                     "view": "fixed",
                     "title": "",
+                    "titleExpr": "actions.getStageTitle(model, arrayIndex)",
                     "items": [{
                         "type": "section",
                         "htmlClass": "",
-                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.auditInfo.messages[arrayIndex].created_by}}\
+                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditInfo.messages[arrayIndex].created_by)}}\
                     <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditInfo.messages[arrayIndex].created_on}}\
                     <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditInfo.messages[arrayIndex].comment}}</strong><br>'
                     }]
@@ -151,6 +154,16 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditDetails"), ["$log", "Pa
                             PageHelper.hideLoader();
                         })
                     });
+                },
+                getUsername: function(userId) {
+                    return User.offline.getDisplayName(userId);
+                },
+                getStageTitle: function(model, arrayIndex) {
+                    var preStage = model.auditInfo.messages.length - 1 == arrayIndex ? '' : model.auditInfo.messages[arrayIndex + 1].type;
+                    var postStage = model.auditInfo.messages[arrayIndex].type;
+                    preStage = preStage ? translateFilter(model.master.stages[preStage].stage_label) || preStage : '*';
+                    postStage = translateFilter(model.master.stages[postStage].stage_label) || postStage;
+                    return preStage == '*' ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
                 }
             }
         };

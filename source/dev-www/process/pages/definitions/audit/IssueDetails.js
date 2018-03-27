@@ -58,6 +58,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                 }, {
                     "key": "auditIssue.deviation",
                     "title": "AUDITOR_DEVIATION",
+                    "type": "html",
                     "readonly": true
                 }, {
                     key: "auditIssue.closed_on",

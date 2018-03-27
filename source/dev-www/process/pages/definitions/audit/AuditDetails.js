@@ -93,7 +93,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                         type: reportType,
                                         id: reportKey,
                                         name: reportKeyName,
-                                        sampleName: sampleName,
+                                        sampleName:sampleName,
                                         count: 0
                                     };
                                     reportMap[reportKey] = reportEntry;
