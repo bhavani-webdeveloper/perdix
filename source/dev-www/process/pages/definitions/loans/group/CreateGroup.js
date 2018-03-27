@@ -420,6 +420,7 @@ define({
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
                         "condition":"model.group.partnerCode=='AXIS'",
                         "type": "amount",
+                        "required":true,
                         "title": "OUTSTANDING_LOAN_AMOUNT"
                     },{
                         "key": "group.jlgGroupMembers[].loanAmount",

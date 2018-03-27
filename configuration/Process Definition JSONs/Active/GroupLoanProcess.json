@@ -138,6 +138,26 @@
          "ARM",
          "RM"
       ]
+   },{
+      "order": 15,
+      "code": "Completed",
+      "name": "Completed",
+      "isAccountOpening": false,
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   },{
+      "order": 16,
+      "code": "Rejected",
+      "name": "Loan Disbursement",
+      "isAccountOpening": false,
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
    }],
    "schema": {
       "$schema": "http://json-schema.org/draft-04/schema#",
