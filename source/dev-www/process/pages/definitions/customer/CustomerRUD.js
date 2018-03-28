@@ -234,6 +234,28 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 "key": "customer.aadhaarNo",
                                 type: "qrcode",
                                 onChange: "actions.setProofs(model)",
+                                "condition":"model.customer.urnNo",
+                                "readonly":true,
+                                onCapture: function(result, model, form) {
+                                    PageHelper.showLoader();
+                                    var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                    Queries.searchPincodes(
+                                        aadhaarData.pc
+                                    ).then(function(response) {
+                                        $log.info(response);
+                                        if (response.body && response.body.length) {
+                                            model.customer.district = response.body[0].district;
+                                            model.customer.state = response.body[0].state;
+                                        }
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                                //onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                            },{
+                                "key": "customer.aadhaarNo",
+                                type: "qrcode",
+                                "condition":"!model.customer.urnNo",
+                                onChange: "actions.setProofs(model)",
                                 onCapture: function(result, model, form) {
                                     PageHelper.showLoader();
                                     var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
@@ -254,8 +276,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 title: "IDENTITY_PROOF",
                                 items: [{
                                     key: "customer.identityProof",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
                                     type: "select"
                                 }, {
+                                    key: "customer.identityProof",
+                                    "condition":"!model.customer.urnNo",
+                                    type: "select"
+                                },{
                                     key: "customer.identityProofImageId",
                                     type: "file",
                                     "readonly":true,
@@ -280,6 +308,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.identityProofNo",
                                     type: "barcode",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                },{
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
+                                    "condition":"!model.customer.urnNo",
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
                                         model.customer.identityProofNo = result.text;
@@ -352,7 +390,13 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 condition: "!model.customer.addressProofSameAsIdProof",
                                 items: [{
                                     key: "customer.addressProof",
-                                    type: "select"
+                                    type: "select",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                },{
+                                    key: "customer.addressProof",
+                                    type: "select",
+                                    "condition":"!model.customer.urnNo",
                                 }, {
                                     key: "customer.addressProofImageId",
                                     "readonly":true,
@@ -378,6 +422,19 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                 }, {
                                     key: "customer.addressProofNo",
                                     type: "barcode",
+                                    "condition":"model.customer.urnNo",
+                                    "readonly":true,
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
+                                    },
+                                    "schema":{
+                                        "pattern":"^[a-zA-Z0-9]*$"
+                                    }
+                                },{
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    "condition":"!model.customer.urnNo",
                                     onCapture: function(result, model, form) {
                                         $log.info(result);
                                         model.customer.addressProofNo = result.text;
@@ -570,6 +627,42 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         },
                         {
                             key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type: "radios",
+                            readonly:true,
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "AGE",
+                            type:"number",
+                            readonly:true,
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type:"date",
+                            readonly:true,
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             type: "radios",
                             title: "T_GENDER"
                         },
@@ -577,6 +670,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             key:"customer.familyMembers[].age",
                             title: "AGE",
                             type:"number",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].age > 0) {
                                     if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -590,6 +684,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             type:"date",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -605,6 +700,14 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                         {
                             key:"customer.familyMembers[].maritalStatus",
                             type:"select",
+                            readonly:true,
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_MARITAL_STATUS"
                         },
                         "customer.familyMembers[].mobilePhone",

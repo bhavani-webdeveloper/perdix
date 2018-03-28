@@ -274,6 +274,42 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                         },
                         {
                             key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type: "radios",
+                            readonly:true,
+                            title: "T_GENDER"
+                        },
+                        {
+                            key:"customer.familyMembers[].age",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "AGE",
+                            type:"number",
+                            readonly:true,
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            type:"date",
+                            readonly:true,
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
+                            key: "customer.familyMembers[].gender",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             type: "radios",
                             title: "T_GENDER"
                         },
@@ -281,6 +317,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                             key:"customer.familyMembers[].age",
                             title: "AGE",
                             type:"number",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].age > 0) {
                                     if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -294,6 +331,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             type:"date",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                 if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -309,6 +347,14 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                         {
                             key:"customer.familyMembers[].maritalStatus",
                             type:"select",
+                            readonly:true,
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() === 'self'",
+                            title: "T_MARITAL_STATUS"
+                        },
+                        {
+                            key:"customer.familyMembers[].maritalStatus",
+                            type:"select",
+                            condition:"(model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self'",
                             title: "T_MARITAL_STATUS"
                         },
                         "customer.familyMembers[].mobilePhone",
