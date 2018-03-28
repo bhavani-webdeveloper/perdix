@@ -1,14 +1,15 @@
 define({
     pageUID: "management.audit.AuditStageActivities",
     pageType: "Engine",
-    dependencies: ["$log", "SessionStore", "PageHelper", "RolesPages", "formHelper", "Audit", "Utils"],
-    $pageFn: function($log, SessionStore, PageHelper, RolesPages, formHelper, Audit, Utils) {
+    dependencies: ["$log", "$q", "SessionStore", "PageHelper", "RolesPages", "formHelper", "Audit", "Utils"],
+    $pageFn: function($log, $q, SessionStore, PageHelper, RolesPages, formHelper, Audit, Utils) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
             "title": "AUDIT_STAGE_MAPPING",
             initialize: function(model, form, formCtrl) {
                 model.stagemap = model.stagemap || {};
+                model.master = Audit.offline.getAuditMaster();
                 model.stagemap.activities = [];
             },
             form: [{
@@ -59,29 +60,33 @@ define({
                         type: "lov",
                         "title": "ACTIVITY_NAME",
                         lovonly: true,
-                        outputMap: {
-                            "stage_id": "stagemap.stage_id",
-                            "stage_name": "stagemap.stage_name",
-                            "stage_type": "stagemap.stage_type",
-                            "tat_days": "stagemap.tat_days",
-                            "stage_order": "stagemap.stage_order"
-                        },
                         searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return Audit.online.findStage().$promise;
+                        search: function(inputModel, form, model, context) {
+                            var out = _.filter(model.master.activity_master, {"activity_type": model.stagemap.stage_type});
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.stagemap.activities[context.arrayIndex].dependency_order = valueObj.dependency_order;
+                            model.stagemap.activities[context.arrayIndex].config = valueObj.config;
+                            model.stagemap.activities[context.arrayIndex].activity_name = valueObj.name;
+                            model.stagemap.activities[context.arrayIndex].activity_id = valueObj.activity_master_id;
+                            model.stagemap.activities[context.arrayIndex].activity_type = valueObj.activity_type;
                         },
                         getListDisplayItem: function(item, index) {
                             return [
-                                item.stage_order + ': ' + item.stage_name,
-                                item.stage_label,
-                                item.stage_type
+                                item.name,
+                                item.activity_type,
+                                item.dependency_order,
+                                item.config
                             ];
-                        },
-                        onSelect: function(result, model, context) {
-                            model.stagemap.activities = result;
                         }
                     }, {
-                        key: "stagemap.activities[].exec_order",
+                        key: "stagemap.activities[].dependency_order",
                         title: "EXEC_ORDER",
                         required: true
                     }, {
