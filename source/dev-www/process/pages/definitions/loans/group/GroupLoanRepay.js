@@ -698,7 +698,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repaymentInfo.accountName=r.accountName;
                                         repaymentInfo.demandsPaidAndPending=r.totalSatisfiedDemands + " / " + r.pendingInstallment;
                                         repaymentInfo.productCode=r.productCode;
-                                        repaymentInfo.transactionID=r.transactionId;
+                                        repaymentInfo.transactionID=r.paymentResponse.transactionId;
                                         $log.info(repaymentInfo);
                                         getPrintReceipt(repaymentInfo, opts);
                                         pData.addLine("", {});
@@ -1020,9 +1020,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
                             reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
-                            reqData.repayments[i].accountNumber=reqData.repayments[i].transactionId;
-                            reqData.repayments[i].accountNumber=reqData.repayments[i].transactionName;
-
+                            
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
                             }
@@ -1076,9 +1074,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 model.repaymentResponse = resp;
                                 model.ui.submissionDone = true;
 
+
+
                                 _.forOwn(model.repayments, function(repayment) {
                                     repayment.paymentResponse = _.find(resp.repayments, {
-                                        'accountId': repayment.accountId
+                                        'accountNumber': repayment.accountId
                                     })
                                 })
 
