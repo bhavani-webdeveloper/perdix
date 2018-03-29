@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
  ["$log", "$q", "SessionStore", "$state", "formHelper",
     "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-    "Groups", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
+    "Groups","GroupProcess", "Utils", "elementsUtils", '$filter', 'LoanProducts', 'irfNavigator',
     function($log, $q, SessionStore, $state, formHelper, $stateParams,
         LoanAccount, LoanProcess, PageHelper,
-        Groups, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
+        Groups,GroupProcess, Utils, elementsUtils, $filter, LoanProducts, irfNavigator) {
 
         function backToQueue() {
             irfNavigator.goBack();
@@ -89,6 +89,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         delete resp.$promise;
                         delete resp.$resolved;
                         console.warn(resp);
+                        GroupProcess.search({
+                            'groupCode': groupParams[1]
+                        }).$promise.then(function(res) {
+                            model.groupName= res.body[0].groupName
+                        });
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
                         model.total = 0;
@@ -158,12 +163,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
                             model.total =0;
                             for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
-
                                 var accountNumber=model.loanDemandScheduleDto[i].accountNumber;
                                 $log.info(accountNumber);
-
                                 model.loanDemandScheduleDto[i].isAdvanceDemand = false;
-                                
                                 model.loanDemandScheduleDto[i].installmentAmountInPaisa =model.loanDemandScheduleDto[i].installmentAmountInPaisa/100;
                                 model.loanDemandScheduleDto[i].pendingAmountInPaisa =model.loanDemandScheduleDto[i].pendingAmountInPaisa/100;
                                 model.loanDemandScheduleDto[i].amount = model.loanDemandScheduleDto[i].pendingAmountInPaisa;
@@ -524,6 +526,15 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addKeyValueLine("Branch Code", opts['branch_code'], {
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
+                                .addLine("", {})
+                                .addKeyValueLine("Group Code", opts['group_code'], {
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addKeyValueLine("Group Name", opts['group_name'], {
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addLine("", {})
+
                             return pData;
                         }
 
@@ -620,7 +631,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             'website': "http://ruralchannels.kgfs.co.in",
                             'helpline': '18001029370',
                             'branch_id': model.branchId,
-                            'branch_code': model.branchCode
+                            'branch_code': model.branchCode,
+                            'group_name':model.groupName,
+                            'group_code':model.groupCode
                         };
 
                         if (model._partnerCode != "AXIS") {
@@ -649,6 +662,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                                     }
                                                 }
                                             }
+                                            /*if (resp.transactions && resp.transactions.length) {
+                                                for (i = 0; i < resp.transactions.length; i++) {
+                                                    if (resp.transactions[i].transactionId == r.transactionId) {
+                                                        r.transactionType = resp.transactions[i].transactionName
+                                                    }
+                                                }
+                                            }*/
                                             $log.info(totalSatisfiedDemands);
                                             $log.info(pendingInstallment);
                                             r.totalSatisfiedDemands = totalSatisfiedDemands;
@@ -678,7 +698,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repaymentInfo.accountName=r.accountName;
                                         repaymentInfo.demandsPaidAndPending=r.totalSatisfiedDemands + " / " + r.pendingInstallment;
                                         repaymentInfo.productCode=r.productCode;
-                                        //repaymentInfo.transactionID=r.paymentResponse.transactionId;
+                                        repaymentInfo.transactionID=r.transactionId;
                                         $log.info(repaymentInfo);
                                         getPrintReceipt(repaymentInfo, opts);
                                         pData.addLine("", {});
@@ -748,7 +768,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             $log.info(promise);
                             $q.all(promise).finally(function() {
                                 opts.accountName= model.repaymentResponse.loanDemandScheduleDto[0].accountName;
-                                opts.productCode=model.repaymentResponse.loanDemandScheduleDto[0].productCode;
+                                opts.productCode=model.repaymentResponse.loanDemandScheduleDto[0].product;
                                 getPrintHeader(opts);
                                 for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
                                     var r = model.repaymentResponse.loanDemandScheduleDto[i];
@@ -765,7 +785,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         'payOffAmount': r.payOffAmount,
                                         'accountName': r.accountName,
                                         'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                        'productCode': r.product
+                                        'productCode': r.productCode
                                     };
                                     $log.info(repaymentInfo);
                                     getPrintReceipt(repaymentInfo, opts);
@@ -774,6 +794,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 }
                                 getPrintFooter(opts);
                                 $log.info(pData);
+
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
                                 }, function(err) {
@@ -999,6 +1020,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     if (reqData.repayments && reqData.repayments.length) {
                         for (var i = 0; i < reqData.repayments.length; i++) {
                             reqData.repayments[i].accountNumber=reqData.repayments[i].accountId;
+                            reqData.repayments[i].accountNumber=reqData.repayments[i].transactionId;
+                            reqData.repayments[i].accountNumber=reqData.repayments[i].transactionName;
 
                             if (reqData.repayments[i].amount != 0) {
                                 repaymentsData.push(reqData.repayments[i]);
