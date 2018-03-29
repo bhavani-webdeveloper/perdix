@@ -36,6 +36,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         var processAuditData = function(auditData) {
             $scope.model.auditData = auditData;
             $scope.model.ai = auditData.audit_info;
+            $scope.model.stage = $scope.model.ai.current_stage;
             $scope.model._isOnline = $scope.$isOnline;
         };
         var reportForm = {
@@ -73,17 +74,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                     case 'SAMPLE':
                                         reportKey = sample.sample_id;
                                         reportKeyName = sample.column_values[0];
-                                        sampleName = sample.column_values[0];
                                         break;
                                     case 'PROCESS':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].process_id;
                                         reportKeyName = master.process[reportKey].process_name;
-                                        sampleName = sample.column_values[0];
                                         break;
                                     case 'RISK':
                                         reportKey = master.typeofissues[issue.type_of_issue_id].risk_classification;
                                         reportKeyName = master.risk_classification[reportKey].risk_clasification_name;
-                                        sampleName = sample.column_values[0];
                                         break;
                                 }
                                 if (!reportKey || !reportKeyName) continue;
@@ -93,7 +91,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                         type: reportType,
                                         id: reportKey,
                                         name: reportKeyName,
-                                        sampleName:sampleName,
+                                        sampleName: sample.column_values[0],
                                         count: 0
                                     };
                                     reportMap[reportKey] = reportEntry;
@@ -330,7 +328,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 getActions: function() {
                     return [{
                         "name": "VIEW_ISSUES",
-                        fn: function(item, index) {
+                        fn: function(item, index, model) {
                             irfNavigator.go({
                                 'state': 'Page.Engine',
                                 'pageName': 'audit.AuditIssues',
@@ -338,7 +336,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                                 'pageData': {
                                     "readonly": $scope.model.readonly,
                                     "type": $scope.model.type,
-                                    "item": item
+                                    "report": item,
+                                    "stage": $scope.model.stage
                                 }
                             });
                         },

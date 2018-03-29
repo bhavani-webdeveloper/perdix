@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "elementsUtils", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
-    function($log, Utils, elementsUtils, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFilter", "Utils", "elementsUtils", "formHelper", "PageHelper", "irfNavigator", "$stateParams", "Audit", "SessionStore",
+    function($log, translateFilter, Utils, elementsUtils, formHelper, PageHelper, irfNavigator, $stateParams, Audit, SessionStore) {
         var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
@@ -20,9 +20,10 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                     $stateParams.pageData.readonly = true;
                 }
                 model.type = $stateParams.pageData.type;
-                if ($stateParams.pageData.item) {
-                    model.item = $stateParams.pageData.item;
+                if ($stateParams.pageData.report) {
+                    model.report = $stateParams.pageData.report;
                 }
+                model.stage = $stateParams.pageData.stage;
                 var ids = $stateParams.pageId.split(':');
                 if (ids.length != 3) {
                     irfNavigator.goBack();
@@ -44,7 +45,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'SAMPLE':
                                 _.map(issuesList, function(iss) {
                                     if (iss.sample_id == model.viewTypeId) {
-                                        iss.sampleName = model.item.sampleName;
+                                        iss.sampleName = model.report.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -52,7 +53,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'PROCESS':
                                 _.map(issuesList, function(iss) {
                                     if (iss.process_id == model.viewTypeId) {
-                                        iss.sampleName = model.item.sampleName;
+                                        iss.sampleName = model.report.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -60,7 +61,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                             case 'RISK':
                                 _.map(issuesList, function(iss) {
                                     if (master.typeofissues[iss.type_of_issue_id].risk_classification == model.viewTypeId) {
-                                        iss.sampleName = model.item.sampleName;
+                                        iss.sampleName = model.report.sampleName;
                                         model.issues.push(iss);
                                     }
                                 })
@@ -98,47 +99,6 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                     render: function(data, type, full, meta) {
                                         return master.risk_classification[full.process_id].risk_clasification_name;
                                     }
-                                }, {
-                                    "title": "OBSERVATION",
-                                    "data": "id",
-                                    render: function(data, type, full, meta) {
-                                        return master.typeofissues[full.type_of_issue_id].description;
-                                    }
-                                }, {
-                                    "title": "DEVIATION",
-                                    "data": "deviation"
-                                }, {
-                                    "title": "AUDITOR_ID",
-                                    "data": "auditor_id"
-                                }, {
-                                    "title": "ISSUE_STATUS",
-                                    "data": "status",
-                                    render: function(data, type, full, meta) {
-                                        switch (data) {
-                                            case 'DO':
-                                                return 'Draft';
-                                            case 'DA':
-                                                return 'Issue Accepted';
-                                            case 'DR':
-                                                return 'Reject Claimed';
-                                            case 'DRA':
-                                                return 'Claim Accepted (Not an issue)';
-                                            case 'DRR':
-                                                return 'Claim Rejected (Issue)';
-                                            case 'IN':
-                                                return 'Not an issue';
-                                        }
-                                        return 'Issue';
-                                    }
-                                }, {
-                                    "title": "RESPONSE",
-                                    "data": "assignee_designation_id",
-                                    render: function(data, type, full, meta) {
-                                        if (full.messages && full.messages.length) {
-                                            return full.messages[0].comment;
-                                        }
-                                        return '';
-                                    }
                                 }];
                             } else if (model.viewType == "PROCESS") {
                                 var columns = [{
@@ -150,103 +110,52 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "Utils", "ele
                                     render: function(data, type, full, meta) {
                                         return master.risk_classification[full.process_id].risk_clasification_name;
                                     }
-                                }, {
-                                    "title": "OBSERVATION",
-                                    "data": "id",
-                                    render: function(data, type, full, meta) {
-                                        return master.typeofissues[full.type_of_issue_id].description;
-                                    }
-                                }, {
-                                    "title": "DEVIATION",
-                                    "data": "deviation"
-                                }, {
-                                    "title": "AUDITOR_ID",
-                                    "data": "auditor_id"
-                                }, {
-                                    "title": "ISSUE_STATUS",
-                                    "data": "status",
-                                    render: function(data, type, full, meta) {
-                                        switch (data) {
-                                            case 'DO':
-                                                return 'Draft';
-                                            case 'DA':
-                                                return 'Issue Accepted';
-                                            case 'DR':
-                                                return 'Reject Claimed';
-                                            case 'DRA':
-                                                return 'Claim Accepted (Not an issue)';
-                                            case 'DRR':
-                                                return 'Claim Rejected (Issue)';
-                                            case 'IN':
-                                                return 'Not an issue';
-                                        }
-                                        return 'Issue';
-                                    }
-                                }, {
-                                    "title": "RESPONSE",
-                                    "data": "assignee_designation_id",
-                                    render: function(data, type, full, meta) {
-                                        if (full.messages && full.messages.length) {
-                                            return full.messages[0].comment;
-                                        }
-                                        return '';
-                                    }
                                 }];
                             } else if (model.viewType == "RISK") {
                                 var columns = [{
+                                    "title": "SAMPLE_NAME",
+                                    "data": "sampleName"
+                                }, {
                                     "title": "PROCESS_NAME",
                                     "data": "process_id",
                                     render: function(data, type, full, meta) {
                                         return master.process[full.process_id].process_name;
                                     }
-                                }, {
-                                    "title": "SAMPLE_NAME",
-                                    "data": "sampleName"
-                                }, {
-                                    "title": "OBSERVATION",
-                                    "data": "id",
-                                    render: function(data, type, full, meta) {
-                                        return master.typeofissues[full.type_of_issue_id].description;
-                                    }
-                                }, {
-                                    "title": "DEVIATION",
-                                    "data": "deviation"
-                                }, {
-                                    "title": "AUDITOR_ID",
-                                    "data": "auditor_id"
-                                }, {
-                                    "title": "ISSUE_STATUS",
-                                    "data": "status",
-                                    render: function(data, type, full, meta) {
-                                        switch (data) {
-                                            case 'DO':
-                                                return 'Draft';
-                                            case 'DA':
-                                                return 'Issue Accepted';
-                                            case 'DR':
-                                                return 'Reject Claimed';
-                                            case 'DRA':
-                                                return 'Claim Accepted (Not an issue)';
-                                            case 'DRR':
-                                                return 'Claim Rejected (Issue)';
-                                            case 'IN':
-                                                return 'Not an issue';
-                                        }
-                                        return 'Issue';
-                                    }
-                                }, {
-                                    "title": "RESPONSE",
-                                    "data": "assignee_designation_id",
-                                    render: function(data, type, full, meta) {
-                                        if (full.messages && full.messages.length) {
-                                            return full.messages[0].comment;
-                                        }
-                                        return '';
-                                    }
                                 }];
                             }
+                            columns.push.apply(columns, [{
+                                "title": "OBSERVATION",
+                                "data": "id",
+                                render: function(data, type, full, meta) {
+                                    return master.typeofissues[full.type_of_issue_id].description;
+                                }
+                            }, {
+                                "title": "DEVIATION",
+                                "data": "deviation"
+                            }, {
+                                "title": "AUDITOR_ID",
+                                "data": "auditor_id"
+                            }, {
+                                "title": "ISSUE_STATUS",
+                                "data": "status",
+                                render: function(data, type, full, meta) {
+                                    var lc = 'AMS_' + model.stage + '_' + data;
+                                    var tr = translateFilter(lc);
+                                    if (tr == lc)
+                                        tr = translateFilter('AMS_' + data);
+                                    return tr;
+                                }
+                            }, {
+                                "title": "RESPONSE",
+                                "data": "assignee_designation_id",
+                                render: function(data, type, full, meta) {
+                                    if (full.messages && full.messages.length) {
+                                        return full.messages[0].comment;
+                                    }
+                                    return '';
+                                }
+                            }])
                             return columns;
-
                         },
                         getActions: function() {
                             return [{
