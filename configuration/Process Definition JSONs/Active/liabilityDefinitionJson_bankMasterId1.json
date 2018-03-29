@@ -12,8 +12,8 @@
       },
       {
          "order":2,
-         "code":"LenderDocumentUpload",
-         "name":"LenderDocumentUpload",
+         "code":"DocumentUpload",
+         "name":"DocumentUpload",
          "stageType":"CAPTURE",         
          "allowedRoles":[
             "WM"
@@ -21,33 +21,16 @@
       },
       {
          "order":3,
-         "code":"LenderDocumentVerification",
-         "name":"LenderDocumentVerification",
+         "code":"DocumentVerification",
+         "name":"DocumentVerification",
          "stageType":"CAPTURE",         
          "allowedRoles":[
             "WM"
          ]
       },
+      
       {
          "order":4,
-         "code":"ComplianceDocumentUpload",
-         "name":"ComplianceDocumentUpload",
-         "stageType":"CAPTURE",
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":5,
-         "code":"ComplianceVerification",
-         "name":"ComplianceVerification",
-         "stageType":"CAPTURE",
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":6,
          "code":"DisbursementConfirmation",
          "name":"DisbursementConfirmation",
          "stageType":"CAPTURE",
@@ -56,7 +39,7 @@
          ]
       },
       {
-         "order":7,
+         "order":5,
          "code":"ScheduleUpload",
          "name":"ScheduleUpload",
          "stageType":"CAPTURE",
@@ -325,7 +308,7 @@
                }
             }
          },
-		 "liabilityLenderDocuments":{
+		"liabilityLenderDocuments":{
             "title":"liabilityLenderDocuments",
             "type":"array",
             "maxItems":null,
@@ -339,7 +322,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "LenderDocumentUpload","LenderDocumentVerification"
+                       "DocumentUpload","DocumentVerification"
                      ]
                   },
                   "uploadedDate":{
@@ -348,7 +331,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                         "LenderDocumentUpload","LenderDocumentVerification"
+                         "DocumentUpload","DocumentVerification"
                      ]
                   },
                   "isSignOff":{
@@ -357,7 +340,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LenderDocumentUpload","LenderDocumentVerification"
+                        "DocumentUpload","DocumentVerification"
                      ]
                   }
 				  ,
@@ -367,7 +350,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LenderDocumentUpload","LenderDocumentVerification"
+                        "DocumentUpload","DocumentVerification"
                      ]
                   }
                }
@@ -387,7 +370,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ComplianceDocumentUpload","ComplianceVerification"
+                        "DocumentUpload","DocumentVerification"
                      ]
                   },
                  "uploadedDate":{
@@ -396,7 +379,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ComplianceDocumentUpload","ComplianceVerification"
+                        "DocumentUpload","DocumentVerification"
                      ]
                   },
                   "isSignOff":{
@@ -405,7 +388,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                         "ComplianceDocumentUpload","ComplianceVerification"
+                         "DocumentUpload","DocumentVerification"
                      ]
                   }
 				  ,
@@ -415,7 +398,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ComplianceDocumentUpload","ComplianceVerification"
+                        "DocumentUpload","DocumentVerification"
                      ]
                   }
                }
