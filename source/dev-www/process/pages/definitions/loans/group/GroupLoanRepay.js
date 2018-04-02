@@ -92,7 +92,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         GroupProcess.search({
                             'groupCode': groupParams[1]
                         }).$promise.then(function(res) {
-                            model.groupName= res.body[0].groupName
+                            model.groupName= res.body[0].groupName;
+                            model.centreCode=res.body[0].centreCode;
+                            var centres = formHelper.enum('centre').data;
+                            for (var i = 0; i < centres.length; i++) {
+                                var centre = centres[i];
+                                if (centre.field3 == model.centreCode) {
+                                    model.centreName = centre.name;
+                                }
+                            }
+
                         });
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
@@ -506,11 +515,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addLine(opts['branch'], {
                                     'center': true,
                                     font: PrinterConstants.FONT_SMALL_NORMAL
-                                }).addLine("Date : " + today, {
-                                    'center': false,
+                                })
+                                .addLine("Centre Code : " + opts['centre_code'], {
+                                    'center': true, 
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
-                                //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
+                                .addLine("Centre Name : " + opts['centre_name'], {
+                                    'center': true, 
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
+                                .addLine("Date : " + today, {
+                                    'center': true,
+                                    font: PrinterConstants.FONT_SMALL_NORMAL
+                                })
                                 .addLine("LOAN REPAYMENT", {
                                     'center': true,
                                     font: PrinterConstants.FONT_LARGE_BOLD
@@ -534,7 +551,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     font: PrinterConstants.FONT_SMALL_NORMAL
                                 })
                                 .addLine("", {})
-
                             return pData;
                         }
 
@@ -561,7 +577,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
-                                .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount']) - parseFloat(repaymentInfo['amountPaid'])), {
+                                .addKeyValueLine("Total Payoff Amount", formatAmount(parseFloat(repaymentInfo['payOffAmount'])), {
                                     font: PrinterConstants.FONT_SMALL_BOLD
                                 })
                                 // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
@@ -633,7 +649,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             'branch_id': model.branchId,
                             'branch_code': model.branchCode,
                             'group_name':model.groupName,
-                            'group_code':model.groupCode
+                            'group_code':model.groupCode,
+                            'centre_code':model.centreCode,
+                            'centre_name':model.centreName
                         };
 
                         if (model._partnerCode != "AXIS") {
@@ -673,6 +691,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                             $log.info(pendingInstallment);
                                             r.totalSatisfiedDemands = totalSatisfiedDemands;
                                             r.pendingInstallment = pendingInstallment;
+                                            r.payOffAmount=resp.payOffAmount;
                                         });
                                     })(i);
                                 }
