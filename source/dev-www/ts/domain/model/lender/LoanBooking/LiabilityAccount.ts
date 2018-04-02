@@ -1,13 +1,13 @@
 import { Type } from "class-transformer";
 
-import LiabilityComplianceDocument = require("./LiabilityComplianceDocument");
-import LiabilityLenderDocument = require("./LiabilityLenderDocument");
-import LiabilityFeeDetail = require("./LiabilityFeeDetail");
+import LiabilityComplianceDocuments = require("./LiabilityComplianceDocuments");
+import LiabilityLenderDocuments = require("./LiabilityLenderDocuments");
+import LiabilityFeeDetails = require("./LiabilityFeeDetails");
 
 
 //LiabilityAccountDTOs
 
-export class LiabilityAccounts {
+export class LiabilityAccount {
        currentStage: string;
         disbursementDate: string;
         expectedDisbursementDate: string;
@@ -35,14 +35,14 @@ export class LiabilityAccounts {
         totalDeductions: number;
         version: number;
 
-        @Type(() => LiabilityComplianceDocument)
-        liabilityComplianceDocument: LiabilityComplianceDocument[];
+        @Type(() => LiabilityComplianceDocuments)
+        liabilityComplianceDocuments: LiabilityComplianceDocuments[];
 
-        @Type(() => LiabilityFeeDetail)
-        iabilityFeeDetail: LiabilityFeeDetail[];
+        @Type(() => LiabilityFeeDetails)
+        liabilityFeeDetails: LiabilityFeeDetails[];
 
-        @Type(() => LiabilityLenderDocument)
-        liabilityLenderDocument: LiabilityLenderDocument[];
+        @Type(() => LiabilityLenderDocuments)
+        liabilityLenderDocuments: LiabilityLenderDocuments[];
         
 }
 

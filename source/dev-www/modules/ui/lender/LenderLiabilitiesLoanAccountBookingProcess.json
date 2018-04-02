@@ -158,18 +158,32 @@
     },
     "LenderDocumentation":{
         "type": "box",
-        "title": "LENDER_DEDUCTION",
+        "title": "LENDER_DOCUMENT",
         "items": {
             "liabilityLenderDocuments": {
                 "key": "liabilityAccount.liabilityLenderDocuments",
                 "type": "array",
-                "title": "LENDER_DEDUCTION",
+                "title": "LENDER_DOCUMENT",
                 "items":{
-                    "documentType": {
-                        "key": "liabilityAccount.liabilityLenderDocuments[].documentType",
-                        "type":"select",
-                        "enumcode":"----",
-                        "title":"DOCUMENT_TYPE"
+                    "documentName": {
+                        "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
+                        "type": "select",
+                        "enumCode": "liability_document_type",
+                        "title": "DOCUMENT_TYPE"
+                    },
+                    "otherDocumentName": {
+                        "key": "liabilityAccount.liabilityLenderDocuments[].otherDocumentName",
+                        "type": "string",
+                        "title": "DOCUMENT_NAME"
+                    },
+                    "upload": {
+                        "title": "Upload",
+                        "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "using": "scanner"
                     },
                     "isSignOff":{
                         "key":"liabilityAccount.liabilityLenderDocuments[].isSignOff",
@@ -202,11 +216,25 @@
                 "type": "array",
                 "title": "LEGAL_COMPLIANCE",
                 "items":{
-                    "documentType": {
-                        "key": "liabilityAccount.liabilityComplianceDocuments[].documentType",
-                        "type":"select",
-                        "enumcode":"----",
-                        "title":"DOCUMENT_TYPE"
+                    "documentName": {
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
+                        "type": "select",
+                        "enumCode": "liability_document_type",
+                        "title": "DOCUMENT_TYPE"
+                    },
+                    "otherDocumentName": {
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].otherDocumentName",
+                        "type": "string",
+                        "title": "DOCUMENT_NAME"
+                    },
+                    "upload": {
+                        "title": "Upload",
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "using": "scanner"
                     },
                     "isSignOff":{
                         "key":"liabilityAccount.liabilityComplianceDocuments[].isSignOff",
@@ -228,6 +256,130 @@
 
                 } 
             } 
+        }
+    },
+    "LegalComplianceNew":{
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "DOCUMENT_VERIFICATION",
+        "htmlClass": "text-danger",
+        "items": {
+            "lenderId": {
+                "key": "liabilityAccount.lenderId",
+                "title": "LENDER_ID",
+                "readonly": true
+            },
+            "lenderName": {
+                "key": "liabilityAccount.lenderName",
+                "title": "LENDER_NAME",
+                "readonly": true
+            },
+            "formDownload": {
+                "type": "button",
+                "title": "DOWNLOAD_ALL_FORMS"
+            },
+            "liabilityComplianceDocuments": {
+                "type": "fieldset",
+                "title": "LENDER_DOCUMENT_VERIFICATION",
+                "items": {
+                    "liabilityComplianceDocuments": {
+                        "key": "liabilityAccount.liabilityComplianceDocuments",
+                        "type": "array",
+                        "title": "LEGAL_COMPLIANCE",
+                        "view": "fixed",
+                        "add": null,
+                        "remove": null,
+                        "notitle": true,
+                        "items": {
+                            "section":{
+                                "type": "section",
+                                "htmlClass": "row",
+                                "items":{
+                                    "documentType": {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-6",
+                                        "items": {
+                                            "documentType": {
+                                                "key": "liabilityAccount.liabilityComplianceDocuments[].documentType",
+                                                "notitle": true,
+                                                "readonly": true
+                                            }
+                                        }
+                                    },
+                                    "upload": {                                        
+                                        "type": "section",
+                                        "htmlClass": "col-sm-6",
+                                        "items": {
+                                            "upload":{
+                                                "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
+                                                "title": "DOWNLOAD_FORM",
+                                                "notitle": true,
+                                                "fieldHtmlClass": "btn-block",
+                                                "style": "btn-default",
+                                                "icon": "fa fa-download", 
+                                                "type": "button",
+                                                "readonly": false
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        } 
+                    } 
+                }
+            },
+            "lenderDocuments": {
+                "type": "fieldset",
+                "title": "COMPLIANCE_DOCUMENT_VERIFICATION",
+                "items": {
+                    "lenderDocuments": {
+                        "key": "liabilityAccount.liabilityLenderDocuments",
+                        "type": "array",
+                        "title": "LEGAL_COMPLIANCE",
+                        "view": "fixed",
+                        "add": null,
+                        "remove": null,
+                        "notitle": true,
+                        "items": {
+                            "section":{
+                                "type": "section",
+                                "htmlClass": "row",
+                                "items":{
+                                    "documentType": {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-6",
+                                        "items": {
+                                            "documentType": {
+                                                "key": "liabilityAccount.liabilityLenderDocuments[].documentType",
+                                                "notitle": true,
+                                                "readonly": true
+                                            }
+                                        }
+                                    },
+                                    "upload": {                                        
+                                        "type": "section",
+                                        "htmlClass": "col-sm-6",
+                                        "items": {
+                                            "upload":{
+                                                "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                "title": "DOWNLOAD_FORM",
+                                                "notitle": true,
+                                                "fieldHtmlClass": "btn-block",
+                                                "style": "btn-default",
+                                                "icon": "fa fa-download", 
+                                                "type": "button",
+                                                "readonly": false
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        } 
+                    } 
+                }
+            }
         }
     }
 }

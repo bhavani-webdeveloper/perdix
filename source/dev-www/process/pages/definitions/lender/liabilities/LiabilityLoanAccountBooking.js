@@ -24,12 +24,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction": {
                         "orderNo": 30
                     },
-                    "LenderDocumentation": {
-                        "orderNo": 40
-                    },
-                    "LegalCompliance": {
-                        "orderNo": 50
-                    },
                    /* "LenderAccountDetails.lenderId": {
                         "required": true
                     },*/
@@ -98,13 +92,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LoanAmountDeduction.loanAccountStatus": {
                         "required": true
-                    }/*,
-                    "LenderDocumentation.liabilityLenderDocuments.documentType": {
-                        "required": true
-                    },
-                    "LegalCompliance.liabilityComplianceDocuments.documentType": {
-                        "required": true
-                    }*/
+                    }
                 }
             }
             var getIncludes = function (model) {
@@ -140,20 +128,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.scheduleStartDate",
                     "LoanAmountDeduction.firstInstallmentDate",
                     "LoanAmountDeduction.maturityDate",
-                    "LoanAmountDeduction.loanAccountStatus",
-
-                    "LenderDocumentation",
-                    "LenderDocumentation.liabilityLenderDocuments",
-                    "LenderDocumentation.liabilityLenderDocuments.documentType",
-                    "LenderDocumentation.liabilityLenderDocuments.isSignOff",
-                    "LenderDocumentation.liabilityLenderDocuments.uploadedDate",
-
-                    "LegalCompliance",
-                    "LegalCompliance.liabilityComplianceDocuments",
-                    "LegalCompliance.liabilityComplianceDocuments.documentType",
-                    "LegalCompliance.liabilityComplianceDocuments.isSignOff",
-                    "LegalCompliance.liabilityComplianceDocuments.uploadedDate"
-
+                    "LoanAmountDeduction.loanAccountStatus"
                 ];
 
             }
@@ -177,7 +152,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "SAVE",
+                                            "title": "SUBMIT",
                                             "onClick": "actions.save(model, formCtrl, form, $event)"
                                         }
                                     ]
@@ -187,6 +162,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "type": "actionbox",
                                     "orderNo": 10000,
                                     "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "SAVE",
+                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                        },
                                         {
                                             "type": "button",
                                             "title": "PROCEED",
@@ -202,7 +182,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
                     });
 
-                    if(_.hasIn($stateParams, 'pageId')) {
+                    if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
                                 if(res.liabilityAccount.currentStage != "LiabilityAccount") {
@@ -254,15 +234,14 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             })
                             .subscribe(function (value) {
                                 PageHelper.showProgress('loan', 'Loan Saved.', 5000);
-                                PageHelper.clearErrors();
+                                PageHelper.clearErrors();   
+                                if(!model.liabilityAccount.id) {
+                                    irfNavigator.goBack();
+                                }                             
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
-                                irfNavigator.go({
-                                    state: 'Page.Adhoc',
-                                    pageName: "lender.liabilities.LoanBookingDashboard"
-                                });
                             });
                     },
                     proceed: function (model, formCtrl, form, $event) {
@@ -284,10 +263,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             .subscribe(function (value) {
                                 PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
                                 PageHelper.clearErrors();
-                                irfNavigator.go({
-                                    state: 'Page.Adhoc',
-                                    pageName: "lender.liabilities.LoanBookingDashboard"
-                                });
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

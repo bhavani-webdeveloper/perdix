@@ -34,7 +34,7 @@ irf.pageCollection.controller(irf.controller("lender.liabilities.LoanBookingDash
             var duqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lender.liabilities.DocumentUpoadQueue"];
             if (duqMenu) {
                 LiabilityAccountProcess.search({
-                    'status': 'LenderDocumentUpload',
+                    'status': 'DocumentUpload',
                     'page': 1,
                     'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
@@ -47,7 +47,7 @@ irf.pageCollection.controller(irf.controller("lender.liabilities.LoanBookingDash
             var dvMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lender.liabilities.DocumentVerificationQueue"];
             if (dvMenu) {
                 LiabilityAccountProcess.search({
-                    'status': 'LenderDocumentVerification',
+                    'status': 'DocumentVerification',
                     'page': 1,
                     'per_page': 1
                 }).$promise.then(function(response, headerGetter) {

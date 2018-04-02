@@ -38,7 +38,7 @@ define([], function() {
 					},
 					getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 						var promise = LiabilityAccountProcess.search({
-							'status': 'LiabilityAccount',
+							'status': 'DocumentVerification',
 							'lenderName': searchOptions.lenderName,
 							'page': pageOpts.pageNo,
                         	'per_page': pageOpts.itemsPerPage,
@@ -99,12 +99,12 @@ define([], function() {
 						getActions: function(){
 							return [
 								{
-									name: "Enroll Customer",
+									name: "Document Verification",
 									desc: "",
 									icon: "fa fa-user-plus",
 									fn: function(item, model){
 										$state.go("Page.Engine",{
-											pageName:"lender.liabilities.DocumentUpload",
+											pageName:"lender.liabilities.LiabilityAccountDocumentVerification",
 											pageId:item.id
 										});
 									},
