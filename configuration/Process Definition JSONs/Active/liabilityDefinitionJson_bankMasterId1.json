@@ -344,7 +344,37 @@
                      ]
                   }
 				  ,
-                  "fileId":{
+               "documentName":{
+                     "title":"documentName",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+              ,
+               "otherDocumentName":{
+                     "title":"otherDocumentName",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+              ,
+              "remarks":{
+                     "title":"isSignOff",
+                     "type":"remarks",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+               ,
+               "fileId":{
                      "title":"fileId",
                      "type":"string",
                      "minLength":1,
@@ -392,7 +422,38 @@
                      ]
                   }
 				  ,
-                  "fileId":{
+               
+               "documentName":{
+                     "title":"documentName",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+              ,
+               "otherDocumentName":{
+                     "title":"otherDocumentName",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+              ,
+              "remarks":{
+                     "title":"isSignOff",
+                     "type":"remarks",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+             ,  
+             "fileId":{
                      "title":"fileId",
                      "type":"string",
                      "minLength":1,
