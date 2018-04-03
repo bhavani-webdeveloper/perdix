@@ -306,45 +306,51 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
 
                     /* START: Component buttons */
                     if (sampleType !== "N") {
+                        var componentForm = [];
                         for (k in componentColumns) {
                             var component_name = master.components[componentColumns[k].component_id].component_name;
                             var sample_column_value = model.sample.column_values[componentColumns[k].$index];
                             if (_.indexOf(["CUSTOMER_ID", "LOAN_ID"], component_name) == -1 || !sample_column_value) continue;
+                            var buttonForm = {
+                                "type": "button",
+                                "title": sampleColumnsConfig.columns[componentColumns[k].$index].user_friendly_name + " - " + sample_column_value
+                            };
+                            var genOnClick = function(state, pageName, pageId) {
+                                return function(model) {
+                                    irfNavigator.go({
+                                        'state': state,
+                                        'pageName': pageName,
+                                        'pageId': pageId
+                                    });
+                                };
+                            };
                             switch (component_name) {
                                 case "CUSTOMER_ID":
-                                    formDetails.push({
-                                        "type": "button",
-                                        "title": "Customer (" + sample_column_value + ")",
-                                        onClick: function(model, formCtrl, form, event) {
-                                            irfNavigator.go({
-                                                'state': 'Page.Customer360',
-                                                'pageName': null,
-                                                'pageId': sample_column_value
-                                            });
-                                        }
-                                    });
+                                    buttonForm.onClick = genOnClick('Page.Customer360', null, sample_column_value);
+                                    componentForm.push(buttonForm);
                                     break;
                                 case "LOAN_ID":
-                                    formDetails.push({
-                                        "type": "button",
-                                        "title": "Loan (" + sample_column_value + ")",
-                                        onClick: function(model, formCtrl, form, event) {
-                                            irfNavigator.go({
-                                                'state': 'Page.Bundle',
-                                                'pageName': 'loans.individual.screening.LoanView',
-                                                'pageId': sample_column_value
-                                            });
-                                        }
-                                    });
+                                    buttonForm.onClick = genOnClick('Page.Bundle', 'loans.individual.screening.LoanView', sample_column_value);
+                                    componentForm.push(buttonForm);
                                     break;
                             }
+                        }
+                        if (componentForm.length) {
+                            formDetails.push({
+                                "type": "fieldset",
+                                "title": "LINKS",
+                                "items": [{
+                                    "type": "actions",
+                                    "notitle": true,
+                                    "items": componentForm
+                                }]
+                            });
                         }
                     }
                     /* END: Component buttons */
 
-                    /* START: Issues processing */
-                    var issueDetailsForm = [];
-                    var processIssuesForm = function(issue, i) {
+                    var renderIssuesForm = function(issue, i) {
+                        var issueDetailsForm = [];
                         issueDetailsForm.push({
                             "type": "section",
                             "html": '<div><strong>' + (i + 1) + '.</strong> <span>' + master.typeofissues[issue.type_of_issue_id].description + '</span></div>'
@@ -498,44 +504,76 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                             "type": "section",
                             "html": '<hr>'
                         });
+                        return {
+                            "type": "section",
+                            "htmlClass": "row",
+                            "items": [{
+                                "type": "section",
+                                "htmlClass": "col-sm-12",
+                                "items": issueDetailsForm
+                            }]
+                        };
                     };
 
-                    model.sample.issue_details = model.sample.issue_details || [];
-                    // existing issues from sample
-                    var issuesDataMap = {};
-                    for (idx = 0; idx < model.sample.issue_details.length; idx++) {
-                        processIssuesForm(master.autosampling_typeofissue_sets[model.sample.issue_details[idx].type_of_issue_id], idx);
-                        issuesDataMap[model.sample.issue_details[idx].type_of_issue_id] = true;
-                    }
-                    // new issues from master
-                    var issues = master.autosampling_scoring_sample_type_sets[sampleTypeId];
-                    for (i = 0; i < issues.length; i++) {
-                        if (issuesDataMap[issues[i].type_of_issue_id]) {
-                            continue;
+                    var idx = 0;
+                    var renderProcessForm = function(processId) {
+                        var processIssuesForm = [];
+                        var issues = master.autosampling_scoring_sample_type_sets[sampleTypeId];
+                        for (i = 0; i < issues.length; i++) {
+                            var typeofissue = master.typeofissues[issues[i].type_of_issue_id];
+                            if (typeofissue.process_id != processId) {
+                                continue;
+                            }
+                            if (existingIssues[issues[i].type_of_issue_id] || typeofissue.status == "1") {
+                                if (existingIssues[issues[i].type_of_issue_id]) {
+                                    model.sample.issue_details[idx] = existingIssues[issues[i].type_of_issue_id];
+                                } else if (typeofissue.status == "1") {
+                                    model.sample.issue_details[idx] = {
+                                        "process_id": typeofissue.process_id,
+                                        "sub_process_id": typeofissue.sub_process_id,
+                                        "type_of_issue_id": typeofissue.type_of_issue_id,
+                                        "option_id": null,
+                                        "deviation": "",
+                                        "assignee_det": [{
+                                            "assignee_id": null,
+                                            "desgn_id": 0 // TODO global_settings audit.issue_assigned_to_role_id
+                                        }],
+                                        "input_datas": "",
+                                        // "spot_fixed": "0",
+                                        "document_id": null,
+                                        "draft_document_id": null,
+                                        "latitude": null,
+                                        "longitude": null
+                                    };
+                                }
+                                var issueItem = renderIssuesForm(issues[i], idx++);
+                                processIssuesForm.push(issueItem);
+                            }
                         }
-                        var typeofissue = master.typeofissues[issues[i].type_of_issue_id];
-                        if (typeofissue.status != "1") {
-                            continue; // SKIP inactive issues
+                        if (!processIssuesForm.length) {
+                            return false;
                         }
-                        model.sample.issue_details[idx] = {
-                            "process_id": typeofissue.process_id,
-                            "sub_process_id": typeofissue.sub_process_id,
-                            "type_of_issue_id": typeofissue.type_of_issue_id,
-                            "option_id": null,
-                            "deviation": "",
-                            "assignee_det": [{
-                                "assignee_id": null,
-                                "desgn_id": 0 // TODO global_settings audit.issue_assigned_to_role_id
-                            }],
-                            "input_datas": "",
-                            // "spot_fixed": "0",
-                            "document_id": null,
-                            "draft_document_id": null,
-                            "latitude": null,
-                            "longitude": null
+                        return {
+                            "type": "fieldset",
+                            "title": master.process[processId].process_name,
+                            "items": processIssuesForm
                         };
-                        processIssuesForm(issues[i], idx++);
                     }
+
+                    /* START: Issues processing */
+                    model.sample.issue_details = model.sample.issue_details || [];
+                    var existingIssues = {};
+                    for(i in model.sample.issue_details) {
+                        existingIssues[model.sample.issue_details[i].type_of_issue_id] = model.sample.issue_details[i];
+                    }
+                    model.sample.issue_details = [];
+                    var allIssuesForm = [];
+                    _.forOwn(master.process, function(v, k) {
+                        var processItem = renderProcessForm(v.process_id, idx);
+                        if (processItem) {
+                            allIssuesForm.push(processItem);
+                        }
+                    });
                     /* END: Issues processing */
 
                     self.form = [{
@@ -546,7 +584,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                         "type": "box",
                         "readonly": $stateParams.pageData.readonly,
                         "title": "ISSUES",
-                        "items": issueDetailsForm
+                        "items": allIssuesForm
                     }];
 
                     if (!$stateParams.pageData.readonly) {
