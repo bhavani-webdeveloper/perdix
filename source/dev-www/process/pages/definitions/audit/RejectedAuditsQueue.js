@@ -128,7 +128,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                         return Audit.utils.processDisplayRecords(null, 1, null, 'reject');
                     }
                     var deferred = $q.defer();
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'audit_id': searchOptions.audit_id,
                         'auditor_id': SessionStore.getLoginname(),
                         'branch_id': searchOptions.branch_id,
@@ -224,7 +224,7 @@ irf.pageCollection.factory(irf.page("audit.RejectedAuditsQueue"), ["$log", "Quer
                             icon: "fa fa-refresh",
                             fn: function(item, index) {
                                 PageHelper.showLoader();
-                                Audit.online.getAuditFull({
+                                Audit.online.getAuditData({
                                     audit_id: item.audit_id
                                 }).$promise.then(function(response) {
                                     item._offline = true;

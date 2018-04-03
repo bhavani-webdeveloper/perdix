@@ -145,7 +145,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                         return Audit.utils.processDisplayRecords(null, 1, null, 'draft');
                     }
                     var deferred = $q.defer();
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
@@ -228,7 +228,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                             icon: "fa fa-refresh",
                             fn: function(item, index) {
                                 PageHelper.showLoader();
-                                Audit.online.getAuditFull({
+                                Audit.online.getAuditData({
                                     audit_id: item.audit_id
                                 }).$promise.then(function(response) {
                                     item._offline = true;
@@ -289,7 +289,7 @@ irf.pageCollection.factory(irf.page("audit.DraftOperationQueue"), ["$log", "Util
                             fn: function(items, index) {
                                 PageHelper.showLoader();
                                 var sy = function(item) {
-                                    var p = Audit.online.getAuditFull({
+                                    var p = Audit.online.getAuditData({
                                         audit_id: item.audit_id
                                     }).$promise;
                                     p.then(function(response) {

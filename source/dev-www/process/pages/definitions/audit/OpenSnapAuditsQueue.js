@@ -116,7 +116,7 @@ irf.pageCollection.factory(irf.page("audit.OpenSnapAuditsQueue"), ["$log", "Util
                         return Audit.utils.processDisplayRecords(null, 0, 'O');
                     }
                     var deferred = $q.defer();
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'audit_id': searchOptions.audit_id,
                         'auditor_id': SessionStore.getLoginname(),
                         'branch_id': searchOptions.branch_id,

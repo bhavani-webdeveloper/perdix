@@ -123,7 +123,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 PageHelper.hideLoader();
                 deferred.resolve();
             } else {
-                Audit.online.getAuditFull({
+                Audit.online.getAuditData({
                     audit_id: $this.auditId
                 }).$promise.then(function(_auditData) {
                     $scope.$isOnline = true;
@@ -162,6 +162,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "Page/Engine/audit.detail.FixedAsset",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
+                "Page/Engine/audit.detail.AuditIssueSummary",
                 "Page/Engine/audit.detail.AuditSummary"
             ]
         });
@@ -206,6 +207,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
                 $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditIssueSummary"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
@@ -586,8 +588,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 PageHelper.showLoader();
                 var reqData = model.auditData;
                 $scope.$online || Audit.offline.setAuditInfo($this.auditId, reqData.audit_info);
-                Audit.online.updateAuditFull(reqData).$promise.then(function(response) {
-                    Audit.online.getAuditFull({
+                Audit.online.updateAuditData(reqData).$promise.then(function(response) {
+                    Audit.online.getAuditData({
                         audit_id: $this.auditId
                     }).$promise.then(function(auditData) {
                         processAuditData(auditData);
@@ -606,7 +608,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             resyncAuditData: function(model) {
                 Utils.confirm('All your audit data will be reset with server copy. Do you really want to resync?').then(function() {
                     PageHelper.showLoader();
-                    Audit.online.getAuditFull({
+                    Audit.online.getAuditData({
                         audit_id: $this.auditId
                     }).$promise.then(function(response) {
                         PageHelper.hideLoader();

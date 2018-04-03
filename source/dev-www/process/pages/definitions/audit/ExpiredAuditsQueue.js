@@ -64,7 +64,7 @@ irf.pageCollection.factory(irf.page("audit.ExpiredAuditsQueue"), ["$log", "formH
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getAuditList({
+                    return Audit.online.findAuditInfo({
                         'audit_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",

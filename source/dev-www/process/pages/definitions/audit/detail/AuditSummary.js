@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("audit.detail.AuditSummary"), ["$log", "irfNavigator", "$stateParams", "Audit", "PageHelper",
-    function($log, irfNavigator, $stateParams, Audit, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.detail.AuditSummary"),
+["$log", "irfNavigator", "$stateParams", "Audit", "PageHelper", "$q",
+    function($log, irfNavigator, $stateParams, Audit, PageHelper, $q) {
 
         var riskColor = function(risk) {
             switch (risk) {
@@ -28,16 +29,13 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditSummary"), ["$log", "irfN
                 var pageData = {
                     "readonly": $stateParams.pageData.readonly
                 };
+                model.readonly = pageData.readonly;
 
                 var auditId = Number($stateParams.pageId);
                 var master = Audit.offline.getAuditMaster();
 
                 self.form = [];
                 var processSummaryData = function(auditSummary, auditScore) {
-                    if (!model.$isOffline && $stateParams.pageData.auditData) {
-                        pageData.auditData = $stateParams.pageData.auditData;
-                    }
-                    model.readonly = pageData.readonly;
                     model.audit_summary = auditSummary;
                     model.audit_score = auditScore;
 
@@ -222,14 +220,16 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditSummary"), ["$log", "irfN
 
                 model.$isOffline = false;
                 if ($stateParams.pageData.auditData && $stateParams.pageData.auditData.audit_summary && $stateParams.pageData.auditData.summary_scoreboard) {
+                    pageData.auditData = $stateParams.pageData.auditData;
                     processSummaryData($stateParams.pageData.auditData.audit_summary, $stateParams.pageData.auditData.summary_scoreboard);
                 } else {
                     PageHelper.showLoader();
-                    Audit.offline.getAuditSummary(auditId).then(function(response) {
-                        Audit.offline.getAuditScoreBoard(auditId).then(function(auditScore) {
-                            model.$isOffline = true;
-                            processSummaryData(response, auditScore);
-                        });
+                    $q.all([
+                        Audit.offline.getAuditSummary(auditId),
+                        Audit.offline.getAuditScoreBoard(auditId)
+                    ]).then(function(response) {
+                        model.$isOffline = true;
+                        processSummaryData(response[0], response[1]);
                     }).finally(PageHelper.hideLoader);
                 }
             },

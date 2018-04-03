@@ -105,7 +105,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'GET',
                 url: endpoint + '/getAuditMaster'
             },
-            getAuditList: searchResource({
+            findAuditInfo: searchResource({
                 method: 'GET',
                 url: endpoint + '/findAuditInfo'
             }),
@@ -117,11 +117,11 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'POST',
                 url: endpoint + '/updateAuditInfo'
             },
-            getAuditFull: {
+            getAuditData: {
                 method: 'GET',
                 url: endpoint + '/getAuditData'
             },
-            updateAuditFull: {
+            updateAuditData: {
                 method: 'POST',
                 url: endpoint + '/updateAuditData'
             },
@@ -146,10 +146,28 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'POST',
                 url: endpoint + '/updateIssue'
             },
-            getAvailableAuditorList: searchResource({
+            findAvailableAuditors: searchResource({
                 method: 'GET',
                 url: endpoint + '/findAvailableAuditors'
             }),
+            getAuditScoreSheet: {
+                method: 'GET',
+                url: endpoint + '/getAuditScoreSheet'
+            },
+            getAuditScore: {
+                method: 'GET',
+                url: endpoint + '/getAuditScore'
+            },
+            findDumpSamples: searchResource({
+                method: 'POST',
+                url: endpoint + '/findDumpSamples'
+            }),
+            getAuditIssueSummary: {
+                method: 'GET',
+                url: endpoint + '/getAuditIssueSummary'
+            },
+
+            // Snap Audits
             getSnapAuditMaster: {
                 method: 'GET',
                 url: endpoint + '/getSnapAuditMaster'
@@ -170,58 +188,24 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 method: 'GET',
                 url: endpoint + '/getSnapAudit'
             },
-            getSnapAuditMaster: {
-                method: 'GET',
-                url: endpoint + '/getSnapAuditMaster'
-            },
-            getAuditScoreSheet: {
-                method: 'GET',
-                url: endpoint + '/getAuditScoreSheet'
-            },
-            findStage: {
-                method: 'GET',
-                url: endpoint + '/findStage'
-            },
-            getStageActivities: {
-                method: 'GET',
-                url: endpoint + '/getStageActivities'
-            },
-            updateStage: {
-                method: 'POST',
-                url: endpoint + '/updateStage'
-            },
-            getAuditScore: {
-                method: 'GET',
-                url: endpoint + '/getAuditScore'
-            },
-            updateStageActivities: {
-                method: 'POST',
-                url: endpoint + '/updateStageActivities'
-            },
-            findDumpSamples: searchResource({
-                method: 'POST',
-                url: endpoint + '/findDumpSamples'
-            }),
-            getStageActivities: searchResource({
-                method: 'GET',
-                url: endpoint + '/getStageActivities'
-            }),
+
+            // Process Maintenance
             findStage: searchResource({
                 method: 'GET',
                 url: endpoint + '/findStage'
             }),
-            findActivity: searchResource({
+            updateStage: {
+                method: 'POST',
+                url: endpoint + '/updateStage'
+            },
+            getStageActivities: searchResource({
                 method: 'GET',
-                url: endpoint + '/findActivity'
+                url: endpoint + '/getStageActivities'
             }),
             updateStageActivities: {
                 method: 'POST',
                 url: endpoint + '/updateStageActivities',
                 isArray: true
-            },
-            updateStage: {
-                method: 'POST',
-                url: endpoint + '/updateStage'
             }
         });
         ret.offline = {

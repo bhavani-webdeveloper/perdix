@@ -151,7 +151,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsViewQueue"), ["$log", 
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getAuditList({
+                    return Audit.online.findAuditInfo({
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
                         'audit_type': searchOptions.audit_type,

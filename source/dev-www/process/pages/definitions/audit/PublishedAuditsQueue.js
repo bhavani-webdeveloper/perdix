@@ -155,7 +155,7 @@ irf.pageCollection.factory(irf.page("audit.PublishedAuditsQueue"), ["$log", "Uti
                         return Audit.utils.processDisplayRecords(null, 1, null, 'publish');
                     }
                     var deferred = $q.defer();
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'bankId': searchOptions.bankId,
                         'auditor_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,

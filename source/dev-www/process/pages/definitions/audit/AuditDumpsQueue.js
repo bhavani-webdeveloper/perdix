@@ -137,7 +137,7 @@ irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries",
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getAuditList({
+                    return Audit.online.findAuditInfo({
                         'audit_id': searchOptions.audit_id,
                         'userId': searchOptions.userId,
                         "branch_id": searchOptions.branch_id,

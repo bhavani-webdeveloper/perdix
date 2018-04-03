@@ -121,7 +121,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"), ["$log", "translateF
                     searchHelper: formHelper,
                     search: function(inputModel, form, model) {
                         if (model.auditInfo.branch_id && model.auditInfo.start_date && model.auditInfo.end_date) {
-                            return Audit.online.getAvailableAuditorList({
+                            return Audit.online.findAvailableAuditors({
                                 'audit_id': model.auditInfo.audit_id,
                                 'branch_id': model.auditInfo.branch_id,
                                 'from_date': model.auditInfo.start_date,

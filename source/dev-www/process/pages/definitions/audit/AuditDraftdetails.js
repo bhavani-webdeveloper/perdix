@@ -181,8 +181,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDraftDetails"), ["$log"
                  PageHelper.showLoader();
                  var reqData = model.auditData;
                  // $scope.$online || Audit.offline.setAuditInfo($this.auditId, reqData.audit_info);
-                 Audit.online.updateAuditFull(reqData).$promise.then(function(response) {
-                     Audit.online.getAuditFull({
+                 Audit.online.updateAuditData(reqData).$promise.then(function(response) {
+                     Audit.online.getAuditData({
                          audit_id: $this.auditId
                      }).$promise.then(function(auditData) {
                          processAuditData(auditData);
@@ -201,7 +201,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDraftDetails"), ["$log"
              resyncAuditData: function(model) {
                  Utils.confirm('All your audit data will be reset with server copy. Do you really want to resync?').then(function() {
                      PageHelper.showLoader();
-                     Audit.online.getAuditFull({
+                     Audit.online.getAuditData({
                          audit_id: $this.auditId
                      }).$promise.then(function(response) {
                          PageHelper.hideLoader();

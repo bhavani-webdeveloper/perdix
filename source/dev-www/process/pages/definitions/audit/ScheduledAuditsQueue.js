@@ -61,7 +61,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsQueue"), ["$log", "for
                 getResultsPromise: function(searchOptions, pageOpts) {
                     var deferred = $q.defer();
                     $q.all([
-                        Audit.online.getAuditList({
+                        Audit.online.findAuditInfo({
                             'auditor_id': SessionStore.getLoginname(),
                             'branch_id': searchOptions.branch_id,
                             'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
@@ -71,7 +71,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduledAuditsQueue"), ["$log", "for
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
-                        // Audit.online.getAuditList({
+                        // Audit.online.findAuditInfo({
                         //     'auditor_id': SessionStore.getLoginname(),
                         //     'branch_id': searchOptions.branch_id,
                         //     'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",

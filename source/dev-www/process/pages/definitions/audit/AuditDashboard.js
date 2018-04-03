@@ -95,7 +95,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (saqMenu) {
                     $q.all([
-                        Audit.online.getAuditList({
+                        Audit.online.findAuditInfo({
                             'auditor_id': auditor_id,
                             'current_stage': 'scheduled',
                         }).$promise
@@ -106,7 +106,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (savqMenu) {
                     $q.all([
-                        Audit.online.getAuditList({
+                        Audit.online.findAuditInfo({
                             'current_stage': 'scheduled'
                         }).$promise
                     ]).then(function(data) {
@@ -116,10 +116,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (daq) {
                     $q.all([
-                        Audit.online.getAuditList({
+                        Audit.online.findAuditInfo({
                             'current_stage': 'postpone'
                         }).$promise,
-                        Audit.online.getAuditList({
+                        Audit.online.findAuditInfo({
                             'current_stage': 'cancel'
                         }).$promise
                     ]).then(function(data) {
@@ -127,7 +127,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
                 if (oraq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'status': 'O',
                         'audit_type': 1
@@ -136,7 +136,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
                 if (osaq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
                         'status': 'O'
@@ -146,7 +146,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (doaq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'current_stage': 'draft',
                         'status': 'D'
                     }).$promise.then(function(data) {
@@ -155,7 +155,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (daaq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'current_stage': 'draft-review',
                         'status': 'D'
@@ -165,7 +165,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (pavq || paq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'current_stage': 'publish'
                     }).$promise.then(function(data) {
                         if (pavq) {
@@ -178,7 +178,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (raq || ravq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'current_stage': 'L1-approve'
                     }).$promise.then(function(data) {
                         if (raq) {
@@ -191,7 +191,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (aaq || aavq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {
@@ -204,7 +204,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (reaq) {
-                    Audit.online.getAuditList({
+                    Audit.online.findAuditInfo({
                         'current_stage': 'reject'
                     }).$promise.then(function(data) {
                         reaq.data = data.body.length;
@@ -212,7 +212,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (adq) {
-                    Audit.online.getAuditList({}).$promise.then(function(data) {
+                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
                         var returnObj = {
                             headers: {
                                 'x-total-count': data.headers['x-total-count']
@@ -239,7 +239,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 }
 
                 if (avq) {
-                    Audit.online.getAuditList({}).$promise.then(function(data) {
+                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
                         var returnObj = {
                             headers: {
                                 'x-total-count': data.headers['x-total-count']
