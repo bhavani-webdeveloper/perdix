@@ -250,16 +250,32 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
-                if (aiq || aivq) {
+                if (aiq) {
                     Audit.online.findIssues({
-                    'current_stage': "assign",
+                        'current_stage': "assign",
+                        "assignee_designation_id": role_id
                     }).$promise.then(function(data) {
-                        if (aiq) {
-                            aiq.data = data.body.length;
-                        }
-                        if (aivq) {
-                            aivq.data = data.body.length;
-                        }
+                        var returnObj = {
+                            headers: {
+                                'x-total-count': data.headers['x-total-count']
+                            },
+                            body: data.body
+                        };
+                        aiq.data = data.body.length;
+                    });
+                }
+
+                if (aivq) {
+                    Audit.online.findIssues({
+                        'current_stage': "assign"
+                    }).$promise.then(function(data) {
+                        var returnObj = {
+                            headers: {
+                                'x-total-count': data.headers['x-total-count']
+                            },
+                            body: data.body
+                        };
+                        aivq.data = data.body.length;
                     });
                 }
 
