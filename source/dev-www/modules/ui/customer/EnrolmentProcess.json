@@ -1998,5 +1998,112 @@
                 }
             }
         }
+    },
+    "LenderContactDetails": {
+        "type": "box",
+        "title": "CONTACT_DETAILS",
+        "orderNo": 20,
+        "items": {
+            "LenderContactDetails": {
+                "key": "customer.lenderContactDetails",
+                "type": "array",
+                "title": "CONTACT_DETAILS",
+                "items": {
+                    "contactPersonName": {
+                        "key": "customer.lenderContactDetails[].contactPersonName",
+                        "title": "CONTACT_PERSON_NAME",
+                        "type": "string",
+                        "orderNo": 9
+                    },
+                    "designation": {
+                        "key": "customer.lenderContactDetails[].designation",
+                        "title": "DESIGNATION",
+                        "type":"string",
+                        "orderNo": 10
+                    },
+                    "mobilePhone1": {
+                        "key": "customer.lenderContactDetails[].mobilePhone1",
+                        "title": "mobilePhone",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 11
+                    },
+                    "mobilePhone2": {
+                        "key": "customer.lenderContactDetails[].mobilePhone2",
+                        "title": "MOBILE_NUMBER2",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 20
+                    },
+                    "whatsappNo": {
+                        "key": "customer.lenderContactDetails[].whatsappNo",
+                        "type": "string",
+                        "title": "WHATSAPP_MOBILE_NO",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 30
+                    },
+                    "landLineNo": {
+                        "key": "customer.lenderContactDetails[].landLineNo",
+                        "title": "LAND_LINE_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "numberType": "tel",
+                        "orderNo": 40
+                    },
+                    "faxNo": {
+                        "key": "customer.lenderContactDetails[].faxNo",
+                        "title": "FAX_NUMBER",
+                        "type": "string",
+                        "inputmode": "number",
+                        "orderNo": 50
+                    },
+                    "emailId": {
+                        "key": "customer.lenderContactDetails[].emailId",
+                        "title": "EMAIL",
+                        "type": "email",
+                        "pattern": "^\\S+@\\S+$",
+                        "orderNo": 60
+                    }
+                }
+            }
+        }
+    },
+    "LenderInformation": {
+        "type": "box",
+        "title": "LENDER_INFORMATION",
+        "orderNo": 80,
+        "items": {
+            "firstName": {
+                "key": "customer.firstName",
+                "title": "LENDER_NAME",
+                "type": "string"
+            },
+            "source": {
+                "key": "customer.source",
+                "title": "SOURCE_THROUGH",
+                "type": "select",
+                "enumCode": "lender_source"
+            },
+            "lenderType": {
+                "key": "customer.lenderType",
+                "title": "LENDER_TYPE",
+                "type": "select",
+                "enumCode": "loan_source_category"
+            },
+            "businessConstitution": {
+                "key": "customer.enterprise.businessConstitution",
+                "title": "CONSTITUTION",
+                "type": "select",
+                "enumCode": "constitution"
+            },
+            "companyOperatingSince": {
+                "key": "customer.enterprise.companyOperatingSince",
+                "title": "OPERATING_SINCE",
+                "type": "date"
+            }
+        }
     }
 }
