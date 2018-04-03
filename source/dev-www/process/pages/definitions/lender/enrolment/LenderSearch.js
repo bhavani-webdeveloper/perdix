@@ -234,14 +234,12 @@ define([], function() {
 									icon: "fa fa-user-plus",
 									fn: function(item, model){
 										$state.go("Page.Engine",{
-											pageName:"lender.enrolment.Registration",
+											pageName:"lender.enrolment.Lender360",
 											pageId:item.id
 										});
 									},
 									isApplicable: function(item, model){
-										if (item.currentStage==='BasicEnrolment' )
-											return true;
-										return false;
+										return true;
 									}
 								}
 							];
