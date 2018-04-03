@@ -4,10 +4,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "lender.enrolment.Registration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
             var configFile = function () {
                 return {                    
@@ -151,6 +151,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 console.log("else enrolmentProcess");
                                 console.log(enrolmentProcess);
                                 model.enrolmentProcess = enrolmentProcess;
+
+                                model.customer = model.enrolmentProcess.customer;
                                 model.customer.customerType = "Lender";
                                 model.customer.currentStage = 'BasicEnrolment';
                             });
@@ -233,7 +235,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function (value) {
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.showProgress('enrolment', 'Lender Saved.', 5000);
+                                irfNavigator.goBack();
                                 PageHelper.clearErrors();
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
