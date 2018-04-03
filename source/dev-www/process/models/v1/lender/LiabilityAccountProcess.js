@@ -1,10 +1,12 @@
 irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/liabilityAccount';
+        var endpoint2 = BASE_URL + '/api/liabilityRepayment/create';
         var resource = $resource(endpoint, null, {
-            getLeadSchema: {
+           getLenderSchema: {
                 method: 'GET',
-                url: 'process/schemas/Leadgeneration.json'
+                url: 'modules/ui/lender/LenderLiabilitiesLoanAccountBookingProcess.json',
+                //isArray:true
             },
             get: {
                 method: 'GET',
@@ -21,8 +23,24 @@ irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerialize
             search: searchResource({
                 method: 'GET',
                 url: endpoint
-            })
+            }),
+            getLiabilityAccount:{
+                method:'GET',
+                url:endpoint +':id',
+                isArray:true
+            },
+
+            getLiabilityAccountSearch:searchResource({
+                method:'GET',
+                url:endpoint +':id'
+                //isArray:true
+            }),
+            liabilityRepay:{
+                method: 'POST',
+                url: endpoint2
+            }
         });
         return resource;
+
     }
 ]);

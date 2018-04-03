@@ -189,13 +189,7 @@
                         "key":"liabilityAccount.liabilityLenderDocuments[].isSignOff",
                         "type":"radios",
                         "title":"IS_SIGNOFF",
-                        "titleMap": [{
-                            "value": true,
-                            "name": "Yes"
-                        },{
-                            "value": false,
-                            "name": "No"
-                        }]
+                        "enumCode": "decisionmaker"
                     },
                     "uploadedDate":{
                         "key":"liabilityAccount.liabilityLenderDocuments[].uploadedDate",
@@ -240,13 +234,7 @@
                         "key":"liabilityAccount.liabilityComplianceDocuments[].isSignOff",
                         "type":"radios",
                         "title":"IS_SIGNOFF",
-                        "titleMap": [{
-                            "value": true,
-                            "name": "Yes"
-                        },{
-                            "value": false,
-                            "name": "No"
-                        }]
+                        "enumCode": "decisionmaker"
                     },
                     "uploadedDate":{
                         "key":"liabilityAccount.liabilityComplianceDocuments[].uploadedDate",

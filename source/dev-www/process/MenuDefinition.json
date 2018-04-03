@@ -92,6 +92,14 @@
                 "Page/Engine/psychometric.QuestionMaintenance",
                 "Page/Engine/psychometric.Queue"
             ]
+        }, {
+            "title": "LENDER",
+            "iconClass": "fa fa-user",
+            "items": [
+                "Page/Engine/lender.enrolment.Registration",
+                "Page/Engine/lender.enrolment.LenderSearch",
+                "Page/Adhoc/lender.liabilities.LoanBookingDashboard"
+            ]
         },
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
