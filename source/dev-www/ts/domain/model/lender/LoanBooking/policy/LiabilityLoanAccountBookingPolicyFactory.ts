@@ -1,5 +1,6 @@
 import {IPolicyFactory} from "../../../../shared/IPolicyFactory";
 import {IPolicy} from "../../../../shared/IPolicy";
+import {LiabilityRelatedLenderPolicy} from "./LiabilityRelatedLenderPolicy";
 
 export class LiabilityLoanAccountBookingPolicyFactory implements IPolicyFactory{
 
@@ -14,10 +15,13 @@ export class LiabilityLoanAccountBookingPolicyFactory implements IPolicyFactory{
     }
 
     fromPolicyName(name: string):IPolicy<Object>{
-        let obj = null;
-       
-
-         return obj;
+        switch (name) {
+            case "LiabilityRelatedLenderPolicy":
+                return new LiabilityRelatedLenderPolicy();
+            
+            default:
+                return null;
+        }
     }
 
 }

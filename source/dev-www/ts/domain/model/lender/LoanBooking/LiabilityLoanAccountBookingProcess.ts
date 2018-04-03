@@ -7,8 +7,9 @@ import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import {PolicyManager} from "../../../shared/PolicyManager";
 import {LiabilityLoanAccountBookingPolicyFactory}  from "./policy/LiabilityLoanAccountBookingPolicyFactory";
-import {LiabilityAccount} from "./LiabilityAccount";
 import {LiabilityLoanAccountBookingProcessFactory} from "./LiabilityLoanAccountBookingProcessFactory";
+import {LiabilityAccount} from "./LiabilityAccount";
+import {EnrolmentProcess} from "../../customer/EnrolmentProcess";
 
 declare var liabilityLoanAccountBookingProcessConfig: Object;
 
@@ -17,6 +18,7 @@ export class LiabilityLoanAccountBookingProcess {
 	liabilityProcessAction: string;
     
     liabilityAccount: LiabilityAccount;
+    lenderEnrolmentProcess: EnrolmentProcess;
     constructor() {
         this.LiabilityLoanAccountBookingProcessRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.LiabilityLoanAccountBookingProcess);
     }
@@ -24,7 +26,8 @@ export class LiabilityLoanAccountBookingProcess {
     save(): any {
         this.liabilityProcessAction = 'SAVE';
         let obs1 = this.LiabilityLoanAccountBookingProcessRepo.saveLiabilityLoanAccount(this);
-        console.log(this.LiabilityLoanAccountBookingProcessRepo);
+        console.log("booking process");
+        console.log(this.liabilityAccount);
         return Observable.concat(obs1).last();
     }
 
@@ -55,5 +58,9 @@ export class LiabilityLoanAccountBookingProcess {
         return liabilityLoanAccountBookingProcessConfig;
     }
 
+    setLender(lender:EnrolmentProcess): LiabilityLoanAccountBookingProcess {
+        this.lenderEnrolmentProcess = lender;
+        return this;
+    }
 
 }

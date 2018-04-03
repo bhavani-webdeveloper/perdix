@@ -188,6 +188,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 if(res.liabilityAccount.currentStage != "LiabilityAccount") {
                                     irfNavigator.goBack();
                                 }
+                                console.log(res);
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
                             });
@@ -234,9 +235,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             })
                             .subscribe(function (value) {
                                 PageHelper.showProgress('loan', 'Loan Saved.', 5000);
-                                PageHelper.clearErrors();   
+                                PageHelper.clearErrors(); 
                                 if(!model.liabilityAccount.id) {
-                                    irfNavigator.goBack();
+                                    model.liabilityAccount = value.liabilityAccount;
+                                    model.LiabilityLoanAccountBookingProcess.liabilityAccount = value.liabilityAccount;
+                                    //irfNavigator.goBack();
                                 }                             
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
