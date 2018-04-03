@@ -97,7 +97,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFil
                                     "title": "RISK_CLASSIFICATION",
                                     "data": "process_id",
                                     render: function(data, type, full, meta) {
-                                        return master.risk_classification[full.process_id].risk_clasification_name;
+                                        return master.risk_classification[master.typeofissues[full.type_of_issue_id].risk_classification].risk_clasification_name;
                                     }
                                 }];
                             } else if (model.viewType == "PROCESS") {
