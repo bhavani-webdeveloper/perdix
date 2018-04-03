@@ -167,7 +167,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "additions": [
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage=='BasicEnrolment'",
+                                    "condition": "!model.customer.id",
                                     "orderNo": 1000,
                                     "items": [
                                         {
@@ -178,13 +178,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     ]
                                 },
                                 {
+                                    "condition": "model.customer.id",
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage=='Completed'",
-                                    "orderNo": 1200,
+                                    "orderNo": 10000,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
+                                            "title": "SAVE",
+                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "title": "PROCEED",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
@@ -236,6 +241,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Lender Saved.', 5000);
+                                if(!model.customer.id) {
+                                    model.customer = value.customer;
+                                    model.enrolmentProcess.customer = value.customer;
+                                }
+                                //irfNavigator.goBack();
+                                PageHelper.clearErrors();
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    proceed: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+
+                        // $q.all start
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                formHelper.resetFormValidityState(formCtrl);
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Lender Proceed.', 5000);
                                 irfNavigator.goBack();
                                 PageHelper.clearErrors();
                             }, function (err) {
