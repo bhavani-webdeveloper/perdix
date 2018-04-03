@@ -5,7 +5,12 @@ let config = {
                 "defaults": []
             },
             onLoad: {
-                "defaults": []
+                "defaults": [
+                    {
+                        "name": "LiabilityRelatedLenderPolicy",
+                        "arguments": {}
+                    }
+                ]
             },
             beforeProceed: {
                 "defaults": []
