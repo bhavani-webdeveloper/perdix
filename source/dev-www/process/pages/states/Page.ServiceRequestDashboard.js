@@ -27,7 +27,7 @@ irf.pages.controller("ServiceRequestDashboardCtrl", [ '$log', '$scope', 'PagesDe
 
             var oreqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/request.openRequestQueue"];
             if (oreqMenu) {
-                worklist.findWorklists().$promise.then(function(response, headerGetter) {
+                Worklist.findWorklists().$promise.then(function(response, headerGetter) {
                    oreqMenu.data = response.headers['x-total-count']; 
                 }, function() {
                     oreqMenu.data = '';
