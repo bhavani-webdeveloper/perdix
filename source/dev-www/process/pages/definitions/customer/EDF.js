@@ -14,6 +14,7 @@ irf.pageCollection.factory("Pages__EDF",
                 $log.info("I got initialized");
                 $log.info($stateParams);
 
+
                 if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
 
                     PageHelper.showLoader();
@@ -33,6 +34,13 @@ irf.pageCollection.factory("Pages__EDF",
                             if (!model.customer.biometricEnrollment) {
                                 model.customer.biometricEnrollment = "PENDING";
                             }
+
+                            if (typeof(cordova)!=='undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
+                                model.customer.iscordova=true;
+                            }else{
+                                model.customer.iscordova=false;
+                            }
+
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                             PageHelper.showProgress("page-init", "Done.", 2000);
@@ -70,8 +78,10 @@ irf.pageCollection.factory("Pages__EDF",
                             type: "fieldset",
                             condition: "model.customer.terms_and_conditions_explained =='YES'",
                             title: "VALIDATE_BIOMETRIC",
-                            items: [{
+                            items: [
+                            {
                                 key: "customer.isBiometricValidated",
+                                condition:"model.customer.iscordova",
                                 required:true,
                                 "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                                 type: "validatebiometric",
@@ -95,7 +105,44 @@ irf.pageCollection.factory("Pages__EDF",
                                         customerId: model.customer.id
                                     };
                                 },
+                            },
+                            {
+                                type: "button",
+                                condition: "!model.customer.iscordova",
+                                title: "VALIDATE_BIOMETRIC",
+                                notitle: true,
+                                fieldHtmlClass: "btn-block",
+                                onClick: function(model, form, formName) {
+                                    var fingerprintObj = {
+                                        'LeftThumb': model.customer.leftHandThumpImageId,
+                                        'LeftIndex': model.customer.leftHandIndexImageId,
+                                        'LeftMiddle': model.customer.leftHandMiddleImageId,
+                                        'LeftRing': model.customer.leftHandRingImageId,
+                                        'LeftLittle': model.customer.leftHandSmallImageId,
+                                        'RightThumb': model.customer.rightHandThumpImageId,
+                                        'RightIndex': model.customer.rightHandIndexImageId,
+                                        'RightMiddle': model.customer.rightHandMiddleImageId,
+                                        'RightRing': model.customer.rightHandRingImageId,
+                                        'RightLittle': model.customer.rightHandSmallImageId
+                                    };
+
+                                    BiometricService.validate(fingerprintObj).then(function(data) {
+                                        model.customer.isBiometricMatched = data;
+                                        if (data == "Match found") {
+                                            model.customer.isBiometricValidated = true;
+                                        } else {
+                                            model.customer.isBiometricValidated = false;
+                                        }
+                                    }, function(reason) {
+                                        console.log(reason);
+                                    });
+                                }
                             }, {
+                                "key": "customer.isBiometricMatched",
+                                "title": "Is Biometric Matched",
+                                "readonly": true
+                            },
+                            {
                                 "key": "customer.biometricEnrollment",
                                 readonly:true,
                                 condition:"model.customer.biometricEnrollment == 'AUTHENTICATED'",

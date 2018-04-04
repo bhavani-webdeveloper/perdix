@@ -1,6 +1,7 @@
-irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), 
+    ["$log", "$q", "$timeout","BiometricService", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils) {
+    function($log, $q, $timeout,BiometricService, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils) {
 
         function backToLoansList() {
             try {
@@ -71,6 +72,11 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                     function(res) {
                         _.assign(model.customer, res);
                         $log.info(model.customer);
+                        if (typeof(cordova) !== 'undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
+                            model.customer.iscordova = true;
+                        } else {
+                            model.customer.iscordova = false;
+                        }
                         model = Utils.removeNulls(model, true);
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init", "Done.", 2000);
@@ -282,10 +288,11 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                             "key": "repayment.authorizationRemark",
                             "condition": "model.siteCode == 'KGFS' && model.additional.override_fp==true"
                         },
+
                          
                         {
                             type: "fieldset",
-                            condition: "model.siteCode == 'KGFS' && !model.additional.override_fp",
+                            condition: "(model.siteCode == 'KGFS' && !model.additional.override_fp) && model.customer.iscordova",
                             title: "VALIDATE_BIOMETRIC",
                             items: [{
                                 key: "customer.isBiometricValidated",
@@ -313,6 +320,43 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                                 },
                             }]
                         },
+                        {
+                            type: "button",
+                            condition: "(!model.additional.override_fp && model.siteCode=='KGFS') && !model.customer.iscordova",
+                            title: "VALIDATE_BIOMETRIC",
+                            notitle: true,
+                            fieldHtmlClass: "btn-block",
+                            onClick: function(model, form, formName) {
+                                var fingerprintObj = {
+                                    'LeftThumb': model.customer.leftHandThumpImageId,
+                                    'LeftIndex': model.customer.leftHandIndexImageId,
+                                    'LeftMiddle': model.customer.leftHandMiddleImageId,
+                                    'LeftRing': model.customer.leftHandRingImageId,
+                                    'LeftLittle': model.customer.leftHandSmallImageId,
+                                    'RightThumb': model.customer.rightHandThumpImageId,
+                                    'RightIndex': model.customer.rightHandIndexImageId,
+                                    'RightMiddle': model.customer.rightHandMiddleImageId,
+                                    'RightRing': model.customer.rightHandRingImageId,
+                                    'RightLittle': model.customer.rightHandSmallImageId
+                                };
+
+                                BiometricService.validate(fingerprintObj).then(function(data) {
+                                    model.customer.isBiometricMatched = data;
+                                    if (data == "Match found") {
+                                        model.customer.isBiometricValidated = true;
+                                    } else {
+                                        model.customer.isBiometricValidated = false;
+                                    }
+                                }, function(reason) {
+                                    console.log(reason);
+                                });
+                            }
+                        }, {
+                            "key": "customer.isBiometricMatched",
+                            condition: "(!model.additional.override_fp && model.siteCode=='KGFS') && !model.customer.iscordova",
+                            "title": "Is Biometric Matched",
+                            "readonly": true
+                        }
                     ]
                 },
 
@@ -717,6 +761,12 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), ["$log", "$q", "$t
                 },
                 submit: function(model, formCtrl, formName) {
                     $log.info("Inside submit");
+
+                    if (!model.additional.override_fp && !model.customer.isBiometricValidated) {
+                        elementsUtils.alert('Fingerprint not verified.');
+                        return;  
+                    }
+
                     if (window.confirm("Are you Sure?")) {
                         PageHelper.showLoader();
                         model.repayment.cashCollectionRemark= model.repayment.cashCollectionRemark + model.repayment.receiptNumber;

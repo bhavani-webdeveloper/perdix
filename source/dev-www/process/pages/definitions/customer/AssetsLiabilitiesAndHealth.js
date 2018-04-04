@@ -697,26 +697,6 @@ function($log,formHelper,Enrollment,$state, $stateParams,elementsUtils,entityMan
                         }
                     },
                     {
-                        type: "button",
-                        title: "VALIDATE_DATA",
-                        notitle: true,
-                        fieldHtmlClass: "btn-block",
-                        onClick: function(model, form, formName){
-                            
-                            var fingerprintObj = {
-                                'LeftThumb': model.customer.leftHandThumpImageId,
-                                'LeftIndex': model.customer.leftHandIndexImageId
-
-                            }
-                            var promise = BiometricService.validate(fingerprintObj);
-                            promise.then(function(data){
-                                model.customer.$fingerprint = data;
-                            }, function(reason){
-                                console.log(reason);
-                            })
-                        }
-                    },
-                    {
                         "type": "section",
                         "html": '<div class="row"> <div class="col-xs-6">' +
                         '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +

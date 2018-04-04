@@ -355,81 +355,53 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
             return tableField;
         },
         validate: function(fingerObj) {
+        	var fingerObj= fingerObj;
         	var deferred = $q.defer();
-        	var BiometricHTML = '\
-        			<select ng-model="selectedFinger" ng-change="model.changeFinger(selectedFinger)">\
-        			<option value="LeftThumb">LeftThumb</option>\
-        			<option value="LeftIndex">LeftIndex</option>\
-        			<option value="LeftMiddle">LeftMiddle</option>\
-        			<option value="LeftRing">LeftRing</option>\
-        			<option value="LeftLittle">LeftLittle</option>\
-        			<option value="RightThumb">RightThumb</option>\
-        			<option value="RightIndex">RightIndex</option>\
-        			<option value="RightMiddle">RightMiddle</option>\
-        			<option value="RightRing">RightRing</option>\
-        			<option value="RightLittle">RightLittle</option>\
-                    <applet code="in/gov/uidai/auth/biometric/VerifyApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="verificationApplet" height="20px"></applet>\
-                    <button ng-click="$close(model.takeData())">Confirm</button>';
-                var fingerData;
-                var out = null;
-                var fileId = null;
-                var BiometricModal = irfSimpleModal("validate Data", BiometricHTML, {
+			var fingerData;
+			var response;
+			var result = [];
+			var fileId = null;
+			var BiometricHTML = '\
+			<select ng-model="selectedFinger" ng-change="model.changeFinger(selectedFinger)">\
+			<option value="LeftThumb">LeftThumb</option>\
+			<option value="LeftIndex">LeftIndex</option>\
+			<option value="LeftMiddle">LeftMiddle</option>\
+			<option value="LeftRing">LeftRing</option>\
+			<option value="LeftLittle">LeftLittle</option>\
+			<option value="RightThumb">RightThumb</option>\
+			<option value="RightIndex">RightIndex</option>\
+			<option value="RightMiddle">RightMiddle</option>\
+			<option value="RightRing">RightRing</option>\
+			<option value="RightLittle">RightLittle</option>\
+			</select>\
+			<applet code="in/gov/uidai/auth/biometric/VerifyApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="verificationApplet" height="20px"></applet>\
+			<button ng-click="model.takeData();">Validate Finger</button>\
+			<div id="responsediv" class="text-danger">\
+			</div>';
+
+                
+                var BiometricModal = irfSimpleModal("Choose a finger to Validate Biometric Data", BiometricHTML, {
+                	"result": result,
                 	changeFinger: function(fingerId) {
                 		// Get Finger Data Using API
-                		
                 		fileId = fingerObj[fingerId];
-                		
                 	},
-                	'takeData': function() {
-                		// var deferred = $q.defer();
+                	takeData: function() {
                 		Files.getBase64DataFromFileId(fileId, {}, true)
                 		.then(function(res) {
-                			console.log(res);
                 			fingerData = res;
                 			var applet = document.getElementById('verificationApplet');
-	                		var out = applet.getMatch(fingerData);
-	                		return out;
+                			var responsediv = document.getElementById('responsediv');
+	                		result = applet.getMatch(fingerData);
+	                		responsediv.innerHTML=result;
+	                		deferred.resolve(result);
                 		}, function(err) {
-                			console.log(err);
-                			return err;
-                		})
-                		
-                		// Check with finger Data
-                		// var fileId = 'dd338bb6-3199-415a-a532-25d7d6bb41b8';
-                		// Files.getBase64DataFromFileId(fileId, {}, true)
-                		// .then(function(res) {
-                		// 	var result=applet.getMatch(res);
-                		// 	deferred.resolve(result);
-                		// }, function(err) {
-                		// 	deferred.reject(err);
-                		// })
-                		// return deferred.promise;
-                		// if(typeof(base64res)!='boolean') {
-                		// 	// base64res = base64res.split(',')[1];
-                		// 	console.log(typeof(base64res));
-                		// 	// var result=applet.getMatch('Rk1SACAyMAAAAAE+AAABoAGgAMUAxQEAAQBfLgC3AEsYAACIAF6YAAC+AGeYAADAAGcQAADtAHAUAAD7AIgEAACiAJsQAAEsAKIAAAEAALR8AABZALcYAAC8ALcIAAA6AMqUAADKANGQAADvANX8AAC+AOYIAAESAOZwAABnAPkUAADYAPn8AACRAPsQAAEAAQJ0AAEZAQnsAADOARz4AACBASgQAABuASqcAACfAUEMAADrAUToAACyAUj4AAD5AUhoAAAsAU2oAAEcAVTcAABiAVekAAB6AVekAAE2AVvsAAAzAWcoAACfAWcMAABEAXAoAACiAXCkAADtAXzEAACbAX8kAADVAX/AAAEcAX/UAAEAAYHEAACiAYqwAAELAYrIAACtAY+0AABBAZYoAAAMCgEADGAFmAAAAAAA')
-                		// 	// return result;
-                		// }
-                		// var result=applet.getFingerPrint();
-                		// var out = applet.getMatch(result);
-
-                		// send out
-
-						//alert (result);
-						// return null;
+                			responsediv.innerHTML=err;
+                			deferred.reject(err);
+                		});
                 	}
                 });
 
-                BiometricModal.result.then(function(body) {
-                	console.log(body);
-                	if(body == 'Match Found') {
-                		deferred.resolve(body)
-                	}
-                	else {
-                		deferred.reject("Not Found");	
-                	}
-                	
-                })
             return deferred.promise;
         },
 		capture: function(model){
@@ -490,13 +462,12 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 				});
 			} else if (navigator.userAgent.indexOf("Trident") > 0 || navigator.userAgent.indexOf("MSIE") > 0 || (navigator.userAgent.indexOf("Firefox") > 0 && parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]) < 60)) {
 				var BiometricHTML = '\
-                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"></applet>\
+                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"> Choose a finger</applet>\
                     <button ng-click="$close(model.takeData())">Confirm</button>';
                 var result = [];
                 var out = null;
 
                 var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
-                	
                 	"result": result,
                 	"takeData": function() {
                 		var applet = document.getElementById('webCaptureApplet');

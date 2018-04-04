@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
-        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
 
         var branch = SessionStore.getBranch();
         var backToQueue = function(){
@@ -90,7 +90,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             },
                             function(res) {
                                 model.customer = res;
-
+                                if (typeof(cordova)!=='undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
+                                model.customer.iscordova=true;
+                                }else{
+                                model.customer.iscordova=false;
+                                }
                             });
                         $log.info(model.customer);      
                     },
@@ -295,7 +299,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         type: "fieldset",
-                        condition: "!model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS'",
+                        condition: "(!model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS')&& model.customer.iscordova",
                         title: "VALIDATE_BIOMETRIC",
                         items: [{
                             key: "loanAccountDisbursementSchedule.fpVerified",
@@ -323,6 +327,43 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 };
                             },
                         }]
+                    },
+                    {
+                        type: "button",
+                        condition: "(!model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS') && !model.customer.iscordova",
+                        title: "VALIDATE_BIOMETRIC",
+                        notitle: true,
+                        fieldHtmlClass: "btn-block",
+                        onClick: function(model, form, formName) {
+                            var fingerprintObj = {
+                                'LeftThumb': model.customer.leftHandThumpImageId,
+                                'LeftIndex': model.customer.leftHandIndexImageId,
+                                'LeftMiddle': model.customer.leftHandMiddleImageId,
+                                'LeftRing': model.customer.leftHandRingImageId,
+                                'LeftLittle': model.customer.leftHandSmallImageId,
+                                'RightThumb': model.customer.rightHandThumpImageId,
+                                'RightIndex': model.customer.rightHandIndexImageId,
+                                'RightMiddle': model.customer.rightHandMiddleImageId,
+                                'RightRing': model.customer.rightHandRingImageId,
+                                'RightLittle': model.customer.rightHandSmallImageId
+                            };
+
+                            BiometricService.validate(fingerprintObj).then(function(data) {
+                                model.customer.isBiometricMatched = data;
+                                if (data == "Match found") {
+                                    model.loanAccountDisbursementSchedule.fpVerified = true;
+                                } else {
+                                    model.loanAccountDisbursementSchedule.fpVerified = false;
+                                }
+                            }, function(reason) {
+                                console.log(reason);
+                            });
+                        }
+                    }, {
+                        "key": "customer.isBiometricMatched",
+                        condition: "(!model.loanAccountDisbursementSchedule.overrideRequested && model.siteCode=='KGFS') && !model.customer.iscordova",
+                        "title": "Is Biometric Matched",
+                        "readonly": true
                     },
                     {
                         "type":"actions",
@@ -360,6 +401,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     if(!formCtrl.$valid){
                         PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
                         return;
+                    }
+
+                    if (!model.loanAccountDisbursementSchedule.overrideRequested && model.loanAccountDisbursementSchedule.fpVerified!= true) {
+                        elementsUtils.alert('Fingerprint not verified.');
+                        return;  
                     }
 
                     if(window.confirm("Perform Disbursement?")){
