@@ -28,7 +28,7 @@
 var irf = irf || {};
 irf.BASE_URL = 'http://34.202.145.163:8080/perdix-server';
 irf.MANAGEMENT_BASE_URL = 'http://34.202.145.163:8081/management/';
-irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formsPrint.php';
+irf.FORM_DOWNLOAD_URL = 'http://34.202.145.163:8080/forms/formPrint.jsp';
 irf.BI_BASE_URL = "http://34.202.145.163:8081/bi";
 
 
