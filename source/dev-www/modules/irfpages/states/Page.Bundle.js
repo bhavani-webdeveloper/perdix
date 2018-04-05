@@ -410,12 +410,12 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
         $q.when(prePromise)
         .then(function(){
-            return OfflineManager.storeSqliteItem($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
+            return OfflineManager.storeItem_v2($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
         })
         .then(
             function(success){
                 $scope.bundleModel.$$STORAGE_KEY$$ = success;
-                PageHelper.showProgress("offline-save", "kishanSqlite save/updated", 5000);
+                PageHelper.showProgress("offline-save", "IRFSqlite save/updated", 5000);
                 deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
             }, function(err){
                 $log.info(err);
@@ -433,7 +433,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
-    BundleManager.deleteOffline = function() {
+    /*BundleManager.deleteOffline = function() {
         if ($scope.bundleModel.$$STORAGE_KEY$$) {
             OfflineManager.removeItem($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$);
             delete $scope.bundleModel.$$STORAGE_KEY$$;
@@ -441,7 +441,23 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         } else {
             return $q.reject();
         }
+    };*/
+
+    BundleManager.deleteOffline = function() {
+        if ($scope.bundleModel.$$STORAGE_KEY$$) {
+            OfflineManager.removeItem_v2($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$, $scope.bundlePage.offlineStrategy).then(function(success) {
+                delete $scope.bundleModel.$$STORAGE_KEY$$;
+                return $q.resolve();
+            }, function(error) {
+                $log.info(error);
+                return $q.reject();
+            })
+
+        } else {
+            return $q.reject();
+        }
     };
+
 
     $scope.loadOfflinePage = function(event) {
         event.preventDefault();

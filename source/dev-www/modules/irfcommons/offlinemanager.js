@@ -126,6 +126,53 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
         retrieveItems: function(collectionName){
             return irfStorageService.getMasterJSON(getMasterKey(collectionName));
         },
+
+        retrieveItem_v2: function(collectionName, offlineKey, offlineStrategy) {
+           var deferred = $q.defer();
+            var Storekey = getMasterKey(collectionName);
+            if (offlineStrategy == 'SQLITE' && Utils.isCordova){
+                cordova.plugins.irfSqlite.offlineGetAll(function(a) {
+                            $log.info("success callback");
+                            var jsonArray=a[0];
+                            var jsonItem = JSON.parse(jsonArray);
+                            $log.info(jsonItem);                            
+                            deferred.resolve(jsonItem);
+                        },
+                        function(b) {
+                            $log.info("error Callback");
+                            $log.info(b);
+                            deferred.reject(b);
+                        }, [{collection_name: Storekey,
+                            collection_id: offlineKey }]
+                        );
+            } else {
+                deferred.resolve(irfStorageService.getMasterJSON(getMasterKey(collectionName)));   
+            }
+
+            return deferred.promise;
+        },
+
+        retrieveItems_v2: function(collectionName, offlineStrategy){
+            var deferred = $q.defer();
+            var Storekey = getMasterKey(collectionName);
+            if (offlineStrategy == 'SQLITE' && Utils.isCordova){
+                cordova.plugins.irfSqlite.offlineGetAll(function(a) {
+                            $log.info("success callback");
+                            $log.info(a);                            
+                            deferred.resolve(a);
+                        },
+                        function(b) {
+                            $log.info("error Callback");
+                            $log.info(b);
+                            deferred.reject(b);
+                        }, [{collection_name: Storekey}]
+                        );
+            } else {
+                deferred.resolve(irfStorageService.getMasterJSON(Storekey));   
+            }
+
+            return deferred.promise;
+        },
         /**
          * Remove an item from the offline storage.
          *
@@ -133,6 +180,29 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
          */
         removeItem: function(collectionName, offlineKey){
             irfStorageService.deleteJSON(getMasterKey(collectionName), offlineKey);
+        },
+
+        removeItem_v2: function(collectionName, offlineKey, offlineStrategy){
+            var deferred = $q.defer();
+            var Storekey = getMasterKey(collectionName);
+            if (offlineStrategy == 'SQLITE' && Utils.isCordova){
+                cordova.plugins.irfSqlite.offlineDeleteItem(function(a) {
+                            $log.info("success callback");
+                            $log.info(a);                            
+                            deferred.resolve(a);
+                        },
+                        function(b) {
+                            $log.info("error Callback");
+                            $log.info(b);
+                            deferred.reject(b);
+                        }, [{collection_name: Storekey,
+                             collection_id: offlineKey 
+                           }]
+                        );
+            } else {
+                deferred.resolve(irfStorageService.deleteJSON(getMasterKey(collectionName), offlineKey));   
+            }
+            return deferred.promise;  
         },
 
         /**

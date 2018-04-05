@@ -1445,7 +1445,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     },
                                 ]
                             },
@@ -1575,7 +1576,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
                                 ]
                             },
@@ -2107,7 +2109,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline: true
                                     },
                                     {
                                         key: "customer.incomeThroughSales[].invoiceDocId",
@@ -2117,7 +2120,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline: true
                                     }
                                 ]
                             },
@@ -3511,7 +3515,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "items": [
                     {
                         "type": "submit",
-                        "title": "COMPLETE_ENROLMENT"
+                        "title": "COMPLETE_ENROLMENT",
+                        "buttonType": "submit"
+
                     }
                 ]
             }
