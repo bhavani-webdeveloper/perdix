@@ -235,7 +235,7 @@
                   ]
                },
                "maturityDate":{
-                  "title":"expectedDisbursementDate",
+                  "title":"maturityDate",
                   "type":"date",
                                  
                   "captureStages":[
@@ -243,8 +243,28 @@
                   ]
                },
                "expectedDisbursementDate":{
-                  "title":"maturityDate",
+                  "title":"expectedDisbursementDate",
                   "type":"date",
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "modeOfDisbursement":{
+                  "title":"modeOfDisbursement",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "referenceNumber":{
+                  "title":"referenceNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
                                  
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
