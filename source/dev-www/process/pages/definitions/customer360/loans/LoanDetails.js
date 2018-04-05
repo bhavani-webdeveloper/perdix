@@ -1127,6 +1127,78 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     ]
                 },
                 {
+                    type: "box",
+                    "condition": "model.siteCode=='KGFS'",
+                    "colClass": "col-sm-12",
+                    title: "Disbursement Repayment Scheduled",
+                    "items": [{
+                        "type": "section",
+                        "htmlClass": "col-sm-12",
+                        "items": [{
+                            type: "tableview",
+                            htmlClass: "table-striped",
+                            listStyle: "table",
+                            key: "loanAccount.newLoanDemandSchedules",
+                            title: "",
+                            selectable: false,
+                            expandable: true,
+                            paginate: false,
+                            searching: false,
+                            getColumns: function() {
+                                return [{
+                                    title: 'Scheduled Date',
+                                    data: 'scheduleDate',
+                                    render: function(data, type, full, meta) {
+                                        return (moment(data).format("DD-MMM-YYYY"));
+                                    }
+                                }, {
+                                    title: 'INSTALLMENT_AMOUNT',
+                                    data: 'installmentAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100;
+                                            return '<i class="fa fa-inr"></i> ' + data;
+                                        }else{
+                                            return data
+                                        }  
+                                    }
+                                }, {
+                                    title: 'Pending Amount',
+                                    data: 'pendingAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100
+                                            return '<i class="fa fa-inr"></i> ' + data; 
+                                        }else{
+                                            return data
+                                        }                                          
+                                    }
+                                }, {
+                                    title: 'Repaid Amount',
+                                    data: 'repaymentAmountInPaisa',
+                                    render: function(data, type, full, meta) {
+                                        if (data) {
+                                            data = data / 100;
+                                            return '<i class="fa fa-inr"></i> ' + data;
+                                        }else{
+                                            return data
+                                        }     
+                                    }
+                                }, {
+                                    title: 'REPAYMENT_TYPE',
+                                    data: 'repaymentType'
+                                }, {
+                                    title: 'LAST_REPAYMENT_DATE',
+                                    data: 'repaymentDate'
+                                }]
+                            },
+                            getActions: function(item) {
+                                return [];
+                            }
+                        }]
+                    }]
+                },
+                {
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "REPAYMENT_SCHEDULE",
@@ -1143,6 +1215,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         },
                         ] // END of box items
                 },
+                
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
