@@ -17,14 +17,23 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return {
                     "DisbursementDetails": {
                         "orderNo": 10
+                    },
+                    "DisbursementDetails.disbursementDate": {
+                        "required": true 
+                    },
+                    "DisbursementDetails.disbursementMode": {
+                        "required": true 
+                    },
+                    "DisbursementDetails.UTRNo": {
+                        "required": true 
                     }
+
                 }
             }
             var getIncludes = function (model) {
 
                 return [
                     "DisbursementDetails",
-                    "DisbursementDetails.disbursementStatus",
                     "DisbursementDetails.disbursementDate",
                     "DisbursementDetails.disbursementMode",
                     "DisbursementDetails.UTRNo"
@@ -34,7 +43,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
             return {
                 "type": "schema-form",
-                "title": "DOCUMENT_VERIFICATION",
+                "title": "DISBURSEMENT_CONFIRMATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
@@ -62,61 +71,16 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
-                            "repositoryAdditions": {
-                                "DisbursementDetails":{
-                                    "type":"box",
-                                    "title":"DISBURSEMENT_DETAILS",
-                                    "items":{
-                                        "disbursementStatus":{
-                                            "key":"liabilityAccount.disbursementStatus",
-                                            "type":"select",
-                                            "title": "DISBURSEMENT_STATUS",
-                                            "enumCode":"lender_product_type"
-                                        },
-                                        "disbursementDate":{
-                                            "key":"liabilityAccount.disbursementDate",
-                                            "type":"date",
-                                            "title":"DISBURSEMENT_DATE"
-                                        },
-                                        "disbursementMode":{
-                                            "key":"liabilityAccount.disbursementMode",
-                                            "type":"string",
-                                            "title":"MODE_OF_DISBURSEMENT"
-                                        },
-                                        "UTRNo":{
-                                            "key":"liabilityAccount.UTRNo",
-                                            "type":"number",
-                                            "title":"UTR_No"
-                                        }
-                                    }   
-                                }   
+                            "repositoryAdditions": {  
                             },
                             "additions": [
                                 {
-                                    "condition": "!model.liabilityAccount.id",
                                     "type": "actionbox",
                                     "orderNo": 10000,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "SUBMIT",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "condition": "model.liabilityAccount.id",
-                                    "type": "actionbox",
-                                    "orderNo": 10000,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "SAVE",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "title": "PROCEED",
+                                            "title": "UPDATE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
@@ -145,34 +109,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    save: function (model, formCtrl, form, $event) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
-                            return false;
-                        }
-
-                        model.LiabilityLoanAccountBookingProcess.save()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Loan Saved.', 5000);
-                                PageHelper.clearErrors();   
-                                if(!model.liabilityAccount.id) {
-                                    irfNavigator.goBack();
-                                }                             
-                            }, function (err) {
-                                PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
-                    },
                     proceed: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
@@ -190,7 +126,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
+                                PageHelper.showProgress('loan', 'Disbursement Confirmed', 5000);
                                 PageHelper.clearErrors();
                                 irfNavigator.goBack();
                             }, function (err) {

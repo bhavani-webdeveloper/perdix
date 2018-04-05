@@ -369,5 +369,26 @@
                 }
             }
         }
-    }
+    },
+    "DisbursementConfirmation":{
+        "type":"box",
+        "title":"DISBURSEMENT_CONFIRMATION",
+        "items":{
+            "disbursementDate":{
+                "key":"liabilityAccount.disbursementDate",
+                "type":"date",
+                "title":"DISBURSEMENT_DATE"
+            },
+            "disbursementMode":{
+                "key":"liabilityAccount.disbursementMode",
+                "type":"string",
+                "title":"MODE_OF_DISBURSEMENT"
+            },
+            "UTRNo":{
+                "key":"liabilityAccount.UTRNo",
+                "type":"number",
+                "title":"UTR_No"
+            }
+        }   
+    }  
 }

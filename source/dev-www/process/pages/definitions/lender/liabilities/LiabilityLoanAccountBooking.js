@@ -24,9 +24,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction": {
                         "orderNo": 30
                     },
-                   /* "LenderAccountDetails.lenderId": {
-                        "required": true
-                    },*/
+                   "LenderAccountDetails.lenderId": {
+                        "resolver": "LenderIDLOVConfiguration"
+                    },
                     "LenderAccountDetails.lenderAccountNumber": {
                         "required": true
                     },
