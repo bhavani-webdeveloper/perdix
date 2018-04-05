@@ -405,7 +405,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key:"customer.identityProofNo",
@@ -432,7 +433,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key:"customer.addressProofNo",
@@ -464,7 +466,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 type:"file",
                                 required: true,
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key:"customer.additionalKYCs[].kyc1ProofNumber",
@@ -559,7 +562,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.identityProofImageId",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }/*,
                              {
                              key:"customer.identityProofReverseImageId",
@@ -601,7 +605,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.addressProofImageId",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }/*,
                              {
                              key:"customer.addressProofReverseImageId",
@@ -646,7 +651,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 key:"customer.additionalKYCs[].kyc1ImagePath",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             // {
                             //     key:"customer.additionalKYCs[].kyc1ReverseImagePath",
@@ -2267,7 +2273,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
                                 ]
                             },
@@ -2343,7 +2350,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
@@ -2390,7 +2398,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
                                 ]
                             },
@@ -3003,7 +3012,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         "type": "button",
                         "icon": "fa fa-circle-o",
                         "title": "SUBMIT",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                        "onClick": "actions.save(model, formCtrl, form, $event)",
+                        "buttonType": "submit"
                     }]
             },
 
@@ -3015,11 +3025,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         "type": "button",
                         "icon": "fa fa-circle-o",
                         "title": "SUBMIT",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                        "onClick": "actions.save(model, formCtrl, form, $event)",
+                        "buttonType": "submit"
                     },
                     {
                         "type": "submit",
-                        "title": "FINISH_ENROLMENT"
+                        "title": "FINISH_ENROLMENT",
+                        "buttonType": "submit"
                     }
                 ]
             }

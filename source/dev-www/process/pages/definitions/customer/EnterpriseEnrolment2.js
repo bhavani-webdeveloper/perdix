@@ -659,7 +659,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 category:"CustomerEnrollment",
                                 subCategory:"REGISTRATIONDOCUMENT",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }
                         ]
                     },/*,
@@ -1052,7 +1053,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 category:"CustomerEnrollment",
                                 subCategory:"REGISTRATIONDOCUMENT",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }
                         ]
                     },
@@ -1529,7 +1531,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
@@ -1671,7 +1674,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "subCategory": "DOC1",
                                 type: "file",
                                 fileType: "application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }
 
                            /*{
@@ -1760,7 +1764,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "subCategory": "DOC1",
                                 type: "file",
                                 fileType: "application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }
                        ]
                     }
@@ -2159,7 +2164,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
                                 ]
                             },
@@ -2238,7 +2244,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         "subCategory": "DOC1",
                                         type: "file",
                                         fileType: "application/pdf",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     },
                                     {
                                         key: "customer.rawMaterialExpenses[].invoiceDocId",
@@ -2248,7 +2255,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         "subCategory": "DOC1",
                                         type: "file",
                                         fileType: "application/pdf",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
 
                                 ]
@@ -2419,7 +2427,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     fileType: "application/pdf",
                                     "category": "CustomerEnrollment",
                                     "subCategory": "IDENTITYPROOF",
-                                    using: "scanner"
+                                    using: "scanner",
+                                    offline:true
                                 }
 
 
@@ -2483,7 +2492,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         fileType: "application/pdf",
                                         "category": "CustomerEnrollment",
                                         "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
+                                        using: "scanner",
+                                        offline:true
                                     }
                                 ]
                             },
@@ -2524,7 +2534,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     "subCategory": "DOC1",
                                     type: "file",
                                     fileType: "application/pdf",
-                                    using: "scanner"
+                                    using: "scanner",
+                                    offline:true
                                 }
                                 ]
                             },
@@ -2740,7 +2751,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "subCategory":"DOC1",
                                 type: "file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineImage",
@@ -2750,7 +2762,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 required: true,
                                 type: "file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                          ]
                      }
@@ -2852,7 +2865,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "subCategory":"DOC1",
                                 type: "file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineImage",
@@ -2861,7 +2875,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "subCategory":"DOC1",
                                 type: "file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             }
                          ]
                      }
@@ -3011,7 +3026,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "subCategory": "DOC1",
                     type: "file",
                     fileType: "application/pdf",
-                    using: "scanner"
+                    using: "scanner",
+                    offline:true
                 }
 
             ]
@@ -3157,7 +3173,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "subCategory": "DOC1",
                     type: "file",
                     fileType: "application/pdf",
-                    using: "scanner"
+                    using: "scanner",
+                    offline:true
                 }
 
             ]
@@ -3407,7 +3424,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"FILE",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key:"customer.enterpriseBureauDetails[].doubtful",
@@ -3464,7 +3482,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"FILE",
                                 type:"file",
                                 fileType:"application/pdf",
-                                using: "scanner"
+                                using: "scanner",
+                                offline:true
                             },
                             {
                                 key:"customer.enterpriseBureauDetails[].doubtful",
