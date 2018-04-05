@@ -21,7 +21,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "customer.photoImageId",
                         type: "file",
                         fileType: "image/*",
-                        "offline": true
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        //"offline": true
                     },
                     "customerBranchId": {
                         orderNo: 30,
@@ -210,7 +215,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 40,
                                 key: "customer.street",
                             },
-
                             "postOffice": {
                                 orderNo: 50,
                                 key: "customer.postOffice",
@@ -670,18 +674,34 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "title": "ADDITIONAL_KYC",
                         "items": {
                             "kyc1ProofType": {
+                                orderNo: 10,
                                 key: "customer.additionalKYCs[].kyc1ProofType",
                                 type: "select",
                                 enumCode: "identity_proof",
                             },
                             "kyc1ImagePath": {
+                                orderNo: 20,
                                 key: "customer.additionalKYCs[].kyc1ImagePath",
                                 type: "file",
                                 fileType:"application/pdf",
                                 using: "scanner",
                                 offline: true
                             },
+                            "kyc1ReverseImagePath": {
+                                orderNo: 30,
+                                key: "customer.additionalKYCs[].kyc1ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //using: "scanner",
+                                offline: true
+                            },
                             "kyc1ProofNumber": {
+                                orderNo: 40,
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
                                 type: "barcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Aadhar Card'",
@@ -695,6 +715,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "kyc1ProofNumber1": {
+                                orderNo: 40,
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
                                 type: "barcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Pan Card'",
@@ -708,6 +729,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "kyc1ProofNumber2": {
+                                orderNo: 40,
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
                                 type: "barcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Passport'",
@@ -721,6 +743,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "kyc1ProofNumber3": {
+                                orderNo: 40,
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
                                 type: "barcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Aadhar Card' && model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Pan Card' && model.customer.additionalKYCs[arrayIndex].kyc1ProofType !== 'Passport'",
@@ -729,15 +752,56 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
                                 }
                             },
+                            "kyc1ProofNumber4": {
+                                orderNo: 40,
+                                key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                type: "barcode",
+                                onCapture: function (result, model, form) {
+                                    $log.info(result);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                }
+                            },
                             "kyc1IssueDate": {
+                                orderNo: 50,
                                 key: "customer.additionalKYCs[].kyc1IssueDate",
                                 type: "date"
                             },
                             "kyc1ValidUptoDate": {
+                                orderNo: 60,
                                 key: "customer.additionalKYCs[].kyc1ValidUptoDate",
                                 type: "date"
                             },
+                            "kyc2ProofType": {
+                                orderNo: 70,
+                                key: "customer.additionalKYCs[].kyc2ProofType",
+                                type: "select"
+                            },
+                            "kyc2ImagePath": {
+                                orderNo: 80,
+                                key: "customer.additionalKYCs[].kyc2ImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            },
+                            "kyc2ReverseImagePath": {
+                                orderNo: 90,
+                                key: "customer.additionalKYCs[].kyc2ReverseImagePath",
+                                type: "file",
+                                fileType: "image/*",
+                                "viewParams": function(modelValue, form, model) {
+                                    return {
+                                        customerId: model.customer.id
+                                    };
+                                },
+                                //"offline": true
+                            },
                             "kyc2ProofNumber": {
+                                orderNo: 100,
                                 key: "customer.additionalKYCs[].kyc2ProofNumber",
                                 type: "barcode",
                                 onCapture: function (result, model, form) {
@@ -745,21 +809,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
                                 }
                             },
-                            "kyc2ProofType": {
-                                key: "customer.additionalKYCs[].kyc2ProofType",
-                                type: "select"
-                            },
-                            "kyc2ImagePath": {
-                                key: "customer.additionalKYCs[].kyc2ImagePath",
-                                type: "file",
-                                fileType: "image/*",
-                                "offline": true
-                            },
                             "kyc2IssueDate": {
+                                orderNo: 110,
                                 key: "customer.additionalKYCs[].kyc2IssueDate",
                                 type: "date"
                             },
                             "kyc2ValidUptoDate": {
+                                orderNo: 120,
                                 key: "customer.additionalKYCs[].kyc2ValidUptoDate",
                                 type: "date"
                             }
@@ -1090,7 +1146,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     },
                                     "monthsPerYear": {
                                         key: "customer.familyMembers[].incomes[].monthsPerYear",
-                                        "title": "MONTHS_PER_YEAR",
+                                        //"title": "MONTHS_PER_YEAR",
                                     }
                                 }
                             }
@@ -1124,7 +1180,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "expenditures": {
                         key: "customer.expenditures",
                         type: "array",
-                        remove: null,
+                        //remove: null,
                         view: "fixed",
                         titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
                         items: {
@@ -1310,6 +1366,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "title": "CUSTOMER_NAME",
                         "readonly": true
                     },
+                    "fullName": {
+                        "key": "customer.fullName",
+                        orderNo: 10,
+                        "title": "CUSTOMER_NAME",
+                        "readonly": true
+                    },
                     "nameInLocalLanguage": {
                         orderNo: 20,
                         key: "customer.nameInLocalLanguage"
@@ -1368,10 +1430,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.udf.userDefinedFieldValues.udf5",
 
                             },
-                            // "Toilet": {
-                            //     order:40,
-                            //     key: "customer.udf.userDefinedFieldValues.udf6"
-                            // },
+                            "Toilet1": {
+                                order:40,
+                                key: "customer.udf.userDefinedFieldValues.udf6"
+                            },
                             "durationOfStay": {
                                 order: 50,
                                 key: "customer.udf.userDefinedFieldValues.udf4",
@@ -1413,11 +1475,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "houseNo": {
                                 key: "customer.verifications[].houseNo"
                             },
+                            "houseNoIsVerified1":{
+                                key:"customer.verifications[].houseNoIsVerified1",
+                                "required":true,
+                                "type": "checkbox",
+                                "title": "HOUSE_NO_IS_VERIFIED",
+                                "required": true,
+                                "schema": {
+                                    "default": false
+                                }
+                            },
                             "houseNoIsVerified": {
                                 key: "customer.verifications[].houseNoIsVerified"
                             },
                             "referenceFirstName": {
                                 key: "customer.verifications[].referenceFirstName"
+                            },
+                            "referenceLastName": {
+                                key: "customer.verifications[].referenceLastName",
+                                "condition": "model.customer.verifications[arrayIndex].referenceLastName"
                             },
                             "relationship": {
                                 key: "customer.verifications[].relationship",
@@ -1805,9 +1881,46 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                 }
             },
+            "Biometric":{
+                "type": "box",
+                orderNo: 130,
+                "title": "BIOMETRIC",
+                "items": {
+                    "CaptureFingerPrint":{
+                        type: "button",
+                        title: "CAPTURE_FINGERPRINT",
+                        notitle: true,
+                        fieldHtmlClass: "btn-block",
+                        onClick: function(model, form, formName){
+                            var promise = BiometricService.capture(model);
+                            promise.then(function(data){
+                                model.customer.$fingerprint = data;
+                            }, function(reason){
+                                console.log(reason);
+                            })
+                        }
+                    },
+                    "FingerPrintSection":{
+                        "type": "section",
+                        "html": '<div class="row"> <div class="col-xs-6">' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftIndex\')"></i> {{ model.getFingerLabel(\'LeftIndex\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftMiddle\')"></i> {{ model.getFingerLabel(\'LeftMiddle\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftRing\')"></i> {{ model.getFingerLabel(\'LeftRing\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftLittle\')"></i> {{ model.getFingerLabel(\'LeftLittle\') }}</span><br>' +
+                        '</div> <div class="col-xs-6">' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightThumb\')"></i> {{ model.getFingerLabel(\'RightThumb\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightIndex\')"></i> {{ model.getFingerLabel(\'RightIndex\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightMiddle\')"></i> {{ model.getFingerLabel(\'RightMiddle\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightRing\')"></i> {{ model.getFingerLabel(\'RightRing\') }}</span><br>' +
+                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightLittle\')"></i> {{ model.getFingerLabel(\'RightLittle\') }}</span><br>' +
+                        '</div></div>'
+                    }
+                }
+            },
             "actionbox": {
                 "type": "actionbox",
-                orderNo: 130,
+                orderNo: 140,
                 //"condition": "model.customer.id",
                 "items": {
                     "submit": {

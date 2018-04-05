@@ -459,6 +459,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 {
                                     "name": "Internal",
                                     "value": "INTERNAL"
+                                },
+                                {
+                                    "name": "Security EMI Adjustment",
+                                    "value": "Security EMI Adjustment"
                                 }
                                 ],
                                 onChange: function(value, form, model) {

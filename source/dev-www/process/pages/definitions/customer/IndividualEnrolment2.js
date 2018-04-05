@@ -1029,7 +1029,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     {
                         "key": "customer.existingLoan",
                         "title": "EXISTING_LOAN",
-                        "type": "radios",
+                        "type": "select",
                         enumCode:"decisionmaker",
                         condition:"model._bundlePageObj.pageClass=='applicant'"
                     },

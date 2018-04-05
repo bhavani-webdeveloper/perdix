@@ -438,12 +438,12 @@ define({
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }, {
                             "type": "submit",
-                            condition:"model.action == 'PROCEED'",
+                            condition:"model.action == 'PROCEED' && model.group.currentStage=='CGT2'",
                             "title": "PROCEED"
                         }]
                     }
                 ]
-            },],
+            }],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",

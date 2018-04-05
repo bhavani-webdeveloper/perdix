@@ -217,9 +217,9 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 }]);
 
 irf.commons.factory("formHelper",
-["$log", "$state", "irfStorageService", "SessionStore", "entityManager", "irfProgressMessage",
+["$log", "$state", "irfStorageService", "SessionStore","$state","$stateParams", "entityManager", "irfProgressMessage",
 "$filter", "Files", "$q", "elementsUtils", "$timeout", "Utils",
-function($log, $state, irfStorageService, SessionStore, entityManager, irfProgressMessage,
+function($log, $state, irfStorageService, SessionStore,$state,$stateParams, entityManager, irfProgressMessage,
 	$filter, Files, $q, elementsUtils, $timeout, Utils){
 	var helperObj = {
 		enum: function(key) {
@@ -288,6 +288,10 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 		},
 		isOffline: function() {
 			return SessionStore.session.offline;
+		},
+		getPageData: function() {
+			$stateParams.pageData = $stateParams.pageData || {};
+			return $stateParams.pageData;
 		},
 		newOffline: {
 			getKey: function(pageName) {
