@@ -86,8 +86,8 @@ irf.pageCollection.factory(irf.page('lender.enrolment.View'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: 'loans.LoanRepay',
-                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                            pageName: 'lender.liabilities.LiabilityRepaymentScreen',
+                                            pageId: item.id
                                         })
                                     },
                                     isApplicable: function(item, index){
