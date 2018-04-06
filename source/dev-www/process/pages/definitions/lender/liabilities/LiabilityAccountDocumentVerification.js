@@ -94,9 +94,14 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
             }
 
-            var docRejectReasons = [];
-            Queries.getLoanProductDocumentsRejectReasons().then(function(resp){
-                docRejectReasons = resp;
+            var lenderDocuments = [];
+            Queries.getLoanProductDocumentsRejectReasons("lender_document").then(function(resp){
+                lenderDocuments = resp;
+            });
+
+            var complianceDocument = [];
+            Queries.getLoanProductDocumentsRejectReasons("compliance_document").then(function(resp){
+                complianceDocument = resp;
             });
 
             return {
@@ -224,12 +229,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             title: "Reason",
                                                                             notitle: true,
                                                                             placeholder: "Reason",
-                                                                            key: "loanAccount.loanDocuments[].rejectReason",
+                                                                            key: "liabilityAccount.liabilityComplianceDocuments[].rejectReason",
                                                                             type: "lov",
                                                                             lovonly: true,
                                                                             searchHelper: formHelper,
                                                                             search: function(inputModel, form, model, context) {
-                                                                                var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                                                                var f = $filter('filter')(complianceDocument, {"document_code": model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].documentName},true);
                                                                                 return $q.resolve({
                                                                                     "header": {
                                                                                         "x-total-count": f && f.length
@@ -241,7 +246,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                                 return [item.reject_reason];
                                                                             },
                                                                             onSelect: function(result, model, context) {
-                                                                                model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                                                                model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].rejectReason = result.reject_reason;
                                                                             }
                                                                         }
                                                                     }
@@ -354,12 +359,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             title: "Reason",
                                                                             notitle: true,
                                                                             placeholder: "Reason",
-                                                                            key: "loanAccount.loanDocuments[].rejectReason",
+                                                                            key: "liabilityAccount.liabilityLenderDocuments[].rejectReason",
                                                                             type: "lov",
                                                                             lovonly: true,
                                                                             searchHelper: formHelper,
                                                                             search: function(inputModel, form, model, context) {
-                                                                                var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                                                                var f = $filter('filter')(lenderDocuments, {"document_code": model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName},true);
                                                                                 return $q.resolve({
                                                                                     "header": {
                                                                                         "x-total-count": f && f.length
@@ -371,7 +376,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                                 return [item.reject_reason];
                                                                             },
                                                                             onSelect: function(result, model, context) {
-                                                                                model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                                                                model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName = result.reject_reason;
                                                                             }
                                                                         }
                                                                     }

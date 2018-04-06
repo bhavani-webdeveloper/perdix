@@ -2,7 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
     function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter) {
 
         var docRejectReasons = [];
-        Queries.getLoanProductDocumentsRejectReasons().then(function(resp){
+        Queries.getLoanProductDocumentsRejectReasons("individual_loan").then(function(resp){
             docRejectReasons = resp;
         });
 

@@ -101,9 +101,9 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getLoanProductDocumentsRejectReasons = function() {
+        resource.getLoanProductDocumentsRejectReasons = function(processName) {
             var deferred = $q.defer();
-            resource.getResult('loan_doc_reject_reasons.list', {}).then(
+            resource.getResult('loan_doc_reject_reasons.list', {process_name: processName}).then(
                 function(res) {
                     if (res && res.results && res.results.length) {
                         deferred.resolve(res.results);
