@@ -4,6 +4,7 @@ import { RepositoryIdentifiers } from './RepositoryIdentifiers';
 import {EnrolmentProcess} from "../model/customer/EnrolmentProcess";
 import {EnrolmentRepository} from "../model/customer/EnrolmentRepository";
 import {LiabilityLoanAccountBookingRepository} from "../model/lender/LoanBooking/LiabilityLoanAccountBookingRepository";
+import {LiabilityRepaymentRepository} from "../model/lender/LoanBooking/LiabilityRepaymentRepository";
 import {QueryRepository} from "./query/QueryRepository";
 
 class RepositoryFactory {
@@ -21,6 +22,8 @@ class RepositoryFactory {
                 return new QueryRepository();
             case RepositoryIdentifiers.LiabilityLoanAccountBookingProcess:
                 return new LiabilityLoanAccountBookingRepository();
+            case RepositoryIdentifiers.LiabilityRepayment:
+                return new LiabilityRepaymentRepository();
     		default:
     			return null;
     	}
