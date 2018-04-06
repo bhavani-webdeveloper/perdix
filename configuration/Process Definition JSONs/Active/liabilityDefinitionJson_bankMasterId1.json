@@ -261,7 +261,7 @@
                   ]
                },
 
-               isPaymentScheduleUploaded{
+               "isPaymentScheduleUploaded":{
                   "title":"isPaymentScheduleUploaded",
                   "type":"string",
                   "minLength":1,
