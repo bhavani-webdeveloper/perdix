@@ -67,8 +67,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.upload.upload",
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff",
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff",
-                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks",
-                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.reason",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.reason.reason",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarksSection5",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarksSection5.remarks",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarksSection2",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarksSection2.remarks",
+
                     "DocumentVerification.liabilityComplianceDocuments",
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments",
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section",
@@ -79,11 +84,20 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload.upload",
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff",
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff",
-                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks",
-                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks.remarks"
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.reason",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.reason.reason",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarksSection5",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarksSection5.remarks",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarksSection2",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarksSection2.remarks"
                 ];
 
             }
+
+            var docRejectReasons = [];
+            Queries.getLoanProductDocumentsRejectReasons().then(function(resp){
+                docRejectReasons = resp;
+            });
 
             return {
                 "type": "schema-form",
@@ -151,7 +165,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                             "items":{
                                                                 "documentType": {
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "documentName": {
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
@@ -169,7 +183,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "upload": {                                        
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "upload":{
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
@@ -185,7 +199,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "isSignOff": {
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "isSignOff": {
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].isSignOff",
@@ -201,9 +215,53 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                         }
                                                                     }
                                                                 },
-                                                                "remarks": {                                        
+                                                                "reason":{
                                                                     "type": "section",
                                                                     "htmlClass": "col-sm-3",
+                                                                    "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].isSignOff === 'REJECTED'",
+                                                                    "items": {
+                                                                        "reason": {
+                                                                            title: "Reason",
+                                                                            notitle: true,
+                                                                            placeholder: "Reason",
+                                                                            key: "loanAccount.loanDocuments[].rejectReason",
+                                                                            type: "lov",
+                                                                            lovonly: true,
+                                                                            searchHelper: formHelper,
+                                                                            search: function(inputModel, form, model, context) {
+                                                                                var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                                                                return $q.resolve({
+                                                                                    "header": {
+                                                                                        "x-total-count": f && f.length
+                                                                                    },
+                                                                                    "body": f
+                                                                                });
+                                                                            },
+                                                                            getListDisplayItem: function(item, index) {
+                                                                                return [item.reject_reason];
+                                                                            },
+                                                                            onSelect: function(result, model, context) {
+                                                                                model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarksSection5": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-5",
+                                                                    "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].isSignOff !== 'REJECTED'",
+                                                                    "items": {
+                                                                        "remarks":{
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].remarks",
+                                                                            "notitle": true,
+                                                                            "placeholder": "Remarks"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarksSection2": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-2",
+                                                                    "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].isSignOff === 'REJECTED'",
                                                                     "items": {
                                                                         "remarks":{
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].remarks",
@@ -237,7 +295,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                             "items":{
                                                                 "documentType": {
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "documentName": {
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
@@ -255,7 +313,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "upload": {                                        
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "upload":{
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
@@ -271,7 +329,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "isSignOff": {
                                                                     "type": "section",
-                                                                    "htmlClass": "col-sm-3",
+                                                                    "htmlClass": "col-sm-2",
                                                                     "items": {
                                                                         "isSignOff": {
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].isSignOff",
@@ -287,9 +345,53 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                         }
                                                                     }
                                                                 },
-                                                                "remarks": {                                        
+                                                                "reason":{
                                                                     "type": "section",
                                                                     "htmlClass": "col-sm-3",
+                                                                    "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].isSignOff === 'REJECTED'",
+                                                                    "items": {
+                                                                        "reason": {
+                                                                            title: "Reason",
+                                                                            notitle: true,
+                                                                            placeholder: "Reason",
+                                                                            key: "loanAccount.loanDocuments[].rejectReason",
+                                                                            type: "lov",
+                                                                            lovonly: true,
+                                                                            searchHelper: formHelper,
+                                                                            search: function(inputModel, form, model, context) {
+                                                                                var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                                                                return $q.resolve({
+                                                                                    "header": {
+                                                                                        "x-total-count": f && f.length
+                                                                                    },
+                                                                                    "body": f
+                                                                                });
+                                                                            },
+                                                                            getListDisplayItem: function(item, index) {
+                                                                                return [item.reject_reason];
+                                                                            },
+                                                                            onSelect: function(result, model, context) {
+                                                                                model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarksSection5": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-5",
+                                                                    "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].isSignOff !== 'REJECTED'",
+                                                                    "items": {
+                                                                        "remarks":{
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].remarks",
+                                                                            "notitle": true,
+                                                                            "placeholder": "Remarks"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarksSection2": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-2",
+                                                                    "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].isSignOff === 'REJECTED'",
                                                                     "items": {
                                                                         "remarks":{
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].remarks",
@@ -343,7 +445,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
                     p1.then(function(repo){
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                        console.log(self);
                     });
                     /* Form rendering ends */
                 },

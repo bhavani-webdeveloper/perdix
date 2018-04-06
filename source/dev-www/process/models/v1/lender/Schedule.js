@@ -20,10 +20,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 isArray:true
             }
         });
-        resource.scheduleUpload = function(file, progress) {
+        resource.scheduleUpload = function(file, progress, id) {
             var deferred = $q.defer();
             Upload.upload({
-                url: endpoint + '/uploadLiablityScheduleDetails',
+                url: endpoint + '/uploadLiablityScheduleDetails?lenderAccountNumber='+id,
                 data: {
                     file: file
                 }
