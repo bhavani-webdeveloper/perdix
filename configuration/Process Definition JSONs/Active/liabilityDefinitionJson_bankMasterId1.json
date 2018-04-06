@@ -385,10 +385,20 @@
                   }
               ,
               "remarks":{
-                     "title":"isSignOff",
+                     "title":"remarks",
                      "type":"remarks",
                      "minLength":1,
                      "maxLength":100,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+               ,
+               "rejectReason":{
+                     "title":"rejectReason",
+                     "type":"remarks",
+                     "minLength":1,
+                     "maxLength":250,
                      "captureStages":[
                          "DocumentUpload","DocumentVerification"
                      ]
@@ -473,6 +483,16 @@
                      ]
                   }
              ,  
+              "rejectReason":{
+                     "title":"rejectReason",
+                     "type":"remarks",
+                     "minLength":1,
+                     "maxLength":250,
+                     "captureStages":[
+                         "DocumentUpload","DocumentVerification"
+                     ]
+                  }
+               ,
              "fileId":{
                      "title":"fileId",
                      "type":"string",
