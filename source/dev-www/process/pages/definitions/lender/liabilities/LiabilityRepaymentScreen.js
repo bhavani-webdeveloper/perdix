@@ -1,0 +1,390 @@
+define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProcess','perdix/domain/model/lender/LoanBooking/LiabilityRepayment', 'perdix/infra/api/AngularResourceService'], function (LiabilityLoanAccountBookingProcess, LiabilityRepayment, AngularResourceService) {
+    LiabilityLoanAccountBookingProcess = LiabilityLoanAccountBookingProcess['LiabilityLoanAccountBookingProcess'];
+    LiabilityRepayment = LiabilityRepayment['LiabilityRepayment'];
+    return {
+        pageUID: "lender.liabilities.LiabilityRepaymentScreen",
+        pageType: "Engine",
+        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Schedule"],
+            $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Schedule) {
+            var branch = SessionStore.getBranch();
+            var userLoginDate = SessionStore.getCBSDate();
+            var configFile = function () {
+                return {
+                }
+            }
+            var overridesFields = function (bundlePageObj) {
+                return {
+                    "LiabilityRepayment": {
+                        "orderNo": 40
+                    },
+                    "LiabilityRepayment.instrumentType": {
+                        onChange: function(modelValue, form, model) {
+                             model.instrTypeCheque = false;
+                             model.instrTypeNEFT = false;
+                            if (modelValue == 'Cheque') {
+                                model.instrTypeCheque = true;
+                            } 
+                             if (modelValue == 'NEFT') {
+                                model.instrTypeNEFT = true;
+                            } 
+                        }
+                    },
+                    "LiabilityRepayment.transactionType": {
+                        onChange: function(modelValue, form, model) {
+                            model.preClosureCharge = false;
+                            if (modelValue == 'PreClosure') {
+                                model.preClosureCharge = true;
+                                model.liabilityClosureRepay.transactionType = modelValue
+                                model.liabilityRepay = model.liabilityClosureRepay 
+                                model.liabilityRepay.lenderAccountNumber = model.lenderAccountNumber
+                                model.liabilityRepay.transactionDate = userLoginDate;
+                            } 
+                            else{
+                                model.liabilityScheduleRepay.transactionType = modelValue
+                                model.liabilityRepay = model.liabilityScheduleRepay;  
+                            }
+                        }
+                    },
+                    "LiabilityRepayment.chequeNumber":{
+                        "condition":"model.instrTypeCheque",
+                         fieldType: "number",
+                    },
+                    "LiabilityRepayment.chequeDate":{
+                        "condition":"model.instrTypeCheque"
+                    },
+                    "LiabilityRepayment.referencenumber":{
+                        "condition":"model.instrTypeNEFT"
+                    },
+                    "LiabilityRepayment.preClosureCharges":{
+                        "condition":"model.preClosureCharge"
+                    }
+                }
+            }
+            var getIncludes = function (model) {
+                return [
+                    "LiabilityDue",
+                    "LiabilityDue.principalDue",
+                    "LiabilityDue.interestDue",
+                    "LiabilityDue.penalityDue",
+                    "LiabilityDue.otherFeeChargesDue",
+                    "LiabilityDue.totalInstallmentAmountDue",
+                    "LiabilityPreClosure",
+                    "LiabilityPreClosure.principalDue",
+                    "LiabilityPreClosure.interestDue",
+                    "LiabilityPreClosure.penalityDue",
+                    "LiabilityPreClosure.otherFeeChargesDue",
+                    "LiabilityPreClosure.totalInstallmentAmountDue",
+                    "LiabilityRepayment",
+                    "LiabilityRepayment.transactionType",
+                    "LiabilityRepayment.principalPaid",
+                    "LiabilityRepayment.interestPaid",
+                    "LiabilityRepayment.penalityPaid",
+                    "LiabilityRepayment.otherFeeChargespaid",
+                    "LiabilityRepayment.totalInstallmentAmountPaid",
+                    "LiabilityRepayment.instrumentType",
+                    "LiabilityRepayment.chequeNumber",
+                    "LiabilityRepayment.chequeDate",
+                    "LiabilityRepayment.referencenumber",
+                    "LiabilityRepayment.transactionDate",
+                    "LiabilityRepayment.preClosureCharges",
+                    "LoanAccount",
+                    "LoanAccount.loanAccountId",
+                    "LoanAccount.lenderName",
+                    "LoanAccount.lenderId",
+                    "LoanAccount.productType"
+                ];
+            }
+
+            return {
+                "type": "schema-form",
+                "title": "LIABILITY_REPAYMENT",
+                "subTitle": "",
+                initialize: function (model, form, formCtrl) {
+                    var self = this;
+                    var formRequest = {
+                        "overrides": overridesFields(model),
+                        "includes": getIncludes(model),
+                        "excludes": [],
+                        "options": {
+                            "repositoryAdditions": {
+                                    "LoanAccount":{
+                                        "type": "box",
+                                        "title": "LOAN_ACCOUNT_DETAILS",
+                                        "orderNo": 20,        
+                                        "items": {
+                                                    "loanAccountId": {
+                                                    "key": "LoanAccount.lenderAccountNumber",
+                                                    "title": "LENDER_ACCOUNT_NUMBER",
+                                                    "type":"string",
+                                                    "readonly": true
+                                                    },
+                                                    "lenderName": {
+                                                    "key": "LoanAccount.lenderName",
+                                                    "title": "LENDER_NAME",
+                                                    "type":"string",
+                                                   // "enumCode":"----"
+                                                    "readonly": true
+                                                    },
+                                                    "lenderId": {
+                                                    "key": "LoanAccount.lenderId",
+                                                    "title": "LENDER_ID",
+                                                    "type":"string",
+                                                   // "enumCode":"----"
+                                                    "readonly": true
+                                                    },
+                                                    "productType": {
+                                                    "key": "LoanAccount.productType",
+                                                    "title": "PRODUCT_TYPE",
+                                                    "type":"string",
+                                                    //"enumCode":"----"
+                                                    "readonly": true
+                                                    }
+                                                }
+                                            },
+                                    "LiabilityDue":{
+                                        "type": "box",
+                                        "condition":"model.liabilityRepay.transactionType!='PreClosure'",
+                                        "orderNo": 30,
+                                        "title": "liabilityRepay",
+                                        "items": {
+                                            "principalDue":{
+                                                "key":"liabilityRepay.principalDue",
+                                                "type":"number",
+                                                "title": "PRINCIPAL_DUE",
+                                                "readonly": true
+                                            },
+                                            "interestDue":{
+                                                "key":"liabilityRepay.interestDue",
+                                                "type":"number",
+                                                "title": "INTEREST_DUE",
+                                                "readonly": true
+                                            },
+                                            "penalityDue":{
+                                                "key":"liabilityRepay.penalityDue",
+                                                "type":"number",
+                                                "title": "PENALITY_DUE",
+                                                "readonly": true
+                                            },
+                                            "otherFeeChargesDue":{
+                                                "key":"liabilityRepay.otherFeeChargesDue",
+                                                "type":"number",
+                                                "title": "OTHER_FEE_CHARGES_DUE",
+                                                "readonly": true
+                                            },
+                                            "totalInstallmentAmountDue":{
+                                                "key":"liabilityRepay.totalInstallmentAmountDue",
+                                                "type":"number",
+                                                "title": "TOTAL_INSTALLMENT_AMOUNT_DUE",
+                                                "readonly": true
+                                            }
+                                        }
+                                    },
+                                    "LiabilityPreClosure":{
+                                        "type": "box",
+                                        "condition":"model.liabilityRepay.transactionType=='PreClosure'",
+                                        "orderNo": 30,
+                                        "title": "PRECLOSURE",
+                                        "items": {
+                                            "principalDue":{
+                                                "key":"liabilityRepay.principalDue",
+                                                "type":"number",
+                                                "title": "PRINCIPAL_DUE",
+                                                "readonly": true
+                                            },
+                                            "interestDue":{
+                                                "key":"liabilityRepay.interestDue",
+                                                "type":"number",
+                                                "title": "INTEREST_DUE",
+                                                "readonly": true
+                                            },
+                                            "penalityDue":{
+                                                "key":"liabilityRepay.penalityDue",
+                                                "type":"number",
+                                                "title": "PENALITY_DUE",
+                                                "readonly": true
+                                            },
+                                            "otherFeeChargesDue":{
+                                                "key":"liabilityRepay.otherFeeChargesDue",
+                                                "type":"number",
+                                                "title": "OTHER_FEE_CHARGES_DUE",
+                                                "readonly": true
+                                            },
+                                            "totalInstallmentAmountDue":{
+                                                "key":"liabilityRepay.totalInstallmentAmountDue",
+                                                "type":"number",
+                                                "title": "TOTAL_INSTALLMENT_AMOUNT_DUE",
+                                                "readonly": true
+                                            }
+                                        }
+                                    }
+
+                                    },
+                            "additions": [
+                                {
+                                    "type": "actionbox",
+                                    "orderNo": 10000,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "SAVE",
+                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    };
+                    var p1 = UIRepository.getLiabilityRepayment().$promise;
+                    p1.then(function(repo){
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                    });
+                    LiabilityRepayment.createNewProcess()
+                            .subscribe(function(res) {
+                                model.LiabilityRepayment = res; 
+                                model.liabilityRepay = res.liabilityRepay;
+                                console.log("liabilities account");
+                                console.log(model);
+                            });
+
+                    if(_.hasIn($stateParams, 'pageId')) {
+                        LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
+                            .subscribe(function(res){
+                                model.LoanAccount = res.liabilityAccount;
+                                model.LoanAccount.lenderName = res.lenderEnrolmentProcess.customer.firstName;
+                                var scheduleDetails = res.liabilityAccount.liabilitySchedules;
+                                var liabilityRepayCal;
+                                scheduleDetails.sort(function compare(a, b) {
+                                   var dateA = new Date(a.installmentDueDate);
+                                   var dateB = new Date(b.installmentDueDate);
+                                   return dateA - dateB;
+                                });
+                                for (i in scheduleDetails){
+                                    var status = scheduleDetails[i].paidStatus;
+                                    if(status == "NotPaid"){
+                                       this.liabilityRepayCal = scheduleDetails[i]
+                                            break;  
+                                    }
+                                    else if(status == "PartiallyPaid"){
+                                        this.liabilityRepayCal = scheduleDetails[i]
+                                            break;
+                                    }
+                                }
+                                if(this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "PartiallyPaid"){
+                                    this.liabilityRepayCal.principalDue = (this.liabilityRepayCal.principalPaid != null) ? this.liabilityRepayCal.principalDue - this.liabilityRepayCal.principalPaid:this.liabilityRepayCal.principalDue;
+                                    this.liabilityRepayCal.interestDue = (this.liabilityRepayCal.interestPaid != null) ? this.liabilityRepayCal.interestDue - this.liabilityRepayCal.interestPaid:this.liabilityRepayCal.interestDue;
+                                    this.liabilityRepayCal.otherFeeChargesDue = (this.liabilityRepayCal.otherFeeChargespaid != null) ? this.liabilityRepayCal.otherFeeChargesDue - this.liabilityRepayCal.otherFeeChargespaid:this.liabilityRepayCal.otherFeeChargesDue;
+                                    this.liabilityRepayCal.penalityDue = (this.liabilityRepayCal.penalityPaid != null) ? this.liabilityRepayCal.penalityDue - this.liabilityRepayCal.penalityPaid:this.liabilityRepayCal.penalityDue;
+                                    this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
+                                    this.liabilityRepayCal.principalPaid = null;
+                                    this.liabilityRepayCal.interestPaid = null;
+                                    this.liabilityRepayCal.otherFeeChargespaid = null;
+                                    this.liabilityRepayCal.penalityPaid = null
+                                    this.liabilityRepayCal.totalAmountPaid = null
+                                }
+                                else if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "NotPaid"){
+                                 this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue   
+                                }
+
+                                var liabilityClosureRepay ={
+                                    "principalDue":0,
+                                    "penalityDue":0,
+                                    "interestDue":0,
+                                    "otherFeeChargesDue" : 0,
+                                    "totalInstallmentAmountDue" : 0,
+                                    "transactionType":null
+                                }
+                                for (i in scheduleDetails){
+                                    if(scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "NotPaid"){
+                                        console.log(liabilityClosureRepay)
+                                        liabilityClosureRepay.principalDue = liabilityClosureRepay.principalDue + scheduleDetails[i].principalDue;
+                                        var dateA = new Date(scheduleDetails[i].installmentDueDate);
+                                        var dateB = new Date();
+                                        if(dateA < dateB){
+                                            liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
+                                            liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
+                                            liabilityClosureRepay.penalityDue =liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                            liabilityClosureRepay.totalInstallmentAmountDue  = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue+ liabilityClosureRepay.penalityDue
+                                        }
+                                    }
+                                    else if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "PartiallyPaid"){
+                                    liabilityClosureRepay.principalDue = (scheduleDetails[i].principalPaid != null) ? scheduleDetails[i].principalDue - scheduleDetails[i].principalPaid:scheduleDetails[i].principalDue;
+                                    liabilityClosureRepay.interestDue = (scheduleDetails[i].interestPaid != null) ? scheduleDetails[i].interestDue - scheduleDetails[i].interestPaid:scheduleDetails[i].interestDue;
+                                    liabilityClosureRepay.otherFeeChargesDue = (scheduleDetails[i].otherFeeChargesPaid != null) ? scheduleDetails[i].otherFeeChargesDue - scheduleDetails[i].otherFeeChargesPaid:scheduleDetails[i].otherFeeChargesDue;
+                                    liabilityClosureRepay.penalityDue = (scheduleDetails[i].penalityPaid != null) ? scheduleDetails[i].penalityDue - scheduleDetails[i].penalityPaid:scheduleDetails[i].penalityDue;
+                                        var dateA = new Date(scheduleDetails[i].installmentDueDate);
+                                        var dateB = new Date();
+                                        if(dateA < dateB){
+                                            liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
+                                            liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
+                                            liabilityClosureRepay.penalityDue =liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                            liabilityClosureRepay.totalInstallmentAmountDue  = liabilityClosureRepay.totalInstallmentAmountDue + scheduleDetails[i];
+                                        }
+                                    }
+                                }
+                               // model.liabilityClosureRepay.transactionType = null;
+                                model.liabilityClosureRepay = liabilityClosureRepay;
+                                model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
+                                model.liabilityScheduleRepay = this.liabilityRepayCal
+                                model.liabilityRepay = this.liabilityRepayCal
+                                model.liabilityRepay.liabilityRepaymentScheduleDetailsId = this.liabilityRepayCal.id;
+                                model.liabilityRepay.transactionDate = userLoginDate;
+                            });
+                    }
+                    /* Form rendering ends */
+                },
+
+                preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+
+                },
+                eventListeners: {
+                },
+                offline: false,
+                getOfflineDisplayItem: function (item, index) {
+                },
+                form: [],
+                schema: function () {
+                    return Enrollment.getSchema().$promise;
+                },
+                actions: {
+                    save: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                        var totalAmountPaid = model.liabilityRepay.principalPaid +model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid+ model.liabilityRepay.otherFeeChargespaid 
+                       if(model.liabilityRepay.totalInstallmentAmountPaid == totalAmountPaid){
+                            model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
+                            model.LiabilityRepayment.save()
+                                .finally(function () {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function (value) {
+                                    PageHelper.showProgress('Repayment', 'Repayment Saved.', 5000);
+                                    PageHelper.clearErrors();
+                                }, function (err) {
+                                    PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                    // irfNavigator.go({
+                                    //     state: 'Page.Adhoc',
+                                    //     pageName: "lender.liabilities.LoanBookingDashboard"
+                                    // });
+                                });
+                        }
+                        else{
+                              PageHelper.showErrors('Repayment',"TotalInstallmentAmountPaid is Incorrect",2000)
+                        }
+                    }
+                }
+            };
+        }
+    }
+})
