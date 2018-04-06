@@ -262,11 +262,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         });
 
                     if (_.hasIn($stateParams, 'pageId')) {
+                        PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res) {
                                 model.LoanAccount = res.liabilityAccount;
                                 model.LoanAccount.lenderName = res.lenderEnrolmentProcess.customer.firstName;
                                 var scheduleDetails = res.liabilityAccount.liabilitySchedules;
+                                PageHelper.hideLoader();
                                 var liabilityRepayCal;
                                 scheduleDetails.sort(function compare(a, b) {
                                     var dateA = new Date(a.installmentDueDate);
@@ -316,8 +318,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
                                             liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
                                             liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
-                                            liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue + liabilityClosureRepay.penalityDue
-                                        }
+                                            }
+                                        liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue + liabilityClosureRepay.penalityDue;
                                     } else if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "PartiallyPaid") {
                                         liabilityClosureRepay.principalDue = (scheduleDetails[i].principalPaid != null) ? scheduleDetails[i].principalDue - scheduleDetails[i].principalPaid : scheduleDetails[i].principalDue;
                                         liabilityClosureRepay.interestDue = (scheduleDetails[i].interestPaid != null) ? scheduleDetails[i].interestDue - scheduleDetails[i].interestPaid : scheduleDetails[i].interestDue;
@@ -369,7 +371,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                         var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargespaid
                         if (model.liabilityRepay.totalInstallmentAmountPaid == totalAmountPaid) {
-                            if (model.liabilityRepay.chequeDate > userLoginDate) {
+                            if (model.liabilityRepay.chequeDate!= null && model.liabilityRepay.chequeDate > userLoginDate) {
+                                PageHelper.showLoader();
                                 model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
                                 model.LiabilityRepayment.save()
                                     .finally(function() {
@@ -382,10 +385,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
-                                        // irfNavigator.go({
-                                        //     state: 'Page.Adhoc',
-                                        //     pageName: "lender.liabilities.LoanBookingDashboard"
-                                        // });
+                                         irfNavigator.goBack();
                                     });
                             } else {
                                 PageHelper.showErrors({
