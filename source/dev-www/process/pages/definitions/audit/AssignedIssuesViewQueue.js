@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+irf.pageCollection.factory(irf.page("audit.AssignedIssuesViewQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
     function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
-            "title": "ASSIGNED_ISSUES",
+            "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 localFormController = formCtrl;
@@ -12,7 +12,6 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
-                model.role_id = SessionStore.getUserRole().id;
             },
             definition: {
                 title: "SEARCH_ISSUES",
@@ -31,7 +30,15 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                             "x-schema-form": {
                                 "type": "select"
                             }
-                        }
+                        },
+                        "user_name": {
+                            "title": "USER_NAME",
+                            "type": "string"
+                        },
+                        "login": {
+                            "title": "LOGIN",
+                            "type": "string"
+                        },
                     },
                     "required": []
                 },
@@ -43,15 +50,15 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                     $q.all([
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
+                            'user_id': searchOptions.userId,
                             'issue_status': "A",
-                            'assignee_designation_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise,
                         Audit.online.getIssuesList({
                             'branch_id': searchOptions.branch_id,
+                            'user_id': searchOptions.userId,
                             'issue_status': "P",
-                            'assignee_designation_id': searchOptions.role_id,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage
                         }).$promise
@@ -163,7 +170,8 @@ irf.pageCollection.factory(irf.page("audit.AssignedIssuesQueue"), ["$log","PageH
                                     'pageId': item.id,
                                     'pageData': {
                                         "readonly": false,
-                                        "type": "operation"
+                                        "type": "operation",
+                                        "readonly": true
                                     }
                                 }, {
                                     'state': 'Page.Engine',

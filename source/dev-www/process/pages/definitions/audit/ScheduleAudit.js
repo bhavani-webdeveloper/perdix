@@ -169,7 +169,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                 "items": [{
                     title: "RESCHEDULE",
                     type: "button",
-                    "onClick": "actions.submit(model, form, formCtrl, 'reassign')"
+                    "onClick": "actions.submit(model, form, formCtrl, 'scheduled')"
                 }, {
                     title: "CANCEL_REQUEST",
                     type: "button",
@@ -244,7 +244,7 @@ irf.pageCollection.factory(irf.page("audit.ScheduleAudit"),
                     formHelper.validate(formCtrl).then(function() {
                         if (!validateDates(model)) return;
                         var auditInfoToCancel = _.cloneDeep(model.auditInfoOriginal);
-                        auditInfoToCancel.next_stage = "reassign";
+                        auditInfoToCancel.next_stage = "scheduled";
                         auditInfoToCancel.message = model.auditInfo.message;
                         PageHelper.showLoader();
                         Audit.online.updateAuditInfo(auditInfoToCancel).$promise.then(function(res) {

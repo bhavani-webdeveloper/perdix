@@ -35,7 +35,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
-            processDisplayRecords: function(onlineAudits) {
+            processDisplayRecords: function(onlineAudits, audit_type) {
                 var deferred = $q.defer();
                 var displayAudits = {
                     headers: {
@@ -63,7 +63,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                         }
                     }
                     angular.forEach(offlineAudits, function(v, k) {
-                        if (!v.$picked) {
+                        if (!v.$picked && (_.isNil(audit_type) || audit_type == v.audit_type)) {
                             displayAudits.body.push(v);
                             displayAudits.headers['x-total-count']++;
                         }
@@ -100,7 +100,7 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             },
             updateAuditInfo: {
                 method: 'POST',
-                url: endpoint + '/UpdateAuditInfo'
+                url: endpoint + '/updateAuditInfo'
             },
             getAuditFull: {
                 method: 'GET',
@@ -134,7 +134,27 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             getAvailableAuditorList: searchResource({
                 method: 'GET',
                 url: endpoint + '/findAvailableAuditors'
-            })
+            }),
+            getSnapAuditMaster: {
+                method: 'GET',
+                url: endpoint + '/getSnapAuditMaster'
+            },
+            createSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/createSnapAudit'
+            },
+            updateSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/updateSnapAudit'
+            },
+            publishSnapAudit: {
+                method: 'POST',
+                url: endpoint + '/publishSnapAudit'
+            },
+            getSnapAuditData: {
+                method: 'GET',
+                url: endpoint + '/getSnapAudit'
+            },
         });
 
         ret.offline = {
@@ -307,7 +327,9 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 irfStorageService.setMaster("auditMaster", auditMaster);
             },
             getAuditMaster: function() {
-                return irfStorageService.getMaster("auditMaster");
+                var auditMaster = irfStorageService.getMaster("auditMaster");
+                if (!auditMaster) PageHelper.setError({message:"Audit master unavailable. Refresh cache & retry"});
+                return auditMaster;
             }
         };
         return ret;
@@ -315,18 +337,27 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
 ]);
 irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "Audit", "PageHelper", "$q", "$log",
     function(irfStorageService, OfflineManager, SessionStore, Audit, PageHelper, $q, $log) {
-        if(!irf.appConfig.AMS_ENABLED) return;
+        if (!irf.appConfig.AMS_ENABLED) return;
 
         irfStorageService.onMasterUpdate(function() {
             var deferred = $q.defer();
             Audit.online.getAuditMaster().$promise.then(function(response) {
                 $log.info(response)
                 var auditTypeObj = {};
+                var audit_type_enum = {data:[]};
                 for (i in response.audit_type) {
                     var rec = response.audit_type[i];
+                    if (rec.status == 1) {
+                        audit_type_enum.data.push({
+                            code: rec.audit_type,
+                            name: rec.audit_type,
+                            value: rec.audit_type_id
+                        });
+                    }
                     auditTypeObj[rec.audit_type_id] = rec;
                 }
                 response.audit_type = auditTypeObj;
+                irfStorageService.setMaster("audit_type", audit_type_enum);
 
                 var process = {};
                 for (i in response.process) {
@@ -371,9 +402,16 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 response.typeofissues = typeofissues;
                 var typeofissues = {};
 
+                var branches = irfStorageService.getMaster("branch").data;
                 var branch_name = {};
-                for (i in response.branch_name) {
-                    branch_name[response.branch_name[i].node_id] = response.branch_name[i];
+                for (i in branches) {
+                    branch_name[branches[i].code] = {
+                        "node_code": branches[i].value,
+                        "node_id": branches[i].code,
+                        "id": branches[i].id,
+                        "parent_code": branches[i].parentCode,
+                        "status": 1
+                    };
                 }
                 response.branch_name = branch_name;
 
@@ -425,7 +463,38 @@ irf.pageCollection.run(["irfStorageService", "OfflineManager", "SessionStore", "
                 }
                 response.observation_classification = observation_classification;
 
-                
+                var field_verification = {};
+                for (i in response.field_verification) {
+                    field_verification[response.field_verification[i].loan_type_id] = response.field_verification[i];
+                }
+                response.field_verification = field_verification;
+
+                var book_entity = {};
+                for (i in response.book_entity) {
+                    book_entity[response.book_entity[i].entity_id] = response.book_entity[i];
+                }
+                response.book_entity = book_entity;
+
+                var particulars = {};
+                for (i in response.general_observation.particulars) {
+                    particulars[response.general_observation.particulars[i].particular_id] = response.general_observation.particulars[i];
+                }
+                response.general_observation.particulars = particulars;
+
+                var particular_options = {};
+                for (i in response.general_observation.particular_options) {
+                    var gopo = response.general_observation.particular_options[i];
+                    particular_options[gopo.particular_id] = particular_options[gopo.particular_id] || [];
+                    particular_options[gopo.particular_id].push(gopo);
+                }
+                response.general_observation.particular_options = particular_options;
+
+                var fixed_assets = {};
+                for (i in response.fixed_assets) {
+                    fixed_assets[response.fixed_assets[i].asset_type_id] = response.fixed_assets[i];
+                }
+                response.fixed_assets = fixed_assets;
+
                 PageHelper.showProgress("page-init", "Audit master loaded successfully", 2000);
                 Audit.offline.setAuditMaster(response);
                 deferred.resolve();
