@@ -376,7 +376,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                                 return [item.reject_reason];
                                                                             },
                                                                             onSelect: function(result, model, context) {
-                                                                                model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName = result.reject_reason;
+                                                                                model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].rejectReason = result.reject_reason;
                                                                             }
                                                                         }
                                                                     }
