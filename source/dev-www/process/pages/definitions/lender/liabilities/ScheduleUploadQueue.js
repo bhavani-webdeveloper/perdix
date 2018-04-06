@@ -104,7 +104,7 @@ define([], function() {
 									icon: "fa fa-book",
 									fn: function(item, model){
 										$state.go("Page.Engine",{
-											pageName:"lender.liabilities.DocumentUpload",
+											pageName:"lender.liabilities.ScheduleUpload",
 											pageId:item.id
 										});
 									},

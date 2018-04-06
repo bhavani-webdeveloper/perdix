@@ -4,10 +4,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         pageUID: "lender.liabilities.LiabilityAccountDocumentVerification",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "IndividualLoan"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "LiabilityAccountProcess"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, IndividualLoan) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, LiabilityAccountProcess) {
 
             var configFile = function () {
                 return {
@@ -15,50 +15,72 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    "LegalComplianceNew": {
+                    "DocumentVerification": {
                         "orderNo": 10
                     },
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload.upload": {
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload.upload": {
                         "onClick": function(model, form, schemaForm, event) {
                             var fileId = model.liabilityAccount.liabilityComplianceDocuments[schemaForm.arrayIndex].fileId;
                             Utils.downloadFile(Files.getFileDownloadURL(fileId));
                         }
                     },
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section.upload.upload": {
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.upload.upload": {
                         "onClick": function(model, form, schemaForm, event) {
                             var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
                             Utils.downloadFile(Files.getFileDownloadURL(fileId));
                         }
                     },
-                    "LegalComplianceNew.formDownload": {
+                    "DocumentVerification.documentDownload": {
                          "onClick": function(model, form, schemaForm, event) {
-                            var fileUrl = IndividualLoan.getAllDocumentsUrl(model.liabilityAccount.id);
+                            var fileUrl = LiabilityAccountProcess.documentDownload(model.liabilityAccount.id);
                             Utils.downloadFile(fileUrl);
                         }
-                    }
+                    },
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff": {
+                        "required": true
+                    },
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff": {
+                        "required": true
+                    },
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks": {
+                        "required": true
+                    }/*,
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks.remarks": {
+                        "required": true
+                    }*/
                 }
             }
             var getIncludes = function (model) {
 
                 return [
-                    "LegalComplianceNew",
-                    "LegalComplianceNew.lenderId",
-                    "LegalComplianceNew.lenderName",
-                    "LegalComplianceNew.formDownload",
-                    "LegalComplianceNew.liabilityComplianceDocuments",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section.documentType",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section.documentType.documentType",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload",
-                    "LegalComplianceNew.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload.upload",
-                    "LegalComplianceNew.lenderDocuments",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section.documentType",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section.documentType.documentType",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section.upload",
-                    "LegalComplianceNew.lenderDocuments.lenderDocuments.section.upload.upload"
+                    "DocumentVerification",
+                    "DocumentVerification.lenderId",
+                    "DocumentVerification.lenderName",
+                    "DocumentVerification.documentDownload",
+                    "DocumentVerification.lenderDocuments",
+                    "DocumentVerification.lenderDocuments.lenderDocuments",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.documentType",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.documentType.documentName",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.documentType.otherDocumentName",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.upload",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.upload.upload",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks",
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks",
+                    "DocumentVerification.liabilityComplianceDocuments",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.documentType",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.documentType.documentName",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.documentType.otherDocumentName",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.upload.upload",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks",
+                    "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks.remarks"
                 ];
 
             }
@@ -69,22 +91,18 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
+                        PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
-                                //if(res.liabilityAccount.currentStage != "LiabilityAccount") {
-                                   // irfNavigator.goBack();
-                                //}
+                                PageHelper.hideLoader();
+                                if(res.liabilityAccount.currentStage != "DocumentVerification") {
+                                   irfNavigator.goBack();
+                                }
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
                             });
                     } else {
-                        LiabilityLoanAccountBookingProcess.createNewProcess()
-                            .subscribe(function(res) {
-                                model.LiabilityLoanAccountBookingProcess = res; 
-                                model.liabilityAccount = res.liabilityAccount;
-                                console.log("liabilities account");
-                                console.log(model);
-                            });
+                       irfNavigator.goBack();
                     }
 
                     var self = this;
@@ -94,59 +112,196 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
-                                "documentVerification": {
+                                "DocumentVerification":{
                                     "type": "box",
                                     "colClass": "col-sm-12",
-                                    "title": "LENDER_DOCUMENT_VERIFICATION",
+                                    "title": "DOCUMENT_VERIFICATION",
                                     "htmlClass": "text-danger",
                                     "items": {
-                                        "type": "fieldset",
-                                        "title": "LENDER_DOCUMENT_VERIFICATION",
-                                        "items": {
-                                            "liabilityLenderDocuments": {
-                                                "type": "array",
-                                                "notitle": true,
-                                                "view": "fixed",
-                                                "key": "liabilityAccount.liabilityLenderDocuments",
-                                                "add": null,
-                                                "remove": null,
-                                                "items": {
-                                                    "liabilityLenderDocuments": {
-                                                        "type": "section",
-                                                        "htmlClass": "row",
-                                                        "items": {
-                                                            "documentType": {
-                                                                "type": "section",
-                                                                "htmlClass": "col-sm-3",
-                                                                "items": [{
-                                                                    "key": "liabilityAccount.liabilityLenderDocuments[].documentType",
-                                                                    "notitle": true,
-                                                                    "title": " ",
-                                                                    "readonly": true
-                                                                }]
-                                                            }, 
-                                                            "fileId": {
-                                                                "type": "section",
-                                                                "htmlClass": "col-sm-2",
-                                                                "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
-                                                                "items": [{
-                                                                    "title": "DOWNLOAD_FORM",
-                                                                    "notitle": true,
-                                                                    "fieldHtmlClass": "btn-block",
-                                                                    "style": "btn-default",
-                                                                    "icon": "fa fa-download", 
-                                                                    "type": "button",
-                                                                    "readonly": false,
-                                                                    "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
-                                                                    "onClick": function(model, form, schemaForm, event) {
-                                                                        var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
-                                                                        Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                        "lenderId": {
+                                            "key": "liabilityAccount.lenderId",
+                                            "title": "LENDER_ID",
+                                            "readonly": true
+                                        },
+                                        "lenderName": {
+                                            "key": "LiabilityLoanAccountBookingProcess.lenderEnrolmentProcess.customer.firstName",
+                                            "title": "LENDER_NAME",
+                                            "readonly": true
+                                        },
+                                        "documentDownload": {
+                                            "type": "button",
+                                            "title": "DOWNLOAD_ALL_DOCUMENTS"
+                                        },
+                                        "liabilityComplianceDocuments": {
+                                            "type": "fieldset",
+                                            "title": "COMPLIANCE_DOCUMENT_VERIFICATION",
+                                            "items": {
+                                                "liabilityComplianceDocuments": {
+                                                    "key": "liabilityAccount.liabilityComplianceDocuments",
+                                                    "type": "array",
+                                                    "title": "LEGAL_COMPLIANCE",
+                                                    "view": "fixed",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "notitle": true,
+                                                    "items": {
+                                                        "section":{
+                                                            "type": "section",
+                                                            "htmlClass": "row",
+                                                            "items":{
+                                                                "documentType": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "documentName": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
+                                                                            "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName!='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        },
+                                                                        "otherDocumentName": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].otherDocumentName",
+                                                                            "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName=='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
                                                                     }
-                                                                }]
+                                                                },
+                                                                "upload": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "upload":{
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
+                                                                            "title": "DOWNLOAD_FORM",
+                                                                            "notitle": true,
+                                                                            "fieldHtmlClass": "btn-block",
+                                                                            "style": "btn-default",
+                                                                            "icon": "fa fa-download", 
+                                                                            "type": "button",
+                                                                            "readonly": false
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "isSignOff": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "isSignOff": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].isSignOff",
+                                                                            "notitle": true,
+                                                                            "type": "select",
+                                                                            "titleMap": [{
+                                                                                "name": "Rejected",
+                                                                                "value": "REJECTED"
+                                                                            },{
+                                                                                "name": "Approved",
+                                                                                "value": "APPROVED"
+                                                                            }]
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarks": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "remarks":{
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].remarks",
+                                                                            "notitle": true,
+                                                                            "placeholder": "Remarks"
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                }
+                                                    } 
+                                                } 
+                                            }
+                                        },
+                                        "lenderDocuments": {
+                                            "type": "fieldset",
+                                            "title": "LENDER_DOCUMENT_VERIFICATION",
+                                            "items": {
+                                                "lenderDocuments": {
+                                                    "key": "liabilityAccount.liabilityLenderDocuments",
+                                                    "type": "array",
+                                                    "title": "LEGAL_COMPLIANCE",
+                                                    "view": "fixed",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "notitle": true,
+                                                    "items": {
+                                                        "section":{
+                                                            "type": "section",
+                                                            "htmlClass": "row",
+                                                            "items":{
+                                                                "documentType": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "documentName": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
+                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName!='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        },
+                                                                        "otherDocumentName": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].otherDocumentName",
+                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName=='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "upload": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "upload":{
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                                            "title": "DOWNLOAD_FORM",
+                                                                            "notitle": true,
+                                                                            "fieldHtmlClass": "btn-block",
+                                                                            "style": "btn-default",
+                                                                            "icon": "fa fa-download", 
+                                                                            "type": "button",
+                                                                            "readonly": false
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "isSignOff": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "isSignOff": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].isSignOff",
+                                                                            "notitle": true,
+                                                                            "type": "select",
+                                                                            "titleMap": [{
+                                                                                "name": "Rejected",
+                                                                                "value": "REJECTED"
+                                                                            },{
+                                                                                "name": "Approved",
+                                                                                "value": "APPROVED"
+                                                                            }]
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "remarks": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "remarks":{
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].remarks",
+                                                                            "notitle": true,
+                                                                            "placeholder": "Remarks"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } 
+                                                } 
                                             }
                                         }
                                     }
@@ -217,7 +372,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -245,7 +400,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();

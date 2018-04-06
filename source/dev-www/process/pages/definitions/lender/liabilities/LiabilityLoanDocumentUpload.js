@@ -57,7 +57,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LenderDocumentation.liabilityLenderDocuments.documentName",
                     "LenderDocumentation.liabilityLenderDocuments.otherDocumentName",
                     "LenderDocumentation.liabilityLenderDocuments.upload",
-                    "LenderDocumentation.liabilityLenderDocuments.isSignOff",
+                    // "LenderDocumentation.liabilityLenderDocuments.isSignOff",
                     "LenderDocumentation.liabilityLenderDocuments.uploadedDate",
 
                     "LegalCompliance",
@@ -65,7 +65,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LegalCompliance.liabilityComplianceDocuments.upload",
                     "LegalCompliance.liabilityComplianceDocuments.documentName",
                     "LegalCompliance.liabilityComplianceDocuments.otherDocumentName",
-                    "LegalCompliance.liabilityComplianceDocuments.isSignOff",
+                    // "LegalCompliance.liabilityComplianceDocuments.isSignOff",
                     "LegalCompliance.liabilityComplianceDocuments.uploadedDate"
 
                 ];
@@ -109,8 +109,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     });
 
                     if(_.hasIn($stateParams, 'pageId')) {
+                        PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
+                                PageHelper.hideLoader();
                                 if(res.liabilityAccount.currentStage != "DocumentUpload") {
                                     irfNavigator.goBack();
                                 }
@@ -154,14 +156,14 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments, function(n) {
                             return n.documentType = "ComplianceDocuments";
                         });
-                        console.log(model);
 
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Loan Saved.', 5000);
+                                PageHelper.showProgress('loan', 'Documents Saved.', 5000);
                                 PageHelper.clearErrors();
                                 //irfNavigator.goBack();
                             }, function (err) {
@@ -181,13 +183,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
+                                PageHelper.showProgress('loan', 'Documents Uploaded', 5000);
                                 PageHelper.clearErrors();
                                 irfNavigator.goBack();
                             }, function (err) {

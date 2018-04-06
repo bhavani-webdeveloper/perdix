@@ -246,130 +246,6 @@
             } 
         }
     },
-    "LegalComplianceNew":{
-        "type": "box",
-        "colClass": "col-sm-12",
-        "title": "DOCUMENT_VERIFICATION",
-        "htmlClass": "text-danger",
-        "items": {
-            "lenderId": {
-                "key": "liabilityAccount.lenderId",
-                "title": "LENDER_ID",
-                "readonly": true
-            },
-            "lenderName": {
-                "key": "liabilityAccount.lenderName",
-                "title": "LENDER_NAME",
-                "readonly": true
-            },
-            "formDownload": {
-                "type": "button",
-                "title": "DOWNLOAD_ALL_FORMS"
-            },
-            "liabilityComplianceDocuments": {
-                "type": "fieldset",
-                "title": "LENDER_DOCUMENT_VERIFICATION",
-                "items": {
-                    "liabilityComplianceDocuments": {
-                        "key": "liabilityAccount.liabilityComplianceDocuments",
-                        "type": "array",
-                        "title": "LEGAL_COMPLIANCE",
-                        "view": "fixed",
-                        "add": null,
-                        "remove": null,
-                        "notitle": true,
-                        "items": {
-                            "section":{
-                                "type": "section",
-                                "htmlClass": "row",
-                                "items":{
-                                    "documentType": {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-6",
-                                        "items": {
-                                            "documentType": {
-                                                "key": "liabilityAccount.liabilityComplianceDocuments[].documentType",
-                                                "notitle": true,
-                                                "readonly": true
-                                            }
-                                        }
-                                    },
-                                    "upload": {                                        
-                                        "type": "section",
-                                        "htmlClass": "col-sm-6",
-                                        "items": {
-                                            "upload":{
-                                                "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
-                                                "title": "DOWNLOAD_FORM",
-                                                "notitle": true,
-                                                "fieldHtmlClass": "btn-block",
-                                                "style": "btn-default",
-                                                "icon": "fa fa-download", 
-                                                "type": "button",
-                                                "readonly": false
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-                        } 
-                    } 
-                }
-            },
-            "lenderDocuments": {
-                "type": "fieldset",
-                "title": "COMPLIANCE_DOCUMENT_VERIFICATION",
-                "items": {
-                    "lenderDocuments": {
-                        "key": "liabilityAccount.liabilityLenderDocuments",
-                        "type": "array",
-                        "title": "LEGAL_COMPLIANCE",
-                        "view": "fixed",
-                        "add": null,
-                        "remove": null,
-                        "notitle": true,
-                        "items": {
-                            "section":{
-                                "type": "section",
-                                "htmlClass": "row",
-                                "items":{
-                                    "documentType": {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-6",
-                                        "items": {
-                                            "documentType": {
-                                                "key": "liabilityAccount.liabilityLenderDocuments[].documentType",
-                                                "notitle": true,
-                                                "readonly": true
-                                            }
-                                        }
-                                    },
-                                    "upload": {                                        
-                                        "type": "section",
-                                        "htmlClass": "col-sm-6",
-                                        "items": {
-                                            "upload":{
-                                                "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
-                                                "title": "DOWNLOAD_FORM",
-                                                "notitle": true,
-                                                "fieldHtmlClass": "btn-block",
-                                                "style": "btn-default",
-                                                "icon": "fa fa-download", 
-                                                "type": "button",
-                                                "readonly": false
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-                        } 
-                    } 
-                }
-            }
-        }
-    },
     "DisbursementConfirmation":{
         "type":"box",
         "title":"DISBURSEMENT_CONFIRMATION",
@@ -379,13 +255,13 @@
                 "type":"date",
                 "title":"DISBURSEMENT_DATE"
             },
-            "disbursementMode":{
-                "key":"liabilityAccount.disbursementMode",
+            "modeOfDisbursement":{
+                "key":"liabilityAccount.modeOfDisbursement",
                 "type":"string",
                 "title":"MODE_OF_DISBURSEMENT"
             },
-            "UTRNo":{
-                "key":"liabilityAccount.UTRNo",
+            "referenceNumber":{
+                "key":"liabilityAccount.referenceNumber",
                 "type":"number",
                 "title":"UTR_No"
             }

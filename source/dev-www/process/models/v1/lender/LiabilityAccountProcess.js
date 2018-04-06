@@ -29,7 +29,6 @@ irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerialize
                 url:endpoint +':id',
                 isArray:true
             },
-
             getLiabilityAccountSearch:searchResource({
                 method:'GET',
                 url:endpoint +':id'
@@ -40,7 +39,10 @@ irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerialize
                 url: endpoint2
             }
         });
-        return resource;
+        resource.documentDownload = function(loanId){
+            return endpoint + '/documents?liabilityAccountId='+loanId;
 
+        };
+        return resource;
     }
 ]);

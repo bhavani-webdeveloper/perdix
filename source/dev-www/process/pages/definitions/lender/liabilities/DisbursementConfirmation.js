@@ -15,16 +15,16 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    "DisbursementDetails": {
+                    "DisbursementConfirmation": {
                         "orderNo": 10
                     },
-                    "DisbursementDetails.disbursementDate": {
+                    "DisbursementConfirmation.disbursementDate": {
                         "required": true 
                     },
-                    "DisbursementDetails.disbursementMode": {
+                    "DisbursementConfirmation.modeOfDisbursement": {
                         "required": true 
                     },
-                    "DisbursementDetails.UTRNo": {
+                    "DisbursementConfirmation.referenceNumber": {
                         "required": true 
                     }
 
@@ -33,10 +33,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var getIncludes = function (model) {
 
                 return [
-                    "DisbursementDetails",
-                    "DisbursementDetails.disbursementDate",
-                    "DisbursementDetails.disbursementMode",
-                    "DisbursementDetails.UTRNo"
+                    "DisbursementConfirmation",
+                    "DisbursementConfirmation.disbursementDate",
+                    "DisbursementConfirmation.modeOfDisbursement",
+                    "DisbursementConfirmation.referenceNumber"
                 ];
 
             }
@@ -47,22 +47,18 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
+                        PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
-                                //if(res.liabilityAccount.currentStage != "LiabilityAccount") {
-                                   // irfNavigator.goBack();
-                                //}
+                                PageHelper.hideLoader();
+                                if(res.liabilityAccount.currentStage != "DisbursementConfirmation") {
+                                   irfNavigator.goBack();
+                                }
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
                             });
                     } else {
-                        LiabilityLoanAccountBookingProcess.createNewProcess()
-                            .subscribe(function(res) {
-                                model.LiabilityLoanAccountBookingProcess = res; 
-                                model.liabilityAccount = res.liabilityAccount;
-                                console.log("liabilities account");
-                                console.log(model);
-                            });
+                        irfNavigator.goBack();
                     }
 
                     var self = this;
@@ -91,7 +87,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
                     p1.then(function(repo){
                         self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                        console.log(self);
                     });
                     /* Form rendering ends */
                 },
@@ -121,6 +116,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             return false;
                         }
 
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
