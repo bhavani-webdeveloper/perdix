@@ -1,0 +1,100 @@
+{
+    "LiabilityRepayment":{
+        "type": "box",
+        "title": "liabilityRepay",
+        "items": {
+            "liabilityRepaymentScheduleDetailsId":{
+               "key":"liabilityRepay.liabilityRepaymentScheduleDetailsId", 
+               "type":"number"
+            },
+            "transactionType":{
+                "key":"liabilityRepay.transactionType",
+                "type":"select",
+                "title":"TRANSACTION_TYPE", 
+                "enumCode":"transaction_type"
+            },
+            "principalDue":{
+                "key":"liabilityRepay.principalDue",
+                "type":"number",
+                "title": "PRINCIPAL_DUE"
+            },
+            "interestDue":{
+                "key":"liabilityRepay.interestDue",
+                "type":"number",
+                "title": "INTEREST_DUE"
+            },
+            "penalityDue":{
+                "key":"liabilityRepay.penalityDue",
+                "type":"number",
+                "title": "PENALITY_DUE"
+            },
+            "otherFeeChargesDue":{
+                "key":"liabilityRepay.otherFeeChargesDue",
+                "type":"number",
+                "title": "OTHER_FEE_CHARGES_DUE"
+            },
+            "totalInstallmentAmountDue":{
+                "key":"liabilityRepay.totalInstallmentAmountDue",
+                "type":"number",
+                "title": "TOTAL_INSTALLMENT_AMOUNT_DUE"
+            },
+             "principalPaid":{
+                "key":"liabilityRepay.principalPaid",
+                "type":"number",
+                "title": "PRINCIPAL_PAID"
+            },
+            "interestPaid":{
+                "key":"liabilityRepay.interestPaid",
+                "type":"number",
+                "title": "INTEREST_PAID"
+            },
+            "penalityPaid":{
+                "key":"liabilityRepay.penalityPaid",
+                "type":"number",
+                "title": "PENALITY_PAID"
+            },
+            "otherFeeChargespaid":{
+                "key":"liabilityRepay.otherFeeChargespaid",
+                "type":"number",
+                "title": "OTHER_FEE_CHARGES_PAID"
+            },
+            "totalInstallmentAmountPaid":{
+                "key":"liabilityRepay.totalInstallmentAmountPaid",
+                "type":"number",
+                "title": "TOTAL_INSTALLMENT_AMOUNT_PAID"
+            },
+            "instrumentType":{
+                "key":"liabilityRepay.instrumentType",
+                "type":"select",
+                "title": "INSTRUMENT_TYPE",
+                "enumCode":"instrument_type"
+            },
+            "chequeNumber":{
+                "key":"liabilityRepay.chequeNumber",
+                "type":"string",
+                "title": "CHEQUE_NUMBER"
+            },
+            "chequeDate":{
+                "key":"liabilityRepay.chequeDate",
+                "type":"date",
+                "title": "CHEQUE_DATE"
+            },
+            "referencenumber":{
+                "key":"liabilityRepay.referencenumber",
+                "type":"string",
+                "title": "REFERENCE_NUMBER"
+            },
+            "transactionDate":{
+                "key":"liabilityRepay.transactionDate",
+                "type":"string",
+                "title": "TRANSACTION_DATE"
+            },
+            "preClosureCharges":{
+                 "key":"liabilityRepay.preClosureCharges",
+                "type":"number",
+                "title": "PRE_CLOSURE_CHARGES"
+
+            }
+        }
+    }
+}
