@@ -457,14 +457,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
-                                "lovonly": true,
+                                //"lovonly": true,
                                 "type": "lov",
                                 bindMap: {
                                  "Partner": "loanAccount.partnerCode",
                                  "ProductCategory": "loanAccount.productCategory",
                                  "Frequency": "loanAccount.frequency",
                                 },
-                                autolov: true,
+                               // autolov: true,
                                 required: true,
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
@@ -476,7 +476,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
-                                        item.name
+                                        item.productCode
                                     ];
                                 },
                                 onChange: function(value, form, model) {
