@@ -231,8 +231,9 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 							fn: function(item, model){
 								if(model.siteCode == 'sambandh') {
 									$state.go("Page.Engine",{
-										pageName:"customer.IndividualEnrollment3",
-										pageId:item.id
+										pageName:"customer.IndividualEnrollmentStage2",
+										pageId:item.id,
+										pageData: {currentStage: item.currentStage}
 									});
 								} else if(model.siteCode == 'saija') {
 									$state.go("Page.Engine",{

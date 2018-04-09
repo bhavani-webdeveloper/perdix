@@ -6,6 +6,7 @@
             "iconClass": "fa fa-user",
             "items": [
                 "Page/Engine/CustomerSearch",
+                "Page/Engine/FSOCustomerSearch",
                 "Page/Engine/ProfileInformation",
                 "Page/Engine/customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
