@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.CloseGroup",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess","filterFilter", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess,filterFilter, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		return {
@@ -13,6 +13,17 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("View / close group got initialized");
+				model.branchId = SessionStore.getCurrentBranch().branchId;
+				model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                        break;
+                    }
+                }
 			},
 			definition: {
 				title: "VIEW_OR_CLOSE_GROUP",
@@ -32,12 +43,50 @@ define({
 								"enumCode": "partner"
 							}
 						},
+						"branchId": {
+							"title": "BRANCH_NAME",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "branch_id"
+							}
+						},
+						"centre": {
+							"title": "CENTRE_NAME",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branchId",
+                                "screenFilter": true
+							}
+						},
+						"groupName": {
+							"title": "GROUP_NAME",
+							"type": ["string", "null"]
+						},
+						"groupCode": {
+							"title": "GROUP_CODE",
+							"type": ["string", "null"]
+						},
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "groupLoanStages"
+							}
+						},
+						"groupStatus":{
+							"title": "GROUP_STATUS",
+							"type": ["string", "null"],
+							"x-schema-form": {
+								"type": "select",
+                                "titleMap": {
+                                    true:"Active",
+                                    false:"Closed"
+                                }
 							}
 						}
 					},
@@ -52,10 +101,15 @@ define({
 					var params = {
 						//'branchId': branchId,
 						'partner': searchOptions.partner,
-						'groupStatus': true,
+						//'groupStatus': true,
 						'currentStage': searchOptions.stage,
 						'page': pageOpts.pageNo,
-						'per_page': pageOpts.itemsPerPage
+						'per_page': pageOpts.itemsPerPage,
+						'branchId': searchOptions.branchId,
+						'centre': searchOptions.centre,
+						'groupName': searchOptions.groupName,
+						'groupStatus': searchOptions.groupStatus,
+						'groupCode': searchOptions.groupCode
 					};
 
 					var promise = GroupProcess.search(params).$promise;
@@ -91,12 +145,17 @@ define({
 						};
 					},
 					getColumns: function() {
+						//var centres = formHelper.enum('centre').data;
+						//var siteCode=SessionStore.getGlobalSetting("siteCode");
 						return [{
 							title: 'ID',
 							data: 'id'
 						}, {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
+						}, {
+							title: 'CENTRE_ID',
+							data: 'centreCode',
 						}, {
 							title: 'GROUP_CODE',
 							data: 'groupCode'

@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper", "Enrollment","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
-function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
+["$log", "formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
+function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -8,6 +8,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
+			model.centres = formHelper.enum('centre').data;
 			//"irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
 			var bankName = SessionStore.getBankName();
 			var banks = formHelper.enum('bank').data;
@@ -191,6 +192,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 					};
 				},
 				getColumns: function(){
+					var centres = formHelper.enum('centre').data;
 					return [
 						{
 							title:'NAME',
@@ -214,7 +216,11 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 						},
 						{
 							title:'CENTRE',
-							data: 'centreId'
+							data: 'centreId',
+							render: function(data, type, full, meta) {
+								var data =filterFilter(centres, {"value": Number(full.centreId)}, true);
+								return data[0].name;
+							}	
 						},
 						{
 							title:'FATHER_NAME',

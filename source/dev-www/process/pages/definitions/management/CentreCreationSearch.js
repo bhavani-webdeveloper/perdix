@@ -10,7 +10,7 @@ define({
 		"title": "CENTRE_SEARCH",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-			model.branch = SessionStore.getCurrentBranch().branchId;
+			model.branchId = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
@@ -36,7 +36,6 @@ define({
            					 "type": ["string", "null"],
                              "title": "CENTRE_NAME_"
          					}
-
       					},
       					"required":[]
 			},
