@@ -1,99 +1,123 @@
 {
     "LiabilityRepayment":{
         "type": "box",
-        "title": "liabilityRepay",
+        "title": "LIABILITY_REPAYMENT",
         "items": {
             "liabilityRepaymentScheduleDetailsId":{
                "key":"liabilityRepay.liabilityRepaymentScheduleDetailsId", 
                "type":"number"
-            },
-            "transactionType":{
+            },"transactionType":{
                 "key":"liabilityRepay.transactionType",
                 "type":"select",
                 "title":"TRANSACTION_TYPE", 
-                "enumCode":"transaction_type"
+                "enumCode":"transaction_type",
+                "orderNo": 1
             },
             "principalDue":{
                 "key":"liabilityRepay.principalDue",
                 "type":"number",
-                "title": "PRINCIPAL_DUE"
+                "title": "PRINCIPAL_DUE",
+                "orderNo": 10
             },
             "interestDue":{
                 "key":"liabilityRepay.interestDue",
                 "type":"number",
-                "title": "INTEREST_DUE"
+                "title": "INTEREST_DUE",
+                "orderNo": 20
             },
             "penalityDue":{
                 "key":"liabilityRepay.penalityDue",
                 "type":"number",
-                "title": "PENALITY_DUE"
+                "title": "PENALITY_DUE",
+                "orderNo": 30
             },
             "otherFeeChargesDue":{
                 "key":"liabilityRepay.otherFeeChargesDue",
                 "type":"number",
-                "title": "OTHER_FEE_CHARGES_DUE"
+                "title": "OTHER_FEE_CHARGES_DUE",
+                "orderNo": 40
             },
             "totalInstallmentAmountDue":{
                 "key":"liabilityRepay.totalInstallmentAmountDue",
                 "type":"number",
-                "title": "TOTAL_INSTALLMENT_AMOUNT_DUE"
+                "title": "TOTAL_INSTALLMENT_AMOUNT_DUE",
+                "orderNo": 50
             },
              "principalPaid":{
                 "key":"liabilityRepay.principalPaid",
                 "type":"number",
-                "title": "PRINCIPAL_PAID"
+                "title": "PRINCIPAL_PAID",
+                
+                "orderNo": 55
             },
             "interestPaid":{
                 "key":"liabilityRepay.interestPaid",
                 "type":"number",
-                "title": "INTEREST_PAID"
+                "title": "INTEREST_PAID",
+               
+                "orderNo": 60
             },
             "penalityPaid":{
                 "key":"liabilityRepay.penalityPaid",
                 "type":"number",
-                "title": "PENALITY_PAID"
+                "title": "PENALITY_PAID",
+                "requried":true,
+                "orderNo": 70
             },
             "otherFeeChargespaid":{
                 "key":"liabilityRepay.otherFeeChargespaid",
                 "type":"number",
-                "title": "OTHER_FEE_CHARGES_PAID"
+                "title": "OTHER_FEE_CHARGES_PAID",
+                "requried":true,
+                "orderNo": 80
             },
             "totalInstallmentAmountPaid":{
                 "key":"liabilityRepay.totalInstallmentAmountPaid",
                 "type":"number",
-                "title": "TOTAL_INSTALLMENT_AMOUNT_PAID"
+                "title": "TOTAL_INSTALLMENT_AMOUNT_PAID",
+                "requried":true,
+                "orderNo": 90
             },
             "instrumentType":{
                 "key":"liabilityRepay.instrumentType",
                 "type":"select",
                 "title": "INSTRUMENT_TYPE",
-                "enumCode":"instrument_type"
+                "enumCode":"instrument_type",
+                "orderNo": 100
             },
             "chequeNumber":{
                 "key":"liabilityRepay.chequeNumber",
-                "type":"string",
-                "title": "CHEQUE_NUMBER"
+                "title": "CHEQUE_NUMBER",
+                "orderNo": 110
             },
             "chequeDate":{
                 "key":"liabilityRepay.chequeDate",
                 "type":"date",
-                "title": "CHEQUE_DATE"
+                "title": "CHEQUE_DATE",
+                "orderNo": 120
             },
             "referencenumber":{
                 "key":"liabilityRepay.referencenumber",
                 "type":"string",
-                "title": "REFERENCE_NUMBER"
+                "title": "REFERENCE_NUMBER",
+                "orderNo": 103
             },
             "transactionDate":{
                 "key":"liabilityRepay.transactionDate",
                 "type":"string",
-                "title": "TRANSACTION_DATE"
+                "title": "TRANSACTION_DATE",
+                "orderNo": 104
             },
             "preClosureCharges":{
-                 "key":"liabilityRepay.preClosureCharges",
+                "key":"liabilityRepay.preClosureCharges",
                 "type":"number",
-                "title": "PRE_CLOSURE_CHARGES"
-
+                "title": "PRE_CLOSURE_CHARGES",
+                "orderNo": 105
+            },
+            "collectionRemarks":{
+                "key":"liabilityRepay.collectionRemarks",
+                "title": "COLLECTION_REMARKS",
+                "orderNo": 106
             }
         }
     }
