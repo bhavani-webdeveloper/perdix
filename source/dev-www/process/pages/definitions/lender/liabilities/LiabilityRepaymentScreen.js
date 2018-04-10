@@ -10,7 +10,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Schedule) {
             var branch = SessionStore.getBranch();
-          //  var userLoginDate = SessionStore.getCBSDate();
+            var userLoginDate = SessionStore.getCBSDate();
             var configFile = function() {
                 return {}
             }
@@ -112,7 +112,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 
                 initialize: function(model, form, formCtrl) {
                     var self = this;
-                    var userLoginDate = SessionStore.getCBSDate();
+                   // var userLoginDate = SessionStore.getCBSDate();
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
@@ -351,7 +351,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
                                     // model.liabilityClosureRepay.transactionType = null;
                                     model.liabilityClosureRepay = liabilityClosureRepay;
-                                    //  model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
+                                    model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
                                     model.liabilityScheduleRepay = this.liabilityRepayCal
                                     model.liabilityRepay = this.liabilityRepayCal;
                                     if(this.liabilityRepayCal){
@@ -397,6 +397,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     })
                                     .subscribe(function(value) {
                                         PageHelper.showProgress('Repayment', 'Repayment Saved.', 5000);
+                                        irfNavigator.goBack();
                                         PageHelper.clearErrors();
                                     }, function(err) {
                                         PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
