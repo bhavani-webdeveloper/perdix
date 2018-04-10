@@ -49,6 +49,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     "ContactInformation.mobilePhone": {
                         "required": false
                     },
+                    "CustomerInformation.age": {
+                        "schema": {
+                            "minimum": 18,
+                            "maximum": 58,
+                        }
+                    },
                     "BusinessOccupationDetails.businessDetails.ageOfEnterprise": {
                         "enumCode": "years_of_business",
                         "title": "AGE_OF_ENTERPRISE"
