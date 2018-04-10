@@ -1,19 +1,10 @@
 {
    "stages": [{
          "order": 1,
-         "code": "Stage01",
+         "code": "Initiation",
          "name": "createCustomerProfile",
          "stageType": "CAPTURE",
-         "isTerminalStage": false
-         "allowedRoles": [
-            "WM"
-         ]
-      },{
-         "order": 2,
-         "code": "Stage02",
-         "name": "customerProfileEdit",
-         "stageType": "CAPTURE",
-         "isTerminalStage": false
+         "isTerminalStage": false,
          "allowedRoles": [
             "WM"
          ]
@@ -62,7 +53,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Stage02"
+                     "Stage01"
                   ]
                },
 
@@ -72,7 +63,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "Stage02"
+                     "Stage01"
                   ]
                },
                "dateOfBirth": {
@@ -89,7 +80,7 @@
               	"minLength": 10,
               	"maxLength": 10,
               	"captureStages": [
-                	"Stage02"
+                	"Stage01"
              	  ]
                },
                "villageName": {
