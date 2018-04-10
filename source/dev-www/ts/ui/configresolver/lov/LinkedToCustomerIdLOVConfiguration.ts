@@ -39,7 +39,7 @@ export class LinkedToCustomeridLOVConfiguration extends LOVElementConfiguration 
 
     getListDisplayItem: Function = function(data, index) {
         return [
-            [data.firstName, data.fatherFirstName].join(' '),
+            [data.firstName].join(' '),
             data.id
         ];
     };

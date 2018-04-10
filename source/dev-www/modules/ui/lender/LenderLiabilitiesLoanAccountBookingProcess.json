@@ -5,12 +5,14 @@
         "items": {
             "lenderId":{
                 "key":"liabilityAccount.lenderId",
+                "resolver": "LenderIDLOVConfiguration",
                 "type":"lov",
+                "lovonly": true,
                 "title":"LENDER_ID"
             },
             "lenderAccountNumber":{
                 "key":"liabilityAccount.lenderAccountNumber",
-                "type":"string",
+                "type":"number",
                 "title": "LENDER_ACCOUNT_NUMBER"
             }
         }
@@ -30,10 +32,26 @@
                 "type":"number",
                 "title":"LOAN_AMOUNT"
             },
+            "numberOfDisbursement":{
+                "key":"liabilityAccount.numberOfDisbursement",
+                "type":"number",
+                "title": "NUMBER_OF_DISBURSEMENT"
+            },
+            "trancheNumber":{
+                "key":"liabilityAccount.trancheNumber",
+                "type":"string",
+                "title": "TRANCHE_NUMBER"
+            },
             "disbursementDate":{
                 "key":"liabilityAccount.disbursementDate",
                 "type":"date",
                 "title":"DISBURSEMENT_DATE"
+            },
+            "trancheCondition":{
+                "key":"liabilityAccount.trancheCondition",
+                "type":"select",
+                "enumCode": "tranche_conditions",
+                "title": "TRANCHE_CONDITION"
             },
             "interestRateType":{
                 "key":"liabilityAccount.interestRateType",
@@ -43,7 +61,7 @@
             },
             "rateOfInterest":{
                 "key":"liabilityAccount.rateOfInterest",
-                "type":"string",
+                "type":"number",
                 "title":"RATE_OF_INTEREST"
             },
             "markUpOrDown":{
@@ -98,7 +116,8 @@
                     },
                     "feeType": {
                         "key": "liabilityAccount.liabilityFeeDetails[].feeType",
-                        "type":"string",
+                        "type":"select",
+                        "enumCode": "liability_fee_type",
                         "title":"FEE_TYPE"
                     },
                     "feeAmount": {

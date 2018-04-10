@@ -1,7 +1,7 @@
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
-        pageUID: "lender.enrolment.Registration",
+        pageUID: "lender.enrolment.Profile",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
@@ -146,7 +146,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             return {
                 "type": "schema-form",
-                "title": "LENDER_REGISTRATION",
+                "title": "LENDER_PROFILE",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {

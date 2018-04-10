@@ -9,7 +9,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
         var fullDefinition = {
             "title": "LENDER360_DASHBOARD",
             "items": [
-                "Page/Engine/lender.enrolment.Registration",
+                "Page/Engine/lender.enrolment.Profile",
                 {
                 "title": "LOANS",
                 "iconClass": "fa fa-key",
@@ -45,8 +45,8 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
         $scope.introFormName = "introForm";
         $scope.pageTitle = 'LENDER_360'; 
 
-        if ($scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Registration'])
-            $scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Registration'].onClick = function(event, menu) {
+        if ($scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Profile'])
+            $scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Profile'].onClick = function(event, menu) {
             menu.stateParams.pageId = $scope.lenderId;
            // entityManager.setModel(menu.stateParams.pageName, $scope.model);
             return $q.resolve(menu);
