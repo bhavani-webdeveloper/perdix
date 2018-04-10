@@ -190,9 +190,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
                                 PageHelper.hideLoader();
-                                if(res.liabilityAccount.currentStage != "LiabilityAccount") {
+                               /* if(res.liabilityAccount.currentStage != "LiabilityAccount") {
                                     irfNavigator.goBack();
-                                }
+                                }*/
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
                             });
