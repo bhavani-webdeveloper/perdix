@@ -218,8 +218,13 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 							title:'CENTRE',
 							data: 'centreId',
 							render: function(data, type, full, meta) {
-								var data =filterFilter(centres, {"value": Number(full.centreId)}, true);
-								return data[0].name;
+	                            if (data) {
+	                                var centrevalue = filterFilter(centres, {
+	                                    "value": Number(full.centreId)
+	                                }, true);
+	                                data = centrevalue[0].name;
+	                            }
+	                            return data;
 							}	
 						},
 						{
