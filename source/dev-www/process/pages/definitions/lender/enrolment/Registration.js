@@ -53,7 +53,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                     "LenderContactInformation.Address1.pincode": {
-                        "resolver": "PincodeLOVConfiguration",
                         "required": true
                     },
                     "LenderContactInformation.Address1.villageName": {
@@ -64,9 +63,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "LenderContactInformation.Address1.state": {
                         "readonly": true
-                    },
-                    "LenderContactInformation.Address2.mailingPincode": {
-                        "resolver": "MailingPincodeLOVConfiguration"
                     },
                     "LenderContactInformation.Address2.mailingLocality": {
                         "readonly": true
@@ -208,9 +204,53 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "pincode": {
                                                     "key": "customer.pincode",
                                                     "title": "PIN_CODE",
-                                                    "type": "lov",                                                    
-                                                    //"inputmode": "number",
-                                                    //"autolov": true,
+                                                    "type": "lov",
+                                                    searchHelper: formHelper,  
+                                                    inputMap: {
+                                                        "pincode": {
+                                                            "key": "customer.pincode",
+                                                            "title": "pinCode",
+                                                            "type": "string"
+                                                        },
+                                                        "district": {
+                                                            "key": "customer.district"
+                                                        },
+                                                        "state": {
+                                                            "key": "customer.state"
+                                                        }
+                                                    },
+                                                    outputMap: {
+                                                        "division": "customer.locality",
+                                                        "region": "customer.villageName",
+                                                        "pincode": "customer.pincode",
+                                                        "district": "customer.district",
+                                                        "state": "customer.state",
+                                                    },
+                                                    initialize: function(inputModel) {
+                                                        $log.warn('in pincode initialize');
+                                                        $log.info(inputModel);
+                                                    },
+                                                    search: function(inputModel, form) {
+                                                        if (!inputModel.pincode) {
+                                                            return $q.reject();
+                                                        }
+                                                        return Queries.searchPincodes(
+                                                            inputModel.pinCode,
+                                                            inputModel.district,
+                                                            inputModel.state
+                                                        );
+                                                    },
+                                                    getListDisplayItem: function(item, index) {
+                                                        return [
+                                                            item.division + ', ' + item.region,
+                                                            item.pincode,
+                                                            item.district + ', ' + item.state
+                                                        ];
+                                                    },
+                                                    "onSelect": function(result, model, context) {
+                                                    },
+                                                    "autolov": true,
+                                                    "lovonly": false,                                                  
                                                     "orderNo": 100
                                                 },
                                                 "locality": {
@@ -258,7 +298,51 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.mailingPincode",
                                                     "type": "lov",
                                                     "inputmode": "number",
-                                                    "autolov": true,
+                                                    inputMap: {
+                                                        "mailingPincode": "customer.mailingPincode",
+                                                        "mailingDistrict": {
+                                                            key: "customer.mailingDistrict"
+                                                        },
+                                                        "mailingState": {
+                                                            key: "customer.mailingState"
+                                                        }
+                                                    },
+                                                    outputMap: {
+                                                        "mailingDivision": "customer.mailingLocality",
+                                                        "mailingPincode": "customer.mailingPincode",
+                                                        "mailingDistrict": "customer.mailingDistrict",
+                                                        "mailingState": "customer.mailingState"
+                                                    },                                                    
+                                                    searchHelper: formHelper,  
+                                                    initialize: function(inputModel) {
+                                                        $log.warn('in pincode initialize');
+                                                        $log.info(inputModel);
+                                                    },
+                                                    search: function(inputModel, form, model) {
+                                                        if (!inputModel.mailingPincode) {
+                                                            return $q.reject();
+                                                        }
+                                                        return Queries.searchPincodes(
+                                                            inputModel.mailingPincode,
+                                                            inputModel.mailingDistrict,
+                                                            inputModel.mailingState
+                                                        );
+                                                    },
+                                                    getListDisplayItem: function(item, index) {
+                                                        return [
+                                                            item.division + ', ' + item.region,
+                                                            item.pincode,
+                                                            item.district + ', ' + item.state
+                                                        ];
+                                                    },
+                                                    onSelect: function(result, model, context) {
+                                                        model.customer.mailingPincode = (new Number(result.pincode)).toString();
+                                                        model.customer.mailingLocality = result.division;
+                                                        model.customer.mailingState = result.state;
+                                                        model.customer.mailingDistrict = result.district;
+                                                    },
+                                                    autolov: true,
+                                                    lovonly: false,
                                                     "orderNo": 190
                                                 },
                                                 "mailingLocality": {
@@ -316,7 +400,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         {
                                             "type": "button",
                                             "title": "UPDATE",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }

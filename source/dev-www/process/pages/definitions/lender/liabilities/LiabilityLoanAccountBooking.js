@@ -25,6 +25,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "orderNo": 30
                     },
                    "LenderAccountDetails.lenderId": {
+                        searchHelper: formHelper,
                         "resolver": "LenderIDLOVConfiguration"
                     },
                     "LenderAccountDetails.lenderAccountNumber": {
