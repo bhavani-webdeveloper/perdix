@@ -8,7 +8,7 @@ irf.pageCollection.controller(irf.controller("lender.liabilities.LoanBookingDash
             "items": [
                 "Page/Engine/lender.liabilities.LiabilityLoanAccountBooking",
                 "Page/Engine/lender.liabilities.LoanBookingQueue",
-                "Page/Engine/lender.liabilities.DocumentUpoadQueue",
+                "Page/Engine/lender.liabilities.DocumentUploadQueue",
                 "Page/Engine/lender.liabilities.DocumentVerificationQueue",
                 "Page/Engine/lender.liabilities.DisbursementConfirmationQueue",
                 "Page/Engine/lender.liabilities.ScheduleUploadQueue"
@@ -31,7 +31,7 @@ irf.pageCollection.controller(irf.controller("lender.liabilities.LoanBookingDash
                 });
             }
 
-            var duqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lender.liabilities.DocumentUpoadQueue"];
+            var duqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lender.liabilities.DocumentUploadQueue"];
             if (duqMenu) {
                 LiabilityAccountProcess.search({
                     'status': 'DocumentUpload',

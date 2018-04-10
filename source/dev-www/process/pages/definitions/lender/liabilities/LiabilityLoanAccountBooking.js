@@ -105,7 +105,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DisbursementDetails",
                     "DisbursementDetails.productType",
                     "DisbursementDetails.loanAmount",
+                    "DisbursementDetails.numberOfDisbursement",
+                    "DisbursementDetails.trancheNumber",
                     "DisbursementDetails.disbursementDate",
+                    "DisbursementDetails.trancheCondition",
                     "DisbursementDetails.interestRateType",
                     "DisbursementDetails.rateOfInterest",
                     "DisbursementDetails.markUpOrDown",
@@ -183,12 +186,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     });
 
                     if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
+                        PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
+                                PageHelper.hideLoader();
                                 if(res.liabilityAccount.currentStage != "LiabilityAccount") {
                                     irfNavigator.goBack();
                                 }
-                                console.log(res);
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
                             });
@@ -228,7 +232,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -258,7 +262,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();

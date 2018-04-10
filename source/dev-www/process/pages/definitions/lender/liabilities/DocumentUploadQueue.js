@@ -1,6 +1,6 @@
 define([], function() {
 	return {
-		pageUID: "lender.liabilities.DocumentUpoadQueue",
+		pageUID: "lender.liabilities.DocumentUploadQueue",
 		pageType: "Engine",
 		dependencies: ["$log", "formHelper", "LiabilityAccountProcess","Queries","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator"],
 		$pageFn: function($log, formHelper, LiabilityAccountProcess,Queries,$state, SessionStore, Utils, PagesDefinition, irfNavigator) {
