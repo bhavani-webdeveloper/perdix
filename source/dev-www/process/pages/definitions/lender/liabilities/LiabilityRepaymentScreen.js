@@ -10,7 +10,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Schedule) {
             var branch = SessionStore.getBranch();
-            var userLoginDate = SessionStore.getCBSDate();
+          //  var userLoginDate = SessionStore.getCBSDate();
             var configFile = function() {
                 return {}
             }
@@ -34,18 +34,24 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.totalInstallmentAmountPaid": {
                         "required": true,
                     },
-                    "LiabilityRepayment.instrumentType": {
-                        onChange: function(modelValue, form, model) {
-                            model.instrTypeCheque = false;
-                            model.instrTypeNEFT = false;
-                            if (modelValue == 'Cheque') {
-                                model.instrTypeCheque = true;
-                            }
-                            if (modelValue == 'NEFT') {
-                                model.instrTypeNEFT = true;
-                            }
-                        }
+                    "LiabilityRepayment.referencenumber": {
+                        "required": true,
                     },
+                    "LiabilityRepayment.chequeDate": {
+                        "required": true,
+                    },
+                    // "LiabilityRepayment.instrumentType": {
+                    //     onChange: function(modelValue, form, model) {
+                    //         model.instrTypeCheque = false;
+                    //         model.instrTypeNEFT = false;
+                    //         if (modelValue == 'Cheque') {
+                    //             model.instrTypeCheque = true;
+                    //         }
+                    //         if (modelValue == 'NEFT') {
+                    //             model.instrTypeNEFT = true;
+                    //         }
+                    //     }
+                    // },
                     "LiabilityRepayment.transactionType": {
                         onChange: function(modelValue, form, model) {
                             model.preClosureCharge = false;
@@ -60,18 +66,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 model.liabilityRepay = model.liabilityScheduleRepay;
                             }
                         }
-                    },
-                    "LiabilityRepayment.chequeNumber": {
-                        "condition": "model.instrTypeCheque",
-                        "type": "number",
-                        "maxLength": 6,
-                        "minLength": 6
-                    },
-                    "LiabilityRepayment.chequeDate": {
-                        "condition": "model.instrTypeCheque"
-                    },
-                    "LiabilityRepayment.referencenumber": {
-                        "condition": "model.instrTypeNEFT"
                     },
                     "LiabilityRepayment.preClosureCharges": {
                         "condition": "model.preClosureCharge"
@@ -100,9 +94,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.otherFeeChargespaid",
                     "LiabilityRepayment.totalInstallmentAmountPaid",
                     "LiabilityRepayment.instrumentType",
-                    "LiabilityRepayment.chequeNumber",
-                    "LiabilityRepayment.chequeDate",
-                    "LiabilityRepayment.referencenumber",
                     "LiabilityRepayment.transactionDate",
                     "LiabilityRepayment.preClosureCharges",
                     "LiabilityRepayment.collectionRemarks",
@@ -118,8 +109,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 "type": "schema-form",
                 "title": "LIABILITY_REPAYMENT",
                 "subTitle": "",
+                
                 initialize: function(model, form, formCtrl) {
                     var self = this;
+                    var userLoginDate = SessionStore.getCBSDate();
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
@@ -246,7 +239,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "title": "SAVE",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
                                 }]
-                            }, ]
+                            }]
                         }
                     };
                     var p1 = UIRepository.getLiabilityRepayment().$promise;
@@ -267,86 +260,110 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             .subscribe(function(res) {
                                 model.LoanAccount = res.liabilityAccount;
                                 model.LoanAccount.lenderName = res.lenderEnrolmentProcess.customer.firstName;
-                                var scheduleDetails = res.liabilityAccount.liabilitySchedules;
-                                PageHelper.hideLoader();
-                                var liabilityRepayCal;
-                                scheduleDetails.sort(function compare(a, b) {
-                                    var dateA = new Date(a.installmentDueDate);
-                                    var dateB = new Date(b.installmentDueDate);
-                                    return dateA - dateB;
-                                });
-                                for (i in scheduleDetails) {
-                                    var status = scheduleDetails[i].paidStatus;
-                                    if (status == "NotPaid") {
-                                        this.liabilityRepayCal = scheduleDetails[i]
-                                        break;
-                                    } else if (status == "PartiallyPaid") {
-                                        this.liabilityRepayCal = scheduleDetails[i]
-                                        break;
-                                    }
-                                }
-                                if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "PartiallyPaid") {
-                                    this.liabilityRepayCal.principalDue = (this.liabilityRepayCal.principalPaid != null) ? this.liabilityRepayCal.principalDue - this.liabilityRepayCal.principalPaid : this.liabilityRepayCal.principalDue;
-                                    this.liabilityRepayCal.interestDue = (this.liabilityRepayCal.interestPaid != null) ? this.liabilityRepayCal.interestDue - this.liabilityRepayCal.interestPaid : this.liabilityRepayCal.interestDue;
-                                    this.liabilityRepayCal.otherFeeChargesDue = (this.liabilityRepayCal.otherFeeChargespaid != null) ? this.liabilityRepayCal.otherFeeChargesDue - this.liabilityRepayCal.otherFeeChargespaid : this.liabilityRepayCal.otherFeeChargesDue;
-                                    this.liabilityRepayCal.penalityDue = (this.liabilityRepayCal.penalityPaid != null) ? this.liabilityRepayCal.penalityDue - this.liabilityRepayCal.penalityPaid : this.liabilityRepayCal.penalityDue;
-                                    this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
-                                    this.liabilityRepayCal.principalPaid = null;
-                                    this.liabilityRepayCal.interestPaid = null;
-                                    this.liabilityRepayCal.otherFeeChargespaid = null;
-                                    this.liabilityRepayCal.penalityPaid = null
-                                    this.liabilityRepayCal.totalAmountPaid = null
-                                } else if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "NotPaid") {
-                                    this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
-                                }
-
-                                var liabilityClosureRepay = {
-                                    "principalDue": 0,
-                                    "penalityDue": 0,
-                                    "interestDue": 0,
-                                    "otherFeeChargesDue": 0,
-                                    "totalInstallmentAmountDue": 0,
-                                    "transactionType": null
-                                }
-                                for (i in scheduleDetails) {
-                                    if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "NotPaid") {
-                                        console.log(liabilityClosureRepay)
-                                        liabilityClosureRepay.principalDue = liabilityClosureRepay.principalDue + scheduleDetails[i].principalDue;
-                                        var dateA = new Date(scheduleDetails[i].installmentDueDate);
-                                        var dateB = new Date();
-                                        if (dateA < dateB) {
-                                            liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
-                                            liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
-                                            liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
-                                            }
-                                        liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue + liabilityClosureRepay.penalityDue;
-                                    } else if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "PartiallyPaid") {
-                                        liabilityClosureRepay.principalDue = (scheduleDetails[i].principalPaid != null) ? scheduleDetails[i].principalDue - scheduleDetails[i].principalPaid : scheduleDetails[i].principalDue;
-                                        liabilityClosureRepay.interestDue = (scheduleDetails[i].interestPaid != null) ? scheduleDetails[i].interestDue - scheduleDetails[i].interestPaid : scheduleDetails[i].interestDue;
-                                        liabilityClosureRepay.otherFeeChargesDue = (scheduleDetails[i].otherFeeChargesPaid != null) ? scheduleDetails[i].otherFeeChargesDue - scheduleDetails[i].otherFeeChargesPaid : scheduleDetails[i].otherFeeChargesDue;
-                                        liabilityClosureRepay.penalityDue = (scheduleDetails[i].penalityPaid != null) ? scheduleDetails[i].penalityDue - scheduleDetails[i].penalityPaid : scheduleDetails[i].penalityDue;
-                                        var dateA = new Date(scheduleDetails[i].installmentDueDate);
-                                        var dateB = new Date();
-                                        if (dateA < dateB) {
-                                            liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
-                                            liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
-                                            liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
-                                            liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.totalInstallmentAmountDue + scheduleDetails[i];
+                                if (res.liabilityAccount.liabilitySchedules.length == 0) {
+                                   // model.scheduleNotUploded = true;
+                                    PageHelper.showProgress("schedule", "No schedule found.", 5000);
+                                    PageHelper.hideLoader();
+                                    return irfNavigator.goBack();
+                                } else {
+                                  //  model.scheduleNotUploded = false;
+                                    var scheduleDetails = res.liabilityAccount.liabilitySchedules;
+                                    PageHelper.hideLoader();
+                                    var liabilityRepayCal;
+                                    scheduleDetails.sort(function compare(a, b) {
+                                        var dateA = new Date(a.installmentDueDate);
+                                        var dateB = new Date(b.installmentDueDate);
+                                        return dateA - dateB;
+                                    });
+                                    model.count = 0
+                                    for (i in scheduleDetails) {
+                                        var status = scheduleDetails[i].paidStatus;
+                                        if (status == "NotPaid") {
+                                            this.liabilityRepayCal = scheduleDetails[i]
+                                            break;
+                                        } else if (status == "PartiallyPaid") {
+                                            this.liabilityRepayCal = scheduleDetails[i]
+                                            break;
+                                        }
+                                         else if(scheduleDetails[i].paidStatus == "FullyPaid"){
+                                            model.count = model.count +1;
                                         }
                                     }
+                                    if (res.liabilityAccount.liabilitySchedules.length == model.count) {
+                                    model.scheduleNotUploded = true;
+                                    PageHelper.showProgress("schedule", "Schedule is fully paid.", 5000);
+                                    PageHelper.hideLoader();
+                                    return irfNavigator.goBack();
                                 }
-                                // model.liabilityClosureRepay.transactionType = null;
-                                model.liabilityClosureRepay = liabilityClosureRepay;
-                                model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
-                                model.liabilityScheduleRepay = this.liabilityRepayCal
-                                model.liabilityRepay = this.liabilityRepayCal
-                                model.liabilityRepay.liabilityRepaymentScheduleDetailsId = this.liabilityRepayCal.id;
-                                model.liabilityRepay.transactionDate = userLoginDate;
+                                    if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "PartiallyPaid") {
+                                        this.liabilityRepayCal.principalDue = (this.liabilityRepayCal.principalPaid != null) ? this.liabilityRepayCal.principalDue - this.liabilityRepayCal.principalPaid : this.liabilityRepayCal.principalDue;
+                                        this.liabilityRepayCal.interestDue = (this.liabilityRepayCal.interestPaid != null) ? this.liabilityRepayCal.interestDue - this.liabilityRepayCal.interestPaid : this.liabilityRepayCal.interestDue;
+                                        this.liabilityRepayCal.otherFeeChargesDue = (this.liabilityRepayCal.otherFeeChargespaid != null) ? this.liabilityRepayCal.otherFeeChargesDue - this.liabilityRepayCal.otherFeeChargespaid : this.liabilityRepayCal.otherFeeChargesDue;
+                                        this.liabilityRepayCal.penalityDue = (this.liabilityRepayCal.penalityPaid != null) ? this.liabilityRepayCal.penalityDue - this.liabilityRepayCal.penalityPaid : this.liabilityRepayCal.penalityDue;
+                                        this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
+                                        this.liabilityRepayCal.principalPaid = null;
+                                        this.liabilityRepayCal.interestPaid = null;
+                                        this.liabilityRepayCal.otherFeeChargespaid = null;
+                                        this.liabilityRepayCal.penalityPaid = null
+                                        this.liabilityRepayCal.totalAmountPaid = null
+                                    } else if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "NotPaid") {
+                                        this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
+                                    }else if(!this.liabilityRepayCal){
+                                        model.fullypaid = true;
+                                    }
+
+
+                                    var liabilityClosureRepay = {
+                                        "principalDue": 0,
+                                        "penalityDue": 0,
+                                        "interestDue": 0,
+                                        "otherFeeChargesDue": 0,
+                                        "totalInstallmentAmountDue": 0,
+                                        "transactionType": null
+                                    }
+                                    for (i in scheduleDetails) {
+                                        if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "NotPaid") {
+                                            console.log(liabilityClosureRepay)
+                                            liabilityClosureRepay.principalDue = liabilityClosureRepay.principalDue + scheduleDetails[i].principalDue;
+                                            var dateA = new Date(scheduleDetails[i].installmentDueDate);
+                                            var dateB = new Date();
+                                            if (dateA < dateB) {
+                                                liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
+                                                liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
+                                                liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                            }
+                                            liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue + liabilityClosureRepay.penalityDue;
+                                        } else if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "PartiallyPaid") {
+                                            liabilityClosureRepay.principalDue = (scheduleDetails[i].principalPaid != null) ? scheduleDetails[i].principalDue - scheduleDetails[i].principalPaid : scheduleDetails[i].principalDue;
+                                            liabilityClosureRepay.interestDue = (scheduleDetails[i].interestPaid != null) ? scheduleDetails[i].interestDue - scheduleDetails[i].interestPaid : scheduleDetails[i].interestDue;
+                                            liabilityClosureRepay.otherFeeChargesDue = (scheduleDetails[i].otherFeeChargesPaid != null) ? scheduleDetails[i].otherFeeChargesDue - scheduleDetails[i].otherFeeChargesPaid : scheduleDetails[i].otherFeeChargesDue;
+                                            liabilityClosureRepay.penalityDue = (scheduleDetails[i].penalityPaid != null) ? scheduleDetails[i].penalityDue - scheduleDetails[i].penalityPaid : scheduleDetails[i].penalityDue;
+                                            var dateA = new Date(scheduleDetails[i].installmentDueDate);
+                                            var dateB = new Date();
+                                            if (dateA < dateB) {
+                                                liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
+                                                liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
+                                                liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                                liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.totalInstallmentAmountDue + scheduleDetails[i];
+                                            }
+                                        }
+                                    }
+
+                                    // model.liabilityClosureRepay.transactionType = null;
+                                    model.liabilityClosureRepay = liabilityClosureRepay;
+                                    //  model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
+                                    model.liabilityScheduleRepay = this.liabilityRepayCal
+                                    model.liabilityRepay = this.liabilityRepayCal;
+                                    if(this.liabilityRepayCal){
+                                    model.liabilityRepay.liabilityRepaymentScheduleDetailsId = this.liabilityRepayCal.id;
+                                    model.liabilityRepay.transactionDate = userLoginDate;
+
+                                };
+                                                                    }
                             });
                     }
                     /* Form rendering ends */
                 },
-
                 preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
 
                 },
@@ -371,7 +388,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                         var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargespaid
                         if (model.liabilityRepay.totalInstallmentAmountPaid == totalAmountPaid) {
-                            if (model.liabilityRepay.chequeDate!= null && model.liabilityRepay.chequeDate > userLoginDate) {
+                            if (model.scheduleNotUploded != true) {
                                 PageHelper.showLoader();
                                 model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
                                 model.LiabilityRepayment.save()
@@ -385,12 +402,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                         PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
-                                         irfNavigator.goBack();
+                                        irfNavigator.goBack();
                                     });
                             } else {
                                 PageHelper.showErrors({
                                     data: {
-                                        error: "chequeDate Date should be greater then Branch working Date"
+                                        error: "Schedule Not Uploaded"
                                     }
                                 });
                             }
