@@ -1307,7 +1307,7 @@
                             "properties": {
                                 "udf1":{
                                     "title": "SPOUSE_LOAN_CONSENT",
-                                    "type":["boolean","null"]
+                                    "type":["boolean","null", "string"]
                                 },
                                 "udf2":{
                                     "title":"IF_HOUSE_RENTED_NAME_OF_LANDLORD",

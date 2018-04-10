@@ -53,6 +53,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                     "LenderContactInformation.Address1.pincode": {
+                        "resolver": "PincodeLOVConfiguration",
                         "required": true
                     },
                     "LenderContactInformation.Address1.villageName": {
@@ -186,7 +187,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "ADDRESS1",
                                             "items": {
                                                 "addressType": {
-                                                    "key": "customer.udf29",                                                    "title": "ADDRESS_TYPE",
+                                                    "key": "customer.udf.userDefinedFieldValues.udf1",                                                    
+                                                    "title": "ADDRESS_TYPE",
                                                     "type": "select",
                                                     "enumCode": "address_type",
                                                     "orderNo": 70
@@ -237,7 +239,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "ADDRESS2",
                                             "items": {                                                
                                                 "addressType": {
-                                                    "key": "customer.udf30",
+                                                    "key": "customer.udf.userDefinedFieldValues.udf2",
                                                     "title": "ADDRESS_TYPE",
                                                     "type": "select",
                                                     "enumCode": "address_type",
