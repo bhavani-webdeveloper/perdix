@@ -3287,6 +3287,46 @@
               "Completed"
             ]
           },
+		  "grossMarginPercentage": {
+            "title": "grossMarginPercentage",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "netMarginPercentage": {
+            "title": "netMarginPercentage",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "avgDailySaleAmount": {
+            "title": "avgDailySaleAmount",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "workingDaysInMonth": {
+            "title": "workingDaysInMonth",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "workInProgress": {
             "title": "workInProgress",
             "type": "number",
@@ -3429,6 +3469,82 @@
             "type": "string",
             "minimum": 0,
             "maximum": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+        }
+      },
+	  "enterpriseMonthlySales": {
+        "title": "Enterprise Monthly Sales",
+        "type": "object",
+        "required": [
+        ],
+        "properties": {
+          "month": {
+            "title": "month",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "totalSales": {
+            "title": "totalSales",
+            "type": "number",
+			"minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "seasonType": {
+            "title": "seasonType",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf1": {
+            "title": "udf1",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf2": {
+            "title": "udf2",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf3": {
+            "title": "udf3",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udfDate1": {
+            "title": "udfDate1",
+            "type": "date",            
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3661,6 +3777,15 @@
                 "Completed"
               ]
             },
+			"endMonth": {
+              "title": "End Month",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "totalDeposits": {
               "title": "Total Deposits",
               "type": "number",
@@ -3847,6 +3972,16 @@
           "properties": {
             "vendorName": {
               "title": "Vendor Name",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+			"frequency": {
+              "title": "frequency",
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
@@ -4192,8 +4327,8 @@
           }
         }
       },
-      "enterpriseOtherAssets": {
-        "title": "Enterprise Other Asset",
+      "currentAssets": {
+        "title": "Current Asset",
         "type": "array",
         "items": {
           "type": "object",
