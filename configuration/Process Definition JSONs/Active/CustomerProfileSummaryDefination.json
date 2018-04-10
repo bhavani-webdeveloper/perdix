@@ -1,162 +1,178 @@
 {
-   "stages": [{
-         "order": 1,
-         "code": "Initiation",
-         "name": "createCustomerProfile",
-         "stageType": "CAPTURE",
-         "isTerminalStage": false,
-         "allowedRoles": [
-            "WM"
-         ]
-      }
-   ],
-   "schema": {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "type": "object",
-      "title": "Comment",
-      "required": [
-         "customerProfileSummary"
-      ],
-      "properties": {
-         "customerProfileSummary": {
-            "title": "Customer Profile Summary",
-            "type": "object",
-            "required": [
-               "firstName",
-               "lastName",
-               "middleName",
-               "dateOfBirth",
-               "mobilePhone",
-               "villageName",
-               "doorNo",
-               "street",
-               "locality",
-               "district",
-               "state",
-               "pincode",
-               "email"
-            ],
-            "properties": {
-               "firstName": {
-                  "title": "First Name",
-                  "type": "String",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
+    "stages": [
+    {
+        "order": 1,
+        "code": "PendingVerification",
+        "name": "Pending Verification",
+        "stageType": "CAPTURE",
+        "isTerminalStage": false,
+        "allowedRoles": [
+            "WM",
+            "CUSTOMER"
+        ]
+    }],
+    "schema":
+    {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Comment",
+        "required": [
+            "customerProfileSummary"
+        ],
+        "properties":
+        {
+            "customerProfileSummary":
+            {
+                "title": "Customer Profile Summary",
+                "type": "object",
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "mobilePhone",
+                    "villageName",
+                    "doorNo",
+                    "street",
+                    "locality",
+                    "district",
+                    "state",
+                    "pincode",
+                    "email"
+                ],
+                "properties":
+                {
+                    "firstName":
+                    {
+                        "title": "First Name",
+                        "type": "String",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
 
-               "lastName": {
-                  "title": "Last Name",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
+                    "lastName":
+                    {
+                        "title": "Last Name",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
 
-               "middleName": {
-                  "title": "Middle Name",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
-               "dateOfBirth": {
-                  "title": "Date Of Birth",
-                  "type": "string",
-                  "format": "date",
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
-              "mobilePhone": {
-              	"title": "Mobile Phone",
-              	"type": "string",
-              	"minLength": 10,
-              	"maxLength": 10,
-              	"captureStages": [
-                	"Stage01"
-             	  ]
-               },
-               "villageName": {
-                  "title": "Village Name",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    "Stage01"
-                  ]
-               },
-              "doorNo": {
-                  "title": "Door No",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    "Stage01"
-                  ]
-               },
-              "street": {
-                  "title": "street",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    "Stage01"
-                  ]
-              },
-               "locality": {
-                  "title": "locality",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
-               "district": {
-                  "title": "district",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                     "Stage01"
-                  ]
-               },
-                  "pincode": {
-            		"title": "Pincode",
-            		"type": "string",
-            		"minimum": 100000,
-            		"maximum": 999999,
-            		"captureStages": [
-             		 	"Stage01"
-           		  ]
-          	   },
-          	   "email": {
-            		"title": "Email",
-            		"type": "string",
-            		"minLength": 1,
-            		"maxLength": 100,
-            		"captureStages": [
-              			"Stage01"
-            	 ]
-              },
-               "state": {
-                  "title": "state",
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 100,
-                  "captureStages": [
-                    "Stage01"
-                  ]
-               }
+                    "middleName":
+                    {
+                        "title": "Middle Name",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "dateOfBirth":
+                    {
+                        "title": "Date Of Birth",
+                        "type": "string",
+                        "format": "date",
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "mobilePhone":
+                    {
+                        "title": "Mobile Phone",
+                        "type": "string",
+                        "minLength": 10,
+                        "maxLength": 10,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "villageName":
+                    {
+                        "title": "Village Name",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "doorNo":
+                    {
+                        "title": "Door No",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "street":
+                    {
+                        "title": "street",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "locality":
+                    {
+                        "title": "locality",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "district":
+                    {
+                        "title": "district",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "pincode":
+                    {
+                        "title": "Pincode",
+                        "type": "string",
+                        "minimum": 100000,
+                        "maximum": 999999,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "email":
+                    {
+                        "title": "Email",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "state":
+                    {
+                        "title": "state",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    }
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }
