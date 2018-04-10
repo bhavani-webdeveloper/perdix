@@ -89,10 +89,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LoanAmountDeduction.maturityDate": {
                         "required": true
-                    },
+                    }/*,
                     "LoanAmountDeduction.loanAccountStatus": {
                         "required": true
-                    }
+                    }*/
                 }
             }
             var getIncludes = function (model) {
@@ -130,8 +130,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.installmentAmount",
                     "LoanAmountDeduction.scheduleStartDate",
                     "LoanAmountDeduction.firstInstallmentDate",
-                    "LoanAmountDeduction.maturityDate",
-                    "LoanAmountDeduction.loanAccountStatus"
+                    "LoanAmountDeduction.maturityDate"
+                    // "LoanAmountDeduction.loanAccountStatus"
                 ];
 
             }

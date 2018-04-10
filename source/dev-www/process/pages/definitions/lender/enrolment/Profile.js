@@ -65,12 +65,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderContactInformation.Address1.state": {
                         "readonly": true
                     },
-                    "LenderContactInformation.Address2.mailingDoorNo": {
-                        "required": true
-                    },
                     "LenderContactInformation.Address2.mailingPincode": {
-                        "resolver": "MailingPincodeLOVConfiguration",
-                        "required": true
+                        "resolver": "MailingPincodeLOVConfiguration"
                     },
                     "LenderContactInformation.Address2.mailingLocality": {
                         "readonly": true

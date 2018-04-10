@@ -187,7 +187,7 @@
                     "documentName": {
                         "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
                         "type": "select",
-                        "enumCode": "liability_document_type",
+                        "enumCode": "lender_document",
                         "title": "DOCUMENT_TYPE"
                     },
                     "otherDocumentName": {
@@ -232,7 +232,7 @@
                     "documentName": {
                         "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
                         "type": "select",
-                        "enumCode": "liability_document_type",
+                        "enumCode": "compliance_document",
                         "title": "DOCUMENT_TYPE"
                     },
                     "otherDocumentName": {

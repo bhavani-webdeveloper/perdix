@@ -31,7 +31,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.leadName": {
                         "required": true
                     },
-                    "LenderInformation.source": {
+                    /*"LenderInformation.source": {
                         "required": true,                                   
                         "titleMap": [
                             {
@@ -39,7 +39,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "value": "UC"
                             }
                         ]
-                    },
+                    },*/
                     "LenderInformation.companyOperatingSince": {
                         "required": true
                     },
@@ -65,12 +65,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderContactInformation.Address1.state": {
                         "readonly": true
                     },
-                    "LenderContactInformation.Address2.mailingDoorNo": {
-                        "required": true
-                    },
                     "LenderContactInformation.Address2.mailingPincode": {
-                        "resolver": "MailingPincodeLOVConfiguration",
-                        "required": true
+                        "resolver": "MailingPincodeLOVConfiguration"
                     },
                     "LenderContactInformation.Address2.mailingLocality": {
                         "readonly": true
@@ -96,8 +92,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation",
                     "LenderInformation.firstName",
                     "LenderInformation.lenderType",
-                    "LenderInformation.source",
-                    "LenderInformation.businessConstitution",
+                    //"LenderInformation.source",
+                    //"LenderInformation.businessConstitution",
                     "LenderInformation.companyOperatingSince",
 
                     "LenderContactDetails",
@@ -211,6 +207,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 },
                                                 "pincode": {
                                                     "key": "customer.pincode",
+                                                    "title": "PIN_CODE",
                                                     "type": "lov",                                                    
                                                     //"inputmode": "number",
                                                     //"autolov": true,
