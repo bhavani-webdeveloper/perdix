@@ -42,8 +42,8 @@
           
           }
 },
-"enterpriseOtherAssets": {
-        "title": "Enterprise Other Asset",
+"currentAssets": {
+        "title": "current Assets",
         "type": "array",
         "items": {
           "type": "object",
@@ -602,6 +602,24 @@
             "type": "string",
             "minimum": 100000,
             "maximum": 999999,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "udf29": {
+            "title": "udf29",
+            "type": "string",
+            "refCodeCategory": "district",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "udf30": {
+            "title": "u",
+            "type": "string",
+            "refCodeCategory": "district",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -1404,6 +1422,31 @@
             "type": "number",
             "minimum": 0,
             "maximum": 100000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+        }
+      },
+	  "enterprise_user_defined_fields": {
+        "title": "Enterprise User Defined Details",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "udf1": {
+            "title": "Address-1 Type",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf2": {
+            "title": "Address-2 Type",
+            "type": "string",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
