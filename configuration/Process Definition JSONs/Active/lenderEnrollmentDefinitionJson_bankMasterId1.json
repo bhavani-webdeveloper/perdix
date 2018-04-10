@@ -1447,6 +1447,8 @@
           "udf2": {
             "title": "Address-2 Type",
             "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
