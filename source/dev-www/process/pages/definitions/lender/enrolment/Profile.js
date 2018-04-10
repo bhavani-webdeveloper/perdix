@@ -31,7 +31,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.leadName": {
                         "required": true
                     },
-                    "LenderInformation.source": {
+                    /*"LenderInformation.source": {
                         "required": true,                                   
                         "titleMap": [
                             {
@@ -39,7 +39,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "value": "UC"
                             }
                         ]
-                    },
+                    },*/
                     "LenderInformation.companyOperatingSince": {
                         "required": true
                     },
@@ -96,8 +96,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation",
                     "LenderInformation.firstName",
                     "LenderInformation.lenderType",
-                    "LenderInformation.source",
-                    "LenderInformation.businessConstitution",
+                    //"LenderInformation.source",
+                    //"LenderInformation.businessConstitution",
                     "LenderInformation.companyOperatingSince",
 
                     "LenderContactDetails",
