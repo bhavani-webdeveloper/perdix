@@ -386,6 +386,7 @@ define({
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
+                                 model.group.jlgGroupMembers[context.arrayIndex].loanAmountRequested = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
@@ -620,8 +621,12 @@ define({
                     //         break;
                     //     }
                     // }
+
                     for (var i=0; i< model.group.jlgGroupMembers.length; i++){
                         model.group.jlgGroupMembers[i].centreCode = model.group.centreCode;
+                        if(!model.group.id){
+                            model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = model.group.jlgGroupMembers[i].loanAmount;
+                        }   
                     }
                     PageHelper.clearErrors();
                     PageHelper.showLoader();

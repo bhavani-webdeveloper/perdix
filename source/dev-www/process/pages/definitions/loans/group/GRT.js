@@ -848,11 +848,22 @@ define({
                         "readonly": true,
                         "title": "RELATION",
                     }, {
-                        "key": "group.jlgGroupMembers[].loanAmount",
+                        "key": "group.jlgGroupMembers[].loanAmountRequested",
                         "readonly": true,
+                        "title": "LOAN_AMOUNT_REQUESTED_",
+                        "type": "amount",
+                        "readonly": true
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanAmountSanctionedInPaisa",
+                        "title": "LOAN_AMOUNT_RECOMMENDED_FROM_BRANCH",
+                        "type": "amount",
+                        "readonly": true
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanAmount",
                         "title": "LOAN_AMOUNT",
                         "type": "amount",
-                    }, {
+                        "readonly": true
+                    },{
                         "key": "group.jlgGroupMembers[].loanPurpose1",
                         "readonly": true,
                         "title": "LOAN_PURPOSE_1",
