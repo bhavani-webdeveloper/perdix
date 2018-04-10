@@ -1,7 +1,7 @@
 let config = {
-    'policies': {
-        'default' : {
-            onNew: {
+    "policies": {
+        "default" : {
+            "onNew": {
                 "defaults": [
                     {
                         "name": "DefaultRelatedCustomersPolicy",
@@ -15,7 +15,7 @@ let config = {
                     }
                 ]
             },
-            onLoad: {
+            "onLoad": {
                 "defaults": [
                     {
                         "name": "LoadRelatedCustomersPolicy",
@@ -23,7 +23,7 @@ let config = {
                     }
                 ]
             },
-            beforeSave: {
+            "beforeSave": {
                 "defaults": [
                     {
                         "name":"MandatoryFieldsPolicy",
@@ -31,7 +31,7 @@ let config = {
                     }
                 ]
             },
-            afterSave: {
+            "afterSave": {
                 "overrides": [
                     {
                         "type": "expr",
@@ -48,7 +48,7 @@ let config = {
                     }
                 ]
             },
-            beforeProceed: {
+            "beforeProceed": {
                 "overrides": [
                     {
                         "type": "expr",
@@ -65,8 +65,8 @@ let config = {
                 ]
             }
         },
-        'command': {
-            'OverlayLeadData': {
+        "command": {
+            "OverlayLeadData": {
 
             }
         }

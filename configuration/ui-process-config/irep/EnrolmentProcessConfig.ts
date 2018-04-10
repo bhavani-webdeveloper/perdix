@@ -1,7 +1,7 @@
 let config = {
-    'policies': {
-        'default' : {
-            onNew: {
+    "policies": {
+        "default" : {
+            "onNew": {
                 "defaults": [
                     {
                         "name": "LoadNewCustomerData",
@@ -9,7 +9,7 @@ let config = {
                     }
                 ]
             },
-            onLoad: {
+            "onLoad": {
                 "defaults": [
                     {
                         "name":"EnrolmentDerivedPolicy",
@@ -17,7 +17,7 @@ let config = {
                     }
                 ]
             },
-            beforeProceed: {
+            "beforeProceed": {
                 "defaults": [
                     {
                         "name": "PreSaveCustomerPolicy",
@@ -33,7 +33,7 @@ let config = {
                     }
                 ]
             },
-            beforeSave: {
+            "beforeSave": {
                 "defaults": [
                     {
                         "name": "LoadEnrolmentCustomerDataPolicy",
@@ -70,11 +70,11 @@ let config = {
                         ]
                     }
                 ]
-            },
+            }
         },
 
-        'command': {
-            'OverlayLeadData': {
+        "command": {
+            "OverlayLeadData": {
 
             }
         }
