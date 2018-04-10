@@ -873,7 +873,16 @@
                         "DSC"
                      ]
                   },
-                  "dscOverrideRequestFileId": {
+
+		"loanAmountRequested": {
+                     "title": "loanAmountRequested",
+                     "type": "number",
+ 			"minimum": 0,
+                     "maximum": 10000000,
+                     "captureStages": [
+                        "DSC"
+                     ]
+                  },                  "dscOverrideRequestFileId": {
                      "title": "dscOverrideRequestFileId",
                      "type": "string",
                      "captureStages": [
