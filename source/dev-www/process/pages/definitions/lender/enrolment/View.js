@@ -31,7 +31,8 @@ irf.pageCollection.factory(irf.page('lender.enrolment.View'),
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                        var promise = LiabilityAccountProcess.getLiabilityAccountSearch({lenderId: $stateParams.pageId, status:'Completed'}).$promise;
+                        // var promise = LiabilityAccountProcess.getLiabilityAccountSearch({lenderId: $stateParams.pageId, status:'Completed'}).$promise;
+                        var promise = LiabilityAccountProcess.getLiabilityAccountSearch({lenderId: $stateParams.pageId}).$promise;
                         return promise;
                     },
                     paginationOptions: {
