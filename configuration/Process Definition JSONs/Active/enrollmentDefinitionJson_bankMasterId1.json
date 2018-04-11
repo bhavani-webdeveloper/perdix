@@ -3159,6 +3159,26 @@
               "Completed"
             ]
           },
+		  "noOfRegularEmployees": {
+            "title": "noOfRegularEmployees",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "noOfContractEmployees": {
+            "title": "noOfContractEmployees",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "avgMonthlyNetIncome": {
             "title": "avgMonthlyNetIncome",
             "type": "number",
@@ -3563,6 +3583,36 @@
           },
           "customerBankName": {
             "title": "Customer Bank Name",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "openingBalance": {
+            "title": "openingBalance",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "closingBalance": {
+            "title": "closingBalance",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		  "amountOfEmiDeducted": {
+            "title": "amountOfEmiDeducted",
             "type": "string",
             "minimum": 0,
             "maximum": 1000000,

@@ -725,6 +725,22 @@
                   "captureStages":[
                      "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
+               },"actualAmountRequired":{
+                  "title":"actualAmountRequired",
+                 "type":"number",
+                  "minimum":0,
+                  "maximum":100000000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },"fundsFromDifferentSources":{
+                  "title":"fundsFromDifferentSources",
+                 "type":"number",
+                  "minimum":0,
+                  "maximum":100000000,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
                },"valuator":{
                   "title":"valuator",
                  "type":"string",
