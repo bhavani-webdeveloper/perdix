@@ -31,7 +31,8 @@ export class LenderIDLOVConfiguration extends LOVElementConfiguration {
        	let promise = Enrollment.lenderSearch({
             'branchName': inputModel.branchName,
             'firstName': inputModel.firstName,
-            'customerType': 'lender'
+            'customerType': 'lender',
+            'stage': 'Completed'
         }).$promise;
         return promise;
 	};

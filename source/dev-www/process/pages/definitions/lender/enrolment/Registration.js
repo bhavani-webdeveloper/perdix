@@ -400,7 +400,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         {
                                             "type": "button",
                                             "title": "UPDATE",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            "onClick": "actions.update(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -487,6 +487,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Lender Proceed.', 5000);
                                 irfNavigator.goBack();
+                                PageHelper.clearErrors();
+                            }, function (err) {
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    update: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+
+                        // $q.all start
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                formHelper.resetFormValidityState(formCtrl);
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Profile Updated.', 5000);
                                 PageHelper.clearErrors();
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

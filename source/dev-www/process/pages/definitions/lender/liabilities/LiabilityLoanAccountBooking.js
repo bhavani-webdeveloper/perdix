@@ -4,10 +4,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         pageUID: "lender.liabilities.LiabilityLoanAccountBooking",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Files"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Files) {
 
             var configFile = function () {
                 return {
@@ -131,8 +131,16 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.installmentAmount",
                     "LoanAmountDeduction.scheduleStartDate",
                     "LoanAmountDeduction.firstInstallmentDate",
-                    "LoanAmountDeduction.maturityDate"
+                    "LoanAmountDeduction.maturityDate",
                     // "LoanAmountDeduction.loanAccountStatus"
+
+                    "Document",
+                    "Document.liabilityLenderDocuments",
+                    "Document.liabilityLenderDocuments.liabilityLenderDocuments",
+                    "Document.liabilityLenderDocuments.liabilityLenderDocuments.fileId",
+                    "Document.liabilityComplianceDocuments",
+                    "Document.liabilityComplianceDocuments.liabilityComplianceDocuments",
+                    "Document.liabilityComplianceDocuments.liabilityComplianceDocuments.fileId"
                 ];
 
             }
@@ -148,6 +156,74 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
+                            "repositoryAdditions": {
+                                "Document":{
+                                    "type": "box",
+                                    "title": "LOAN_DOCUMENTS",
+                                    "condition": "model.liabilityAccount.currentStage == 'Completed'",
+                                    "orderNo": 40,
+                                    "items": {
+                                        "liabilityLenderDocuments": {
+                                            "type":"fieldset",
+                                            "title": "LENDER_DOCUMENTS",
+                                            "items": {
+                                                "liabilityLenderDocuments": {
+                                                    "type": "array",
+                                                    "key": "liabilityAccount.liabilityLenderDocuments",
+                                                    "add": null,
+                                                    "startEmpty":false,
+                                                    "remove": null,
+                                                    "titleExpr": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName",
+                                                    "items": {
+                                                        "fileId": {
+                                                            "title": "DOWNLOAD_FORM",
+                                                            "notitle": true,
+                                                            "fieldHtmlClass": "btn-block",
+                                                            "style": "btn-default",
+                                                            "icon": "fa fa-download",
+                                                            "type": "button",
+                                                            "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                            "onClick": function(model, form, schemaForm, event) {
+                                                                var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
+                                                                Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "liabilityComplianceDocuments": {
+                                            "type":"fieldset",
+                                            "title": "COMPLIANCE_DOCUMENTS",
+                                            "items": {
+                                                "liabilityComplianceDocuments": {
+                                                    "type": "array",
+                                                    "key": "liabilityAccount.liabilityComplianceDocuments",
+                                                    "add": null,
+                                                    "startEmpty":false,
+                                                    "remove": null,
+                                                    "titleExpr": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName",
+                                                    "items": {
+                                                        "fileId": {
+                                                            "title": "DOWNLOAD_FORM",
+                                                            "notitle": true,
+                                                            "fieldHtmlClass": "btn-block",
+                                                            "style": "btn-default",
+                                                            "icon": "fa fa-download",
+                                                            "type": "button",
+                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
+                                                            "onClick": function(model, form, schemaForm, event) {
+                                                                var fileId = model.liabilityAccount.liabilityComplianceDocuments[schemaForm.arrayIndex].fileId;
+                                                                Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [
                                 {
                                     "condition": "!model.liabilityAccount.id",
@@ -162,7 +238,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     ]
                                 },
                                 {
-                                    "condition": "model.liabilityAccount.id",
+                                    "condition": "model.liabilityAccount.id && model.liabilityAccount.currentStage!='Completed",
                                     "type": "actionbox",
                                     "orderNo": 10000,
                                     "items": [
@@ -175,6 +251,18 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             "type": "button",
                                             "title": "PROCEED",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "condition": "model.liabilityAccount.id && model.liabilityAccount.currentStage=='Completed'",
+                                    "type": "actionbox",
+                                    "orderNo": 10000,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "UPDATE",
+                                            "onClick": "actions.update(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -272,6 +360,31 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
                                 PageHelper.clearErrors();
                                 irfNavigator.goBack();
+                            }, function (err) {
+                                PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                    },
+                    update: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                        model.LiabilityLoanAccountBookingProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                PageHelper.showProgress('loan', 'Loan Updated.', 5000);
+                                PageHelper.clearErrors();
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
