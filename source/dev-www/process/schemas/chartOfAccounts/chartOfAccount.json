@@ -1,0 +1,139 @@
+{
+  "$id": "http://example.com/example.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {},
+  "properties": {
+    "glAccount": {
+      "properties": {
+        "branchSetCode": {
+          "$id": "/properties/branchSetCode",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Branchsetcode Schema ",
+          "type": "string"
+        },
+        "category": {
+          "$id": "/properties/category",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Category Schema ",
+          "type": "string"
+        },
+        "dateMax": {
+          "$id": "/properties/dateMax",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Datemax Schema ",
+          "type": "string"
+        },
+        "dateMin": {
+          "$id": "/properties/dateMin",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Datemin Schema ",
+          "type": "string"
+        },
+        "errorResponse": {
+          "$id": "/properties/errorResponse",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Errorresponse Schema ",
+          "type": "string"
+        },
+        "glName": {
+          "$id": "/properties/glName",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Glname Schema ",
+          "type": "string"
+        },
+        "glOrder": {
+          "$id": "/properties/glOrder",
+          "default": 0,
+          "examples": [
+            0
+          ],
+          "title": "The Glorder Schema ",
+          "type": "integer"
+        },
+        "glType": {
+          "$id": "/properties/glType",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Gltype Schema ",
+          "type": "string"
+        },
+        "id": {
+          "$id": "/properties/id",
+          "default": 0,
+          "examples": [
+            0
+          ],
+          "title": "The Id Schema ",
+          "type": "integer"
+        },
+        "parentGl": {
+          "$id": "/properties/parentGl",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Parentgl Schema ",
+          "type": "string"
+        },
+        "parentId": {
+          "$id": "/properties/parentId",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Parentid Schema ",
+          "type": "string"
+        },
+        "productCode": {
+          "$id": "/properties/productCode",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Productcode Schema ",
+          "type": "string"
+        },
+        "status": {
+          "$id": "/properties/status",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "The Status Schema ",
+          "type": "string"
+        },
+        "version": {
+          "$id": "/properties/version",
+          "default": 0,
+          "examples": [
+            0
+          ],
+          "title": "The Version Schema ",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "type": "object"
+}
