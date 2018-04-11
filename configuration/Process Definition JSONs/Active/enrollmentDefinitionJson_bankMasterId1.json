@@ -152,15 +152,7 @@
                 "Completed"
               ]
             },
-            "dateOfBirth": {
-              "title": "Date Of Birth",
-              "type": "string",
-              "format": "date",
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
+            
             "educationStatus": {
               "title": "Education Status",
               "type": "string",
@@ -4327,8 +4319,16 @@
           }
         }
       },
+<<<<<<< .mine
+      "currentAssets": {
+        "title": "Enterprise Other Asset",
+||||||| .r8143
+      "enterpriseOtherAssets": {
+        "title": "Enterprise Other Asset",
+=======
       "currentAssets": {
         "title": "Current Asset",
+>>>>>>> .r8169
         "type": "array",
         "items": {
           "type": "object",
@@ -4374,7 +4374,90 @@
                 "Completed"
               ]
             }
-           
+            ,
+            "udf1": {
+              "title": "udf1",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf2": {
+              "title": "udf2",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf3": {
+              "title": "udf3",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf4": {
+              "title": "udf4",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf5": {
+              "title": "udf5",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "title": "udfDate1",
+              "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "title": "udfDate2",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate3": {
+              "title": "udfDate3",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
           }
         }
       },

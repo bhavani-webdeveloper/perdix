@@ -3243,6 +3243,77 @@
                }
             }
          },
+          "loanUtillisationDetails":{
+            "title":"Loan Utilisation Details",
+            "type":"array",
+            "maxItems":null,
+            "items":null,
+            "required":[
+
+            ],
+            "properties":{
+               
+               "utilisationType":{
+                  "title":"utilisationType",
+                  "type":"string",
+                  "minimum":1,
+                  "maximum":100,
+                 "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "fundAllocationPercentage":{
+                  "title":"fund Allocation Percentage",
+                  "type":"number",
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "consumptionDetails":{
+                  "title":"consumption Details",
+                  "type":"string",
+                 "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "udf1":{
+                  "title":"udf1",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                 "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "udf2":{
+                  "title":"udf2",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                 "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "udf3":{
+                  "title":"udf3",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               },
+               "udfDate1":{
+                  "title":"udf Date1",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  ]
+               }   
+            }
+         },
          "disbursementSchedules":{
             "title":"Disbursement Schedule",
             "type":"array",

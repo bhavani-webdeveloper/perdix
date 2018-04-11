@@ -260,6 +260,26 @@
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
+                "trancheNumber":{
+                  "title":"trancheNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+                "trancheCondition":{
+                  "title":"trancheCondition",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
 
                "isPaymentScheduleUploaded":{
                   "title":"isPaymentScheduleUploaded",
