@@ -345,6 +345,36 @@
             }
         }
     },
+    "ProposedUtilizationPlan": {
+        "type": "box",
+        "title": "PROPOSED_LOAN_UTILIZATION",
+        "startEmpty": true,
+        "orderNo": 61,
+        "items": {
+            "loanUtilisationDetail" : {
+                "key": "loanAccount.loanUtilisationDetail",
+                "type": "array",
+                "title": "PROPOSED_UTILIZATION_PLAN",
+                "items": {
+                    "utilisationType": {
+                        "key": "loanAccount.loanUtilisationDetail[].utilisationType",
+                        "title": "UTILIZATION_TYPE",
+                        "type": "text"                   
+                    },
+                    "fundAllocationPercentage": {
+                        "key": "loanAccount.loanUtilisationDetail[].fundAllocationPercentage",
+                        "title": "PERC_FUND_ALLOCATION",
+                        "type": ["null","integer"]
+                    },
+                    "consumptionDetails": {
+                        "key": "loanAccount.loanUtilisationDetail[].consumptionDetails",
+                        "title": "CONSUMPTION_DETAILS",
+                        "type": "text"                   
+                    }
+                }                    
+            }
+        }
+    },
     "LoanSanction": {
         "type": "box",
         "title": "LOAN_SANCTION",

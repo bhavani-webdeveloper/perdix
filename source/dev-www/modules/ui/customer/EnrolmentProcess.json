@@ -1191,6 +1191,7 @@
                 "key": "customer.enterpriseMonthlySales",
                 "type": "array",
                 "title": "ENTERPRISE_MONTHLY_SALES",
+                "startEmpty": true,
                 "items": {
                     "month": {
                         "key": "customer.enterpriseMonthlySales[].month",

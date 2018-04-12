@@ -46,7 +46,12 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation",
                                 "AdditionalLoanInformation",
-                                "NomineeDetails"
+                                "NomineeDetails",
+                                "ProposedUtilizationPlan",
+                                "ProposedUtilizationPlan.loanUtilisationDetail",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -117,7 +122,12 @@ define([],function(){
                         "ScreeningReview": {
                             "excludes": [
                                 "AdditionalLoanInformation",
-                                "NomineeDetails"
+                                "NomineeDetails",
+                                "ProposedUtilizationPlan",
+                                "ProposedUtilizationPlan.loanUtilisationDetail",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -150,7 +160,15 @@ define([],function(){
                             }
                         },
                         "Application": {
-                            "excludes": ["LoanRecommendation"],
+                            "excludes": [
+                            "LoanRecommendation",
+                            "ProposedUtilizationPlan",
+                            "ProposedUtilizationPlan.loanUtilisationDetail",
+                            "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
+                            "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
+                            "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
+
+                            ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "orderNo": 1
@@ -468,7 +486,13 @@ define([],function(){
                     "PostReview.reject.rejectButton",
                     "PostReview.hold",
                     "PostReview.hold.remarks",
-                    "PostReview.hold.holdButton"
+                    "PostReview.hold.holdButton",
+
+                    "ProposedUtilizationPlan",
+                    "ProposedUtilizationPlan.loanUtilisationDetail",
+                    "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
+                    "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
+                    "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
                 ];
 
             }
