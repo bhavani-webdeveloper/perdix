@@ -42,10 +42,10 @@ irf.pageCollection.factory(irf.page("customer360.CustomerHistorySummary"), ["$lo
                         '<table class="table table-bordered">' +
                         '<thead class="thead-default">' +
                         '<tr>' +
-                        '<th class="col-sm-3" style="text-align: center">LastEditedBY</th>' +
-                        '<th class="col-sm-3" style="text-align: center">LastEditedByUserName</th>' +
-                        '<th class="col-sm-3" style="text-align: center">LastEditAt</th>' +
-                        '<th class="col-sm-3" style="text-align: center">ShowChanges</th>' +
+                        '<th class="col-sm-3" style="text-align: center">Last Edited BY</th>' +
+                        '<th class="col-sm-3" style="text-align: center">Last Edited By UserName</th>' +
+                        '<th class="col-sm-3" style="text-align: center">Last Edit At</th>' +
+                        '<th class="col-sm-3" style="text-align: center">Show Changes</th>' +
                         '</tr>' +
                         '</thead>' +
                         '<tbody>' +
