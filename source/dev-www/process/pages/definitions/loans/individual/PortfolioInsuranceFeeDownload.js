@@ -1,5 +1,5 @@
 define({
-    pageUID: "loans.individual.PortfolioInsurenceFeedDownload",
+    pageUID: "loans.individual.PortfolioInsuranceFeeDownload",
     pageType: "Engine",
     dependencies: ["$log", "$q",'PageHelper', 'formHelper','irfProgressMessage',
         'SessionStore', "$state", "$stateParams","IndividualLoan","SchemaResource","Utils"],
@@ -7,9 +7,9 @@ define({
         SessionStore, $state, $stateParams,IndividualLoan,SchemaResource,Utils) {
 
         return {
-            "name": "PORTFOLIO_INSURENCE_FEED_DOWNLOAD",
+            "name": "PORTFOLIO_INSURANCE_FEE_DOWNLOAD",
             "type": "schema-form",
-            "title": "PORTFOLIO_INSURENCE_FEED_DOWNLOAD",
+            "title": "PORTFOLIO_INSURANCE_FEE_DOWNLOAD",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Create Branch Page loaded");
