@@ -53,3 +53,4 @@ vehiclePriceEvaluation.list = SELECT * from vehicle_price_evaluation_master
 AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_purpose_second_level as purpose2,loan_purpose as purpose3 from loan_purpose_mapping_master
 PDCDemands.list= select repayment_amount, cheque_number from repayment_batch_details  where account_number=:accountNumber and repayment_type='PDC' and processing_status='FAILURE' order by id desc limit 1
 loanAccountsByUrnAndStage.list = Select l.account_Number as accountNumber, l.id as loanId, l.current_stage as currentStage from loan_accounts l where l.urn_no = :urn and l.current_stage IN (:currentStage)
+LookUpCodeByFrequency.list = select lookup_code from `equated_installment_lookup_master` where frequency=:frequency
