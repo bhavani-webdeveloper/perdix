@@ -113,6 +113,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.monthlyTurnover",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
                     "EnterpriseFinancials.avgMonthlyNetIncome",
+                    "EnterpriseFinancials.incomeThroughSales",
+                    "EnterpriseFinancials.incomeThroughSales.buyerName",
+                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
+                    "EnterpriseFinancials.incomeThroughSales.amount",
+                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                    "EnterpriseFinancials.enterpriseMonthlySales",
+                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",                    
 
                     "EmployeeDetails",
                     "EmployeeDetails.noOfFemaleEmployees",
@@ -186,8 +197,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.details",
                     "EnterpriseAssets.enterpriseAssets.subDetails",
                     "EnterpriseAssets.enterpriseAssets.assetregistrationNumber",
-                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",
-
+                    "EnterpriseAssets.enterpriseAssets.valueOfAsset",                    
+                    
                     "Machinery",
                     "Machinery.fixedAssetsMachinaries",
                     "Machinery.fixedAssetsMachinaries.machineDescription",
@@ -236,7 +247,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets",
                                     "Machinery",
                                     "EnterpriseReferences",
-                                    "CommercialCBCheck"
+                                    "CommercialCBCheck",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -402,7 +418,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "SuppliersDeatils",
                                     "EnterpriseAssets",
                                     "Machinery",
-                                    "EnterpriseReferences"
+                                    "EnterpriseReferences",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -476,7 +496,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.modeOfPayment",
                                     "EnterpriseReferences.verifications.outstandingPayable",
                                     "EnterpriseReferences.verifications.outstandingReceivable",
-                                    "EnterpriseReferences.verifications.customerResponse"
+                                    "EnterpriseReferences.verifications.customerResponse",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -683,6 +707,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "orderNo": 1
                                     },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INVOICE_DETATILS"
+                                    },                                    
                                     "ContactInformation": {
                                         "orderNo": 2
                                     },
@@ -1097,7 +1124,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "ZonalRiskReview": {
                                 "excludes": [
-                                    "EnterpriseAssets"
+                                    "EnterpriseAssets",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1312,7 +1343,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "CentralRiskReview": {
                                 "excludes": [
-                                    "EnterpriseAssets"
+                                    "EnterpriseAssets",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1527,7 +1562,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "CreditCommitteeReview": {
                                 "excludes": [
-                                    "EnterpriseAssets"
+                                    "EnterpriseAssets",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1742,7 +1781,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "Sanction": {
                                 "excludes": [
-                                    "EnterpriseAssets"
+                                    "EnterpriseAssets",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1957,7 +2000,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "Rejected": {
                                 "excludes": [
-                                    "EnterpriseAssets"
+                                    "EnterpriseAssets",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {

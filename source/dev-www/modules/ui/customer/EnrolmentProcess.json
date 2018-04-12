@@ -1,5 +1,5 @@
 {
-    "EnterpriseAssets": {
+    "enterprise": {
         "type": "box",
         "title": "ASSET_DETAILS",
         "orderNo": 400,
@@ -1184,6 +1184,37 @@
                         "category": "CustomerEnrollment",
                         "subCategory": "IDENTITYPROOF",
                         "using": "scanner"
+                    }
+                }
+            },
+            "enterpriseMonthlySales": {
+                "key": "customer.enterpriseMonthlySales",
+                "type": "array",
+                "title": "ENTERPRISE_MONTHLY_SALES",
+                "items": {
+                    "month": {
+                        "key": "customer.enterpriseMonthlySales[].month",
+                        "type": "date",
+                        "title": "START_MONTH",
+                        "dateDisplayFormat": "MMM, YYYY",
+                        "required": true
+                    },
+                    "totalSales": {
+                        "key": "customer.enterpriseMonthlySales[].totalSales",
+                        "type": "amount",
+                        "calculator": true,
+                        "creditDebitBook": true,
+                        "title": "TOTAL_SALES"
+                    },
+                    "seasonType": {
+                        "key": "customer.enterpriseMonthlySales[].seasonType",
+                        "type": "select",
+                        "title": "SEASON_TYPE"
+                        "titleMap": {
+                            "Good": "Good",
+                            "Bad": "Bad",
+                            "Moderate": "Moderate"
+                        }
                     }
                 }
             },
