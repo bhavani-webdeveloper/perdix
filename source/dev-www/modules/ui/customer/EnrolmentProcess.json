@@ -1196,8 +1196,7 @@
                         "key": "customer.enterpriseMonthlySales[].month",
                         "type": "date",
                         "title": "START_MONTH",
-                        "dateDisplayFormat": "MMM, YYYY",
-                        "required": true
+                        "dateDisplayFormat": "MMM, YYYY"
                     },
                     "totalSales": {
                         "key": "customer.enterpriseMonthlySales[].totalSales",
@@ -1209,7 +1208,7 @@
                     "seasonType": {
                         "key": "customer.enterpriseMonthlySales[].seasonType",
                         "type": "select",
-                        "title": "SEASON_TYPE"
+                        "title": "SEASON_TYPE",
                         "titleMap": {
                             "Good": "Good",
                             "Bad": "Bad",
