@@ -4369,16 +4369,10 @@
           }
         }
       },
-<<<<<<< .mine
-      "currentAssets": {
-        "title": "Enterprise Other Asset",
-||||||| .r8143
-      "enterpriseOtherAssets": {
-        "title": "Enterprise Other Asset",
-=======
+
+     
       "currentAssets": {
         "title": "Current Asset",
->>>>>>> .r8169
         "type": "array",
         "items": {
           "type": "object",
