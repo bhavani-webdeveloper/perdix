@@ -1347,7 +1347,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
