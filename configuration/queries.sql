@@ -54,3 +54,4 @@ AllLoanPurposeMapping.list = select loan_purpose_first_level as purpose1,loan_pu
 PDCDemands.list= select repayment_amount, cheque_number from repayment_batch_details  where account_number=:accountNumber and repayment_type='PDC' and processing_status='FAILURE' order by id desc limit 1
 loanAccountsByUrnAndStage.list = Select l.account_Number as accountNumber, l.id as loanId, l.current_stage as currentStage from loan_accounts l where l.urn_no = :urn and l.current_stage IN (:currentStage)
 LookUpCodeByFrequency.list = select lookup_code from `equated_installment_lookup_master` where frequency=:frequency
+physicalAssets.list= select * from asset_master

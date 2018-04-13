@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("CentrePaymentCollection"),
 ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper",
 "$stateParams", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService",
-"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator",
+"$filter", "elementsUtils", "Utils","PagesDefinition", "irfNavigator","GroupProcess",
 function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 	$stateParams, LoanProcess, PM, PageHelper, StorageService,
-	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator ){
+	$filter, elementsUtils, Utils,PagesDefinition, irfNavigator,GroupProcess ){
 
 	return {
 		"id": "CentrePaymentCollection",
@@ -15,6 +15,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		initialize: function (model, form, formCtrl) {
 			if (!model.$$STORAGE_KEY$$) {
 				model.showDenomination = false;
+
+				model.groupCollectionOn = SessionStore.getGlobalSetting('groupCollectionOn');
+				//model.groupCollectionOn= true;
 				
 				PagesDefinition.getPageConfig("Page/Engine/CentrePaymentCollection").then(function(data){
 					if(data.showDenomination) {
@@ -168,7 +171,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		                        $log.info(centres);
 		                        var out = [];
 		                        if (centres && centres.length) {
-
 	                                for (var j = 0; j < centres.length; j++) {
 	                                	if(inputModel.centreName && !centres[j].centreName.toLowerCase().includes(inputModel.centreName.toLowerCase())){
 	                                		continue;
@@ -223,17 +225,99 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									if (!groups[v.groupCode]) groups[v.groupCode] = [];
 									groups[v.groupCode].push(v);
 								});
+
+								var g=[];
+								model.individualCollectionDemand=[];
 								_.each(groups, function(v,k){
-									var d = {groupCode:k, collectiondemand:v};
-									model.groupCollectionDemand.push(d);
+									var groupName;
+									var grouptobecollected =0;
+									PageHelper.showLoader();
+
+									_.each(v, function(v,k){
+										v.amountPaid = v.installmentAmount;
+										if (v.totalToBeCollected > v.installmentAmount) {
+											v.amountPaid = v.totalToBeCollected;
+											v.overdue = true;
+										}
+										grouptobecollected += v.amountPaid;
+									});
+
+									var d = {
+										groupCode: k,
+										collectiondemand: v,
+										totalToBeCollected:grouptobecollected,
+										collected:grouptobecollected,
+									};
+									GroupProcess.search({
+										'groupCode': k
+									}).$promise.then(function(res) {
+										d.groupName = res.body[0].groupName;
+										g.push(d);
+										PageHelper.hideLoader();
+										if (model.groupCollectionOn) {
+											model.groupCollectionDemand=g;
+											model.totalToBeCollected = model.collected = totalToBeCollected;
+											model.notcollected=0;
+										}else{
+											model.individualCollectionDemand=g;
+										}	
+									},function(err){
+										PageHelper.hideLoader();
+										$log.info(err);
+									});
 								});
-								model.totalToBeCollected = model.collected = totalToBeCollected;
 		                    },
 		                    getListDisplayItem: function (item, index) {
 		                        return [
 		                            item.name,
 		                            "Code: " + item.code
 		                        ];
+		                    }
+						},
+						{
+							"key":"collectionDemandSummary.groupNames",
+							"title":"GROUP_NAME",
+							"condition":"!model.groupCollectionOn",
+							"type":"lov",
+		                    lovonly: true,
+		                    bindMap: {},
+		                    required: true,
+		                    searchHelper: formHelper,
+		                    search: function (inputModel, form, model, context) {
+		                    	return $q.resolve({
+		                            headers: {
+		                                "x-total-count": model.individualCollectionDemand.length
+		                            },
+		                            body: model.individualCollectionDemand
+		                        });
+		                    },
+		                    getListDisplayItem: function (item, index) {
+		                        return [
+		                            item.groupName,
+		                        ];
+		                    },
+		                    onSelect: function (valueObj, model, context) {
+		                    	model.collectionDemandSummary.groupNames= valueObj.groupName;
+		                    	model.groupCollectionDemand=[];
+		                    	model.totalToBeCollected= 0;
+		                    	var totalToBeCollected = 0;
+		                    	if(model.individualCollectionDemand && model.individualCollectionDemand.length && model.individualCollectionDemand.length>0){
+									_.each(model.individualCollectionDemand, function(value, key) {
+										if(value.groupCode == valueObj.groupCode){
+											_.each(value.collectiondemand, function(v, k) {
+												v.amountPaid = v.installmentAmount;
+												if (v.totalToBeCollected > v.installmentAmount) {
+													v.amountPaid = v.totalToBeCollected;
+													v.overdue = true;
+												}
+												totalToBeCollected += v.amountPaid;
+											});
+											model.totalToBeCollected = model.collected = totalToBeCollected;
+											model.notcollected=0;
+											model.groupCollectionDemand.push(valueObj);
+										}
+									});
+		                    	}
 		                    }
 						},
 						{
@@ -245,6 +329,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						{
 							"key": "collectionDemandSummary.photoOfCentre",
 							"type": "file",
+							"condition":"model.groupCollectionOn",
 							"fileType": "image/*",
 							"offline": true
 						},
@@ -256,7 +341,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"longitudeExpr":"model.collectionDemandSummary.longitude",
 							"latitude": "collectionDemandSummary.latitude",
 							"longitude": "collectionDemandSummary.longitude",
-							"condition": "model._mode!=='VIEW'"
+							"condition": "model._mode!=='VIEW' && model.groupCollectionOn"
 						},
 						{
 							"key": "collectionDemandSummary.latitude",
@@ -264,7 +349,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 							"type": "geotag",
 							"latitude": "collectionDemandSummary.latitude",
 							"longitude": "collectionDemandSummary.longitude",
-							"condition": "model._mode==='VIEW'",
+							"condition": "model._mode==='VIEW' && model.groupCollectionOn",
 							"readonly": true
 						}
 					]
@@ -274,7 +359,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		{
 			"type": "box",
 			"title": "GROUPS",
-			"condition": "model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
+			"condition": "model._storedData && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist && (model.groupCollectionDemand && model.groupCollectionDemand.length && model.groupCollectionDemand.length>0)",
 			"items": [{
 				"key":"collectionDemandSummary.allAttendance",
 				"fullwidth": true,
@@ -290,8 +375,33 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				"key": "groupCollectionDemand",
 				"add": null,
 				"remove": null,
-				"titleExpr": "form.title + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode",
+				"titleExpr": "model.groupCollectionDemand[arrayIndex].groupName + '(' + 'Group Code' + ' - ' + model.groupCollectionDemand[arrayIndex].groupCode + ')'",
 				"items": [
+					{
+						"key": "collectionDemandSummary.photoOfCentre",
+						"type": "file",
+						"title":"Group Photo",
+						"condition": "!model.groupCollectionOn",
+						"fileType": "image/*",
+						"offline": true
+					}, {
+						"key": "collectionDemandSummary.latitude",
+						"title": "Group Location",
+						"type": "geotag",
+						"latitudeExpr": "model.collectionDemandSummary.latitude",
+						"longitudeExpr": "model.collectionDemandSummary.longitude",
+						"latitude": "collectionDemandSummary.latitude",
+						"longitude": "collectionDemandSummary.longitude",
+						"condition": "model._mode!=='VIEW' && !model.groupCollectionOn"
+					}, {
+						"key": "collectionDemandSummary.latitude",
+						"title": "Group Location",
+						"type": "geotag",
+						"latitude": "collectionDemandSummary.latitude",
+						"longitude": "collectionDemandSummary.longitude",
+						"condition": "model._mode==='VIEW' && !model.groupCollectionOn",
+						"readonly": true
+					},
 					{
 						"key": "groupCollectionDemand[].collectiondemand",
 						"titleExpr": "model.groupCollectionDemand[arrayIndexes[0]].collectiondemand[arrayIndexes[1]].customerName",
@@ -322,18 +432,32 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 											demand.error = '';
 											if (demand.amountPaid > demand.totalToBeCollected) {
 												demand.error = "No advance payment allowed";
+												demand.overdue= Number(demand.amountPaid-demand.totalToBeCollected)||0;
 												return;
 											}
+											demand.notcollected = Number(demand.totalToBeCollected-demand.amountPaid);
 											var collected = 0;
+											var notcollected=0;
 											var l1 = model.groupCollectionDemand.length;
 											for(i=0;i<l1;i++){
+												var col;
+												var noncol;
 												var l2=model.groupCollectionDemand[i].collectiondemand.length;
 												for(j=0;j<l2;j++){
-													collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
+													model.groupCollectionDemand[i].collected += Number(model.groupCollectionDemand[i].collectiondemand[j].amountPaid);
+													model.groupCollectionDemand[i].notcollected += Number(model.groupCollectionDemand[i].collectiondemand[j].notcollected)||0;
 												}
+												collected +=model.groupCollectionDemand[i].collected
+												notcollected +=model.groupCollectionDemand[i].notcollected
 											}
 											model.collected = collected;
+											model.notcollected= notcollected;
 										}
+									},{
+										"key": "groupCollectionDemand[].collectiondemand[].overdue",
+										"title":"Overdue Amount",
+										"readonly":true,
+										"type": "amount"
 									}]
 								},{
 									"type": "section",
@@ -343,9 +467,29 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 										"notitle": true
 									}]
 								}]
-							}
+							},
 						]
+					},
+					{
+						"type": "fieldset",
+						"title": ""
+					}, {
+						"key": "groupCollectionDemand[].totalToBeCollected",
+						"title": "TO_COLLECT",
+						"readonly": true,
+						"type": "amount"
+					}, {
+						"key": "groupCollectionDemand[].collected",
+						"title": "COLLECTED",
+						"readonly": true,
+						"type": "amount"
+					}, {
+						"key": "groupCollectionDemand[].notcollected",
+						"title": "Not Collected",
+						"readonly": true,
+						"type": "amount"
 					}
+
 				]
 			}]
 		},
@@ -423,7 +567,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 		{
 			"type": "box",
 			"title": "COLLECTION",
-			"condition": "((model._storedData && !model._storedData.expired)) && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist",
+			"condition": "((model._storedData && !model._storedData.expired)) && model.collectionDemandSummary.centreId && model.collectionDemandSummary.collectionExist && (model.groupCollectionDemand && model.groupCollectionDemand.length && model.groupCollectionDemand.length>0)",
 			"items": [
 				{
 					"key": "totalToBeCollected",
@@ -434,6 +578,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				{
 					"key": "collected",
 					"title": "COLLECTED",
+					"type": "amount",
+					"readonly": true
+				},
+				{
+					"key": "notcollected",
+					"title": "Not Collected",
 					"type": "amount",
 					"readonly": true
 				},
