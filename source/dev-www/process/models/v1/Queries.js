@@ -839,7 +839,23 @@ irf.models.factory('Queries', [
             deferred.resolve(response.results);
         }, deferred.reject);
         return deferred.promise;
-    }
-        return resource;
+    };
+    resource.getAllLoanPurposesMapping = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("AllLoanPurposeMapping.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getPhysicalAssetsList = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("physicalAssets.list",request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;        
+    };
+    return resource;
     }
 ]);

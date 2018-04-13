@@ -653,6 +653,41 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                             "NA": "NA",
                         }
                     },
+                    "assets.physicalAssets":{
+                        titleExpr: "model.customer.physicalAssets[arrayIndex].ownedAssetDetails | translate",
+                        remove:null,
+                        onArrayAdd: function(value, form, model, formCtrl, event) {
+                            if ((model.customer.physicalAssets.length - 1) === 0) {
+                                PageHelper.showLoader();
+                                var physicalAssets=[];
+                                Queries.getPhysicalAssetsList().then(function(res){
+                                    $log.info(res);
+                                    if(res && res.length && res.length>0){
+                                        for(i in res){
+                                            var obj={};
+                                            obj.assetType= res[i].asset;
+                                            obj.ownedAssetDetails=res[i].asset_details;
+                                            obj.numberOfOwnedAsset=1;
+                                            physicalAssets.push(obj);   
+                                        }
+                                      model.customer.physicalAssets=physicalAssets;
+                                    }
+                                    PageHelper.hideLoader();
+                                },function(err){
+                                    $log.info(err);
+                                    PageHelper.hideLoader();
+                                });
+                            }
+                        },
+                    },
+                    "assets.physicalAssets.assetType":{
+                        "type":"string",
+                        "readonly":true
+                    },
+                    "assets.physicalAssets.ownedAssetDetails":{
+                        "type":"string",
+                        "readonly":true
+                    },
                     "HouseVerification.nameOfRo": {
                         orderNo: 1,
                     },
