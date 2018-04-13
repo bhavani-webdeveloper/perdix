@@ -1850,6 +1850,57 @@
           }
         }
       },
+      "enterpriseOtherAssets": {
+        "title": "Enterprise Other Asset",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            
+          ],
+          "properties": {
+            "assetType": {
+              "title": "Asset Type",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "description": {
+              "title": "description",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetValue": {
+              "title": "assetValue",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "hypothecatedToUs": {
+              "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+           
+          }
+        }
+      },
       "physicalVerification": {
         "title": "Physical Verification",
         "type": "object",
