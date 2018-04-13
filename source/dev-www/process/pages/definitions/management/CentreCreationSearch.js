@@ -10,7 +10,7 @@ define({
 		"title": "CENTRE_SEARCH",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-			model.branch = SessionStore.getCurrentBranch().branchId;
+			model.branchId = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
@@ -35,12 +35,7 @@ define({
          					"centreName": {
            					 "type": ["string", "null"],
                              "title": "CENTRE_NAME_"
-         					},
-         					"centreCode": {
-           					 "type": ["string", "null"],
-                             "title": "CODE"
          					}
-
       					},
       					"required":[]
 			},
@@ -51,6 +46,7 @@ define({
 
 				var promise = CentreCreationResource.centreSearch({
 					'branchId': searchOptions.branchId,
+					'centreName': searchOptions.centreName,
 					'per_page': pageOpts.itemsPerPage,
 					'page': pageOpts.pageNo
 				}).$promise;
@@ -73,6 +69,9 @@ define({
 				},
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0){
+						for(i in response) {
+							response[i].centreAddress = response[i].centreAddress.split("~#");
+						}						
 						return response;
 					}
 					return [];
@@ -89,24 +88,21 @@ define({
 				},
 				getColumns: function(){
 					return [
+
+						{
+							title:'CENTRE_CODE',	
+							data: 'centreCode'
+						},
 						{
 							title:'CENTRE_NAME_',
 							data: 'centreName'
 						},
 						{
-							title:'CODE',	
-							data: 'centreCode'
-						},
-						{
-							title:'CLASSIFIERS',
+							title:'ADDRESS',
 							data: 'centreAddress'
 						},
 						{
-							title:'LOCATION',
-							data: 'centreAltitude'
-						},
-						{
-							title:'GPS_CAPTURE_DATE',
+							title:'CENTRE_CREATION_DATE',
 							data: 'centreGpsCaptureDate'
 						},
 						{
