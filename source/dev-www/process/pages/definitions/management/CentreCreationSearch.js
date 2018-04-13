@@ -69,6 +69,9 @@ define({
 				},
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0){
+						for(i in response) {
+							response[i].centreAddress = response[i].centreAddress.split("~#");
+						}						
 						return response;
 					}
 					return [];
@@ -85,24 +88,21 @@ define({
 				},
 				getColumns: function(){
 					return [
+
+						{
+							title:'CENTRE_CODE',	
+							data: 'centreCode'
+						},
 						{
 							title:'CENTRE_NAME_',
 							data: 'centreName'
 						},
 						{
-							title:'CODE',	
-							data: 'centreCode'
-						},
-						{
-							title:'CLASSIFIERS',
+							title:'ADDRESS',
 							data: 'centreAddress'
 						},
 						{
-							title:'LOCATION',
-							data: 'centreAltitude'
-						},
-						{
-							title:'GPS_CAPTURE_DATE',
+							title:'CENTRE_CREATION_DATE',
 							data: 'centreGpsCaptureDate'
 						},
 						{
