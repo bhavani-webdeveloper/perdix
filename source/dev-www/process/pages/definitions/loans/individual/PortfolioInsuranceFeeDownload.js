@@ -40,7 +40,8 @@ define({
                 },{
                     "key": "loanaccount.insuranceRateCode",
                     "type": "select",
-                    "title": "INSURENCE_TYPE",
+                    "required":true,
+                    "title": "INSURANCE_TYPE",
                     "titleMap":{
                         "Shriram":"Shriram",
                         "Bajaj":"Bajaj"
