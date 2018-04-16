@@ -27,7 +27,7 @@
             },          
             "centreCode": {
                "type": ["string", "null"],
-               "title": "CENTRE_CODE1"
+               "title": "CENTRE_CODE_"
             },
             "centreId": {
                "type": ["object", "null"],
