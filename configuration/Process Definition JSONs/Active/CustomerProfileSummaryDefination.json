@@ -28,11 +28,9 @@
                 "type": "object",
                 "required": [
                     "firstName",
-                    "lastName",
                     "mobilePhone",
                     "villageName",
                     "doorNo",
-                    "street",
                     "locality",
                     "district",
                     "state",
