@@ -349,7 +349,7 @@
         "type": "box",
         "title": "PROPOSED_LOAN_UTILIZATION",
         "startEmpty": true,
-        "orderNo": 61,
+        "orderNo": 59,
         "items": {
             "loanUtilisationDetail" : {
                 "key": "loanAccount.loanUtilisationDetail",

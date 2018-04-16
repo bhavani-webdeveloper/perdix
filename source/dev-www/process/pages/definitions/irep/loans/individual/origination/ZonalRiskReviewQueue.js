@@ -6,7 +6,7 @@ define({
 		
 		return {
 			"type": "search-list",
-			"title": "ZONAL_RISK_REVIEW_QUEUE",
+			"title": "TELEVERIFICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;

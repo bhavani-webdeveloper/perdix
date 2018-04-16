@@ -11,17 +11,13 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
             "items": [
                 "Page/Bundle/irep.loans.individual.origination.ScreeningInput",
                 "Page/Engine/irep.loans.individual.origination.ScreeningQueue",
-                "Page/Engine/irep.loans.individual.origination.DedupeQueue",
                 "Page/Engine/irep.loans.individual.origination.ScreeningReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.ApplicationQueue",
                 "Page/Engine/irep.loans.individual.origination.ApplicationReviewQueue",
-                "Page/Engine/irep.loans.individual.origination.FieldAppraisalQueue",
-                "Page/Engine/irep.loans.individual.origination.FieldAppraisalReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.ZonalRiskReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.CentralRiskReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.LoanSanctionQueue",
-                "Page/Engine/irep.loans.individual.origination.RejectedQueue",
                 "Page/Engine/irep.loans.individual.origination.RejectedAdminQueue"
             ]
         };
@@ -57,7 +53,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
             }
 
 
-            var dqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.DedupeQueue"];
+            /*var dqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.DedupeQueue"];
 
             if (dqMenu) {
                 dqMenu.data = 0;
@@ -79,7 +75,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                         dqMenu.data = '-';
                     });
                 });
-            }
+            }*/
 
 
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.ScreeningReviewQueue"];
@@ -164,7 +160,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 });
             }
 
-            var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.FieldAppraisalQueue"];
+      /*      var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.FieldAppraisalQueue"];
             if (faqMenu) {
                 IndividualLoan.search({
                     'stage': 'FieldAppraisal',
@@ -200,7 +196,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 }, function() {
                     farqMenu.data = '-';
                 });
-            }
+            }*/
 
             var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.ZonalRiskReviewQueue"];
             if (zrrqMenu) {
@@ -275,7 +271,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     lsqMenu.data = '-';
                 });
             }
-
+/*
             var lrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.RejectedQueue"];
             if (lrqMenu) {
                 IndividualLoan.search({
@@ -292,7 +288,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 }, function() {
                     lrqMenu.data = '-';
                 });
-            }
+            }*/
 
             var lrq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.RejectedAdminQueue"];
             if (lrq1Menu) {

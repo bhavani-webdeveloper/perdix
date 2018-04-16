@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "APPLICATION",
+                    "title": "IREP_APPRAISAL",
                     "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                     "readonly": true,
                     "bundleDefinitionPromise": function() {

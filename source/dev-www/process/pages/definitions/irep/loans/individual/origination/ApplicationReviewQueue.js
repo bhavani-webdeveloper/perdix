@@ -13,7 +13,7 @@ define({
 	    }
 		return { 
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "IREP_APPRAISAL_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;

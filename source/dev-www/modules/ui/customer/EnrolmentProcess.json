@@ -1277,6 +1277,12 @@
                         "title": "AMOUNT",
                         "type": "amount"
                     },
+                    "freequency": {
+                        "key": "customer.rawMaterialExpenses[].frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "enumCode": "frequency"
+                    },                                        
                     "rawMaterialDate": {
                         "key": "customer.rawMaterialExpenses[].rawMaterialDate",
                         "title": "DATE",
@@ -1365,6 +1371,20 @@
                                 "title":"INCOME_SOURCE",
                                 "type": "select",
                                 "enumCode": "occupation"
+                            },
+                            "incomeType": {
+                                "key": "",
+                                "title": "INCOME_TYPE",
+                                "type": "select",
+                                "titleMap": {
+                                    "rental": "rental",
+                                    "agriculture": "agriculture",
+                                    "salary": "salary",
+                                    "pension": "pension",
+                                    "profession/business": "profession/business",
+                                    "Vehicle": "Vehicle",
+                                    "others": "others"
+                                }
                             },
                             "incomeEarned": {
                                 "key": "customer.familyMembers[].incomes[].incomeEarned"

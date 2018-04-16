@@ -123,7 +123,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.enterpriseMonthlySales",
                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",                    
+                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType", 
+                    "EnterpriseFinancials.rawMaterialExpenses",
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
+
 
                     "EmployeeDetails",
                     "EmployeeDetails.noOfFemaleEmployees",
@@ -251,7 +258,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
 
                                 ],
                                 "overrides": {
@@ -422,7 +430,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -500,7 +509,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -703,7 +713,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets"
                                 ],
-                                "overrides": {
+                                "overrides": {                                                                     
+                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate": {
+                                        "condition": "model.customer.rawMaterialExpenses[].frequency == 'Daily'"
+                                    },
                                     "EnterpriseInformation": {
                                         "orderNo": 1
                                     },
@@ -1128,7 +1141,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1347,7 +1361,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1566,7 +1581,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1785,7 +1801,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -2004,7 +2021,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType"
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {

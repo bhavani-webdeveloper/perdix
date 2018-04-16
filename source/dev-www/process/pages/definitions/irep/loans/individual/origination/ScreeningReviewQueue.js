@@ -13,7 +13,7 @@ define({
 	    }
 		return {
 			"type": "search-list",
-			"title": "SCREENING_REVIEW_QUEUE",
+			"title": "KYC_CB_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
