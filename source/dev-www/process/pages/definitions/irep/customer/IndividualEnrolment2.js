@@ -1480,7 +1480,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-
+                    
+                    "KYC.customerId": {
+                        "resolver": "IndividualCustomerIDLOVConfiguration"
+                    }
                 }
             }
             var getIncludes = function (model) {

@@ -23,10 +23,6 @@ define([],function(){
                 return true;
             };
 
-
-
-
-
             var getRelationFromClass = function(relation){
                 if (relation == 'guarantor'){
                     return 'Guarantor';
@@ -92,10 +88,7 @@ define([],function(){
                                 },
                                 "PreliminaryInformation.loanPurpose2": {
                                     "resolver": "LoanPurpose2LOVConfiguration"
-                                },
-                                "PreliminaryInformation.linkedAccountNumber": {
-                                    "resolver": "LinkedAccountNumberLOVConfiguration"
-                                },
+                                },                                
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
@@ -215,9 +208,6 @@ define([],function(){
                                 "PreliminaryInformation.loanPurpose2": {
                                     "resolver": "LoanPurpose2LOVConfiguration"
                                 },
-                                "PreliminaryInformation.linkedAccountNumber": {
-                                    "resolver": "LinkedAccountNumberLOVConfiguration"
-                                },
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
@@ -300,6 +290,14 @@ define([],function(){
 
                 }
             }
+
+             var overridesFields = function (bundlePageObj) {
+                return {                 
+                        "PreliminaryInformation.linkedAccountNumber": {
+                            "resolver": "LinkedAccountNumberLOVConfiguration"
+                        }
+                    }
+                }
 
             var getIncludes = function (model) {
 
@@ -414,7 +412,7 @@ define([],function(){
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {
                         var formRequest = {
-                            "overrides": "",
+                            "overrides": overridesFields(model),
                             "includes": getIncludes(model),
                             "excludes": [
                             ],
