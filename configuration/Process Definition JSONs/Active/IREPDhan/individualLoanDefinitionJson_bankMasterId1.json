@@ -7,8 +7,8 @@
    "stages":[
       {
          "order":1,
-         "code":"Screening",
-         "name":"Screening",
+         "code":"KYC",
+         "name":"KYC And CB Submission",
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
@@ -20,8 +20,8 @@
       },
       {
          "order":2,
-         "code":"ScreeningReview",
-         "name":"Screening Review",
+         "code":"KYCReview",
+         "name":"KYC Review ",
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
@@ -32,8 +32,8 @@
       },
       {
          "order":3,
-         "code":"Application",
-         "name":"Application",
+         "code":"Appraisal",
+         "name":"Appraisal ",
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
@@ -45,8 +45,8 @@
       },
       {
          "order":4,
-         "code":"ApplicationReview",
-         "name":"Application Review",
+         "code":"AppraisalReview",
+         "name":"Appraisal Review",
          "stageType":"CAPTURE",
          "sendSms":"Yes",
          "smsCategory":"ApplicationReview",
@@ -58,24 +58,23 @@
       },
       {
          "order":5,
-         "code":"FieldAppraisal",
-         "name":"FieldAppraisal",
+         "code":"Televerification",
+         "name":"Tele Verification",
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
          "isAccountOpening":false,
-         "riskScoreName":"RiskScore3",
          "allowedRoles":[
             "WM"
          ]
       },
       {
          "order":6,
-         "code":"FieldAppraisalReview",
-         "name":"FieldAppraisal Review",
+         "code":"Evaluation",
+         "name":"Evaluation",
          "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
+         "sendSms":"Yes",
+         "smsCategory":"FieldAppraisal",
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"
@@ -95,6 +94,18 @@
       },
       {
          "order":8,
+         "code":"GuarantorAddition",
+         "name":"Guarantor Addition",
+         "stageType":"CAPTURE",
+         "sendSms":"Yes",
+         "smsCategory":"Approval",
+         "isAccountOpening":false,
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":9,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",
@@ -106,7 +117,7 @@
          ]
       },
       {
-         "order":9,
+         "order":10,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -118,7 +129,7 @@
          ]
       },
       {
-         "order":10,
+         "order":11,
          "code":"LoanInitiation",
          "name":"Loan Input",
          "stageType":"CAPTURE",
@@ -130,7 +141,7 @@
          ]
       },
       {
-         "order":11,
+         "order":12,
          "code":"LoanBooking",
          "name":"Loan Booking",
          "stageType":"CAPTURE",
@@ -142,7 +153,7 @@
          ]
       },
       {
-         "order":12,
+         "order":13,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
@@ -154,7 +165,7 @@
          ]
       },
       {
-         "order":13,
+         "order":14,
          "code":"DocumentVerification",
          "name":"Document Verification",
          "stageType":"CAPTURE",
