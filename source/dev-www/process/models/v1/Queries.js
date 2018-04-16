@@ -856,6 +856,23 @@ irf.models.factory('Queries', [
         }, deferred.reject);
         return deferred.promise;        
     };
+    resource.getProfileSummary = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("profileSummary.list",request).then(function(response){
+            if (response && _.isArray(response.results) && response.results.length > 0) {
+                
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject)
+        return deferred.promise;
+    }
     return resource;
     }
 ]);

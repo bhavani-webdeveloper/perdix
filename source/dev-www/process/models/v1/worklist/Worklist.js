@@ -43,6 +43,14 @@ irf.models.factory('Worklist',
 			update: {
 				method: "PUT",
 				url: endpoint + '/workList'
+			},
+			getProfile: {
+				method: 'GET',
+				url: BASE_URL + '/api/editProfile'
+			},
+			updateProfile: {
+				method: "PUT",
+				url: BASE_URL + '/api/editProfile'
 			}
 		});
 		
