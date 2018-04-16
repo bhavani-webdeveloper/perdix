@@ -69,6 +69,7 @@ define({
                                         enumCode: "branch_id",
                                         condition: "!model.editMode"                                        
                                     },
+                                    //it sud be auto updated 
                                     {
                                         key: "centre.centreName",
                                         condition:"!model.editMode",
@@ -471,7 +472,8 @@ define({
                             PageHelper.showProgress('centreCreationSubmitRequest', 'Done',5000);
                             model.centre={};
                             form.$setPristine();
-                            irfNavigator.goBack();
+                            //irfNavigator.goBack();
+                            $state.go('Page.CentreCreationDashboard', null);
                                                         
                         }, function(data){
                             PageHelper.hideLoader();
