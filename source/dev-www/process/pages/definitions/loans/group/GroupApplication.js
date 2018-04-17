@@ -392,14 +392,14 @@ define({
                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=agmt_loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
                         },
-                        {
+                        /*{
                             "type": "button",
                             "key": "group.jlgGroupMembers[].insurenceForm",
                             "title": "Download Insurence Form",
                             "onClick": function(model, form, schemaForm, event) {
                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bajaj_insurance&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
-                        }
+                        }*/
                     ]
                     }, {
                         "key": "group.jlgGroupMembers",
