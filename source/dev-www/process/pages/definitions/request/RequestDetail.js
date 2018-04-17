@@ -20,15 +20,9 @@ define([], function(){
                 $log.info("Request Detail got initialized");
                 model.reqDetail = {};
                 var id = $stateParams.pageId;
-                Worklist.get({
-                  id : id
-                }, function(res) {
-                model.reqDetail= res;
-                model.reqDetail.branchName = branchId.branchName;
-                console.log(model.reqDetail)
-                  formCtrl.redraw();
-                })
-
+                var data = $stateParams.pageData;
+                model.reqDetail = data;
+                formCtrl.redraw();
             },
             offline: false,
             form: [
@@ -51,7 +45,7 @@ define([], function(){
                                 "key": "reqDetail.customerName",
                                 "title": "CUSTOMER_NAME"
                             }, {
-                                "key": "reqDetail.customerUrn",
+                                "key": "reqDetail.customerURN",
                                 "title": "CUSTOMER_URN"
                             }, {
                                 "key": "reqDetail.requestType",

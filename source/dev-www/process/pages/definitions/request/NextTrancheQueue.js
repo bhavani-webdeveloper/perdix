@@ -158,7 +158,7 @@ define([],function(){
 								fn: function(item, index) {
 									$state.go("Page.Engine", {
 										pageName: "request.RequestDetail",
-										pageId: item.id
+										pageData: item
 									});
 								},
 								isApplicable: function(item, index) {

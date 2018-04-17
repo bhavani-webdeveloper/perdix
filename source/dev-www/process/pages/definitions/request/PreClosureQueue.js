@@ -159,7 +159,7 @@ define([],function(){
 									console.log(item);
 									$state.go("Page.Engine", {
 										pageName: "request.RequestDetail",
-										pageId: item.id
+										pageData: item
 									});
 								},
 								isApplicable: function(item, index) {
