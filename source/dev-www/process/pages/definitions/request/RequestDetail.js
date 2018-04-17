@@ -11,19 +11,21 @@ define([], function(){
                           irfProgressMessage,SessionStore,$state,$stateParams, Utils,
                           BundleManager, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator, Worklist, $filter) {
 
-          console.log("Inside Request Detail");
+          var branchId = SessionStore.getCurrentBranch();
           return {
             "type": "schema-form",
             "title": "REQUEST_DETAIL",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Request Detail got initialized");
+                model.reqDetail = {};
                 var id = $stateParams.pageId;
                 Worklist.get({
                   id : id
                 }, function(res) {
-                  console.log(res);
-                  model.reqDetail= res;
+                model.reqDetail= res;
+                model.reqDetail.branchName = branchId.branchName;
+                console.log(model.reqDetail)
                   formCtrl.redraw();
                 })
 
@@ -45,9 +47,6 @@ define([], function(){
                             "items": [{
                                 "key": "reqDetail.branchName",
                                 "title": "HUB_NAME"
-                            }, {
-                                "key": "reqDetail.centreName",
-                                "title": "SPOKE_NAME"
                             }, {
                                 "key": "reqDetail.customerName",
                                 "title": "CUSTOMER_NAME"
@@ -225,7 +224,7 @@ define([], function(){
                               "type": "button",
                               "icon": "fa fa-circle-o",
                               "title": "CUSTOMER_360",
-                              // "onClick": "actions.save(model, formCtrl, form, $event)"
+                              "onClick": "actions.gotoCustomer(model, formCtrl, form, $event)"
                           },
                           {
                               "type": "button",
@@ -261,6 +260,14 @@ define([], function(){
                       PageHelper.showErrors(err);
                       PageHelper.hideLoader();
                   })
+                },close: function(model, formCtrl, form, $event) {
+                    irfNavigator.goBack();
+                },
+                gotoCustomer: function(model, formCtrl, form, $event) {
+                    var customerId = model.reqDetail.customerId;
+                    $state.go("Page.Customer360",{
+                        pageId:customerId
+                    });
                 }
             }
           };

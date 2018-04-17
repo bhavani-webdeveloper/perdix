@@ -48,49 +48,22 @@ define([],function(){
 							},
 							"customerName": {
 								"title": "CUSTOMER_NAME",
-								"type": "string",
-								"x-schema-form": {
-									"type": "lov",
-									"autolov": true,
-									"bindmap": {},
-									"searchHelper": formHelper,
-									"lovonly": true,
-			                        search: function(inputModel, form) {
-			                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-			                            var promise = Enrollment.search({
-			                                'branchName': SessionStore.getBranch(),
-			                            }).$promise;
-			                            return promise;
-			                        },
-			                        getListDisplayItem: function(data, index) {
-			                            return [
-			                                data.firstName
-			                            ];
-			                        },
-			                        onSelect: function(valueObj, model, context){
-			                        	model.customerName = valueObj.firstName;
-			                        	model.customerId = valueObj.id;
-									}
-								}
+								"type": "string"
+							},
+							"accountNumber": {
+								"title": "ACCOUNT_NUMBER",
+								"type": "string"
 							},
 							"customerUrn": {
 								"title": "CUSTOMER_URN",
 								"type": "string"
 							},
-							"requestType": {
-								"title": "REQUEST_TYPE",
-								"type": "string"
-							},
 							"requestDate": {
-								"title": "LOAN_ACCOUNT_NUMBER",
+								"title": "REQUEST_DATE",
 								"type": "string",
 								"x-schema-form": {
 									"type": "date"
 								}							
-							},
-							"requestStatus": {
-								"title": "REQUEST_STATUS",
-								"type": "string"
 							}
 						}
 					},
@@ -103,8 +76,12 @@ define([],function(){
 							'customerId': searchOptions.customerId,
 							'bracnhId': searchOptions.branchId,
 							'requestType': 'pre-closure',
+							'customerURN': searchOptions.customerUrn,
+							'requestDate': searchOptions.requestDate,
+							'customerName': searchOptions.customerName,
+							'accountNumber': searchOptions.accountNumber,
 							'page': pageOpts.pageNo,
-							'per_page': pageOpts.itemsPerPage							
+							'per_page': pageOpts.itemsPerPage						
 						}).$promise;
 					 	return promise;
 
@@ -154,10 +131,6 @@ define([],function(){
 										}
 										return branchName;
 									}
-								},
-								{
-									title: "SPOKE_NAME",
-									data: 'centreName'
 								},
 								{
 									title: "CUSTOMER_URN",

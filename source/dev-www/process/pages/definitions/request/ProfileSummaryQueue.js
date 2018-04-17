@@ -20,7 +20,7 @@ define([],function(){
 					searchForm: [
 						"*"
 					],
-					autoSearch: true,
+					
 					searchSchema: {
 						"type": 'object',
 						"title": 'SearchOptions',
@@ -48,30 +48,7 @@ define([],function(){
 							},
 							"customerName": {
 								"title": "CUSTOMER_NAME",
-								"type": "string",
-								"x-schema-form": {
-									"type": "lov",
-									"autolov": true,
-									"bindmap": {},
-									"searchHelper": formHelper,
-									"lovonly": true,
-			                        search: function(inputModel, form) {
-			                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-			                            var promise = Enrollment.search({
-			                                'branchName': SessionStore.getBranch()
-			                            }).$promise;
-			                            return promise;
-			                        },
-			                        getListDisplayItem: function(data, index) {
-			                            return [
-			                                data.firstName
-			                            ];
-			                        },
-			                        onSelect: function(valueObj, model, context){
-			                        	model.customerName = valueObj.firstName;
-			                        	model.customerId = valueObj.id;
-									}
-								}
+								"type": "string"
 							},
 							"customerUrn": {
 								"title": "CUSTOMER_URN",
@@ -84,7 +61,12 @@ define([],function(){
 					},
 					getResultsPromise: function(searchOptions, pageOpts) {
 						// var deffered = $q.defer();
-						var promise = Queries.getProfileSummary()
+						var promise = Queries.getProfileSummary({
+							'customerURN': searchOptions.customerUrn,
+							'customerName': searchOptions.customerName,
+							'page': pageOpts.pageNo,
+							'per_page': pageOpts.itemsPerPage
+						})
 						return promise;						
 						// return promise;
 						

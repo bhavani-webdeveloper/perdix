@@ -75,7 +75,7 @@ define([], function(){
                               "type": "button",
                               "icon": "fa fa-circle-o",
                               "title": "CUSTOMER_360",
-                              // "onClick": "actions.save(model, formCtrl, form, $event)"
+                              "onClick": "actions.gotoCustomer(model, formCtrl, form, $event)"
                           },
                           {
                               "type": "button",
@@ -117,6 +117,12 @@ define([], function(){
                 },
                 close: function(model, formCtrl, form, $event) {
                     irfNavigator.goBack();
+                },
+                gotoCustomer: function(model, formCtrl, form, $event) {
+                    var customerId = model.userInfo.customerId;
+                    $state.go("Page.Customer360",{
+                        pageId:customerId
+                    });
                 }
             }
           };
