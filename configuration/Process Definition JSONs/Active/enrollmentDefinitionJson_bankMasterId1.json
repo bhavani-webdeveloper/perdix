@@ -172,6 +172,16 @@
                 "Completed"
               ]
             },
+			"noOfDependents": {
+              "title": "noOfDependents",
+              "type": "string",
+              "minLength": 0,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "maritalStatus": {
               "title": "Marital Status",
               "type": "string",
@@ -2486,6 +2496,34 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+		  ,"vehiclesOwned": {
+            "title": "vehiclesOwned",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"vehiclesFinanced": {
+            "title": "vehiclesFinanced",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },"vehiclesFree": {
+            "title": "vehiclesFree",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
