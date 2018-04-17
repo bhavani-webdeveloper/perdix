@@ -452,6 +452,7 @@ define([],function(){
                             },
                             "PreliminaryInformation.expectedInterestRate": {
                                 "required": true,
+                                "title": "FLAT_RATE",
                                  onChange: function(modelValue, form, model) {
                                     model.loanAccount.estimatedEmi = null;
                                 }
@@ -641,13 +642,13 @@ define([],function(){
                                                         case 'Weekly':
                                                             frequencyRequested = parseInt(365/7);
                                                             break;
-                                                        case 'Yearly': 
-                                                            frequencyRequested = 1;   
+                                                        case 'Yearly':
+                                                            frequencyRequested = 1;
                                                     }
                                                     var rate = parseFloat((model.loanAccount.expectedInterestRate)/(100*frequencyRequested));
                                                     var n = parseFloat(model.loanAccount.tenureRequested);
                                                     var calculateEmi = (parseFloat(model.loanAccount.loanAmountRequested) * rate / parseFloat((1 - Math.pow(1 + rate, -n))));
-                                                    model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());   
+                                                    model.loanAccount.estimatedEmi = parseInt(calculateEmi.toFixed());
                                                 }
                                             }
                                         }
@@ -1024,7 +1025,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                               
+
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
                             }, function (err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
@@ -1040,7 +1041,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                
+
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {

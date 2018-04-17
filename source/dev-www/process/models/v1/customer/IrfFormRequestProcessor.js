@@ -1,6 +1,6 @@
 irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager", "CustomerBankBranch",
-    function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager, CustomerBankBranch) {
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager", "CustomerBankBranch", "User",
+    function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager, CustomerBankBranch, User) {
         var formRepository = {}
 
         formRepository['IndividualEnrollment'] = {
@@ -2653,7 +2653,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource=='Existing Customer Referral' || model.lead.leadSource=='Employee referral'",
+                        "condition": "model.lead.leadSource=='Existing Customer Referral'",
                         "type": "lov",
 
                         "lovonly": true,
@@ -2686,7 +2686,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "centreName": {
                                 "key": "lead.centreName",
-
                                 "type": "string",
                                 "readonly": true,
 
@@ -2770,6 +2769,47 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         }
 
                     },
+                    "referredBy": {
+                        "key": "lead.referredBy",
+                        "condition": "model.lead.leadSource=='Employee referral'",
+                        "type": "lov",
+                        "lovonly": true,
+                        "inputMap" : {
+                            "branchName": {
+                                "key": "lead.branchName",
+                                "screenFilter": true,
+                                "type": "select"
+                            },
+                            "userName": {
+                                "key": "lead.userName"
+                            },
+                            "login": {
+                                "key": "lead.login"
+                            },
+                            "partnerCode": {
+                                "key": "lead.partnerCode"
+                            }
+                        },
+                        "searchHelper": formHelper,
+                        search: function (inputModel, form, model, context) {
+                            var promise = User.query({
+                                'branchName': inputModel.branchName,
+                                'userName': inputModel.userName,
+                                'login': inputModel.login,
+                                'partnerCode': inputModel.partnerCode
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.userName
+                            ]
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.lead.referredBy = valueObj.userName;
+                        }
+                    },
+
                     "agentName": {
                         "key": "lead.agentName",
                         "type":"select"

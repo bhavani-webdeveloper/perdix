@@ -387,6 +387,18 @@
             "type": ["string", "null"],
             "title": "LOAN_OFFICER"
          },
+         "userName": {
+            "type": ["string", "null"],
+            "title": "USER_NAME"
+         },
+         "login": {
+            "type": ["string", "null"],
+            "title": "LOGIN"
+         },
+         "partnerCode": {
+            "type": ["string", "null"],
+            "title": "PARTNER_CODE"
+         },
          "udf": {
             "type": "object",
             "title": "UDF",

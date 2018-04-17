@@ -10,6 +10,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
         $pageFn: function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository) {
 
+            // var getLocation = function() {
+            //     var deferred = $q.defer();
+            //     navigator.geolocation.getCurrentPosition((p) => {
+            //         console.log(p);
+            //         deferred.resolve(p);
+            //     }, (err) => {
+            //         console.log("Error");
+            //         deferred.reject(err)
+            //     })
+            //     return deferred.promise;
+            // }
+
+            var getLocation = function() {
+                return new Promise(function(resolve, reject) {
+                    navigator.geolocation.getCurrentPosition(function(p) {
+                        console.log(p);
+                        resolve(p);
+                    }, function(err) {
+                        console.log("Error");
+                        reject(err);
+                    })
+                });
+            };
+
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
@@ -45,6 +69,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessSector",
                     "EnterpriseInformation.businessSubsector",
                     "EnterpriseInformation.itrAvailable",
+                    "EnterpriseInformation.HouseVerificationPhoto",
                     "EnterpriseInformation.enterpriseCustomerRelations",
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
@@ -194,7 +219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences": {
                                         "readonly": true
                                     }
-                                    
+
                                 }
                             },
                             "BranchCreditAppraisal": {
@@ -321,7 +346,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     }
                                 }
-                               
+
                             }
                         }
                     }
@@ -487,6 +512,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 }
                                             }
                                         }
+                                    },
+                                    "EnterpriseInformation": {
+                                        "items": {
+                                            "HouseVerificationPhoto": {
+                                                "key": "customer.houseVerificationPhoto",
+                                                "type": "file",
+                                                "title": "HOUSE_VERIFICATION_PHOTO",
+                                                "category": "CustomerEnrollment",
+                                                "subCategory": "PHOTO",
+                                                "viewParams" : function(modelValue, form, model) {
+                                                    getLocation().then((pos)=>{
+                                                        console.log("successful");
+                                                        model.customer.latitude = pos.coords.latitude;
+                                                        model.customer.longitude = pos.coords.longitude;
+                                                    });
+                                                    getLocation().catch((err)=>{
+                                                        console.log(err);
+                                                    });
+                                                }
+                                            }
+                                        }
+
                                     }
                                 },
                                 "additions": [

@@ -130,6 +130,33 @@
           ],
           "title": "The Version Schema ",
           "type": "integer"
+        },
+        "parentGlName": {
+          "$id": "/properties/parentGlName",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "PARENT_GL_NAME",
+          "type": "string"
+        },
+        "parentProductCode": {
+          "$id": "/properties/parentProductCode",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "PARENT_PRODUCT_CODE",
+          "type": "string"
+        },
+        "parentCategory": {
+          "$id": "/properties/parentCategory",
+          "default": "",
+          "examples": [
+            "string"
+          ],
+          "title": "PARENT_CATEGORY",
+          "type": "string"
         }
       },
       "type": "object"

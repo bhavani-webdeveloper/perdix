@@ -174,7 +174,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 }
                             }
-                            
+
                         },
                         "BranchCreditAppraisal": {
                             "overrides": {
@@ -376,6 +376,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "HouseVerification": {
+                        "title": "RESIDENCE"
+                    },
                     "TrackDetails.vehiclesFree": {
                         "readonly": true
                     },
