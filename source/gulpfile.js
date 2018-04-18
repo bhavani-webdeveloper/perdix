@@ -53,21 +53,40 @@ gulp.task('fonts', function(){
 })
 
 gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
-    return gulp.src([
-        'dev-www/img/**/*',
-        'dev-www/resources/**/*',
-        'dev-www/modules/**/*.' + '+(json|html)',
-        'dev-www/process/**/*.' + '+(json|html|css)',
-        'dev-www/process/config/**/*',
-        'dev-www/process/pages/definitions/**/*',
-        'dev-www/css/fonts/**/*',
-        'dev-www/js/vendor/**/*',
-        'dev-www/js/themeswitch.js',
-        'dev-www/js/require.js',
-        'dev-www/js/index.js',
-        'dev-www/tsjs/**/*',
-        'dev-www/app_manifest.json'
-        ], {base: 'dev-www/'})
+    var src = [];
+    if(argv.segam) {
+        src = [
+            'dev-www/img/**/*',
+            'dev-www/resources/**/*',
+            'dev-www/modules/**/*.' + '+(json|html)',
+            'dev-www/process/**/*.' + '+(json|html|css)',
+            'dev-www/process/config/**/*',
+            'dev-www/process/pages/definitions/**/*',
+            'dev-www/css/fonts/**/*',
+            'dev-www/js/vendor/**/*',
+            'dev-www/js/themeswitch.js',
+            'dev-www/js/require.js',
+            'dev-www/js/index.js',
+            'dev-www/tsjs/**/*',
+            'dev-www/app_manifest.json'
+            ];
+    } else {
+        src = [
+            'dev-www/img/**/*',
+            'dev-www/modules/**/*.' + '+(json|html)',
+            'dev-www/process/**/*.' + '+(json|html|css)',
+            'dev-www/process/config/**/*',
+            'dev-www/process/pages/definitions/**/*',
+            'dev-www/css/fonts/**/*',
+            'dev-www/js/vendor/**/*',
+            'dev-www/js/themeswitch.js',
+            'dev-www/js/require.js',
+            'dev-www/js/index.js',
+            'dev-www/tsjs/**/*',
+            'dev-www/app_manifest.json'
+            ];
+    }
+    return gulp.src(src , {base: 'dev-www/'})
         .pipe(gulp.dest(buildDirectory));
 })
 

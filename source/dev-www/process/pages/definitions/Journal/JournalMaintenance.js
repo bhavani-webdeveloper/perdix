@@ -331,7 +331,7 @@ define({
                     var branches = [];
                     model.journal.journalBranches.map(function(item) {
                         if(_.hasIn(item, '$selected') && item.$selected) {
-                            branches.push({'id': item.id, 'branchId': item.id});
+                            branches.push({'branchId': item.id});
                         }
                     })
                     model.journal.journalBranches = branches;
