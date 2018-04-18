@@ -119,6 +119,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 }
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
+                                model.rejectProceed = false
                             });
                     } else {
                        irfNavigator.goBack();
@@ -216,7 +217,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             },{
                                                                                 "name": "Approved",
                                                                                 "value": "APPROVED"
-                                                                            }]
+                                                                            }],
+                                                                            "onChange": function(modelValue, form, model) {
+                                                                                model.rejectProceed =  (modelValue == 'REJECTED') ? true : false;
+                                                                                   // model.rejectProceed = true; }
+                                                                            }
                                                                         }
                                                                     }
                                                                 },
@@ -346,7 +351,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             },{
                                                                                 "name": "Approved",
                                                                                 "value": "APPROVED"
-                                                                            }]
+                                                                            }],
+                                                                            "onChange": function(modelValue, form, model) {
+                                                                               model.rejectProceed =  (modelValue == 'REJECTED') ? true : false;                                                                            }
                                                                         }
                                                                     }
                                                                 },
@@ -441,6 +448,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             "type": "button",
                                             "title": "PROCEED",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "condition":"model.rejectProceed",
+                                            "title": "SEND BACK",
+                                            "onClick": "actions.back(model, formCtrl, form, $event)"
                                         }
                                     ]
                                 }
@@ -506,13 +519,33 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-                        PageHelper.showLoader();
-                        model.LiabilityLoanAccountBookingProcess.proceed()
+                        if (model.rejectProceed) {
+                            PageHelper.showProgress('loan', 'cant proceed.', 5000);
+                        } else {
+                            PageHelper.showLoader();
+                            model.LiabilityLoanAccountBookingProcess.proceed()
+                                .finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                                .subscribe(function(value) {
+                                    PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
+                                    PageHelper.clearErrors();
+                                    irfNavigator.goBack();
+                                }, function(err) {
+                                    PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
+                                    PageHelper.showErrors(err);
+                                    PageHelper.hideLoader();
+                                });
+                        }
+                    },
+                    back :function (model, formCtrl, form, $event)
+                    {
+                         model.LiabilityLoanAccountBookingProcess.sendBack("DocumentUpload")
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                PageHelper.showProgress('loan', 'Loan Proceed.', 5000);
+                                PageHelper.showProgress('loan', 'Document SentBack', 5000);
                                 PageHelper.clearErrors();
                                 irfNavigator.goBack();
                             }, function (err) {
