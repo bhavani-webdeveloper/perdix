@@ -17,6 +17,7 @@ export class LiabilityLoanAccountBookingProcess {
 	LiabilityLoanAccountBookingProcessRepo:ILiabilityLoanAccountBookingRepository;
 	liabilityProcessAction: string;
     
+    stage: String;
     liabilityAccount: LiabilityAccount;
     lenderEnrolmentProcess: EnrolmentProcess;
     constructor() {
@@ -36,6 +37,15 @@ export class LiabilityLoanAccountBookingProcess {
         let obs1 = this.LiabilityLoanAccountBookingProcessRepo.proceedLiabilityLoanAccount(this);
         return Observable.concat(obs1).last();
     }
+
+    sendBack(stage: any): any {
+        console.log("sendback");
+        console.log(stage)
+        this.liabilityProcessAction = 'PROCEED';
+        this.stage = stage;
+		let obs1 = this.LiabilityLoanAccountBookingProcessRepo.proceedLiabilityLoanAccount(this);
+        return Observable.concat(obs1).last();
+	}
 
     static createNewProcess(): Observable<LiabilityLoanAccountBookingProcess> {
         let ep = new LiabilityLoanAccountBookingProcess();
