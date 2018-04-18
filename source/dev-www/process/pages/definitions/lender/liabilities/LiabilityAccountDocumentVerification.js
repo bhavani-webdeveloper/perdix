@@ -40,10 +40,19 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true
                     },
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff": {
-                        "required": true
+                        "required": true,
+                        "onChange": function(modelValue, form, model) {
+                            model.rejectProceed = (modelValue == 'REJECTED') ? true : false;
+                        }
                     },
+                    "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff":{
+                       "onChange": function(modelValue, form, model) {
+                            model.rejectProceed = (modelValue == 'REJECTED') ? true : false;
+                        } 
+                    },
+
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks": {
-                        "required": true
+                        "required": true,
                     }/*,
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.remarks.remarks": {
                         "required": true
@@ -351,9 +360,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                             },{
                                                                                 "name": "Approved",
                                                                                 "value": "APPROVED"
-                                                                            }],
-                                                                            "onChange": function(modelValue, form, model) {
-                                                                               model.rejectProceed =  (modelValue == 'REJECTED') ? true : false;                                                                            }
+                                                                            }]
                                                                         }
                                                                     }
                                                                 },
@@ -451,7 +458,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         },
                                         {
                                             "type": "button",
-                                            "condition":"model.rejectProceed",
+                                            // "condition":"model.rejectProceed",
+                                            "condition":"model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].isSignOff != 'REJECTED' || model.liabilityAccount.liabilityLenderDocuments[arrayIndex].isSignOff != 'REJECTED'",
                                             "title": "SEND BACK",
                                             "onClick": "actions.back(model, formCtrl, form, $event)"
                                         }
