@@ -102,15 +102,12 @@
                     },
                     "accountNumber": {
                         "key": "customer.customerBankAccounts[].accountNumber",
-                       "type":"text",
                         "required": true,
                         "orderNo": 50
                     },
                     "confirmedAccountNumber" : {
                         "key": "customer.customerBankAccounts[].confirmedAccountNumber",
-                        "orderNo": 51,
-                        "inputmode": "number",
-                        "numberType": "tel"
+                        "orderNo": 51
                     },
                     "accountType": {
                         "key": "customer.customerBankAccounts[].accountType",
@@ -1282,7 +1279,7 @@
                         "title": "FREQUENCY",
                         "type": "select",
                         "enumCode": "frequency"
-                    },                                        
+                    },
                     "rawMaterialDate": {
                         "key": "customer.rawMaterialExpenses[].rawMaterialDate",
                         "title": "DATE",
