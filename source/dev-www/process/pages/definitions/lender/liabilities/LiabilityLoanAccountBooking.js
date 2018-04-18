@@ -419,22 +419,19 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     }
 
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    p1.then(function(repo){
+                    p1.then(function(repo) {
                         self.formRepo = repo;
                     })
 
-                    $q.all([p1,pLoadInit])
-                    .then(function(){
-                        self.form = IrfFormRequestProcessor.getFormDefinition(self.formRepo, formRequest, configFile(), model);
-                        PageHelper.hideLoader();
+                    $q.all([p1, pLoadInit])
+                        .then(function() {
+                            self.form = IrfFormRequestProcessor.getFormDefinition(self.formRepo, formRequest, configFile(), model);
+                            PageHelper.hideLoader();
 
-                    })
-
-                    
+                        })
                 },
-
                 preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-
+                    
                 },
                 eventListeners: {},
                 offline: false,
