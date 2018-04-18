@@ -1,101 +1,105 @@
 {
-    "LenderAccountDetails":{
+    "LenderAccountDetails": {
         "type": "box",
         "title": "LENDER_ACCOUNT_DETAILS",
         "items": {
-            "lenderId":{
-                "key":"liabilityAccount.lenderId",
+            "lenderId": {
+                "key": "liabilityAccount.lenderId",
                 "resolver": "LenderIDLOVConfiguration",
-                "type":"lov",
+                "type": "lov",
                 "lovonly": true,
-                "title":"LENDER_ID"
+                "title": "LENDER_ID"
             },
-            "lenderAccountNumber":{
-                "key":"liabilityAccount.lenderAccountNumber",
-                "type":"number",
+            "lenderAccountNumber": {
+                "key": "liabilityAccount.lenderAccountNumber",
+                "type": "string",
                 "title": "LENDER_ACCOUNT_NUMBER"
             }
         }
     },
-    "DisbursementDetails":{
-        "type":"box",
-        "title":"DISBURSEMENT_DETAILS",
-        "items":{
-            "productType":{
-                "key":"liabilityAccount.productType",
-                "type":"select",
+    "DisbursementDetails": {
+        "type": "box",
+        "title": "DISBURSEMENT_DETAILS",
+        "items": {
+            "productType": {
+                "key": "liabilityAccount.productType",
+                "type": "select",
                 "title": "PRODUCT_TYPE",
-                "enumCode":"lender_product_type"
+                "enumCode": "lender_product_type"
             },
-            "loanAmount":{
-                "key":"liabilityAccount.loanAmount",
-                "type":"number",
-                "title":"LOAN_AMOUNT"
+            "loanAmount": {
+                "key": "liabilityAccount.loanAmount",
+                "type": "number",
+                "title": "LOAN_AMOUNT"
             },
-            "numberOfDisbursement":{
-                "key":"liabilityAccount.numberOfDisbursement",
-                "type":"number",
+            "numberOfDisbursement": {
+                "key": "liabilityAccount.numberOfDisbursement",
+                "type": "number",
                 "title": "NUMBER_OF_DISBURSEMENT"
             },
-            "trancheNumber":{
-                "key":"liabilityAccount.trancheNumber",
-                "type":"string",
+            "trancheNumber": {
+                "key": "liabilityAccount.trancheNumber",
+                "type": "string",
                 "title": "TRANCHE_NUMBER"
             },
-            "disbursementDate":{
-                "key":"liabilityAccount.disbursementDate",
-                "type":"date",
-                "title":"DISBURSEMENT_DATE"
+            "disbursementDate": {
+                "key": "liabilityAccount.disbursementDate",
+                "type": "date",
+                "title": "DISBURSEMENT_DATE"
             },
-            "trancheCondition":{
-                "key":"liabilityAccount.trancheCondition",
-                "type":"select",
+            "trancheCondition": {
+                "key": "liabilityAccount.trancheCondition",
+                "type": "select",
                 "enumCode": "tranche_conditions",
                 "title": "TRANCHE_CONDITION"
             },
-            "interestRateType":{
-                "key":"liabilityAccount.interestRateType",
-                "type":"select",
-                "title":"INTEREST_RATE_TYPE",
-                "enumCode":"interest_rate_type"
+            "interestRateType": {
+                "key": "liabilityAccount.interestRateType",
+                "type": "select",
+                "title": "INTEREST_RATE_TYPE",
+                "enumCode": "interest_rate_type"
             },
-            "rateOfInterest":{
-                "key":"liabilityAccount.rateOfInterest",
-                "type":"number",
-                "title":"RATE_OF_INTEREST"
+            "rateOfInterest": {
+                "key": "liabilityAccount.rateOfInterest",
+                "type": "number",
+                "title": "RATE_OF_INTEREST"
             },
-            "markUpOrDown":{
-                "key":"liabilityAccount.markUpOrDown",
-                "type":"number",
-                "title":"MARKUP_OR_DOWN"
+            "markDown": {
+                "key": "liabilityAccount.markDown",
+                "type": "number",
+                "title": "MARKDOWN"
             },
-            "interestCalculationMethod":{
-                "key":"liabilityAccount.interestCalculationMethod",
-                "type":"select",
-                "enumCode":"interest_calculation_method",
-                "title":"INTEREST_CALCULATION_METHOD"
+            "markUp": {
+                "key": "liabilityAccount.markUp",
+                "type": "number",
+                "title": "MARKUP"
             },
-            "repaymentTenure":{
-                "key":"liabilityAccount.repaymentTenure",
-                "type":"number",
-                "title":"REPAYMENT_TENURE"
+            "interestCalculationMethod": {
+                "key": "liabilityAccount.interestCalculationMethod",
+                "type": "select",
+                "enumCode": "interest_calculation_method",
+                "title": "INTEREST_CALCULATION_METHOD"
             },
-            "repaymentFrequency":{
-                "key":"liabilityAccount.repaymentFrequency",
-                "type":"select",
-                "enumCode":"frequency",
+            "repaymentTenure": {
+                "key": "liabilityAccount.repaymentTenure",
+                "type": "number",
+                "title": "REPAYMENT_TENURE"
+            },
+            "repaymentFrequency": {
+                "key": "liabilityAccount.repaymentFrequency",
+                "type": "select",
+                "enumCode": "frequency",
                 "title": "REPAYMENT_FREQUENCY"
             },
-            "repaymentMode":{
-                "key":"liabilityAccount.repaymentMode",
-                "type":"select",
-                "enumCode":"payment_mode",
-                "title":"REPAYMENT_MODE"
+            "repaymentMode": {
+                "key": "liabilityAccount.repaymentMode",
+                "type": "select",
+                "enumCode": "lender_repayment_mode",
+                "title": "REPAYMENT_MODE"
             }
-
         }
     },
-    "LoanAmountDeduction":{
+    "LoanAmountDeduction": {
         "type": "box",
         "title": "LOAN_AMOUNT_DEDUCTION",
         "items": {
@@ -103,79 +107,79 @@
                 "key": "liabilityAccount.liabilityFeeDetails",
                 "type": "array",
                 "title": "LOAN_AMOUNT_DEDUCTION",
-                "items":{
+                "items": {
                     "processingFeeInPercentage": {
                         "key": "liabilityAccount.liabilityFeeDetails[].processingFeeInPercentage",
-                        "type":"number",
-                        "title":"PROCESSING_FEE_IN_PERCENTAGE"
+                        "type": "number",
+                        "title": "PROCESSING_FEE_IN_PERCENTAGE"
                     },
                     "feeName": {
                         "key": "liabilityAccount.liabilityFeeDetails[].feeName",
-                        "type":"string",
-                        "title":"FEE_NAME"
+                        "type": "string",
+                        "title": "FEE_NAME"
                     },
                     "feeType": {
                         "key": "liabilityAccount.liabilityFeeDetails[].feeType",
-                        "type":"select",
+                        "type": "select",
                         "enumCode": "liability_fee_type",
-                        "title":"FEE_TYPE"
+                        "title": "FEE_TYPE"
                     },
                     "feeAmount": {
                         "key": "liabilityAccount.liabilityFeeDetails[].feeAmount",
-                        "type":"number",
-                        "title":"FEE_AMOUNT"
+                        "type": "number",
+                        "title": "FEE_AMOUNT"
                     }
                 }
             },
-            "securityAmount":{
-                "key":"liabilityAccount.securityAmount",
-                "type":"number",
-                "title":"SECURITY_AMOUNT"
+            "securityAmount": {
+                "key": "liabilityAccount.securityAmount",
+                "type": "number",
+                "title": "SECURITY_AMOUNT"
             },
-            "totalDeductions":{
-                "key":"liabilityAccount.totalDeductions",
-                "type":"number",
-                "title":"TOTAL_DEDUCTIONS"
+            "totalDeductions": {
+                "key": "liabilityAccount.totalDeductions",
+                "type": "number",
+                "title": "TOTAL_DEDUCTIONS"
             },
-            "netDisbursementAmount":{
-                "key":"liabilityAccount.netDisbursementAmount",
-                "type":"number",
-                "title":"NET_DISBURSEMENT_AMOUNT"
+            "netDisbursementAmount": {
+                "key": "liabilityAccount.netDisbursementAmount",
+                "type": "number",
+                "title": "NET_DISBURSEMENT_AMOUNT"
             },
-            "expectedDisbursementDate":{
-                "key":"liabilityAccount.expectedDisbursementDate",
-                "type":"date",
-                "title":"EXPECTED_DISBURSEMENT_DATE"
+            "expectedDisbursementDate": {
+                "key": "liabilityAccount.expectedDisbursementDate",
+                "type": "date",
+                "title": "EXPECTED_DISBURSEMENT_DATE"
             },
-            "installmentAmount":{
-                "key":"liabilityAccount.installmentAmount",
-                "type":"number",
-                "title":"INSTALLMENT_AMOUNT"
+            "installmentAmount": {
+                "key": "liabilityAccount.installmentAmount",
+                "type": "number",
+                "title": "INSTALLMENT_AMOUNT"
             },
             "scheduleStartDate": {
-                "key":"liabilityAccount.scheduleStartDate",
-                "type":"date",
-                "title":"SCHEDULE_START_DATE"
+                "key": "liabilityAccount.scheduleStartDate",
+                "type": "date",
+                "title": "SCHEDULE_START_DATE"
             },
             "firstInstallmentDate": {
-                "key":"liabilityAccount.firstInstallmentDate",
-                "type":"date",
-                "title":"FIRST_INSTALLMENT_DATE"
+                "key": "liabilityAccount.firstInstallmentDate",
+                "type": "date",
+                "title": "FIRST_INSTALLMENT_DATE"
             },
             "maturityDate": {
-                "key":"liabilityAccount.maturityDate",
-                "type":"date",
-                "title":"MATURITY_DATE"
+                "key": "liabilityAccount.maturityDate",
+                "type": "date",
+                "title": "MATURITY_DATE"
             },
             "loanAccountStatus": {
-                "key":"liabilityAccount.loanAccountStatus",
-                "type":"select",
-                "enumCode":"loan_account_status",
-                "title":"LOAN_ACCOUNT_STATUS"
+                "key": "liabilityAccount.loanAccountStatus",
+                "type": "select",
+                "enumCode": "loan_account_status",
+                "title": "LOAN_ACCOUNT_STATUS"
             }
         }
     },
-    "LenderDocumentation":{
+    "LenderDocumentation": {
         "type": "box",
         "title": "LENDER_DOCUMENT",
         "items": {
@@ -183,7 +187,7 @@
                 "key": "liabilityAccount.liabilityLenderDocuments",
                 "type": "array",
                 "title": "LENDER_DOCUMENT",
-                "items":{
+                "items": {
                     "documentName": {
                         "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
                         "type": "select",
@@ -204,23 +208,22 @@
                         "subCategory": "DOC1",
                         "using": "scanner"
                     },
-                    "isSignOff":{
-                        "key":"liabilityAccount.liabilityLenderDocuments[].isSignOff",
-                        "type":"radios",
-                        "title":"IS_SIGNOFF",
+                    "isSignOff": {
+                        "key": "liabilityAccount.liabilityLenderDocuments[].isSignOff",
+                        "type": "radios",
+                        "title": "IS_SIGNOFF",
                         "enumCode": "decisionmaker"
                     },
-                    "uploadedDate":{
-                        "key":"liabilityAccount.liabilityLenderDocuments[].uploadedDate",
-                        "type":"date",
-                        "title":"UPLOAD_DATE"
+                    "uploadedDate": {
+                        "key": "liabilityAccount.liabilityLenderDocuments[].uploadedDate",
+                        "type": "date",
+                        "title": "UPLOAD_DATE"
                     }
-
-                } 
-            } 
-        } 
+                }
+            }
+        }
     },
-    "LegalCompliance":{
+    "LegalCompliance": {
         "type": "box",
         "title": "LEGAL_COMPLIANCE",
         "items": {
@@ -228,7 +231,7 @@
                 "key": "liabilityAccount.liabilityComplianceDocuments",
                 "type": "array",
                 "title": "LEGAL_COMPLIANCE",
-                "items":{
+                "items": {
                     "documentName": {
                         "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
                         "type": "select",
@@ -249,41 +252,131 @@
                         "subCategory": "DOC1",
                         "using": "scanner"
                     },
-                    "isSignOff":{
-                        "key":"liabilityAccount.liabilityComplianceDocuments[].isSignOff",
-                        "type":"radios",
-                        "title":"IS_SIGNOFF",
+                    "isSignOff": {
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].isSignOff",
+                        "type": "radios",
+                        "title": "IS_SIGNOFF",
                         "enumCode": "decisionmaker"
                     },
-                    "uploadedDate":{
-                        "key":"liabilityAccount.liabilityComplianceDocuments[].uploadedDate",
-                        "type":"date",
+                    "uploadedDate": {
+                        "key": "liabilityAccount.liabilityComplianceDocuments[].uploadedDate",
+                        "type": "date",
                         "title": "UPLOAD_DATE"
                     }
-
-                } 
-            } 
+                }
+            }
         }
     },
-    "DisbursementConfirmation":{
-        "type":"box",
-        "title":"DISBURSEMENT_CONFIRMATION",
-        "items":{
-            "disbursementDate":{
-                "key":"liabilityAccount.disbursementDate",
-                "type":"date",
-                "title":"DISBURSEMENT_DATE"
+    "DisbursementConfirmation": {
+        "type": "box",
+        "title": "DISBURSEMENT_CONFIRMATION",
+        "items": {
+            "disbursementDate": {
+                "key": "liabilityAccount.disbursementDate",
+                "type": "date",
+                "title": "DISBURSEMENT_DATE"
             },
-            "modeOfDisbursement":{
-                "key":"liabilityAccount.modeOfDisbursement",
-                "type":"string",
-                "title":"MODE_OF_DISBURSEMENT"
+            "modeOfDisbursement": {
+                "key": "liabilityAccount.modeOfDisbursement",
+                "type": "select",
+                "enumCode": "liability_mode_of_disbursement",
+                "title": "MODE_OF_DISBURSEMENT"
             },
-            "referenceNumber":{
-                "key":"liabilityAccount.referenceNumber",
-                "type":"number",
-                "title":"UTR_No"
+            "referenceNumber": {
+                "key": "liabilityAccount.referenceNumber",
+                "type": "number",
+                "title": "UTR_No"
             }
-        }   
-    }  
+        }
+    },
+    "LiabilitySchedules": {
+        "type": "box",
+        "colClass": "col-sm-12",
+        "condition": "model.liabilityAccount.liabilitySchedules && model.liabilityAccount.liabilitySchedules.length != 0",
+        "title": "SCHEDULE_DETAILS",
+        "items": {
+            "liabilitySchedules": {
+                "key": "liabilityAccount.liabilitySchedules",
+                "type": "array",
+                "title": "REPAYMENT_SCHEDULE_DETAILS",
+                "items": {
+                    "lenderAccountNumber": {
+                        "key": "liabilityAccount.liabilitySchedules[].lenderAccountNumber",
+                        "type": "number"
+                    },
+                    "installmentDueDate": {
+                        "key": "liabilityAccount.liabilitySchedules[].installmentDueDate",
+                        "type": "uploadedDate"
+                    },
+                    "paidStatus": {
+                        "key": "liabilityAccount.liabilitySchedules[].paidStatus",
+                        "type": "string"
+                    },
+                    "principalDue": {
+                        "key": "liabilityAccount.liabilitySchedules[].principalDue",
+                        "type": "number"
+                    },
+                    "interestDue": {
+                        "key": "liabilityAccount.liabilitySchedules[].interestDue",
+                        "type": "number"
+                    },
+                    "penalityDue": {
+                        "key": "liabilityAccount.liabilitySchedules[].penalityDue",
+                        "type": "number"
+                    },
+                    "otherFeeChargesDue": {
+                        "key": "liabilityAccount.liabilitySchedules[].otherFeeChargesDue",
+                        "type": "number"
+                    },
+                    "totalInstallmentAmountDue": {
+                        "type": "number",
+                        "key": "liabilityAccount.liabilitySchedules[].totalInstallmentAmountDue"
+                    }
+                }
+            }
+        }
+    },
+    "LiabilityRepayments": {
+        "type": "box",
+        "colClass": "col-sm-12",
+        "condition": "model.liabilityAccount.liabilityRepayments && model.liabilityAccount.liabilityRepayments.length != 0",
+        "title": "REPAYMENT_DETAILS",
+        "items": {
+            "liabilityRepayments": {
+                "key": "liabilityAccount.liabilityRepayments",
+                "type": "array",
+                "title": "REPAYMENT_DETAILS",
+                "items": {
+                    "lenderAccountNumber": {
+                        "key": "liabilityAccount.liabilityRepayments[].lenderAccountNumber",
+                        "type": "number"
+                    },
+                    "installmentDate": {
+                        "key": "liabilityAccount.liabilityRepayments[].installmentDate",
+                        "type": "number"
+                    },
+                    "principalPaid": {
+                        "key": "liabilityAccount.liabilityRepayments[].principalPaid",
+                        "type": "number"
+                    },
+                    "interestPaid": {
+                        "key": "liabilityAccount.liabilityRepayments[].interestPaid",
+                        "type": "number"
+                    },
+                    "penalityPaid": {
+                        "key": "liabilityAccount.liabilityRepayments[].penalityPaid",
+                        "type": "number"
+                    },
+                    "otherFeeChargespaid": {
+                        "key": "liabilityAccount.liabilityRepayments[].otherFeeChargespaid",
+                        "type": "number"
+                    },
+                    "totalAmountPaid": {
+                        "key": "liabilityAccount.liabilityRepayments[].totalAmountPaid",
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    }
 }
