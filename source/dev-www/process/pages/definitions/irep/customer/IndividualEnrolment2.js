@@ -42,7 +42,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC": {
                             "excludes": [
                                 "IndividualFinancials",
-                                "FamilyDetails",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
                                 "FamilyDetails.familyMembers.anualEducationFee",
                                 "FamilyDetails.familyMembers.salary",
@@ -178,7 +177,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts.ifscCode": {
                                     "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "resolver": "IFSCCodeLOVConfiguration"
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankName": {
                                     "readonly": true
@@ -1482,8 +1481,101 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return {
 
                     "KYC.customerId": {
-                        "resolver": "IndividualCustomerIDLOVConfiguration"
+                        "orderNo": 10
+                    },
+                    "KYC.identityProofFieldSet": {
+                        "orderNo": 20
+                    },
+                    "KYC.identityProof": {
+                        "orderNo": 30
+                    },
+                    "KYC.identityProofImageId": {
+                        "orderNo": 40
+                    },
+                    "KYC.identityProofNo": {
+                        "orderNo": 50
+                    },
+                    "KYC.addressProofFieldSet": {
+                        "orderNo": 60
+                    },
+                    "KYC.addressProof": {
+                        "orderNo": 70
+                    },
+                    "KYC.addressProofImageId": {
+                        "orderNo": 80
+                    },
+                    "KYC.addressProofNo": {
+                        "orderNo": 90
+                    },
+                    "KYC.additionalKYCs": {
+                        "orderNo": 100
+                    },
+                    "KYC.additionalKYCs.kyc1ProofType": {
+                        "orderNo": 110
+                    },
+                    "KYC.additionalKYCs.kyc1ImagePath": {
+                        "orderNo": 120
+                    },
+                    "KYC.additionalKYCs.kyc1ProofNumber": {
+                        "orderNo": 130
+                    },
+                    "KYC.additionalKYCs.kyc1IssueDate": {
+                        "orderNo": 140
+                    },
+                    "KYC.additionalKYCs.kyc1ValidUptoDate": {
+                        "orderNo": 150
+                    },
+                    "ContactInformation.permanentAddressFieldSet": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.pincode": {
+                        "resolver": "PincodeLOVConfiguration",
+                        "searchHelper": formHelper
+                    },
+                    "HouseVerification.houseDetailsFieldSet": {
+                        "orderNo": 10
+                    },
+                    "HouseVerification.ownership": {
+                        "orderNo": 20
+                    },
+                    "HouseVerification.inCurrentAddressSince": {
+                        "orderNo": 30
+                    },
+                    "HouseVerification.inCurrentAreaSince": {
+                        "required": true,
+                        "orderNo": 40
+                    },
+                    "HouseVerification.latitude": {
+                        "orderNo": 60
+                    },
+                    "HouseVerification.houseVerificationPhoto": {
+                        "orderNo": 70
+                    },
+                    "HouseVerification.date": {
+                        "orderNo": 80
+                    },
+                    "HouseVerification.place": {
+                        "orderNo": 90
+                    },
+                    "BankAccounts.customerBankAccounts": {
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            modelValue.bankStatements = [];
+                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                            var noOfMonthsToDisplay = 6;
+                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                                modelValue.bankStatements.push({
+                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                                });
+                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                            }
+                        }
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements": {
+                        "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                        "titleExprLocals": {moment: window.moment},
                     }
+
                 }
             }
             var getIncludes = function (model) {
@@ -1491,9 +1583,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return [
                     "KYC",
                     "KYC.customerId",
+                    "KYC.identityProofFieldSet",
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
                     "KYC.addressProofNo",
@@ -1530,6 +1624,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.whatsAppMobileNoOption",
                     "ContactInformation.whatsAppMobileNo",
                     "ContactInformation.email",
+                    "ContactInformation.residentialAddressFieldSet",
                     "ContactInformation.careOf",
                     "ContactInformation.doorNo",
                     "ContactInformation.street",
@@ -1541,6 +1636,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.district",
                     "ContactInformation.state",
                     "ContactInformation.mailSameAsResidence",
+                    "ContactInformation.permanentAddressFieldSet",
                     "ContactInformation.mailingDoorNo",
                     "ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
@@ -1582,6 +1678,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.interestRate",
 
                     "HouseVerification",
+                    "HouseVerification.houseDetailsFieldSet",
                     "HouseVerification.ownership",
                     "HouseVerification.inCurrentAddressSince",
                     "HouseVerification.inCurrentAreaSince",
@@ -1600,8 +1697,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.accountType",
                     "BankAccounts.customerBankAccounts.bankingSince",
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
-                    "BankAccounts.customerBankAccounts.sanctionedAmount",
-                    "BankAccounts.customerBankAccounts.bankStatementDocId",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",

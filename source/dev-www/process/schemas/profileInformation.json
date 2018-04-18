@@ -1651,7 +1651,8 @@
                 },
                 "inCurrentAreaSince": {
                     "type": ["string","null"],
-                    "title": "IN_CURRENT_AREA_SINCE"
+                    "title": "IN_CURRENT_AREA_SINCE",
+                    "enumCode": "years_in_current_area"
                 },
                 "villageName": {
                     "type": ["string","null"],
