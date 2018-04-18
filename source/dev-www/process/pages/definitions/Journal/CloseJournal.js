@@ -71,6 +71,11 @@ define({
                     type: "string",
                     readonly: true,
                     "title": "TRANSACTION_DESCRIPTION"
+                }, {
+                    key: "journal.type",
+                    type: "string",
+                    readonly: true,
+                    "title": "TRANSACTION_TYPE"
                 }]
             }, {
                 "type": "actionbox",

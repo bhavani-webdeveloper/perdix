@@ -57,6 +57,10 @@ irf.models.factory('Journal', ["$resource", "$httpParamSerializer", "BASE_URL", 
 				method: 'PUT',
 				url: endpoint2 + '/update'
 			},
+			listAccountCode: searchResource ({
+				method: 'GET',
+				url: endpoint + '/listAccountCode'
+			})
 		});
 
 		resource.JournalEntryUpload = function(file, progress) {

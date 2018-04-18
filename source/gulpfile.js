@@ -55,6 +55,7 @@ gulp.task('fonts', function(){
 gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
     return gulp.src([
         'dev-www/img/**/*',
+        'dev-www/resources/**/*',
         'dev-www/modules/**/*.' + '+(json|html)',
         'dev-www/process/**/*.' + '+(json|html|css)',
         'dev-www/process/config/**/*',

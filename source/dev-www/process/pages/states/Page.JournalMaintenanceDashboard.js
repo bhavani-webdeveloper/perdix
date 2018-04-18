@@ -4,7 +4,7 @@ irf.pages.controller("JournalMaintenanceDashboardCtrl",
         $log.info("Page.JournalMaintenanceDashboard.html loaded");
 
         var fullDefinition = {
-            "title": "JOURNAL_ENTRY_MAINTENANCE_DASHBOARD",
+            "title": "BRANCH_POSTING_MAINTENANCE_DASHBOARD",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/Engine/Journal.JournalMaintenance",
