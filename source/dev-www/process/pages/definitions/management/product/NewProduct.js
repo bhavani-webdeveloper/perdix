@@ -4,11 +4,13 @@ define({
     dependencies: ["$log", "formHelper", "Product", "PageHelper", "$state", "SessionStore", "Utils", "irfNavigator", "$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q", "$timeout"],
     $pageFn: function($log, formHelper, Product, PageHelper, $state, SessionStore, Utils, irfNavigator, $stateParams, RolesPages, $filter, Enrollment, Queries, $q, $timeout) {
         var branch = SessionStore.getBranch();
+
         return {
             "type": "schema-form",
             "title": "PRODUCT_MAINTENANCE",
             initialize: function(model, form, formCtrl) {
                 model.product = model.product || {};
+                model.userLoginDate = SessionStore.getCBSDate();
                 model.allPurposes = [];
                 var productId = $stateParams.pageId;
                 PageHelper.showLoader();
@@ -134,6 +136,13 @@ define({
                 }, {
                     "key": "product.effectiveDate",
                     "type": "date",
+                    //     "pickadate" : {
+                    //     //"min" : "1995-09-01",
+                    //     "max" : new Date(),
+                    //     "modelFormat" : "yyyy-mm-dd", // this is the only "non-standard" pickadate options
+                    //     "format": "d mmmm, yyyy"
+                    // }
+                    // "min": new Date(),
                 }, {
                     "key": "product.expiryDate",
                     "type": "date",
@@ -167,7 +176,11 @@ define({
                 "title": "INTEREST_RATE",
                 "items": [{
                     "key": "product.minInterestRate",
-                    "type": "number"
+                    "type": "number",
+                    "schema": {
+                        "minimum": 0,
+                        "maximum": 99.99
+                    }
                 }, {
                     "key": "product.maxInterestRate",
                     "type": "number"
@@ -224,18 +237,22 @@ define({
                 "items": [{
                     "key": "product.tenureFrom",
                     "type": "number",
+                    "required":true
                 }, {
                     "key": "product.tenureTo",
                     "type": "number",
+                     "required":true
                 }, {
                     "type": "section",
                     "html": "<h3 style='text-align:center'>OR</h3>"
                 }, {
                     "key": "product.tenureSlabs",
                     "type": "array",
-                    "startEmpty":true,
+                    "startEmpty": true,
+
                     "items": [{
                         "key": "product.tenureSlabs[].tenure",
+                        "required":true,
                     }]
                 }],
             }, {
@@ -245,21 +262,26 @@ define({
                 "items": [{
                     "key": "product.amountFrom",
                     "type": "number",
+                    "disable":true,
+                    "required":true
                 }, {
                     "key": "product.amountTo",
                     "type": "number",
+                    "required":true
                 }, {
                     "key": "product.amountMultiples",
                     "type": "number",
+                    "required":true
                 }, {
                     "type": "section",
                     "html": "<h3 style='text-align:center'>OR</h3>"
                 }, {
                     "key": "product.amountSlabs",
                     "type": "array",
-                    "startEmpty":true,
+                    "startEmpty": true,
                     "items": [{
                         "key": "product.amountSlabs[].amount",
+                        "required":true
                     }]
                 }],
             }, {
@@ -341,23 +363,23 @@ define({
                 }],
             }, {
                 "type": "box",
-              //  "condition": "model.product.purposes.length",
+                //  "condition": "model.product.purposes.length",
                 "title": "LOAN_PURPOSES",
                 "items": [{
                     key: "product.allLoanPurposesApplicable",
                     "onChange": function(modelValue, form, model) {
                         $log.info(model.product.allLoanPurposesApplicable == true)
-                            var ap = model.allPurposes;
-                            model.allPurposes = null;
-                            $timeout(function() {
-                                for (i in ap) {
-                                    if (ap[i].$selected === undefined || ap[i].$selected == false || model.product.allLoanPurposesApplicable == true) {
-                                        ap[i].$selected = true;
-                                    } else {
-                                        ap[i].$selected = false;
-                                    }
+                        var ap = model.allPurposes;
+                        model.allPurposes = null;
+                        $timeout(function() {
+                            for (i in ap) {
+                                if (ap[i].$selected === undefined || ap[i].$selected == false || model.product.allLoanPurposesApplicable == true) {
+                                    ap[i].$selected = true;
+                                } else {
+                                    ap[i].$selected = false;
                                 }
-                                model.allPurposes = ap;
+                            }
+                            model.allPurposes = ap;
                         });
                     }
                 }, {
@@ -395,7 +417,8 @@ define({
                     "key": "product.userDefinedFields",
                     "type": "array",
                     "items": [{
-                        "key": "product.userDefinedFields[].label"
+                        "key": "product.userDefinedFields[].label",
+                        "required": true
                     }, {
                         "key": "product.userDefinedFields[].dataType",
                         "type": "select",
@@ -406,8 +429,8 @@ define({
                             "name": "NUMERIC",
                             "value": "NUMERIC"
                         }, {
-                            "name": "ALPHANUMARIC",
-                            "value": "ALPHANUMARIC",
+                            "name": "ALPHANUMERIC",
+                            "value": "ALPHANUMERIC",
                         }, {
                             "name": "SPECIAL",
                             "value": "SPECIAL",
@@ -436,7 +459,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                "title": "MODULE_CONFIG_MASTER",
+                "title": "MODULE_CONFIG_MASTERS",
                 "items": [{
                     "key": "product.moduleConfigMasters",
                     "type": "array",
@@ -464,7 +487,8 @@ define({
                     "items": [{
                         "key": "product.lmsProductMasters[].bankId",
                         "type": "select",
-                        "enumCode": "bank"
+                        "enumCode": "bank",
+                        "required": true,
                     }, {
                         "key": "product.lmsProductMasters[].investorId",
                         "type": "select",
@@ -545,6 +569,7 @@ define({
                             "effectiveDate": {
                                 "title": "EFFECTIVE_DATE",
                                 "type": "string",
+                                "min": new Date()
                             },
                             "expiryDate": {
                                 "type": "string",
@@ -552,14 +577,13 @@ define({
                             },
                             "minInterestRate": {
                                 "type": "number",
-                                "title": "MIN_INTEREST_RATE",
-                                "maxLength": 2,
-
+                                "title": "MIN_INTEREST_RATE"
                             },
                             "maxInterestRate": {
                                 "type": "number",
                                 "title": "MAX_INTEREST_RATE",
-                                "maxLength": 2
+                                "minimum": 0,
+                                "maximum": 99.99
                             },
                             "groupMemberMinimum": {
                                 "type": "number",
@@ -742,7 +766,10 @@ define({
                             },
                             "userDefinedFields": {
                                 "type": "array",
-                                "title":"USER_DEFINED_FIELDS",
+                                "title": "USER_DEFINED_FIELDS",
+                                "required": [
+                                    "label"
+                                ],
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -771,7 +798,7 @@ define({
                             },
                             "userDefinedDateFields": {
                                 "type": "array",
-                                "title":"USER_DEFINED_DATE_FIELDS",
+                                "title": "USER_DEFINED_DATE_FIELDS",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -788,7 +815,7 @@ define({
                             },
                             "moduleConfigMasters": {
                                 "type": "array",
-                                "title":"MODULE_CONFIG_MASTERS",
+                                "title": "MODULE_CONFIG_MASTERS",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -817,7 +844,7 @@ define({
                             },
                             "lmsProductMasters": {
                                 "type": "array",
-                                "title":"LMS_PRODUCT_MASTER",
+                                "title": "LMS_PRODUCT_MASTER",
                                 "items": {
                                     "type": "object",
                                     "properties": {
@@ -872,48 +899,64 @@ define({
                 },
                 submit: function(model, form, formName) {
                     PageHelper.showLoader();
-                    PageHelper.showProgress("New product", "Working...");
-                    model.product.lmsProductMasters.maxAmt = 0;
-                    model.product.lmsProductMasters.minAmt = 0;
-                    model.product.lmsProductMasters.newProduct = 'Y';
-                    model.product.purposes = [];
-                    //if (model.product.allPurposes)
+                    date1 = new Date(model.product.effectiveDate);
+                    date2 = new Date(model.product.expiryDate);
+                    date3 = new Date(model.userLoginDate);
+                    if (date2 < date1) {
+                        PageHelper.showErrors("");
+                    }
+                    if (date1 < date3) {
+                        PageHelper.showErrors({
+                            data: {
+                                error: "EffectiveDate should not be less than Branch working date "
+                            }
+                        });
+                        PageHelper.hideLoader();
+                    } else {
+                        console.log(date1, date2, date2 < date1)
+                        PageHelper.showProgress("New product", "Working...");
+                        model.product.lmsProductMasters.maxAmt = 0;
+                        model.product.lmsProductMasters.minAmt = 0;
+                        model.product.lmsProductMasters.newProduct = 'Y';
+                        model.product.purposes = [];
+                        //if (model.product.allPurposes)
                         _.filter(model.allPurposes, function(allPurposesValues) {
                             if (allPurposesValues.$selected == true) {
                                 model.product.purposes.push(allPurposesValues);
                             }
                             delete model.product.purposes["$selected"];
                         });
-                    if (model.product.id) {
-                        Product.update(model.product)
-                            .$promise
-                            .then(function(res) {
-                                PageHelper.showProgress("product Save", "product Updated with id" + '  ' + res.id, 3000);
-                                $log.info(res);
-                                model.product = res;
-                                irfNavigator.goBack();
-                            }, function(httpRes) {
-                                PageHelper.showProgress("product Save", "Oops. Some error occured.", 3000);
-                                PageHelper.showErrors(httpRes);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                    } else {
-                        if (model.product.purposes)
-                            Product.createProduct(model.product)
-                            .$promise
-                            .then(function(res) {
-                                PageHelper.showProgress("Product Save", "Product Created with id" + '  ' + res.id, 3000);
-                                $log.info("PRODUCT CREATED");
-                                model.product = res;
-                                irfNavigator.goBack();
-                            }, function(httpRes) {
-                                PageHelper.showProgress("Product Save", "Oops. Some error occured.", 3000);
-                                PageHelper.showErrors(httpRes);
-                                $state.go('LoanProductDashboard', null);
-                            }).finally(function() {
-                                PageHelper.hideLoader();
-                            })
+                        if (model.product.id) {
+                            Product.update(model.product)
+                                .$promise
+                                .then(function(res) {
+                                    PageHelper.showProgress("product Save", "product Updated with id" + '  ' + res.id, 3000);
+                                    $log.info(res);
+                                    model.product = res;
+                                    irfNavigator.goBack();
+                                }, function(httpRes) {
+                                    PageHelper.showProgress("product Save", "Oops. Some error occured.", 3000);
+                                    PageHelper.showErrors(httpRes);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                        } else {
+                            if (model.product.purposes)
+                                Product.createProduct(model.product)
+                                .$promise
+                                .then(function(res) {
+                                    PageHelper.showProgress("Product Save", "Product Created with id" + '  ' + res.id, 3000);
+                                    $log.info("PRODUCT CREATED");
+                                    model.product = res;
+                                    irfNavigator.goBack();
+                                }, function(httpRes) {
+                                    PageHelper.showProgress("Product Save", "Oops. Some error occured.", 3000);
+                                    PageHelper.showErrors(httpRes);
+                                    $state.go('LoanProductDashboard', null);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                })
+                        }
                     }
                 }
             }
