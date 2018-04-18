@@ -405,9 +405,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                      irfNavigator.goBack();
                                  }*/
                                  model.LiabilityLoanAccountBookingProcess = res;
-                                modshowScheduleDetailsel.liabilityAccount = res.liabilityAccount;
-                                model. = (res.liabilityAccount.liabilitySchedules).length != 0 ? true : false
-                             //   model.showRepaymentDetails = (res.liabilityAccount.liabilityRepayments).length != 0 ? true : false
+                                model.liabilityAccount = res.liabilityAccount;
+                               // model.showScheduleDetails = (res.liabilityAccount.liabilitySchedules).length != 0 ? true : false
+                               //model.showRepaymentDetails = (res.liabilityAccount.liabilityRepayments).length != 0 ? true : false
                                 _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule){
                                     if(schedule.totalInstallmentAmountDue == null){
                                         schedule.totalInstallmentAmountDue= schedule.principalDue+schedule.penalityDue+schedule.interestDue+schedule.otherFeeChargesDue
@@ -419,19 +419,22 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     }
 
                     var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    p1.then(function(repo) {
+                    p1.then(function(repo){
                         self.formRepo = repo;
                     })
 
-                    $q.all([p1, pLoadInit])
-                        .then(function() {
-                            self.form = IrfFormRequestProcessor.getFormDefinition(self.formRepo, formRequest, configFile(), model);
-                            PageHelper.hideLoader();
+                    $q.all([p1,pLoadInit])
+                    .then(function(){
+                        self.form = IrfFormRequestProcessor.getFormDefinition(self.formRepo, formRequest, configFile(), model);
+                        PageHelper.hideLoader();
 
-                        })
-                },
-                preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                    })
+
                     
+                },
+
+                preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+
                 },
                 eventListeners: {},
                 offline: false,
