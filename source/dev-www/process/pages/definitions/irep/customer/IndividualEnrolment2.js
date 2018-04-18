@@ -1542,7 +1542,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 30
                     },
                     "HouseVerification.inCurrentAreaSince": {
-                        "required": true,
+                        // "required": true,
                         "orderNo": 40
                     },
                     "HouseVerification.latitude": {
@@ -1760,6 +1760,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
+                    model.enrolmentProcess.currentStage =  model.currentStage;
                     /* End of setting data recieved from Bundle */
 
                     /* Setting data for the form */

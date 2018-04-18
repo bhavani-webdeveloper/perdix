@@ -128,7 +128,8 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "LoanCustomerRelations": {
-                                    "orderNo": 2
+                                    "orderNo": 2,
+                                    "readonly": true
                                 },
                                 "DeductionsFromLoan": {
                                     "orderNo": 3,
@@ -142,10 +143,11 @@ define([],function(){
                                 },
                                 "LoanRecommendation": {
                                     "orderNo": 6
-                                },
+                                },                                
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
-                                    "remove": null
+                                    "remove": null,
+                                    "startEmpty": false
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'"
@@ -289,6 +291,20 @@ define([],function(){
                 return {                 
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
+                        },
+                        "PreliminaryInformation.emiPaymentDateRequested": {
+                            titleMap: {
+                                "5th": "5th",
+                                "10th": "10th",
+                                "15th": "15th",
+                            }
+                        },
+                        "PreliminaryInformation.collectionPaymentType": {
+                            titleMap:{
+                                "ACH":"ACH",
+                                "PDC":"PDC",
+                                "Others":"Others"
+                            }
                         }
                     }
                 }
@@ -328,7 +344,7 @@ define([],function(){
                     "LoanMitigants",
                     "LoanMitigants.deviationParameter",
                     "LoanMitigants.deviationParameter.mitigants",
-                    "LoanMitigants.deviationParameter.mitigants.selected",
+                    //"LoanMitigants.deviationParameter.mitigants.selected",
                     "LoanMitigants.deviationParameter.mitigants.mitigantName",
 
                     "LoanDocuments",
@@ -401,6 +417,30 @@ define([],function(){
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
+
+
+                     /* Deviations and Mitigations grouping */
+                        /*if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                            var loanMitigantsGrouped = {};
+                            for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                                var item = model.loanAccount.loanMitigants[i];
+                                if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                                    loanMitigantsGrouped[item.parameter] = [];
+                                }
+                                loanMitigantsGrouped[item.parameter].push(item);
+                            }
+                            model.loanMitigantsByParameter = [];
+                            _.forOwn(loanMitigantsGrouped, function(mitigants, key){
+                                var chosenMitigants = "<ul>";
+
+                                for (var i=0; i<mitigants.length; i++){
+                                    chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
+                                }
+                                chosenMitigants = chosenMitigants + "</ul>";
+                                model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
+                            })
+                        }*/
+                        /* End of Deviations and Mitigations grouping */
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -553,6 +593,35 @@ define([],function(){
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.screeningDate = obj.screeningDate;
+                    },
+                    "new-business": function(bundleModel, model, params){
+                        $log.info("Inside new-business of LoanRequest");
+                        model.loanAccount.customerId = params.customer.id;
+                        model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                        model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
+                        model.loanAccount.loanCentre.centreId = params.customer.centreId;
+                        model.enterprise = params.customer;
+                    },
+                    "load-deviation":function(bundleModel, model, params){
+                        $log.info("Inside Deviation List");
+                        model.deviations = {};
+                        model.deviations.deviationParameter = [];
+                        model.deviations.deviationParameter = params.deviations.deviationParameter;
+                        model.deviations.scoreName = params.deviations.scoreName;
+
+                        if (_.isArray(model.deviations.deviationParameter)){
+                            _.forEach(model.deviations.deviationParameter, function(deviation){
+                                if (_.hasIn(deviation, 'ChosenMitigants') && _.isArray(deviation.ChosenMitigants)){
+                                    _.forEach(deviation.ChosenMitigants, function(mitigantChosen){
+                                        for (var i=0; i< deviation.mitigants.length; i++){
+                                            if (deviation.mitigants[i].mitigantName == mitigantChosen){
+                                                deviation.mitigants[i].selected = true;
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
                     }
                 },
                 form: [],
