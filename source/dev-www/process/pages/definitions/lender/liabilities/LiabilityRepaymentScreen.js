@@ -28,7 +28,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.penalityPaid": {
                         "required": true,
                     },
-                    "LiabilityRepayment.otherFeeChargespaid": {
+                    "LiabilityRepayment.otherFeeChargesPaid": {
                         "required": true,
                     },
                     "LiabilityRepayment.totalInstallmentAmountPaid": {
@@ -40,18 +40,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.chequeDate": {
                         "required": true,
                     },
-                    // "LiabilityRepayment.instrumentType": {
-                    //     onChange: function(modelValue, form, model) {
-                    //         model.instrTypeCheque = false;
-                    //         model.instrTypeNEFT = false;
-                    //         if (modelValue == 'Cheque') {
-                    //             model.instrTypeCheque = true;
-                    //         }
-                    //         if (modelValue == 'NEFT') {
-                    //             model.instrTypeNEFT = true;
-                    //         }
-                    //     }
-                    // },
+               
                     "LiabilityRepayment.transactionType": {
                         onChange: function(modelValue, form, model) {
                             model.preClosureCharge = false;
@@ -67,6 +56,50 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }
                         }
                     },
+                    "LiabilityRepayment.instrumentType": {
+                        onChange: function(modelValue, form, model) {
+                            model.instrTypeCheque = false;
+                            model.instrTypeNEFT = false;
+                            switch (modelValue) {
+                                case 'Cheque':
+                                    model.instrTypeCheque = true;
+                                    break;
+                                case 'NEFT':
+                                     model.instrTypeNEFT = true;
+                                    break;
+                                case 'Cash':
+                                    //day = "Tuesday";
+                                    break;
+                                case 'RTGS':
+                                    model.instrTypeRTGS = true;
+                                    break;
+                                case 'ACH':
+                                    model.instrTypeACH = true;
+                                    break;
+                                case 'PDC':
+                                    model.instrTypePDC = true;
+                                    break;
+                                case 'Internal':
+                                    model.instrTypeInternal = true;
+                                    break
+                            }
+                        }
+                    },
+                    "LiabilityRepayment.preClosureCharges": {
+                        "condition": "model.preClosureCharge"
+                    },
+                    "LiabilityRepayment.chequeNumber": {
+                        "condition": "model.instrTypeCheque",
+                        "type": "number",
+                        "maxLength": 6,
+                        "minLength": 6
+                    },
+                    "LiabilityRepayment.chequeDate": {
+                        "condition": "model.instrTypeCheque"
+                    },
+                    "LiabilityRepayment.referencenumber": {
+                        "condition": "model.instrTypeNEFT"
+                    },
                     "LiabilityRepayment.preClosureCharges": {
                         "condition": "model.preClosureCharge"
                     }
@@ -75,12 +108,14 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var getIncludes = function(model) {
                 return [
                     "LiabilityDue",
+                    "LiabilityDue.installmentDueDate",
                     "LiabilityDue.principalDue",
                     "LiabilityDue.interestDue",
                     "LiabilityDue.penalityDue",
                     "LiabilityDue.otherFeeChargesDue",
                     "LiabilityDue.totalInstallmentAmountDue",
                     "LiabilityPreClosure",
+                    "LiabilityPreClosure.installmentDueDate",
                     "LiabilityPreClosure.principalDue",
                     "LiabilityPreClosure.interestDue",
                     "LiabilityPreClosure.penalityDue",
@@ -91,10 +126,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.principalPaid",
                     "LiabilityRepayment.interestPaid",
                     "LiabilityRepayment.penalityPaid",
-                    "LiabilityRepayment.otherFeeChargespaid",
+                    "LiabilityRepayment.otherFeeChargesPaid",
                     "LiabilityRepayment.totalInstallmentAmountPaid",
                     "LiabilityRepayment.instrumentType",
                     "LiabilityRepayment.transactionDate",
+                    "LiabilityRepayment.referencenumber",
+                    "LiabilityRepayment.chequeNumber",
+                    "LiabilityRepayment.chequeDate",
                     "LiabilityRepayment.preClosureCharges",
                     "LiabilityRepayment.collectionRemarks",
                     "LoanAccount",
@@ -159,6 +197,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "orderNo": 230,
                                     "title": "LIABILITY_SCHEDULE_DUE",
                                     "items": {
+                                        "installmentDueDate":{
+                                            "key":"liabilityRepay.installmentDueDate",
+                                            "title":"INSTALLMENT_DATE",
+                                            "type":"date",
+                                            "readonly": true
+                                        },
                                         "principalDue": {
                                             "key": "liabilityRepay.principalDue",
                                             "type": "number",
@@ -197,6 +241,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "orderNo": 230,
                                     "title": "LIABILITY_PRECLOSURE_DUE",
                                     "items": {
+                                         "installmentDueDate":{
+                                            "key":"liabilityRepay.installmentDueDate",
+                                            "title":"INSTALLMENT_DATE",
+                                            "type":"date",
+                                            "readonly": true
+                                        },
                                         "principalDue": {
                                             "key": "liabilityRepay.principalDue",
                                             "type": "number",
@@ -261,12 +311,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 model.LoanAccount = res.liabilityAccount;
                                 model.LoanAccount.lenderName = res.lenderEnrolmentProcess.customer.firstName;
                                 if (res.liabilityAccount.liabilitySchedules.length == 0) {
-                                   // model.scheduleNotUploded = true;
                                     PageHelper.showProgress("schedule", "No schedule found.", 5000);
                                     PageHelper.hideLoader();
                                     return irfNavigator.goBack();
                                 } else {
-                                  //  model.scheduleNotUploded = false;
                                     var scheduleDetails = res.liabilityAccount.liabilitySchedules;
                                     PageHelper.hideLoader();
                                     var liabilityRepayCal;
@@ -290,7 +338,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         }
                                     }
                                     if (res.liabilityAccount.liabilitySchedules.length == model.count) {
-                                    model.scheduleNotUploded = true;
                                     PageHelper.showProgress("schedule", "Schedule is fully paid.", 5000);
                                     PageHelper.hideLoader();
                                     return irfNavigator.goBack();
@@ -298,12 +345,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "PartiallyPaid") {
                                         this.liabilityRepayCal.principalDue = (this.liabilityRepayCal.principalPaid != null) ? this.liabilityRepayCal.principalDue - this.liabilityRepayCal.principalPaid : this.liabilityRepayCal.principalDue;
                                         this.liabilityRepayCal.interestDue = (this.liabilityRepayCal.interestPaid != null) ? this.liabilityRepayCal.interestDue - this.liabilityRepayCal.interestPaid : this.liabilityRepayCal.interestDue;
-                                        this.liabilityRepayCal.otherFeeChargesDue = (this.liabilityRepayCal.otherFeeChargespaid != null) ? this.liabilityRepayCal.otherFeeChargesDue - this.liabilityRepayCal.otherFeeChargespaid : this.liabilityRepayCal.otherFeeChargesDue;
+                                        this.liabilityRepayCal.otherFeeChargesDue = (this.liabilityRepayCal.otherFeeChargesPaid != null) ? this.liabilityRepayCal.otherFeeChargesDue - this.liabilityRepayCal.otherFeeChargesPaid : this.liabilityRepayCal.otherFeeChargesDue;
                                         this.liabilityRepayCal.penalityDue = (this.liabilityRepayCal.penalityPaid != null) ? this.liabilityRepayCal.penalityDue - this.liabilityRepayCal.penalityPaid : this.liabilityRepayCal.penalityDue;
                                         this.liabilityRepayCal.totalInstallmentAmountDue = this.liabilityRepayCal.principalDue + this.liabilityRepayCal.interestDue + this.liabilityRepayCal.otherFeeChargesDue + this.liabilityRepayCal.penalityDue
                                         this.liabilityRepayCal.principalPaid = null;
                                         this.liabilityRepayCal.interestPaid = null;
-                                        this.liabilityRepayCal.otherFeeChargespaid = null;
+                                        this.liabilityRepayCal.otherFeeChargesPaid = null;
                                         this.liabilityRepayCal.penalityPaid = null
                                         this.liabilityRepayCal.totalAmountPaid = null
                                     } else if (this.liabilityRepayCal && this.liabilityRepayCal.paidStatus == "NotPaid") {
@@ -319,7 +366,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         "interestDue": 0,
                                         "otherFeeChargesDue": 0,
                                         "totalInstallmentAmountDue": 0,
-                                        "transactionType": null
+                                        "transactionType": null,
+                                        "installmentDueDate":null
                                     }
                                     for (i in scheduleDetails) {
                                         if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "NotPaid") {
@@ -331,6 +379,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                 liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
                                                 liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
                                                 liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                                liabilityClosureRepay.installmentDueDate = scheduleDetails[i].installmentDueDate
                                             }
                                             liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.principalDue + liabilityClosureRepay.interestDue + liabilityClosureRepay.otherFeeChargesDue + liabilityClosureRepay.penalityDue;
                                         } else if (scheduleDetails[i] != null && scheduleDetails[i].paidStatus == "PartiallyPaid") {
@@ -344,6 +393,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                 liabilityClosureRepay.interestDue = liabilityClosureRepay.interestDue + scheduleDetails[i].interestDue;
                                                 liabilityClosureRepay.otherFeeChargesDue = liabilityClosureRepay.otherFeeChargesDue + scheduleDetails[i].otherFeeChargesDue;
                                                 liabilityClosureRepay.penalityDue = liabilityClosureRepay.penalityDue + scheduleDetails[i].penalityDue;
+                                                liabilityClosureRepay.installmentDueDate = scheduleDetails[i].installmentDueDate
                                                 liabilityClosureRepay.totalInstallmentAmountDue = liabilityClosureRepay.totalInstallmentAmountDue + scheduleDetails[i];
                                             }
                                         }
@@ -386,9 +436,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-                        var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargespaid
+                        var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargesPaid
                         if (model.liabilityRepay.totalInstallmentAmountPaid == totalAmountPaid) {
-                            if (model.scheduleNotUploded != true) {
                                 PageHelper.showLoader();
                                 model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
                                 model.LiabilityRepayment.save()
@@ -399,20 +448,19 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         PageHelper.showProgress('Repayment', 'Repayment Saved.', 5000);
                                         irfNavigator.goBack();
                                         PageHelper.clearErrors();
-                                    }, function(err) {
-                                        PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
-                                        PageHelper.showErrors(err);
-                                        PageHelper.hideLoader();
                                         irfNavigator.goBack();
+                                    }, function(err) {
+                                        $log.info(err.data.error);
+                                        $log.info("err");
+                                        PageHelper.showProgress('loan', err.data.error, 50000);
+                                        PageHelper.showErrors({
+                                            'message': err
+                                        });
+                                        //PageHelper.showErrors(err.data.error);
+                                        PageHelper.hideLoader();
                                     });
-                            } else {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: "Schedule Not Uploaded"
-                                    }
-                                });
                             }
-                        } else {
+                        else {
                             PageHelper.showErrors({
                                 data: {
                                     error: "TotalInstallmentAmountPaid is Incorrect"
