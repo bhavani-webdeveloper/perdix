@@ -416,6 +416,12 @@ define([],function(){
                     self = this;
                     var formRequest = {
                         "overrides": {
+                            "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
+                                "required": true
+                            },
+                            "VehicleExpensesInformation.VehicleExpenses.expenseAmount": {
+                                "required": true
+                            },
                             "VehicleAssetUse": {
                                 "condition": "model.loanAccount.vehicleLoanDetails.usedFor == 'Commercial' && (model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' ||model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                             },
