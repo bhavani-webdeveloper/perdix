@@ -19,18 +19,7 @@ let config = {
             },
             "beforeProceed": {
                 "defaults": [
-                    {
-                        "name": "PreSaveCustomerPolicy",
-                        "arguments": null
-                    },
-                    {
-                        "name":"SelfRelationshipRequiredPolicy",
-                        "arguments": null
-                    },
-                    {
-                        "name":"GSTApplicablePolicy",
-                        "arguments": null
-                    }
+                    
                 ]
             },
             "beforeSave": {

@@ -496,7 +496,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 }
                             }
-                            
+
                         },
                         "Televerification": {
                             "excludes": [
@@ -1480,7 +1480,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    
+
                     "KYC.customerId": {
                         "resolver": "IndividualCustomerIDLOVConfiguration"
                     }
@@ -1853,6 +1853,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
                             .finally(function () {
+                                console.log("Inside hideLoader call");
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (enrolmentProcess) {
@@ -1863,7 +1864,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
                             });
                     },
                     submit: function (model, form, formName) {
