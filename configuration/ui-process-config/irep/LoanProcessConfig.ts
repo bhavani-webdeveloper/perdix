@@ -35,7 +35,7 @@ let config = {
                 "overrides": [
                     {
                         "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='Screening'",
+                        "expr": "this.loanAccount.currentStage=='KYC'",
                         "add": [
                             {
                                 "name": "CloseLeadonLoanSave",

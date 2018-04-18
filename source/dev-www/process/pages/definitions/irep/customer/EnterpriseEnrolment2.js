@@ -27,11 +27,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.latitude",
                     "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.ownership",
+                    "EnterpriseInformation.rentLeaseStatus",
+                    "EnterpriseInformation.agreementValidTill",
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.businessHistory",
                     "EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
                     "EnterpriseInformation.partnershipDissolvedDate",
+                    "EnterpriseInformation.regularEmployees",
+                    "EnterpriseInformation.contractEmployee",
+                    "EnterpriseInformation.operatedBy",
                     "EnterpriseInformation.companyRegistered",
                     "EnterpriseInformation.isGSTAvailable",
                     "EnterpriseInformation.enterpriseRegistrations",
@@ -45,6 +50,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessSector",
                     "EnterpriseInformation.businessSubsector",
                     "EnterpriseInformation.itrAvailable",
+                    "EnterpriseInformation.lastFiledItr",
+                    "EnterpriseInformation.WhetherAudited",
                     "EnterpriseInformation.enterpriseCustomerRelations",
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
@@ -265,7 +272,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "orderNo": 1
-                                    },
+                                    },                                   
                                     "ContactInformation": {
                                         "orderNo": 2
                                     },
@@ -317,6 +324,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.ownership": {
                                         "required": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                                    },
+                                    "EnterpriseInformation.agreementValidTill": {
+                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
                                     "EnterpriseInformation.businessHistory": {
                                         "required": true
@@ -506,11 +519,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.outstandingPayable",
                                     "EnterpriseReferences.verifications.outstandingReceivable",
                                     "EnterpriseReferences.verifications.customerResponse",
-                                    "EnterpriseFinancials.enterpriseMonthlySales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
+
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -710,6 +726,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             },
                             "AppraisalReview": {
+                                "excludes": [
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
+                                ],
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
@@ -742,7 +767,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -962,7 +994,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
+
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1177,6 +1217,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "GuarantorAddition": {
                                 "excludes": [
+
                                 ],
                                 "overrides": {
 
@@ -1189,7 +1230,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1409,7 +1457,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1629,7 +1684,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {

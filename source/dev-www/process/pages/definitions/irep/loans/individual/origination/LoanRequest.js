@@ -154,13 +154,7 @@ define([],function(){
                         },
                         "Appraisal": {
                             "excludes": [
-                            "LoanRecommendation",
-                            "ProposedUtilizationPlan",
-                            "ProposedUtilizationPlan.loanUtilisationDetail",
-                            "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
-                            "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                            "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
-
+                            "LoanRecommendation"                            
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {

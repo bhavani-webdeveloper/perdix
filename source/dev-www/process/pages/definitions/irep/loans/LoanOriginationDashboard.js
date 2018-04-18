@@ -45,7 +45,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 sqMenu.data = 0;
                 _.forEach(centres, function(centre) {
                     IndividualLoan.search({
-                        'stage': 'KYC_&_CB_SUBMISSION',
+                        'stage': 'KYC',
                         'enterprisePincode': '',
                         'applicantName': '',
                         'area': '',
@@ -66,7 +66,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.KycCbReviewQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
-                    'stage': 'KYC_&_CB_REVIEW',
+                    'stage': 'KYCReview',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
