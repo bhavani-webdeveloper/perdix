@@ -3259,7 +3259,7 @@
                }
             }
          },
-          "loanUtillisationDetails":{
+          "loanUtilisationDetails":{
             "title":"Loan Utilisation Details",
             "type":"array",
             "maxItems":null,

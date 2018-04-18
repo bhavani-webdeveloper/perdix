@@ -129,13 +129,22 @@
                       "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
-               "markUpOrDown":{
-                  "title":"markUpOrDown",
+               "markUp":{
+                  "title":"markUp",
                   "type":"number",
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
 					 "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "markDown":{
+                  "title":"markDown",
+                  "type":"number",
+                  "minimum":-10000000,
+                  "maximum":0,
+                  "captureStages":[
+                "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
                "interestCalculationMethod":{
