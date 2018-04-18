@@ -14,7 +14,6 @@ define({
                     model.centre=model.centre||{};
                     model.centre.branchId = SessionStore.getBranchId();
                     model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || Utils.getCurrentDate();
-                    //model.branch = branch;
                     if ($stateParams.pageId) {
                         model.editMode = false;
                         var id = $stateParams.pageId;
@@ -23,13 +22,13 @@ define({
                             centreid: id
                         }, function(response, headersGetter) {
                             model.centre = _.cloneDeep(response);
-
                             model.centre.monthlyMeetingTime = moment(model.centre.monthlyMeetingTime).toDate();
                             model.centre.weeklyMeetingTime = moment(model.centre.weeklyMeetingTime).toDate();
+                            model.centre.fortnightlyMeetingTime= moment(model.centre.fortnightlyMeetingTime).toDate();
+                            
                             var addressArr = model.centre.centreAddress.split("~#");
                             if(addressArr && addressArr.length > 0) {
                                 model.centre.centreAddress = addressArr[0];
-
                                 if(addressArr.length >= 6) {
                                     model.centre.locality = addressArr[1];
                                     model.centre.villageName = addressArr[2];
@@ -41,8 +40,6 @@ define({
                             PageHelper.hideLoader();
                         }, function(resp) {
                             PageHelper.hideLoader();
-                            //irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-                            //backToDashboard();
                         });
                     }
 
@@ -69,18 +66,16 @@ define({
                                         enumCode: "branch_id",
                                         condition: "!model.editMode"                                        
                                     },
-                                    //it sud be auto updated 
                                     {
                                         key: "centre.centreName",
                                         condition:"!model.editMode",
                                         readonly: true
                                     },
-                                    /*{
+                                    {
                                         key: "centre.centreCode",
                                         condition:"!model.editMode",
                                         readonly: true
-                                    },*/
-                                    //it sud be auto updated 
+                                    },
                                     {
                                         key: "centre.centreName",
                                         condition:"model.editMode"
@@ -163,14 +158,10 @@ define({
                                         key: "centre.status",
                                         type: "radios",
                                         condition: "model.centre.status = 'ACTIVE'",
-
                                         titleMap:{
                                         "ACTIVE":"ACTIVE",
                                         "INACTIVE":"INACTIVE"
-                                        },
-
-                                        
-                                        
+                                        },   
                                     },
                                     {
                                         key: "centre.centreLatitude",
@@ -231,12 +222,10 @@ define({
                                         initialize: function(model, form, parentModel, context) {
                                             model.branchId = parentModel.centre.branchId;
                                             var centres = formHelper.enum('centre').data;
-
                                             var centreName = $filter('filter')(centres, {field3: parentModel.centre.centreCode, parentCode: parentModel.centre.branchId});
                                             if(centreName && centreName.length > 0) {
                                                 model.centreId = centreName[0].value;
                                             }
-
                                         },
                                         inputMap: {
                                             "branchId": {
@@ -303,7 +292,7 @@ define({
                                         }                                        
                                     },
                                     {
-                                        key: "centre.meetingpreference",
+                                        key: "centre.meetingPreference",
                                         title :"MEETING_FREQUENCY",
                                         type: "select",
                                         titleMap: {
@@ -311,26 +300,21 @@ define({
                                             "MONTHLY": "MONTHLY",
                                             "FORTNIGHTLY": "FORTNIGHTLY"
                                         }
-
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'MONTHLY'",
-                                        key: "centre.monthlyMeeting",
+                                        condition : "model.centre.meetingPreference === 'MONTHLY'",
+                                        key: "centre.monthlyMeetingStatus",
                                         type: "radios",
                                         titleMap:{
                                         "DAY":"DAY",
                                         "DATE":"DATE"
                                         }
-                                        /*onChange: function(model) {
-
-                                        }*/
-
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'MONTHLY'",
+                                        condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingDate",
                                         type: "select",
-                                        condition: "model.centre.monthlyMeeting=='DATE'",
+                                        condition: "model.centre.monthlyMeetingStatus=='DATE'",
                                          titleMap:{
                                         "1":"1",
                                         "2":"2",
@@ -366,10 +350,9 @@ define({
                                         }
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'MONTHLY'",
+                                        condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDateNumber",
                                         type: "select",
-                                        condition: "model.centre.monthlyMeeting=='DAY'",
                                         titleMap:{
                                         "1":"1",
                                         "2":"2",
@@ -378,10 +361,9 @@ define({
                                         }
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'MONTHLY'",
+                                        condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDay",
                                         type: "select",
-                                        condition: "model.centre.monthlyMeeting=='DAY'",
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -390,16 +372,15 @@ define({
                                         "THURSDAY":"THURSDAY",
                                         "FRIDAY":"FRIDAY",
                                         "SATURDAY":"SATURDAY"
-                                        }
-                                        
+                                        }  
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'MONTHLY'",
+                                        condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingTime",
                                         type: "time",
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'WEEKLY'",
+                                        condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingDay",
                                         type: "select",
                                         titleMap:{
@@ -413,12 +394,12 @@ define({
                                         }
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'WEEKLY'",
+                                        condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingTime",
                                         type: "time",
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'FORTNIGHTLY'",
+                                        condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingDay",
                                         type: "select",
                                         titleMap:{
@@ -432,9 +413,9 @@ define({
                                         }
                                     },
                                     {
-                                        condition : "model.centre.meetingpreference === 'FORTNIGHTLY'",
+                                        condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingTime",
-                                        type: "time",
+                                        type: "time"
                                     }
                                     
                                  ]
@@ -456,10 +437,9 @@ define({
                         PageHelper.clearErrors();
                         PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
                         var tempModelData = _.clone(model.centre);
-                        delete tempModelData['monthlyMeeting'];
+                        //delete tempModelData['monthlyMeeting'];
                         tempModelData.centreAddress = [tempModelData.centreAddress, tempModelData.locality, tempModelData.villageName, tempModelData.district, tempModelData.state, tempModelData.pincode].join("~#");
                         var deferred = {};
-
                         if((model.centre.id!="")&&(model.centre.id!=undefined)){
                             deferred =   CentreCreationResource.centreEdit(tempModelData).$promise;
                         }
@@ -472,16 +452,12 @@ define({
                             PageHelper.showProgress('centreCreationSubmitRequest', 'Done',5000);
                             model.centre={};
                             form.$setPristine();
-                            //irfNavigator.goBack();
-                            $state.go('Page.CentreCreationDashboard', null);
-                                                        
+                            $state.go('Page.CentreCreationDashboard', null);                               
                         }, function(data){
                             PageHelper.hideLoader();
                             PageHelper.showProgress('centreCreationSubmitRequest', 'Oops some error happend',5000);
-                            PageHelper.showErrors(data);
-                                    
+                            PageHelper.showErrors(data);          
                         });
-
                     }
                 }
             };
