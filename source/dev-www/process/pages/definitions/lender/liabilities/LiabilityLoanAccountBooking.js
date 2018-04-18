@@ -405,9 +405,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                      irfNavigator.goBack();
                                  }*/
                                  model.LiabilityLoanAccountBookingProcess = res;
-                                model.liabilityAccount = res.liabilityAccount;
-                                model.showScheduleDetails = (res.liabilityAccount.liabilitySchedules).length != 0 ? true : false
-                                model.showRepaymentDetails = (res.liabilityAccount.liabilityRepayments).length != 0 ? true : false
+                                modshowScheduleDetailsel.liabilityAccount = res.liabilityAccount;
+                                model. = (res.liabilityAccount.liabilitySchedules).length != 0 ? true : false
+                             //   model.showRepaymentDetails = (res.liabilityAccount.liabilityRepayments).length != 0 ? true : false
                                 _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule){
                                     if(schedule.totalInstallmentAmountDue == null){
                                         schedule.totalInstallmentAmountDue= schedule.principalDue+schedule.penalityDue+schedule.interestDue+schedule.otherFeeChargesDue
