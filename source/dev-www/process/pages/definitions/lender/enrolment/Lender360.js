@@ -26,6 +26,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
             ]
         };
         LiabilityAccountProcess.getLenderSchema().$promise.then(function(lenderSchemaResponse) {
+            PageHelper.showLoader();
             LiabilityAccountProcess.get({
                 id: $scope.lenderId
             }).$promise.then(function(response) {
@@ -33,6 +34,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
                     $scope.dashboardDefinition = resp;
                     $scope.customerSchema = lenderSchemaResponse;
                     $scope.initialize(response);
+                    PageHelper.hideLoader();
                 });
             }, function(errorResponse) {
                 PageHelper.showErrors(errorResponse);
@@ -41,6 +43,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
 
         $scope.initialize = function(data) {
         $log.info(data);
+        
         $scope.model = {liabilityAccount: data};
         $scope.introFormName = "introForm";
         $scope.pageTitle = 'LENDER_360'; 
@@ -48,7 +51,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Profile'])
             $scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.Profile'].onClick = function(event, menu) {
             menu.stateParams.pageId = $scope.lenderId;
-           // entityManager.setModel(menu.stateParams.pageName, $scope.model);
+           
             return $q.resolve(menu);
         };
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/lender.enrolment.View'])
@@ -57,6 +60,7 @@ irf.pageCollection.controller(irf.controller("lender.enrolment.Lender360"),
            // entityManager.setModel(menu.stateParams.pageName, $scope.model);
             return $q.resolve(menu);
         };
+
         };
 
     }
