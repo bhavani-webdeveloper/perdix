@@ -34,9 +34,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LenderDocumentation.liabilityLenderDocuments.upload": {
                         "required": true
+                        
                     },
                     "LenderDocumentation.liabilityLenderDocuments.uploadedDate": {
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     },
                     "LegalCompliance.liabilityComplianceDocuments.documentName": {
                         "required": true
@@ -45,7 +47,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true
                     },
                     "LegalCompliance.liabilityComplianceDocuments.uploadedDate": {
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     }
                 }
             }
@@ -118,6 +121,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 }
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 model.liabilityAccount = res.liabilityAccount;
+                                model.LenderDocumentation.liabilityLenderDocuments.uploadedDate  = moment().format('d-mm-Y')
+                                model.LegalCompliance.liabilityComplianceDocuments.uploadedDate = moment().format('d-mm-Y')
                             });
                     } else {        
                         irfNavigator.goBack();
