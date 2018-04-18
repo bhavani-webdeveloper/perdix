@@ -301,6 +301,66 @@
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
+			   "accountName":{
+                  "title":"accountName",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+			   "ifscCode":{
+                  "title":"ifscCode",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+			   "bankAccountNumber":{
+                  "title":"bankAccountNumber",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+			   "bankAccountType":{
+                  "title":"bankAccountType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+			   "agentName":{
+                  "title":"agentName",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+			   "agentContactPerson":{
+                  "title":"agentContactPerson",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
                "installmentAmount":{
                   "title":"installmentAmount",
 					"type":"number",
