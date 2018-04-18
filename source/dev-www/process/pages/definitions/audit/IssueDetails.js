@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
-    function(irfNavigator, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
+irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$log", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
+    function(irfNavigator, $log, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
         var master = Audit.offline.getAuditMaster();
         return {
             "type": "schema-form",
@@ -54,6 +54,18 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "tra
                 }, {
                     "key": "auditIssue.option",
                     "title": "OPTION",
+                    "readonly": true
+                }, {
+                    "key": "auditIssue.sample_set.column_values[0]",
+                    "title": "SAMPLE_NAME",
+                    "readonly": true
+                },{
+                    "key": "auditIssue.assignee_det[0].assignee_id",
+                    "title": "RESPONSIBILITY",
+                    "readonly": true
+                },{
+                    "key": "auditIssue.sample_set.column_values[1]",
+                    "title": "SPOKE",
                     "readonly": true
                 }, {
                     "key": "auditIssue.deviation",
