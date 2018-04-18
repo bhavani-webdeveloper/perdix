@@ -40,11 +40,8 @@ define([], function() {
                             "type": "section",
                             items: [
                                 {
-                                    key: "urnNo"
+                                    key: "customerId"
                                 },
-                                {
-                                    key: "firstName"
-                                }
                             ]
                         }
                     ],
@@ -52,13 +49,9 @@ define([], function() {
                         "type": 'object',
                         "title": 'SearchOptions',
                         "properties": {
-                            "urnNo": {
-                                "title": "URN_NO",
+                            "customerId": {
+                                "title": "LENDER_ID",
                                 "type": "number"
-                            },
-                            "firstName": {
-                                "title": "LENDER_NAME",
-                                "type": "string"
                             }
                         },
                         "required":[]
@@ -79,7 +72,7 @@ define([], function() {
                         }
 
                         var promise = Enrollment.lenderSearch({
-                            'bankId': searchOptions.bankId,
+                            'customerId': searchOptions.customerId,
                             'branchName': branchName,
                             'firstName': searchOptions.firstName,
                             'centreId': searchOptions.centre,
@@ -133,6 +126,10 @@ define([], function() {
                         },
                         getColumns: function(){
                             return [
+                                {
+                                    title: 'LENDER_ID',
+                                    data: 'id'
+                                },
                                 {
                                     title:'NAME',
                                     data: 'firstName',
