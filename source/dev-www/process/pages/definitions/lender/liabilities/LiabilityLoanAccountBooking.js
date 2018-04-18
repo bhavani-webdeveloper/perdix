@@ -41,40 +41,62 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LenderAccountDetails.lenderId": {
                         searchHelper: formHelper,
-                        "resolver": "LenderIDLOVConfiguration"
+                        "resolver": "LenderIDLOVConfiguration",
+                        "orderNo":90
                     },
                     "LenderAccountDetails.lenderAccountNumber": {
                         "required": true
                     },
                     "DisbursementDetails.productType": {
+                        "orderNo":100,
                         "required": true
                     },
                     "DisbursementDetails.loanAmount": {
-                        "required": true
+                        "required": true,
+                        "orderNo":110
                     },
                     "DisbursementDetails.disbursementDate": {
-                        "required": true
+                        "required": true,
+                        "orderNo":120
                     },
                     "DisbursementDetails.interestRateType": {
-                        "required": true
-                    },
+                        "required": true,
+                        "onChange": function(modelValue, form, model) {
+                            model.floatingRate = (modelValue == 'Floating Rate') ? true : false;
+                        },
+                        "orderNo":130
+
+                    }
+                    ,
                     "DisbursementDetails.rateOfInterest": {
-                        "required": true
+                        "required": true,
+                        "orderNo":140
                     },
-                    "DisbursementDetails.markUpOrDown": {
-                        "required": true
+                    "DisbursementDetails.markDown": {
+                        "condition":"model.floatingRate",
+                        "required": true,
+                        "orderNo":150
+                    },
+                    "DisbursementDetails.markUp": {
+                        "condition":"model.floatingRate",
+                        "required": true,
+                        "orderNo":160
                     },
                     "DisbursementDetails.interestCalculationMethod": {
-                        "required": true
+                        "required": true,
+                        "orderNo":170
                     },
                     "DisbursementDetails.repaymentTenure": {
-                        "required": true
+                        "required": true,
+                        "orderNo":180
                     },
                     "DisbursementDetails.repaymentFrequency": {
-                        "required": true
+                        "required": true,
+                        "orderNo":190
                     },
                     "DisbursementDetails.repaymentMode": {
-                        "required": true
+                        "required": true,
+                        "orderNo":200
                     },
                     "LoanAmountDeduction.liabilityFeeDetails.feeName": {
                         "required": true
@@ -151,7 +173,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 title: 'LENDER_ACCOUNT_NUMBER',
                                 data: 'lenderAccountNumber',
                             }, {
-                                title: 'INSTALLMENT_DATE',
+                                title: 'TRANSACTION_DATE',
                                 data: 'installmentDate'
                             }, {
                                 title: 'PRINCIPAL',
@@ -192,7 +214,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     // "DisbursementDetails.trancheCondition",
                     "DisbursementDetails.interestRateType",
                     "DisbursementDetails.rateOfInterest",
-                    "DisbursementDetails.markUpOrDown",
+                    "DisbursementDetails.markUp",
+                    "DisbursementDetails.markDown",
                     "DisbursementDetails.interestCalculationMethod",
                     "DisbursementDetails.repaymentTenure",
                     "DisbursementDetails.repaymentFrequency",
