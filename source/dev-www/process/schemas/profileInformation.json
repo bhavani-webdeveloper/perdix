@@ -1228,7 +1228,7 @@
                     }
                 },
                 "pincode": {
-                    "type": ["string","null"],
+                    "type": ["string","null", "integer"],
                     "title": "PIN_CODE",
                     "minimum":100000,
                     "maximum":999999
