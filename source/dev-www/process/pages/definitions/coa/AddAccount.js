@@ -18,6 +18,17 @@ define([], function() {
                 "subTitle": "",
                 initialize: function(model, form, formCtrl) {
                     $log.info("Add Account got initialized");
+
+                    var promise1 = ChartOfAccount.list().$promise;
+                    promise1.then((res) => {
+                        console.log((res));
+                        model.data1 = res;
+                        PageHelper.hideLoader();
+                    }, (err) => {
+                        console.log(err);
+                        PageHelper.hideLoader();
+                    });
+
                     model.glAccount = model.glAccount || {};
                     if (!(model && model.glAccount && model.glAccount.id)) {
                         PageHelper.showLoader();
@@ -86,26 +97,25 @@ define([], function() {
                                 "autolov": true,
                                 "searchHelper": formHelper,
                                 inputMap: {
-                                    "glName": {
-                                        "key": "glAccount.glName"
+                                    "parentGlName": {
+                                        "key": "glAccount.parentGlName"
                                     },
-                                    "category": {
-                                        "key": "glAccount.category"
+                                    "parentCategory": {
+                                        "key": "glAccount.parentCategory"
                                     },
-                                    "productCode": {
-                                        "key": "glAccount.productCode"
+                                    "parentProductCode": {
+                                        "key": "glAccount.parentProductCode"
                                     }
                                 },
                                 search: function(inputModel, form, model, context) {
                                     var promise = ChartOfAccount.search({
-                                        'glName' : inputModel.glName,
-                                        'category': inputModel.category,
-                                        'productCode': inputModel.productCode
+                                        'glName': inputModel.parentGlName,
+                                        'category': inputModel.parentCategory,
+                                        'productCode': inputModel.parentProductCode
                                     }).$promise;
                                     return promise;
                                 },
                                 getListDisplayItem: function(item, index) {
-                                    $log.info(item);
                                     return [
                                         item.glName,
                                         item.category,
@@ -142,6 +152,36 @@ define([], function() {
                                 "required": true,
                                 "key": "glAccount.dateMax"
                             }
+                            // {
+                            //     type: "datatable",
+                            //     listStyle: "table",
+                            //     key: "data1",
+                            //     title: "DATA_TABLE",
+                            //     selectable: true,
+                            //     editable: true,
+                            //     paginate: false,
+                            //     searching: false,
+                            //     getColumns: function() {
+                            //         return [{
+                            //             name: 'ID',
+                            //             prop: 'id',
+                            //             isTreeColumn: true,
+                            //             relationProp: "parentId",
+                            //             flexGrow: 1
+                            //         }, {
+                            //             name: 'GL_NAME',
+                            //             prop: 'glName',
+                            //             flexGrow: 1
+                            //         }, {
+                            //             name: 'GL_TYPE',
+                            //             prop: 'glType',
+                            //             flexGrow: 1
+                            //         }]
+                            //     },
+                            //     getActions: function(item) {
+                            //         return [];
+                            //     }
+                            // }
                         ]
                     },
 
@@ -193,22 +233,21 @@ define([], function() {
                             return false;
                         }
                         PageHelper.showLoader();
-                        PageHelper.showProgress('request', 'Saving Data');
+                        PageHelper.showProgress('request', 'Saving Data', 3000);
                         if (model.glType == 'GROUP' && !model.parentId) {
                             model.parentId = 0;
                         }
                         model.glAccount.branchSetCode = 'ALL';
-                        model.glAccount.category = 'Asset';
                         model.glAccount.glType = 'LEDGER';
                         var reqData = model.glAccount;
                         $log.info(reqData);
                         var promise = ChartOfAccount.post(reqData).$promise;
                         promise.then((data) => {
                             console.log(data);
-                            PageHelper.showProgress('request', 'Update Done.', 5000);
+                            PageHelper.showProgress('request', 'Update Done.', 3000);
                             irfNavigator.goBack();
                         }, (err) => {
-                            PageHelper.showProgress('', 'Oops. Some error.', 5000);
+                            PageHelper.showProgress('', 'Oops. Some error.', 3000);
                             PageHelper.showErrors(err);
                             PageHelper.hideLoader();
                         })
@@ -246,7 +285,7 @@ define([], function() {
                             console.log(err);
                             PageHelper.showProgress('', 'Oops. Some error.', 5000);
                             PageHelper.showErrors(err);
-                        }).finally (function() {
+                        }).finally(function() {
                             PageHelper.hideLoader();
                         })
                     }
