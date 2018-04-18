@@ -388,6 +388,12 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 				var uc = SessionStore.getCentres().reduce(function(map, obj) { map[obj.id] = true; return map }, {});
 				o.data = filterFilter(o.data, function(a, p) { return uc[a.value] });
 			});
+			createEnum("userbranches", "branch_id", function(s, o) {
+				var userbranches= SessionStore.getItem("UserAllowedBranches");
+				userbranches.push({"branchId":SessionStore.getCurrentBranch().branchId});
+				var uc = userbranches.reduce(function(map, obj) { map[obj.branchId] = true; return map }, {});
+				o.data = filterFilter(o.data, function(a, p) { return uc[a.value] });
+			});
 			createEnum("loan_product_frequency", "frequency", function(s, o) {
 				for (i in o.data) {
 					o.data[i].value = o.data[i].field1;

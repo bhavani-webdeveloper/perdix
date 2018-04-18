@@ -60,7 +60,13 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
                 		condition: "model.showBankFilter && model.fullAccess"
                 	},
                 	{
-                		key: "branch", 
+                		key: "branch",
+                		condition: "model.siteCode!='sambandh'" 
+                	},
+                	{
+                		key: "branch",
+                		enumCode:"userbranches",
+                		condition: "model.siteCode=='sambandh'"
                 	},
                 	{
                 		key: "centre", 
