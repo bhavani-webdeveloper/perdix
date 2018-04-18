@@ -1694,7 +1694,7 @@
                                 "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             "limit": {
-                                "type": ["integer","null"],
+                                "type": ["string","null"],
                                 "title": "LIMIT",
                                 "minimum": 0,
                                 "maximum": 100000000

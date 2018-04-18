@@ -136,6 +136,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.customerBankBranchName",
                     "BankAccounts.customerBankAccounts.customerNameAsInBank",
                     "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber",
                     "BankAccounts.customerBankAccounts.accountType",
                     "BankAccounts.customerBankAccounts.bankingSince",
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
@@ -148,7 +149,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                    "BankAccounts.customerBankAccounts.isDisbersementAccount"
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount",
+                    "TrackDetails",
+                    "TrackDetails.vehiclesOwned",
+                    "TrackDetails.vehiclesFinanced",
+                    "TrackDetails.vehiclesFree"
                 ];
             }
 
@@ -190,6 +195,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation": {
                                         "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
                                     }
                                 },
                                 "excludes": [
@@ -218,6 +226,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
                                     }
 
                                 }
@@ -244,6 +255,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -269,6 +283,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
                                     }
                                 }
                             },
@@ -293,6 +310,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseReferences": {
+                                        "readonly": true
+                                    },
+                                    "TrackDetails": {
                                         "readonly": true
                                     }
                                 }
@@ -344,6 +364,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": true
                                     }
                                 }
 
@@ -371,12 +394,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-
+                    var calculateVehiclesFree = function(modelValue, form, model) {
+                        model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
+                    }
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     var self = this;
                     p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
+                                "BankAccounts.customerBankAccounts.accountNumber": {
+                                    "type": "password",
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "TrackDetails.vehiclesFree": {
+                                    "readonly": true
+                                },
+                                "TrackDetails.vehiclesOwned": {
+                                    "onChange": calculateVehiclesFree
+                                },
+                                "TrackDetails.vehiclesFinanced": {
+                                    "onChange": calculateVehiclesFree
+                                },
                                 "ContactInformation.locality": {
                                     "readonly": true
                                 },
@@ -521,6 +563,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 "title": "HOUSE_VERIFICATION_PHOTO",
                                                 "category": "CustomerEnrollment",
                                                 "subCategory": "PHOTO",
+                                                "onChange": function(){
+                                                    console.log("INSIDE ONCHANGE1");
+                                                },
                                                 "viewParams" : function(modelValue, form, model) {
                                                     getLocation().then((pos)=>{
                                                         console.log("successful");

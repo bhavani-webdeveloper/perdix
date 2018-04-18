@@ -22,6 +22,10 @@ let config = {
                     {
                         "name": "PreSaveCustomerPolicy",
                         "arguments": null
+                    },
+                    {
+                        "name": "VerifyBankAccountNumberPolicy",
+                        "arguments": null
                     }
                 ]
             },

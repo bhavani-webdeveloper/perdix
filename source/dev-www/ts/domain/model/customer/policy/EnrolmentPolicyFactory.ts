@@ -8,6 +8,8 @@ import {SelfRelationshipRequiredPolicy} from "./SelfRelationshipRequiredPolicy";
 import {CommercialCBCheckPolicy} from "./CommercialCBCheckPolicy";
 import {MinimumReferencesPolicy} from "./MinimumReferencesPolicy";
 import {GSTApplicablePolicy} from "./GSTApplicablePolicy";
+import {VerifyBankAccountNumberPolicy} from "./VerifyBankAccountNumberPolicy";
+
 export class EnrolmentPolicyFactory implements IPolicyFactory{
 
     private static _instance:EnrolmentPolicyFactory = null;
@@ -41,6 +43,8 @@ export class EnrolmentPolicyFactory implements IPolicyFactory{
                 return new MinimumReferencesPolicy();
             case 'GSTApplicablePolicy':
                 return new GSTApplicablePolicy();
+            case 'VerifyBankAccountNumberPolicy':
+                return new VerifyBankAccountNumberPolicy();
             default:
                 return null;
 

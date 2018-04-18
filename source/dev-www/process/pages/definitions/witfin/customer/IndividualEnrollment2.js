@@ -98,9 +98,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "HouseVerification": {
                                     "readonly": true
-                                },
-                                "TrackDetails": {
-                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -158,9 +155,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "TrackDetails": {
-                                    "readonly": true
-                                },
                                 "reference": {
                                     "readonly": true
                                 },
@@ -195,9 +189,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "readonly": true
-                                },
-                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "HouseVerification": {
@@ -236,9 +227,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "TrackDetails": {
-                                    "readonly": true
-                                },
                                 "HouseVerification": {
                                     "readonly": true
                                 },
@@ -273,9 +261,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "readonly": true
-                                },
-                                "TrackDetails": {
                                     "readonly": true
                                 },
                                 "HouseVerification": {
@@ -316,9 +301,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "HouseVerification": {
                                     "readonly": true
-                                },
-                                "TrackDetails": {
-                                    "readonly": true
                                 }
                             },
                             "excludes": [
@@ -354,9 +336,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences": {
                                     "readonly": true
                                 },
-                                "TrackDetails": {
-                                    "readonly": true
-                                },
                                 "HouseVerification": {
                                     "readonly": true
                                 },
@@ -371,22 +350,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                 }
             }
-            var calculateVehiclesFree = function(modelValue, form, model) {
-                model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
-            }
             var overridesFields = function (bundlePageObj) {
                 return {
                     "HouseVerification": {
                         "title": "RESIDENCE"
-                    },
-                    "TrackDetails.vehiclesFree": {
-                        "readonly": true
-                    },
-                    "TrackDetails.vehiclesOwned": {
-                        onChange: calculateVehiclesFree
-                    },
-                    "TrackDetails.vehiclesFinanced": {
-                        onChange: calculateVehiclesFree
                     },
                     "Liabilities.liabilities.loanSource1": {
                         orderNo : 12
@@ -749,10 +716,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.distanceFromBranch",
                     "HouseVerification.monthlyRent",
                     "HouseVerification.previousRentDetails",
-                    "TrackDetails",
-                    "TrackDetails.vehiclesOwned",
-                    "TrackDetails.vehiclesFinanced",
-                    "TrackDetails.vehiclesFree",
                     "ResidenceVerification",
                     "ResidenceVerification.location",
                     "ResidenceVerification.locatingHouse",

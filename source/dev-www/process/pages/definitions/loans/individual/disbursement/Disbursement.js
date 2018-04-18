@@ -73,7 +73,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }else{
                             model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
                         }
-                       
+
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                         model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
 
@@ -96,7 +96,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 model.customer.iscordova=false;
                                 }
                             });
-                        $log.info(model.customer);      
+                        $log.info(model.customer);
                     },
                     function (resp) {
                         PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
@@ -177,9 +177,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
-                        "condition":"!model.siteCode || model.siteCode == 'kinara' || model.siteCode == 'witfin'",
-                        "title": "MODE_OF_DISBURSEMENT", 
-                        "required": true,  
+                        "condition":"!model.siteCode || model.siteCode == 'kinara'",
+                        "title": "MODE_OF_DISBURSEMENT",
+                        "required": true,
                         "type": "select",
                         "titleMap": [{
                             value: "NEFT",
@@ -192,17 +192,29 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
 						"condition":"model.siteCode =='KGFS'",
-                        "title": "MODE_OF_DISBURSEMENT",   
+                        "title": "MODE_OF_DISBURSEMENT",
                         "type": "select",
-                        "enumCode": "mode_of_disbursement",
+                        "enumCode": "mode_of_disbursement"
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
+                        "condition":"model.siteCode == 'witfin'",
+                        "title": "MODE_OF_DISBURSEMENT",
+                        "type": "select",
+                        "enumCode": "disbursement_mode"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
                         "condition":"model.siteCode =='sambandh' || model.siteCode =='saija'",
                         "required": true,
-                        "title": "MODE_OF_DISBURSEMENT",   
+                        "title": "MODE_OF_DISBURSEMENT",
                         "type": "select",
                         "enumCode": "mode_of_disbursement",
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.referenceNumber",
+                        "title": "CHEQUE_NO",
+                        "condition":"model.siteCode=='witfin'&& model.loanAccountDisbursementSchedule.modeOfDisbursement=='Cheque'"
                     },
                     {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
@@ -232,7 +244,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 item.branch_name
                             ];
                         }
-                    }, 
+                    },
                     {
                         "key":"customer.firstName",
                         "title":"APPLICANT_NAME",
@@ -405,7 +417,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                     if (!model.loanAccountDisbursementSchedule.overrideRequested && model.loanAccountDisbursementSchedule.fpVerified!= true) {
                         elementsUtils.alert('Fingerprint not verified.');
-                        return;  
+                        return;
                     }
 
                     if(window.confirm("Perform Disbursement?")){
