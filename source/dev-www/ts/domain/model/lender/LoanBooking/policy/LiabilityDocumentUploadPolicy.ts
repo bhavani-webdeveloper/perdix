@@ -8,8 +8,8 @@ import {RepositoryIdentifiers} from "../../../../shared/RepositoryIdentifiers";
 import LiabilityAccount = require("../LiabilityAccount");
 import {LiabilityLoanAccountBookingProcess} from "../LiabilityLoanAccountBookingProcess";
 import {EnrolmentProcess} from "../../../customer/EnrolmentProcess";
-import LiabilityLenderDocuments = require("../LiabilityLenderDocuments");
-import LiabilityComplianceDocuments = require("../LiabilityComplianceDocuments");
+import {LiabilityLenderDocuments }from "../LiabilityLenderDocuments";
+import {LiabilityComplianceDocuments}  from "../LiabilityComplianceDocuments";
 
 declare var moment: Function;
 export class LiabilityDocumentUploadPolicy extends IPolicy<LiabilityLoanAccountBookingProcess> {
