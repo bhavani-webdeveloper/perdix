@@ -93,7 +93,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branch,
+	                    //'branchName':searchOptions.branch,
 	                    'stage': 'GuarantorAddition',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
@@ -103,7 +103,7 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode': searchOptions.centre
+	                    //'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {

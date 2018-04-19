@@ -89,8 +89,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Televerification',
-	                    'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branch,
+	                    /*'centreCode':  searchOptions.centre,
+	                    'branchName':searchOptions.branch,*/
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
