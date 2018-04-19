@@ -570,8 +570,8 @@
                      "ReadyForScreening"
                   ]
                },
-			   "postoffice": {
-                  "title": "postoffice",
+			   "postOffice": {
+                  "title": "postOffice",
                   "type": "String",
                   "minLength": 1,
                   "maxLength": 100,
