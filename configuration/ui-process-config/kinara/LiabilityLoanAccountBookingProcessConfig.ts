@@ -9,6 +9,10 @@ let config = {
                     {
                         "name": "LiabilityRelatedLenderPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "LiabilityDocumentUploadPolicy",
+                        "arguments": {}
                     }
                 ]
             },
