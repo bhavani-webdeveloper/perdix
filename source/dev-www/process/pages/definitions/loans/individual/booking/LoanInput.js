@@ -733,7 +733,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "loanAccount.transactionType",
                                 "type":"select",
                                 "title":"TRANSACTION_TYPE",
-                                "condition": "model.siteCode != 'witfin'"
+                                "condition": "model.siteCode == 'kinara'"
                             },
                             {
                                 "key": "loanAccount.loanAmount",
