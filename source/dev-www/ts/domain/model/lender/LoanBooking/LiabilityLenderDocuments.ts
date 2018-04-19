@@ -2,7 +2,7 @@ import { Type } from "class-transformer";
 
 //LiabilityLenderDocumentDTOs
 
-class LiabilityLenderDocuments {
+export class LiabilityLenderDocuments {
 	documentName: string;
    	documentType: string;
     fileId: string;
@@ -17,4 +17,4 @@ class LiabilityLenderDocuments {
     remarks: string;
 }
 
-export = LiabilityLenderDocuments;
+//export = LiabilityLenderDocuments;
