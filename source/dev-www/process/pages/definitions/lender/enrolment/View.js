@@ -90,13 +90,20 @@ irf.pageCollection.factory(irf.page('lender.enrolment.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode == 'KGFS' || siteCode == 'sambandh' || siteCode == 'saija')
-                                        {
-                                            return false;
-                                        } else {
-                                            return true;
-                                        }
+                                       return true
+                                    }
+                                },
+                                {
+                                    name: "ScheduleUpload",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'lender.liabilities.ScheduleUpload',
+                                            pageId: item.id
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
                                     }
                                 },
                             ];
