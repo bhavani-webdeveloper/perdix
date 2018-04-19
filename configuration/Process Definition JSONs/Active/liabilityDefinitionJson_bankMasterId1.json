@@ -65,7 +65,7 @@
             "required":[
             "lenderAccountNumber",
             "loanAmount",
-			"productType"
+		   	"productType"
             ],
             "properties":{
                "lenderId":{
@@ -347,6 +347,83 @@
                   "maxLength":100,
                                  
                   "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "liabilityType":{
+                  "title":"liabilityType",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                                 
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+
+               "udf1": {
+                  "title": "udf 1",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udf2": {
+                  "title": "udf 2",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udf3": {
+                  "title": "udf 3",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udf4": {
+                  "title": "udf 4",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udf5": {
+                  "title": "udf 5",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udfDate1": {
+                  "title": "udf Date1",
+                  "type": "date",
+                 "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udfDate2": {
+                  "title": "udf Date2",
+                  "type": "date",
+                 "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "udfDate3": {
+                  "title": "udf Date3",
+                  "type": "date",
+                 "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
