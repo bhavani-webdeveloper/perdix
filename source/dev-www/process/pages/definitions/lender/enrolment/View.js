@@ -49,7 +49,6 @@ irf.pageCollection.factory(irf.page('lender.enrolment.View'),
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
-                                //var arrLength = response.length;
                                 //for (var i=0; i<arrLength; i++){
                                 //    if (!_.isNull(response[i]) && _.isObject(response[i])){
                                 //        _.remove()
