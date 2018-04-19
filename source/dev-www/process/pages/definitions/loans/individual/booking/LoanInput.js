@@ -732,7 +732,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.transactionType",
                                 "type":"select",
-                                "title":"TRANSACTION_TYPE"
+                                "title":"TRANSACTION_TYPE",
+                                "condition": "model.siteCode != 'witfin'"
                             },
                             {
                                 "key": "loanAccount.loanAmount",
@@ -1590,7 +1591,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                 Utils.alert("Please Select an Applicant");
                                                 model.additional.portfolioUrnSelector="";
                                                 model.loanAccount.portfolioInsuranceUrn = "";
-                                                model.loanAccount.portfolioInsuranceCustomerName = "";    
+                                                model.loanAccount.portfolioInsuranceCustomerName = "";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
@@ -2525,7 +2526,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     });
 
-                    
+
                 },
                 holdButton: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");

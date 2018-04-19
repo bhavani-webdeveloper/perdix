@@ -2802,11 +2802,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         },
                         getListDisplayItem: function(item, index) {
                             return [
-                                item.userName
+                                item.userName,
+                                item.id
                             ]
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.lead.referredBy = valueObj.userName;
+                            model.lead.referredBy = valueObj.userName; /*+ ' | ' + valueObj.id; */
                         }
                     },
 
