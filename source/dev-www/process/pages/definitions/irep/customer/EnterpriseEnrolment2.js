@@ -85,6 +85,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.customerBankBranchName",
                     "BankAccounts.customerBankAccounts.customerNameAsInBank",
                     "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber",
                     "BankAccounts.customerBankAccounts.accountType",
                     "BankAccounts.customerBankAccounts.bankingSince",
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
@@ -92,6 +93,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatementDocId",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.EmiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -102,6 +106,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     "Liabilities",
                     "Liabilities.liabilities",
+                    "Liabilities.liabilities.liabilityType",
                     "Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
@@ -127,6 +132,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.incomeThroughSales.amount",
                     "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                    "EnterpriseFinancials.avgDailySaleAmount",
+                    "EnterpriseFinancials.workingDaysInMonth",
+                    "EnterpriseFinancials.grossMarginPercentage",
+                    "EnterpriseFinancials.netMarginPercentage",                   
                     "EnterpriseFinancials.enterpriseMonthlySales",
                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -134,10 +143,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses",
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
-                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
-
 
                     "EmployeeDetails",
                     "EmployeeDetails.noOfFemaleEmployees",
@@ -262,11 +270,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Machinery",
                                     "EnterpriseReferences",
                                     "CommercialCBCheck",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.incomeThroughSales",
+                                    "EnterpriseFinancials.incomeThroughSales.buyerName",
+                                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
+                                    "EnterpriseFinancials.incomeThroughSales.amount",
+                                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
+                                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",                     
+                                    "EnterpriseFinancials.rawMaterialExpenses",
+                                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
+                                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
 
                                 ],
                                 "overrides": {
@@ -291,10 +316,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.customerBranchId": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
-                                        "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
                                         "condition": "model.customer.urnNo",
@@ -400,7 +421,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -440,11 +461,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets",
                                     "Machinery",
                                     "EnterpriseReferences",
+                                    "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency"
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage"    
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -476,7 +502,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "orderNo": 7
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id"
+                                        "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
                                         "condition": "model.customer.urnNo"
@@ -529,8 +555,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                                 ],
                                 "overrides": {
+
                                     "EnterpriseInformation": {
                                         "orderNo": 1
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
                                     },
                                     "ContactInformation": {
                                         "orderNo": 2
@@ -669,7 +699,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -739,8 +769,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.enterpriseType" : {
-                                        "readonly": true
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
                                     },
                                     "Liabilities": {
                                         "readonly": true
@@ -763,11 +793,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Televerification": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",     
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
@@ -830,7 +865,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
@@ -931,7 +965,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -990,11 +1024,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Evaluation": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",     
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
@@ -1058,7 +1097,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
@@ -1159,7 +1197,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -1226,11 +1264,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "CreditCommitteeReview": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
@@ -1293,7 +1332,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
@@ -1394,7 +1432,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -1453,11 +1491,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Sanction": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",     
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
@@ -1520,7 +1563,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
@@ -1621,7 +1663,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -1680,11 +1722,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "Rejected": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",     
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
@@ -1747,7 +1794,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId": {
-                                        "condition": "model.customer.id",
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
                                     },
                                     "EnterpriseInformation.urnNo": {
@@ -1848,7 +1894,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "ContactInformation.pincode": {
                                         "required": true,
-                                        "resolver": "MailingPincodeLOVConfiguration"
+                                        "resolver": "PincodeLOVConfiguration"
                                     },
                                     "BankAccounts.customerBankAccounts.ifscCode": {
                                         "required": true,
@@ -1936,7 +1982,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     var self = this;
                     p1.then(function(repo){
                         var formRequest = {
-                            "overrides": "",
+                            "overrides": {
+                                "ContactInformation.pincode": {
+                                        "title": "pincode"
+                                },
+                                "BankAccounts.customerBankAccounts.accountNumber": {
+                                    "type": "password",
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                                    "type": "string",
+                                    "required": true
+                                }
+                            },
                             "includes": getIncludes(model),
                             "excludes": [],
                             "options": {
@@ -1963,34 +2021,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                 "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                             }
                                         ]
-                                    },
-                                    {
-                                        "orderNo": 1,
-                                        "type": "box",
-                                        "title": "BUSINESS_SELECTION",
-                                        "items":[
-                                            {
-                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.applicantEnrolmentProcess.customer.currentStage != 'Completed'",
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
-                                                "orderNo": 10
-                                            },
-                                            "EnterpriseInformation.enterpriseType"
-                                        ]
-                                    }/*,
-                                    {
-                                        "targetID": "BusinessInformation",
-                                        "items": [
-                                            {
-                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null",
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
-                                                "orderNo": 10
-                                            }
-                                        ]
-                                    }*/
+                                    }
                                 ]
                             }
                         };
