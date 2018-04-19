@@ -280,7 +280,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Appraisal": {
                             "excludes": [
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "PhysicalAssets.physicalAssets.vehicleModel"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -411,8 +412,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankName": {
                                     "readonly": true
@@ -436,8 +436,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
                                     "view": "fixed"
                                 },
                                 "IndividualReferences.verifications.referenceFirstName": {
@@ -451,6 +449,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails.familyMembers.familyMemberFirstName": {
                                     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                },
+                                "IndividualFinancials.expenditures.frequency": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -639,8 +640,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankName": {
                                     "readonly": true
@@ -1574,8 +1574,76 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements": {
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": {moment: window.moment},
+                    },                    
+                    "BankAccounts.customerBankAccounts.ifscCode": {
+                        "required": true,
+                        "resolver": "IFSCCodeLOVConfiguration"
+                    },
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
+                        "enumCode": "asset_type"    
+                    },
+                    "FamilyDetails.familyMembers.relationShip": {
+                        "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                            if (modelValue && modelValue.toLowerCase() === 'self') {
+                                if (model.customer.id)
+                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                if (model.customer.firstName)
+                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                if (model.customer.gender)
+                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                if (model.customer.dateOfBirth)
+                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                if (model.customer.maritalStatus)
+                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                if (model.customer.mobilePhone)
+                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                if (model.customer.spouseFirstName)
+                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                if (model.customer.gender)
+                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                        (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                if (model.customer.spouseDateOfBirth)
+                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                if (model.customer.maritalStatus)
+                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                            }
+                        }   
+                    },
+                    "FamilyDetails.familyMembers.relationShip1": {
+                        "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                            if (modelValue && modelValue.toLowerCase() === 'self') {
+                                if (model.customer.id)
+                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                if (model.customer.firstName)
+                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                if (model.customer.gender)
+                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                if (model.customer.dateOfBirth)
+                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                if (model.customer.maritalStatus)
+                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                if (model.customer.mobilePhone)
+                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                if (model.customer.spouseFirstName)
+                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                if (model.customer.gender)
+                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                        (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                if (model.customer.spouseDateOfBirth)
+                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                if (model.customer.maritalStatus)
+                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                            }
+                        } 
                     }
-
                 }
             }
             var getIncludes = function (model) {
@@ -1654,6 +1722,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
                     "FamilyDetails.familyMembers.relationShip",
+                    "FamilyDetails.familyMembers.relationShip1",
                     "FamilyDetails.familyMembers.educationStatus",
                     "FamilyDetails.familyMembers.familyMemberFirstName",
                     "FamilyDetails.familyMembers.anualEducationFee",
@@ -1792,7 +1861,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage",
+                                    "condition": "model.customer.currentStage && model.customer.currentStage != 'KYCReview'",
                                     "orderNo": 1200,
                                     "items": [
                                         {
@@ -1881,36 +1950,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    setProofs: function (model) {
-                        model.customer.addressProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProof = 'Aadhar card';
-                        model.customer.addressProof = 'Aadhar card';
-                        model.customer.addressProofSameAsIdProof = true;
-                        if (model.customer.yearOfBirth) {
-                            model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                        }
-                    },
-                    preSave: function (model, form, formName) {
-                        var deferred = $q.defer();
-                        if (model.customer.firstName) {
-                            deferred.resolve();
-                        } else {
-                            PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
-                            deferred.reject();
-                        }
-                        return deferred.promise;
-                    },
-                    reload: function (model, formCtrl, form, $event) {
-                        $state.go("Page.Engine", {
-                            pageName: 'customer.IndividualEnrollment',
-                            pageId: model.customer.id
-                        }, {
-                            reload: true,
-                            inherit: false,
-                            notify: true
-                        });
-                    },
                     save: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {

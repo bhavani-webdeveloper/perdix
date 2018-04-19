@@ -1,5 +1,5 @@
 define({
-	pageUID: "irep.loans.individual.origination.ApplicationReviewQueue",
+	pageUID: "irep.loans.individual.origination.AppraisalReviewQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -86,7 +86,7 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'AppraisalReview',
-	                    'branchName':searchOptions.branch,
+	                    // 'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -95,7 +95,7 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode':  searchOptions.centre
+	                    // 'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -165,16 +165,16 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('irep.loans.individual.origination.ApplicationReview', {
+								entityManager.setModel('irep.loans.individual.origination.AppraisalReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "irep.loans.individual.origination.ApplicationReview",
+									pageName: "irep.loans.individual.origination.AppraisalReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "irep.loans.individual.origination.ApplicationReviewQueue"
+                                    pageName: "irep.loans.individual.origination.AppraisalReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

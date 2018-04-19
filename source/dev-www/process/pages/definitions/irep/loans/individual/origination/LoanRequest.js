@@ -47,7 +47,8 @@ define([],function(){
                                 "ProposedUtilizationPlan.loanUtilisationDetail",
                                 "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
                                 "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
+                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
+                                "CollateralDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -120,7 +121,8 @@ define([],function(){
                                 "ProposedUtilizationPlan.loanUtilisationDetail",
                                 "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
                                 "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails"
+                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
+                                "CollateralDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -156,14 +158,16 @@ define([],function(){
                         },
                         "Appraisal": {
                             "excludes": [
-                            "LoanRecommendation"                            
+                                "LoanRecommendation",
+                                "ProposedUtilizationPlan"                     
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
                                     "orderNo": 1
                                 },
                                 "LoanCustomerRelations": {
-                                    "orderNo": 2
+                                    "orderNo": 2,
+                                    "readonly": true
                                 },
                                 "DeductionsFromLoan": {
                                     "orderNo": 3
@@ -177,8 +181,11 @@ define([],function(){
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6
                                 },
-                                "NomineeDetails": {
+                                "CollateralDetails": {
                                     "orderNo": 7
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8
                                 },
                                 "PreliminaryInformation.loanAmountRequested": {
                                     "required": true
@@ -198,28 +205,10 @@ define([],function(){
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium": {
                                     "readonly": true
                                 },
-                                "PreliminaryInformation.loanPurpose1": {
-                                    "resolver": "LoanPurpose1LOVConfiguration"
-                                },
-                                "PreliminaryInformation.loanPurpose2": {
-                                    "resolver": "LoanPurpose2LOVConfiguration"
-                                },
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
                                     "startEmpty": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
-                                   "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.urn": {
-                                   "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.name": {
-                                   "readonly": true
-                                },
-                                "LoanCustomerRelations.loanCustomerRelations.relation": {
-                                   "readonly": true
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
@@ -248,11 +237,62 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
                                    "required": true,
-                                   "resolver": "MailingPincodeLOVConfiguration"
+                                   "resolver": "NomineePincodeLOVConfiguration"
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                    "required":true
-                                }
+                                },
+                                "CollateralDetails.collateral.collateralDescription": {
+                                    "required": true,
+                                   "orderNo":10
+                                },
+                                "CollateralDetails.collateral.collateralValue": {
+                                    "required": true,
+                                   "orderNo":20
+                                },
+                                "CollateralDetails.collateral.expectedIncome": {
+                                    "required": true,
+                                   "orderNo":30
+                                },
+                                "CollateralDetails.collateral.collateralType": {
+                                    "required": true,
+                                   "orderNo":40
+                                },
+                                "CollateralDetails.collateral.manufacturer": {
+                                    "required": true,
+                                   "orderNo":50
+                                },
+                                "CollateralDetails.collateral.modelNo": {
+                                    "required": true,
+                                   "orderNo":60
+                                },
+                                "CollateralDetails.collateral.serialNo": {
+                                   "orderNo":70
+                                },
+                                "CollateralDetails.collateral.expectedPurchaseDate": {
+                                    "required": true,
+                                   "orderNo":80
+                                },
+                                "CollateralDetails.collateral.machineAttachedToBuilding": {
+                                    "required": true,
+                                   "orderNo":90
+                                },
+                                "CollateralDetails.collateral.hypothecatedToBank": {
+                                    "required": true,
+                                   "orderNo":100
+                                },
+                                "CollateralDetails.collateral.electricityAvailable": {
+                                    "required": true,
+                                   "orderNo":110
+                                },
+                                "CollateralDetails.collateral.spaceAvailable": {
+                                    "required": true,
+                                   "orderNo":120
+                                },
+                                "CollateralDetails.collateral.collateral1FilePath": {
+                                    "required": true,
+                                   "orderNo":130
+                                },
 
                             }
                         },
@@ -293,18 +333,21 @@ define([],function(){
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
                         "PreliminaryInformation.emiPaymentDateRequested": {
-                            titleMap: {
+                            "titleMap": {
                                 "5th": "5th",
                                 "10th": "10th",
                                 "15th": "15th",
                             }
                         },
                         "PreliminaryInformation.collectionPaymentType": {
-                            titleMap:{
+                            "titleMap":{
                                 "ACH":"ACH",
                                 "PDC":"PDC",
                                 "Others":"Others"
                             }
+                        },
+                        "NomineeDetails.nominees.nomineePincode": {
+                            "resolver": "PincodeLOVConfiguration"
                         }
                     }
                 }
@@ -344,8 +387,11 @@ define([],function(){
                     "LoanMitigants",
                     "LoanMitigants.deviationParameter",
                     "LoanMitigants.deviationParameter.mitigants",
-                    //"LoanMitigants.deviationParameter.mitigants.selected",
-                    "LoanMitigants.deviationParameter.mitigants.mitigantName",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected.selected",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName",
+                    "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionMitigantName.mitigantName",
 
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
@@ -369,7 +415,23 @@ define([],function(){
                     "AdditionalLoanInformation.percentageIncreasedIncome",
                     "AdditionalLoanInformation.percentageInterestSaved",
 
-                    "NomineeDetails",
+                    "CollateralDetails",
+                    "CollateralDetails.collateral",
+                    "CollateralDetails.collateral.collateralDescription",
+                    "CollateralDetails.collateral.collateralValue",
+                    "CollateralDetails.collateral.expectedIncome",
+                    "CollateralDetails.collateral.collateralType",
+                    "CollateralDetails.collateral.manufacturer",
+                    "CollateralDetails.collateral.modelNo",
+                    "CollateralDetails.collateral.serialNo",
+                    "CollateralDetails.collateral.expectedPurchaseDate",
+                    "CollateralDetails.collateral.machineAttachedToBuilding",
+                    "CollateralDetails.collateral.hypothecatedToBank",
+                    "CollateralDetails.collateral.electricityAvailable",
+                    "CollateralDetails.collateral.spaceAvailable",
+                    "CollateralDetails.collateral.collateral1FilePath",
+
+                    "NomineeDetails",                    
                     "NomineeDetails.nominees",
                     "NomineeDetails.nominees.nomineeFirstName",
                     "NomineeDetails.nominees.nomineeGender",
@@ -420,27 +482,27 @@ define([],function(){
 
 
                      /* Deviations and Mitigations grouping */
-                        /*if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
-                            var loanMitigantsGrouped = {};
-                            for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
-                                var item = model.loanAccount.loanMitigants[i];
-                                if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
-                                    loanMitigantsGrouped[item.parameter] = [];
-                                }
-                                loanMitigantsGrouped[item.parameter].push(item);
+                    if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                        var loanMitigantsGrouped = {};
+                        for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                            var item = model.loanAccount.loanMitigants[i];
+                            if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                                loanMitigantsGrouped[item.parameter] = [];
                             }
-                            model.loanMitigantsByParameter = [];
-                            _.forOwn(loanMitigantsGrouped, function(mitigants, key){
-                                var chosenMitigants = "<ul>";
+                            loanMitigantsGrouped[item.parameter].push(item);
+                        }
+                        model.loanMitigantsByParameter = [];
+                        _.forOwn(loanMitigantsGrouped, function(mitigants, key){
+                            var chosenMitigants = "<ul>";
 
-                                for (var i=0; i<mitigants.length; i++){
-                                    chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
-                                }
-                                chosenMitigants = chosenMitigants + "</ul>";
-                                model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
-                            })
-                        }*/
-                        /* End of Deviations and Mitigations grouping */
+                            for (var i=0; i<mitigants.length; i++){
+                                chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
+                            }
+                            chosenMitigants = chosenMitigants + "</ul>";
+                            model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
+                        })
+                    }
+                    /* End of Deviations and Mitigations grouping */
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -629,16 +691,6 @@ define([],function(){
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
-                    preSave: function(model, form, formName) {
-                        var deferred = $q.defer();
-                        if (model.customer.firstName) {
-                            deferred.resolve();
-                        } else {
-                            irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
-                            deferred.reject();
-                        }
-                        return deferred.promise;
-                    },
                     save: function(model, formCtrl, form, $event){
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
