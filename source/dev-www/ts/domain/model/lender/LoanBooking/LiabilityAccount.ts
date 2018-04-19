@@ -7,7 +7,7 @@ import LiabilityFeeDetails = require("./LiabilityFeeDetails");
 
 //LiabilityAccountDTOs
 
-export class LiabilityAccount {
+ class LiabilityAccount {
        currentStage: string;
         disbursementDate: string;
         expectedDisbursementDate: string;
@@ -45,4 +45,6 @@ export class LiabilityAccount {
         liabilityLenderDocuments: LiabilityLenderDocuments[];
         
 }
+
+export = LiabilityAccount;
 
