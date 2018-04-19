@@ -196,6 +196,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.pincode",
                                                     "type": "lov",
                                                     "inputmode": "number",
+                                                    "title":"PINCODE",
                                                     inputMap: {
                                                         "pincode": "customer.pincode",
                                                         "district": {
@@ -208,10 +209,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     outputMap: {
                                                         "district": "customer.district",
                                                         "pincode": "customer.pincode",
-                                                       // "mailingDistrict": "customer.mailingDistrict",
                                                         "state": "customer.state"
-                                                    },                                                    
-                                                    searchHelper: formHelper,  
+                                                    },
+                                                    searchHelper: formHelper,
                                                     initialize: function(inputModel) {
                                                         $log.warn('in pincode initialize');
                                                         $log.info(inputModel);
