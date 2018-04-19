@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 
-import LiabilityComplianceDocuments = require("./LiabilityComplianceDocuments");
-import LiabilityLenderDocuments = require("./LiabilityLenderDocuments");
+import {LiabilityComplianceDocuments}  from "./LiabilityComplianceDocuments";
+import {LiabilityLenderDocuments} from "./LiabilityLenderDocuments";
 import LiabilityFeeDetails = require("./LiabilityFeeDetails");
 
 
