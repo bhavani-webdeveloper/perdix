@@ -1,5 +1,7 @@
-define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProcess', 'perdix/infra/api/AngularResourceService'], function (LiabilityLoanAccountBookingProcess, AngularResourceService) {
-    LiabilityLoanAccountBookingProcess = LiabilityLoanAccountBookingProcess['LiabilityLoanAccountBookingProcess'];
+define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProcess','perdix/domain/model/lender/LoanBooking/LiabilityLenderDocuments', 'perdix/infra/api/AngularResourceService','perdix/domain/model/lender/LoanBooking/LiabilityComplianceDocuments'], function (LiabilityLoanAccountBookingProcess, LiabilityLenderDocuments, AngularResourceService,LiabilityComplianceDocuments) {
+  LiabilityLoanAccountBookingProcess = LiabilityLoanAccountBookingProcess['LiabilityLoanAccountBookingProcess'];
+    LiabilityLenderDocuments = LiabilityLenderDocuments['LiabilityLenderDocuments'];
+    LiabilityComplianceDocuments  = LiabilityComplianceDocuments['LiabilityComplianceDocuments']
     return {
         pageUID: "lender.liabilities.LiabilityLoanDocumentUpload",
         pageType: "Engine",
@@ -33,12 +35,27 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true
                     },
                     "LenderDocumentation.liabilityLenderDocuments.upload": {
-                        "required": true
-                        
+                        "required": true,
+                    },
+                    "LenderDocumentation.liabilityLenderDocuments": {
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            console.log(LiabilityLenderDocuments)
+                            var index = model.liabilityAccount.liabilityLenderDocuments.length -1;
+                            model.liabilityAccount.liabilityLenderDocuments[index] = new LiabilityLenderDocuments();
+                            model.liabilityAccount.liabilityLenderDocuments[index].uploadedDate =  moment(new Date()).format('YYYY-MM-DD')
+                        }
                     },
                     "LenderDocumentation.liabilityLenderDocuments.uploadedDate": {
                         "required": true,
                         "readonly":true
+                    },
+                     "LegalCompliance.liabilityComplianceDocuments": {
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            console.log(LiabilityLenderDocuments)
+                            var index = model.liabilityAccount.liabilityComplianceDocuments.length -1;
+                            model.liabilityAccount.liabilityComplianceDocuments[index] = new LiabilityComplianceDocuments();
+                            model.liabilityAccount.liabilityComplianceDocuments[index].uploadedDate =  moment(new Date()).format('YYYY-MM-DD')
+                        }
                     },
                     "LegalCompliance.liabilityComplianceDocuments.documentName": {
                         "required": true
@@ -120,9 +137,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     irfNavigator.goBack();
                                 }
                                 model.LiabilityLoanAccountBookingProcess = res; 
-                                model.liabilityAccount = res.liabilityAccount;
-                                model.LenderDocumentation.liabilityLenderDocuments.uploadedDate  = moment().format('d-mm-Y')
-                                model.LegalCompliance.liabilityComplianceDocuments.uploadedDate = moment().format('d-mm-Y')
+                                model.liabilityAccount = res.liabilityAccount
                             });
                     } else {        
                         irfNavigator.goBack();
