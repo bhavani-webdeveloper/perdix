@@ -106,6 +106,10 @@ define({
                             "stage_name": {
                                 "type": "string",
                                 "title": "Stage Name"
+                            },
+                            "tat_days": {
+                                "type": "number",
+                                "title": "Stage Name"
                             }
                         }
                     }
