@@ -4,7 +4,8 @@ export enum RepositoryIdentifiers {
     Enrolment = 3,
     Queries = 4,
     LiabilityLoanAccountBookingProcess = 5,
-    LiabilityRepayment = 6
+    LiabilityRepayment = 6,
+    BranchPostingProcess = 7
 }
 
 

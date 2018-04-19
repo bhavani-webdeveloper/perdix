@@ -6,7 +6,9 @@ import {EnrolmentRepository} from "../model/customer/EnrolmentRepository";
 import {LiabilityLoanAccountBookingRepository} from "../model/lender/LoanBooking/LiabilityLoanAccountBookingRepository";
 import {LiabilityRepaymentRepository} from "../model/lender/LoanBooking/LiabilityRepaymentRepository";
 import {QueryRepository} from "./query/QueryRepository";
-
+import { BranchPostingPolicyFactory } from '../model/journal/branchposting/policy/BranchPostingPolicyFactory';
+import { BranchPostingProcess } from '../model/journal/branchposting/BranchPostingProcess';
+import BranchPostingRepository = require('../model/journal/branchposting/BranchRepository');
 class RepositoryFactory {
 
     public static createRepositoryObject(type: RepositoryIdentifiers) : any  {
@@ -24,6 +26,8 @@ class RepositoryFactory {
                 return new LiabilityLoanAccountBookingRepository();
             case RepositoryIdentifiers.LiabilityRepayment:
                 return new LiabilityRepaymentRepository();
+            case RepositoryIdentifiers.BranchPostingProcess:
+                return new BranchPostingRepository();
     		default:
     			return null;
     	}

@@ -10,7 +10,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "JOURNAL_POSTING",
+            "title": "BRANCH_POSTING_ENTRY",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.journal = model.journal || {};
