@@ -72,7 +72,7 @@ define({
                     readonly: true,
                     "title": "TRANSACTION_DESCRIPTION"
                 }, {
-                    key: "journal.type",
+                    key: "journal.transactionType",
                     type: "string",
                     readonly: true,
                     "title": "TRANSACTION_TYPE"

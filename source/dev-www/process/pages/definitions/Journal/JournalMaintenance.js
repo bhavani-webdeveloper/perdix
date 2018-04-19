@@ -17,21 +17,24 @@ define({
             initialize: function(model, form, formCtrl) {
                 model.journal = model.journal || {};
                 $log.info("Inside submit()");
+                var journalId = $stateParams.pageId;
                 model.journal.journalBranches = [];
-                var branches = formHelper.enum('branch_id').data;
-                console.log(branches);
-                if (branches && branches.length) {
-                        for (var j = 0; j < branches.length; j++) {
-                            model.journal.journalBranches.push({
-                                    name: branches[j].name,
-                                    id: branches[j].value
-                                })
-                        }
+                if(!journalId) {
+                    var branches = formHelper.enum('branch_id').data;
+                    if (branches && branches.length) {
+                            for (var j = 0; j < branches.length; j++) {
+                                model.journal.journalBranches.push({
+                                        name: branches[j].name,
+                                        id: branches[j].value
+                                    })
+                            }
+                    }
                 }
+                
                 if (!(model && model.journal && model.journal.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
-                    var journalId = $stateParams.pageId;
+                    
                     if (!journalId) {
                         PageHelper.hideLoader();
                     }
@@ -42,15 +45,19 @@ define({
                             _.assign(model.journal, res);
                             $log.info(model.journal);
                             var branches = formHelper.enum('branch_id').data;
-                            if(model.journal.journalBranches && model.journal.journalBranches)
-                            {
+                            if(model.journal.journalBranches && model.journal.journalBranches.length > 0) {
+                                var journalBranches = [];
                                 for(i=0;i<model.journal.journalBranches.length;i++){
                                     for(j=0;j<branches.length;j++){
-                                        if(model.journal.journalBranches[i].branchId==branches[j].value){
-                                           model.journal.journalBranches[i].branchName=branches[j].name;
+                                        if(model.journal.journalBranches[i].branchId == branches[j].value) {
+                                            journalBranches.push({id: branches[j].value, name: branches[j].name, $selected: true})
+                                        } else {
+                                            journalBranches.push({id: branches[j].value, name: branches[j].name});
+                                            
                                         }
                                     }
                                 }
+                                model.journal.journalBranches = journalBranches;
                             }
                             $log.info(model.journal);
                             PageHelper.hideLoader();
@@ -95,14 +102,12 @@ define({
                         type: "select",
                         required: true,
                         "title": "TRANSACTION_TYPE",
-                        "enumCode": 'journal_transaction_type',
-                        titleMap: {
-                            'Receipt':'Receipt'
-                        }
+                        "enumCode": 'journal_transaction_type'
                     },
                     {
                         key: "journal.debitGLNo",
                         "type": "lov",
+                        lovonly: true,
                         required: true,
                         title: "DEBIT_GL_NO",
                         "inputMap": {
@@ -153,6 +158,7 @@ define({
                     }, {
                         key: "journal.creditGLNo",
                         "type": "lov",
+                        lovonly: true,
                         required: true,
                         title: "CREDIT_GL_NO",
                         "inputMap": {
@@ -248,6 +254,7 @@ define({
                                         PageHelper.showProgress("Journal Save", "Journal Updated with id" + '  ' + res.id, 3000);
                                         $log.info(res);
                                         // Add navigation
+                                        irfNavigator.goBack();
                                         // $state.go('Page.JournalMaintenanceDashboard', null);
                                     }, function(httpRes) {
                                         PageHelper.showProgress("Journal Save", "Oops. Some error occured.", 3000);
@@ -361,6 +368,7 @@ define({
                             .then(function(res) {
                                 PageHelper.showProgress("Journal Save", "Journal Created with id" + '  ' + res.id, 3000);
                                 $log.info(res);
+                                irfNavigator.goBack();
                                 // 'Add navigation'
                                 // $state.go('Page.JournalMaintenanceDashboard', null);
                             }, function(httpRes) {

@@ -19,13 +19,9 @@ irf.pages.controller("JournalMaintenanceDashboardCtrl",
 
             if (jqMenu) {
                 var promise = Journal.journalSearch({
-                        'transactionName': '',
-                        'transactionDescription':'',
-                        'debitGLNo': '',
-                        'creditGLNo': '',
                         'page': 1,
-                        'per_page': 1,
-                        'isApplicable': '',
+                        'per_page': 100,
+                        
                     }).$promise.then(function(response, headerGetter) {
                     jqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
