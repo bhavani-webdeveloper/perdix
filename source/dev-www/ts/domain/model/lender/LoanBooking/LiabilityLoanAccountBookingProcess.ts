@@ -8,7 +8,7 @@ import {plainToClass} from "class-transformer";
 import {PolicyManager} from "../../../shared/PolicyManager";
 import {LiabilityLoanAccountBookingPolicyFactory}  from "./policy/LiabilityLoanAccountBookingPolicyFactory";
 import {LiabilityLoanAccountBookingProcessFactory} from "./LiabilityLoanAccountBookingProcessFactory";
-import {LiabilityAccount} from "./LiabilityAccount";
+import LiabilityAccount = require("./LiabilityAccount");
 import {EnrolmentProcess} from "../../customer/EnrolmentProcess";
 
 declare var liabilityLoanAccountBookingProcessConfig: Object;
