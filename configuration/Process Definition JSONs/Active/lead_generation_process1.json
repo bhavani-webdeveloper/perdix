@@ -570,6 +570,30 @@
                      "ReadyForScreening"
                   ]
                },
+			   "postoffice": {
+                  "title": "postoffice",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
+			   "landmark": {
+                  "title": "landmark",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                     "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess",
+                     "ReadyForScreening"
+                  ]
+               },
                "applicantCustomerId": {
                   "title": "applicantCustomerId",
                   "type": "number",
