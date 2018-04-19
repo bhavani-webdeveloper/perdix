@@ -164,7 +164,8 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
             }),
             getAuditIssueSummary: {
                 method: 'GET',
-                url: endpoint + '/getAuditIssueSummary'
+                url: endpoint + '/getAuditIssueSummary',
+                isArray: true
             },
 
             // Snap Audits

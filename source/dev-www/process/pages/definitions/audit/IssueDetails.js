@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                 model.auditIssue = model.auditIssue || {};
                 var master = Audit.offline.getAuditMaster();
                 var self = this;
+                self.form = [];
                 $stateParams.pageData = $stateParams.pageData || {};
                 model.readonly = $stateParams.pageData.readonly !== false;
                 model.type = $stateParams.pageData.type;
@@ -17,6 +18,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                         issue_id: $stateParams.pageId
                     }).$promise.then(function(res) {
                         model.auditIssue = res;
+                        processForm(res);
                         var optionData = res.options;
                         if (optionData.type == "dropdown") {
                             model.auditIssue.option = optionData.type_of_issue_options[0].option_label;
@@ -24,6 +26,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                         model.type_of_issue_id = model.auditIssue.type_of_issue_id;
                         model.auditIssue.title = master.typeofissues[model.type_of_issue_id].description;
                         model.auditIssue.branch_name = master.branch_name[res.branch_id].node_code;
+
                     }, function(errorResponse) {
                         PageHelper.showErrors(errorResponse);
                     }).finally(function() {
@@ -32,193 +35,232 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                 } else {
                     irfNavigator.goBack();
                     return;
-                }
-                model.actions = self.actions;
-            },
-            form: [{
-                "type": "box",
-                "title": "ISSUE_DETAILS",
-                "items": [{
-                    key: "auditIssue.branch_name",
-                    type: "string",
-                    "readonly": true
-                }, {
-                    key: "auditIssue.id",
-                    "title": "ISSUE_ID",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.title",
-                    "title": "ISSUE",
-                    "type": "html",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.option",
-                    "title": "OPTION",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.sample_set.column_values[0]",
-                    "title": "SAMPLE_NAME",
-                    "readonly": true
-                },{
-                    "key": "auditIssue.assignee_det[0].assignee_id",
-                    "title": "RESPONSIBILITY",
-                    "readonly": true
-                },{
-                    "key": "auditIssue.sample_set.column_values[1]",
-                    "title": "SPOKE",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.deviation",
-                    "title": "AUDITOR_DEVIATION",
-                    "type": "html",
-                    "readonly": true
-                }, {
-                    key: "auditIssue.closed_on",
-                    type: "date",
-                    "readonly": true
-                }, {
-                    key: "auditIssue.closed_by",
-                    "readonly": true
-                }, {
-                    key: "auditIssue.audit_report_date",
-                    type: "date",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.latitude",
-                    "title": "LOCATION",
-                    "type": "geotag",
-                    "readonly": true,
-                    "latitude": "auditIssue.latitude",
-                    "longitude": "auditIssue.longitude"
-                }, {
-                    key: "auditIssue.document_id",
-                    type: "file",
-                    "fileType": "*/*",
-                    title: "DOCUMENT",
-                    "category": "Audit",
-                    "subCategory": "AUDITISSUEDOC",
-                    "readonly": true
-                }, {
-                    key: "auditIssue.draft_document_id",
-                    "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO'",
-                    type: "file",
-                    "fileType": "*/*",
-                    title: "DRAFT_DOCUMENT",
-                    "category": "Audit",
-                    "subCategory": "AUDITISSUEDRAFTDOC"
-                }, {
-                    key: "auditIssue.draft_document_id",
-                    "condition": "!(!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO')",
-                    type: "file",
-                    "fileType": "*/*",
-                    title: "DRAFT_DOCUMENT",
-                    "category": "Audit",
-                    "subCategory": "AUDITISSUEDRAFTDOC",
-                    "readonly": true
-                }, {
-                    "key": "auditIssue.confirmity_status",
-                    "title": "STATUS",
-                    "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status == 'X'",
-                    "type": "radios",
-                    "titleMap": [{
-                        "name": "Confirm",
-                        "value": 1
-                    }, {
-                        "name": "Unconfirm",
-                        "value": 2
-                    }]
-                }, {
-                    "key": "auditIssue.confirmity_status",
-                    "title": "STATUS",
-                    "condition": "model.readonly || model.type!='audit'",
-                    "type": "radios",
-                    "titleMap": [{
-                        "name": "Confirmed",
-                        "value": 1
-                    }, {
-                        "name": "Unconfirmed",
-                        "value": 2
-                    }],
-                    "readonly": true
-                }, {
-                    type: "textarea",
-                    key: "auditIssue.comments",
-                    "condition": "model.actions.showComments(model, true)",
-                    "readonly": true
-                }, {
-                    type: "textarea",
-                    key: "auditIssue.comments",
-                    "condition": "model.actions.showComments(model, false)",
-                    "required": true
-                }]
-            }, {
-                "type": "box",
-                "title": "MESSAGE_HISTORY",
-                "condition": "model.auditIssue.messages.length",
-                "items": [{
-                    "key": "auditIssue.messages",
-                    "type": "array",
-                    "add": null,
-                    "remove": null,
-                    "view": "fixed",
-                    "titleExpr": "actions.getStageTitle(model, arrayIndex)",
-                    "items": [{
-                        "type": "section",
-                        "htmlClass": "",
-                        "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
+                };
+                var formDetails = [];
+                var processForm = function(response) {
+                    for (i in master.sampling_columns_config) {
+                        sampleColumnsConfig = master.sampling_columns_config[i];
+                        for (j in sampleColumnsConfig.columns) {
+                            var columnForm = {
+                                "title": sampleColumnsConfig.columns[j].user_friendly_name,
+                                "readonly": true,
+                                "key": "auditIssue.sample_set.column_values[" + j + "]"
+                            }
+                            var schema = {
+                                pattern: "^[a-zA-Z\. ]+$"
+                            };
+                            switch (sampleColumnsConfig.columns[j].data_type) {
+                                case 'ALPHABETIC':
+                                    columnForm.type = "text";
+                                    columnForm.schema = schema;
+                                    break;
+                                case 'NUMERIC':
+                                    columnForm.type = "number";
+                                    break;
+                                case 'AMOUNT':
+                                    columnForm.type = "amount";
+                                    break;
+                                case 'DATE':
+                                    columnForm.type = "date";
+                                    break;
+                                case 'ALPHANUMERIC':
+                                    columnForm.type = "text";
+                                    break;
+                            }
+                            formDetails.push(columnForm);
+                        }
+                        break;
+                    };
+
+                    self.form = [{
+                            "type": "box",
+                            "title": "ISSUE_DETAILS",
+                            "items": [{
+                                key: "auditIssue.branch_name",
+                                type: "string",
+                                "readonly": true
+                            }, {
+                                key: "auditIssue.id",
+                                "title": "ISSUE_ID",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.title",
+                                "title": "ISSUE",
+                                "type": "html",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.option",
+                                "title": "OPTION",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.assignee_det[0].assignee_id",
+                                "title": "RESPONSIBILITY",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.assignee_det[1].assignee_id",
+                                "condition": "model.auditIssue.assignee_det[1].assignee_id",
+                                "title": "RESPONSIBILITY",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.deviation",
+                                "title": "AUDITOR_DEVIATION",
+                                "type": "html",
+                                "readonly": true
+                            }, {
+                                key: "auditIssue.closed_on",
+                                type: "date",
+                                "readonly": true
+                            }, {
+                                key: "auditIssue.closed_by",
+                                "readonly": true
+                            }, {
+                                key: "auditIssue.audit_report_date",
+                                type: "date",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.latitude",
+                                "title": "LOCATION",
+                                "type": "geotag",
+                                "readonly": true,
+                                "latitude": "auditIssue.latitude",
+                                "longitude": "auditIssue.longitude"
+                            }, {
+                                key: "auditIssue.document_id",
+                                type: "file",
+                                "fileType": "*/*",
+                                title: "DOCUMENT",
+                                "category": "Audit",
+                                "subCategory": "AUDITISSUEDOC",
+                                "readonly": true
+                            }, {
+                                key: "auditIssue.draft_document_id",
+                                "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO'",
+                                type: "file",
+                                "fileType": "*/*",
+                                title: "DRAFT_DOCUMENT",
+                                "category": "Audit",
+                                "subCategory": "AUDITISSUEDRAFTDOC"
+                            }, {
+                                key: "auditIssue.draft_document_id",
+                                "condition": "!(!model.readonly && model.type == 'operation' && model.auditIssue.status == 'DO')",
+                                type: "file",
+                                "fileType": "*/*",
+                                title: "DRAFT_DOCUMENT",
+                                "category": "Audit",
+                                "subCategory": "AUDITISSUEDRAFTDOC",
+                                "readonly": true
+                            }, {
+                                "key": "auditIssue.confirmity_status",
+                                "title": "STATUS",
+                                "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status == 'X'",
+                                "type": "radios",
+                                "titleMap": [{
+                                    "name": "Confirm",
+                                    "value": 1
+                                }, {
+                                    "name": "Unconfirm",
+                                    "value": 2
+                                }]
+                            }, {
+                                "key": "auditIssue.confirmity_status",
+                                "title": "STATUS",
+                                "condition": "model.readonly || model.type!='audit'",
+                                "type": "radios",
+                                "titleMap": [{
+                                    "name": "Confirmed",
+                                    "value": 1
+                                }, {
+                                    "name": "Unconfirmed",
+                                    "value": 2
+                                }],
+                                "readonly": true
+                            }, {
+                                type: "textarea",
+                                key: "auditIssue.comments",
+                                "condition": "model.actions.showComments(model, true)",
+                                "readonly": true
+                            }, {
+                                type: "textarea",
+                                key: "auditIssue.comments",
+                                "condition": "model.actions.showComments(model, false)",
+                                "required": true
+                            }]
+                        }, {
+                            "type": "box",
+                            "title": "SAMPLE",
+                            "items": formDetails
+                        }, {
+                            "type": "box",
+                            "title": "MESSAGE_HISTORY",
+                            "condition": "model.auditIssue.messages.length",
+                            "items": [{
+                                "key": "auditIssue.messages",
+                                "type": "array",
+                                "add": null,
+                                "remove": null,
+                                "view": "fixed",
+                                "titleExpr": "actions.getStageTitle(model, arrayIndex)",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "",
+                                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
                         <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
                         <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
-                    }]
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status=='X'",
-                "items": [{
-                    "type": "button",
-                    "title": "UPDATE_ISSUE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'assign')"
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
-                "items": [{
-                    "type": "button",
-                    "title": "CLOSE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
-                "items": [{
-                    "type": "button",
-                    "title": "UPDATE_ISSUE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
-                }, {
-                    "type": "button",
-                    "title": "ACCEPT",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'accept')"
-                }, {
-                    "type": "button",
-                    "title": "REJECT",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'reject')"
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
-                "items": [{
-                    "type": "button",
-                    "title": "UPDATE_ISSUE",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
-                }, {
-                    "type": "button",
-                    "title": "ACCEPT",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'draftAccept')"
-                }, {
-                    "type": "button",
-                    "title": "REJECT",
-                    "onClick": "actions.updateIssue(model, formCtrl, form, 'draftReject')"
-                }]
-            }],
+                                }]
+                            }]
+                        }, {
+                            "type": "actionbox",
+                            "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status=='X'",
+                            "items": [{
+                                "type": "button",
+                                "title": "UPDATE_ISSUE",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'assign')"
+                            }]
+                        }, {
+                            "type": "actionbox",
+                            "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
+                            "items": [{
+                                "type": "button",
+                                "title": "CLOSE",
+                                "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
+                            }]
+                        }, {
+                            "type": "actionbox",
+                            "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
+                            "items": [{
+                                "type": "button",
+                                "title": "UPDATE_ISSUE",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
+                            }, {
+                                "type": "button",
+                                "title": "ACCEPT",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'accept')"
+                            }, {
+                                "type": "button",
+                                "title": "REJECT",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'reject')"
+                            }]
+                        }, {
+                            "type": "actionbox",
+                            "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
+                            "items": [{
+                                "type": "button",
+                                "title": "UPDATE_ISSUE",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
+                            }, {
+                                "type": "button",
+                                "title": "ACCEPT",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'draftAccept')"
+                            }, {
+                                "type": "button",
+                                "title": "REJECT",
+                                "onClick": "actions.updateIssue(model, formCtrl, form, 'draftReject')"
+                            }]
+                        }],
+                        model.actions = self.actions;
+                }
+            },
+            form: [],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
