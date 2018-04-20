@@ -169,6 +169,111 @@
                      "journalPosting"
                   ]
                },
+               "billNumber": {
+                  "title": "bil Number",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "billDate": {
+                  "title": "Bill Date",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "fileId": {
+                  "title": "fileId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               
+               "udf1": {
+                  "title": "udf 1",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf2": {
+                  "title": "udf 2",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf3": {
+                  "title": "udf 3",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf4": {
+                  "title": "udf 4",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf5": {
+                  "title": "udf 5",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate1": {
+                  "title": "udf Date1",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate2": {
+                  "title": "udf Date2",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate3": {
+                  "title": "udf Date3",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
                "branchId": {
                   "title": "branchId",
                   "type": "string",
