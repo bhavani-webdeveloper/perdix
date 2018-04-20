@@ -32,7 +32,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true
                     },
                     "LenderDocumentation.liabilityLenderDocuments.documentName": {
-                        "required": true
+                        "required": true,
+                        "onChange": function(modelValue, form, model) {
+                            model.floatingRate = (modelValue == 'Floating Rate') ? true : false;
+                        },
                     },
                     "LenderDocumentation.liabilityLenderDocuments.upload": {
                         "required": true,
@@ -141,6 +144,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     irfNavigator.goBack();
                                 }
                                 model.LiabilityLoanAccountBookingProcess = res; 
+                                res.liabilityAccount.liabilityComplianceDocuments.pop();
+                                res.liabilityAccount.liabilityLenderDocuments.pop();
                                 model.liabilityAccount = res.liabilityAccount
                             });
                     } else {        
