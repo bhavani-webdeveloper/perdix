@@ -132,6 +132,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                               bundleModel.loanProcess = loanProcess;
                                var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -139,7 +140,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'Screening'){
+                                if (loanAccount.loanAccount.currentStage != 'GuarantorAddition'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
@@ -224,15 +225,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'KYC');
+                    BundleManager.broadcastEvent('origination-stage', 'GuarantorAddition');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
-                        PageHelper.showProgress("KYC-Input", 'Loading lead details');
+                        PageHelper.showProgress("GuarantorAddition", 'Loading lead details');
                         var _leadId = $stateParams.pageData['lead_id'];
                         Lead.get({id: _leadId})
                             .$promise
                             .then(function(res){
-                                PageHelper.showProgress('KYC-input', 'Done.', 5000);
+                                PageHelper.showProgress('GuarantorAddition', 'Done.', 5000);
                                 BundleManager.broadcastEvent('lead-loaded', res);
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -324,7 +325,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("KYC", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("GuarantorAddition", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

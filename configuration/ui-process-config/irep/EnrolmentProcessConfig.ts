@@ -19,7 +19,10 @@ let config = {
             },
             "beforeProceed": {
                 "defaults": [
-                    
+                    {
+                        "name": "VerifyBankAccountNumberPolicy",
+                        "arguments": null
+                    }
                 ]
             },
             "beforeSave": {

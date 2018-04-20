@@ -297,6 +297,9 @@ define([],function(){
                             }
                         },
                         "AppraisalReview": {
+                            "excludes": [
+                                "ProposedUtilizationPlan"                     
+                            ],
                             "overrides": {
                                 "EnterpriseInformation": {
                                     "readonly": true

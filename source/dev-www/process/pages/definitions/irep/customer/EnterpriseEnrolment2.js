@@ -1255,10 +1255,194 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "GuarantorAddition": {
                                 "excludes": [
+                                    "ProxyIndicators",
+                                    "BuyerDetails",
+                                    "SuppliersDeatils",
+                                    "EnterpriseAssets",
+                                    "Machinery",
+                                    "EnterpriseReferences",
+                                    "CommercialCBCheck",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.incomeThroughSales",
+                                    "EnterpriseFinancials.incomeThroughSales.buyerName",
+                                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
+                                    "EnterpriseFinancials.incomeThroughSales.amount",
+                                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
+                                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.avgDailySaleAmount",
+                                    "EnterpriseFinancials.workingDaysInMonth",
+                                    "EnterpriseFinancials.grossMarginPercentage",
+                                    "EnterpriseFinancials.netMarginPercentage",                     
+                                    "EnterpriseFinancials.rawMaterialExpenses",
+                                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
+                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
+                                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
 
                                 ],
                                 "overrides": {
-
+                                    "EnterpriseInformation": {
+                                        "orderNo": 1
+                                    },                                   
+                                    "ContactInformation": {
+                                        "orderNo": 2
+                                    },
+                                    "BankAccounts": {
+                                        "orderNo": 3
+                                    },
+                                    "Liabilities": {
+                                        "orderNo": 4,
+                                         "title": "BUSINESS_LIABILITIES"
+                                    },
+                                    "EnterpriseFinancials": {
+                                        "orderNo": 5
+                                    },
+                                    "EmployeeDetails": {
+                                        "orderNo": 6
+                                    },
+                                    "EnterpriseInformation.customerBranchId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.urnNo": {
+                                        "condition": "model.customer.urnNo",
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.centreId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.oldCustomerId": {
+                                        "condition": "model.customer.oldCustomerId",
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.referredBy": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.referredName": {
+                                        "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'"
+                                    },
+                                    "EnterpriseInformation.companyOperatingSince": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.companyEmailId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.photoImageId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.ownership": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                                    },
+                                    "EnterpriseInformation.agreementValidTill": {
+                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                                    },
+                                    "EnterpriseInformation.businessHistory": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.noOfPartners": {
+                                        "condition": "model.customer.enterprise.businessConstitution=='Partnership'"
+                                    },
+                                    "EnterpriseInformation.partnershipDissolvedDate": {
+                                        "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'"
+                                    },
+                                    "EnterpriseInformation.companyRegistered": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.isGSTAvailable": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations": {
+                                        "condition": "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'"
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations.documentId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessActivity": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessSector": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessSubsector": {
+                                        "required": true,
+                                        "resolver": "BusinessSubsectorLOVConfiguration"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
+                                        "resolver": "LinkedToCustomeridLOVConfiguration"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                                    },
+                                    "ContactInformation.locality": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.villageName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.businessInPresentAreaSince": {
+                                        "required": true
+                                    },
+                                    "ContactInformation.businessInCurrentAddressSince": {
+                                        "required": true
+                                    },
+                                    "ContactInformation.pincode": {
+                                        "required": true,
+                                        "resolver": "PincodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.ifscCode": {
+                                        "required": true,
+                                        "resolver": "IFSCCodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "EnterpriseFinancials.monthlyTurnover": {
+                                        "required": true
+                                    },
+                                    "EmployeeDetails.avgMonthlySalary": {
+                                        "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
+                                    }
                                 }
                             },
                             "CreditCommitteeReview": {
@@ -1978,9 +2162,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     /* End of setting data for the form */
                     console.log("model information");
                     console.log(model);
-                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+
                     var self = this;
-                    p1.then(function(repo){
                         var formRequest = {
                             "overrides": {
                                 "ContactInformation.pincode": {
@@ -2025,8 +2208,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 ]
                             }
                         };
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    })
+                        UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index){

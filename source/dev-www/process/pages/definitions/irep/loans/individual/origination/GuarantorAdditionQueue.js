@@ -1,27 +1,31 @@
 define({
-	 pageUID: "irep.loans.individual.origination.GuarantorAdditionQueue",
-    pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-    	var branch = SessionStore.getBranch();
+	pageUID: "irep.loans.individual.origination.GuarantorAdditionQueue", 
+	pageType: "Engine",
+	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
+	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
+		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
-	    if (centres && centres.length) {
+		if (centres && centres.length) {
 		    for (var i = 0; i < centres.length; i++) {
 			    centreId.push(centres[i].centreId);
 		    }
 	    }
 		return {
 			"type": "search-list",
-			"title": "IREP_GUARANTOR_ADDITION",
+			"title": "IREP_GUARANTOR_ADDITION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				// model.branch = branch;
+				model.branch = branch;
 				$log.info("search-list sample got initialized");
-
+				var centres = SessionStore.getCentres();
+				if (_.isArray(centres) && centres.length > 0){
+					model.centre = centres[0].centreName;
+					model.centreCode = centres[0].centreCode;
+				}
 			},
 			definition: {
-				title: "SEARCH",
+				title: "SEARCH_LOAN",
 				searchForm: [
 					"*"
 				],
@@ -30,6 +34,50 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						"centre": {
+							"title": "CENTRE",
+							"type": "string",
+							"required": true,
+							"x-schema-form": {
+								type: "lov",
+	                            autolov: true,
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            lovonly: true,
+	                            search: function(inputModel, form, model, context) {
+	                                var centres = SessionStore.getCentres();
+	                                var centreCode = formHelper.enum('centre').data;
+	                                var out = [];
+	                                if (centres && centres.length) {
+	                                    for (var i = 0; i < centreCode.length; i++) {
+	                                        for (var j = 0; j < centres.length; j++) {
+	                                            if (centreCode[i].value == centres[j].id) {
+	                                                out.push({
+	                                                    name: centreCode[i].name,
+	                                                    value:centreCode[i].code
+	                                                })
+	                                            }
+	                                        }
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.centre = valueObj.name;
+	                                model.centreCode = valueObj.value;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
+							}
+						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -38,25 +86,6 @@ define({
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
-	                    'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
-	                    },
-                        "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"screenFilter": true
-							}
-						},
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -69,11 +98,12 @@ define({
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                     "pincode": {
-	                        "title": "PIN_CODE",
-	                        "type": "string"
+	                    "pincode": {
+	                        "title": "PINCODE",
+	                        "type": "string",
+	                       
 	                    },
-	                     "status":
+	                     "status": 
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -93,17 +123,17 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    //'branchName':searchOptions.branch,
 	                    'stage': 'GuarantorAddition',
+	                    /*'centreCode':searchOptions.centreCode,
+	                    'branchName':branch,*/
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
 	                    'status':searchOptions.status,
+	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    //'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -130,8 +160,9 @@ define({
 							item.screeningDate,
 							item.applicantName,
 							item.customerName,
-							item.branchName,
-							item.centreName
+							item.area,
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -148,20 +179,26 @@ define({
 						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						}, {
+						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
+						},{
+							title: 'Loan Amount',
+							data: 'loanAmount'
 						}, {
-							title: 'BRANCH_NAME',
-							data: 'branchName'
+							title: 'AREA',
+							data: 'area'
 						}, {
-							title: 'CENTRE_NAME',
-							data: 'centreName'
+							title: 'CITY_TOWN_VILLAGE',
+							data: 'villageName'
+						}, {
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "GUARANTOR_ADDITION",
+							name: "IREP_GUARANTOR_ADDITION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
@@ -182,5 +219,5 @@ define({
 				}
 			}
 		};
-    }
-})
+	}
+});
