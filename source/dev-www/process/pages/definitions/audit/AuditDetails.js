@@ -197,6 +197,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         }
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
+            // View process compliance & other when status == O || view == all
             if ($stateParams.pageData.view != 'all' && $scope.model.ai.status != 'O') {
                 $scope.showDashboard = false;
                 return;
@@ -215,12 +216,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"]
             ];
 
+            // View score when status == A
             var reloadDashboardBox = false;
             if ($scope.viewScoreMenu && $scope.model.ai.status == 'A') {
                 requestMenu.push($scope.viewScoreMenu);
                 $scope.dashboardDefinition.items.push($scope.viewScoreMenu);
                 reloadDashboardBox = true;
             }
+            // edit score when status == O
             if ($scope.editScoreMenu && $scope.model.ai.status == 'O') {
                 requestMenu.push($scope.editScoreMenu);
                 $scope.dashboardDefinition.items.push($scope.editScoreMenu);
@@ -234,7 +237,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                     v.onClick = function(event, menu) {
                         var pageData = {};
                         pageData.readonly = $stateParams.pageData.readonly;
-                        if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O') {
+                        // Edit process compliance & other when status == O, P
+                        if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O' && $scope.model.ai.status != 'P') {
                             pageData.readonly = true;
                         }
                         pageData.type = $stateParams.pageData.type;
