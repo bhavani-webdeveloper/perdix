@@ -6909,7 +6909,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
             buildFormDefinition: function(formName, formRequest, configFile, model) {
                 var form = this.getFormDefinition(formName, formRequest, configFile, model);
                 var deferred = $q.defer();
-                if (form.promise != null){
+                if (form.promise){
                     form.promise
                         .then(function(){
                             deferred.resolve(form);
