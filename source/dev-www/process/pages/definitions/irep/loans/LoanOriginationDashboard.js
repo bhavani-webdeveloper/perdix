@@ -52,9 +52,9 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                         'villageName': '',
                         'customerName': '',
                         'page': 1,
-                        'per_page': 1,
+                        'per_page': 1/*,
                         'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode
+                        'centreCode': centre.centreCode*/
                     }).$promise.then(function(response, headerGetter) {
                         sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
                     }, function() {
@@ -97,8 +97,8 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode
+                        // 'branchName': currentBranch.branchName,
+                        // 'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
                     }, function() {

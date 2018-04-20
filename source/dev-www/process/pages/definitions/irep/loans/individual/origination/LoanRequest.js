@@ -370,6 +370,8 @@ define([],function(){
                     "PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
+                    "PreliminaryInformation.actualAmountRequired",
+                    "PreliminaryInformation.fundsFromDifferentSources",
 
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",

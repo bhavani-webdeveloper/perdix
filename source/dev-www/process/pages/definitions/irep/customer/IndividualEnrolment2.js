@@ -141,31 +141,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.state": {
                                     "readonly": true
                                 },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true
                                 },
@@ -238,27 +213,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence"
                                 }
                             },
                              "excludes": [
@@ -364,18 +318,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1529,8 +1471,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
-                        "resolver": "PincodeLOVConfiguration",
-                        "searchHelper": formHelper
+                        "resolver": "PincodeLOVConfiguration"
                     },
                     "HouseVerification.houseDetailsFieldSet": {
                         "orderNo": 10
@@ -1643,6 +1584,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                             }
                         } 
+                    },
+                    "IndividualInformation.caste": {
+                        "enumCode": "caste"
+                    },
+                    "HouseVerification.rentLeaseStatus": {
+                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'"
+                    },
+                    "HouseVerification.rentLeaseAgreement": {
+                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'"
+                    },
+                    "ContactInformation.mailingMandal": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingDoorNo": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingStreet": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingPostoffice": {
+                        "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "ContactInformation.mailingPincode": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "resolver": "MailingPincodeLOVConfiguration"
+                    },
+                    "ContactInformation.mailingLocality": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "readonly": true
+                    },
+                    "ContactInformation.mailingDistrict": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "readonly": true
+                    },
+                    "ContactInformation.mailingState": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "readonly": true
                     }
                 }
             }
@@ -1685,6 +1663,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.maritalStatus",
                     "IndividualInformation.spouseFirstName",
                     "IndividualInformation.spouseDateOfBirth",
+                    "IndividualInformation.numberOfDependents",
+                    "IndividualInformation.caste",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -1698,6 +1678,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.street",
                     "ContactInformation.postOffice",
                     "ContactInformation.landmark",
+                    "ContactInformation.mandal",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
                     "ContactInformation.villageName",
@@ -1708,6 +1689,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingDoorNo",
                     "ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
+                    "ContactInformation.mailingMandal",
                     "ContactInformation.mailingPincode",
                     "ContactInformation.mailingLocality",
                     "ContactInformation.mailingDistrict",
@@ -1755,6 +1737,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto",
                     "HouseVerification.date",
                     "HouseVerification.place",
+                    "HouseVerification.rentLeaseStatus",
+                    "HouseVerification.rentLeaseAgreement",
 
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
@@ -1768,6 +1752,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.EmiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -1782,6 +1769,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.vehicleModel",
                     "PhysicalAssets.physicalAssets.registeredOwner",
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
+                    "PhysicalAssets.physicalAssets.unit",
 
                     "IndividualReferences",
                     "IndividualReferences.verifications",
