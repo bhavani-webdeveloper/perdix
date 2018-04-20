@@ -84,10 +84,19 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             ]
                         }
                     };
-                    var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    p1.then(function(repo){
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    });
+                // var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
+                //     p1.then(function(repo){
+                //         self.form = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
+                //     });
+
+                      UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                            console.log("INSIDE HERE 111");
+                        });
                     /* Form rendering ends */
                 },
 
