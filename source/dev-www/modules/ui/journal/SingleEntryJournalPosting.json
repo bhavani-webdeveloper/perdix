@@ -1,0 +1,102 @@
+{
+    "BranchPostingEntry": {
+        "type": "box",
+        "title": "BRANCH_POSTING_ENTRY",
+        "orderNo": 10,
+        "items": {
+            "transactionName": {
+                "key":"journal.journalEntryDto.transactionName",
+                "title": "TRANSACTION_NAME",
+                "type": "lov",
+                "resolver": "JournalTransactionLOVConfiguration",
+                "autolov": true,
+                "orderNo": 10
+            },
+            "transactionDescription": {
+                "key": "journal.journalEntryDto.transactionDescription",
+                "readonly": true,
+                "orderNo": 20
+            },
+            "transactionType": {
+                "key": "journal.journalEntryDto.transactionType",
+                "readonly": true,
+                "orderNo": 30
+            },
+            "creditGLNo": {
+                "key": "journal.journalEntryDto.creditGLNo",
+                "readonly": true,
+                "orderNo": 40
+            },
+            "debitGLNo": {
+                "key": "journal.journalEntryDto.debitGLNo",
+                "readonly": true,
+                "orderNo": 50
+            },
+            "transactionAmount": {
+                "key": "journal.journalEntryDto.transactionAmount",
+                "required":true,
+                "type": "amount",
+                "orderNo": 60
+            },
+            "billNo": {
+                "key": "journal.journalEntryDto.billNo",
+                "title": "BILL_NO",
+                "type": "number",
+                "orderNo": 60
+            },
+            "billDate": {
+                "key": "journal.journalEntryDto.billDate",
+                "title": "BILL_DATE",
+                "type": "number",
+                "orderNo": 60
+            },
+            "instrumentBankName": {
+                "key": "journal.journalEntryDto.instrumentBankName",
+                "type": "string",
+                "orderNo": 70
+            },
+            "instrumentBranchName": {
+                "key": "journal.journalEntryDto.instrumentBranchName",
+                "type": "string",
+                "orderNo": 80
+            },
+            "instrumentType": {
+                "key": "journal.journalEntryDto.instrumentType",
+                "type": "select",
+                "enumCode": "instrument_type",
+                "orderNo": 90
+            },
+            "instrumentNumber": {
+                "key": "journal.journalEntryDto.instrumentNumber",
+                "title": "INSTRUMENT_NUMBER",
+                "orderNo": 100
+            },
+            "instrumentDate": {
+                "key": "journal.journalEntryDto.instrumentDate",
+                "title": "INSTRUMENT_DATE",
+                "type": "date",
+                "orderNo": 110
+            },
+            "ifscCode": {
+                "key": "journal.journalEntryDto.ifscCode",
+                "type": "string",
+                "orderNo": 120
+            },
+            "valueDate": {
+                "key": "journal.journalEntryDto.valueDate",
+                "type": "date",
+                "orderNo": 130
+            },
+            "relatedAccountNo": {
+                "key": "journal.journalEntryDto.relatedAccountNo",
+                "title": "RELATED_ACCOUNT_NO",
+                "orderNo": 140
+            },
+            "narration":{
+                "key": "journal.journalEntryDto.narration",
+                "required":true,
+                "orderNo": 150
+            }
+        }
+    }
+}
