@@ -29,7 +29,7 @@ export class LiabilityDocumentUploadPolicy extends IPolicy<LiabilityLoanAccountB
             i.uploadedDate = moment(new Date()).format('YYYY-MM-DD');
             j.uploadedDate = moment(new Date()).format('YYYY-MM-DD');
             liabilityLoanAccountBookingProcess.liabilityAccount.liabilityLenderDocuments.push(i);
-            liabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments.push(i);
+            liabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments.push(j);
         }
         return Observable.of(liabilityLoanAccountBookingProcess);
     }
