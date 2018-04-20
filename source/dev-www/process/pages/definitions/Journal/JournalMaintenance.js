@@ -43,22 +43,31 @@ define({
                         },
                         function(res) {
                             _.assign(model.journal, res);
-                            $log.info(model.journal);
                             var branches = formHelper.enum('branch_id').data;
                             if(model.journal.journalBranches && model.journal.journalBranches.length > 0) {
                                 var journalBranches = [];
-                                for(i=0;i<model.journal.journalBranches.length;i++){
-                                    for(j=0;j<branches.length;j++){
-                                        if(model.journal.journalBranches[i].branchId == branches[j].value) {
-                                            journalBranches.push({id: branches[j].value, name: branches[j].name, $selected: true})
-                                        } else {
-                                            journalBranches.push({id: branches[j].value, name: branches[j].name});
-                                            
-                                        }
+
+                                model.journal.journalBranches.map(function(j) {
+                                    var index = _.findIndex(branches, function(b) {
+                                        return b.value == j.branchId;
+                                    })
+                                    journalBranches.push({id:j.branchId, name: branches[index].name, $selected: true});
+                                });
+
+                                branches.map(function(b) {
+                                    var index = _.findIndex(journalBranches, function(j) {
+                                        return j.id == b.value;
+                                    });
+                                    if(index < 0) {
+                                        journalBranches.push({id:b.value, name: b.name});     
                                     }
-                                }
-                                model.journal.journalBranches = journalBranches;
+                                    
+                                })
+
                             }
+                            
+                            model.journal.journalBranches = journalBranches;
+                            
                             $log.info(model.journal);
                             PageHelper.hideLoader();
                         }
