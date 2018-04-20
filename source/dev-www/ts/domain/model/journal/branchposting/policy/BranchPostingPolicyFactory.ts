@@ -1,6 +1,6 @@
 import {BranchPostingPolicy} from "./BranchPostingPolicy";
 import {IPolicyFactory} from "../../../../shared/IPolicyFactory";
-
+import {LoadBranchData} from "./LoadBranchData";
 export class BranchPostingPolicyFactory implements IPolicyFactory {
 
     private static _instance:BranchPostingPolicyFactory = null;
@@ -16,6 +16,12 @@ export class BranchPostingPolicyFactory implements IPolicyFactory {
 
     fromPolicyName(name: string):BranchPostingPolicy<Object> {
         let obj = null;
+        switch(name) {
+            case 'LoadBranchData':
+                return new LoadBranchData();
+            default:
+                return null;
+        }
         return obj;
     }
 }

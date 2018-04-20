@@ -16,7 +16,7 @@ export class BranchPostingFactory {
 
     static createNew() : Observable<BranchPostingProcess>{
         let branchPostingProcess: BranchPostingProcess = new BranchPostingProcess();
-        branchPostingProcess.journal = new BranchEntry();
+        branchPostingProcess.journalEntryDto = new BranchEntry();
 
         return Observable.of(branchPostingProcess);
     }
@@ -30,7 +30,7 @@ export class BranchPostingFactory {
                     //noinspection TypeScriptValidateTypes
                     let branchEntry:BranchEntry = <BranchEntry>plainToClass<BranchEntry, Object>(BranchEntry, obj);
                     let branchPostingProcess = new BranchPostingProcess();
-                    branchPostingProcess.journal = branchEntry;
+                    branchPostingProcess.journalEntryDto = branchEntry;
                     return branchPostingProcess;
                 }
             );

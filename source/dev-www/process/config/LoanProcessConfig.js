@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var config = {
-        "policies": {
-            "default": {
-                "onNew": {
+        'policies': {
+            'default': {
+                onNew: {
                     "defaults": [
                         {
                             "name": "DefaultRelatedCustomersPolicy",
@@ -17,27 +17,75 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
-                "onLoad": {
+                onLoad: {
                     "defaults": [
                         {
                             "name": "LoadRelatedCustomersPolicy",
                             "arguments": {}
+                        },
+                        {
+                            "name": "CustomerReferencePolicy",
+                            "arguments": {}
+                        }
+                    ],
+                    "overrides": [
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='VehicleValuation'",
+                            "add": [
+                                {
+                                    "name": "DefaultVehicleComponentsPolicy",
+                                    "arguments": {}
+                                },
+                                {
+                                    "name": "DefaultVehicleAccessoriesPolicy",
+                                    "arguments": {}
+                                }
+                            ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal'",
+                            "add": [
+                                {
+                                    "name": "CustomerReferencePolicy",
+                                    "arguments": {}
+                                }
+                            ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage == 'Application'",
+                            "add": [
+                                {
+                                    "name": "DefaultIncomeTypePolicy",
+                                    "arguments": {}
+                                },
+                                {
+                                    "name": "DefaultExpensePolicy",
+                                    "arguments": {}
+                                }
+                            ]
                         }
                     ]
                 },
-                "beforeSave": {
+                beforeSave: {
                     "defaults": [
                         {
                             "name": "MandatoryFieldsPolicy",
                             "arguments": null
+                        },
+                        {
+                            "name": "LoanDerivedFieldsUpdate",
+                            "arguments": null
                         }
                     ]
                 },
-                "afterSave": {
+                afterSave: {
                     "overrides": [
                         {
                             "type": "expr",
-                            "expr": "this.loanAccount.currentStage=='KYC'",
+                            "expr": "this.loanAccount.currentStage=='Screening'",
                             "add": [
                                 {
                                     "name": "CloseLeadonLoanSave",
@@ -50,7 +98,16 @@ define(["require", "exports"], function (require, exports) {
                         }
                     ]
                 },
-                "beforeProceed": {
+                beforeProceed: {
+                    "defaults": [
+                        {
+                            "name": "LoanDerivedFieldsUpdation",
+                            "arguments": null
+                        }, {
+                            "name": "CustomerEnrolmentCompletedPolicy",
+                            "arguments": {}
+                        }
+                    ],
                     "overrides": [
                         {
                             "type": "expr",
@@ -63,12 +120,22 @@ define(["require", "exports"], function (require, exports) {
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "type": "expr",
+                            "expr": "this.loanAccount.currentStage=='BranchCreditAppraisal' || this.loanAccount.currentStage=='HOCreditAppraisal' || this.loanAccount.currentStage=='ManagementCommittee'",
+                            "add": [{
+                                    "name": "CollateralFieldPolicy",
+                                    "arguments": {
+                                        "postStage": "LoanInitiation"
+                                    }
+                                }]
                         }
                     ]
                 }
             },
-            "command": {
-                "OverlayLeadData": {}
+            'command': {
+                'OverlayLeadData': {}
             }
         }
     };

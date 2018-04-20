@@ -14,9 +14,11 @@ import {BranchPostingFactory} from "./BranchPostingFactory";
 declare var branchPostingProcessConfig: Object;
 
 export class BranchPostingProcess implements CanApplyPolicy {
+    
+    journalEntryDto: BranchEntry;
+    private journalEntryProcessAction: string;
+
     branchRepo: IBranchRepository;
-    journal: BranchEntry;
-    private journalAction: string;
     constructor() {
         this.branchRepo = RepositoryFactory.createRepositoryObject(RepositoryIdentifiers.BranchPostingProcess);
     }
@@ -24,8 +26,8 @@ export class BranchPostingProcess implements CanApplyPolicy {
     static createNewProcess() : Observable<BranchPostingProcess> {
         let obs1 = BranchPostingFactory.createNew();
         return obs1.flatMap(
-            (leadProcess) => {
-                let pm: PolicyManager<BranchPostingProcess> = new PolicyManager<BranchPostingProcess>(leadProcess, BranchPostingPolicyFactory.getInstance(), 'onNew', BranchPostingProcess.getProcessConfig());
+            (branchProcess) => {
+                let pm: PolicyManager<BranchPostingProcess> = new PolicyManager<BranchPostingProcess>(branchProcess, BranchPostingPolicyFactory.getInstance(), 'onNew', BranchPostingProcess.getProcessConfig());
                 return pm.applyPolicies();
             }
         )
@@ -42,7 +44,7 @@ export class BranchPostingProcess implements CanApplyPolicy {
     }
 
     save(): Observable<BranchPostingProcess> {
-        this.journalAction = 'SAVE';
+        this.journalEntryProcessAction = 'SAVE';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeSave', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.branchRepo.updateJournal(this);
@@ -53,7 +55,7 @@ export class BranchPostingProcess implements CanApplyPolicy {
 
     proceed(): Observable<BranchPostingProcess>{
         // this.stage = toStage;
-        this.journalAction = 'PROCEED';
+        this.journalEntryProcessAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeProceed', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.branchRepo.updateJournal(this);
