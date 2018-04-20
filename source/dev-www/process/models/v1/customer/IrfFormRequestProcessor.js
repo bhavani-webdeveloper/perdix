@@ -6916,6 +6916,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         }, function(e){
                             deferred.reject(e)
                         })
+                } else  {
+                    deferred.resolve(form);
                 }
 
                 return deferred.promise;
