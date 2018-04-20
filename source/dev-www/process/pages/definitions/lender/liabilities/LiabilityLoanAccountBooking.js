@@ -40,7 +40,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "orderNo":80
                     },
                     "LenderAccountDetails.lenderId": {
-                        searchHelper: formHelper,
+                       // searchHelper: formHelper,
                         "resolver": "LenderIDLOVConfiguration",
                         "orderNo":90
                     },
@@ -416,17 +416,15 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
 
                     }
 
-                    var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    p1.then(function(repo){
-                        self.formRepo = repo;
-                    })
+                    UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                            PageHelper.hideLoader();
+                        });
 
-                    $q.all([p1,pLoadInit])
-                    .then(function(){
-                        self.form = IrfFormRequestProcessor.getFormDefinition(self.formRepo, formRequest, configFile(), model);
-                        PageHelper.hideLoader();
-
-                    })
 
                     
                 },
