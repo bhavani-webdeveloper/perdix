@@ -31,15 +31,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.leadName": {
                         "required": true
                     },
-                    /*"LenderInformation.source": {
-                        "required": true,
-                        "titleMap": [
-                            {
-                                "name": "UC",
-                                "value": "UC"
-                            }
-                        ]
-                    },*/
                     "LenderInformation.companyOperatingSince": {
                         "required": true
                     },
@@ -406,11 +397,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         }
                     };
-
-                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
-                    p1.then(function(repo){
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    })
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                            console.log("INSIDE HERE 111");
+                        });
 
                     /* Form rendering ends */
                 },
