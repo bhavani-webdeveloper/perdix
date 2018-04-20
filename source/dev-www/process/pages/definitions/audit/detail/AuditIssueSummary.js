@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", "irfNavigator", "$stateParams", "Audit", "PageHelper",
-    function($log, irfNavigator, $stateParams, Audit, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", "$filter", "formHelper", "irfNavigator", "$stateParams", "Audit", "PageHelper",
+    function($log, $filter, formHelper, irfNavigator, $stateParams, Audit, PageHelper) {
         return {
             "type": "schema-form",
             "title": "AUDIT_ISSUE_SUMMARY",
@@ -21,85 +21,124 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", 
                 var auditId = Number($stateParams.pageId);
                 var master = Audit.offline.getAuditMaster();
 
+                var processArray = [];
+                _.forOwn(master.process, function(v, k) {
+                    processArray.push(v);
+                });
+                var summaryWeightageArray = [];
+                var weightageColumns = [{
+                    "title": "PROCESS_NAME",
+                    "data": "process_name"
+                }];
+                _.forOwn(master.summary_weightage, function(v, k) {
+                    summaryWeightageArray.push(v);
+                    weightageColumns.push({
+                        "title": v.name,
+                        "data": v.name
+                    })
+                });
+                weightageColumns.push({
+                    "title": "TOTAL",
+                    "data": "total",
+                    render: function(data) {
+                        return '<strong>' + data + '</strong>';
+                    }
+                });
+
+                var nodes = {};
+                for (i in master.nodetype) {
+                    nodes[master.nodetype[i].node_id] = master.nodetype[i];
+                }
 
                 self.form = [];
                 var processIssueSummaryData = function(auditIssueSummary) {
-                    var processArray = [];
-                    _.forOwn(master.process, function(v, k) {
-                        processArray.push(v);
-                    });
-                    var summaryWeightageArray = [];
-                    _.forOwn(master.summary_weightage, function(v, k) {
-                        summaryWeightageArray.push(v);
-                    });
                     model.process = [];
-                    var processTotal = {
-                        "process_name": "Total"
-                    };
-                    for (i in auditIssueSummary) {
+                    self.form = [];
+                    for (i = 0; i < auditIssueSummary.length; i++) {
                         var is = auditIssueSummary[i];
-                        model.process[i] = _.cloneDeep(processArray);
-                        for (n in model.process[i]) {
-                            var pro = model.process[i][n];
-                            for (j in summaryWeightageArray) {
-                                var traitList = is.trait_score[k];
-                                if (pro.process_id == traitList.process_id) {
-                                    pro[master.summary_weightage[traitList.rating_id].name] = traitList.rating_count;
-                                    pro.total = pro.total? pro.total + traitList.rating_count: 0;
+                        if (is.node_type == 1) {
+                            var branchName = $filter('filter')(formHelper.enum('branch_id').data, {
+                                'value': is.node_id
+                            }, true);
+                            $log.info(branchName);
+                            if (branchName && branchName.length) {
+                                is.branchName = branchName[0].name;
+                            }
+                        } else {
+                            is.branchName = null;
+                        }
+                        if (is.node_type == 2) {
+                            var centreName = $filter('filter')(formHelper.enum('centre').data, {
+                                'value': is.node_id
+                            }, true);
+                            $log.info(centreName);
+                            if (centreName && centreName.length) {
+                                is.centreName = centreName[0].name;
+                            }
+                        } else {
+                            is.centreName = null;
+                        }
+                        var pr = _.cloneDeep(processArray);
+                        model.process[i] = pr;
+                        var processTotal = {
+                            "process_name": "<strong>Total</strong>",
+                            "total": 0
+                        };
+                        for (k in summaryWeightageArray) {
+                            processTotal[summaryWeightageArray[k].name] = 0;
+                        }
+                        for (j in pr) {
+                            var pro = pr[j];
+                            pro.total = 0;
+                            for (k in summaryWeightageArray) {
+                                pro[summaryWeightageArray[k].name] = 0;
+                            }
+                            for (n in is.trait_score) {
+                                var t = is.trait_score[n];
+                                if (pro.process_id == t.process_id) {
+                                    pro[master.summary_weightage[t.rating_id].name] = t.rating_count;
+                                    pro.total += t.rating_count;
                                 }
                             }
+                            for (k in summaryWeightageArray) {
+                                processTotal[summaryWeightageArray[k].name] += pro[summaryWeightageArray[k].name];
+                                processTotal.total += pro[summaryWeightageArray[k].name];
+                            }
                         }
+                        for (j in processTotal) {
+                            processTotal[j] = '<strong>' + processTotal[j] + '</strong>';
+                        }
+                        pr.push(processTotal);
                     }
-                        self.form = [{
+                    for (i in model.process) {
+                        self.form.push({
                             "type": "box",
-                            "title": is.node_type ? (is.node_type + " - " + is.node_ + "ISSUE_SUMMARY") : "ISSUE_SUMMARY",
+                            "title": nodes[auditIssueSummary[i].node_type].node_type + " " + "Score board" + ": " + ((auditIssueSummary[i].node_type == 1) ? auditIssueSummary[i].branchName : auditIssueSummary[i].centreName),
                             "colClass": "col-sm-12",
                             "items": [{
-                                "key": "process[0]",
+                                "key": "process[" + i + "]",
                                 "type": "tableview",
                                 "selectable": false,
                                 "notitle": true,
                                 "editable": false,
                                 "tableConfig": {
-                                    "searching": true,
-                                    "paginate": true,
-                                    "pageLength": 10,
-                                    "responsive": {
-                                        "details": {
-                                            // "display": $.fn.dataTable.Responsive.display.childRowImmediate
-                                        }
-                                    }
+                                    "searching": false,
+                                    "paginate": false,
+                                    "ordering": false
                                 },
                                 getColumns: function() {
-                                    var columns = [{
-                                        "title": "PROCESS_NAME",
-                                        "data": "process_name"
-                                    }];
-                                    _.forOwn(master.summary_weightage, function(v, k) {
-                                        columns.push.apply(columns, [{
-                                            "title": v.name,
-                                            "data": "rating_id",
-                                            render: function(data, type, full, meta) {
-                                                return data ? full.rating_count : "0";
-                                            }
-                                        }]);
-                                    });
-                                    columns.push({
-                                        "title": "TOTAL",
-                                        "data": "total"
-                                    })
-                                    return columns;
+                                    return weightageColumns;
                                 },
                                 getActions: function() {}
 
                             }]
-                        }];
-
-                    $log.info(model.process)
-
+                        });
+                    }
                 };
                 PageHelper.showLoader();
-                Audit.online.getAuditIssueSummary().$promise.then(function(resp) {
+                Audit.online.getAuditIssueSummary({
+                    'audit_id': auditId
+                }).$promise.then(function(resp) {
                     processIssueSummaryData(resp);
                 }, PageHelper.showErrors).finally(PageHelper.hideLoader);
             },

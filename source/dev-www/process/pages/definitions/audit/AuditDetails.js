@@ -195,6 +195,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 })
             );
         }
+        allPromises.push(
+            PagesDefinition.getUserAllowedDefinition({
+                "title": "Audit Details",
+                "iconClass": "fa fa-cube",
+                "items": [
+                    "Page/Engine/audit.detail.AuditIssueSummary"
+                ]
+            }).then(function(resp) {
+                $scope.issueSummaryMenu = _.cloneDeep(resp.$menuMap["Page/Engine/audit.detail.AuditIssueSummary"]);
+            })
+        );
         $q.all(allPromises).then(function() {
             $scope.showDashboard = true;
             // View process compliance & other when status == O || view == all
@@ -203,17 +214,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 return;
             }
 
-            // if ($scope.siteCode == 'kinara' && $scope.model.ai.status == 'O' || $scope.siteCode != 'kinara') {
             var requestMenu = [
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditInfo"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.GeneralObservation"],
-                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditIssueSummary"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.JewelAppraisal"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.PortfolioStats"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
-                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"]
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
+                $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"]
             ];
 
             // View score when status == A
@@ -227,6 +235,12 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             if ($scope.editScoreMenu && $scope.model.ai.status == 'O') {
                 requestMenu.push($scope.editScoreMenu);
                 $scope.dashboardDefinition.items.push($scope.editScoreMenu);
+                reloadDashboardBox = true;
+            }
+            // view issue Summary when status == P, A
+            if ($scope.issueSummaryMenu &&( $scope.model.ai.status == 'P' ||  $scope.model.ai.status == 'A')) {
+                requestMenu.push($scope.issueSummaryMenu);
+                $scope.dashboardDefinition.items.push($scope.issueSummaryMenu);
                 reloadDashboardBox = true;
             }
             if (reloadDashboardBox) {
