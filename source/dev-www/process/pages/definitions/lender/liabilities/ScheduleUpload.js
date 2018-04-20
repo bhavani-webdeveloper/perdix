@@ -39,7 +39,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
                                 PageHelper.hideLoader();
-                                if(res.liabilityAccount.currentStage != "ScheduleUpload") {
+                                if(res.liabilityAccount.currentStage != "ScheduleUpload" && res.liabilityAccount.currentStage != "Completed") {
                                    irfNavigator.goBack();
                                 }
                                 model.LiabilityLoanAccountBookingProcess = res; 
@@ -98,9 +98,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             customHandle: function(file, progress, modelValue, form, model) {
                                                 Schedule.scheduleUpload(file, progress, model.liabilityAccount.lenderAccountNumber).then(function(res) {
                                                     model.liabilityAccount.isPaymentScheduleUploaded = true;
-                                                    model.LiabilityLoanAccountBookingProcess.save()
+                                                    model.LiabilityLoanAccountBookingProcess.proceed()
                                                         .finally(function () {
                                                             PageHelper.hideLoader();
+                                                            irfNavigator.goBack();
                                                         })
                                                         .subscribe(function (value) {
                                                             PageHelper.clearErrors();                           
