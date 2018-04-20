@@ -2025,15 +2025,17 @@
         "required": [],
         "properties": {
           "udf1": {
-            "title": "SPOUSE_LOAN_CONSENT",
-            "type": "boolean",
+            "title": "MANDAL",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           },
           "udf2": {
-            "title": "IF_HOUSE_RENTED_NAME_OF_LANDLORD",
+            "title": "MAILING_MANDAL",
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
@@ -2043,263 +2045,16 @@
             ]
           },
           "udf3": {
-            "title": "HOUSE_OWNERSHIP",
+            "title": "RENT_LEASE_STATUS",
             "type": "string",
-            "enumCode": "house_ownership",
+            "minLength": 1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           },
           "udf4": {
-            "title": "HOUSE_DURATION_OF_STAY",
-            "type": "integer",
-            "minimum": 0,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf5": {
-            "title": "HOUSE_CONDITION",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "condition",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf6": {
-            "title": "TOILET",
-            "type": "boolean",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf7": {
-            "title": "BUSINESS_OR_EMPLOYER_NAME",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf8": {
-            "title": "BUSINESS_VILLAGE",
-            "type": "string",
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf9": {
-            "title": "BUSINESS_LANDMARK",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf10": {
-            "title": "BUSINESS_PINCODE",
-            "type": "number",
-            "minimum": 100000,
-            "maximum": 999999,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf11": {
-            "title": "BUSINESS_PHONE",
-            "type": "number",
-            "minimum": 1000000000,
-            "maximum": 9999999999,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf12": {
-            "title": "IF_SHOP_RENTED_NAME_OF_LANDLORD",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf13": {
-            "title": "CUST_OCCUPATION_TYPE",
-            "type": "string",
-            "enumCode": "broad_occupation_type",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf14": {
-            "title": "RELATIONSHIP_WITH_BUSINESS_OWNER",
-            "type": "string",
-            "enumCode": "relation_with_business_owner",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf15": {
-            "title": "CROP_NAME",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf16": {
-            "title": "WORK_PLACE_TYPE",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "work_place_type",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf17": {
-            "title": "WORK_PERIOD",
-            "type": "integer",
-            "minimum": 0,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf18": {
-            "title": "WORK_PLACE_BUILD_TYPE",
-            "type": "string",
-            "enumCode": "work_place_build_type",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf19": {
-            "title": "WORK_PLACE_CONDITION",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "condition",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf20": {
-            "title": "WORK_PLACE",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "work_place",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf21": {
-            "title": "WORK_PLACE_OTHERS",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf22": {
-            "title": "BUSINESS_REG_NO",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf23": {
-            "title": "BUSINESS_DESCRIPTION",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "condition",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf24": {
-            "title": "RELATION_WITH_FARMER",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "relation_with_business_owner",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf25": {
-            "title": "LAND_OWNERSHIP",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "land_ownership",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf26": {
-            "title": "IRRIGATED",
-            "type": "boolean",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf27": {
-            "title": "HARVEST_MONTH",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "enumCode": "months",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf28": {
-            "title": "LAND_AREA",
-            "type": "number",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf29": {
             "title": "YEARS_IN_CURR_ADDRESS",
             "type": "string",
             "enumCode": "years_in_current_address",
@@ -2308,65 +2063,10 @@
               "Completed"
             ]
           },
-          "udf30": {
+          "udf5": {
             "title": "YEARS_IN_CURR_AREA",
             "type": "string",
             "enumCode": "years_in_current_area",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf31": {
-            "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
-            "type": "string",
-            "enumCode": "years_in_present_area",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf32": {
-            "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-            "type": "string",
-            "enumCode": "years_in_current_address",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf33": {
-            "type": "string",
-            "title": "SPOUSE_IDENTITY_PROOF",
-            "enumCode": "identity_proof",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf34": {
-            "type": "string",
-            "title": "SPOUSE_IDENTITY_PROOF_IMAGE",
-            "category": "CustomerEnrollment",
-            "subCategory": "IDENTITYPROOF",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf35": {
-            "type": "string",
-            "title": "SPOUSE_IDENTITY_PROOF_IMAGE_BACK",
-            "category": "CustomerEnrollment",
-            "subCategory": "IDENTITYPROOF",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf36": {
-            "type": "string",
-            "title": "SPOUSE_IDENTITY_PROOF_NO",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2380,15 +2080,7 @@
         "required": [],
         "properties": {
           "udfDate1": {
-            "title": "date1",
-            "type": "string",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udfDate2": {
-            "title": "date2",
+            "title": "RENT_LEASE_AGREEMENT",
             "type": "string",
             "captureStages": [
               "BasicEnrolment",

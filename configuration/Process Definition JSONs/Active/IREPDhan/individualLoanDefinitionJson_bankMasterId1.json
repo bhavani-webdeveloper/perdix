@@ -494,6 +494,24 @@
                      "KYC", "Appraisal", "FieldAppraisal", "LoanInitiation", "PendingForPartner"
                   ]
                },
+               "actualAmountRequired":{
+                  "title":"Actual Amount Requested",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "KYC", "Appraisal", "FieldAppraisal", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
+               "fundsFromDifferentSources":{
+                  "title":"Funds From OWN Sources",
+                  "type":"number",
+                  "minimum":1,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "KYC", "Appraisal", "FieldAppraisal", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
                "disbursedAmountInPaisa":{
                   "title":"Disbursed Amount In Paisa",
                   "type":"number",
