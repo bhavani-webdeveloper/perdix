@@ -6,7 +6,7 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         "pincode": {
             "key": "customer.pincode",
             "title": "pinCode",
-            "type": "string"
+            "type": "number"
         },
         "district": {
             key: "customer.district"
