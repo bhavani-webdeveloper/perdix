@@ -9,7 +9,7 @@ import {QueryRepository} from "./query/QueryRepository";
 import { BranchPostingPolicyFactory } from '../model/journal/branchposting/policy/BranchPostingPolicyFactory';
 import { BranchPostingProcess } from '../model/journal/branchposting/BranchPostingProcess';
 import BranchPostingRepository = require('../model/journal/branchposting/BranchRepository');
-import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
+//import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 
 
 class RepositoryFactory {
@@ -31,8 +31,8 @@ class RepositoryFactory {
                 return new LiabilityRepaymentRepository();
             case RepositoryIdentifiers.BranchPostingProcess:
                 return new BranchPostingRepository();
-            case RepositoryIdentifiers.TagMasterProcess:
-                return new TagMasterRepository();
+            // case RepositoryIdentifiers.TagMasterProcess:
+            //     return new TagMasterRepository();
     		default:
     			return null;
     	}
