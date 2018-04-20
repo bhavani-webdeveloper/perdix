@@ -15,6 +15,7 @@ define({
             "title": "BRANCH_POSTING_JOURNAL_MAINTENANCE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                var branches = formHelper.enum('branch_id').data;
                 model.journal = model.journal || {};
                 $log.info("Inside submit()");
                 var journalId = $stateParams.pageId;
@@ -43,28 +44,28 @@ define({
                         },
                         function(res) {
                             _.assign(model.journal, res);
-                            var branches = formHelper.enum('branch_id').data;
-                            if(model.journal.journalBranches && model.journal.journalBranches.length > 0) {
-                                var journalBranches = [];
+                            
+                            
+                            var journalBranches = [];
 
-                                model.journal.journalBranches.map(function(j) {
-                                    var index = _.findIndex(branches, function(b) {
-                                        return b.value == j.branchId;
-                                    })
-                                    journalBranches.push({id:j.branchId, name: branches[index].name, $selected: true});
-                                });
-
-                                branches.map(function(b) {
-                                    var index = _.findIndex(journalBranches, function(j) {
-                                        return j.id == b.value;
-                                    });
-                                    if(index < 0) {
-                                        journalBranches.push({id:b.value, name: b.name});     
-                                    }
-                                    
+                            model.journal.journalBranches.map(function(j) {
+                                var index = _.findIndex(branches, function(b) {
+                                    return b.value == j.branchId;
                                 })
+                                journalBranches.push({id:j.branchId, name: branches[index].name, transactionId: j.transactionId, $selected: true});
+                            });
 
-                            }
+                            branches.map(function(b) {
+                                var index = _.findIndex(journalBranches, function(j) {
+                                    return j.id == b.value;
+                                });
+                                if(index < 0) {
+                                    journalBranches.push({name: b.name});     
+                                }
+                                
+                            })
+
+                            
                             
                             model.journal.journalBranches = journalBranches;
                             
@@ -256,6 +257,24 @@ define({
                             $log.info("Inside submit()");
                             PageHelper.showLoader();
                             PageHelper.showProgress("Journal Save", "Working...");
+                            var branches = formHelper.enum('branch_id').data;
+                            var journalbranch = [];
+                            _.map(model.journal.journalBranches, function(j) {
+                                if(j.$selected == true && !j.id) {
+                                    var index = _.findIndex(branches, function(b) {
+                                        return b.name === j.name;
+                                    })
+                                    journalbranch.push({branchId: branches[index].value});
+                                } else if (j.$selected && j.id) {
+                                    var index = _.findIndex(branches, function(b) {
+                                        return b.name === j.name;
+                                    })
+                                    journalbranch.push({branchId: branches[index].value,id:j.id})
+                                }
+                            });
+                           
+                            model.journal.journalBranches = journalbranch;
+                            
                             if (model.journal.id) {
                                 Journal.updateJournal(model.journal)
                                     .$promise
