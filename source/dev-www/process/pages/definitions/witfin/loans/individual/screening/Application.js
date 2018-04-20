@@ -108,7 +108,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return out;
                     },
 
-                   
+
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
@@ -210,7 +210,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
 
-
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
@@ -237,7 +236,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         BundleManager.broadcastEvent('origination-stage', 'Application');
                         Queries.getVehiclePrice()
                         .then(function (response) {
-                            BundleManager.broadcastEvent("get-vehicle-price", response); 
+                            BundleManager.broadcastEvent("get-vehicle-price", response);
                         });
                     },
                     eventListeners: {

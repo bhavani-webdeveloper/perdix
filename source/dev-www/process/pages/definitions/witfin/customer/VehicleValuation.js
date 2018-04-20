@@ -80,7 +80,7 @@ define(
                     "VehicleRegistrationDetails.registrationDate": {
                         "orderNo":100
                     }
-                    
+
                 }
             }
                 var getIncludes = function (model) {
@@ -250,7 +250,7 @@ define(
                                         "readonly": true
                                     }
                                 }
-                               
+
                             },
                             "ApplicationReview": {
                                 "excludes": [
@@ -300,7 +300,7 @@ define(
                                         "readonly": true
                                     }
                                 }
-                               
+
                             },
                             "BranchCreditAppraisal": {
                                 "excludes": [
@@ -350,7 +350,7 @@ define(
                                         "readonly": true
                                     }
                                 }
-                               
+
                             },
                             "HOCreditAppraisal": {
                                 "excludes": [
@@ -400,7 +400,7 @@ define(
                                         "readonly": true
                                     }
                                 }
-                               
+
                             },
                             "ManagementCommittee": {
                                 "excludes": [
@@ -450,7 +450,7 @@ define(
                                         "readonly": true
                                     }
                                 }
-                               
+
                             }
                         },
                         "loanProcess.loanAccount.isReadOnly": {
@@ -637,7 +637,7 @@ define(
                             .subscribe(function(data) {
                                 model.loanProcess = data;
                                 model.loanAccount = data.loanAccount;
-                                   
+
                                 var p1 = UIRepository.getLoanProcessUIRepository().$promise;;
                                 p1.then(function(repo) {
                                     self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
@@ -648,7 +648,7 @@ define(
                                 PageHelper.hideLoader();
                             })
                         }
-                       
+
 
 
                         // LoanProcess.get($stateParams.pageId)

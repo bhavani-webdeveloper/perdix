@@ -61,6 +61,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
+                                pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                                title: 'VEHICLE_DETAILS',
+                                pageClass: 'vehicle-details',
+                                minimum: 1,
+                                maximum: 1,
+                                order:55
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',
@@ -101,7 +109,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return out;
                     },
 
-                    
+
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
@@ -210,7 +218,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',

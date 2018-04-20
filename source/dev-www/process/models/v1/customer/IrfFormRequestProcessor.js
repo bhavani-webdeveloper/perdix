@@ -2588,6 +2588,14 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 "latitude": "latitude",
                                 "longitude": "longitude"
                             },
+                            "postOffice": {
+                                "key": "lead.postOffice",
+                                "title": "POST_OFFICE"
+                            },
+                            "landmark": {
+                                "key": "lead.landmark",
+                                "title": "LANDMARK"
+                            },
                             "pincode": {
                                 key: "lead.pincode",
                                 type: "lov",
@@ -2807,7 +2815,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             ]
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.lead.referredBy = valueObj.userName; /*+ ' | ' + valueObj.id; */
+                            model.lead.referredBy = valueObj.userName + ' | ' + valueObj.id;
                         }
                     },
 
