@@ -10,7 +10,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator) {
 
             var configFile = function () {
-                return {                    
+                return {
                 }
             }
             var overridesFields = function (bundlePageObj) {
@@ -32,7 +32,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                     /*"LenderInformation.source": {
-                        "required": true,                                   
+                        "required": true,
                         "titleMap": [
                             {
                                 "name": "UC",
@@ -145,14 +145,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         EnrolmentProcess.fromCustomerID($stateParams.pageId)
-                            .subscribe(function(enrolmentProcess) { 
+                            .subscribe(function(enrolmentProcess) {
                                 model.enrolmentProcess = enrolmentProcess;
                                 model.customer = model.enrolmentProcess.customer;
                                 PageHelper.hideLoader();
                             });
                     } else {
                          EnrolmentProcess.createNewProcess('Lender')
-                            .subscribe(function(enrolmentProcess) { 
+                            .subscribe(function(enrolmentProcess) {
                                 console.log("else enrolmentProcess");
                                 console.log(enrolmentProcess);
                                 model.enrolmentProcess = enrolmentProcess;
@@ -174,12 +174,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type": "box",
                                     "title": "CONTACT_INFORMATION",
                                     "items": {
-                                        "Address1": {                                            
+                                        "Address1": {
                                             "type": "fieldset",
                                             "title": "ADDRESS1",
                                             "items": {
                                                 "addressType": {
-                                                    "key": "customer.udf.userDefinedFieldValues.udf1",                                                    
+                                                    "key": "customer.udf.userDefinedFieldValues.udf1",
                                                     "title": "ADDRESS_TYPE",
                                                     "type": "select",
                                                     "enumCode": "address_type",
@@ -205,12 +205,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.pincode",
                                                     "title": "PIN_CODE",
                                                     "type": "lov",
-                                                    searchHelper: formHelper,  
+                                                    searchHelper: formHelper,
                                                     inputMap: {
                                                         "pincode": {
                                                             "key": "customer.pincode",
-                                                            "title": "pinCode",
-                                                            "type": "string"
+                                                            "title": "PIN_CODE"
                                                         },
                                                         "district": {
                                                             "key": "customer.district"
@@ -250,7 +249,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "onSelect": function(result, model, context) {
                                                     },
                                                     "autolov": true,
-                                                    "lovonly": false,                                                  
+                                                    "lovonly": false,
                                                     "orderNo": 100
                                                 },
                                                 "locality": {
@@ -274,7 +273,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "Address2": {
                                             "type": "fieldset",
                                             "title": "ADDRESS2",
-                                            "items": {                                                
+                                            "items": {
                                                 "addressType": {
                                                     "key": "customer.udf.userDefinedFieldValues.udf2",
                                                     "title": "ADDRESS_TYPE",
@@ -312,8 +311,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "mailingPincode": "customer.mailingPincode",
                                                         "mailingDistrict": "customer.mailingDistrict",
                                                         "mailingState": "customer.mailingState"
-                                                    },                                                    
-                                                    searchHelper: formHelper,  
+                                                    },
+                                                    searchHelper: formHelper,
                                                     initialize: function(inputModel) {
                                                         $log.warn('in pincode initialize');
                                                         $log.info(inputModel);

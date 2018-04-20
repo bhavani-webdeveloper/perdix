@@ -1515,13 +1515,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements": {
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": {moment: window.moment},
-                    },                    
+                    },
                     "BankAccounts.customerBankAccounts.ifscCode": {
                         "required": true,
                         "resolver": "IFSCCodeLOVConfiguration"
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                        "enumCode": "asset_type"    
+                        "enumCode": "asset_type"
                     },
                     "FamilyDetails.familyMembers.relationShip": {
                         "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
@@ -1552,7 +1552,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 if (model.customer.maritalStatus)
                                     model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                             }
-                        }   
+                        }
                     },
                     "FamilyDetails.familyMembers.relationShip1": {
                         "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
@@ -1583,7 +1583,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 if (model.customer.maritalStatus)
                                     model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                             }
-                        } 
+                        }
                     },
                     "IndividualInformation.caste": {
                         "enumCode": "caste"
@@ -1863,10 +1863,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     };
 
-                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
-                    p1.then(function(repo){
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
-                    })
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
 
                     /* Form rendering ends */
                 },

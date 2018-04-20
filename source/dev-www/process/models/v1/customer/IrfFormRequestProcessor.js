@@ -6691,6 +6691,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
 
         return {
             getFormDefinition: function (formName, formRequest, configFile, model) {
+                if (arguments.callee.caller.name !== 'buildFormDefinition'){
+                    console.error('DVARA ERROR: Use buildFormDefinition (which returns a promise). getFormDefinition is deprecated, some features may not work as expected.');
+                }
+
                 var form = [],
                     keys, formRepo;
                 var resolvers = []
