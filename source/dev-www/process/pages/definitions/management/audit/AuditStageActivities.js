@@ -33,7 +33,7 @@ define({
                     },
                     getListDisplayItem: function(item, index) {
                         return [
-                            item.stage_order + ': ' + item.stage_name,
+                            (item.stage_order || '-') + ': ' + item.stage_name,
                             item.stage_label,
                             item.stage_type
                         ];
@@ -52,9 +52,10 @@ define({
                     }
                 }, {
                     "key": "stagemap.activities",
-                    "title": "ACTIVITIES",
+                    "title": "ACTIVITY",
                     "type": "array",
                     "condition": "model.stagemap.stage_id",
+                    "titleExpr": "model.stagemap.activities[arrayIndex].exec_order+' - '+model.stagemap.activities[arrayIndex].activity_name",
                     "items": [{
                         key: "stagemap.activities[].activity_name",
                         type: "lov",
@@ -81,19 +82,21 @@ define({
                             return [
                                 item.name,
                                 item.activity_type,
-                                item.dependency_order,
-                                item.config
+                                item.dependency_order
                             ];
                         }
                     }, {
                         key: "stagemap.activities[].dependency_order",
+                        title: "DEPENDANCY_ORDER",
+                        readonly: true
+                    }, {
+                        key: "stagemap.activities[].exec_order",
                         title: "EXEC_ORDER",
                         required: true
                     }, {
                         key: "stagemap.activities[].config",
                         title: "CONFIG",
-                        type: "string",
-                        required: true
+                        type: "textarea"
                     }]
                 }]
             }, {

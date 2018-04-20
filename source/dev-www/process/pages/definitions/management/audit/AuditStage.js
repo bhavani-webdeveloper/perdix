@@ -32,7 +32,7 @@ define({
                     },
                     getListDisplayItem: function(item, index) {
                         return [
-                            item.stage_order + ': ' + item.stage_name,
+                            (item.stage_order || '-') + ': ' + item.stage_name,
                             item.stage_label,
                             item.stage_type
                         ];
