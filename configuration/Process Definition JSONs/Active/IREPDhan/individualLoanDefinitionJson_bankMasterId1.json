@@ -1137,6 +1137,42 @@
                }
             }
          },
+         "loanUtilisationDetail":{
+            "title":"PROPOSED_LOAN_UTILIZATION",
+            "type":"array",
+            "maxItems":null,
+            "items":{
+               "type":"object",
+               "required":[],
+               "properties":{
+                  "utilisationType":{
+                     "title":"UTILIZATION_TYPE",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                     ]
+                  },
+                  "fundAllocationPercentage":{
+                     "title":"PROPOSED_FUND_ALLOCATION",
+                     "type":"number",
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                     ]
+                  },
+                  "consumptionDetails":{
+                     "title":"PROPOSED_FUND_ALLOCATION",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                     ]
+                  }
+               }
+            }
+         },
          "nominees":{
             "title":"Nominee Details",
             "type":"array",

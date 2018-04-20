@@ -3372,36 +3372,6 @@
               "Completed"
             ]
           },
-		  "openingBalance": {
-            "title": "openingBalance",
-            "type": "string",
-            "minimum": 0,
-            "maximum": 1000000,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-		  "closingBalance": {
-            "title": "closingBalance",
-            "type": "string",
-            "minimum": 0,
-            "maximum": 1000000,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-		  "amountOfEmiDeducted": {
-            "title": "amountOfEmiDeducted",
-            "type": "string",
-            "minimum": 0,
-            "maximum": 1000000,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
           "confirmedAccountNumber": {
             "title": "Confirmed Account Number",
             "type": "string",
@@ -3664,6 +3634,36 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "openingBalance": {
+              "title": "openingBalance",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 1000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "closingBalance": {
+              "title": "closingBalance",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 1000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "amountOfEmiDeducted": {
+              "title": "amountOfEmiDeducted",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 1000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

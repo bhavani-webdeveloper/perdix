@@ -1607,7 +1607,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
-                        "resolver": "PincodeLOVConfiguration"
+                        "resolver": "PincodeLOVConfiguration",
+                        "searchHelper": formHelper
                     },
                     "HouseVerification.houseDetailsFieldSet": {
                         "orderNo": 10
@@ -1616,10 +1617,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 20
                     },
                     "HouseVerification.inCurrentAddressSince": {
+                        "enumCode": "years_in_current_address",
+                        "schema": {
+                            "type": "string"
+                        },
                         "orderNo": 30
                     },
                     "HouseVerification.inCurrentAreaSince": {
-                        // "required": true,
+                        "enumCode": "years_in_current_area",
+                        "required": true,
                         "orderNo": 40
                     },
                     "HouseVerification.latitude": {
@@ -1725,6 +1731,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode": "caste"
                     },
                     "HouseVerification.rentLeaseStatus": {
+                        "schema": {
+                            "enumCode": "rent_lease_status"
+                        },
                         "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'"
                     },
                     "HouseVerification.rentLeaseAgreement": {
@@ -1756,6 +1765,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingState": {
                         "condition": "!model.customer.mailSameAsResidence",
+                        "readonly": true
+                    },
+                    "IndividualInformation.numberOfDependents": {
                         "readonly": true
                     }
                 }
@@ -1949,6 +1961,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
 
+                    model.UIUDF = {
+                        'family_fields': {}
+                    };
+
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
@@ -1959,7 +1975,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     /* End of setting data for the form */
-
+                    model.UIUDF.family_fields.dependent_family_member = 0;
+                     _.each(model.customer.familyMembers, function(member) {
+                        if (member.incomes.length == 0)
+                            model.UIUDF.family_fields.dependent_family_member++;
+                    });
 
                     /* Form rendering starts */
                     var self = this;
