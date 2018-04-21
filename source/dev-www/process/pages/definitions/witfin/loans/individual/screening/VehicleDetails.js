@@ -57,7 +57,7 @@ define(
                     "VehicleExpensesInformation",
                     "VehicleExpensesInformation.VehicleExpenses",
                     "VehicleExpensesInformation.VehicleExpenses.expenseType",
-                    "VehicleExpensesInformation.VehicleExpenses.expenseAmount"
+                    "VehicleExpensesInformation.VehicleExpenses.expenseAmount",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",

@@ -2,7 +2,7 @@ define({
 	pageUID: "management.ReferenceCodeSearch",
     pageType: "Engine",
     dependencies: ["$log","formHelper","ReferenceCodeResource","$state","SessionStore","Utils"],
-    $pageFn: 
+    $pageFn:
     function($log, formHelper, ReferenceCodeResource,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
@@ -21,7 +21,7 @@ define({
 			searchSchema: {
 				"type": 'object',
 				"title": 'SearchOptions',
-				"properties": 
+				"properties":
        					{
         					 "classifier": {
            					 "type": ["string", "null"],
@@ -94,7 +94,7 @@ define({
 							data: 'name'
 						},
 						{
-							title:'CODE',	
+							title:'CODE',
 							data: 'code'
 						},
 						{
@@ -141,12 +141,31 @@ define({
 							isApplicable: function(item, index){
 									return true;
 							}
-							}
+							},
+                            {
+                                name: "DELETE_REFERENCE_CODE",
+                                desc: "",
+                                icon: "fa fa-user",
+                                fn: function(item, index) {
+                                    var promise =  ReferenceCodeResource.referenceCodesDelete({
+                                        id: item.id
+                                    }).$promise.then(function(response){
+                                        console.log("insider here");
+                                    }, function(err){
+                                        console.log("error here");
+                                        console.log(err);
+                                    });
+
+                                },
+                                isApplicable: function(item, index) {
+                                    return true;
+                                }
+                            }
 						];
 				}
 			}
 		}
 	};
 }
-   
+
 })

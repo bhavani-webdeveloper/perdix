@@ -30,6 +30,10 @@ irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializ
          referenceCodesEdit: {
             method: 'PUT',
             url: BASE_URL + "/api/referencecodes"
+        },
+        referenceCodesDelete: {
+            method: 'DELETE',
+            url: BASE_URL + "api/referencecodes/:id"
         }
     });
 });
