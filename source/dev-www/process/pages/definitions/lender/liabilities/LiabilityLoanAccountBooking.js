@@ -393,7 +393,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         obs.subscribe(function(res) {
                                 model.LiabilityLoanAccountBookingProcess = res;
                                 model.liabilityAccount = res.liabilityAccount;
-                                console.log("liabilities account");
+                                console.log(model.liabilityAccount);
                                 console.log(model);
                             })
                     } else {
@@ -404,14 +404,15 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 /* if(res.liabilityAccount.currentStage != "LiabilityAccount") {
                                      irfNavigator.goBack();
                                  }*/
-                                 model.LiabilityLoanAccountBookingProcess = res;
+                                model.LiabilityLoanAccountBookingProcess = res;
                                 model.liabilityAccount = res.liabilityAccount;
+                                res.liabilityAccount.liabilityComplianceDocuments.pop();
+                                res.liabilityAccount.liabilityLenderDocuments.pop()
                                 _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule){
                                     if(schedule.totalInstallmentAmountDue == null){
                                         schedule.totalInstallmentAmountDue= schedule.principalDue+schedule.penalityDue+schedule.interestDue+schedule.otherFeeChargesDue
                                     }
-                                })
-
+                                });
                             })
 
                     }
