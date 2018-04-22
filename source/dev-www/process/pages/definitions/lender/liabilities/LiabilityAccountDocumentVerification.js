@@ -44,22 +44,34 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "onChange": function(modelValue, form, model) {
                             if (model.liabilityAccount.liabilityComplianceDocuments.length > 1) {
                                 var doucmentArr = model.liabilityAccount.liabilityComplianceDocuments;
-                                console.log(doucmentArr)
-                                _.forEach(doucmentArr in value)
-                                {
-                                    console.log(value)
-                                }
+                                model.rejectCompliancedocument = false;
+                                _.forEach(doucmentArr, function(value) {
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectCompliancedocument = true
+                                        console.log("rejectComplianceDocument")
+                                    }
+                                });
                             } else {
                                 model.rejectCompliancedocument = (modelValue == 'REJECTED') ? true : false;
                             }
                         }
                     },
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff":{
-                       "onChange": function(modelValue, form, model) {
-                            model.rejectLenderDocument = (modelValue == 'REJECTED') ? true : false;
-                        } 
+                        "onChange": function(modelValue, form, model) {
+                            if (model.liabilityAccount.liabilityLenderDocuments.length > 1) {
+                                var doucmentArr = model.liabilityAccount.liabilityLenderDocuments;
+                                model.rejectLenderDocument = false;
+                                _.forEach(doucmentArr, function(value) {
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectLenderDocument = true
+                                        console.log("rejectLenderDocument")
+                                    }
+                                });
+                            } else {
+                                model.rejectLenderDocument = (modelValue == 'REJECTED') ? true : false;
+                            }
+                        }
                     },
-
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks": {
                         "required": true,
                     }
@@ -134,8 +146,16 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 model.LiabilityLoanAccountBookingProcess = res; 
                                 res.liabilityAccount.liabilityComplianceDocuments.pop();
                                 res.liabilityAccount.liabilityLenderDocuments.pop()
+                                _.forEach(res.liabilityAccount.liabilityComplianceDocuments, function(value){
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectCompliancedocument = true                                    }
+                                });
+                                _.forEach(res.liabilityAccount.liabilityLenderDocuments, function(value){
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectLenderDocument = true
+                                    }
+                                });
                                 model.liabilityAccount = res.liabilityAccount;
-                              //  console.log(model.liabilityAccount,"res.liabilityAccount.liabilityComplianceDocuments.pop()")
                                 model.rejectProceed = false
                             });
                     } else {
@@ -495,18 +515,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     };
 
                     UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
-                        .then(function(repo){
+                        .then(function(repo) {
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
-                        .then(function(form){
+                        .then(function(form) {
                             self.form = form;
                             console.log("INSIDE HERE 111");
-                        });
-                    // var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    // p1.then(function(repo){
-                    //     self.form = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
-                    // });
-                    /* Form rendering ends */
+                        })
                 },
 
                 preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
