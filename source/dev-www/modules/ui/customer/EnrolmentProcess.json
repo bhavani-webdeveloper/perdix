@@ -164,6 +164,25 @@
                                 "required": true,
                                 "orderNo": 110
                             },
+                            "openingBalance": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].openingBalance",
+                                "type": "amount",
+                                "title": "OPENING_BALANCE",
+                                "orderNo": 111
+
+                            },
+                            "closingBalance": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].closingBalance",
+                                "type": "amount",
+                                "title": "CLOSING_BALANCE",
+                                "orderNo": 112
+                            },
+                            "emiAmountdeducted": {
+                                "key": "customer.customerBankAccounts[].bankStatements[].amountOfEmiDeducted",
+                                "type": "amount",
+                                "title": "EMI_AMOUNT_DEDUCTED",
+                                "orderNo": 113
+                            },
                             "totalDeposits": {
                                 "key": "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                 "type": "amount",
@@ -457,6 +476,16 @@
                         "type": "date"
                     }
                 }
+            },
+            "identityProofFieldSet": {
+                "type": "fieldset",
+                "title": "IDENTITY_PROOF",
+                "items": []
+            },
+            "addressProofFieldSet": {
+                "type": "fieldset",
+                "title": "ADDRESS_PROOF",
+                "items": []
             }
         }
     },
@@ -589,6 +618,11 @@
                 "type": "date",
                 "title": "WEDDING_ANNIVERSERY",
                 "condition": "model.customer.maritalStatus==='MARRIED'"
+            },
+            "caste": {
+                "key": "customer.caste",
+                "type": "select",
+                "title": "CASTE"
             }
         }
     },
@@ -748,6 +782,26 @@
                 "title": "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
                 "type": "date",
                 "orderNo": 190
+            },
+            "regularEmployees": {
+                "key": "customer.enterprise.noOfRegularEmployees",
+                "title": "REGULAR_EMPLOYEES",
+                "type": "number",
+                "orderNo": 191
+            },
+            "contractEmployee": {
+                "key": "customer.enterprise.noOfContractEmployees",
+                "title": "CONTRACT_EMPLOYEES",
+                "type": "number",
+                "orderNo": 192
+
+            },
+            "operatedBy": {
+                "key": "",
+                "title": "ENTERPRISE_OPERATED_BY",
+                "type": "select",
+                "orderNo": 193,
+                "enumCode": "enterpise_operated_by"
             },
             "companyRegistered": {
                 "key": "customer.enterprise.companyRegistered",
@@ -984,6 +1038,7 @@
             },
             "pincode": {
                 "key": "customer.pincode",
+                "title": "PIN_CODE",
                 "type": "lov",
                 "fieldType": "number",
                 "autolov": true,
@@ -1060,6 +1115,20 @@
                 "enumCode": "bsns_in_current_addrss_since",
                 "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
                 "orderNo": 250
+            },
+            "residentialAddressFieldSet": {
+                "type": "fieldset",
+                "orderNo": 51,
+                "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                "items": [
+                ]
+            },
+            "permanentAddressFieldSet": {
+                "type": "fieldset",
+                "orderNo": 159,
+                "title": "CUSTOMER_PERMANENT_ADDRESS",
+                "items": [
+                ]
             }
         }
     },
@@ -1184,6 +1253,17 @@
                     }
                 }
             },
+            "avgDailySaleAmount": {
+                "key": "customer.enterprise.avgDailySaleAmount",
+                "title": "AVERAGE_DAILY_SALE_AMT",
+                "type": "amount"
+            },
+            "workingDaysInMonth": {
+                "key": "customer.enterprise.workingDaysInMonth",
+                "title": "WORKING_DAYS_MON",
+                "type": "number"
+
+            },
             "enterpriseMonthlySales": {
                 "key": "customer.enterpriseMonthlySales",
                 "type": "array",
@@ -1207,13 +1287,19 @@
                         "key": "customer.enterpriseMonthlySales[].seasonType",
                         "type": "select",
                         "title": "SEASON_TYPE",
-                        "titleMap": {
-                            "Good": "Good",
-                            "Bad": "Bad",
-                            "Moderate": "Moderate"
-                        }
+                        "enumCode": "enterprise_season_types"
                     }
                 }
+            },
+            "grossMarginPercentage": {
+                "key": "customer.enterprise.grossMarginPercentage",
+                "type": "number",
+                "title":"GROSS_MARGIN_PERCT"
+            },
+            "netMarginPercentage": {
+                "key": "customer.enterprise.netMarginPercentage",
+                "type": "number",
+                "title": "NET_MARGIN_PRCT"
             },
             "expenditures": {
                 "key": "customer.expenditures",
@@ -1279,6 +1365,7 @@
                         "title": "FREQUENCY",
                         "type": "select",
                         "enumCode": "frequency"
+
                     },
                     "rawMaterialDate": {
                         "key": "customer.rawMaterialExpenses[].rawMaterialDate",
@@ -1373,15 +1460,7 @@
                                 "key": "",
                                 "title": "INCOME_TYPE",
                                 "type": "select",
-                                "titleMap": {
-                                    "rental": "rental",
-                                    "agriculture": "agriculture",
-                                    "salary": "salary",
-                                    "pension": "pension",
-                                    "profession/business": "profession/business",
-                                    "Vehicle": "Vehicle",
-                                    "others": "others"
-                                }
+                                "enumCode": "income_types"
                             },
                             "incomeEarned": {
                                 "key": "customer.familyMembers[].incomes[].incomeEarned"
@@ -1407,6 +1486,12 @@
                 "startEmpty": true,
                 "title": "HOUSEHOLD_LIABILITIES",
                 "items": {
+                    "liabilityType": {
+                        "key": "customer.liabilities[].liabilityType",
+                        "type": "select",
+                        "orderNo": 8,
+                        "enumCode": "customer_liability_type"
+                    },
                     "loanType": {
                         "key": "customer.liabilities[].loanType",
                         "type": "select",
@@ -1545,6 +1630,12 @@
             "previousRentDetails": {
                 "key": "customer.previousRentDetails",
                 "title": "PREVIOUS_RENT_DEATLS"
+            },
+            "houseDetailsFieldSet": {
+                "type":"fieldset",
+                "title":"HOUSE_DETAILS",
+                "items":[
+                ]
             }
         }
     },
@@ -1589,6 +1680,11 @@
                         "key": "customer.physicalAssets[].ownedAssetValue",
                         "title": "VALUE_OF_THE_ASSET",
                         "type": "amount"
+                    },
+                    "unit": {
+                        "key": "customer.physicalAssets[].unit",
+                        "title": "AREA_UNITS_OF_ASSETS",
+                        "type": "number"
                     }
                 }
             }
