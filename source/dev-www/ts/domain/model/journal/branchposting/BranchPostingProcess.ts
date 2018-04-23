@@ -47,7 +47,7 @@ export class BranchPostingProcess implements CanApplyPolicy {
         this.journalEntryProcessAction = 'SAVE';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeSave', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.branchRepo.updateJournal(this);
+        let obs2 = this.branchRepo.createJournal(this);
         let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterSave', BranchPostingProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -58,7 +58,7 @@ export class BranchPostingProcess implements CanApplyPolicy {
         this.journalEntryProcessAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeProceed', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.branchRepo.updateJournal(this);
+        let obs2 = this.branchRepo.createJournal(this);
         let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterProceed', BranchPostingProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();

@@ -1,10 +1,13 @@
 class BranchEntry {
+    billDate: string;
+    billNumber: string;
     branchCode: string;
     branchId: number;
     creditGLNo: string;
     currentStage: string;
     debitGLNo: string;
     errorResponse: string;
+    fileId: string;
     id: number;
     ifscCode: string;
     instrumentBankName: string;
@@ -24,6 +27,14 @@ class BranchEntry {
     transactionResponse: string;
     transactionStatus: string;
     transactionType: string;
+    udf1: string;
+    udf2: string;
+    udf3: string;
+    udf4: string;
+    udf5: string;
+    udfDate1: string;
+    udfDate2: string;
+    udfDate3: string;
     valueDate: string;
     version: number;
 }

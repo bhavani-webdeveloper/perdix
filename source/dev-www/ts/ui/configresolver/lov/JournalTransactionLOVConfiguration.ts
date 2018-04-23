@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 declare var angular: any;
 export class JournalTransactionLOVConfiguration extends LOVElementConfiguration {
     outputMap: Object = {
-        "id": "journal.journalEntryDto.journalMasterId",
+        "id": "jorunal.journalEntryDto.journalMasterId",
         "transactionName": "journal.journalEntryDto.transactionName",
         "transactionType": "journal.journalEntryDto.transactionType",
         "transactionDescription": "journal.journalEntryDto.transactionDescription",

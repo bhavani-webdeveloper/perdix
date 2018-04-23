@@ -22,8 +22,10 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     "BranchPostingEntry.transactionType",
                     "BranchPostingEntry.creditGLNo",
                     "BranchPostingEntry.debitGLNo",
+                    "BranchPostingEntry.transactionAmount",
                     "BranchPostingEntry.billNo",
                     "BranchPostingEntry.billDate",
+                    "BranchPostingEntry.billUpload",
                     "BranchPostingEntry.instrumentBankName",
                     "BranchPostingEntry.instrumentBranchName",
                     "BranchPostingEntry.instrumentType",
@@ -400,6 +402,36 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         return deferred.promise;
                     },
                     submit: function(model, form, formName) {
+                        $log.info("Inside submit()");
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("Posting Save", "Working...");
+                        model.branchProcess.remarks = model.journal.remarks;
+                        model.branchProcess.save()
+                            .finally(function() {
+
+                            })
+                            .subscribe(function(out) {
+                                PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                                 model.branchProcess.proceed()
+                                    .finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                                    .subscribe(function(out) {
+                                        PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                                        PageHelper.showProgress('Posting', 'Done.', 5000);
+                                        irfNavigator.goBack();
+                                    }, function(err) {
+                                        PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                        PageHelper.showErrors(err);
+                                        PageHelper.hideLoader();
+                                    })
+                            }, function(err) {
+                                PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+
+                       
                         // model.branchProcess.save().
                         //     subscribe(function(d) {
                         //         console.log(d)
