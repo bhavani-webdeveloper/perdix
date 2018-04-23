@@ -1860,8 +1860,8 @@
           }
         }
       },
-      "enterpriseOtherAssets": {
-        "title": "Enterprise Other Asset",
+      "currentAssets": {
+        "title": "Current Assets",
         "type": "array",
         "items": {
           "type": "object",

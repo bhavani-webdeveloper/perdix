@@ -1889,8 +1889,8 @@
           }
         }
       },
-      "enterpriseOtherAssets": {
-        "title": "Enterprise Other Asset",
+      "currentAssets": {
+        "title": "Current Asset",
         "type": "array",
         "items": {
           "type": "object",
