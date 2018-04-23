@@ -68,7 +68,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                     "orderNo": 1200,
                                     "items": [
                                         {
-                                            "type": "save",
+                                            "type": "button",
                                             "title": "SAVE",
                                             "onClick": "actions.save(model, formCtrl, form, $event)"
                                         },
@@ -474,6 +474,27 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         //             PageHelper.hideLoader();
                         //         })
                         // }
+                    },
+
+                    save: function (model, formCtrl, form, $event) {
+                        $log.info("Inside save()");
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                        model.branchProcess.remarks = model.journal.remarks;
+                        model.branchProcess.save()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(out) {
+                                PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                                PageHelper.showProgress('Posting', 'Done.', 5000);
+                            }, function(err) {
+                                PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
                     }
                 }
             }
