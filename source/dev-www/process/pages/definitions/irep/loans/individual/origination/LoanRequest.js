@@ -113,6 +113,24 @@ define([],function(){
                                 }
                             }
                         },
+                        "GuarantorAddition": {
+                            "excludes": [
+                                "LoanRecommendation",
+                                "AdditionalLoanInformation",
+                                "NomineeDetails",
+                                "ProposedUtilizationPlan",
+                                "ProposedUtilizationPlan.loanUtilisationDetail",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
+                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
+                                "CollateralDetails"
+                            ],
+                            "overrides": {
+                                "LoanCustomerRelations.loanCustomerRelations": {
+                                    "startEmpty": true
+                                }, 
+                            }
+                        },
                         "KYCReview": {
                             "excludes": [
                                 "AdditionalLoanInformation",

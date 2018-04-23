@@ -9,7 +9,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
         $pageFn: function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository) {
-
+            var overridesFields = function(bundlePageObj){
+               return {
+                    "ContactInformation.pincode": {
+                         "title": "pincode"
+                    },
+                    "BankAccounts.customerBankAccounts.accountNumber": {
+                         "type": "password",
+                         "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                         "type": "string",
+                         "required": true
+                    }                         
+               }
+            }
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
@@ -2165,19 +2179,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     var self = this;
                         var formRequest = {
-                            "overrides": {
-                                "ContactInformation.pincode": {
-                                        "title": "pincode"
-                                },
-                                "BankAccounts.customerBankAccounts.accountNumber": {
-                                    "type": "password",
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
-                                    "type": "string",
-                                    "required": true
-                                }
-                            },
+                            "overrides": overridesFields(model),
                             "includes": getIncludes(model),
                             "excludes": [],
                             "options": {

@@ -104,6 +104,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                     var loanProcess = bundleModel.loanProcess;
 
                     switch (definition.pageClass){
+                        case 'co-applicant':
+                            /* TODO Add new coApplicant to loan process and return the model accordingly */
+                            PageHelper.showErrors("Cannot add Co-applicant at this stage");
+                            break;
                         case 'guarantor':
                             /* TODO Add new guarantor to loan process and return model accordingly */
                             EnrolmentProcess.createNewProcess()
@@ -132,8 +136,8 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                         LoanProcess.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
-                               bundleModel.loanProcess = loanProcess;
-                               var loanAccount = loanProcess;
+                                bundleModel.loanProcess = loanProcess;
+                                var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
@@ -219,7 +223,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             });
 
-                    }
+                    } 
                     return deferred.promise;
 
                 },
@@ -254,7 +258,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
                     "customer-loaded": function(pageObj, bundleModel, params){
-                        console.log("custome rloaded :: " + params.customer.firstName);
+                        console.log("customer rloaded :: " + params.customer.firstName);
                         if (pageObj.pageClass =='applicant'){
                             BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }
