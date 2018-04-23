@@ -3086,6 +3086,246 @@
                      "captureStages":[
                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                      ]
+                  },
+
+                  "propertyType":{
+                     "title":"propertyType",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "extentOfProperty":{
+                     "title":"extentOfProperty",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "extentOfPropertyUnit":{
+                     "title":"extentOfPropertyUnit",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "collateral1FilePath":{
+                     "title":"collateral1FilePath",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "documentType":{
+                     "title":"documentType",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "collateral4FilePath":{
+                     "title":"collateral4FilePath",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "collateral5FilePath":{
+                     "title":"collateral5FilePath",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "documentNumber":{
+                     "title":"documentNumber",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "dateOfRegistration":{
+                     "title":"dateOfRegistration",
+                     "type":"date",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrar":{
+                     "title":"subRegistrar",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrarPincode":{
+                     "title":"subRegistrarPincode",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrarVillage":{
+                     "title":"subRegistrarVillage",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrarDistrict":{
+                     "title":"subRegistrarDistrict",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrarState":{
+                     "title":"subRegistrarState",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "subRegistrarArea":{
+                     "title":"subRegistrarArea",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "propertyOwner":{
+                     "title":"propertyOwner",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "relationWithApplicant":{
+                     "title":"relationWithApplicant",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "propertyOwnerName":{
+                     "title":"propertyOwnerName",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "doorNo":{
+                     "title":"doorNo",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "surveyNo":{
+                     "title":"surveyNo",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "landmark":{
+                     "title":"landmark",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "village":{
+                     "title":"village",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "mandal":{
+                     "title":"mandal",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "district":{
+                     "title":"district",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "state":{
+                     "title":"state",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "udf1":{
+                     "title":"udf1",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "udf4":{
+                     "title":"udf4",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "udf2":{
+                     "title":"udf2",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "udf3":{
+                     "title":"udf3",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
+                  },
+
+                  "udf5":{
+                     "title":"udf5",
+                     "type":"string",
+                     "captureStages":[
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                     ]
                   }
 
                }
