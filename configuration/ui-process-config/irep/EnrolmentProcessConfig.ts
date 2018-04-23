@@ -19,9 +19,18 @@ let config = {
             },
             "beforeProceed": {
                 "defaults": [
+                    
+                ],
+                "overrides": [
                     {
-                        "name": "VerifyBankAccountNumberPolicy",
-                        "arguments": null
+                        "type": "expr",
+                        "expr": "this.customer.customerType == 'Enterprise'",
+                        "add": [
+                            {
+                                "name": "VerifyBankAccountNumberPolicy",
+                                "arguments": null
+                            }
+                        ]
                     }
                 ]
             },

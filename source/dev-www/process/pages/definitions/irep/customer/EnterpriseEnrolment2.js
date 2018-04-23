@@ -24,6 +24,46 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     }                         
                }
             }
+            var repositoryAdditions = function(bundlePageObj){
+               return {
+                    "EnterpriseInformation": {
+                         "items": {
+                              "lastFiledItr": {
+                                   "key": "customer.udf.enterpriseUserDefinedDateFieldValues.udfDate2",
+                                   "title": "LAST_AVAIL_ITR",
+                                   "orderNo": 311,
+                                   "type": "date"
+                              },
+                              "whetherAudited": {
+                                   "key": "customer.udf.enterpriseUserDefinedFieldValues.udf2",
+                                   "title": "WHETHER_AUDITED",
+                                   "orderNo": 312,
+                                   "type": "select",
+                                   "titleMap": {
+                                        "Yes": "yes",
+                                        "No": "No"
+                                   } 
+                              },
+                              "rentLeaseStatus": {
+                                   "type":"select",
+                                   "key": "customer.udf.enterpriseUserDefinedFieldValues.udf1",
+                                   "title":"RENT_LEASE_STATUS",
+                                   "orderNo": 145,
+                                   "titleMap": {
+                                        "Available": "Available",
+                                        "Not-Available": "Not-Available"
+                                   }
+                              },
+                              "agreementValidTill": {
+                                   "key": "customer.udf.enterpriseUserDefinedDateFieldValues.udfDate1",
+                                   "title": "RENT_LEASE_AGREEMENT",
+                                   "orderNo": 146,
+                                   "type": "date"
+                              }
+                         }
+                    }
+               }
+            }
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
@@ -65,7 +105,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessSubsector",
                     "EnterpriseInformation.itrAvailable",
                     "EnterpriseInformation.lastFiledItr",
-                    "EnterpriseInformation.WhetherAudited",
+                    "EnterpriseInformation.whetherAudited",
                     "EnterpriseInformation.enterpriseCustomerRelations",
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
@@ -562,7 +602,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -820,7 +860,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -1051,7 +1091,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -1471,7 +1511,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -1702,7 +1742,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -1933,7 +1973,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus",
                                     "EnterpriseInformation.agreementValidTill",
                                     "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
+                                    "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
                                     "EnterpriseInformation.contractEmployee",
                                     "EnterpriseInformation.operatedBy"
@@ -2207,7 +2247,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             }
                                         ]
                                     }
-                                ]
+                                ],
+                                "repositoryAdditions":repositoryAdditions(model)
                             }
                         };
                         UIRepository.getEnrolmentProcessUIRepository().$promise

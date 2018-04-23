@@ -1187,7 +1187,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeMiddleName":{
@@ -1196,7 +1196,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeLastName":{
@@ -1205,14 +1205,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeRelationship":{
                      "title":"Nominee Relationship",
                      "type":"string",
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"relation"
                   },
@@ -1222,7 +1222,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeStreet":{
@@ -1231,7 +1231,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeLocality":{
@@ -1240,14 +1240,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeDistrict":{
                      "title":"Nominee District",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1257,7 +1257,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineePincode":{
@@ -1266,21 +1266,21 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "nomineeDOB":{
                      "title":"Nominee DOB",
                      "type":"string",
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview","FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview","FieldAppraisal"
                      ]
                   },
                   "nomineeGender":{
                      "title":"Nominee Gender",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"gender"
                   },
@@ -1288,7 +1288,7 @@
                      "title":"Nominee Minor",
                      "type":"boolean",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianTitle":{
@@ -1297,7 +1297,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianFirstName":{
@@ -1306,7 +1306,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianMiddleName":{
@@ -1315,7 +1315,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianLastName":{
@@ -1324,14 +1324,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianRelationWithMinor":{
                      "title":"Guardian Relation With Minor",
                      "type":"string",
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"relationship"
                   },
@@ -1339,7 +1339,7 @@
                      "title":"Guardian DOB",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianDoorNo":{
@@ -1348,7 +1348,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianStreet":{
@@ -1357,7 +1357,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianLocality":{
@@ -1366,14 +1366,14 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianDistrict":{
                      "title":"Guardian District",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"district"
                   },
@@ -1383,7 +1383,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                       "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianPincode":{
@@ -1392,14 +1392,14 @@
                      "minimum":6,
                      "maximum":6,
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ]
                   },
                   "guardianGender":{
                      "title":"Guardian Gender",
                      "type":"string",
                      "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
+                        "LoanInitiation", "GuarantorAddition", "PendingForPartner", "Appraisal","AppraisalReview", "FieldAppraisal"
                      ],
                      "refCodeCategory":"gender"
                   }

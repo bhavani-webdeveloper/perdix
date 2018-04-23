@@ -1705,7 +1705,7 @@
                                 "enumCode": "account_type"
                             },
                             "isDisbersementAccount": {
-                                "type": ["string","null"],
+                                "type": ["boolean","null","string"],
                                 "title": "DISBURSEMENT_ACCOUNT"
                             },
                             "bankStatements": {

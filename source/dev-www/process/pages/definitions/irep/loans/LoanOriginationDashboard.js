@@ -26,8 +26,8 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 "Page/Engine/irep.loans.individual.origination.AppraisalReviewQueue",
                 "Page/Engine/irep.loans.individual.origination.TeleverificationQueue",
                 "Page/Engine/irep.loans.individual.origination.EvaluationReviewQueue",
-                "Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue",
                 "Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue",
+                "Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue",                                
                 "Page/Engine/irep.loans.individual.origination.LoanSanctionQueue",
                 "Page/Engine/irep.loans.individual.origination.RejectedAdminQueue"
             ]
@@ -164,6 +164,24 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     crrqMenu.data = '-';
                 });
             }
+            var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue"];
+            if (ccrqMenu) {
+                IndividualLoan.search({
+                    'stage': 'CreditCommitteeReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    ccrqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    ccrqMenu.data = '-';
+                });
+            }
+
 
             var crrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue"];
             if (crrqMenu) {
@@ -184,24 +202,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                 });
             }
 
-            var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue"];
-            if (ccrqMenu) {
-                IndividualLoan.search({
-                    'stage': 'CreditCommitteeReview',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1
-                }).$promise.then(function(response, headerGetter) {
-                    ccrqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    ccrqMenu.data = '-';
-                });
-            }
-
+            
             var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.LoanSanctionQueue"];
             if (lsqMenu) {
                 IndividualLoan.search({
