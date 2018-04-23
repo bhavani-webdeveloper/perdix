@@ -112,7 +112,11 @@ define({
                         type: "select",
                         required: true,
                         "title": "TRANSACTION_TYPE",
-                        "enumCode": 'journal_transaction_type'
+                        //"enumCode": 'journal_transaction_type'
+                        titleMap: {
+                            "Entry": "Entry",
+                            "Reversal": "Reversal"
+                        }
                     },
                     {
                         key: "journal.debitGLNo",

@@ -29,6 +29,8 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     "BranchPostingEntry.instrumentBankName",
                     "BranchPostingEntry.instrumentBranchName",
                     "BranchPostingEntry.instrumentType",
+                    "BranchPostingEntry.transactionDate",
+                    "BranchPostingEntry.remarks",
                     "BranchPostingEntry.instrumentNumber",
                     "BranchPostingEntry.instrumentDate",
                     "BranchPostingEntry.ifscCode",
