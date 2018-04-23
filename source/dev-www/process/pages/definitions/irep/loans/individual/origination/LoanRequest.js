@@ -510,7 +510,7 @@ define([],function(){
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
-                    p1.then(function(repo) {
+                    p1.then(function(repo) {                        
                         var formRequest = {
                             "overrides": overridesFields(model),
                             "includes": getIncludes(model),
@@ -567,7 +567,7 @@ define([],function(){
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
-                                                        "resolver": "SendBacktoStageLOVConfiguration"
+                                                        "resolver": "IREPSendBacktoStageLOVConfiguration"
                                                     }, 
                                                    "sendBackButton": {
                                                         "key": "review.sendBackButton",
@@ -641,9 +641,11 @@ define([],function(){
                                 ]
                             }
                         };
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest, configFile(), model);
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
-
+                    .then(function(form){
+                        self.form = form;
+                    });
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index){

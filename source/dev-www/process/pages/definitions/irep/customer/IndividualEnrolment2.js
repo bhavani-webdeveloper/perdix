@@ -1977,7 +1977,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
                      _.each(model.customer.familyMembers, function(member) {
-                        if (member.incomes.length == 0)
+                        if (member.incomes && member.incomes.length == 0)
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
 
@@ -2045,9 +2045,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     return $q.resolve();
                 },
                 eventListeners: {
-                    "test-listener": function (bundleModel, model, obj) {
-
-                    },
                     "lead-loaded": function (bundleModel, model, obj) {
                         model.customer.mobilePhone = obj.mobileNo;
                         model.customer.gender = obj.gender;
