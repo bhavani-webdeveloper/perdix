@@ -110,6 +110,7 @@
                 "type": "array",
                 "startEmpty": true,
                 "title": "LOAN_CUSTOMER_RELATIONS",
+                "key": "loanAccount.loanCustomerRelations",
                 "items": {
                     "customerId": {
                         "key": "loanAccount.loanCustomerRelations[].customerId",
