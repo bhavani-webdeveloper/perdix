@@ -162,7 +162,6 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "Page/Engine/audit.detail.FixedAsset",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
-                "Page/Engine/audit.detail.AuditIssueSummary",
                 "Page/Engine/audit.detail.AuditSummary"
             ]
         });
