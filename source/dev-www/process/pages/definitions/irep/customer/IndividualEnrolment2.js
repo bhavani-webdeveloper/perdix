@@ -1617,6 +1617,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 20
                     },
                     "HouseVerification.inCurrentAddressSince": {
+                        "key": "customer.udf.userDefinedFieldValues.udf4",
                         "enumCode": "years_in_current_address",
                         "schema": {
                             "type": "string"
@@ -1624,6 +1625,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 30
                     },
                     "HouseVerification.inCurrentAreaSince": {
+                        "key": "customer.udf.userDefinedFieldValues.udf5",
                         "enumCode": "years_in_current_area",
                         "required": true,
                         "orderNo": 40
@@ -1902,7 +1904,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                     "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.EmiAmountdeducted",
+                    "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -1990,6 +1992,51 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "KYC.addressProofSameAsIdProof",
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "ContactInformation": {
+                                    "items": {
+                                        "mandal": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf1",
+                                            "title": "MANDAL_TAHSIL",
+                                            "type": "string",
+                                            "orderNo": 100
+                                        },
+                                        "mailingMandal": {
+                                            "key": "customer.udf.userDefinedFieldValues.udf2",
+                                            "title": "MANDAL_TAHSIL",
+                                            "type": "string",
+                                            "orderNo": 181
+                                        }
+                                    }
+                                },
+                                "FamilyDetails": {
+                                    "items": {
+                                        "familyMembers": {
+                                            "items": {                                                
+                                                "relationShip1": {
+                                                    "key": "customer.familyMembers[].relationShip",
+                                                    "type": "select",
+                                                    "title": "T_RELATIONSHIP"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "HouseVerification": {
+                                    "items": {
+                                        "rentLeaseStatus": {
+                                            "type":"select",
+                                            "key": "customer.udf.userDefinedFieldValues.udf3",
+                                            "title":"RENT_LEASE_STATUS"
+                                        },
+                                        "rentLeaseAgreement": {
+                                            "type":"date",
+                                            "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
+                                            "title":"RENT_LEASE_AGREEMENT_VALID_TILL"
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [
                                 {
                                     "type": "actionbox",
