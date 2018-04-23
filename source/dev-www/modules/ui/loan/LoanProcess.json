@@ -37,6 +37,18 @@
                 "title": "REQUESTED_LOAN_AMOUNT",
                 "orderNo": 50
             },
+            "actualAmountRequired": {
+                "key": "loanAccount.actualAmountRequired",
+                "type": "amount",
+                "title": "ACTUAL_AMOUNT_REQUIRED",
+                "orderNo": 51
+            },
+            "fundsFromDifferentSources": {
+                "key": "loanAccount.fundsFromDifferentSources",
+                "title": "FUNDS_FROM_OWM_SOURCES",
+                "type": "amount",
+                "orderNo": 52
+            },
             "frequencyRequested": {
                 "key": "loanAccount.frequencyRequested",
                 "type": "select",
@@ -359,19 +371,20 @@
                     "utilisationType": {
                         "key": "loanAccount.loanUtilisationDetail[].utilisationType",
                         "title": "UTILIZATION_TYPE",
-                        "type": "text"                   
+                        "type": "select",
+                        "enumCode": "loan_utilization_type"
                     },
                     "fundAllocationPercentage": {
                         "key": "loanAccount.loanUtilisationDetail[].fundAllocationPercentage",
-                        "title": "PERC_FUND_ALLOCATION",
-                        "type": ["null","integer"]
+                        "title": "PROPOSED_FUND_ALLOCATION",
+                        "type": "string"
                     },
                     "consumptionDetails": {
                         "key": "loanAccount.loanUtilisationDetail[].consumptionDetails",
                         "title": "CONSUMPTION_DETAILS",
-                        "type": "text"                   
+                        "type": "string"
                     }
-                }                    
+                }
             }
         }
     },
@@ -1234,7 +1247,8 @@
                             "mitigantsName": {
                                 "type": "section",
                                 "htmlClass": "row",
-                                "items": [{
+                                "items": {
+                                    "sectionSelected": {
                                         "type": "section",
                                         "htmlClass": "col-xs-2 col-md-2",
                                         "items": {
@@ -1247,7 +1261,7 @@
                                             }
                                         }
                                     },
-                                    {
+                                    "sectionMitigantName": {
                                         "type": "section",
                                         "htmlClass": "col-xs-10 col-md-10",
                                         "items": {
@@ -1258,7 +1272,7 @@
                                             }
                                         }
                                     }
-                                ]
+                                }
                             }
                         }
                     }
