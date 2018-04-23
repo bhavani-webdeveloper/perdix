@@ -6,10 +6,30 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 var master = Audit.offline.getAuditMaster();
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 $stateParams.pageData = $stateParams.pageData || {};
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
+
+                HubScoresHtml = '\
+<table class="table table-condensed">\
+  <tr>\
+    <th>{{"MODULE_SUBMODULE"|translate}}</th>\
+    <th>{{"SCORE"|translate}}</th>\
+    <th>{{"MAXSCORE"|translate}}</th>\
+  </tr>\
+  <tr ng-repeat-start="ds in detail_score">\
+    <td><strong>{{ds.module_name}}</strong></td>\
+    <td><strong>{{ds.module_score}}</strong></td>\
+    <td>&nbsp;</td>\
+  </tr>\
+  <tr ng-repeat-end ng-repeat="sms in ds.sub_module_score">\
+    <td>&nbsp;&nbsp;<i class="fa fa-caret-right">&nbsp;</i>&nbsp;&nbsp; {{sms.sub_module_name}}</td>\
+    <td>{{sms.awarded_score}}</td>\
+    <td>{{sms.max_score}}</td>\
+  </tr>\
+</table>';
 
                 detailScoresHtml = '\
 <table class="table table-condensed">\
@@ -23,6 +43,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
     <td><strong>{{ds.module_name}}</strong></td>\
     <td><strong>{{ds.module_score}}</strong></td>\
     <td>&nbsp;</td>\
+    <td>&nbsp;</td>\
   </tr>\
   <tr ng-repeat-end ng-repeat="sms in ds.sub_module_score">\
     <td>&nbsp;&nbsp;<i class="fa fa-caret-right">&nbsp;</i>&nbsp;&nbsp; {{sms.sub_module_name}}</td>\
@@ -32,17 +53,22 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
   </tr>\
 </table>';
 
+
+
                 var init = function(response) {
                     model.auditScoresheet = response;
                     model.auditScoresheet.rating_name = Audit.utils.getRatingByScore(master, Math.round(parseFloat(model.auditScoresheet.audit_score)));
+                    model.auditScoresheet.final_rating = Audit.utils.getRatingByScore(master, Math.round(parseFloat(model.auditScoresheet.final_score)));
+                    model.auditScoresheet.final_rating_name = model.auditScoresheet.final_score + "     " + model.auditScoresheet.final_rating;
                     var nodeForms = [];
                     for (i in model.auditScoresheet.node_scores) {
                         var nodeSheet = model.auditScoresheet.node_scores[i];
-                        nodeSheet.rating_name = Audit.utils.getRatingByScore(master, Math.round(parseFloat(model.auditScoresheet.audit_score)));
+                        nodeSheet.rating_name = Audit.utils.getRatingByScore(master, Math.round(parseFloat(nodeSheet.audit_score)));
                         var nodeForm = {
                             "type": "box",
                             "colClass": "col-sm-12",
-                            "title": nodeSheet.node_type == 'BRANCH' ? "BRANCH_SCORESHEET" : "CENTRE_SCORESHEET",
+                            "condition": "model.siteCode == 'kinara'",
+                            "title": nodeSheet.node_type == 1 ? "Branch Scoresheet" : "Centre Scoresheet",
                             "readonly": true,
                             "items": [{
                                 "type": "section",
@@ -52,12 +78,9 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                                     "htmlClass": "col-sm-6",
                                     "items": [{
                                         "key": "auditScoresheet.node_scores[" + i + "].node_id",
-                                        "title": nodeSheet.node_type == 'BRANCH' ? "BRANCH_NAME" : "CENTRE_NAME",
-                                        "enumCode": nodeSheet.node_type == 'BRANCH' ? "branch_id" : "centre",
+                                        "title": nodeSheet.node_type == 1 ? "BRANCH_NAME" : "CENTRE_NAME",
+                                        "enumCode": nodeSheet.node_type == 1 ? "branch_id" : "centre",
                                         "type": "select"
-                                    }, {
-                                        "key": "auditScoresheet.start_date",
-                                        "title": "START_DATE"
                                     }]
                                 }, {
                                     "type": "section",
@@ -72,14 +95,35 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                                 }]
                             }, {
                                 "type": "section",
-                                "html": '<hr><div ng-init="detail_score = model.auditScoresheet.node_scores[' + i + '].detail_score">' + detailScoresHtml + '</div>'
+                                "html": '<hr><div ng-init="detail_score = model.auditScoresheet.node_scores[' + i + '].detail_score">' + HubScoresHtml + '</div>'
                             }]
                         };
                         nodeForms.push(nodeForm);
                     }
                     self.form = [{
                         "type": "box",
+                        "condition": "model.siteCode == 'kinara'",
+                        "title": "Hub Rating Board",
+                        "items": [{
+                            key: "auditScoresheet.hub_score",
+                            title: "Hub Rating",
+                            type: "string",
+                            "readonly": true
+                        }, {
+                            key: "auditScoresheet.spoke_score",
+                            title: "Spoke Rating",
+                            type: "string",
+                            "readonly": true
+                        }, {
+                            key: "auditScoresheet.final_rating_name",
+                            title: "Final Hub Rating",
+                            type: "string",
+                            "readonly": true
+                        }]
+                    }, {
+                        "type": "box",
                         "colClass": "col-sm-12",
+                        "condition": "model.siteCode == 'KGFS'",
                         "title": "AUDIT_SCORESHEET",
                         "readonly": true,
                         "items": [{
@@ -116,7 +160,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                     }];
                     self.form.push.apply(self.form, nodeForms);
                 };
-                
+
                 model.auditScoresheet = model.auditScoresheet || {};
                 if ($stateParams.pageId) {
                     PageHelper.showLoader();

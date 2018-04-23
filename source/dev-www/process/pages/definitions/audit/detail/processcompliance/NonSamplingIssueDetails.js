@@ -418,12 +418,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.NonSamplingI
 
                 self.actions.submit = function(model, formCtrl, form, event) {
                     PageHelper.clearErrors();
-                    if (model.siteCode = "kinara") {
+                    if (model.siteCode == "kinara") {
                         if (!validateResponsibility(model.manual_issue)) {
                             return;
                         }
                     }
-                    if (model.siteCode = "KGFS") {
+                    if (model.siteCode == "KGFS") {
                         if (!validateKgfs(model.manual_issue)) {
                             return;
                         }

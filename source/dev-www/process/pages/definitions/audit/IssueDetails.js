@@ -99,7 +99,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                             }, {
                                 "key": "auditIssue.assignee_det[1].assignee_id",
                                 "condition": "model.auditIssue.assignee_det[1].assignee_id",
-                                "title": "RESPONSIBILITY",
+                                "title": "ADDL_RESPONSIBILITY",
                                 "readonly": true
                             }, {
                                 "key": "auditIssue.deviation",
