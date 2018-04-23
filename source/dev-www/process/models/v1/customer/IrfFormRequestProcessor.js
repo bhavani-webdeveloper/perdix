@@ -2363,6 +2363,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                                 key: "lead.educationStatus",
                                                 type: "select",
                                                 enumCode: "education",
+                                                required: true
                                                 /* titleMap: {
                                                  "Below SSLC": "Below SSLC",
                                                  "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
@@ -2526,6 +2527,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.educationStatus",
                                 type: "select",
                                 enumCode: "education",
+                                required: true
                                 /* titleMap: {
                                  "Below SSLC": "Below SSLC",
                                  "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
@@ -2570,37 +2572,44 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         items: {
                             "mobileNo": {
                                 key: "lead.mobileNo",
+                                orderNo: 10
                             },
                             "alternateMobileNo": {
                                 key: "lead.alternateMobileNo",
+                                orderNo: 20
                             },
                             "addressLine1": {
                                 key: "lead.addressLine1",
-                                "title": "DOOR_NO"
+                                "title": "DOOR_NO",
+                                orderNo: 40
                             },
                             "addressLine2": {
                                 key: "lead.addressLine2",
-                                "title": "STREET"
+                                "title": "STREET",
+                                orderNo: 50
                             },
                             "location": {
                                 "key": "lead.location",
                                 "type": "geotag",
                                 "latitude": "latitude",
-                                "longitude": "longitude"
+                                "longitude": "longitude",
+                                "orderNo": 30
                             },
                             "postOffice": {
                                 "key": "lead.postOffice",
-                                "title": "POST_OFFICE"
+                                "title": "POST_OFFICE",
+                                orderNo: 60
                             },
                             "landmark": {
                                 "key": "lead.landmark",
-                                "title": "LANDMARK"
+                                "title": "LANDMARK",
+                                "orderNo": 70
                             },
                             "pincode": {
                                 key: "lead.pincode",
                                 type: "lov",
                                 fieldType: "number",
-
+                                orderNo: 80,
                                 inputMap: {
                                     "pincode": "lead.pincode",
                                     "district": {
@@ -2632,19 +2641,23 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "area": {
                                 "key": "lead.area",
-                                "readonly": true
+                                "readonly": true,
+                                "orderNo": 90
                             },
                             "cityTownVillage": {
                                 "key": "lead.cityTownVillage",
-                                "readonly": true
+                                "readonly": true,
+                                "orderNo": 100
                             },
                             "district": {
                                 "key": "lead.district",
-                                "readonly": true
+                                "readonly": true,
+                                "orderNo": 110
                             },
                             "state": {
                                 "key": "lead.state",
-                                "readonly": true
+                                "readonly": true,
+                                "orderNo": 120
                             }
                         }
                     },

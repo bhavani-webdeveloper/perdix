@@ -352,6 +352,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "FamilyDetails.familyMembers.noOfDependents": {
+                        "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() == 'SELF'"
+                    },
                     "HouseVerification": {
                         "title": "RESIDENCE"
                     },
@@ -689,6 +692,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.incomes.incomeSource",
                     "FamilyDetails.familyMembers.incomes.incomeEarned",
                     "FamilyDetails.familyMembers.incomes.frequency",
+                    "FamilyDetails.familyMembers.noOfDependents",
                     "IndividualFinancials.expenditures",
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
@@ -1075,14 +1079,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.gender = obj.gender;
                                 model.customer.referredBy = obj.referredBy;
                                 model.customer.landLineNo = obj.alternateMobileNo;
+                                model.customer.landmark = obj.landmark;
+                                model.customer.postOffice = obj.postOffice;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                    $log.info(model.customer.familyMembers[i].relationShip);
-                                    model.customer.familyMembers[i].educationStatus = obj.educationStatus;
-                                    /*if (model.customer.familyMembers[i].relationShip == "self") {
-                                     model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                     break;
-                                     }*/
+                                    // $log.info(model.customer.familyMembers[i].relationShip);
+                                    // model.customer.familyMembers[i].educationStatus = obj.educationStatus;
+                                    if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
+                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                     }
                                 }
                             })
 

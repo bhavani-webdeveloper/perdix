@@ -160,6 +160,81 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                             model.cbsLoan.orgRepaymentScheduleTblFormat.data = $filter('filter')(model.cbsLoan.repaymentSchedule, {status: 'true'});
                                         }
 
+                                        for (var i = 0; i < model.cbsLoan.accountStatement.length; i++) {
+                                            model.cbsLoan.accountStatement[i].valueDate = moment.utc(model.cbsLoan.accountStatement[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");
+                                        }
+                                        model.cbsLoan.accountStatementTblFormat = {columns:[], data :[]};
+                                        if(model.cbsLoan.accountStatement.length > 0){
+                                            var keys = Object.keys(model.cbsLoan.accountStatement[0]);
+                                            var title, format, orderNo;
+                                            for(var itr = 0; itr < keys.length; itr++){
+                                                format, title = '';
+                                                switch(keys[itr]){
+                                                    case 'valueDate' :
+                                                        title = "DATE";
+                                                        orderNo = 0;
+                                                        break;
+                                                    case 'description':
+                                                        title = "DESCRIPTION";
+                                                        model.cbsLoan.accountStatementTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr], "orderNo": orderNo});
+                                                        orderNo = 1;
+                                                        continue;
+                                                    case 'transactionId':
+                                                        title = "TRANSACTION_ID";
+                                                        orderNo = 2;
+                                                        break;
+                                                    case 'amount':
+                                                        title = "AMOUNT";
+                                                        format = "currency";
+                                                        orderNo = 3;
+                                                        break;
+                                                    case 'accountEntryType':
+                                                        title = "TYPE";
+                                                        orderNo = 4;
+                                                        break;
+                                                    case 'balance':
+                                                        title = "BALANCE";
+                                                        format = "currency";
+                                                        orderNo = 5;
+                                                        break;
+                                                    default:
+                                                        continue;
+                                                }
+                                                model.cbsLoan.accountStatementTblFormat.columns.push({"title": title, "data": keys[itr], format: format, "orderNo": orderNo});
+                                            }
+                                            model.cbsLoan.accountStatementTblFormat.columns =  [
+                                                {
+                                                    "data": "valueDate",
+                                                    "title": "Value Date"
+                                                },
+                                                {
+                                                    "data": "description",
+                                                    "title": "DESCRIPTION",
+                                                },
+                                                {
+                                                    "data": "transactionId",
+                                                    "title": "TRANSACTION_ID"
+                                                },
+                                                {
+                                                    "data": "amount",
+                                                    "title": "AMOUNT",
+                                                    "format": "currency"
+                                                },
+                                                {
+                                                    "data": "accountEntryType",
+                                                    "title": "TYPE"
+                                                },
+                                                {
+                                                    "data": "balance",
+                                                    "title": "BALANCE",
+                                                    "format": "currency"
+                                                }
+                                            ];
+                                            model.cbsLoan.accountStatementTblFormat.data = model.cbsLoan.accountStatement;
+                                            model.cbsLoan.orgAccountStatementTblFormat = {columns: model.cbsLoan.accountStatementTblFormat.columns};
+                                            model.cbsLoan.orgAccountStatementTblFormat.data = model.cbsLoan.accountStatement;
+                                        }
+
                                         model.cbsLoan.orgTransactions = {};
                                         model.cbsLoan.invoiceTransactions = {};
 
@@ -1267,6 +1342,23 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 type: "section",
                                 colClass: "col-sm-12",
                                 html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgRepaymentScheduleTblFormat'></irf-simple-summary-table>"
+                            }
+                            ]
+                        },
+                        ] // END of box items
+                },
+                {
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "title": "ACCOUNT_STATEMENT",
+                    "htmlClass": "text-danger",
+                    "items": [{
+                            "type": "fieldset",
+                            "title": "ACCOUNT_STATEMENT",
+                            "items": [{
+                                type: "section",
+                                colClass: "col-sm-12",
+                                html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgAccountStatementTblFormat'></irf-simple-summary-table>"
                             }
                             ]
                         },
