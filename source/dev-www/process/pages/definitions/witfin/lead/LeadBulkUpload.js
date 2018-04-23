@@ -2,9 +2,9 @@
 define({
     pageUID: "witfin.lead.LeadBulkUpload",
     pageType: "Engine",
-    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator"],
+    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator", "Utils"],
 
-    $pageFn: function($log, SessionStore, $state, $stateParams, Lead, irfNavigator) {
+    $pageFn: function($log, SessionStore, $state, $stateParams, Lead, irfNavigator, Utils) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -35,6 +35,23 @@ define({
                                 pageName: "witfin.loans.LoanOriginationDashboard"
                             });
                         });
+                    }
+                }]
+            },
+            {
+                "type": "box",
+                "title": "LEAD_DOWNLOAD",
+                "colClass": "col-sm-6",
+                "items": [{
+                    "type": "button",
+                    "title":"DOWNLOAD",
+                    "icon": "fa fa-download",
+                    "notitle": true,
+                    "readonly": false,
+                     onClick: function(model, form, schemaForm, event) {
+                        var file = irf.MANAGEMENT_BASE_URL + "/server-ext/template/LeadBulkUpload.xlsx";
+                        Utils.downloadFile(file);
+                        //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
                     }
                 }]
             }],

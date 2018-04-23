@@ -352,6 +352,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "IndividualReferences.verifications.referenceFirstName": {
+                        "type": "select",
+                        "enumCode": "reference_type"
+                    },
                     "FamilyDetails.familyMembers.noOfDependents": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() == 'SELF'"
                     },
