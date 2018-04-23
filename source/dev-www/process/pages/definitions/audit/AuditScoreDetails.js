@@ -17,7 +17,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
   <tr>\
     <th>{{"MODULE_SUBMODULE"|translate}}</th>\
     <th>{{"SCORE"|translate}}</th>\
-    <th>{{"MAXSCORE"|translate}}</th>\
+    <th>{{"WEIGHTED_SCORE"|translate}}</th>\
   </tr>\
   <tr ng-repeat-start="ds in detail_score">\
     <td><strong>{{ds.module_name}}</strong></td>\
@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
   <tr ng-repeat-end ng-repeat="sms in ds.sub_module_score">\
     <td>&nbsp;&nbsp;<i class="fa fa-caret-right">&nbsp;</i>&nbsp;&nbsp; {{sms.sub_module_name}}</td>\
     <td>{{sms.awarded_score}}</td>\
-    <td>{{sms.max_score}}</td>\
+    <td>{{sms.weighted_score}} </td>\
   </tr>\
 </table>';
 
