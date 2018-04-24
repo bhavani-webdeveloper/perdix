@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$log", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
-    function(irfNavigator, $log, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
+irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "formHelper", "$log", "translateFilter", "Audit", "$stateParams", "SessionStore", "PageHelper", "User",
+    function(irfNavigator, formHelper, $log, translateFilter, Audit, $stateParams, SessionStore, PageHelper, User) {
         var master = Audit.offline.getAuditMaster();
         return {
             "type": "schema-form",
@@ -320,42 +320,44 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "$lo
                     }
                 },
                 updateIssue: function(model, form, formName, actionType) {
-                    PageHelper.showLoader();
-                    if (actionType == 'close') {
-                        model.auditIssue.close_message = model.auditIssue.comments;
-                        model.auditIssue.status = 'X';
-                        model.auditIssue.next_stage = 'close';
-                        model.auditIssue.closed_by = SessionStore.getLoginname();
-                        model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
-                    } else if (actionType == 'assign') {
-                        if (model.auditIssue.confirmity_status == 2) {
-                            model.auditIssue.status = 'A';
-                            model.auditIssue.next_stage = 'assign';
-                        } else if (model.auditIssue.confirmity_status == 1) {
-                            model.auditIssue.status = '';
-                            model.auditIssue.next_stage = 'confirm';
+                    formHelper.validate(form).then(function() {
+                        PageHelper.showLoader();
+                        if (actionType == 'close') {
+                            model.auditIssue.close_message = model.auditIssue.comments;
+                            model.auditIssue.status = 'X';
+                            model.auditIssue.next_stage = 'close';
+                            model.auditIssue.closed_by = SessionStore.getLoginname();
+                            model.auditIssue.closed_on = moment().format('YYYY-MM-DD HH:mm:ss');
+                        } else if (actionType == 'assign') {
+                            if (model.auditIssue.confirmity_status == 2) {
+                                model.auditIssue.status = 'A';
+                                model.auditIssue.next_stage = 'assign';
+                            } else if (model.auditIssue.confirmity_status == 1) {
+                                model.auditIssue.status = '';
+                                model.auditIssue.next_stage = 'confirm';
+                            }
+                        } else if (model.auditIssue.status == 'DO' && model.type == 'operation') {
+                            if (actionType == 'accept') {
+                                model.auditIssue.status = 'DA';
+                                model.auditIssue.next_stage = 'draftaccept';
+                            } else if (actionType == 'reject') {
+                                model.auditIssue.status = 'DR';
+                                model.auditIssue.next_stage = 'draftreject';
+                            }
+                        } else if (model.auditIssue.status == 'DR' && model.type == 'audit') {
+                            if (actionType == 'draftAccept') {
+                                model.auditIssue.status = 'DRA';
+                                model.auditIssue.next_stage = 'draftrejectaccept';
+                            } else if (actionType == 'draftReject') {
+                                model.auditIssue.status = 'DRR';
+                                model.auditIssue.next_stage = 'draftrejectreject';
+                            }
                         }
-                    } else if (model.auditIssue.status == 'DO' && model.type == 'operation') {
-                        if (actionType == 'accept') {
-                            model.auditIssue.status = 'DA';
-                            model.auditIssue.next_stage = 'draftaccept';
-                        } else if (actionType == 'reject') {
-                            model.auditIssue.status = 'DR';
-                            model.auditIssue.next_stage = 'draftreject';
-                        }
-                    } else if (model.auditIssue.status == 'DR' && model.type == 'audit') {
-                        if (actionType == 'draftAccept') {
-                            model.auditIssue.status = 'DRA';
-                            model.auditIssue.next_stage = 'draftrejectaccept';
-                        } else if (actionType == 'draftReject') {
-                            model.auditIssue.status = 'DRR';
-                            model.auditIssue.next_stage = 'draftrejectreject';
-                        }
-                    }
-                    Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {
-                        PageHelper.showProgress("audit", "Issue Updated Successfully.", 3000);
-                        irfNavigator.goBack();
-                    }, PageHelper.showErrors).finally(PageHelper.hideLoader);
+                        Audit.online.updateIssueDetails(model.auditIssue).$promise.then(function(res) {
+                            PageHelper.showProgress("audit", "Issue Updated Successfully.", 3000);
+                            irfNavigator.goBack();
+                        }, PageHelper.showErrors).finally(PageHelper.hideLoader);
+                    });
                 },
                 getStageTitle: function(model, arrayIndex) {
                     var preStage = model.auditIssue.messages.length - 1 == arrayIndex ? '' : model.auditIssue.messages[arrayIndex + 1].stage;
