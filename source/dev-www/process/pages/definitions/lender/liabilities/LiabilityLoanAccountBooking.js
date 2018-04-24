@@ -322,27 +322,28 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
                                                                 Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                                             }
-                                                        },
-                                                        "upload": {
-                                                            // "key" :"liabilityAccount.liabilityLenderDocuments[].fileId ",
-                                                            // "title": "ADD_DOCUMENT",
-                                                            // "notitle": true,
-                                                            // "fieldHtmlClass": "btn-block",
-                                                            // "style": "btn-default",
-                                                            // "fileType": "application/pdf",
-                                                            // "category": "Loan",
-                                                            // "subCategory": "DOC1",
-                                                            // //"icon": "fa fa-download", 
-                                                            // "type": "file",
-                                                            "condition":""
-                                                            "title": "Upload",
-                                                            "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
-                                                            "type": "file",
-                                                            "fileType": "application/pdf",
-                                                            "category": "Loan",
-                                                            "subCategory": "DOC1",
-                                                            "using": "scanner"
                                                         }
+                                                        // },
+                                                        // "upload": {
+                                                        //     // "key" :"liabilityAccount.liabilityLenderDocuments[].fileId ",
+                                                        //     // "title": "ADD_DOCUMENT",
+                                                        //     // "notitle": true,
+                                                        //     // "fieldHtmlClass": "btn-block",
+                                                        //     // "style": "btn-default",
+                                                        //     // "fileType": "application/pdf",
+                                                        //     // "category": "Loan",
+                                                        //     // "subCategory": "DOC1",
+                                                        //     // //"icon": "fa fa-download", 
+                                                        //     // "type": "file",
+                                                        //     "condition":""
+                                                        //     "title": "Upload",
+                                                        //     "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                        //     "type": "file",
+                                                        //     "fileType": "application/pdf",
+                                                        //     "category": "Loan",
+                                                        //     "subCategory": "DOC1",
+                                                        //     "using": "scanner"
+                                                        // }
                                                     }
                                                 }
                                             }
