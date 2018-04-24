@@ -522,7 +522,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             return false;
                         }
                         if (model.rejectCompliancedocument || model.rejectLenderDocument) {
-                            PageHelper.showProgress('loan', 'Cant proceed as document/s is rejected', 5000);
+                            PageHelper.showProgress('loan', 'Cant proceed as documents is rejected', 5000);
                         } else {
                             PageHelper.showLoader();
                             model.LiabilityLoanAccountBookingProcess.proceed()
