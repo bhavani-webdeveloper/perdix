@@ -377,8 +377,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer = value.customer;
                                     model.enrolmentProcess.customer = value.customer;
                                 }
-                                //irfNavigator.goBack();
                                 PageHelper.clearErrors();
+                                irfNavigator.go({
+                                    state: 'Page.Engine',
+                                    pageName: "lender.enrolment.LenderSearch"
+                                });
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
