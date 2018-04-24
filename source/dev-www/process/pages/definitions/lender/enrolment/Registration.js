@@ -232,15 +232,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "mailingDoorNo": {
                                                     "key": "customer.mailingDoorNo",
                                                     "orderNo": 160,
-                                                    "required":false
+                                                     "required":false
                                                 },
                                                 "mailingStreet": {
                                                     "key": "customer.mailingStreet",
-                                                    "orderNo": 170
+                                                    "orderNo": 170,
+                                                    "required":false
                                                 },
                                                 "mailingPostoffice": {
                                                     "key": "customer.mailingPostoffice",
-                                                    "orderNo": 180
+                                                    "orderNo": 180,
+                                                    "required":false
                                                 },
                                                 "mailingPincode": {
                                                     "key": "customer.mailingPincode",
@@ -251,15 +253,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 },
                                                 "mailingLocality": {
                                                     "key": "customer.mailingLocality",
-                                                    "orderNo": 200
+                                                    "orderNo": 200,
+                                                    "required":false
                                                 },
                                                 "mailingDistrict": {
                                                     "key": "customer.mailingDistrict",
-                                                    "orderNo": 210
+                                                    "orderNo": 210,
+                                                    "schema": {
+                                                        "required":false
+                                                    }
                                                 },
                                                 "mailingState": {
                                                     "key": "customer.mailingState",
-                                                    "orderNo": 220
+                                                    "orderNo": 220,
+                                                    "schema": {
+                                                        "required":false
+                                                    }
                                                 }
                                             }
                                         }
