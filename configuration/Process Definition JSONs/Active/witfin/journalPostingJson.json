@@ -28,8 +28,8 @@
          ]
       },{
          "order": 4,
-         "code": "REJECTED",
-         "name": "REJECTED",
+         "code": "Rejected",
+         "name": "Rejected",
          "stageType": "ACCOUNTINGPOSTING",
          "isAccountPosting": true,
          "allowedRoles": [
@@ -67,7 +67,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "relatedAccountNo": {
@@ -79,7 +79,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
 
@@ -92,7 +92,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
 
@@ -105,7 +105,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "transactionDate": {
@@ -116,7 +116,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "productType": {
@@ -127,7 +127,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "valueDate": {
@@ -138,7 +138,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "remarks": {
@@ -150,7 +150,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "instrumentType": {
@@ -162,7 +162,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "instrumentNumber": {
@@ -174,7 +174,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "instrumentDate": {
@@ -185,7 +185,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "ifscCode": {
@@ -197,7 +197,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "instrumentBankName": {
@@ -209,7 +209,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "instrumentBranchName": {
@@ -221,7 +221,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "billNumber": {
@@ -233,7 +233,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "billDate": {
@@ -245,7 +245,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "fileId": {
@@ -257,7 +257,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                },
                "branchId": {
@@ -269,7 +269,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "REJECTED"
+                     "Rejected"
                   ]
                }
             }
