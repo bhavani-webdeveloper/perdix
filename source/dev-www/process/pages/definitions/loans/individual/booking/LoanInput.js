@@ -1334,7 +1334,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key": "_currentDisbursement.scheduledDisbursementDate",
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "type": "date",
-                        "required": true
+                        "required": true,
+                        "onChange": function(value ,form ,model, event){
+                            if(!model.allowPreEmiInterest)
+                                return;
+                            var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                            var disbursementSchedules = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                            if(model.loanAccount.scheduleStartDate == undefined || model.loanAccount.scheduleStartDate == null || model.loanAccount.scheduleStartDate == ""){
+                                model._currentDisbursement.scheduledDisbursementDate = null;
+                                PageHelper.showProgress("loan-create","Please Enter the Schedule Start Date date",5000);
+                            }else{
+                                var scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                                if(scheduleStartDate < disbursementSchedules){
+                                    model._currentDisbursement.scheduledDisbursementDate = null;
+                                    PageHelper.showProgress("loan-create","Disbursement date should be lesser than Schedule Start Date date",5000);
+                                }
+                            } 
+                            if(repaymentDate < disbursementSchedules){
+                                model._currentDisbursement.scheduledDisbursementDate = null;
+                                PageHelper.showProgress("loan-create","Disbursement date should be lesser than Repayment date",5000);
+                            }
+                           
+                        }
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
@@ -2624,6 +2645,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 var diffDays = 0;
                                 var scheduleStartDate;
                                 if (model.allowPreEmiInterest) {
+                                    model.loanAccount.disbursementSchedules[0].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
+                                    model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
                                     if(model.loanAccount.scheduleStartDate)
                                         scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
                                     if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
@@ -2719,6 +2742,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     var diffDays = 0;
                     var scheduleStartDate;
                     if (model.allowPreEmiInterest) {
+                        model.loanAccount.disbursementSchedules[0].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
+                        model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
                         if(model.loanAccount.scheduleStartDate)
                             scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
                         if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
