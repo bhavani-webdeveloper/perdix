@@ -91,6 +91,15 @@
                      "journalPosting"
                   ]
                },
+               "productType": {
+                  "title": "productType",
+                  "type": "string",
+                 
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
                "valueDate": {
                   "title": "Value Date",
                   "type": "string",
