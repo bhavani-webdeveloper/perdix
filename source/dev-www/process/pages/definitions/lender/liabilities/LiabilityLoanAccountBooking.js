@@ -153,6 +153,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }, {
                                 title: 'PENALTY_DUE',
                                 data: 'penalityDue'
+                            },{
+                                title: 'OTHER_FEE_CHARGES_DUE',
+                                data: 'otherFeeChargesDue'
                             },{ 
                                 title: 'TOTAL_INSTALLMENT_AMOUNT_DUE',
                                 data: 'totalInstallmentAmountDue'
