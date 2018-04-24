@@ -101,15 +101,18 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                     model.LiabilityLoanAccountBookingProcess.proceed()
                                                         .finally(function () {
                                                             PageHelper.hideLoader();
-                                                            irfNavigator.goBack();
+                                                            return irfNavigator.goBack();
                                                         })
                                                         .subscribe(function (value) {
                                                             PageHelper.clearErrors();                           
                                                         }, function (err) {
-                                                            PageHelper.showErrors(err);
+                                                            PageHelper.showErrors({
+                                                                'message': "Please upload excel file only"
+                                                            })
+                                                           // PageHelper.showErrors(err);
                                                             PageHelper.hideLoader();
                                                         });
-                                                }, function(res) {
+                                                }, function(err) {
                                                     console.log("error");
                                                 });
                                             }
@@ -119,10 +122,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }
                         }
                     };
-                    // var p1 = UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise;
-                    // p1.then(function(repo){
-                    //     self.form = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
-                    // });
                     UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
                         .then(function(repo){
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
