@@ -10,10 +10,19 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
             PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Schedule) {
             var branch = SessionStore.getBranch();
-            var userLoginDate = SessionStore.getCBSDate();
+           // var userLoginDate = SessionStore.getCBSDate();
             var configFile = function() {
                 return {}
             }
+            var totalAmountPaidSum = function(modelValue,model){
+                if(model.liabilityRepay.totalAmountPaid != null){
+                    model.liabilityRepay.totalAmountPaid = model.liabilityRepay.totalAmountPaid + modelValue;  
+                }
+                else{
+                    model.liabilityRepay.totalAmountPaid = modelValue;
+                }    
+            }
+
             var overridesFields = function(bundlePageObj) {
                 return {
                     "LiabilityRepayment": {
@@ -21,18 +30,31 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LiabilityRepayment.principalPaid": {
                         "required": true,
+                         onChange: function(modelValue, form, model) {
+                           totalAmountPaidSum(modelValue,model);
+                        }
                     },
                     "LiabilityRepayment.interestPaid": {
                         "required": true,
+                         onChange: function(modelValue, form, model) {
+                           totalAmountPaidSum(modelValue,model);
+                        }
                     },
                     "LiabilityRepayment.penalityPaid": {
                         "required": true,
+                         onChange: function(modelValue, form, model) {
+                           totalAmountPaidSum(modelValue,model);
+                        }
                     },
                     "LiabilityRepayment.otherFeeChargesPaid": {
                         "required": true,
+                         onChange: function(modelValue, form, model) {
+                           totalAmountPaidSum(modelValue,model);
+                        }
                     },
-                    "LiabilityRepayment.totalInstallmentAmountPaid": {
+                    "LiabilityRepayment.totalAmountPaid": {
                         "required": true,
+                        "readonly":true
                     },
                     "LiabilityRepayment.referencenumber": {
                         "required": true,
@@ -42,6 +64,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                
                     "LiabilityRepayment.transactionType": {
+                        "required": true,
                         onChange: function(modelValue, form, model) {
                             model.preClosureCharge = false;
                             if (modelValue == 'PreClosure') {
@@ -49,7 +72,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 model.liabilityClosureRepay.transactionType = modelValue
                                 model.liabilityRepay = model.liabilityClosureRepay
                                 model.liabilityRepay.lenderAccountNumber = model.lenderAccountNumber
-                                model.liabilityRepay.transactionDate = userLoginDate;
+                               // model.liabilityRepay.transactionDate = userLoginDate;
                             } else {
                                 model.liabilityScheduleRepay.transactionType = modelValue
                                 model.liabilityRepay = model.liabilityScheduleRepay;
@@ -57,6 +80,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                     },
                     "LiabilityRepayment.instrumentType": {
+                        "required": true,
                         onChange: function(modelValue, form, model) {
                             model.instrTypeCheque = false;
                             model.instrTypeNEFT = false;
@@ -102,6 +126,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LiabilityRepayment.preClosureCharges": {
                         "condition": "model.preClosureCharge"
+                    },
+                    "LiabilityRepayment.transactionDate":{
+                        "required": true,
                     }
                 }
             }
@@ -127,7 +154,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayment.interestPaid",
                     "LiabilityRepayment.penalityPaid",
                     "LiabilityRepayment.otherFeeChargesPaid",
-                    "LiabilityRepayment.totalInstallmentAmountPaid",
+                    "LiabilityRepayment.totalAmountPaid",
                     "LiabilityRepayment.instrumentType",
                     "LiabilityRepayment.transactionDate",
                     "LiabilityRepayment.referencenumber",
@@ -415,7 +442,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     model.liabilityRepay = this.liabilityRepayCal;
                                     if(this.liabilityRepayCal){
                                     model.liabilityRepay.liabilityRepaymentScheduleDetailsId = this.liabilityRepayCal.id;
-                                    model.liabilityRepay.transactionDate = userLoginDate;
+                                  //  model.liabilityRepay.transactionDate = userLoginDate;
 
                                 };
                                                                     }
@@ -446,7 +473,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             return false;
                         }
                         var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargesPaid
-                        if (model.liabilityRepay.totalInstallmentAmountPaid == totalAmountPaid) {
+                        if (model.liabilityRepay.totalAmountPaid == totalAmountPaid) {
                                 PageHelper.showLoader();
                                 model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
                                 model.LiabilityRepayment.save()
@@ -455,9 +482,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     })
                                     .subscribe(function(value) {
                                         PageHelper.showProgress('Repayment', 'Repayment Saved.', 5000);
-                                        irfNavigator.goBack();
+                                        //irfNavigator.goBack();
                                         PageHelper.clearErrors();
-                                        irfNavigator.goBack();
+                                       return irfNavigator.goBack();
                                     }, function(err) {
                                         $log.info(err.data.error);
                                         $log.info("err");
