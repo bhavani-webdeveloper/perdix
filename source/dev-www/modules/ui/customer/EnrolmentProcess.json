@@ -1470,6 +1470,11 @@
                                 "type": "select"
                             }
                         }
+                    },
+                    "noOfDependents": {
+                        "key": "customer.familyMembers[].noOfDependents",
+                        "type": "number",
+                        "title": "NO_OF_DEPENDENTS"
                     }
                 }
             }
