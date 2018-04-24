@@ -33,7 +33,7 @@ irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializ
         },
         referenceCodesDelete: {
             method: 'DELETE',
-            url: BASE_URL + "api/referencecodes/:id"
+            url: BASE_URL + "/api/referencecodes/:id"
         }
     });
 });
