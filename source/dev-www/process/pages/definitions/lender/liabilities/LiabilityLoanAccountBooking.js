@@ -315,7 +315,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                             "notitle": true,
                                                             "fieldHtmlClass": "btn-block",
                                                             "style": "btn-default",
-                                                            "icon": "fa fa-download"
+                                                            "icon": "fa fa-download",
                                                             "type": "button",
                                                             "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
                                                             "onClick": function(model, form, schemaForm, event) {
