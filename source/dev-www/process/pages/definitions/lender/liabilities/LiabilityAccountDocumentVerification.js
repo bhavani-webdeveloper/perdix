@@ -36,42 +36,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             Utils.downloadFile(fileUrl);
                         }
                     },
-                    "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff": {
-                        "required": true
-                    },
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff": {
                         "required": true,
-                        "onChange": function(modelValue, form, model) {
-                            if (model.liabilityAccount.liabilityComplianceDocuments.length > 1) {
-                                var doucmentArr = model.liabilityAccount.liabilityComplianceDocuments;
-                                model.rejectCompliancedocument = false;
-                                _.forEach(doucmentArr, function(value) {
-                                    if (value.isSignOff == 'REJECTED') {
-                                        model.rejectCompliancedocument = true
-                                        console.log("rejectComplianceDocument")
-                                    }
-                                });
-                            } else {
-                                model.rejectCompliancedocument = (modelValue == 'REJECTED') ? true : false;
-                            }
-                        }
                     },
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff":{
-                        "onChange": function(modelValue, form, model) {
-                            if (model.liabilityAccount.liabilityLenderDocuments.length > 1) {
-                                var doucmentArr = model.liabilityAccount.liabilityLenderDocuments;
-                                model.rejectLenderDocument = false;
-                                _.forEach(doucmentArr, function(value) {
-                                    if (value.isSignOff == 'REJECTED') {
-                                        model.rejectLenderDocument = true
-                                        console.log("rejectLenderDocument")
-                                    }
-                                });
-                            } else {
-                                model.rejectLenderDocument = (modelValue == 'REJECTED') ? true : false;
-                            }
-                        }
-                    },
+                        "required": true,
+                      },
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks": {
                         "required": true,
                     }
@@ -243,6 +213,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 "isSignOff": {
                                                                     "type": "section",
                                                                     "htmlClass": "col-sm-2",
+                                                                    
                                                                     "items": {
                                                                         "isSignOff": {
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].isSignOff",
@@ -381,6 +352,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                         "isSignOff": {
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].isSignOff",
                                                                             "notitle": true,
+                                                                            "required":true,
                                                                             "type": "select",
                                                                             "titleMap": [{
                                                                                 "name": "Rejected",
@@ -470,7 +442,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     ]
                                 },
                                 {
-                                    "condition": "model.liabilityAccount.id && (model.rejectLenderDocument || model.rejectCompliancedocument)",
+                                    "condition": "model.liabilityAccount.id",
                                     "type": "actionbox",
                                     "orderNo": 10000,
                                     "items": [
@@ -490,26 +462,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             "onClick": "actions.back(model, formCtrl, form, $event)"
                                         }
                                     ]
-                                },
-                                {
-                                    "condition": "model.liabilityAccount.id && ! (model.rejectLenderDocument || model.rejectCompliancedocument)",
-                                    "type": "actionbox",
-                                    "orderNo": 10000,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "SAVE",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "title": "PROCEED",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                        }
-                                    ]
                                 }
-
-
                             ]
                         }
                     };
@@ -539,15 +492,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 actions: {
                     save: function (model, formCtrl, form, $event) {
                         PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
-                            return false;
-                        }
+                        
                         PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.save()
                             .finally(function () {
@@ -577,7 +522,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             return false;
                         }
                         if (model.rejectCompliancedocument || model.rejectLenderDocument) {
-                            PageHelper.showProgress('loan', 'cant proceed.', 5000);
+                            PageHelper.showProgress('loan', 'Cant proceed as document/s is rejected', 5000);
                         } else {
                             PageHelper.showLoader();
                             model.LiabilityLoanAccountBookingProcess.proceed()
@@ -597,6 +542,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     back :function (model, formCtrl, form, $event)
                     {
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
                          model.LiabilityLoanAccountBookingProcess.sendBack("DocumentUpload")
                             .finally(function () {
                                 PageHelper.hideLoader();
