@@ -151,9 +151,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 title: 'INTEREST_DUE',
                                 data: 'interestDue'
                             }, {
-                                title: 'PENALITY_DUE',
+                                title: 'PENALTY_DUE',
                                 data: 'penalityDue'
-                            },{  title: 'TOTAL_INSTALLMENT_AMOUNT_DUE',
+                            },{ 
+                                title: 'TOTAL_INSTALLMENT_AMOUNT_DUE',
                                 data: 'totalInstallmentAmountDue'
                             }]
                         },
@@ -174,7 +175,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 data: 'lenderAccountNumber',
                             }, {
                                 title: 'TRANSACTION_DATE',
-                                data: 'installmentDate'
+                                data: 'transactionDate'
+                            }, {
+                                title: 'TRANSACTION_TYPE',
+                                data: 'transactionType'
                             }, {
                                 title: 'PRINCIPAL',
                                 data: 'principalPaid'
@@ -186,7 +190,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 data: 'penalityPaid'
                             }, {
                                 title: 'OTHER_FEE_CARGES',
-                                data: 'otherFeeChargespaid'
+                                data: 'otherFeeChargesPaid'
+                            },{
+                                 title: 'PRE_CLOSURE_CHARGES',
+                                data:'preClosureCharges'
                             }, {
                                 title: 'TOTAL_INSTALLMENT_AMOUNT',
                                 data: 'totalAmountPaid'
@@ -295,7 +302,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                 "liabilityLenderDocuments": {
                                                     "type": "array",
                                                     "key": "liabilityAccount.liabilityLenderDocuments",
-                                                    "add": null,
+                                                    "add": true,
+                                                    "title":"ADD_DOCUMENT",
                                                     "startEmpty": false,
                                                     "remove": null,
                                                     "titleExpr": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName",
@@ -324,9 +332,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                 "liabilityComplianceDocuments": {
                                                     "type": "array",
                                                     "key": "liabilityAccount.liabilityComplianceDocuments",
-                                                    "add": null,
+                                                    "add": true,
                                                     "startEmpty": false,
                                                     "remove": null,
+                                                    "title":"ADD_DOCUMENT",
                                                     "titleExpr": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName",
                                                     "items": {
                                                         "fileId": {
@@ -393,8 +402,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         obs.subscribe(function(res) {
                                 model.LiabilityLoanAccountBookingProcess = res;
                                 model.liabilityAccount = res.liabilityAccount;
-                                console.log(model.liabilityAccount);
-                                console.log(model);
+                               // console.log(model.liabilityAccount);
+                                //console.log(model);
                             })
                     } else {
                         var obs = LiabilityLoanAccountBookingProcess.get($stateParams.pageId);
@@ -405,14 +414,15 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                      irfNavigator.goBack();
                                  }*/
                                 model.LiabilityLoanAccountBookingProcess = res;
-                                model.liabilityAccount = res.liabilityAccount;
                                 res.liabilityAccount.liabilityComplianceDocuments.pop();
-                                res.liabilityAccount.liabilityLenderDocuments.pop()
+                                 res.liabilityAccount.liabilityLenderDocuments.pop()
                                 _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule){
                                     if(schedule.totalInstallmentAmountDue == null){
                                         schedule.totalInstallmentAmountDue= schedule.principalDue+schedule.penalityDue+schedule.interestDue+schedule.otherFeeChargesDue
                                     }
                                 });
+                                model.liabilityAccount = res.liabilityAccount;
+                                console.log(model.liabilityAccount.liabilitySchedules)
                             })
 
                     }
@@ -422,6 +432,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function(form){
+                            console.log(form)
                             self.form = form;
                             PageHelper.hideLoader();
                         });
