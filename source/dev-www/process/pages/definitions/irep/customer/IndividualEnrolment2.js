@@ -96,9 +96,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.addressProofNo": {
                                     "required": true
                                 },
-                                "KYC.addressProof": {
-                                    "readonly": true
-                                },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
                                 },
@@ -235,7 +232,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Appraisal": {
                             "excludes": [
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "PhysicalAssets.physicalAssets.vehicleModel"
+                                "PhysicalAssets.physicalAssets.vehicleModel",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -261,9 +259,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts": {
                                     "orderNo": 8
-                                },
-                                "IndividualReferences": {
-                                    "orderNo": 9
                                 },
                                 "PhysicalAssets": {
                                     "orderNo": 10
@@ -400,7 +395,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "AppraisalReview": {
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {

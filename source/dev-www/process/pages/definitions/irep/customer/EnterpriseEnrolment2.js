@@ -29,13 +29,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation": {
                          "items": {
                               "lastFiledItr": {
-                                   "key": "customer.udf.enterpriseUserDefinedDateFieldValues.udfDate2",
+                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate3",
                                    "title": "LAST_AVAIL_ITR",
                                    "orderNo": 311,
                                    "type": "date"
                               },
                               "whetherAudited": {
-                                   "key": "customer.udf.enterpriseUserDefinedFieldValues.udf2",
+                                   "key": "customer.udf.userDefinedFieldValues.udf7",
                                    "title": "WHETHER_AUDITED",
                                    "orderNo": 312,
                                    "type": "select",
@@ -46,19 +46,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                               },
                               "rentLeaseStatus": {
                                    "type":"select",
-                                   "key": "customer.udf.enterpriseUserDefinedFieldValues.udf1",
+                                   "key": "customer.udf.userDefinedFieldValues.udf6",                                   
                                    "title":"RENT_LEASE_STATUS",
-                                   "orderNo": 145,
-                                   "titleMap": {
-                                        "Available": "Available",
-                                        "Not-Available": "Not-Available"
-                                   }
+                                   "orderNo": 141
                               },
-                              "agreementValidTill": {
-                                   "key": "customer.udf.enterpriseUserDefinedDateFieldValues.udfDate1",
-                                   "title": "RENT_LEASE_AGREEMENT",
-                                   "orderNo": 146,
-                                   "type": "date"
+                              "rentLeaseAgreement": {
+                                   "type":"date",
+                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
+                                   "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
+                                   "orderNo:": 143
                               }
                          }
                     }
@@ -82,7 +78,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.ownership",
                     "EnterpriseInformation.rentLeaseStatus",
-                    "EnterpriseInformation.agreementValidTill",
+                    "EnterpriseInformation.rentLeaseAgreement",
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.businessHistory",
                     "EnterpriseInformation.noOfPartners",
@@ -197,7 +193,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses",
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
-                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
 
@@ -343,7 +338,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.rawMaterialExpenses",
                                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                                     "EnterpriseFinancials.rawMaterialExpenses.amount",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
 
@@ -391,9 +385,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.companyOperatingSince": {
                                         "required": true
                                     },
-                                    "EnterpriseInformation.companyEmailId": {
-                                        "required": true
-                                    },
                                     "EnterpriseInformation.photoImageId": {
                                         "required": true
                                     },
@@ -401,9 +392,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "required": true
                                     },
                                     "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
                                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
-                                    "EnterpriseInformation.agreementValidTill": {
+                                    "EnterpriseInformation.rentLeaseAgreement": {
                                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
                                     "EnterpriseInformation.businessHistory": {
@@ -520,7 +514,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseFinancials.avgDailySaleAmount",
                                     "EnterpriseFinancials.workingDaysInMonth",
                                     "EnterpriseFinancials.grossMarginPercentage",
@@ -600,7 +593,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.outstandingReceivable",
                                     "EnterpriseReferences.verifications.customerResponse",
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -812,7 +805,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "AppraisalReview": {
                                 "excludes": [
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.WhetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -855,10 +848,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",                                    ,
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -1086,10 +1078,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",                              
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -1335,7 +1326,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.rawMaterialExpenses",
                                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                                     "EnterpriseFinancials.rawMaterialExpenses.amount",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
 
@@ -1395,7 +1385,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.rentLeaseStatus": {
                                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
-                                    "EnterpriseInformation.agreementValidTill": {
+                                    "EnterpriseInformation.rentLeaseAgreement": {
                                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
                                     "EnterpriseInformation.businessHistory": {
@@ -1507,9 +1497,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -1738,9 +1727,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -1969,9 +1957,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.rawMaterialExpenses.Purchasefrequency",
                                     "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.agreementValidTill",
+                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",

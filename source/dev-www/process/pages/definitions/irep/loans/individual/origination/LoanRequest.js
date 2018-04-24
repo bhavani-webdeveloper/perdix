@@ -41,8 +41,13 @@ define([],function(){
                         "KYC": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "DeductionsFromLoan",
+                                "DeductionsFromLoan.expectedProcessingFeePercentage",
+                                "DeductionsFromLoan.expectedCommercialCibilCharge",
+                                "DeductionsFromLoan.estimatedEmi",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium",
                                 "ProposedUtilizationPlan",
                                 "ProposedUtilizationPlan.loanUtilisationDetail",
                                 "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
@@ -51,6 +56,9 @@ define([],function(){
                                 "CollateralDetails"
                             ],
                             "overrides": {
+                                "PreliminaryInformation.expectedInterestRate": {
+                                    "type": "select",
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1
                                 },
@@ -70,7 +78,10 @@ define([],function(){
                                     "required": true
                                 },
                                 "PreliminaryInformation.tenureRequested": {
-                                    "required": true
+                                    "type": "select",
+                                    "schema": {
+                                             "enumCode": "tenure_requested"
+                                        }
                                 },
                                 "PreliminaryInformation.expectedEmi": {
                                     "readonly": true
@@ -80,9 +91,6 @@ define([],function(){
                                 },
                                 "PreliminaryInformation.collectionPaymentType": {
                                     "required": true
-                                },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
                                 },
                                 "PreliminaryInformation.loanPurpose1": {
                                     "resolver": "LoanPurpose1LOVConfiguration"
@@ -133,6 +141,7 @@ define([],function(){
                         },
                         "KYCReview": {
                             "excludes": [
+                                "LoanRecommendation",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "ProposedUtilizationPlan",
@@ -176,7 +185,8 @@ define([],function(){
                         },
                         "Appraisal": {
                             "excludes": [
-                                "LoanRecommendation"                    
+                                "LoanRecommendation",
+                                "DeductionsFromLoan"                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -185,9 +195,6 @@ define([],function(){
                                 "LoanCustomerRelations": {
                                     "orderNo": 2,
                                     "readonly": true
-                                },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3
                                 },
                                 "LoanMitigants": {
                                     "orderNo": 4
@@ -240,19 +247,27 @@ define([],function(){
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeFirstName": {
+                                    "orderNo": 81,
                                    "required":true,
                                    "resolver": "NomineeFirstNameLOVConfiguration"
                                 },
                                 "NomineeDetails.nominees.nomineeGender": {
+                                   "orderNo": 82,
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeDOB": {
+                                    "orderNo": 83,
                                    "required":true
                                 },
+                                "NomineeDetails.nominees.nomineeButton": {
+                                    "orderNo": 84,
+                                },
                                 "NomineeDetails.nominees.nomineeDoorNo": {
+                                    "orderNo": 85,
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
+                                    "orderNo": 86,
                                    "required": true,
                                    "resolver": "NomineePincodeLOVConfiguration"
                                 },
@@ -315,7 +330,9 @@ define([],function(){
                         },
                         "AppraisalReview": {
                             "excludes": [
-                                "ProposedUtilizationPlan"                     
+                                "ProposedUtilizationPlan",
+                                "DeductionsFromLoan",
+                                "NomineeDetails.nominees.nomineeButton"                   
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -458,6 +475,7 @@ define([],function(){
                     "NomineeDetails.nominees.nomineeFirstName",
                     "NomineeDetails.nominees.nomineeGender",
                     "NomineeDetails.nominees.nomineeDOB",
+                    "NomineeDetails.nominees.nomineeButton",
                     "NomineeDetails.nominees.nomineeDoorNo",
                     "NomineeDetails.nominees.nomineeLocality",
                     "NomineeDetails.nominees.nomineeStreet",
@@ -536,6 +554,28 @@ define([],function(){
                             ],
                             "options": {
                                 "repositoryAdditions": {
+                                    "NomineeDetails": {
+                                        "type": "box",
+                                        "title": "NOMINEE_DETAILS",
+                                        "orderNo": 300,
+                                        "items": {
+                                            "nominees": {
+                                                "key": "loanAccount.nominees",
+                                                "type": "array",
+                                                "notitle": "true",
+                                                "view": "fixed",
+                                                "add": null,
+                                                "remove": null,
+                                                "items": {
+                                                    "nomineeButton": {
+                                                        "type": "button",
+                                                        "title": "NOMINEE_ADDRESS_APPLICANT",
+                                                        "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
                                     "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
@@ -816,6 +856,21 @@ define([],function(){
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });
+                    },
+                    nomineeAddress: function(model, formCtrl, form, $event){
+                        PageHelper.showLoader();
+                        if(model.loanProcess.applicantEnrolmentProcess){
+                            model.loanAccount.nominees[0].nomineeDoorNo=  model.loanProcess.applicantEnrolmentProcess.customer.doorNo;
+                            model.loanAccount.nominees[0].nomineeLocality= model.loanProcess.applicantEnrolmentProcess.customer.locality;
+                            model.loanAccount.nominees[0].nomineeStreet= model.loanProcess.applicantEnrolmentProcess.customer.street;
+                            model.loanAccount.nominees[0].nomineePincode= model.loanProcess.applicantEnrolmentProcess.customer.pincode;
+                            model.loanAccount.nominees[0].nomineeDistrict= model.loanProcess.applicantEnrolmentProcess.customer.district;
+                            model.loanAccount.nominees[0].nomineeState = model.loanProcess.applicantEnrolmentProcess.customer.state;
+                        }else
+                        {
+                            PageHelper.hideLoader();
+                        }
+                        PageHelper.hideLoader();
                     }
                 }
             };

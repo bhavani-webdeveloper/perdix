@@ -61,14 +61,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:50
                             },
                             {
-                                pageName: 'loans.individual.screening.CreditBureauView',
-                                title: 'CREDIT_BUREAU',
-                                pageClass: 'cbview',
-                                minimum: 1,
-                                maximum: 1,
-                                order:60
-                            },
-                            {
                                 pageName: 'loans.individual.screening.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
@@ -198,15 +190,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'loan-request',
                                     model: {
                                         loanProcess: loanProcess
-                                    }
-                                });
-
-
-
-                                $this.bundlePages.push({
-                                    pageClass: 'cbview',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
                                     }
                                 });
 
