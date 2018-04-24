@@ -1,8 +1,8 @@
 {
    "stages": [{
          "order": 1,
-         "code": "journalEntry",
-         "name": "journalEntry",
+         "code": "branchPostingEntry",
+         "name": "branchPostingEntry",
          "stageType": "CAPTURE",
          "isAccountPosting": false,
          "allowedRoles": [
@@ -10,8 +10,17 @@
          ]
       },{
          "order": 2,
-         "code": "journalPosting",
-         "name": "journalPosting",
+         "code": "branchPostingReview",
+         "name": "branchPostingReview",
+         "stageType": "ACCOUNTINGPOSTING",
+         "isAccountPosting": true,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 3,
+         "code": "branchRejected",
+         "name": "branchRejected",
          "stageType": "ACCOUNTINGPOSTING",
          "isAccountPosting": true,
          "allowedRoles": [
@@ -27,7 +36,7 @@
          "journalEntry"
       ],
       "properties": {
-         "journalEntry": {
+         "branchPostingEntry": {
             "title": "journal Entry",
             "type": "object",
             "required": [
@@ -46,8 +55,9 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "relatedAccountNo": {
@@ -56,8 +66,9 @@
                   "minLength": 1,
                   "maxLength": 30,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
 
@@ -67,8 +78,9 @@
                   "minLength": 1,
                   "maxLength": 20,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
 
@@ -78,8 +90,9 @@
                   "minimum": 1,
                   "maximum": 99999999,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "transactionDate": {
@@ -87,8 +100,9 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "productType": {
@@ -96,8 +110,9 @@
                   "type": "string",
                  
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "valueDate": {
@@ -105,8 +120,9 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "remarks": {
@@ -115,8 +131,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "instrumentType": {
@@ -125,8 +142,9 @@
                   "minLength": 1,
                   "maxLength": 20,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "instrumentNumber": {
@@ -135,8 +153,9 @@
                   "minLength": 1,
                   "maxLength": 45,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "instrumentDate": {
@@ -144,8 +163,9 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "ifscCode": {
@@ -154,8 +174,9 @@
                   "minLength": 1,
                   "maxLength": 45,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "instrumentBankName": {
@@ -164,8 +185,9 @@
                   "minLength": 1,
                   "maxLength": 300,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "instrumentBranchName": {
@@ -174,8 +196,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "billNumber": {
@@ -184,8 +207,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "billDate": {
@@ -194,8 +218,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "fileId": {
@@ -204,8 +229,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                },
                "branchId": {
@@ -214,8 +240,9 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry",
-                     "journalPosting"
+                     "branchPostingEntry",
+                     "branchPostingReview",
+                     "branchRejected"
                   ]
                }
             }
