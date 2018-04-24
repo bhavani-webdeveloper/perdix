@@ -43,11 +43,17 @@ export class BranchPostingProcess implements CanApplyPolicy {
         )
     }
 
-    save(): Observable<BranchPostingProcess> {
+    save(): any{
         this.journalEntryProcessAction = 'SAVE';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeSave', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.branchRepo.createJournal(this);
+        let obs2 = null;
+        if (this.journalEntryDto.id){
+            obs2 = this.branchRepo.updateJournal(this);
+        } else {
+            obs2 = this.branchRepo.createJournal(this);
+        }
+
         let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterSave', BranchPostingProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
@@ -58,11 +64,34 @@ export class BranchPostingProcess implements CanApplyPolicy {
         this.journalEntryProcessAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeProceed', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
-        let obs2 = this.branchRepo.createJournal(this);
+        let obs2 = this.branchRepo.updateJournal(this);
         let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterProceed', BranchPostingProcess.getProcessConfig());
         let obs3 = pmAfterUpdate.applyPolicies();
         return Observable.concat(obs1, obs2, obs3).last();
     }
+
+   reject(): Observable<BranchPostingProcess>{
+        // this.stage = toStage;
+        this.stage = 'REJECTED';
+        let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeReject', BranchPostingProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.branchRepo.updateJournal(this);
+        let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterReject', BranchPostingProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
+
+    sendBack(): Observable<BranchPostingProcess>{
+        // this.stage = toStage;
+        this.journalEntryProcessAction = 'PROCEED';
+        let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeSendBack', BranchPostingProcess.getProcessConfig());
+        let obs1 = pmBeforeUpdate.applyPolicies();
+        let obs2 = this.branchRepo.updateJournal(this);
+        let pmAfterUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'afterSendBack', BranchPostingProcess.getProcessConfig());
+        let obs3 = pmAfterUpdate.applyPolicies();
+        return Observable.concat(obs1, obs2, obs3).last();
+    }
+
 
 
     static getProcessConfig(){

@@ -114,9 +114,16 @@ define({
                         "title": "TRANSACTION_TYPE",
                         //"enumCode": 'journal_transaction_type'
                         titleMap: {
-                            "Entry": "Entry",
-                            "Reversal": "Reversal"
+                            "Entry": "Entry"
                         }
+                    },
+                    {
+                        key: "journal.productType",
+                        type: "select",
+                        required: true,
+                        "title": "PRODUCT_TYPE",
+                        "enumCode": 'journal_transaction_type'
+                        
                     },
                     {
                         key: "journal.debitGLNo",
@@ -326,6 +333,10 @@ define({
                             },
                             "transactionType": {
                                 "title": "BATCH_NAME",
+                                "type": "string"
+                            },
+                            "productType": {
+                                "title": "PRODUCY_TYPE",
                                 "type": "string"
                             },
                             "debitGLNo": {

@@ -1,5 +1,5 @@
 define({
-    pageUID: "Journal.JournalEntryReviewQueue",
+    pageUID: "Journal.JournalEntryPostingSearch",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
@@ -14,7 +14,7 @@ define({
                 $log.info("Journal Queue got initialized");
             },
             definition: {
-                title: "SEARCH_JOURNAL_ENTRY",
+                title: "SEARCH_POSTING_ENTRY",
                 searchForm: [
                     "*"
                 ],
@@ -56,7 +56,7 @@ define({
                         'transactionDescription':searchOptions.transactionDescription,
                         'transactionDate': searchOptions.transactionDate,
                         'transactionType': searchOptions.transactionType,
-                        'currentStage': "branchPostingReview",
+                        'currentStage': "branchPostingSearch",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
