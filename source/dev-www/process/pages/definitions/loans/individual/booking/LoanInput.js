@@ -252,6 +252,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
                             model.showLoanBookingDetails = data.showLoanBookingDetails;
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
+                            model.allowPreEmiInterest = data.allowPreEmiInterest;
                         }
                         //stateParams
                         console.log(model.BackedDatedDisbursement);
@@ -359,6 +360,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
                             model.additional.portfolioUrnSelector = "coapplicant";
+                        }
+                        
+                        if (model.loanAccount.disbursementSchedules.length >= 0 && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)) {
+                            model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
 
                         init(model, form, formCtrl); // init call
@@ -1341,8 +1346,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key": "loanAccount.firstRepaymentDate",
                         "title": "REPAYMENT_DATE",
                         "type": "date",
+                        "required": true,
+                        "onChange": function(value ,form ,model, event){
+                            if(!model.allowPreEmiInterest)
+                                return;
+                            var repaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                            var applicationDate = moment(model.loanAccount.loanApplicationDate,SessionStore.getSystemDateFormat());
+                            if(repaymentDate < applicationDate){
+                                model.loanAccount.firstRepaymentDate = null;
+                                PageHelper.showProgress("loan-create","Repayment date should be greater than Application date",5000);
+                            }
+                        }
+                    },
+                    {
+                        "key": "loanAccount.scheduleStartDate",
+                        "title": "SCHEDULE_START_DATE",
+                        "condition": "model.allowPreEmiInterest",
+                        "type": "date",
                         "required": true
-                    }
+                    },
                 ]
             },
             {
@@ -1765,6 +1787,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     },
                                     {
                                         "key": "loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                                        "condition": "!model.allowPreEmiInterest", 
                                         "title": "MORATORIUM_PERIOD",
                                         "type": "string"
                                     },
@@ -2597,6 +2620,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
+
+                                var diffDays = 0;
+                                var scheduleStartDate;
+                                if (model.allowPreEmiInterest) {
+                                    if(model.loanAccount.scheduleStartDate)
+                                        scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                                    if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                                        var DisbursementDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                                    if(model.loanAccount.scheduleStartDate && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                                        diffDays = scheduleStartDate.diff(DisbursementDate, "days");
+
+                                    if (diffDays > 0) {
+                                        model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
+                                    }
+
+                                    for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
+                                        model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
+                                    }
+                                }
+                                
                                 var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                                  if(!$stateParams.pageId)
                                 {
@@ -2671,6 +2714,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
                                 return false;
                             }
+                        }
+                    }
+                    var diffDays = 0;
+                    var scheduleStartDate;
+                    if (model.allowPreEmiInterest) {
+                        if(model.loanAccount.scheduleStartDate)
+                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate,SessionStore.getSystemDateFormat());
+                        if(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                            var DisbursementDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                        if(model.loanAccount.scheduleStartDate && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate)
+                            diffDays = scheduleStartDate.diff(DisbursementDate, "days");
+
+                        if (diffDays > 0) {
+                            model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
+                        }
+
+                        for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
+                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDays;
+
                         }
                     }
 
