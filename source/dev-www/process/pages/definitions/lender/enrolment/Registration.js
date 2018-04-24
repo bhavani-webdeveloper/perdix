@@ -407,7 +407,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Lender Proceed.', 5000);
-                                irfNavigator.goBack();
+                                return irfNavigator.goBack();
                                 PageHelper.clearErrors();
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
