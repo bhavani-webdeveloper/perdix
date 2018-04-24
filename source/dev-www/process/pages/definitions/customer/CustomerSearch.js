@@ -92,7 +92,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					},
 					"urnNo": {
 						"title": "URN_NO",
-						"type": "number"
+						"type": "string"
 					},
 					"bankId": {
 						"title": "BANK_NAME",

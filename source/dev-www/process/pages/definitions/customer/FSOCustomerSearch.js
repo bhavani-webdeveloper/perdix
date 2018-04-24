@@ -87,7 +87,7 @@ function($log, formHelper, Enrollment,Queries,$state, SessionStore, Utils, Pages
 					},
 					"urnNo": {
 						"title": "URN_NO",
-						"type": "number"
+						"type": "string"
 					},
 					"bankId": {
 						"title": "BANK_NAME",
