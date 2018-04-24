@@ -13,6 +13,7 @@ export interface IFormHelper {
     getAddressProof(): any;
     getIncomeType(): any;
     getExpenseType(): any;
+    getReferencetype(): any;
 }
 
 export abstract class NeedsAngularInjector {
@@ -68,5 +69,9 @@ export class FormHelper extends NeedsAngularInjector implements IFormHelper {
 
     getExpenseType(): any {
         return this.getInjector().enum('vehicle_expense_types').data;
+    }
+
+    getReferencetype(): any {
+         return this.getInjector().enum('reference_type').data;
     }
 }

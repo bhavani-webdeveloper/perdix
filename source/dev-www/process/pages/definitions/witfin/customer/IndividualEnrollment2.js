@@ -64,15 +64,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true
                                 },
-                                "IndividualReferenes.verifications.referenceFirstName": {
-                                    "title":"NAME_OF_NEIGHBOUR"
-                                },
-                                "IndividualReferenes.verifications.referenceCheck.customerResponse": {
-                                    "title":"NEIGHBOUR_REFERENCE"
-                                },
-                                "IndividualReferenes.verifications.referenceCheck.opinion": {
-                                    "title":"COMMENTS_OF_NEIGHBOUR"
-                                }
+                                // "IndividualReferenes.verifications.referenceFirstName": {
+                                //     "title":"NAME_OF_NEIGHBOUR"
+                                // },
+                                // "IndividualReferenes.verifications.customerResponse": {
+                                //     "title":"NEIGHBOUR_REFERENCE"
+                                // },
+                                // "IndividualReferenes.verifications.opinion": {
+                                //     "title":"COMMENTS_OF_NEIGHBOUR"
+                                // }
                             }
                         },
                         "ScreeningReview": {
@@ -126,14 +126,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.location",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.location"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "ApplicationReview": {
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.whatsAppMobileNoOption"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -202,8 +202,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.whatsAppMobileNoOption"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "HOCreditAppraisal": {
@@ -238,8 +238,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.whatsAppMobileNoOption"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "ManagementCommittee": {
@@ -274,8 +274,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "excludes": [
-                                "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck"
+                                "ContactInformation.whatsAppMobileNoOption"
+                                // "IndividualReferences.verifications.ReferenceCheck"
                             ]
                         },
                         "REJECTED": {
@@ -352,9 +352,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    "IndividualReferences.verifications.referenceFirstName": {
+                    "IndividualReferences.verifications": {
+                        "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
+                        "add": null
+                    },
+                    "IndividualReferences.verifications.relationship": {
                         "type": "select",
-                        "enumCode": "reference_type"
+                        "enumCode": "reference_type",
+                        "title": "REFERENCE_TYPE",
+                        "orderNo": 10
+                    },
+                    "IndividualReferenes.verifications.referenceFirstName": {
+                        "orderNo": 20,
+                        "title": "NAME"
+                    },
+                    "IndividualReferences.verifications.mobileNo": {
+                        "orderNo": 30,
+                        "title": "PHONE_NO"
+                    },
+                    "IndividualReferences.verifications.knownSince": {
+                        "orderNo": 40
                     },
                     "FamilyDetails.familyMembers.noOfDependents": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() == 'SELF'"
@@ -748,15 +765,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualReferences.verifications",
                     "IndividualReferences.verifications.referenceFirstName",
                     "IndividualReferences.verifications.mobileNo",
-                    "IndividualReferences.verifications.occupation",
-                    "IndividualReferences.verifications.address",
-                    "IndividualReferences.verifications.ReferenceCheck",
-                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                    "IndividualReferences.verifications.ReferenceCheck.relationship",
-                    "IndividualReferences.verifications.ReferenceCheck.customerResponse",
-                    "IndividualReferences.verifications.ReferenceCheck.opinion",
-                    "IndividualReferences.verifications.ReferenceCheck.financialStatus"
-
+                    "IndividualReferences.verifications.knownSince",
+                    "IndividualReferences.verifications.relationship"
                 ];
 
             }
