@@ -186,10 +186,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 title: 'INTEREST',
                                 data: 'interestPaid'
                             }, {
-                                title: 'PENALITY',
+                                title: 'PENALTY',
                                 data: 'penalityPaid'
                             }, {
-                                title: 'OTHER_FEE_CARGES',
+                                title: 'OTHER_FEE_CHARGES',
                                 data: 'otherFeeChargesPaid'
                             },{
                                  title: 'PRE_CLOSURE_CHARGES',
@@ -248,9 +248,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "Document.liabilityLenderDocuments",
                     "Document.liabilityLenderDocuments.liabilityLenderDocuments",
                     "Document.liabilityLenderDocuments.liabilityLenderDocuments.fileId",
+                    "Document.liabilityLenderDocuments.liabilityLenderDocuments.upload",
                     "Document.liabilityComplianceDocuments",
                     "Document.liabilityComplianceDocuments.liabilityComplianceDocuments",
                     "Document.liabilityComplianceDocuments.liabilityComplianceDocuments.fileId",
+                    "Document.liabilityComplianceDocuments.liabilityComplianceDocuments.upload ",
 
                     "LiabilityRepayments",
                     "LiabilityRepayments.liabilityRepayments",
@@ -313,13 +315,33 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                             "notitle": true,
                                                             "fieldHtmlClass": "btn-block",
                                                             "style": "btn-default",
-                                                            "icon": "fa fa-download",
+                                                            "icon": "fa fa-download"
                                                             "type": "button",
                                                             "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
                                                             "onClick": function(model, form, schemaForm, event) {
                                                                 var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
                                                                 Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                                             }
+                                                        },
+                                                        "upload": {
+                                                            // "key" :"liabilityAccount.liabilityLenderDocuments[].fileId ",
+                                                            // "title": "ADD_DOCUMENT",
+                                                            // "notitle": true,
+                                                            // "fieldHtmlClass": "btn-block",
+                                                            // "style": "btn-default",
+                                                            // "fileType": "application/pdf",
+                                                            // "category": "Loan",
+                                                            // "subCategory": "DOC1",
+                                                            // //"icon": "fa fa-download", 
+                                                            // "type": "file",
+                                                            "condition":""
+                                                            "title": "Upload",
+                                                            "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                            "type": "file",
+                                                            "fileType": "application/pdf",
+                                                            "category": "Loan",
+                                                            "subCategory": "DOC1",
+                                                            "using": "scanner"
                                                         }
                                                     }
                                                 }
