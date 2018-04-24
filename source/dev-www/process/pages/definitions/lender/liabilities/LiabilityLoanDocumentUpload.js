@@ -18,10 +18,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var overridesFields = function (bundlePageObj) {
                 return {
                     "LenderDocumentation": {
-                        "orderNo": 40
+                        "orderNo": 40,
+                        "condition":"!model.rejectedFlag"
                     },
                     "LegalCompliance": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                         "condition":"!model.rejectedFlagg"
                     },
                     "LegalCompliance.liabilityComplianceDocuments.otherDocumentName": {
                         "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName == 'Other'",
@@ -41,6 +43,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true,
                     },
                     "LenderDocumentation.liabilityLenderDocuments": {
+                        "view":"fixed",
                         onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                             console.log(LiabilityLenderDocuments)
                             var index = model.liabilityAccount.liabilityLenderDocuments.length -1;
@@ -89,9 +92,40 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LegalCompliance.liabilityComplianceDocuments.documentName",
                     "LegalCompliance.liabilityComplianceDocuments.otherDocumentName",
                     // "LegalCompliance.liabilityComplianceDocuments.isSignOff",
-                    "LegalCompliance.liabilityComplianceDocuments.uploadedDate"
+                    "LegalCompliance.liabilityComplianceDocuments.uploadedDate",
 
-                ];
+                    "LenderDocumentationRejected",
+                    "LenderDocumentationRejected.liabilityLenderDocument",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.documentType",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.documentType.documentName",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.rejectReasons",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.rejectReasons.rejectReason",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.isSignOff",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.isSignOff.isSignOff",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.upload",
+                    "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.upload.upload",
+                    // "LegalComplianceRejected",
+                    // "LegalComplianceRejected.liabilityComplianceDocuments",
+                    // "LegalComplianceRejected.liabilityComplianceDocuments.documentName",
+                    // "LegalComplianceRejected.liabilityComplianceDocuments.otherDocumentName",
+                    // "LegalComplianceRejected.liabilityComplianceDocuments.isSignOff",
+                    // "LegalComplianceRejected.liabilityComplianceDocuments.upload"
+                    "LegalComplianceRejected",
+                    "LegalComplianceRejected.liabilityComplianceDocument",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.documentType",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.documentType.documentName",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.rejectReasons",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.rejectReasons.rejectReason",
+                    //"LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.rejectReason",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.isSignOff",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.isSignOff.isSignOff",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.upload",
+                    "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument.section.upload.upload"
+                    ];
 
             }
 
@@ -106,6 +140,183 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
+                         "repositoryAdditions": {
+                                "LenderDocumentationRejected":{
+                                    "type": "box",
+                                    "condition":"model.rejectedFlag",
+                                    "orderNo":10,
+                                    "colClass": "col-sm-12",
+                                    "title": "LENDER_DOCUMENT",
+                                    "htmlClass": "text-danger",
+                                    "items": {
+                                        "liabilityLenderDocument": {
+                                            "type": "fieldset",
+                                            "title": "LENDER_DOCUMENT",
+                                            "items": {
+                                                "liabilityLenderDocument": {
+                                                    "key": "liabilityAccount.liabilityLenderDocuments",
+                                                    "type": "array",
+                                                    "title": "LENDER_DOCUMENT",
+                                                    "view": "fixed",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "notitle": true,
+                                                    "items": {
+                                                        "section":{
+                                                            "type": "section",
+                                                            "htmlClass": "row",
+                                                            "items":{
+                                                                "documentType": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "documentName": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
+                                                                    }
+                                                                },
+                                                                 "rejectReasons": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "rejectReason": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].rejectReason",
+                                                                           // "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName=='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "isSignOff": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "isSignOff": {
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].isSignOff",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                            
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "upload": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "upload":{
+                                                                            "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                                            "title": "DOWNLOAD_FORM",
+                                                                            "notitle": true,
+                                                                            "fieldHtmlClass": "btn-block",
+                                                                            "style": "btn-default",
+                                                                            "fileType": "application/pdf",
+                                                                            "category": "Loan",
+                                                                            "subCategory": "DOC1",
+                                                                            //"icon": "fa fa-download", 
+                                                                            "type": "file",
+                                                                            //"readonly": false
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } 
+                                                } 
+                                            }
+                                        },
+                                    }
+                                },
+                                "LegalComplianceRejected":{
+                                    "type": "box",
+                                    "condition":"model.rejectedFlagg",
+                                    "orderNo":10,
+                                    "colClass": "col-sm-12",
+                                    "title": "COMPLIANCE_DOCUMENT",
+                                    "htmlClass": "text-danger",
+                                    "items": {
+                                        "liabilityComplianceDocument": {
+                                            "type": "fieldset",
+                                            "title": "COMPLIANCE_DOCUMENT",
+                                            "items": {
+                                                "liabilityComplianceDocument": {
+                                                    "key": "liabilityAccount.liabilityComplianceDocuments",
+                                                    "type": "array",
+                                                    "title": "COMPLIANCE_DOCUMENT",
+                                                    "view": "fixed",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "notitle": true,
+                                                    "items": {
+                                                        "section":{
+                                                            "type": "section",
+                                                            "htmlClass": "row",
+                                                            "items":{
+                                                                "documentType": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "documentName": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].documentName",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
+                                                                    }
+                                                                },
+                                                                 "rejectReasons": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "rejectReason": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].rejectReason",
+                                                                           // "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName=='Other'",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "isSignOff": {
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "isSignOff": {
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].isSignOff",
+                                                                            "notitle": true,
+                                                                            "readonly": true
+                                                                            
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "upload": {                                        
+                                                                    "type": "section",
+                                                                    "htmlClass": "col-sm-3",
+                                                                    "items": {
+                                                                        "upload":{
+                                                                           // "condition":"liabilityAccount.liabilityComplianceDocuments.fileId",
+                                                                            "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
+                                                                            "title": "DOWNLOAD_FORM",
+                                                                            "notitle": true,
+                                                                            "fieldHtmlClass": "btn-block",
+                                                                            "style": "btn-default",
+                                                                            "fileType": "application/pdf",
+                                                                            "category": "Loan",
+                                                                            "subCategory": "DOC1",
+                                                                            //"icon": "fa fa-download", 
+                                                                            "type": "file",
+                                                                            //"readonly": false
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } 
+                                                } 
+                                            }
+                                        },
+                                    }
+                                }
+                            },
                             "additions": [
                                 {
                                     "type": "actionbox",
@@ -147,6 +358,26 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 res.liabilityAccount.liabilityComplianceDocuments.pop();
                                 res.liabilityAccount.liabilityLenderDocuments.pop();
                                 model.liabilityAccount = res.liabilityAccount
+                                console.log(model.liabilityAccount.rejectedFlag);
+                                model.liabilityDocumentApproved=[];
+                                model.liabilityComplianceApproved = [];
+                                _.remove(model.liabilityAccount.liabilityLenderDocuments, function(n) {
+                                    if(n.isSignOff == "REJECTED") {
+                                        model.rejectedFlag =true;
+                                    }else{
+                                        model.liabilityDocumentApproved.push(n)
+                                    }
+                                });
+                                _.remove(model.liabilityAccount.liabilityComplianceDocuments, function(n) {
+                                    if(n.isSignOff == "REJECTED") {
+                                        model.rejectedFlagg =true;
+                                    }else{
+                                       model.liabilityComplianceApproved.push(n)
+                                    }
+                                });
+                               
+                                model.liabilityAccount = res.liabilityAccount
+                                console.log(model.liabilityDocumentApproved)
                             });
                     } else {        
                         irfNavigator.goBack();
@@ -219,6 +450,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         _.map(model.LiabilityLoanAccountBookingProcess.liabilityAccount.liabilityComplianceDocuments, function(n) {
                             return n.documentType = "ComplianceDocuments";
                         });
+                         model.liabilityAccount.liabilityLenderDocuments = _.union(model.liabilityDocumentApproved, model.liabilityAccount.liabilityLenderDocuments);
+                         model.liabilityAccount.liabilityComplianceDocuments = _.union(model.liabilityComplianceApproved, model.liabilityAccount.liabilityComplianceDocuments);
+                        console.log(_.union(model.liabilityDocumentApproved, model.liabilityAccount.liabilityLenderDocuments));
+                        console.log(_.union(model.liabilityComplianceApproved, model.liabilityAccount.liabilityComplianceDocuments));
 
                         PageHelper.showLoader();
                         model.LiabilityLoanAccountBookingProcess.proceed()
@@ -228,7 +463,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             .subscribe(function (value) {
                                 PageHelper.showProgress('loan', 'Documents Uploaded', 5000);
                                 PageHelper.clearErrors();
-                                irfNavigator.goBack();
+                                return irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
