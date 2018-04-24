@@ -152,7 +152,15 @@
                 "Completed"
               ]
             },
-            
+            "dateOfBirth": {
+              "title": "Date Of Birth",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "educationStatus": {
               "title": "Education Status",
               "type": "string",
@@ -172,7 +180,7 @@
                 "Completed"
               ]
             },
-			"noOfDependents": {
+            "noOfDependents": {
               "title": "noOfDependents",
               "type": "string",
               "minLength": 0,
@@ -284,7 +292,7 @@
                 "Completed"
               ]
             },
-			"billDocId": {
+      "billDocId": {
             "title": "billDocId",
             "type": "string",
             "minLength": 1,
@@ -366,6 +374,140 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 366,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+          }
+        }
+      },
+"currentAssets": {
+        "title": "Current Asset",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            
+          ],
+          "properties": {
+            "assetType": {
+              "title": "Asset Type",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "description": {
+              "title": "description",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetValue": {
+              "title": "assetValue",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "hypothecatedToUs": {
+              "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+            ,
+            "udf1": {
+              "title": "udf1",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf2": {
+              "title": "udf2",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf3": {
+              "title": "udf3",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf4": {
+              "title": "udf4",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf5": {
+              "title": "udf5",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "title": "udfDate1",
+              "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "title": "udfDate2",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate3": {
+              "title": "udfDate3",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -514,7 +656,7 @@
                 "Completed"
               ]
             },
-			 "loanSourceCategory": {
+            "loanSourceCategory": {
               "title": "loanSourceCategory",
               "type": "string",
               "captureStages": [
@@ -569,7 +711,7 @@
                 "Completed"
               ]
             },
-			"proofDocuments": {
+      "proofDocuments": {
             "title": "proofDocuments",
             "type": "string",
             "minLength": 1,
@@ -599,7 +741,6 @@
                 "Completed"
               ]
             },
-			
             "interestOnly": {
               "title": "Interest Only",
               "type": "string",
@@ -764,7 +905,7 @@
               "Completed"
             ]
           },
-		   "localityType": {
+          "localityType": {
             "title": "localityType",
             "type": "string",
             "minLength": 1,
@@ -774,7 +915,7 @@
               "Completed"
             ]
           },
-		   "accomodationType": {
+          "accomodationType": {
             "title": "accomodationType",
             "type": "string",
             "minLength": 1,
@@ -949,7 +1090,7 @@
               "Completed"
             ]
           },
-		   "requestedLoanAmount": {
+       "requestedLoanAmount": {
             "title": "requestedLoanAmount",
             "type": "number",           
             "captureStages": [
@@ -957,7 +1098,7 @@
               "Completed"
             ]
           },
-		   "requestedLoanPurpose": {
+       "requestedLoanPurpose": {
             "title": "requestedLoanPurpose",
             "type": "string",
             "minLength": 1,
@@ -966,14 +1107,16 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"weddingDate": {
+          },
+          "weddingDate": {
             "title": "weddingDate",
             "type": "date",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
-          },"monthlyRent": {
+          },
+          "monthlyRent": {
             "title": "monthlyRent",
             "type": "number",
             "minimum": 0,
@@ -982,7 +1125,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"previousRentDetails": {
+          },
+          "previousRentDetails": {
             "title": "previousRentDetails",
             "type": "string",
             "minLength": 1,
@@ -991,7 +1135,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"vehiclesOwned": {
+          },
+          "vehiclesOwned": {
             "title": "vehiclesOwned",
             "type": "number",
             "minimum": 0,
@@ -1000,7 +1145,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"vehiclesFinanced": {
+          },
+          "vehiclesFinanced": {
             "title": "vehiclesFinanced",
             "type": "number",
             "minimum": 0,
@@ -1009,7 +1155,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"vehiclesFree": {
+          },
+          "vehiclesFree": {
             "title": "vehiclesFree",
             "type": "number",
             "minimum": 1,
@@ -1019,7 +1166,7 @@
               "Completed"
             ]
           },
-		   "businessSignboardImage": {
+       "businessSignboardImage": {
             "title": "businessSignboardImage",
             "type": "string",
             "minLength": 1,
@@ -1248,7 +1395,7 @@
               "Completed"
             ]
           },
-		  "customerPartnerNumber": {
+      "customerPartnerNumber": {
             "title": "customerPartnerNumber",
             "type": "string",
             "minLength": 1,
@@ -1258,7 +1405,7 @@
               "Completed"
             ]
           }
-		    }
+        }
       },
       "kyc": {
         "title": "KYC Details",
@@ -1860,57 +2007,6 @@
           }
         }
       },
-      "currentAssets": {
-        "title": "Current Assets",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "required": [
-            
-          ],
-          "properties": {
-            "assetType": {
-              "title": "Asset Type",
-              "type": "string",
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "description": {
-              "title": "description",
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "assetValue": {
-              "title": "assetValue",
-              "type": "number",
-              "minimum": 0,
-              "maximum": 10000000000,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "hypothecatedToUs": {
-              "title": "hypothecatedToUs",
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            }
-           
-          }
-        }
-      },
       "physicalVerification": {
         "title": "Physical Verification",
         "type": "object",
@@ -2054,6 +2150,15 @@
               "Completed"
             ]
           },
+          "udf5": {
+            "title": "YEARS_IN_CURR_AREA",
+            "type": "string",
+            "enumCode": "years_in_current_area",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "udf4": {
             "title": "YEARS_IN_CURR_ADDRESS",
             "type": "string",
@@ -2063,15 +2168,27 @@
               "Completed"
             ]
           },
-          "udf5": {
-            "title": "YEARS_IN_CURR_AREA",
+          "udf6": {
+            "title": "RENT_LEASE_STATUS",
             "type": "string",
-            "enumCode": "years_in_current_area",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf7": {
+            "title": "WHETHER_AUDITED",
+            "type": "string",
+            "minLength":1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           }
+        }
       },
       "user_defined_date_fields": {
         "title": "User Defined Date Details",
@@ -2085,7 +2202,23 @@
               "BasicEnrolment",
               "Completed"
             ]
-          }         
+          },
+          "udfDate2": {
+            "title": "RENT_LEASE_AGREEMENT",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udfDate3": {
+            "title": "LAST_AVAIL_ITR",
+            "type": "string",
+            "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+            ]
+          }
         }
       },
       "enterprise_user_defined_fields": {
@@ -2094,20 +2227,44 @@
         "required": [],
         "properties": {
           "udf1": {
-              "title": "RENT_LEASE_STATUS",
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "captureStages": [
+            "title": "Distance From Highway (in KM)",
+            "type": "number",
+            "minLength": 1,
+            "maxLength": 500,
+            "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           },
           "udf2": {
-            "title": "WHETHER_AUDITED",
+            "title": "Availed Any MFI service?",
+            "type": "boolean",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf3": {
+            "title": "A Numerical Value",
+            "type": "number",
+            "minLength": 1,
+            "maxLength": 500,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf4": {
+            "title": "Enterprise Name 1",
             "type": "string",
-            "minLength":1,
-            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf5": {
+            "title": "Enterprise Name 2",
+            "type": "string",
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2119,10 +2276,12 @@
         "title": "Enterprise User Defined Date Details",
         "type": "object",
         "required": [
+          "udfDate1",
+          "udfDate2"
         ],
         "properties": {
-           "udfDate1": {
-            "title": "RENT_LEASE_AGREEMENT",
+          "udfDate1": {
+            "title": "date1",
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
@@ -2130,11 +2289,11 @@
             ]
           },
           "udfDate2": {
-            "title": "LAST_AVAIL_ITR",
+            "title": "date2",
             "type": "string",
             "captureStages": [
-                "BasicEnrolment",
-                "Completed"
+              "BasicEnrolment",
+              "Completed"
             ]
           }
         }
@@ -2156,7 +2315,7 @@
               "Completed"
             ]
           },
-		    "photoImageId": {
+           "photoImageId": {
             "title": "photoImageId",
             "type": "string",
             "minLength": 1,
@@ -2165,8 +2324,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          }
-		  ,"vehiclesOwned": {
+          },
+          "vehiclesOwned": {
             "title": "vehiclesOwned",
             "type": "number",
             "minimum": 0,
@@ -2175,7 +2334,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"vehiclesFinanced": {
+          },
+          "vehiclesFinanced": {
             "title": "vehiclesFinanced",
             "type": "number",
             "minimum": 0,
@@ -2184,7 +2344,8 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },"vehiclesFree": {
+          },
+          "vehiclesFree": {
             "title": "vehiclesFree",
             "type": "number",
             "minimum": 1,
@@ -2204,21 +2365,21 @@
               "Completed"
             ]
           },
-          "photoImageId": {
-            "title": "photoImageId",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
           "landmark": {
             "title": "Landmark",
             "type": "string",
             "minLength": 1,
             "maxLength": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+      "panNo": {
+            "title": "Pan Number",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2264,7 +2425,7 @@
               "Completed"
             ]
           },
-		      "oldCustomerId": {
+          "oldCustomerId": {
             "title": "OldCustomerId",
             "type": "string",
             "minLength": 1,
@@ -2582,7 +2743,7 @@
               "Completed"
             ]
           },
-		  "panNo": {
+          "panNo": {
             "title": "Pan Number",
             "type": "string",
             "minLength": 10,
@@ -2913,7 +3074,7 @@
               "Completed"
             ]
           },
-		  "noOfRegularEmployees": {
+          "noOfRegularEmployees": {
             "title": "noOfRegularEmployees",
             "type": "number",
             "minimum": 0,
@@ -2923,7 +3084,7 @@
               "Completed"
             ]
           },
-		  "noOfContractEmployees": {
+          "noOfContractEmployees": {
             "title": "noOfContractEmployees",
             "type": "number",
             "minimum": 0,
@@ -3053,7 +3214,7 @@
               "Completed"
             ]
           },
-		  "grossMarginPercentage": {
+          "grossMarginPercentage": {
             "title": "grossMarginPercentage",
             "type": "number",
             "minimum": 0,
@@ -3063,7 +3224,7 @@
               "Completed"
             ]
           },
-		  "netMarginPercentage": {
+          "netMarginPercentage": {
             "title": "netMarginPercentage",
             "type": "number",
             "minimum": 0,
@@ -3073,7 +3234,7 @@
               "Completed"
             ]
           },
-		  "avgDailySaleAmount": {
+          "avgDailySaleAmount": {
             "title": "avgDailySaleAmount",
             "type": "number",
             "minimum": 0,
@@ -3083,7 +3244,7 @@
               "Completed"
             ]
           },
-		  "workingDaysInMonth": {
+          "workingDaysInMonth": {
             "title": "workingDaysInMonth",
             "type": "number",
             "minimum": 0,
@@ -3103,7 +3264,7 @@
               "Completed"
             ]
           },
-		   "isGSTAvailable": {
+          "isGSTAvailable": {
             "title": "isGSTAvailable",
             "type": "string",
             "minLength": 0,
@@ -3113,7 +3274,7 @@
               "Completed"
             ]
           },
-		   "companyEmailId": {
+       "companyEmailId": {
             "title": "companyEmailId",
             "type": "string",
             "minLength": 0,
@@ -3123,7 +3284,7 @@
               "Completed"
             ]
           },
-		   "enterpriseType": {
+          "enterpriseType": {
             "title": "enterpriseType",
             "type": "string",
             "minLength": 0,
@@ -3242,7 +3403,7 @@
           }
         }
       },
-	  "enterpriseMonthlySales": {
+      "enterpriseMonthlySales": {
         "title": "Enterprise Monthly Sales",
         "type": "object",
         "required": [
@@ -3261,7 +3422,7 @@
           "totalSales": {
             "title": "totalSales",
             "type": "number",
-			"minimum": 0,
+            "minimum": 0,
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
@@ -3359,7 +3520,7 @@
             "title": "limit",
             "type": "number",
             "minimum": 0,
-            "maximum": 100000000,
+            "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -3543,7 +3704,7 @@
                 "Completed"
               ]
             },
-			"endMonth": {
+            "endMonth": {
               "title": "End Month",
               "type": "string",
               "format": "date",
@@ -3592,8 +3753,8 @@
                 "Completed"
               ]
             },
-			 "bankStatementPhoto": {
-              "title": "bankStatementPhoto",
+            "bankStatementPhoto": {
+                "title": "bankStatementPhoto",
              "type": "string",
             "minLength": 1,
             "maxLength": 100,
@@ -3666,7 +3827,7 @@
                 "Completed"
               ]
             },
-			"invoiceDocId": {
+      "invoiceDocId": {
             "title": "invoiceDocId",
             "type": "string",
             "minLength": 1,
@@ -3776,7 +3937,7 @@
                 "Completed"
               ]
             },
-			"frequency": {
+            "frequency": {
               "title": "frequency",
               "type": "string",
               "minLength": 1,
@@ -3814,7 +3975,7 @@
                 "Completed"
               ]
             },
-			"invoiceDocId": {
+      "invoiceDocId": {
             "title": "invoiceDocId",
             "type": "string",
             "minLength": 1,
@@ -3824,7 +3985,7 @@
               "Completed"
             ]
           }
-			
+      
           }
         }
       },
@@ -3846,7 +4007,7 @@
                 "Completed"
               ]
             },
-			"machineImage": {
+      "machineImage": {
             "title": "machineImage",
             "type": "string",
             "minLength": 1,
@@ -4031,7 +4192,7 @@
                 "BasicEnrolment",
                 "Completed"
               ]
-            },
+              },
             "endUse": {
               "title": "endUse",
               "type": "string",
@@ -4052,7 +4213,7 @@
                 "Completed"
               ]
             }, 
-			"details": {
+      "details": {
               "title": "details",
               "type": "string",
               "minLength": 1,
@@ -4115,142 +4276,6 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            }
-          }
-        }
-      },
-
-     
-      "currentAssets": {
-        "title": "Current Asset",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "required": [
-            
-          ],
-          "properties": {
-            "assetType": {
-              "title": "Asset Type",
-              "type": "string",
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "description": {
-              "title": "description",
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "assetValue": {
-              "title": "assetValue",
-              "type": "number",
-              "minimum": 0,
-              "maximum": 10000000000,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "hypothecatedToUs": {
-              "title": "hypothecatedToUs",
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            }
-            ,
-            "udf1": {
-              "title": "udf1",
-              "type": "String",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udf2": {
-              "title": "udf2",
-              "type": "string",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udf3": {
-              "title": "udf3",
-              "type": "String",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udf4": {
-              "title": "udf4",
-              "type": "String",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udf5": {
-              "title": "udf5",
-              "type": "String",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udfDate1": {
-              "title": "udfDate1",
-              "type": "string",
-              "format": "date",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udfDate2": {
-              "title": "udfDate2",
-             "type": "string",
-              "format": "date",
-              "minimum": 0,
-              "maximum": 100,
-              "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-              ]
-            },
-            "udfDate3": {
-              "title": "udfDate3",
-             "type": "string",
-              "format": "date",
-              "minimum": 0,
-              "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -4386,7 +4411,14 @@
         "items": {
           "type": "object",
           "required": [
-            "buyerName"
+            "buyerName",
+            "sector",
+            "subSector",
+            "product",
+            "paymentTerms",
+            "paymentDate",
+            "paymentFrequency",
+            "receivablesOutstanding"
           ],
           "properties": {
             "buyerName": {
