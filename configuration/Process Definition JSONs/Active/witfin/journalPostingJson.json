@@ -28,8 +28,8 @@
          ]
       },{
          "order": 4,
-         "code": "branchRejected",
-         "name": "branchRejected",
+         "code": "REJECTED",
+         "name": "REJECTED",
          "stageType": "ACCOUNTINGPOSTING",
          "isAccountPosting": true,
          "allowedRoles": [
@@ -67,7 +67,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "relatedAccountNo": {
@@ -79,7 +79,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
 
@@ -92,7 +92,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
 
@@ -105,7 +105,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "transactionDate": {
@@ -116,7 +116,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "productType": {
@@ -127,7 +127,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "valueDate": {
@@ -138,7 +138,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "remarks": {
@@ -150,7 +150,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "instrumentType": {
@@ -162,7 +162,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "instrumentNumber": {
@@ -174,7 +174,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "instrumentDate": {
@@ -185,7 +185,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "ifscCode": {
@@ -197,7 +197,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "instrumentBankName": {
@@ -209,7 +209,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "instrumentBranchName": {
@@ -221,7 +221,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "billNumber": {
@@ -233,7 +233,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "billDate": {
@@ -245,7 +245,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "fileId": {
@@ -257,7 +257,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                },
                "branchId": {
@@ -269,7 +269,7 @@
                      "branchPostingEntry",
                      "branchPostingReview",
                      "branchPostingSearch",
-                     "branchRejected"
+                     "REJECTED"
                   ]
                }
             }
