@@ -178,6 +178,36 @@
                      "journalPosting"
                   ]
                },
+               "billNumber": {
+                  "title": "bil Number",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "billDate": {
+                  "title": "Bill Date",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "fileId": {
+                  "title": "fileId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
                "branchId": {
                   "title": "branchId",
                   "type": "string",
