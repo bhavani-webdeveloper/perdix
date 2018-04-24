@@ -15,12 +15,24 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return {}
             }
             var totalAmountPaidSum = function(modelValue,model){
-                if(model.liabilityRepay.totalAmountPaid != null){
-                    model.liabilityRepay.totalAmountPaid = model.liabilityRepay.totalAmountPaid + modelValue;  
+                var total = 0;
+                if (_.isNumber(model.liabilityRepay.principalPaid)) {
+                    total = total + model.liabilityRepay.principalPaid;
                 }
-                else{
-                    model.liabilityRepay.totalAmountPaid = modelValue;
-                }    
+
+                if (_.isNumber(model.liabilityRepay.interestPaid)) {
+                    total = total + model.liabilityRepay.interestPaid;
+                }
+
+                if (_.isNumber(model.liabilityRepay.penalityPaid)) {
+                    total = total + model.liabilityRepay.penalityPaid;
+                }
+
+                if (_.isNumber(model.liabilityRepay.otherFeeChargesPaid)) {
+                    total = total + model.liabilityRepay.otherFeeChargesPaid;
+                }
+
+                model.liabilityRepay.totalAmountPaid = total;   
             }
 
             var overridesFields = function(bundlePageObj) {
@@ -319,10 +331,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }]
                         }
                     };
-                    // var p1 = UIRepository.getLiabilityRepayment().$promise;
-                    // p1.then(function(repo) {
-                    //     self.form = IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
-                    // });
                     UIRepository.getLiabilityRepayment().$promise
                         .then(function(repo){
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
@@ -434,16 +442,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             }
                                         }
                                     }
-
-                                    // model.liabilityClosureRepay.transactionType = null;
                                     model.liabilityClosureRepay = liabilityClosureRepay;
                                     model.lenderAccountNumber = this.liabilityRepayCal.lenderAccountNumber
                                     model.liabilityScheduleRepay = this.liabilityRepayCal
                                     model.liabilityRepay = this.liabilityRepayCal;
                                     if(this.liabilityRepayCal){
                                     model.liabilityRepay.liabilityRepaymentScheduleDetailsId = this.liabilityRepayCal.id;
-                                  //  model.liabilityRepay.transactionDate = userLoginDate;
-
                                 };
                                                                     }
                             });
@@ -472,8 +476,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-                        var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargesPaid
-                        if (model.liabilityRepay.totalAmountPaid == totalAmountPaid) {
+                        //var totalAmountPaid = model.liabilityRepay.principalPaid + model.liabilityRepay.interestPaid + model.liabilityRepay.penalityPaid + model.liabilityRepay.otherFeeChargesPaid
                                 PageHelper.showLoader();
                                 model.LiabilityRepayment.liabilityRepay = model.liabilityRepay;
                                 model.LiabilityRepayment.save()
@@ -494,16 +497,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         });
                                         //PageHelper.showErrors(err.data.error);
                                         PageHelper.hideLoader();
-                                    });
-                            }
-                        else {
-                            PageHelper.showErrors({
-                                data: {
-                                    error: "TotalInstallmentAmountPaid is Incorrect"
-                                }
-                            });
-                        }
-                    }
+                                    })
+                     }
                 }
             };
         }
