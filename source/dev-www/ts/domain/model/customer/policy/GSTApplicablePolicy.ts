@@ -34,9 +34,11 @@ export class GSTApplicablePolicy extends IPolicy<EnrolmentProcess> {
                     count++;
                 }
             }
-            if (count < 1) {               
+            if (count < 1) {
                 return Observable.throw(new ValidationError("Self Relationship is mandatory!"));
             }
         }
+
+        return Observable.of(enrolmentProcess);
     }
 }

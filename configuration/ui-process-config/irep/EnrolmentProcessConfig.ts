@@ -49,8 +49,7 @@ let config = {
                         "arguments": null
                     }
                 ],
-                "overrides": [
-                ]
+                "overrides": []
             }
         },
 

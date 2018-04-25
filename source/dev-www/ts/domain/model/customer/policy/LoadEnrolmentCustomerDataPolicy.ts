@@ -28,9 +28,7 @@ export class LoadEnrolmentCustomerDataPolicy extends IPolicy<EnrolmentProcess> {
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let formHelperData:IFormHelper = ObjectFactory.getInstance("FormHelper");
-        return Observable.defer(
-            () => {
-                try {
+        try {
                     let observables = [];
                     let fm = enrolmentProcess.customer.familyMembers;
                     let incomes;
@@ -85,9 +83,6 @@ export class LoadEnrolmentCustomerDataPolicy extends IPolicy<EnrolmentProcess> {
                     console.error(err);
                     return Observable.of(enrolmentProcess);
                 }
-
-            }
-        )
     }
 
 }

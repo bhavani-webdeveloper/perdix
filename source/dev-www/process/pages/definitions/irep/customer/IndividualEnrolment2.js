@@ -119,7 +119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },                                
+                                },
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true
                                 },
@@ -1308,7 +1308,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                    };                    
+                    };
                     model.UIUDF = {
                         'family_fields': {}
                     };
@@ -1364,7 +1364,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails": {
                                     "items": {
                                         "familyMembers": {
-                                            "items": {                                                
+                                            "items": {
                                                 "relationShip1": {
                                                     "key": "customer.familyMembers[].relationShip",
                                                     "type": "select",
@@ -1397,8 +1397,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "submit",
-                                            "title": "SUBMIT",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                                            "title": "SUBMIT"
                                         }
                                     ]
                                 },

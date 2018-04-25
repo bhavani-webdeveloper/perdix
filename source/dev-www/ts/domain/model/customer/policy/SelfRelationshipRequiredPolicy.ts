@@ -39,11 +39,10 @@ export class SelfRelationshipRequiredPolicy extends IPolicy<EnrolmentProcess> {
                 return Observable.throw(new Error("Self Relationship is mandatory!"));
                // PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory",5000);
                 // return false;
+            } else {
+                return Observable.of(enrolmentProcess);
             }
-        } else {
-            //PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory",5000);
-           // return false;
-           return Observable.throw(new Error("Family Members section is missing. Self Relationship is Mandatory"));
-        }        
+        }
+        return Observable.throw(new Error("Family Members section is missing. Self Relationship is Mandatory"));
     }
 }
