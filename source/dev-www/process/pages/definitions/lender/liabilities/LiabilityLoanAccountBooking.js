@@ -245,7 +245,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.scheduleStartDate",
                     "LoanAmountDeduction.firstInstallmentDate",
                     "LoanAmountDeduction.maturityDate",
-                    // "LoanAmountDeduction.loanAccountStatus"
+                    
 
                     "Document",
                     "Document.liabilityLenderDocuments",
