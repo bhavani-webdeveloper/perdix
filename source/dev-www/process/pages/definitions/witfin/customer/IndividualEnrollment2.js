@@ -354,21 +354,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return {
                     "IndividualReferences.verifications": {
                         "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
-                        "add": null
+                        "add": null,
+                        "remove": null
                     },
                     "IndividualReferences.verifications.relationship": {
                         "type": "select",
                         "enumCode": "reference_type",
                         "title": "REFERENCE_TYPE",
-                        "orderNo": 10
+                        "orderNo": 10,
+                        "required": true
                     },
-                    "IndividualReferenes.verifications.referenceFirstName": {
+                    "IndividualReferences.verifications.referenceFirstName": {
                         "orderNo": 20,
-                        "title": "NAME"
+                        "title": "NAME",
+                        "required": true
                     },
                     "IndividualReferences.verifications.mobileNo": {
                         "orderNo": 30,
-                        "title": "PHONE_NO"
+                        "title": "PHONE_NO",
+                        "required": true
                     },
                     "IndividualReferences.verifications.knownSince": {
                         "orderNo": 40
@@ -1094,7 +1098,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.referredBy = obj.referredBy;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.landmark = obj.landmark;
-                                model.customer.postOffice = obj.postOffice;
+                                model.customer.mailingPostoffice = obj.postOffice;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
