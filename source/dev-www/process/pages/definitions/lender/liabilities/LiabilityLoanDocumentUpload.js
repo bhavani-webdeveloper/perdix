@@ -106,12 +106,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.isSignOff.isSignOff",
                     "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.upload",
                     "LenderDocumentationRejected.liabilityLenderDocument.liabilityLenderDocument.section.upload.upload",
-                    // "LegalComplianceRejected",
-                    // "LegalComplianceRejected.liabilityComplianceDocuments",
-                    // "LegalComplianceRejected.liabilityComplianceDocuments.documentName",
-                    // "LegalComplianceRejected.liabilityComplianceDocuments.otherDocumentName",
-                    // "LegalComplianceRejected.liabilityComplianceDocuments.isSignOff",
-                    // "LegalComplianceRejected.liabilityComplianceDocuments.upload"
+                    
                     "LegalComplianceRejected",
                     "LegalComplianceRejected.liabilityComplianceDocument",
                     "LegalComplianceRejected.liabilityComplianceDocument.liabilityComplianceDocument",
