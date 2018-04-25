@@ -448,8 +448,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         obs.subscribe(function(res) {
                             model.LiabilityLoanAccountBookingProcess = res;
                             model.liabilityAccount = res.liabilityAccount;
-                            // console.log(model.liabilityAccount);
-                            //console.log(model);
                         })
                     } else {
                         var obs = LiabilityLoanAccountBookingProcess.get($stateParams.pageId);
