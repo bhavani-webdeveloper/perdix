@@ -60,7 +60,6 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", 
                             var branchName = $filter('filter')(formHelper.enum('branch_id').data, {
                                 'value': is.node_id
                             }, true);
-                            $log.info(branchName);
                             if (branchName && branchName.length) {
                                 is.branchName = branchName[0].name;
                             }
@@ -71,7 +70,6 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", 
                             var centreName = $filter('filter')(formHelper.enum('centre').data, {
                                 'value': is.node_id
                             }, true);
-                            $log.info(centreName);
                             if (centreName && centreName.length) {
                                 is.centreName = centreName[0].name;
                             }
