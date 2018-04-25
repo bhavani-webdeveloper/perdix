@@ -19,15 +19,6 @@
          ]
       },{
          "order": 3,
-         "code": "branchPostingSearch",
-         "name": "branchPostingSearch",
-         "stageType": "ACCOUNTINGPOSTING",
-         "isAccountPosting": true,
-         "allowedRoles": [
-            "WM"
-         ]
-      },{
-         "order": 4,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "ACCOUNTINGPOSTING",
