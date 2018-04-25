@@ -16,6 +16,7 @@ declare var branchPostingProcessConfig: Object;
 export class BranchPostingProcess implements CanApplyPolicy {
     
     journalEntryDto: BranchEntry;
+    stage: string;
     private journalEntryProcessAction: string;
 
     branchRepo: IBranchRepository;
@@ -59,8 +60,8 @@ export class BranchPostingProcess implements CanApplyPolicy {
         return Observable.concat(obs1, obs2, obs3).last();
     }
 
-    proceed(): Observable<BranchPostingProcess>{
-        // this.stage = toStage;
+    proceed(toStage?: any): Observable<BranchPostingProcess>{
+        this.stage = toStage;
         this.journalEntryProcessAction = 'PROCEED';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeProceed', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
@@ -72,7 +73,8 @@ export class BranchPostingProcess implements CanApplyPolicy {
 
    reject(): Observable<BranchPostingProcess>{
         // this.stage = toStage;
-        this.stage = 'REJECTED';
+        this.journalEntryProcessAction = 'PROCEED';
+        this.stage = 'clearRejectedNoCatch(promise: ZoneAwarePromise<any>)';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeReject', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.branchRepo.updateJournal(this);

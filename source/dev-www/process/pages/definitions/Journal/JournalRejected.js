@@ -1,5 +1,5 @@
 define({
-    pageUID: "Journal.JournalEntryPostingSearch",
+    pageUID: "Journal.JournalRejected",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
@@ -56,7 +56,7 @@ define({
                         'transactionDescription':searchOptions.transactionDescription,
                         'transactionDate': searchOptions.transactionDate,
                         'transactionType': searchOptions.transactionType,
-                        'currentStage': "Completed",
+                        'currentStage': "Rejected",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
@@ -113,7 +113,7 @@ define({
                     },
                     getActions: function() {
                         return [{
-                            name: "UPDATE_JOURNAL_ENTRY",
+                            name: "VIEW_BRANCH_ENTRY",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {

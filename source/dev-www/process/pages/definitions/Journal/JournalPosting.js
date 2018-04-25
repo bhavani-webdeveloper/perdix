@@ -20,6 +20,23 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                     "readonly": true
                                 }
                             }
+                        },
+                        "Rejected": {
+                            "overrides": {
+                                "BranchPostingEntry": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "Completed": {
+                            "excludes": [
+                                "actionBox"
+                            ],
+                            "overrides": {
+                                "BranchPostingEntry": {
+                                    "readonly": true
+                                }
+                            }
                         }
                     }
                 }
@@ -448,7 +465,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "billNo": {
                                             "title": "BILL_NO",
-                                            "type": "number"
+                                            "type": "string"
                                         },
                                         "billUpload": {
                                             "title": "BILL_UPLOAD",
@@ -663,6 +680,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         .subscribe(function(out) {
                             PageHelper.showProgress("Posting Rejected", "Posting Rejected", 3000);
                             PageHelper.showProgress('Posting', 'Done.', 5000);
+                            irfNavigator.goBack();
                         }, function(err) {
                             PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
                             PageHelper.showErrors(err);
@@ -676,7 +694,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         }
                         PageHelper.showLoader();
                         model.branchProcess.remarks = model.journal.remarks;
-                        model.branchProcess.proceed()
+                        model.branchProcess.proceed("Completed")
                         .finally(function() {
                             PageHelper.hideLoader();
                         })

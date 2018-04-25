@@ -11,6 +11,7 @@ irf.pages.controller("JournalPostingDashboardCtrl",
                 "Page/Engine/Journal.JournalPostingSearch",
                 "Page/Engine/Journal.JournalEntryReviewQueue",
                 "Page/Engine/Journal.JournalEntryPostingSearch",
+                "Page/Engine/Journal.JournalRejected",
                 // "Page/Engine/Journal.JournalPostingQueue",
                 "Page/Engine/Journal.JournalEntryUpload"
             ]
@@ -84,6 +85,23 @@ irf.pages.controller("JournalPostingDashboardCtrl",
                     ceMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     ceMenu.data = '-';
+                });
+            }
+
+            var deMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.JournalRejected"];
+
+            if (deMenu) {
+                var promise = Journal.journalEntrySearch({
+                        'transactionName': '',
+                        'transactionDescription':'',
+                        'page': 1,
+                        'per_page': 1,
+                        'transactionType':"Entry",
+                        'currentStage': "Rejected"
+                    }).$promise.then(function(response, headerGetter) {
+                    deMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    deMenu.data = '-';
                 });
             }
         });
