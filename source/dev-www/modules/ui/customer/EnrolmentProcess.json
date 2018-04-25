@@ -267,6 +267,18 @@
                         "inputmode": "number",
                         "numberType": "tel"
                     },
+                    "relationship": {
+                        "key": "customer.verifications[].relationship",
+                        "title": "REFERENCE_TYPE1",
+                        "type": "select",
+                        "titleMap": {
+                            "Neighbour": "Neighbour",
+                            "Relative/friend": "Relative/friend"
+                        }
+                    },
+                    "knownSince": {
+                        "key": "customer.verifications[].knownSince"
+                    },
                     "occupation": {
                         "key": "customer.verifications[].occupation",
                         "title": "OCCUPATION",
@@ -277,35 +289,17 @@
                         "key": "customer.verifications[].address",
                         "type": "textarea"
                     },
-                    "ReferenceCheck": {
-                        "type": "fieldset",
-                        "title": "REFERENCE_CHECK",
-                        "items": {
-                            "knownSince": {
-                                "key": "customer.verifications[].knownSince"
-                            },
-                            "relationship": {
-                                "key": "customer.verifications[].relationship",
-                                "title": "REFERENCE_TYPE1",
-                                "type": "select",
-                                "titleMap": {
-                                    "Neighbour": "Neighbour",
-                                    "Relative/friend": "Relative/friend"
-                                }
-                            },
-                            "opinion": {
-                                "key": "customer.verifications[].opinion"
-                            },
-                            "financialStatus": {
-                                "key": "customer.verifications[].financialStatus"
-                            },
-                            "customerResponse": {
-                                "key": "customer.verifications[].customerResponse",
-                                "title": "CUSTOMER_RESPONSE",
-                                "type": "select",
-                                "enumCode": "customer_response"
-                            }
-                        }
+                    "opinion": {
+                        "key": "customer.verifications[].opinion"
+                    },
+                    "financialStatus": {
+                        "key": "customer.verifications[].financialStatus"
+                    },
+                    "customerResponse": {
+                        "key": "customer.verifications[].customerResponse",
+                        "title": "CUSTOMER_RESPONSE",
+                        "type": "select",
+                        "enumCode": "customer_response"
                     }
                 }
             }
