@@ -1098,7 +1098,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.referredBy = obj.referredBy;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.landmark = obj.landmark;
-                                model.customer.mailingPostoffice = obj.postOffice;
+                                model.customer.postOffice = obj.postOffice;
 
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);

@@ -1,9 +1,9 @@
 define({
 	pageUID: "management.ReferenceCodeSearch",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","ReferenceCodeResource","$state","SessionStore","Utils"],
+    dependencies: ["$log","formHelper","ReferenceCodeResource","$state","SessionStore","Utils", "irfNavigator"],
     $pageFn:
-    function($log, formHelper, ReferenceCodeResource,$state, SessionStore, Utils){
+    function($log, formHelper, ReferenceCodeResource,$state, SessionStore, Utils, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -151,6 +151,10 @@ define({
                                         id: item.id
                                     }).$promise.then(function(response){
                                         console.log("insider here");
+                                        irfNavigator.go({
+                                            state: "Page.Adhoc",
+                                            pageName: "witfin.loans.LoanOriginationDashboard"
+                                        });
                                     }, function(err){
                                         console.log("error here");
                                         console.log(err);
