@@ -98,8 +98,6 @@
                "loanAmount":{
                   "title":"loanAmount",
                   "type":"number",
-                  "minimum":1,
-                  "maximum":1000000000,
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
@@ -123,8 +121,6 @@
                "rateOfInterest":{
                   "title":"rateOfInterest",
                   "type":"number",
-                  "minimum":1,
-                  "maximum":12,
                   "captureStages":[
                       "LiabilityAccount", "DisbursementConfirmation"
                   ]
@@ -212,9 +208,7 @@
                },
                "netDisbursementAmount":{
                   "title":"netDisbursementAmount",
-					"type":"number",
-                  "minimum":1,
-                  "maximum":10000000,
+					   "type":"number",
                   "captureStages":[
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
