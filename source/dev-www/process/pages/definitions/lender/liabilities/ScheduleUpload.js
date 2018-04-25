@@ -1,13 +1,13 @@
-
 define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProcess'], function(LiabilityLoanAccountBookingProcess) {
     LiabilityLoanAccountBookingProcess = LiabilityLoanAccountBookingProcess['LiabilityLoanAccountBookingProcess'];
     return {
         pageUID: "lender.liabilities.ScheduleUpload",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "LiabilityAccountProcess","Schedule"],
-        $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, LiabilityAccountProcess,Schedule) {
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "LiabilityAccountProcess", "Schedule"
+        ],
+        $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, LiabilityAccountProcess, Schedule) {
 
             var configFile = function() {
                 return {}
@@ -33,21 +33,21 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 "title": "SCHEDULE_UPLOAD",
                 "subTitle": "",
 
-                initialize: function (model, form, formCtrl) {
-                    if(_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId) ) {
+                initialize: function(model, form, formCtrl) {
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
-                            .subscribe(function(res){
+                            .subscribe(function(res) {
                                 PageHelper.hideLoader();
-                                if(res.liabilityAccount.currentStage != "ScheduleUpload" && res.liabilityAccount.currentStage != "Completed") {
-                                   irfNavigator.goBack();
+                                if (res.liabilityAccount.currentStage != "ScheduleUpload" && res.liabilityAccount.currentStage != "Completed") {
+                                    irfNavigator.goBack();
                                 }
-                                model.LiabilityLoanAccountBookingProcess = res; 
+                                model.LiabilityLoanAccountBookingProcess = res;
                                 model.liabilityAccount = res.liabilityAccount;
                                 model.lenderEnrolmentProcess = res.lenderEnrolmentProcess;
                             });
                     } else {
-                       irfNavigator.goBack();
+                        irfNavigator.goBack();
                     }
 
                     var self = this;
@@ -56,25 +56,25 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "includes": getIncludes(model),
                         "excludes": [],
                         "options": {
-                            "repositoryAdditions": {                                
+                            "repositoryAdditions": {
                                 "LenderAccountDetails": {
                                     "type": "box",
                                     "title": "LENDER_ACCOUNT_DETAILS",
                                     "colClass": "col-sm-6",
                                     "items": {
-                                        "lenderName":{
+                                        "lenderName": {
                                             "key": "lenderEnrolmentProcess.customer.firstName",
                                             "title": "LENDER_NAME",
                                             "type": "string",
                                             "readonly": true
                                         },
-                                        "lenderAccountNumber":{
+                                        "lenderAccountNumber": {
                                             "key": "liabilityAccount.lenderAccountNumber",
                                             "title": "LENDER_ACCOUNT_NUMBER",
                                             "type": "string",
                                             "readonly": true
                                         },
-                                        "repaymentTenure":{
+                                        "repaymentTenure": {
                                             "key": "liabilityAccount.repaymentTenure",
                                             "title": "REPAYMENT_TENURE",
                                             "type": "string",
@@ -87,7 +87,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     "title": "SCHEDULE_UPLOAD",
                                     "colClass": "col-sm-6",
                                     "items": {
-                                        "burlkFile":{
+                                        "burlkFile": {
                                             "key": "schedule.Bulkfile",
                                             "notitle": true,
                                             "title": "SCHEDULE_UPLOAD",
@@ -99,17 +99,20 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                 Schedule.scheduleUpload(file, progress, model.liabilityAccount.lenderAccountNumber).then(function(res) {
                                                     model.liabilityAccount.isPaymentScheduleUploaded = true;
                                                     model.LiabilityLoanAccountBookingProcess.proceed()
-                                                        .finally(function () {
+                                                        .finally(function() {
                                                             PageHelper.hideLoader();
-                                                            return irfNavigator.goBack();
+                                                            irfNavigator.go({
+                                                                state: 'Page.Adhoc',
+                                                                pageName: "lender.liabilities.LoanBookingDashboard"
+                                                            });
                                                         })
-                                                        .subscribe(function (value) {
-                                                            PageHelper.clearErrors();                           
-                                                        }, function (err) {
+                                                        .subscribe(function(value) {
+                                                            PageHelper.clearErrors();
+                                                        }, function(err) {
                                                             PageHelper.showErrors({
-                                                                'message': "Please upload excel file only"
-                                                            })
-                                                           // PageHelper.showErrors(err);
+                                                                    'message': "Please upload excel file only"
+                                                                })
+                                                                // PageHelper.showErrors(err);
                                                             PageHelper.hideLoader();
                                                         });
                                                 }, function(err) {
@@ -123,10 +126,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                     };
                     UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
-                        .then(function(repo){
+                        .then(function(repo) {
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
-                        .then(function(form){
+                        .then(function(form) {
                             self.form = form;
                         });
                 },
@@ -137,8 +140,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 schema: function() {
                     return Enrollment.getSchema().$promise;
                 },
-                actions: {
-                }
+                actions: {}
             };
 
         }
