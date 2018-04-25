@@ -61,6 +61,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:40
                             },
                             {
+                                pageName: 'irep.loans.individual.origination.LoanRequest',
+                                title: 'LOAN_REQUEST',
+                                pageClass: 'loan-request',
+                                minimum: 1,
+                                maximum: 1,
+                                order:50
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
@@ -208,6 +216,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'business',
                                     model: {
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model: {
                                         loanProcess: loanProcess
                                     }
                                 });

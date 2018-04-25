@@ -41,18 +41,12 @@ define([],function(){
                         "KYC": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "LoanSanction",
                                 "DeductionsFromLoan",
-                                "DeductionsFromLoan.expectedProcessingFeePercentage",
-                                "DeductionsFromLoan.expectedCommercialCibilCharge",
-                                "DeductionsFromLoan.estimatedEmi",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium",
-                                "ProposedUtilizationPlan",
-                                "ProposedUtilizationPlan.loanUtilisationDetail",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
+                                "ProposedUtilizationPlan",                                
                                 "CollateralDetails"
                             ],
                             "overrides": {
@@ -122,33 +116,54 @@ define([],function(){
                             }
                         },
                         "GuarantorAddition": {
-                            "excludes": [
-                                "LoanRecommendation",
-                                "AdditionalLoanInformation",
-                                "NomineeDetails",
+                           "excludes": [
                                 "ProposedUtilizationPlan",
-                                "ProposedUtilizationPlan.loanUtilisationDetail",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
-                                "CollateralDetails"
+                                "LoanSanction",
+                                "DeductionsFromLoan",
+                                "NomineeDetails.nominees.nomineeButton",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",                  
                             ],
                             "overrides": {
-                                "LoanCustomerRelations.loanCustomerRelations": {
-                                    "startEmpty": true
-                                }, 
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": true
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },                                
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }          
                             }
                         },
                         "KYCReview": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "LoanSanction",
+                                "DeductionsFromLoan",                                
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "ProposedUtilizationPlan",
-                                "ProposedUtilizationPlan.loanUtilisationDetail",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage",
-                                "ProposedUtilizationPlan.loanUtilisationDetail.consumptionDetails",
                                 "CollateralDetails"
                             ],
                             "overrides": {
@@ -186,7 +201,10 @@ define([],function(){
                         "Appraisal": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "DeductionsFromLoan"                  
+                                "LoanSanction",
+                                "DeductionsFromLoan",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",                 
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -331,34 +349,215 @@ define([],function(){
                         "AppraisalReview": {
                             "excludes": [
                                 "ProposedUtilizationPlan",
+                                "LoanSanction",
                                 "DeductionsFromLoan",
+                                "NomineeDetails.nominees.nomineeButton",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",                  
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": true
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },                                
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }      
+                            }
+                        },
+                        "Televerification": {
+                            "excludes": [
+                                "ProposedUtilizationPlan",
+                                "LoanSanction",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
                             ],
                             "overrides": {
-                                "EnterpriseInformation": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
                                     "readonly": true
                                 },
-                                "EnterpriseInformation.enterpriseType" : {
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
                                     "readonly": true
                                 },
-                                "Liabilities": {
-                                    "readonly": true
-                                    },
-                                "EnterpriseAssets": {
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
                                     "readonly": true
                                 },
-                                "BankAccounts": {
+                                "CollateralDetails": {
+                                    "orderNo": 7,
                                     "readonly": true
                                 },
-                                "ContactInformation": {
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },                                
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }      
+                                    
+                            }
+                        },
+                        "Evaluation": {
+                            "excludes": [
+                                "ProposedUtilizationPlan",
+                                "LoanSanction",
+                                "DeductionsFromLoan",
+                                "PreliminaryInformation.actualAmountRequired",
+                                 "PreliminaryInformation.fundsFromDifferentSources",
+                                "NomineeDetails.nominees.nomineeButton"                   
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
                                     "readonly": true
                                 },
-                                "EnterpriseReferences": {
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
                                     "readonly": true
-                                }
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": true
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },                                
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                } 
+
+                            }       
+                        },
+
+                        "CreditCommitteeReview": {
+                            "excludes": [
+                                "ProposedUtilizationPlan",
+                                "LoanSanction",
+                                "DeductionsFromLoan",
+                                "PreliminaryInformation.actualAmountRequired",
+                                "PreliminaryInformation.fundsFromDifferentSources",
+                                "NomineeDetails.nominees.nomineeButton"                   
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": true
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },                                
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }      
+                                    
+                            }
+                        },
+                        "Sanction": {
+                            "excludes": [
+                                "ProposedUtilizationPlan",
+                                "DeductionsFromLoan",
+                                "PreliminaryInformation.actualAmountRequired",
+                    "PreliminaryInformation.fundsFromDifferentSources",
+                                "NomineeDetails.nominees.nomineeButton"                   
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation": {
+                                    "orderNo": 1,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanMitigants": {
+                                    "orderNo": 4
+                                },
+                                "LoanDocuments": {
+                                    "orderNo": 5
+                                },
+                                "AdditionalLoanInformation": {
+                                    "orderNo": 6,
+                                    "readonly": true
+                                },
+                                "CollateralDetails": {
+                                    "orderNo": 7,
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 8,
+                                    "readonly": true
+                                },
+                                "LoanSanction":{
+                                    "orderNo": 9
+                                },                           
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                }      
                                     
                             }
                         }
+
                     }
 
                 }
@@ -382,6 +581,11 @@ define([],function(){
                                 "PDC":"PDC",
                                 "Others":"Others"
                             }
+                        },
+                        "LoanCustomerRelations.loanCustomerRelations": {
+                            "add": null,
+                            "remove": null,
+                            "startEmpty": true
                         },
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "PincodeLOVConfiguration"
@@ -445,6 +649,11 @@ define([],function(){
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.commercialCibilCharge",
+                    "LoanSanction",
+                    "LoanSanction.sanctionDate",
+                    "LoanSanction.numberOfDisbursements",
+                    "LoanSanction.disbursementSchedules",
+                    "LoanSanction.disbursementSchedules.disbursementAmount",
 
                     "AdditionalLoanInformation",
                     "AdditionalLoanInformation.estimatedDateOfCompletion",
@@ -580,7 +789,7 @@ define([],function(){
                                         "type": "box",
                                         "title": "POST_REVIEW",
                                         "condition": "model.loanAccount.id",
-                                        "orderNo": 20,
+                                        "orderNo": 600,
                                         "items": {
                                             "action": {
                                                 "key": "review.action",

@@ -18,6 +18,118 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "password",
                          "required": true
                     },
+                    "EnterpriseInformation.rentLeaseStatus": {
+                         "schema": {
+                              "enumCode": "rent_lease_status"
+                         },
+                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                    },
+                    "EnterpriseInformation.rentLeaseAgreement": {
+                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' ",
+                         "orderNo":142
+                    },
+                    "EnterpriseFinancials.monthlyTurnover": {
+                         "orderNo": 10
+                     },
+                    "EnterpriseFinancials.monthlyBusinessExpenses":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.avgMonthlyNetIncome": {
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.otherBusinessIncomes": {
+                         "orderNo": 40
+                    },
+                    "EnterpriseFinancials.otherBusinessIncomes.incomeSource": {
+                         "orderNo": 10
+                    },
+                    "EnterpriseFinancials.otherBusinessIncomes.amount":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.otherBusinessIncomes.otherBusinessIncomeDate":{
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.incomeThroughSales": {
+                         "orderNo": 50
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.buyerName":{
+                         "orderNo": 10,
+                         "title": "BUYER_NAME"
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.incomeType":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.invoiceType": {
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.amount": {
+                         "orderNo": 40
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate": {
+                         "orderNo": 50
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
+                         "orderNo": 60
+                    },
+                    "EnterpriseFinancials.avgDailySaleAmount": {
+                         "orderNo": 60
+                    },
+                    "EnterpriseFinancials.workingDaysInMonth": {
+                         "orderNo": 70
+                    },
+                    "EnterpriseFinancials.grossMarginPercentage":{
+                         "orderNo": 80
+                    },
+                    "EnterpriseFinancials.netMarginPercentage" :{
+                         "orderNo": 90
+                    },                
+                    "EnterpriseFinancials.enterpriseMonthlySales":{
+                         "orderNo": 100
+                    },
+                    "EnterpriseFinancials.enterpriseMonthlySales.month": {
+                         "orderNo": 10
+                    },
+                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType":{
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.expenditures": {
+                         "orderNo": 110
+                    },
+                    "EnterpriseFinancials.expenditures.expenditureSource":{
+                         "orderNo": 10
+                    },
+                    "EnterpriseFinancials.expenditures.annualExpenses":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.expenditures.frequency":{
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.expenditures.billDocId":{
+                         "orderNo": 40
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses":{
+                         "orderNo": 120
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName":{
+                         "orderNo": 10,
+                         "title": "VENDOR_NAME"
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.amount":{
+                         "orderNo": 20
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency":{
+                         "orderNo": 30
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate":{
+                         "orderNo": 40,
+                         "condition": "model.customer.rawMaterialExpenses[arrayIndex].frequency== 'Date'"
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId":{
+                         "orderNo": 50
+                    },
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                          "type": "string",
                          "required": true
@@ -54,7 +166,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                    "type":"date",
                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
-                                   "orderNo:": 143
+                                   "orderNo:": 142
                               }
                          }
                     }
@@ -175,6 +287,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.monthlyTurnover",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
                     "EnterpriseFinancials.avgMonthlyNetIncome",
+                    "EnterpriseFinancials.otherBusinessIncomes",
+                    "EnterpriseFinancials.otherBusinessIncomes.incomeSource",
+                    "EnterpriseFinancials.otherBusinessIncomes.amount",
+                    "EnterpriseFinancials.otherBusinessIncomes.otherBusinessIncomeDate",
                     "EnterpriseFinancials.incomeThroughSales",
                     "EnterpriseFinancials.incomeThroughSales.buyerName",
                     "EnterpriseFinancials.incomeThroughSales.incomeType",
@@ -189,10 +305,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.enterpriseMonthlySales",
                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType", 
+                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                    "EnterpriseFinancials.expenditures",
+                    "EnterpriseFinancials.expenditures.expenditureSource",
+                    "EnterpriseFinancials.expenditures.annualExpenses",
+                    "EnterpriseFinancials.expenditures.frequency",
+                    "EnterpriseFinancials.expenditures.billDocId",
                     "EnterpriseFinancials.rawMaterialExpenses",
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
 
@@ -314,32 +436,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "ProxyIndicators",
                                     "BuyerDetails",
+                                    "EnterpriseFinancials.otherBusinessIncomes",
                                     "SuppliersDeatils",
                                     "EnterpriseAssets",
                                     "Machinery",
                                     "EnterpriseReferences",
                                     "CommercialCBCheck",
+                                    "EnterpriseFinancials.expenditures",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.incomeThroughSales",
-                                    "EnterpriseFinancials.incomeThroughSales.buyerName",
-                                    "EnterpriseFinancials.incomeThroughSales.incomeType",
-                                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
-                                    "EnterpriseFinancials.incomeThroughSales.amount",
-                                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
-                                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
                                     "EnterpriseFinancials.avgDailySaleAmount",
                                     "EnterpriseFinancials.workingDaysInMonth",
                                     "EnterpriseFinancials.grossMarginPercentage",
                                     "EnterpriseFinancials.netMarginPercentage",                     
-                                    "EnterpriseFinancials.rawMaterialExpenses",
-                                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
-                                    "EnterpriseFinancials.rawMaterialExpenses.amount",
-                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
-                                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
+                                    "EnterpriseFinancials.rawMaterialExpenses"
 
                                 ],
                                 "overrides": {
@@ -398,7 +509,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
                                     },
                                     "EnterpriseInformation.rentLeaseAgreement": {
-                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' ",
+                                        "orderNo":142
+
                                     },
                                     "EnterpriseInformation.businessHistory": {
                                         "required": true
@@ -505,19 +618,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "ProxyIndicators",
                                     "BuyerDetails",
+                                    "EnterpriseFinancials.otherBusinessIncomes",
+                                    "EnterpriseFinancials.expenditures",
                                     "SuppliersDeatils",
                                     "EnterpriseAssets",
                                     "Machinery",
                                     "EnterpriseReferences",
                                     "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.enterpriseMonthlySales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseFinancials.incomeThroughSales",                                    
+                                    "EnterpriseFinancials.enterpriseMonthlySales",                                    
                                     "EnterpriseFinancials.avgDailySaleAmount",
                                     "EnterpriseFinancials.workingDaysInMonth",
                                     "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage"    
+                                    "EnterpriseFinancials.netMarginPercentage",                     
+                                    "EnterpriseFinancials.rawMaterialExpenses"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -592,8 +706,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.outstandingPayable",
                                     "EnterpriseReferences.verifications.outstandingReceivable",
                                     "EnterpriseReferences.verifications.customerResponse",
-                                    "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.rentLeaseAgreement",
                                     "EnterpriseInformation.lastFiledItr",
                                     "EnterpriseInformation.whetherAudited",
                                     "EnterpriseInformation.regularEmployees",
@@ -804,13 +916,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "AppraisalReview": {
                                 "excludes": [
-                                    "EnterpriseInformation.rentLeaseStatus",
-                                    "EnterpriseInformation.rentLeaseAgreement",
-                                    "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.WhetherAudited",
-                                    "EnterpriseInformation.regularEmployees",
-                                    "EnterpriseInformation.contractEmployee",
-                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1300,192 +1405,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "GuarantorAddition": {
                                 "excludes": [
-                                    "ProxyIndicators",
-                                    "BuyerDetails",
-                                    "SuppliersDeatils",
-                                    "EnterpriseAssets",
-                                    "Machinery",
-                                    "EnterpriseReferences",
-                                    "CommercialCBCheck",
-                                    "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.incomeThroughSales",
-                                    "EnterpriseFinancials.incomeThroughSales.buyerName",
-                                    "EnterpriseFinancials.incomeThroughSales.incomeType",
-                                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
-                                    "EnterpriseFinancials.incomeThroughSales.amount",
-                                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
-                                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
-                                    "EnterpriseFinancials.enterpriseMonthlySales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
-                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",                     
-                                    "EnterpriseFinancials.rawMaterialExpenses",
-                                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
-                                    "EnterpriseFinancials.rawMaterialExpenses.amount",
-                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
-                                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId"
-
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
-                                        "orderNo": 1
-                                    },                                   
-                                    "ContactInformation": {
-                                        "orderNo": 2
+                                        "readonly": true
                                     },
-                                    "BankAccounts": {
-                                        "orderNo": 3
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
                                     },
                                     "Liabilities": {
-                                        "orderNo": 4,
-                                         "title": "BUSINESS_LIABILITIES"
-                                    },
-                                    "EnterpriseFinancials": {
-                                        "orderNo": 5
-                                    },
-                                    "EmployeeDetails": {
-                                        "orderNo": 6
-                                    },
-                                    "EnterpriseInformation.customerBranchId": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.urnNo": {
-                                        "condition": "model.customer.urnNo",
+                                    "EnterpriseAssets": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.centreId": {
+                                    "BankAccounts": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.oldCustomerId": {
-                                        "condition": "model.customer.oldCustomerId",
+                                    "ContactInformation": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.referredBy": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.referredName": {
-                                        "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'"
-                                    },
-                                    "EnterpriseInformation.companyOperatingSince": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.companyEmailId": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.photoImageId": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.ownership": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.rentLeaseStatus": {
-                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
-                                    },
-                                    "EnterpriseInformation.rentLeaseAgreement": {
-                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
-                                    },
-                                    "EnterpriseInformation.businessHistory": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.noOfPartners": {
-                                        "condition": "model.customer.enterprise.businessConstitution=='Partnership'"
-                                    },
-                                    "EnterpriseInformation.partnershipDissolvedDate": {
-                                        "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'"
-                                    },
-                                    "EnterpriseInformation.companyRegistered": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.isGSTAvailable": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.enterpriseRegistrations": {
-                                        "condition": "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'"
-                                    },
-                                    "EnterpriseInformation.enterpriseRegistrations.documentId": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.businessActivity": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.businessSector": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.businessSubsector": {
-                                        "required": true,
-                                        "resolver": "BusinessSubsectorLOVConfiguration"
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
+                                    "EnterpriseReferences": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement": {
-                                        "required": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
-                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
-                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
-                                    },
-                                    "ContactInformation.locality": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation.villageName": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation.district": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation.state": {
-                                        "readonly": true
-                                    },
-                                    "ContactInformation.businessInPresentAreaSince": {
-                                        "required": true
-                                    },
-                                    "ContactInformation.businessInCurrentAddressSince": {
-                                        "required": true
-                                    },
-                                    "ContactInformation.pincode": {
-                                        "required": true,
-                                        "resolver": "PincodeLOVConfiguration"
-                                    },
-                                    "BankAccounts.customerBankAccounts.ifscCode": {
-                                        "required": true,
-                                        "resolver": "IFSCCodeLOVConfiguration"
-                                    },
-                                    "BankAccounts.customerBankAccounts.customerBankName": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                        "required": true
-                                    },
-                                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                        "required": true
-                                    },
-                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                        "required": true
-                                    },
-                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                        "required": true
-                                    },
-                                    "EnterpriseFinancials.monthlyTurnover": {
-                                        "required": true
-                                    },
-                                    "EmployeeDetails.avgMonthlySalary": {
-                                        "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
                                     }
                                 }
                             },
@@ -2200,6 +2141,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                    var branchId = SessionStore.getBranchId();
+                    if(branchId && !model.customer.customerBranchId)
+                        {
+                            model.customer.customerBranchId = branchId;
+                    };
                     /* End of setting data for the form */
                     console.log("model information");
                     console.log(model);

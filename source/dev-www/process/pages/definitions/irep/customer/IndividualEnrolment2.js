@@ -11,9 +11,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
-            var pageParams = {
+           /* var pageParams = {
                 readonly: true
-            };
+            };*/
 
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
@@ -105,12 +105,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.customerId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
                                 "IndividualInformation.existingLoan": {
                                     "required": true
                                 },
@@ -125,19 +119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
+                                },                                
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true
                                 },
@@ -329,15 +311,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
                                 },
                                 "ContactInformation.mailingDistrict": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
                                 },
                                 "ContactInformation.mailingState": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
                                 },
                                 "FamilyDetails.familyMembers.relationShip": {
                                     "readonly": true
@@ -438,919 +417,231 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Televerification": {
                             "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
-                                    "orderNo": 1,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
-                                    "orderNo": 2,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "ContactInformation": {
-                                    "orderNo": 3,
-                                    "readonly":true
-                                },
-                                "IndividualFinancials": {
-                                    "orderNo": 4,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "orderNo": 5,
-                                    "readonly":true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "orderNo": 6,
-                                    "readonly":true
-                                },
-                                "HouseVerification": {
-                                    "orderNo": 7,
-                                    "readonly":true
-                                },
-                                "BankAccounts": {
-                                    "orderNo": 8,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "orderNo": 9,
-                                    "readonly":true
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "orderNo": 10,
-                                    "readonly":true
-                                },
-                                "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
-                                },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
-                                "KYC.identityProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.identityProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProof": {
                                     "readonly": true
                                 },
-                                "KYC.additionalKYCs.kyc1ImagePath": {
-                                    "required": true
-                                },
-                                "IndividualInformation.customerBranchId": {
+                                "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                },
-                                "IndividualInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.customerId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.existingLoan": {
-                                    "required": true
-                                },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true
-                                },
-                                "IndividualInformation.maritalStatus": {
-                                    "required": true
-                                },
-                                "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
-                                "HouseVerification.udf30": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
-                                "IndividualReferences.verifications.referenceFirstName": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.mobileNo": {
-                                    "required": true
-                                },
-                                "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
-                                "IndividualReferences.verifications.knownSince": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.relationship": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.customerResponse": {
-                                    "required": true
                                 }
                             }
                         },
                         "Evaluation": {
                             "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
-                                    "orderNo": 1,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
-                                    "orderNo": 2,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "ContactInformation": {
-                                    "orderNo": 3,
-                                    "readonly":true
-                                },
-                                "IndividualFinancials": {
-                                    "orderNo": 4,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "orderNo": 5,
-                                    "readonly":true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "orderNo": 6,
-                                    "readonly":true
-                                },
-                                "HouseVerification": {
-                                    "orderNo": 7,
-                                    "readonly":true
-                                },
-                                "BankAccounts": {
-                                    "orderNo": 8,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "orderNo": 9,
-                                    "readonly":true
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "orderNo": 10,
-                                    "readonly":true
-                                },
-                                "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
-                                },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
-                                "KYC.identityProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.identityProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProof": {
                                     "readonly": true
                                 },
-                                "KYC.additionalKYCs.kyc1ImagePath": {
-                                    "required": true
-                                },
-                                "IndividualInformation.customerBranchId": {
+                                "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                },
-                                "IndividualInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.customerId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.existingLoan": {
-                                    "required": true
-                                },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true
-                                },
-                                "IndividualInformation.maritalStatus": {
-                                    "required": true
-                                },
-                                "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
-                                "HouseVerification.udf30": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
-                                "IndividualReferences.verifications.referenceFirstName": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.mobileNo": {
-                                    "required": true
-                                },
-                                "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
-                                "IndividualReferences.verifications.knownSince": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.relationship": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.customerResponse": {
-                                    "required": true
                                 }
                             }
                         },
                         "GuarantorAddition": {
                             "excludes": [
-                                "IndividualFinancials",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.familyMembers.incomes.incomeSource",
-                                "FamilyDetails.familyMembers.incomes.incomeEarned",
-                                "FamilyDetails.familyMembers.incomes.frequency",
-                                "HouseVerification.latitude",
-                                "HouseVerification.houseVerificationPhoto",
-                                "HouseVerification.date",
-                                "HouseVerification.place",
-                                "PhysicalAssets",
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
-                                    "orderNo": 1
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
-                                    "orderNo": 2
+                                    "readonly": true
                                 },
                                 "ContactInformation": {
-                                    "orderNo": 3
+                                    "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "orderNo": 4
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "orderNo": 5
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
                                 },
                                 "HouseVerification": {
-                                    "orderNo": 6
-                                },
-                                "BankAccounts": {
-                                    "orderNo": 7
-                                },
-                                "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
-                                },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
-                                "KYC.identityProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.identityProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProof": {
                                     "readonly": true
                                 },
-                                "KYC.additionalKYCs.kyc1ImagePath": {
-                                    "required": true
-                                },
-                                "IndividualInformation.customerBranchId": {
+                                "ResidenceVerification":{
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
+                                "PhysicalAssets": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.customerId": {
+                                "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.existingLoan": {
-                                    "required": true
-                                },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true
-                                },
-                                "IndividualInformation.maritalStatus": {
-                                    "required": true
-                                },
-                                "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
-                                "HouseVerification.udf30": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "IFSCCodeLOVConfiguration"
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
                                 }
                             }
                         },
                         "CreditCommitteeReview": {
                             "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
-                                    "orderNo": 1,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
-                                    "orderNo": 2,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "ContactInformation": {
-                                    "orderNo": 3,
-                                    "readonly":true
-                                },
-                                "IndividualFinancials": {
-                                    "orderNo": 4,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "orderNo": 5,
-                                    "readonly":true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "orderNo": 6,
-                                    "readonly":true
-                                },
-                                "HouseVerification": {
-                                    "orderNo": 7,
-                                    "readonly":true
-                                },
-                                "BankAccounts": {
-                                    "orderNo": 8,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "orderNo": 9,
-                                    "readonly":true
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "orderNo": 10,
-                                    "readonly":true
-                                },
-                                "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
-                                },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
-                                "KYC.identityProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.identityProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProof": {
                                     "readonly": true
                                 },
-                                "KYC.additionalKYCs.kyc1ImagePath": {
-                                    "required": true
-                                },
-                                "IndividualInformation.customerBranchId": {
+                                "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                },
-                                "IndividualInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.customerId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.existingLoan": {
-                                    "required": true
-                                },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true
-                                },
-                                "IndividualInformation.maritalStatus": {
-                                    "required": true
-                                },
-                                "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
-                                "HouseVerification.udf30": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
-                                "IndividualReferences.verifications.referenceFirstName": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.mobileNo": {
-                                    "required": true
-                                },
-                                "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
-                                "IndividualReferences.verifications.knownSince": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.relationship": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.customerResponse": {
-                                    "required": true
                                 }
                             }
                         },
                         "Sanction": {
                             "excludes": [
+                                "ContactInformation.whatsAppMobileNoOption",
+                                "IndividualReferences.verifications.ReferenceCheck",
+                                "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
-                                    "orderNo": 1,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
-                                    "orderNo": 2,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "ContactInformation": {
-                                    "orderNo": 3,
-                                    "readonly":true
-                                },
-                                "IndividualFinancials": {
-                                    "orderNo": 4,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "orderNo": 5,
-                                    "readonly":true
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
-                                    "orderNo": 6,
-                                    "readonly":true
-                                },
-                                "HouseVerification": {
-                                    "orderNo": 7,
-                                    "readonly":true
-                                },
-                                "BankAccounts": {
-                                    "orderNo": 8,
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "orderNo": 9,
-                                    "readonly":true
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "orderNo": 10,
-                                    "readonly":true
-                                },
-                                "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
-                                },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
-                                "KYC.identityProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.identityProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true
-                                },
-                                "KYC.addressProof": {
                                     "readonly": true
                                 },
-                                "KYC.additionalKYCs.kyc1ImagePath": {
-                                    "required": true
-                                },
-                                "IndividualInformation.customerBranchId": {
+                                "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                },
-                                "IndividualInformation.centreId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.customerId": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.urnNo": {
-                                    "readonly": true
-                                },
-                                "IndividualInformation.existingLoan": {
-                                    "required": true
-                                },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true
-                                },
-                                "IndividualInformation.maritalStatus": {
-                                    "required": true
-                                },
-                                "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPostoffice": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
-                                "ContactInformation.mailingPincode": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "ContactInformation.mailingLocality": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingDistrict": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "ContactInformation.mailingState": {
-                                    "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
-                                },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
-                                "HouseVerification.udf30": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.ifscCode": {
-                                    "required": true,
-                                    "resolver": "MailingPincodeLOVConfiguration"
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
-                                    "readonly": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
-                                "IndividualReferences.verifications.referenceFirstName": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.mobileNo": {
-                                    "required": true
-                                },
-                                "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
-                                },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
-                                "IndividualReferences.verifications.knownSince": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.relationship": {
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.customerResponse": {
-                                    "required": true
                                 }
                             }
                         },
@@ -1732,10 +1023,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "schema": {
                             "enumCode": "rent_lease_status"
                         },
-                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'"
+                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'",
+                        "orderNo": 21
                     },
                     "HouseVerification.rentLeaseAgreement": {
-                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'"
+                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'",
+                        "orderNo": 22
                     },
                     "ContactInformation.mailingMandal": {
                         "condition": "!model.customer.mailSameAsResidence"
@@ -1957,8 +1250,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                    }
-
+                    };                    
                     model.UIUDF = {
                         'family_fields': {}
                     };
@@ -1972,6 +1264,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                    var branchId = SessionStore.getBranchId();
+                    if(branchId && !model.customer.customerBranchId)
+                        {
+                            model.customer.customerBranchId = branchId;
+                    };
+
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
                      _.each(model.customer.familyMembers, function(member) {
