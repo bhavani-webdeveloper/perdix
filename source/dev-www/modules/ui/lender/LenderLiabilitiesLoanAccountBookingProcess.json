@@ -181,6 +181,7 @@
     },
     "LenderDocumentation": {
         "type": "box",
+
         "title": "LENDER_DOCUMENT",
         "items": {
             "liabilityLenderDocuments": {
@@ -284,7 +285,7 @@
             },
             "referenceNumber": {
                 "key": "liabilityAccount.referenceNumber",
-                "type": "number",
+                "type": "string",
                 "title": "UTR_No"
             }
         }
