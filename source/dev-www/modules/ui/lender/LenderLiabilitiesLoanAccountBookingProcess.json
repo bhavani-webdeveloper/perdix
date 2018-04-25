@@ -14,6 +14,11 @@
                 "key": "liabilityAccount.lenderAccountNumber",
                 "type": "string",
                 "title": "LENDER_ACCOUNT_NUMBER"
+            },
+            "sourcingAgent":{
+                "key": "liabilityAccount.sourcingAgent",
+                "type": "string",
+                "title": "SOURCING_AGENT"
             }
         }
     },
