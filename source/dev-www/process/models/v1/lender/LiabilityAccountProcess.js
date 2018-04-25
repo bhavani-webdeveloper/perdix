@@ -1,7 +1,7 @@
 irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/liabilityAccount';
-        var endpoint2 = BASE_URL + '/api/liabilityRepayment/create';
+     
         var resource = $resource(endpoint, null, {
            getLenderSchema: {
                 method: 'GET',
@@ -34,10 +34,7 @@ irf.models.factory('LiabilityAccountProcess', ["$resource", "$httpParamSerialize
                 url:endpoint +':id'
                 //isArray:true
             }),
-            liabilityRepay:{
-                method: 'POST',
-                url: endpoint2
-            }
+            
         });
         resource.documentDownload = function(loanId){
             return endpoint + '/documents?liabilityAccountId='+loanId;

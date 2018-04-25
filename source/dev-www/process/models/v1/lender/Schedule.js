@@ -2,6 +2,7 @@ irf.models.factory('Schedule',
 ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
 function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/liablitySchedule';
+        var endpoint2 = BASE_URL + '/api/liabilityRepayment/create';
         var lenderAccountNumb = '/find?lenderAccountNumber='
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -18,6 +19,14 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 method:'GET',
                 url: endpoint + lenderAccountNumb + ':id',
                 isArray:true
+            },
+            liabilityRepay:{
+                method: 'POST',
+                url: endpoint2
+            },
+            liabilityPartialRepay:{
+                method: 'PUT',
+                url: endpoint+'/update'
             }
         });
         resource.scheduleUpload = function(file, progress, id) {
