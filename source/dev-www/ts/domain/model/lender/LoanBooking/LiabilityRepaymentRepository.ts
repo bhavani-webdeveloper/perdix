@@ -10,11 +10,15 @@ export class LiabilityRepaymentRepository implements ILiabilityRepaymentReposito
     liabilityRepaymentService: any;
 
     constructor(){
-        this.liabilityRepaymentService = AngularResourceService.getInstance().getNGService('LiabilityAccountProcess');
+        this.liabilityRepaymentService = AngularResourceService.getInstance().getNGService('Schedule');
     }
 
     repay(reqData: Object): Observable<any> {
     	//delete reqData['LiabilityLoanAccountBookingProcessRepo'];
 		return Ro.fromPromise(this.liabilityRepaymentService.liabilityRepay(reqData.liabilityRepay).$promise);
+    }
+    partialRepay(reqData: Object): Observable<any> {
+    	//delete reqData['LiabilityLoanAccountBookingProcessRepo'];
+		return Ro.fromPromise(this.liabilityRepaymentService.liabilityPartialRepay(reqData).$promise);
     }
 }
