@@ -19,11 +19,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return {
                     "LenderDocumentation": {
                         "orderNo": 40,
-                        "condition":"!model.rejectedFlag"
+                        "condition":"!model.rejectLenderDocumentFlag"
                     },
                     "LegalCompliance": {
                         "orderNo": 50,
-                         "condition":"!model.rejectedFlagg"
+                         "condition":"!model.rejectLenderDocumentFlag"
                     },
                     "LegalCompliance.liabilityComplianceDocuments.otherDocumentName": {
                         "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName == 'Other'",
@@ -143,7 +143,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                          "repositoryAdditions": {
                                 "LenderDocumentationRejected":{
                                     "type": "box",
-                                    "condition":"model.rejectedFlag",
+                                    "condition":"model.rejectLenderDocumentFlag",
                                     "orderNo":10,
                                     "colClass": "col-sm-12",
                                     "title": "LENDER_DOCUMENT",
@@ -203,6 +203,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 },
                                                                 "upload": {                                        
                                                                     "type": "section",
+                                                                    "condition":"liabilityAccount.liabilityLenderDocuments.length != 0",
                                                                     "htmlClass": "col-sm-3",
                                                                     "items": {
                                                                         "upload":{
@@ -230,7 +231,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                 },
                                 "LegalComplianceRejected":{
                                     "type": "box",
-                                    "condition":"model.rejectedFlagg",
+                                    "condition":"model.rejectLenderDocumentFlag",
                                     "orderNo":10,
                                     "colClass": "col-sm-12",
                                     "title": "COMPLIANCE_DOCUMENT",
@@ -294,6 +295,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                     "items": {
                                                                         "upload":{
                                                                            // "condition":"liabilityAccount.liabilityComplianceDocuments.fileId",
+                                                                            "condition":"liabilityAccount.liabilityComplianceDocuments.length != 0",
                                                                             "key": "liabilityAccount.liabilityComplianceDocuments[].fileId",
                                                                             "title": "DOWNLOAD_FORM",
                                                                             "notitle": true,
@@ -350,35 +352,36 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         PageHelper.showLoader();
                         LiabilityLoanAccountBookingProcess.get($stateParams.pageId)
                             .subscribe(function(res){
-                                PageHelper.hideLoader();
-                                if(res.liabilityAccount.currentStage != "DocumentUpload") {
-                                    irfNavigator.goBack();
+                            PageHelper.hideLoader();
+                            if (res.liabilityAccount.currentStage != "DocumentUpload") {
+                                irfNavigator.goBack();
+                            }
+                            model.LiabilityLoanAccountBookingProcess = res;
+                            model.liabilityAccount = res.liabilityAccount;
+                            res.liabilityAccount.liabilityComplianceDocuments.pop();
+                            res.liabilityAccount.liabilityLenderDocuments.pop();
+                            model.liabilityAccount = res.liabilityAccount
+                            model.rejectLenderDocumentFlag = false;
+                            model.rejectLenderDocumentFlag = false;
+
+                            _.forEach(model.liabilityAccount.liabilityComplianceDocuments, function(value) {
+                                if (value.isSignOff == 'REJECTED') {
+                                    model.rejectLenderDocumentFlag = true
                                 }
-                                model.LiabilityLoanAccountBookingProcess = res; 
-                                res.liabilityAccount.liabilityComplianceDocuments.pop();
-                                res.liabilityAccount.liabilityLenderDocuments.pop();
-                                model.liabilityAccount = res.liabilityAccount
-                                console.log(model.liabilityAccount.rejectedFlag);
-                                model.liabilityDocumentApproved=[];
-                                model.liabilityComplianceApproved = [];
-                                _.remove(model.liabilityAccount.liabilityLenderDocuments, function(n) {
-                                    if(n.isSignOff == "REJECTED") {
-                                        model.rejectedFlag =true;
-                                    }else{
-                                        model.liabilityDocumentApproved.push(n)
-                                    }
-                                });
-                                _.remove(model.liabilityAccount.liabilityComplianceDocuments, function(n) {
-                                    if(n.isSignOff == "REJECTED") {
-                                        model.rejectedFlagg =true;
-                                    }else{
-                                       model.liabilityComplianceApproved.push(n)
-                                    }
-                                });
-                               
-                                model.liabilityAccount = res.liabilityAccount
-                                console.log(model.liabilityDocumentApproved)
+
                             });
+                            _.forEach(model.liabilityAccount.liabilityLenderDocuments, function(value) {
+                                if (value.isSignOff == 'REJECTED') {
+                                    model.rejectLenderDocumentFlag = true
+                                }
+                            });
+                            model.liabilityComplianceApproved = _.remove(model.liabilityAccount.liabilityComplianceDocuments, function(n) {
+                                return n.isSignOff != "REJECTED"
+                            });
+                            model.liabilityDocumentApproved = _.remove(model.liabilityAccount.liabilityLenderDocuments, function(n) {
+                                return n.isSignOff != "REJECTED"
+                            });
+                        });
                     } else {        
                         irfNavigator.goBack();
                     }
@@ -463,7 +466,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             .subscribe(function (value) {
                                 PageHelper.showProgress('loan', 'Documents Uploaded', 5000);
                                 PageHelper.clearErrors();
-                                return irfNavigator.goBack();
+                                irfNavigator.go({
+                                    state: 'Page.Adhoc',
+                                    pageName: "lender.liabilities.LoanBookingDashboard"
+                                });
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
