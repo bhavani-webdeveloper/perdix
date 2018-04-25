@@ -103,7 +103,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 ];
 
             }
-
             var lenderDocuments = [];
             Queries.getLoanProductDocumentsRejectReasons("lender_document").then(function(resp){
                 lenderDocuments = resp;
