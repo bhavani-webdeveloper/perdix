@@ -379,6 +379,7 @@ define([],function(){
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
                     "NewVehicleDetails.originalInvoiceValue",
+                    "NewVehicleDetails.permitType",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -434,6 +435,11 @@ define([],function(){
                             },
                             "NewVehicleDetails": {
                                 "condition": "model.loanAccount.loanPurpose1 == 'Purchase – New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance'"
+                            },
+                            "NewVehicleDetails.permitType": {
+                                "type": "select",
+                                "enumCode": "permit_type",
+                                "title": "PERMIT_TYPE"
                             },
                             "PreliminaryInformation.loanAmountRequested": {
                                 onChange: function(modelValue, form, model) {

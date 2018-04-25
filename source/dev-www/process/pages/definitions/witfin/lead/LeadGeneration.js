@@ -42,10 +42,12 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         }
                     },
                     "sourceDetails.agentName": {
-                        "condition": "model.lead.leadSource=='Buying/Selling Agent'"
+                        "condition": "model.lead.leadSource=='Buying/Selling Agent'",
+                        "enumCode": "agent"
                     },
                     "sourceDetails.dealerName": {
-                        "condition": "model.lead.leadSource=='Dealer'"
+                        "condition": "model.lead.leadSource=='Dealer'",
+                        "enumCode": "dealer"
                     }
 
                 }
@@ -184,9 +186,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
                          if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                             model.lead.leadStatus = "Reject";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '< 1 month') {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'Now') {
                             model.lead.leadStatus = "Screening";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == '> 1 month' ) {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'Later' ) {
                             model.lead.leadStatus = "FollowUp";
                         } else {
                             model.lead.leadStatus = "Incomplete";
