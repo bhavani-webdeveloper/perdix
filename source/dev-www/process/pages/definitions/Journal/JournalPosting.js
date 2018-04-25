@@ -12,31 +12,41 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
             var branch = SessionStore.getBranch();
 
             var configFile = function() {
-                return {}
+                return {
+                    "branchProcess.journalEntryDto.currentStage": {
+                        "branchPostingReview": {
+                            "overrides": {
+                                "BranchPostingEntry": {
+                                    "readonly": true
+                                }
+                            }
+                        }
+                    }
+                }
             }
             var getIncludes = function(model) {
                 return [
-                    "BranchPostingEntry",
-                    "BranchPostingEntry.transactionName",
-                    "BranchPostingEntry.transactionDescription",
-                    "BranchPostingEntry.transactionType",
-                    "BranchPostingEntry.creditGLNo",
-                    "BranchPostingEntry.debitGLNo",
-                    "BranchPostingEntry.transactionAmount",
-                    "BranchPostingEntry.billNo",
-                    "BranchPostingEntry.billDate",
-                    "BranchPostingEntry.billUpload",
-                    "BranchPostingEntry.instrumentBankName",
-                    "BranchPostingEntry.instrumentBranchName",
-                    "BranchPostingEntry.instrumentType",
-                    "BranchPostingEntry.transactionDate",
-                    "BranchPostingEntry.remarks",
-                    "BranchPostingEntry.instrumentNumber",
-                    "BranchPostingEntry.instrumentDate",
-                    "BranchPostingEntry.ifscCode",
-                    "BranchPostingEntry.valueDate",
-                    "BranchPostingEntry.relatedAccountNo",
-                    "BranchPostingEntry.narration"
+                "BranchPostingEntry",
+                "BranchPostingEntry.transactionName",
+                "BranchPostingEntry.transactionDescription",
+                "BranchPostingEntry.transactionType",
+                "BranchPostingEntry.productType",
+                "BranchPostingEntry.creditGLNo",
+                "BranchPostingEntry.debitGLNo",
+                "BranchPostingEntry.transactionAmount",
+                "BranchPostingEntry.billNo",
+                "BranchPostingEntry.billDate",
+                "BranchPostingEntry.billUpload",
+                "BranchPostingEntry.instrumentBankName",
+                "BranchPostingEntry.instrumentBranchName",
+                "BranchPostingEntry.instrumentType",
+                "BranchPostingEntry.transactionDate",
+                "BranchPostingEntry.remarks",
+                "BranchPostingEntry.instrumentNumber",
+                "BranchPostingEntry.instrumentDate",
+                "BranchPostingEntry.ifscCode",
+                "BranchPostingEntry.valueDate",
+                "BranchPostingEntry.relatedAccountNo"
                 ]
             }
 
@@ -46,54 +56,181 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "subTitle": "",
                 initialize: function(model, form, formCtrl) {
                     model.journal = model.journal || {};
-                    BranchPostingProcess.createNewProcess()
-                        .subscribe(function(journal) {
-                            model.branchProcess = journal;
-                            model.journal.journalEntryDto = {};
-                            model.journal.journalEntryDto = journal.journalEntryDto;
-
-                            // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
-                        })
-
-                    self = this;
+                    var self = this;
                     var formRequest = {
                         "overrides": {},
                         "includes": getIncludes (model),
                         "excludes": [
-                            ""
+                        ""
                         ],
                         "options": {
                             "additions": [
                             {
-                                    "type": "actionbox",
-                                    
-                                    "orderNo": 1200,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "SAVE",
-                                            "onClick": "actions.save(model, formCtrl, form, $event)"
-                                        },
-                                        {
-                                            "type": "submit",
-                                            "title": "SUBMIT"
-                                        }
-                                    ]
-                                }
+                                "type": "actionbox",
+                                "condition":"model.journal.journalEntryDto.currentStage!=='branchPostingReview'",
+                                "orderNo": 1200,
+                                "items": [
+                                {
+                                    "type": "button",
+                                    "title": "SAVE",
 
+                                    "onClick": "actions.save(model, formCtrl, form, $event)"
+                                },
+                                {
+                                    "type": "submit",
+
+                                    "title": "SUBMIT"
+                                }]
+                            },
+                            {
+                                "type": "box",
+                                "orderNo": 999,
+                                "title": "POST_REVIEW",
+                                "condition":"model.journal.journalEntryDto.currentStage=='branchPostingReview'",
+                                "items": [{
+                                        key: "review.action",
+                                        type: "radios",
+                                        titleMap: {
+                                            "REJECT": "REJECT",
+                                            "SEND_BACK": "SEND_BACK",
+                                            "PROCEED": "PROCEED"
+                                        }
+                                    },{
+                                        type: "section",
+                                        condition: "model.review.action=='PROCEED'",
+                                        items: [{
+                                            "type": "button",
+                                            "title": "PROCEED",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        }]
+                                    },{
+                                         type: "section",
+                                        condition: "model.review.action=='REJECT'",
+                                        items: [{
+                                            "type": "button",
+                                            "title": "REJECT",
+                                            "onClick": "actions.reject(model, formCtrl, form, $event)"
+                                        }]
+                                    },{
+                                    type: "section",
+                                    condition: "model.review.action=='SEND_BACK'",
+                                    "items": [
+                                    {
+                                        title: "REMARKS",
+                                        key: "branchProcess.remarks",
+                                        type: "textarea",
+                                        required: true
+                                    }, {
+                                        key: "branchProcess.stage",
+                                        "required": true,
+                                        type: "lov",
+                                        autolov: true,
+                                        lovonly:true,
+                                        title: "SEND_BACK_TO_STAGE",
+                                        bindMap: {},
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var stage1 = model.branchProcess.journalEntryDto.currentStage;
+                                            var targetstage = formHelper.enum('posting_target_stage').data;
+                                            var out = [];
+                                            for (var i = 0; i < targetstage.length; i++) {
+                                                var t = targetstage[i];
+                                                if (t.field1 == stage1) {
+                                                    out.push({
+                                                        name: t.name,
+                                                        value:t.code
+                                                    })
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context) {
+                                            // model.review.targetStage1 = valueObj.name;
+                                            model.branchProcess.stage = valueObj.value;
+
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                            item.name
+                                            ];
+                                        }
+                                    }, {
+                                        
+                                        type: "button",
+                                        title: "SEND_BACK",
+                                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                    }
+                                    ]
+                                    
+
+                                }]
+                            }
                             ]
+
                         }
                     };
+                        var journalId = $stateParams.pageId;
+                        if (journalId) {
+                            PageHelper.showLoader();
+                            PageHelper.showProgress("page-init", "Loading...", 5000);
+                            var journalId = $stateParams.pageId;
+                            if (!journalId) {
+                                PageHelper.hideLoader();
+                            } else {
+                                BranchPostingProcess.getJournal(journalId)
+                                .finally(function() {
+                                    PageHelper.showProgress('Posting', 'Loading Finished.', 5000);    
+                                })
+                                .subscribe(function(journal) {
+
+                                    model.branchProcess = journal;
+                                    model.journal.journalEntryDto = {};
+                                    model.journal.journalEntryDto = journal.journalEntryDto;
+                                    UIRepository.getPostingEntryUIRepository().$promise
+                                    .then(function(repo){
+                                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                                    })
+                                    .then(function(form){
+                                        console.log(form)
+                                        self.form = form;
+                                    });
+                                    PageHelper.hideLoader();
+                                })
+                            }
+                            $log.info("Journal page  is initiated ");
+                        } else {
+                            BranchPostingProcess.createNewProcess()
+                            .finally(function() {
+                                PageHelper.showProgress('Posting', 'Loading Finished.', 5000);    
+                            })
+                            .subscribe(function(journal) {
+                                model.branchProcess = journal;
+                                model.journal.journalEntryDto = {};
+                                model.journal.journalEntryDto = journal.journalEntryDto;
+                                UIRepository.getPostingEntryUIRepository().$promise
+                                .then(function(repo){
+                                    return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                                })
+                                .then(function(form){
+                                    console.log(form)
+                                    self.form = form;
+                                });
+                                // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+                            })
+                        }
 
 
-                     UIRepository.getPostingEntryUIRepository().$promise
-                        .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
-                        })
-                        .then(function(form){
-                            console.log(form)
-                            self.form = form;
-                        });
+
+
+
+
+
+
 
 
                     // model.journal = model.journal || {};
@@ -219,7 +356,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 //             ];
                 //         },
                 //         onSelect: function(valueObj, model, context) {
-                            
+
                 //         }
                 //     }, {
                 //         key: "journal.journalEntryDto.transactionDescription",
@@ -308,6 +445,18 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         "debitGLNo": {
                                             "title": "DEBIT_GL_NO",
                                             "type": "string"
+                                        },
+                                        "billNo": {
+                                            "title": "BILL_NO",
+                                            "type": "number"
+                                        },
+                                        "billUpload": {
+                                            "title": "BILL_UPLOAD",
+                                            "type": "string"
+                                        },
+                                        "billDate": {
+                                            "title": "BILL_DATE",
+                                            "type": ["string","null"]
                                         },
                                         "id": {
                                             "title": "JOURNAL_ENTRY_ID",
@@ -409,31 +558,33 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         PageHelper.showProgress("Posting Save", "Working...");
                         model.branchProcess.remarks = model.journal.remarks;
                         model.branchProcess.save()
-                            .finally(function() {
+                        .finally(function() {
 
+                        })
+                        .subscribe(function(branchProcess) {
+                            // console.log("out");
+                            // console.log(branchProcess);
+                            PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                            model.branchProcess.proceed()
+                            .finally(function() {
+                                PageHelper.hideLoader();
                             })
                             .subscribe(function(out) {
                                 PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
-                                 model.branchProcess.proceed()
-                                    .finally(function() {
-                                        PageHelper.hideLoader();
-                                    })
-                                    .subscribe(function(out) {
-                                        PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
-                                        PageHelper.showProgress('Posting', 'Done.', 5000);
-                                        irfNavigator.goBack();
-                                    }, function(err) {
-                                        PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                                        PageHelper.showErrors(err);
-                                        PageHelper.hideLoader();
-                                    })
+                                PageHelper.showProgress('Posting', 'Done.', 5000);
+                                irfNavigator.goBack();
                             }, function(err) {
                                 PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
-                            });
+                            })
+                        }, function(err) {
+                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        });
 
-                       
+
                         // model.branchProcess.save().
                         //     subscribe(function(d) {
                         //         console.log(d)
@@ -486,17 +637,73 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         PageHelper.showLoader();
                         model.branchProcess.remarks = model.journal.remarks;
                         model.branchProcess.save()
-                            .finally(function() {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function(out) {
-                                PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
-                                PageHelper.showProgress('Posting', 'Done.', 5000);
-                            }, function(err) {
-                                PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
+                        .subscribe(function(out) {
+                            PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                            PageHelper.showProgress('Posting', 'Done.', 5000);
+                        }, function(err) {
+                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        });
+                    },
+                    reject: function (model, formCtrl, form, $event) {
+                        $log.info("Inside reject()");
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                        model.branchProcess.remarks = model.journal.remarks;
+                        model.branchProcess.reject()
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
+                        .subscribe(function(out) {
+                            PageHelper.showProgress("Posting Rejected", "Posting Rejected", 3000);
+                            PageHelper.showProgress('Posting', 'Done.', 5000);
+                        }, function(err) {
+                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        });
+                    },
+                    proceed: function (model, formCtrl, form, $event) {
+                        $log.info("Inside proceed()");
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        PageHelper.showLoader();
+                        model.branchProcess.remarks = model.journal.remarks;
+                        model.branchProcess.proceed()
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
+                        .subscribe(function(out) {
+                            PageHelper.showProgress("Posting Save", "Posting Updated with id", 3000);
+                            PageHelper.showProgress('Posting', 'Done.', 5000);
+                            irfNavigator.goBack();
+                        }, function(err) {
+                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        })
+                    },
+                    sendBack: function (model, formCtrl, form, $event) {
+                        model.branchProcess.sendBack()
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
+                        .subscribe(function(out) {
+                            PageHelper.showProgress("Posting Send Back", "Posting Send Back", 3000);
+                            PageHelper.showProgress('Posting', 'Done.', 5000);
+                            irfNavigator.goBack();
+                        }, function(err) {
+                            PageHelper.showProgress('Posting', 'Oops. Some error.', 5000);
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        });
                     }
                 }
             }
