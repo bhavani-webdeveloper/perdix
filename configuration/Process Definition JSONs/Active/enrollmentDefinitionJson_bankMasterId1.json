@@ -856,7 +856,7 @@
           "inCurrentAddressSince": {
             "title": "In Correct Address Since",
             "type": "string",
-            "format": "date",
+            
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -865,7 +865,7 @@
           "inCurrentAreaSince": {
             "title": "In Correct Area Since",
             "type": "string",
-            "format": "date",
+            
             "captureStages": [
               "BasicEnrolment",
               "Completed"
