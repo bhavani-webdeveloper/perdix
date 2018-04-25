@@ -75,10 +75,10 @@
                 "requried": true,
                 "orderNo": 80
             },
-            "totalInstallmentAmountPaid": {
-                "key": "liabilityRepay.totalInstallmentAmountPaid",
+            "totalAmountPaid": {
+                "key": "liabilityRepay.totalAmountPaid",
                 "type": "number",
-                "title": "TOTAL_INSTALLMENT_AMOUNT_PAID",
+                "title": "TOTAL_AMOUNT_PAID",
                 "requried": true,
                 "orderNo": 90
             },
@@ -108,7 +108,7 @@
             },
             "transactionDate": {
                 "key": "liabilityRepay.transactionDate",
-                "type": "string",
+                "type": "date",
                 "title": "TRANSACTION_DATE",
                 "orderNo": 140
             },
