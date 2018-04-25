@@ -38,9 +38,23 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "DocumentVerification.liabilityComplianceDocuments.liabilityComplianceDocuments.section.isSignOff.isSignOff": {
                         "required": true,
+                         "onChange": function(modelValue, form, model) {
+                            model.rejectCompliancedocument = false
+                            _.forEach(model.liabilityAccount.liabilityComplianceDocuments, function(value){
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectCompliancedocument = true                                    }
+                                });
+                        }
                     },
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.isSignOff.isSignOff":{
                         "required": true,
+                         "onChange": function(modelValue, form, model) {
+                            model.rejectLenderDocument = false
+                            _.forEach(model.liabilityAccount.liabilityLenderDocuments, function(value){
+                                    if (value.isSignOff == 'REJECTED') {
+                                        model.rejectLenderDocument = true                                    }
+                                });
+                        }
                       },
                     "DocumentVerification.lenderDocuments.lenderDocuments.section.remarks.remarks": {
                         "required": true,
@@ -560,7 +574,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }, function (err) {
                                 PageHelper.showProgress('loan', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
+                               PageHelper.hideLoader();
                             });
                     }
                 }
