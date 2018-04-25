@@ -165,15 +165,18 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }]
                         },
                         getActions: function(item) {
-                            condition:"item.paidStatus == 'PartiallyPaid' "
                             return [{
                                 name: "Edit_PARTIAL_PAID",
                                 desc: "",
                                 fn: function(item, index) {
-                                    $state.go('Page.Engine', {
-                                        pageName: 'lender.liabilities.LiabilityPartialRepaymentScreen',
-                                        pageData: item
-                                    })
+                                    if (item.paidStatus != "PartiallyPaid") {
+                                        PageHelper.showProgress("Repayment", "Only PartiallyPaid are allowed to Schedule Update", 10000);
+                                    } else {
+                                        $state.go('Page.Engine', {
+                                            pageName: 'lender.liabilities.LiabilityPartialRepaymentScreen',
+                                            pageData: item
+                                        })
+                                    }
                                 },
                                 isApplicable: function(item, index) {
                                     return true;

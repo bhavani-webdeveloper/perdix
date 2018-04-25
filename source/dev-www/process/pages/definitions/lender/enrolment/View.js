@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page('lender.enrolment.View'),
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
-                    $log.info("ViewLoans initialiized");
+                    $log.info("ViewLoans initialiized ");
                 },
                 offline: false,
                 definition: {
