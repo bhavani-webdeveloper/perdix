@@ -396,8 +396,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
-                        // $q.all start
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
                             .finally(function () {
