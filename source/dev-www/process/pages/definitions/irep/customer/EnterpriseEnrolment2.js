@@ -141,13 +141,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation": {
                          "items": {
                               "lastFiledItr": {
-                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate3",
+                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
                                    "title": "LAST_AVAIL_ITR",
                                    "orderNo": 311,
                                    "type": "date"
                               },
                               "whetherAudited": {
-                                   "key": "customer.udf.userDefinedFieldValues.udf7",
+                                   "key": "customer.udf.userDefinedFieldValues.udf2",
                                    "title": "WHETHER_AUDITED",
                                    "orderNo": 312,
                                    "type": "select",
@@ -158,13 +158,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                               },
                               "rentLeaseStatus": {
                                    "type":"select",
-                                   "key": "customer.udf.userDefinedFieldValues.udf6",                                   
+                                   "key": "customer.udf.userDefinedFieldValues.udf1",                                   
                                    "title":"RENT_LEASE_STATUS",
                                    "orderNo": 141
                               },
                               "rentLeaseAgreement": {
                                    "type":"date",
-                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
+                                   "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
                                    "orderNo:": 142
                               }
@@ -1403,30 +1403,229 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 }
                             },
-                            "GuarantorAddition": {
+                          "GuarantorAddition": {
                                 "excludes": [
+                                    "EnterpriseAssets",
+                                    "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.enterpriseMonthlySales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.month",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
+                                    "EnterpriseFinancials.enterpriseMonthlySales.seasonType",
+                                    "EnterpriseInformation.rentLeaseStatus",
+                                    "EnterpriseInformation.rentLeaseAgreement",
+                                    "EnterpriseInformation.lastFiledItr",
+                                    "EnterpriseInformation.whetherAudited",
+                                    "EnterpriseInformation.regularEmployees",
+                                    "EnterpriseInformation.contractEmployee",
+                                    "EnterpriseInformation.operatedBy"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseFinancials.incomeThroughSales": {
-                                        "title": "SALES_INFO_DETAILS"
-                                    },
-                                    "Liabilities": {
-                                        "readonly": true
-                                    },
-                                    "EnterpriseAssets": {
-                                        "readonly": true
-                                    },
-                                    "BankAccounts": {
+                                        "orderNo": 1,
                                         "readonly": true
                                     },
                                     "ContactInformation": {
+                                        "orderNo": 2,
+                                        "readonly": true
+                                    },
+                                    "BankAccounts": {
+                                        "orderNo": 3,
+                                        "readonly": true
+                                    },
+                                    "Liabilities": {
+                                        "orderNo": 4,
+                                         "title": "BUSINESS_LIABILITIES",
+                                        "readonly": true
+                                    },
+                                    "BuyerDetails": {
+                                        "orderNo": 5,
+                                        "readonly": true
+                                    },
+                                    "SuppliersDeatils": {
+                                        "orderNo": 6,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials": {
+                                        "orderNo": 7,
+                                        "readonly": true
+                                    },
+                                    "EmployeeDetails": {
+                                        "orderNo": 8,
+                                        "readonly": true
+                                    },
+                                    "Machinery": {
+                                        "orderNo": 9,
+                                        "readonly": true
+                                    },
+                                    "ProxyIndicators": {
+                                        "orderNo": 10,
                                         "readonly": true
                                     },
                                     "EnterpriseReferences": {
+                                        "orderNo": 11,
                                         "readonly": true
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 12,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.customerBranchId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.customerId": {
+                                        "resolver": "IndividualCustomerIDLOVConfiguration"
+                                    },
+                                    "EnterpriseInformation.urnNo": {
+                                        "condition": "model.customer.urnNo",
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.centreId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.oldCustomerId": {
+                                        "condition": "model.customer.oldCustomerId",
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.referredBy": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.referredName": {
+                                        "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'"
+                                    },
+                                    "EnterpriseInformation.companyOperatingSince": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.companyEmailId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.photoImageId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.ownership": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessHistory": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.noOfPartners": {
+                                        "condition": "model.customer.enterprise.businessConstitution=='Partnership'"
+                                    },
+                                    "EnterpriseInformation.partnershipDissolvedDate": {
+                                        "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'"
+                                    },
+                                    "EnterpriseInformation.companyRegistered": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.isGSTAvailable": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations": {
+                                        "condition": "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'"
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations.documentId": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessActivity": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessSector": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.businessSubsector": {
+                                        "required": true,
+                                        "resolver": "BusinessSubsectorLOVConfiguration"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
+                                        "resolver": "LinkedToCustomeridLOVConfiguration"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement": {
+                                        "required": true
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                                    },
+                                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                                    },
+                                    "ContactInformation.locality": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.villageName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.businessInPresentAreaSince": {
+                                        "required": true
+                                    },
+                                    "ContactInformation.businessInCurrentAddressSince": {
+                                        "required": true
+                                    },
+                                    "ContactInformation.pincode": {
+                                        "required": true,
+                                        "resolver": "PincodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.ifscCode": {
+                                        "required": true,
+                                        "resolver": "IFSCCodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                        "required": true
+                                    },
+                                    "EnterpriseFinancials.monthlyTurnover": {
+                                        "required": true
+                                    },
+                                    "EmployeeDetails.avgMonthlySalary": {
+                                        "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
+                                    },
+                                    "SuppliersDeatils.supplierDetails.supplierName": {
+                                        "required": true
+                                    },
+                                    "EnterpriseReferences.verifications.relationship": {
+                                        "required": true
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.machineDescription": {
+                                        "required": true
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.machineType": {
+                                        "required": true
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.purchasePrice": {
+                                        "required": true
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.presentValue": {
+                                        "required": true
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.hypothecatedTo": {
+                                        "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
+                                    },
+                                    "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
+                                        "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                                     }
                                 }
                             },

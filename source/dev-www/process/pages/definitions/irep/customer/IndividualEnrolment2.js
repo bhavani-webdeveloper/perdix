@@ -428,6 +428,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
+                                "IndividualFinancials":{
+                                    "readonly": true
+                                },
                                 "ContactInformation": {
                                     "readonly": true
                                 },
@@ -469,6 +472,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualFinancials": {
                                     "readonly": true
                                 },
                                 "IndividualInformation": {
@@ -515,6 +521,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualFinancials": {
                                     "readonly": true
                                 },
                                 "IndividualInformation": {
@@ -836,6 +845,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualReferences.verifications.customerResponse": {
                                     "required": true
+                                }
+                            }
+                        }
+                    },
+                    "pageClass" : {
+                        "guarantor": {
+                            "overrides" : {
+                                "KYC": {
+                                    "readonly": false
+                                },
+                                "IndividualFinancials": {
+                                    "readonly": false
+                                },
+                                "IndividualInformation": {
+                                    "readonly": false
+                                },
+                                "ContactInformation": {
+                                    "readonly": false
+                                },
+                                "FamilyDetails": {
+                                    "readonly": false,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": false
+                                },
+                                "IndividualReferences": {
+                                    "readonly": false
+                                },
+                                "TrackDetails": {
+                                    "readonly": false
+                                },
+                                "reference": {
+                                    "readonly": false
+                                },
+                                "HouseVerification": {
+                                    "readonly": false
+                                },
+                                "ResidenceVerification":{
+                                    "readonly": false
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": false
+                                },
+                                "BankAccounts.customerBankAccounts":{
+                                    "readonly": false
                                 }
                             }
                         }

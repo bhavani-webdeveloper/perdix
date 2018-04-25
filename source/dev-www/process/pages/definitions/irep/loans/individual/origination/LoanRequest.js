@@ -348,7 +348,6 @@ define([],function(){
                         },
                         "AppraisalReview": {
                             "excludes": [
-                                "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "NomineeDetails.nominees.nomineeButton",
