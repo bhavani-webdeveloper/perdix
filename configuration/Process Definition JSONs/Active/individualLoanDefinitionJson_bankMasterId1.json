@@ -1852,6 +1852,15 @@
                      "Screening", "LoanInitiation"
                   ]
                },
+"permitType":{
+                  "title":"permitType",
+                   "type":"string",
+                  "minLength":1,
+                  "maxLength":20,
+                  "captureStages":[
+                     "Screening", "LoanInitiation"
+                  ]
+               },
                "inspectedBy":{
                   "title":"inspectedBy",
                   "type":"string",
