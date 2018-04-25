@@ -13,6 +13,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
             var configFile = function() {
                 return {}
             }
+            var edit = function(data) {
+                console.log(data);
+            };
+
             var overridesFields = function(bundlePageObj) {
                 return {
                     "LenderAccountDetails": {
@@ -24,79 +28,78 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction": {
                         "orderNo": 30
                     },
-                    "LenderDocumentation":{
+                    "LenderDocumentation": {
                         "orderNo": 40
                     },
-                    "LegalCompliance":{
-                         "orderNo": 50
+                    "LegalCompliance": {
+                        "orderNo": 50
                     },
-                    "DisbursementConfirmation":{
-                        "orderNo":60
+                    "DisbursementConfirmation": {
+                        "orderNo": 60
                     },
-                    "LiabilitySchedules":{
-                        "orderNo":70
+                    "LiabilitySchedules": {
+                        "orderNo": 70
                     },
-                    "LiabilityRepayments":{
-                        "orderNo":80
+                    "LiabilityRepayments": {
+                        "orderNo": 80
                     },
                     "LenderAccountDetails.lenderId": {
-                       // searchHelper: formHelper,
+                        // searchHelper: formHelper,
                         "resolver": "LenderIDLOVConfiguration",
-                        "orderNo":90
+                        "orderNo": 90
                     },
                     "LenderAccountDetails.lenderAccountNumber": {
                         "required": true
                     },
                     "DisbursementDetails.productType": {
-                        "orderNo":100,
+                        "orderNo": 100,
                         "required": true
                     },
                     "DisbursementDetails.loanAmount": {
                         "required": true,
-                        "orderNo":110
+                        "orderNo": 110
                     },
                     "DisbursementDetails.disbursementDate": {
                         "required": true,
-                        "orderNo":120
+                        "orderNo": 120
                     },
                     "DisbursementDetails.interestRateType": {
                         "required": true,
                         "onChange": function(modelValue, form, model) {
                             model.floatingRate = (modelValue == 'Floating Rate') ? true : false;
                         },
-                        "orderNo":130
+                        "orderNo": 130
 
-                    }
-                    ,
+                    },
                     "DisbursementDetails.rateOfInterest": {
                         "required": true,
-                        "orderNo":140
+                        "orderNo": 140
                     },
                     "DisbursementDetails.markDown": {
-                        "condition":"model.floatingRate",
+                        "condition": "model.floatingRate",
                         "required": true,
-                        "orderNo":150
+                        "orderNo": 150
                     },
                     "DisbursementDetails.markUp": {
-                        "condition":"model.floatingRate",
+                        "condition": "model.floatingRate",
                         "required": true,
-                        "orderNo":160
+                        "orderNo": 160
                     },
                     "DisbursementDetails.interestCalculationMethod": {
                         "required": true,
-                        "orderNo":170
+                        "orderNo": 170
                     },
                     "DisbursementDetails.repaymentTenure": {
                         "required": true,
-                        "orderNo":180
+                        "orderNo": 180
                     },
                     "DisbursementDetails.repaymentFrequency": {
                         "required": true,
-                        "orderNo":190
+                        "orderNo": 190
                     },
                     "DisbursementDetails.repaymentMode": {
                         "required": true,
-                        "orderNo":200
+                        "orderNo": 200
                     },
                     "LoanAmountDeduction.liabilityFeeDetails.feeName": {
                         "required": true
@@ -153,20 +156,33 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }, {
                                 title: 'PENALTY_DUE',
                                 data: 'penalityDue'
-                            },{
+                            }, {
                                 title: 'OTHER_FEE_CHARGES_DUE',
                                 data: 'otherFeeChargesDue'
-                            },{ 
+                            }, {
                                 title: 'TOTAL_INSTALLMENT_AMOUNT_DUE',
                                 data: 'totalInstallmentAmountDue'
                             }]
                         },
                         getActions: function(item) {
-                            return [];
+                            condition:"item.paidStatus == 'PartiallyPaid' "
+                            return [{
+                                name: "Edit_PARTIAL_PAID",
+                                desc: "",
+                                fn: function(item, index) {
+                                    $state.go('Page.Engine', {
+                                        pageName: 'lender.liabilities.LiabilityPartialRepaymentScreen',
+                                        pageData: item
+                                    })
+                                },
+                                isApplicable: function(item, index) {
+                                    return true;
+                                }
+                            }];
                         }
                     },
                     "LiabilityRepayments.liabilityRepayments": {
-                       
+
                         "type": "tableview",
                         "listStyle": "table",
                         "title": "REPAYMENT_DETAILS",
@@ -194,9 +210,9 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             }, {
                                 title: 'OTHER_FEE_CHARGES',
                                 data: 'otherFeeChargesPaid'
-                            },{
-                                 title: 'PRE_CLOSURE_CHARGES',
-                                data:'preClosureCharges'
+                            }, {
+                                title: 'PRE_CLOSURE_CHARGES',
+                                data: 'preClosureCharges'
                             }, {
                                 title: 'TOTAL_INSTALLMENT_AMOUNT',
                                 data: 'totalAmountPaid'
@@ -214,6 +230,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LenderAccountDetails",
                     "LenderAccountDetails.lenderId",
                     "LenderAccountDetails.lenderAccountNumber",
+                    "LenderAccountDetails.sourcingAgent",
 
                     "DisbursementDetails",
                     "DisbursementDetails.productType",
@@ -245,7 +262,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.scheduleStartDate",
                     "LoanAmountDeduction.firstInstallmentDate",
                     "LoanAmountDeduction.maturityDate",
-                    
+
 
                     "Document",
                     "Document.liabilityLenderDocuments",
@@ -308,7 +325,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                     "type": "array",
                                                     "key": "liabilityAccount.liabilityLenderDocuments",
                                                     "add": true,
-                                                    "title":"ADD_DOCUMENT",
+                                                    "title": "ADD_DOCUMENT",
                                                     "startEmpty": false,
                                                     "remove": null,
                                                     "titleExpr": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName",
@@ -361,7 +378,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                     "add": true,
                                                     "startEmpty": false,
                                                     "remove": null,
-                                                    "title":"ADD_DOCUMENT",
+                                                    "title": "ADD_DOCUMENT",
                                                     "titleExpr": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName",
                                                     "items": {
                                                         "fileId": {
@@ -426,45 +443,45 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         var obs = LiabilityLoanAccountBookingProcess.createNewProcess();
                         pLoadInit = obs.toPromise();
                         obs.subscribe(function(res) {
-                                model.LiabilityLoanAccountBookingProcess = res;
-                                model.liabilityAccount = res.liabilityAccount;
-                               // console.log(model.liabilityAccount);
-                                //console.log(model);
-                            })
+                            model.LiabilityLoanAccountBookingProcess = res;
+                            model.liabilityAccount = res.liabilityAccount;
+                            // console.log(model.liabilityAccount);
+                            //console.log(model);
+                        })
                     } else {
                         var obs = LiabilityLoanAccountBookingProcess.get($stateParams.pageId);
                         pLoadInit = obs.toPromise();
                         obs.subscribe(function(res) {
-                                PageHelper.hideLoader();
-                                /* if(res.liabilityAccount.currentStage != "LiabilityAccount") {
-                                     irfNavigator.goBack();
-                                 }*/
-                                model.LiabilityLoanAccountBookingProcess = res;
-                                res.liabilityAccount.liabilityComplianceDocuments.pop();
-                                 res.liabilityAccount.liabilityLenderDocuments.pop()
-                                _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule){
-                                    if(schedule.totalInstallmentAmountDue == null){
-                                        schedule.totalInstallmentAmountDue= schedule.principalDue+schedule.penalityDue+schedule.interestDue+schedule.otherFeeChargesDue
-                                    }
-                                });
-                                model.liabilityAccount = res.liabilityAccount;
-                                console.log(model.liabilityAccount.liabilitySchedules)
-                            })
+                            PageHelper.hideLoader();
+                            /* if(res.liabilityAccount.currentStage != "LiabilityAccount") {
+                                 irfNavigator.goBack();
+                             }*/
+                            model.LiabilityLoanAccountBookingProcess = res;
+                            res.liabilityAccount.liabilityComplianceDocuments.pop();
+                            res.liabilityAccount.liabilityLenderDocuments.pop()
+                            _.forEach(model.liabilityAccount.liabilitySchedules, function(schedule) {
+                                if (schedule.totalInstallmentAmountDue == null) {
+                                    schedule.totalInstallmentAmountDue = schedule.principalDue + schedule.penalityDue + schedule.interestDue + schedule.otherFeeChargesDue
+                                }
+                            });
+                            model.liabilityAccount = res.liabilityAccount;
+                            console.log(model.liabilityAccount.liabilitySchedules)
+                        })
 
                     }
 
                     UIRepository.getLenderLiabilitiesLoanAccountBookingProcess().$promise
-                        .then(function(repo){
+                        .then(function(repo) {
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
-                        .then(function(form){
+                        .then(function(form) {
                             console.log(form)
                             self.form = form;
                             PageHelper.hideLoader();
                         });
 
 
-                    
+
                 },
 
                 preDestroy: function(model, form, formCtrl, bundlePageObj, bundleModel) {
