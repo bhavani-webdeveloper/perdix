@@ -138,6 +138,28 @@
                      "Inprocess"
                   ]
                },
+               "landmark": {
+                  "title": "Landmark",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                    "Assignment Pending",
+                    "Incomplete",
+                    "Inprocess"
+                  ]
+               },
+                "postOffice": {
+                  "title": "Post Office",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                    "Assignment Pending",
+                     "Incomplete",
+                     "Inprocess"
+                  ]
+                },
                "district": {
                   "title": "District",
                   "type": "String",

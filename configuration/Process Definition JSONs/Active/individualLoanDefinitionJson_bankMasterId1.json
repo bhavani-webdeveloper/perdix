@@ -1852,7 +1852,7 @@
                      "Screening", "LoanInitiation"
                   ]
                },
-"permitType":{
+               "permitType":{
                   "title":"permitType",
                    "type":"string",
                   "minLength":1,

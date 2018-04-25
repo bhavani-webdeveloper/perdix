@@ -14,6 +14,10 @@ let config = {
                     {
                         "name":"EnrolmentDerivedPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "DefaultIndividualReferencePolicy",
+                        "arguments": {}
                     }
                 ]
             },
@@ -26,6 +30,10 @@ let config = {
                     {
                         "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
+                    },
+                    {
+                        "name": "VerifyIndividualReferencePolicy",
+                        "arguments": null                        
                     }
                 ]
             },
@@ -33,6 +41,14 @@ let config = {
                 "defaults": [
                     {
                         "name": "LoadEnrolmentCustomerDataPolicy",
+                        "arguments": null
+                    },
+                    {
+                        "name": "VerifyIndividualReferencePolicy",
+                        "arguments": null                        
+                    },
+                    {
+                        "name": "VerifyBankAccountNumberPolicy",
                         "arguments": null
                     }
                 ]
