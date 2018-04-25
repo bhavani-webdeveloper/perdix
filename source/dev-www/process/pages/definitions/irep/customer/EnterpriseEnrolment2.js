@@ -14,6 +14,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.pincode": {
                          "title": "pincode"
                     },
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount":{
+                        "title": "Is Disbursement"
+                    },
                     "BankAccounts.customerBankAccounts.accountNumber": {
                          "type": "password",
                          "required": true
@@ -2485,7 +2488,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function(err) {
                                         PageHelper.showErrors(err);
-                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                        
+                                        PageHelper.hideLoader();
                                     })
                             }, function(err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);

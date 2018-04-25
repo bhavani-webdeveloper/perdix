@@ -50,26 +50,6 @@ let config = {
                     }
                 ],
                 "overrides": [
-                    {
-                        "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='Appraisal'",
-                        "add": [
-                            {
-                                "name": "MinimumReferencesPolicy",
-                                "arguments": {}
-                            }
-                        ]
-                    },
-                    {
-                        "type": "expr",
-                        "expr": "this.loanAccount.currentStage=='KYCReview'",
-                        "add": [
-                            {
-                                "name": "CommercialCBCheckPolicy",
-                                "arguments": {}
-                            }
-                        ]
-                    }
                 ]
             }
         },

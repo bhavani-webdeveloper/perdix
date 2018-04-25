@@ -903,6 +903,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.customerId": {
                         "orderNo": 10
                     },
+                    "BankAccounts.customerBankAccounts.isDisbersementAccount":{
+                        "title": "Is Disbursement"
+                    },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20
                     },
