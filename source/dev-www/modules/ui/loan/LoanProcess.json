@@ -274,6 +274,10 @@
                 "key": "loanAccount.vehicleLoanDetails.price",
                 "type": "number",
                 "title": "PRICE"
+            },
+            "permitType": {
+                "key" : "loanAccount.vehicleLoanDetails.permitType",
+                "type": "string"
             }
         }
     },
