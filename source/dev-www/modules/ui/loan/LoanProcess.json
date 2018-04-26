@@ -62,6 +62,12 @@
                 "title": "TENURE_REQUESETED",
                 "orderNo": 70
             },
+            "udf5": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
+                "title" : "FLAT_RATE",
+                "type": "string",
+                "orderNo" : 75
+            },
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
                 "type": "number",
@@ -340,6 +346,11 @@
                 "type": "number",
                 "required": true,
                 "title": "INTEREST_RATE"
+            },
+            "udf6": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                "type": "string",
+                "required": true
             },
             "processingFeePercentage": {
                 "key": "loanAccount.processingFeePercentage",
