@@ -68,7 +68,7 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                             "type": "box",
                             "colClass": "col-sm-12",
                             "condition": "model.siteCode == 'kinara'",
-                            "title": nodeSheet.node_type == 1 ? "Branch Scoresheet" : "Centre Scoresheet",
+                            "title": nodeSheet.node_type == 1 ? "Hub Scoresheet" : "Spoke Scoresheet",
                             "readonly": true,
                             "items": [{
                                 "type": "section",
@@ -78,16 +78,14 @@ irf.pageCollection.factory(irf.page("audit.AuditScoreDetails"), ["$log", "$filte
                                     "htmlClass": "col-sm-6",
                                     "items": [{
                                         "key": "auditScoresheet.node_scores[" + i + "].node_id",
-                                        "title": nodeSheet.node_type == 1 ? "BRANCH_NAME" : "CENTRE_NAME",
-                                        // "enumCode": nodeSheet.node_type == 1 ? "branch_id" : "centre",
-                                        "type": "select"
+                                        "title": nodeSheet.node_type == 1 ? "BRANCH_NAME" : "CENTRE_NAME"
                                     }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-6",
                                     "items": [{
                                         "key": "auditScoresheet.node_scores[" + i + "].audit_score",
-                                        "title": "AUDIT_SCORE"
+                                        "title": nodeSheet.node_type == 1 ? "Hub Score" : "Spoke Score",
                                     }, {
                                         "key": "auditScoresheet.node_scores[" + i + "].rating_name",
                                         "title": "Rating"
