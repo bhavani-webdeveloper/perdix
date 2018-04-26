@@ -470,6 +470,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "orderNo": 4,
                                          "title": "BUSINESS_LIABILITIES"
                                     },
+                                    "IndividualInformation.centreId" :{
+                                        "resolver": "CentreLovConfiguration"
+                                    },
                                     "EnterpriseFinancials": {
                                         "orderNo": 5
                                     },

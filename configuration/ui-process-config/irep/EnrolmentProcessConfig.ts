@@ -39,17 +39,20 @@ let config = {
                     {
                         "name": "LoadEnrolmentCustomerDataPolicy",
                         "arguments": null
-                    },
-                    {
-                        "name":"SelfRelationshipRequiredPolicy",
-                        "arguments": null
-                    },
-                    {
-                        "name":"GSTApplicablePolicy",
-                        "arguments": null
-                    }
+                    }                    
                 ],
-                "overrides": []
+                "overrides": [
+                    {
+                        "type": "expr",
+                        "expr": "this.customer.customerType == 'applicant'",
+                        "add": [
+                            {
+                                "name":"SelfRelationshipRequiredPolicy",
+                                "arguments": null
+                            }
+                        ]
+                    }
+                ]
             }
         },
 

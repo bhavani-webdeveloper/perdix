@@ -59,7 +59,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "KYC": {
                                     "orderNo": 1
-                                },
+                                },                               
                                 "IndividualInformation": {
                                     "orderNo": 2
                                 },
@@ -908,6 +908,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
+                    },
+                     "IndividualInformation.centreId": {
+                        "resolver": "CentreLOVConfiguration"
                     },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20
