@@ -36,6 +36,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         var processAuditData = function(auditData) {
             $scope.model.auditData = auditData;
             $scope.model.ai = auditData.audit_info;
+            PageHelper.setWarning({
+                message: $scope.model.ai.days_left + " day(s) left to complete"
+            });
             $scope.model.stage = $scope.model.ai.current_stage;
             $scope.model._isOnline = $scope.$isOnline;
         };
@@ -237,7 +240,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 reloadDashboardBox = true;
             }
             // view issue Summary when status == P, A
-            if ($scope.issueSummaryMenu &&( $scope.model.ai.status == 'P' ||  $scope.model.ai.status == 'A')) {
+            if ($scope.issueSummaryMenu && ($scope.model.ai.status == 'P' || $scope.model.ai.status == 'A')) {
                 requestMenu.push($scope.issueSummaryMenu);
                 $scope.dashboardDefinition.items.push($scope.issueSummaryMenu);
                 reloadDashboardBox = true;
