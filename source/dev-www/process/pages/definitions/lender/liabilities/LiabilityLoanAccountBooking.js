@@ -137,7 +137,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             console.log(modelValue)
                             
                         }
-                    }
+                    },
                     "LiabilitySchedules.liabilitySchedules": {
                         "type": "tableview",
                         "listStyle": "table",
