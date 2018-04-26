@@ -60,7 +60,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "title": "BUYER_NAME"
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType":{
-                         "orderNo": 20
+                         "orderNo": 20,
+                         "enumCode": "salesinfo_income_type"
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceType": {
                          "orderNo": 30
@@ -125,6 +126,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName":{
                          "orderNo": 10,
                          "title": "VENDOR_NAME"
+                    },                   
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
+                         "enumCode" : "purchase_income_type",
+                         "orderNo": 15
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount":{
                          "orderNo": 20
@@ -328,6 +333,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.expenditures.billDocId",
                     "EnterpriseFinancials.rawMaterialExpenses",
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
                     "EnterpriseFinancials.rawMaterialExpenses.freequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
