@@ -899,8 +899,7 @@ define([],function(){
                                         "items": [
                                             {
                                                 "type": "submit",
-                                                "title": "SAVE",
-                                                "onClick": "actions.save(model, formCtrl, form, $event)"
+                                                "title": "SAVE"
                                             },
                                         ]
                                     }
@@ -963,7 +962,7 @@ define([],function(){
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
-                    save: function(model, formCtrl, form, $event){
+                    submit: function(model, formCtrl, form){
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;

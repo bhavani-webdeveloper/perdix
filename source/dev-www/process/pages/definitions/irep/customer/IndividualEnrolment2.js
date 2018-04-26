@@ -101,8 +101,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
+                                },                                
+                                "IndividualInformation.customerId": {
+                                    "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
+                                "IndividualInformation.urnNo": {
                                     "readonly": true
                                 },
                                 "IndividualInformation.existingLoan": {

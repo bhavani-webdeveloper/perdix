@@ -2167,26 +2167,6 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },
-          "udf6": {
-            "title": "RENT_LEASE_STATUS",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf7": {
-            "title": "WHETHER_AUDITED",
-            "type": "string",
-            "minLength":1,
-            "maxLength": 100,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
           }
         }
       },
@@ -2202,22 +2182,6 @@
               "BasicEnrolment",
               "Completed"
             ]
-          },
-          "udfDate2": {
-            "title": "RENT_LEASE_AGREEMENT",
-            "type": "string",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udfDate3": {
-            "title": "LAST_AVAIL_ITR",
-            "type": "string",
-            "captureStages": [
-                "BasicEnrolment",
-                "Completed"
-            ]
           }
         }
       },
@@ -2227,44 +2191,20 @@
         "required": [],
         "properties": {
           "udf1": {
-            "title": "Distance From Highway (in KM)",
-            "type": "number",
+            "title": "RENT_LEASE_STATUS",
+            "type": "string",
             "minLength": 1,
-            "maxLength": 500,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
             ]
           },
           "udf2": {
-            "title": "Availed Any MFI service?",
-            "type": "boolean",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf3": {
-            "title": "A Numerical Value",
-            "type": "number",
-            "minLength": 1,
-            "maxLength": 500,
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf4": {
-            "title": "Enterprise Name 1",
+            "title": "WHETHER_AUDITED",
             "type": "string",
-            "captureStages": [
-              "BasicEnrolment",
-              "Completed"
-            ]
-          },
-          "udf5": {
-            "title": "Enterprise Name 2",
-            "type": "string",
+            "minLength":1,
+            "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2276,12 +2216,10 @@
         "title": "Enterprise User Defined Date Details",
         "type": "object",
         "required": [
-          "udfDate1",
-          "udfDate2"
         ],
         "properties": {
           "udfDate1": {
-            "title": "date1",
+            "title": "RENT_LEASE_AGREEMENT",
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
@@ -2289,11 +2227,11 @@
             ]
           },
           "udfDate2": {
-            "title": "date2",
+            "title": "LAST_AVAIL_ITR",
             "type": "string",
             "captureStages": [
-              "BasicEnrolment",
-              "Completed"
+                "BasicEnrolment",
+                "Completed"
             ]
           }
         }
