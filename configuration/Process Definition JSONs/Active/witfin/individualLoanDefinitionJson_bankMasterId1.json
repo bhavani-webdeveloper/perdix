@@ -4025,6 +4025,7 @@
                 ],
                 "properties": {
                     "udf1": {
+                        "title": "Distance From Highway (in KM)",
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 500,
@@ -4058,6 +4059,28 @@
                             "Screening",
                             "LoanInitiation",
                             "PendingForPartner"
+                        ]
+                    },
+                    "udf5": {
+                        "type": "number",
+                        "captureStages": [
+                            "Screening",
+                            "LoanInitiation",
+                            "Application"
+                        ]
+                    },
+                    "udf6": {
+                        "type": "number",
+                        "captureStages": [
+                            "ScreeningReview",
+                            "ApplicationReview",
+                            "FieldAppraisal",
+                            "BranchCreditAppraisal",
+                            "ZonalRiskReview",
+                            "CentralRiskReview",
+                            "CreditCommitteeReview",
+                            "Rejected",
+                            "LoanInitiation"
                         ]
                     }
                 }
