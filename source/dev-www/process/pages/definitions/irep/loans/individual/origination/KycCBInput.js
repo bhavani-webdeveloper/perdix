@@ -149,6 +149,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     return;
                                 }
 
+                                $this.bundlePages.push({
+                                    pageClass: 'applicant',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
                                 if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
                                     for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
                                         $this.bundlePages.push({

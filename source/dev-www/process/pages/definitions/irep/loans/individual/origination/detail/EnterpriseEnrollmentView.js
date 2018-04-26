@@ -257,6 +257,12 @@ define({
                         }, {
                             "key": "customer.enterprise.isGSTAvailable",
                             "title": "GST Available"
+                        }, {
+                            "key": "customer.udf.userDefinedFieldValues.udf3",
+                            "title": "ENTERPRISE_OPERATED_BY"
+                        }, {
+                            "key": "customer.udf.userDefinedFieldValues.udf2",
+                            "title": "WHETHER_AUDITED"
                         }]
                     }, {
                         "type": "grid",
@@ -279,6 +285,9 @@ define({
                         }, {
                             "key": "customer.enterprise.anyPartnerOfPresentBusiness",
                             "title": "Has anyone else been a partner of your present business ?"
+                        }, {
+                            "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
+                            "title": "LAST_AVAIL_ITR"
                         }]
 
                     }]
@@ -557,6 +566,10 @@ define({
                             "key": "customer.enterprise.noOfMaleEmployees",
                             "title": "No. of Female Employees",
                             "type": "number"
+                        },{
+                            "key": "customer.enterprise.noOfContractEmployees",
+                            "title": "CONTRACT_EMPLOYEES",
+                            "type": "number"
                         }]
                     }, {
                         "type": "grid",
@@ -565,6 +578,10 @@ define({
                             "key": "customer.enterprise.avgMonthlySalary",
                             "title": "Average Monthly Salary",
                             "type": "amount"
+                        },{
+                            "key": "customer.enterprise.noOfRegularEmployees",
+                            "title": "REGULAR_EMPLOYEES",
+                            "type": "number"
                         }]
                     }]
                 }]
@@ -717,190 +734,6 @@ define({
                             "title": "Sub-Standard Accounts",
                             "type": "number"
                         }]
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "Proxy Indicators",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-12",
-                    "html": '<div style="display: table;"><div style="font-weight: bold; display: table-cell;">Proxy Indicator Score</div><div style="display: table-cell; padding-left: 40px;">{{(model.proxyScore==null || model.proxyScore==undefined) ?"-Proxy Waiting For Summary-": model.proxyScore["Actual Value"].concat("/",model.proxyScore["ParameterScore"])}}</p></div>'
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [/*{
-                            "type": "section",
-                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
-                            "items": [{
-                                "key": "customer.businessSignboardImage",
-                                "notitle": true,
-                                "title": "SignBoard Image",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                "type": "file",
-                                "fileType": "application/pdf",
-                                "using": "scanner"
-                            }]
-                        },*/{
-                                "key": "customer.properAndMatchingSignboard",
-                                "title": "Proper Matching SignBoard"
-                            }, {
-                                "key": "customer.bribeOffered",
-                                "title": "Bribe Offered"
-                            }, {
-                                "key": "customer.shopOrganized",
-                                "title": "Shop Shed Organized"
-                            }, {
-                                "key": "customer.isIndustrialArea",
-                                "title": "In Industrial Area"
-                            }, {
-                                "key": "customer.customerAttitudeToKinara",
-                                "title": "CUSTOMER_ATTITUDE_TO_KINARA"
-                            }, {
-                                "key": "customer.bookKeepingQuality",
-                                "title": "Book Keeping Quality"
-                            }, {
-                                "key": "customer.challengingChequeBounce",
-                                "title": "Challenging Cheque Bounce/Fess Charge/Policies"
-                            }, {
-                                "key": "customer.allMachinesAreOperational",
-                                "title": "All Machines Operational"
-                            }, {
-                                "key": "customer.employeeSatisfaction",
-                                "title": "Employee Satisfaction"
-                            }, {
-                                "key": "customer.politicalOrPoliceConnections",
-                                "title": "Political Police Connections"
-                            }]
-                        }, {
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "customer.multipleProducts",
-                                "title": "Multiple Products (more than 3)"
-                            }, {
-                                "key": "customer.multipleBuyers",
-                                "title": "Multiple Buyers (more than 3)"
-                            }, {
-                                "key": "customer.seasonalBusiness",
-                                "title": "Seasonal Business"
-                            }, {
-                                "key": "customer.incomeStability",
-                                "title": "Income Stability"
-                            }, {
-                                "key": "customer.utilisationOfBusinessPremises",
-                                "title": "Utilization Of Business Premises"
-                            }, {
-                                "key": "customer.approachForTheBusinessPremises",
-                                "title": "Approach For The Business Premises"
-                            }, {
-                                "key": "customer.safetyMeasuresForEmployees",
-                                "title": "Safety Measures For Employees"
-                            }, {
-                                "key": "customer.childLabours",
-                                "title": "Child Labourers"
-                            }, {
-                                "key": "customer.isBusinessEffectingTheEnvironment",
-                                "title": "Is the Business Effecting Environment"
-                            }, {
-                                "key": "customer.stockMaterialManagement",
-                                "title": "Stock Material Management"
-                            }]
-                        }]
-                    }]
-                }]
-
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "Reference Check",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "REFERENCE_CHECK_RESPONSE",
-                            "title": "Reference Check Responses"
-                        }]
-                    }],
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "tableview",
-                        "key": "customer.verifications",
-                        "title": "",
-                        "selectable": false,
-                        "transpose": true,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "REFERENCE_TYPE",
-                                "data": "relationship"
-                            }, {
-                                "title": "Business Name",
-                                "data": "businessName"
-                            }, {
-                                "title": "Contact Person Name",
-                                "data": "referenceFirstName"
-                            }, {
-                                "title": "Contact Number",
-                                "data": "mobileNo",
-                            }, {
-                                "title": "Address",
-                                "data": "address"
-                            }];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
-                    }, {
-                        "type": "tableview",
-                        "key": "customer.verifications",
-                        "title": "Reference Check",
-                        "selectable": false,
-                        "transpose": true,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "How long have you know the Applicant(years)?",
-                                "data": "knownSince"
-                            }, {
-                                "title": "Payment Terms",
-                                "data": "paymentTerms"
-                            }, {
-                                "title": "Mode of Payment",
-                                "data": "modeOfPayment"
-                            }, {
-                                "title": "Referer Response",
-                                "data": "customerResponse",
-                            }];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
                     }]
                 }]
             }],

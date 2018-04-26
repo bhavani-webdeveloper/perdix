@@ -259,7 +259,7 @@ define({
                 }).$promise.then(function(res) {
                     $log.warn("res");
                     $log.warn(res);                    
-                    model.cibil_highmark = res;
+                    model.cibil_equifax = res;
                     if (res.cibil != null) {
                         model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
                         model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
@@ -278,8 +278,18 @@ define({
                         model.UIUDF.highmark.disbursed_amount = highmarkFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
                         // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
                     }
+                    if (res.equifax != null) {
+                        model.UIUDF.equifax.score = res.equifax.equifaxScore;
+                        var equifaxFields = $(res.equifax.reportHtml).find('.subHeader1').parent().parent().children(':last').find('.AccValue');
+                        model.UIUDF.equifax.active_accounts = equifaxFields[1].innerText.trim();
+                        model.UIUDF.equifax.overdue_accounts = equifaxFields[2].innerText.trim();
+                        model.UIUDF.equifax.current_balance = equifaxFields[3].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                        model.UIUDF.equifax.disbursed_amount = equifaxFields[4].innerText.trim() + ' ' + irfElementsConfig.currency.iconHtml;
+                        // model.UIUDF.highmark.report = '<a href="" class="color-theme">Download</a>';
+                    }
+
                 }, function(e) {
-                    model.cibil_highmark = null;
+                    model.cibil_equifax = null;
                 });
             },
 
@@ -352,6 +362,9 @@ define({
                             }, {
                                 "key": "customer.religion"
                             }, {
+                                "key": "customer.caste",
+                                "title": "CASTE"
+                            }, {
                                 "key": "customer.fatherFirstName",
                                 "title": "FATHER_FULL_NAME",
                             }, {
@@ -405,6 +418,39 @@ define({
                             }, {
                                 "title": "PARTNER_OF_ANY_OTHER_COMPANY",
                                 "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
+                            }]
+                        }]
+                    }]
+                }, {
+                    "type": "box",
+                    "readonly": true,
+                    "colClass": "col-sm-12",
+                    "overrideType": "default-view",
+                    "title": "HOUSE_DETAILS",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "horizontal",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "customer.ownership",
+                                "title": "PREMISES_OWNERSHIP",
+                                "type": "string"
+                            },{
+                                "key": "customer.place"
+                            }]
+                        }, {
+                            "type": "grid",
+                            "orientation": "vertical",
+                            "items": [{
+                                "key": "customer.udf.userDefinedFieldValues.udf3",
+                                "title":"RENT_LEASE_STATUS",
+                                "type": "string"
+                            },{
+                                "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
+                                "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
+                                "type": "string"
                             }]
                         }]
                     }]
@@ -759,6 +805,9 @@ define({
                                             return irfCurrencyFilter(data)
                                         else return "NA"
                                     }
+                                }, {
+                                    "title": "AREA_UNITS_OF_ASSETS",
+                                    "data": "unit"
                                 }];
                             },
                             getActions: function() {
@@ -770,9 +819,9 @@ define({
                     "type": "box",
                     "colClass": "col-sm-12",
                     "overrideType": "default-view",
-                    "title": "CIBIL/Highmark",
+                    "title": "CIBIL/Equifax",
                     "readonly": true,
-                    "condition": "model.cibil_highmark",
+                    "condition": "model.cibil_equifax",
                     "items": [{
                         "type": "grid",
                         "orientation": "horizontal",
@@ -811,77 +860,24 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                    "key": "UIUDF.highmark.score",
-                                    "title": "Highmark Score"
+                                    "key": "UIUDF.equifax.score",
+                                    "title": "Equifax Score"
                                 }, {
-                                    "key": "UIUDF.highmark.active_accounts",
+                                    "key": "UIUDF.equifax.active_accounts",
                                     "title": "Active Accounts"
                                 }, {
-                                    "key": "UIUDF.highmark.overdue_accounts",
+                                    "key": "UIUDF.equifax.overdue_accounts",
                                     "title": "Overdue Account"
                                 }, {
-                                    "key": "UIUDF.highmark.current_balance",
+                                    "key": "UIUDF.equifax.current_balance",
                                     "title": "Total Current Balance",
                                     "type": "number"
                                 }, {
-                                    "key": "UIUDF.highmark.disbursed_amount",
+                                    "key": "UIUDF.equifax.disbursed_amount",
                                     "title": "Amount Disbursed",
                                     "type": "number"
                                 }
-                                /*, {
-                                                                "key": "UIUDF.highmark.report",
-                                                                "title": "Report",
-                                                                "type": "html"
-                                                            }*/
                             ]
-                        }]
-                    }]
-                }, {
-                    "type": "box",
-                    "colClass": "col-sm-12",
-                    "title": "Psychometric",
-                    "readonly": true,
-                    "condition": "model.bundlePageObj.pageClass != 'guarantor' ",
-                    "items": [{
-                        "type": "section",
-                        "html": '<em ng-if="!model.psy_data">Psychometric data is not available</em><table ng-if="model.psy_data" class="table table-responsive">' +
-                            '<colgroup>' +
-                            '<col width="30%"> <col width="30%"> <col width="30%">' +
-                            '</colgroup>' +
-                            '<tbody>' +
-                            '<tr><td>Psychometric Score</td>' +
-                            '<td>Passed {{model.psy_data.passOutOf}} out of {{model.psy_data.psyTotalPara}} parameters</td>' +
-                            '<td>{{model.psy_data.summary["Total Score"]}}</td></tr></tbody></table>'
-                    }, {
-                        "type": "expandablesection",
-                        "items": [{
-                            "type": "section",
-                            "colClass": "col-sm-12",
-                            "html": '<div ng-init="_scores=model.psy_data">' +
-                                '<table class="table table-responsive">' +
-                                '<colgroup>' +
-                                '<col width="20%"> <col width="10%"> <col width="5%"><col width="20%">' +
-                                '</colgroup>' +
-                                '<tbody style="border:0px;">' +
-                                '<tr>' +
-                                '<th>Parameter Name</th>' +
-                                '<th>Cut Off </th>' +
-                                '<th></th>' +
-                                '<th>Score</th>' +
-                                '</tr>' +
-                                '<tr ng-repeat=" (key, value) in _scores.data" ng-init="parameterIndex=$index">' +
-                                '<td >{{key}}</td>' +
-                                '<td >{{value["Cut Off Score"]}}</td>' +
-                                '<td ><span class="square-color-box" style="background:{{_scores.data[key].color_hexadecimal}}"> </span></td>' +
-                                '<td>{{value["Score"]}}</td></tr>' +
-                                '<tr ng-repeat=" (key, value) in _scores.summary" ng-init="parameterIndex=$index">' +
-                                '<td ng-style = "{\'font-weight\': \'bold\'}">{{key}}</td>' +
-                                '<td ></td>' +
-                                '<td ></td>' +
-                                '<td > {{_scores.summary[key]}}</td></tr>' +
-                                '</tbody>' +
-                                '</table>' +
-                                '</div>'
                         }]
                     }]
                 }, {
@@ -933,91 +929,6 @@ define({
                                 '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>' +
                                 '</tbody>' +
                                 '</table>' + '</div>'
-                        }]
-                    }]
-                }, {
-                    "type": "box",
-                    "colClass": "col-sm-12",
-                    "overrideType": "default-view",
-                    "readonly": true,
-                    "title": "Reference Check",
-                    "condition": "model.bundlePageObj.pageClass != 'guarantor' && model.customer.verifications.length !=0",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "UIUDF.REFERENCE_CHECK_RESPONSE",
-                                "title": "Reference Check Responses",
-                            }]
-                        }]
-                    }, {
-                        "type": "expandablesection",
-                        "items": [{
-                            "type": "tableview",
-                            "key": "customer.verifications",
-                            "title": "",
-                            "transpose": true,
-                            "selectable": false,
-                            "editable": false,
-                            "tableConfig": {
-                                "searching": false,
-                                "paginate": false,
-                                "pageLength": 10,
-                            },
-                            getColumns: function() {
-                                return [{
-                                    "title": "Contact Person Name",
-                                    "data": "referenceFirstName"
-                                }, {
-                                    "title": "Contact Number",
-                                    "data": "mobileNo",
-                                }, {
-                                    "title": "Occupation",
-                                    "data": "occupation"
-                                }, {
-                                    "title": "Address",
-                                    "data": "address"
-                                }];
-                            },
-                            getActions: function() {
-                                return [];
-                            }
-                        }, {
-                            "type": "tableview",
-                            "key": "customer.verifications",
-                            "title": "Reference Check",
-                            "transpose": true,
-                            "selectable": false,
-                            "editable": false,
-                            "tableConfig": {
-                                "searching": false,
-                                "paginate": false,
-                                "pageLength": 10,
-                            },
-                            getColumns: function() {
-                                return [{
-                                    "title": "How long have you know the Applicant(years)?",
-                                    "data": "knownSince"
-                                }, {
-                                    "title": "Relationship with Applicant",
-                                    "data": "relationship"
-                                }, {
-                                    "title": "Opinion on Applicant's Business",
-                                    "data": "opinion"
-                                }, {
-                                    "title": "What is the curent financial status of the Applicant?",
-                                    "data": "financialStatus",
-                                }, {
-                                    "title": "Referer Response",
-                                    "data": "customerResponse"
-                                }];
-                            },
-                            getActions: function() {
-                                return [];
-                            }
                         }]
                     }]
                 }/*, {
