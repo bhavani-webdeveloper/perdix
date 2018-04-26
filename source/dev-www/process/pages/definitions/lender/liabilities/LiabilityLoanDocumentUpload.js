@@ -35,9 +35,30 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     },
                     "LenderDocumentation.liabilityLenderDocuments.documentName": {
                         "required": true,
+                        "type": "lov",
+                        lovonly: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var f = $filter('filter')(model.document, {
+                                "field1": model.liabilityAccount.productType
+                            }, true);
+                            return $q.resolve({
+                                "header": {
+                                    "x-total-count": f && f.length
+                                },
+                                "body": f
+                            });
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [item.name];
+                        },
+                        onSelect: function(result, model, context) {
+                            model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName = result.name;
+                        },
                         "onChange": function(modelValue, form, model) {
                             model.floatingRate = (modelValue == 'Floating Rate') ? true : false;
                         },
+
                     },
                     "LenderDocumentation.liabilityLenderDocuments.upload": {
                         "required": true,
@@ -56,6 +77,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "readonly":true
                     },
                      "LegalCompliance.liabilityComplianceDocuments": {
+                        "required": true,
                         onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                             console.log(LiabilityLenderDocuments)
                             var index = model.liabilityAccount.liabilityComplianceDocuments.length -1;
@@ -64,7 +86,27 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         }
                     },
                     "LegalCompliance.liabilityComplianceDocuments.documentName": {
-                        "required": true
+                        "required": true,
+                         "type": "lov",
+                        lovonly: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var f = $filter('filter')(model.complianceDocument, {
+                                "field1": model.liabilityAccount.productType
+                            }, true);
+                            return $q.resolve({
+                                "header": {
+                                    "x-total-count": f && f.length
+                                },
+                                "body": f
+                            });
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [item.name];
+                        },
+                        onSelect: function(result, model, context) {
+                            model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].documentName = result.name;
+                        }
                     },
                     "LegalCompliance.liabilityComplianceDocuments.upload": {
                         "required": true
@@ -351,8 +393,12 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             if (res.liabilityAccount.currentStage != "DocumentUpload") {
                                 irfNavigator.goBack();
                             }
+                            model.document = formHelper.enum('lender_document').data;
+                            model.complianceDocument = formHelper.enum('compliance_document').data;
+                            console.log(model.document);
                             model.LiabilityLoanAccountBookingProcess = res;
                             model.liabilityAccount = res.liabilityAccount;
+
                             res.liabilityAccount.liabilityComplianceDocuments.pop();
                             res.liabilityAccount.liabilityLenderDocuments.pop();
                             model.liabilityAccount = res.liabilityAccount
