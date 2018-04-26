@@ -129,7 +129,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses.amount":{
                          "orderNo": 20
                     },
-                    "EnterpriseFinancials.rawMaterialExpenses.frequency":{
+                    "EnterpriseFinancials.rawMaterialExpenses.freequency":{
                          "orderNo": 30,
                          "enumCode": "enterprise_purchase_frequency"
                     },                    
@@ -737,7 +737,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate":{
                                         "orderNo": 40,
-                                        "condition": "model.customer.rawMaterialExpenses.frequency.toUpperCase() == 'DATE'"
+                                        "condition": "model.customer.rawMaterialExpenses[arrayIndex].frequency.toUpperCase() == 'DATE'"
                                    },
                                     "ContactInformation": {
                                         "orderNo": 2
