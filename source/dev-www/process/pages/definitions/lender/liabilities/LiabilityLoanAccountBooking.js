@@ -131,6 +131,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LoanAmountDeduction.maturityDate": {
                         "required": true
                     },
+                    "LenderDocumentation.liabilityLenderDocuments": {
+                        "view": "fixed",
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            console.log(modelValue)
+                            
+                        }
+                    }
                     "LiabilitySchedules.liabilitySchedules": {
                         "type": "tableview",
                         "listStyle": "table",
@@ -166,7 +173,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         },
                         getActions: function(item) {
                             return [{
-                                name: "Edit_PARTIAL_PAID",
+                                name: "PARTIAL_UPADTE",
                                 desc: "",
                                 fn: function(item, index) {
                                     if (item.paidStatus != "PartiallyPaid") {
@@ -328,7 +335,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                     "type": "array",
                                                     "key": "liabilityAccount.liabilityLenderDocuments",
                                                     "add": true,
-                                                    "title": "ADD_DOCUMENT",
+                                                    "title": "",
                                                     "startEmpty": false,
                                                     "remove": null,
                                                     "titleExpr": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName",
@@ -345,7 +352,20 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                 var fileId = model.liabilityAccount.liabilityLenderDocuments[schemaForm.arrayIndex].fileId;
                                                                 Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                                             }
-                                                        }
+                                                        },
+                                                        // "fileId": {
+                                                        //     "title": "ADD_DOCUMENT",
+                                                        //     "notitle": true,
+                                                        //     "fieldHtmlClass": "btn-block",
+                                                        //     "style": "btn-default",
+                                                        //     "icon": "fa fa-upload",
+                                                        //     "type": "button",
+                                                        //    // "key": "liabilityAccount.liabilityLenderDocuments[].fileId",
+                                                        //     "onClick": function(model, form, schemaForm, event) {
+                                                        //        model.show = true;
+                                                        //        console.log(model.show)
+                                                        //     }
+                                                        // }
                                                         // },
                                                         // "upload": {
                                                         //     // "key" :"liabilityAccount.liabilityLenderDocuments[].fileId ",
