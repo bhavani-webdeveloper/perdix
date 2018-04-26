@@ -74,18 +74,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
                          "orderNo": 60
                     },
-                    "EnterpriseFinancials.avgDailySaleAmount": {
-                         "orderNo": 60
-                    },
-                    "EnterpriseFinancials.workingDaysInMonth": {
+                    "EnterpriseFinancials.dailySales": {
                          "orderNo": 70
                     },
-                    "EnterpriseFinancials.grossMarginPercentage":{
-                         "orderNo": 80
+                    "EnterpriseFinancials.dailySales.avgDailySaleAmount":{
+                         "orderNo": 10
                     },
-                    "EnterpriseFinancials.netMarginPercentage" :{
-                         "orderNo": 90
-                    },                
+                    "EnterpriseFinancials.dailySales.workingDaysInMonth": {
+                         "orderNo" : 20
+                    },                           
                     "EnterpriseFinancials.enterpriseMonthlySales":{
                          "orderNo": 100
                     },
@@ -97,6 +94,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.enterpriseMonthlySales.seasonType":{
                          "orderNo": 30
+                    },
+                    "EnterpriseFinancials.marginDetails":{
+                         "orderNo": 108
+                    },
+                    "EnterpriseFinancials.marginDetails.grossMarginPercentage": {
+                         "orderNo": 10
+                    },
+                    "EnterpriseFinancials.marginDetails.netMarginPercentage": {
+                         "orderNo": 20
                     },
                     "EnterpriseFinancials.expenditures": {
                          "orderNo": 110
@@ -124,12 +130,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo": 20
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.frequency":{
-                         "orderNo": 30
-                    },
-                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate":{
-                         "orderNo": 40,
-                         "condition": "model.customer.rawMaterialExpenses[arrayIndex].frequency== 'Date'"
-                    },
+                         "orderNo": 30,
+                         "enumCode": "enterprise_purchase_frequency"
+                    },                    
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId":{
                          "orderNo": 50
                     },
@@ -170,7 +173,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
                                    "orderNo:": 142
-                              }
+                              },                              
+                              "operatedBy": {
+                                   "key": "customer.udf.userDefinedFieldValues.udf3",
+                                   "title": "ENTERPRISE_OPERATED_BY",
+                                   "type": "select",
+                                   "orderNo": 193,
+                                   "enumCode": "enterpise_operated_by"
+                              },
                          }
                     }
                }
@@ -301,10 +311,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.incomeThroughSales.amount",
                     "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
-                    "EnterpriseFinancials.avgDailySaleAmount",
-                    "EnterpriseFinancials.workingDaysInMonth",
-                    "EnterpriseFinancials.grossMarginPercentage",
-                    "EnterpriseFinancials.netMarginPercentage",                   
+                    "EnterpriseFinancials.dailySales",
+                    "EnterpriseFinancials.dailySales.avgDailySaleAmount",
+                    "EnterpriseFinancials.dailySales.workingDaysInMonth",
+                    "EnterpriseFinancials.marginDetails",
+                    "EnterpriseFinancials.marginDetails.grossMarginPercentage",
+                    "EnterpriseFinancials.marginDetails.netMarginPercentage",                   
                     "EnterpriseFinancials.enterpriseMonthlySales",
                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -317,7 +329,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses",
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
-                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                    "EnterpriseFinancials.rawMaterialExpenses.freequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
 
@@ -449,10 +461,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.incomeThroughSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",                     
+                                    "EnterpriseFinancials.dailySales",
+                                    "EnterpriseFinancials.marginDetails",                        
                                     "EnterpriseFinancials.rawMaterialExpenses"
 
                                 ],
@@ -632,12 +642,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.incomeThroughSales",                                    
-                                    "EnterpriseFinancials.enterpriseMonthlySales",                                    
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",                     
-                                    "EnterpriseFinancials.rawMaterialExpenses"
+                                    "EnterpriseFinancials.enterpriseMonthlySales",                    
+                                    "EnterpriseFinancials.rawMaterialExpenses",
+                                    "EnterpriseFinancials.dailySales",                    
+                                   "EnterpriseFinancials.marginDetails"                   
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -727,6 +735,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
                                     },
+                                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate":{
+                                        "orderNo": 40,
+                                        "condition": "model.customer.rawMaterialExpenses.frequency.toUpperCase() == 'DATE'"
+                                   },
                                     "ContactInformation": {
                                         "orderNo": 2
                                     },
@@ -952,10 +964,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",     
+                                    "EnterpriseFinancials.dailySales",
+                                   "EnterpriseFinancials.marginDetails",                                            
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -1182,10 +1192,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",     
+                                    "EnterpriseFinancials.dailySales",
+                                   "EnterpriseFinancials.marginDetails",   
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -1639,6 +1647,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
+                                    "EnterpriseFinancials.dailySales",
+                                   "EnterpriseFinancials.marginDetails",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -1865,10 +1875,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",     
+                                    "EnterpriseFinancials.dailySales",
+                                   "EnterpriseFinancials.marginDetails",   
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",
@@ -2095,10 +2103,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
-                                    "EnterpriseFinancials.avgDailySaleAmount",
-                                    "EnterpriseFinancials.workingDaysInMonth",
-                                    "EnterpriseFinancials.grossMarginPercentage",
-                                    "EnterpriseFinancials.netMarginPercentage",     
+                                    "EnterpriseFinancials.dailySales",
+                                    "EnterpriseFinancials.marginDetails",                      
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
                                     "EnterpriseFinancials.enterpriseMonthlySales.totalSales",

@@ -2209,6 +2209,16 @@
               "BasicEnrolment",
               "Completed"
             ]
+          },
+          "udf3": {
+            "title": "ENTERPRISE_OPERATED_BY",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+            ]
           }
         }
       },
