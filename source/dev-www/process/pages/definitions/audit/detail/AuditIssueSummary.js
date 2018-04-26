@@ -56,26 +56,26 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", 
                     self.form = [];
                     for (i = 0; i < auditIssueSummary.length; i++) {
                         var is = auditIssueSummary[i];
-                        if (is.node_type == 1) {
-                            var branchName = $filter('filter')(formHelper.enum('branch_id').data, {
-                                'value': is.node_id
-                            }, true);
-                            if (branchName && branchName.length) {
-                                is.branchName = branchName[0].name;
-                            }
-                        } else {
-                            is.branchName = null;
-                        }
-                        if (is.node_type == 2) {
-                            var centreName = $filter('filter')(formHelper.enum('centre').data, {
-                                'value': is.node_id
-                            }, true);
-                            if (centreName && centreName.length) {
-                                is.centreName = centreName[0].name;
-                            }
-                        } else {
-                            is.centreName = null;
-                        }
+                        // if (is.node_type == 1) {
+                        //     var branchName = $filter('filter')(formHelper.enum('branch_id').data, {
+                        //         'value': is.node_id
+                        //     }, true);
+                        //     if (branchName && branchName.length) {
+                        //         is.branchName = branchName[0].name;
+                        //     }
+                        // } else {
+                        //     is.branchName = null;
+                        // }
+                        // if (is.node_type == 2) {
+                        //     var centreName = $filter('filter')(formHelper.enum('centre').data, {
+                        //         'value': is.node_id
+                        //     }, true);
+                        //     if (centreName && centreName.length) {
+                        //         is.centreName = centreName[0].name;
+                        //     }
+                        // } else {
+                        //     is.centreName = null;
+                        // }
                         var pr = _.cloneDeep(processArray);
                         model.process[i] = pr;
                         var processTotal = {
