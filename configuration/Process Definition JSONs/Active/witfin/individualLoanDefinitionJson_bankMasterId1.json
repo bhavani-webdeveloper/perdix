@@ -4025,13 +4025,13 @@
                 ],
                 "properties": {
                     "udf1": {
-                        "title": "Distance From Highway (in KM)",
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 500,
                         "captureStages": [
                             "Screening",
-                            "LoanInitiation"
+                            "LoanInitiation",
+                            "Application"
                         ]
                     },
                     "udf2": {
