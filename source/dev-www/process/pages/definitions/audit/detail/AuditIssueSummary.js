@@ -111,7 +111,7 @@ irf.pageCollection.factory(irf.page("audit.detail.AuditIssueSummary"), ["$log", 
                     for (i in model.process) {
                         self.form.push({
                             "type": "box",
-                            "title": nodes[auditIssueSummary[i].node_type].node_type + " " + "Score board" + ": " + ((auditIssueSummary[i].node_type == 1) ? auditIssueSummary[i].branchName : auditIssueSummary[i].centreName),
+                            "title": nodes[auditIssueSummary[i].node_type].node_type + " " + "Score board" + ": " + auditIssueSummary[i].node_id,
                             "colClass": "col-sm-12",
                             "items": [{
                                 "key": "process[" + i + "]",
