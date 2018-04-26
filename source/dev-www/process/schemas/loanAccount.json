@@ -93,7 +93,11 @@
                         },
                         "userDefinedFieldValues": {
                             "type": ["null", "object"],
-                            "properties": {}
+                            "properties": {
+                                "udf5": {
+                                    "type": ["null", "string"]
+                                }
+                            }
                         },
                         "version": {
                             "type":["null", "number"]
