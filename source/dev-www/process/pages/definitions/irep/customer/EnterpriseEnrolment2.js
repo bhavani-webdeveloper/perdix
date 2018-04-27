@@ -16,7 +16,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseInformation.businessHistory": {
                          "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
-                         "enumCode": "businessinfo_business_ownership"
+                         "enumCode": "businessinfo_business_ownershi"
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type_upd"
@@ -213,9 +213,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.companyEmailId",
                     "EnterpriseInformation.latitude",
                     "EnterpriseInformation.photoImageId",
-                    "EnterpriseInformation.ownership",
-                    "EnterpriseInformation.rentLeaseStatus",
-                    "EnterpriseInformation.rentLeaseAgreement",
+                    "EnterpriseInformation.ownership",                    
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.businessHistory",
                     "EnterpriseInformation.noOfPartners",
@@ -236,6 +234,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessActivity",
                     "EnterpriseInformation.businessSector",
                     "EnterpriseInformation.businessSubsector",
+                    "EnterpriseInformation.rentLeaseStatus",
+                    "EnterpriseInformation.rentLeaseAgreement",
                     "EnterpriseInformation.itrAvailable",
                     "EnterpriseInformation.lastFiledItr",
                     "EnterpriseInformation.whetherAudited",
@@ -345,6 +345,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses.freequency",
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
+                    "EnterpriseFinancials.currentAsset",
+                    "EnterpriseFinancials.currentAsset.assetType",
+                    "EnterpriseFinancials.currentAsset.value",
 
                     "EmployeeDetails",
                     "EmployeeDetails.noOfFemaleEmployees",
@@ -464,6 +467,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "ProxyIndicators",
                                     "BuyerDetails",
+                                    "EnterpriseFinancials.currentAsset",
                                     "EnterpriseFinancials.otherBusinessIncomes",
                                     "SuppliersDeatils",
                                     "EnterpriseAssets",
@@ -471,7 +475,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences",
                                     "CommercialCBCheck",
                                     "EnterpriseFinancials.expenditures",
-                                    "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.incomeThroughSales",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.dailySales",
@@ -539,7 +542,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
                                     },
                                     "EnterpriseInformation.rentLeaseAgreement": {
-                                        "condition": "model.customer.enterprise.ownership.toLowerCase =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' ",
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
                                         "orderNo":142,
                                         "required": true
 
@@ -649,13 +652,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "excludes": [
                                     "ProxyIndicators",
                                     "BuyerDetails",
+                                    "EnterpriseFinancials.currentAsset",
                                     "EnterpriseFinancials.otherBusinessIncomes",
                                     "EnterpriseFinancials.expenditures",
                                     "SuppliersDeatils",
                                     "EnterpriseAssets",
                                     "Machinery",
                                     "EnterpriseReferences",
-                                    "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.incomeThroughSales",                                    
                                     "EnterpriseFinancials.enterpriseMonthlySales",                    
                                     "EnterpriseFinancials.rawMaterialExpenses",
@@ -666,6 +669,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "orderNo": 1,
                                         "readonly": true
+                                    },
+                                    "EnterpriseInformation.isGSTAvailable": {
+                                        "required": true
                                     },
                                     "ContactInformation": {
                                         "orderNo": 2,
@@ -735,17 +741,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.outstandingPayable",
                                     "EnterpriseReferences.verifications.outstandingReceivable",
                                     "EnterpriseReferences.verifications.customerResponse",
-                                    "EnterpriseInformation.lastFiledItr",
-                                    "EnterpriseInformation.whetherAudited",
-                                    "EnterpriseInformation.regularEmployees",
-                                    "EnterpriseInformation.contractEmployee",
-                                    "EnterpriseInformation.operatedBy"
 
                                 ],
                                 "overrides": {
 
                                     "EnterpriseInformation": {
                                         "orderNo": 1
+                                    },
+                                    "EnterpriseFinancials.currentAsset.assetType": {
+                                        "required": true
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
@@ -942,6 +946,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Machinery.fixedAssetsMachinaries.hypothecatedTo": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                                     },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
                                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                                         "condition":"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                                     }
@@ -953,6 +970,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "overrides": {
                                     "EnterpriseInformation": {
                                         "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
@@ -980,6 +1010,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.dailySales",
+                                    "EnterpriseFinancials.currentAsset",
                                    "EnterpriseFinancials.marginDetails",                                            
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
@@ -1435,6 +1466,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                           "GuarantorAddition": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "EnterpriseFinancials.currentAsset",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
@@ -1661,6 +1693,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "CreditCommitteeReview": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "EnterpriseFinancials.currentAsset",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.dailySales",
                                    "EnterpriseFinancials.marginDetails",
@@ -1891,6 +1924,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.dailySales",
+                                    "EnterpriseFinancials.currentAsset",
                                    "EnterpriseFinancials.marginDetails",   
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",
@@ -2119,6 +2153,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseAssets",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.dailySales",
+                                    "EnterpriseFinancials.currentAsset",
                                     "EnterpriseFinancials.marginDetails",                      
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.enterpriseMonthlySales.month",

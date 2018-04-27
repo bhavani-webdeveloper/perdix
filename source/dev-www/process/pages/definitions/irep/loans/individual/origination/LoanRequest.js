@@ -47,7 +47,7 @@ define([],function(){
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium",
-                                "ProposedUtilizationPlan",                                
+                                "ProposedUtilizationPlan",                      
                                 "CollateralDetails"
                             ],
                             "overrides": {                                
@@ -201,9 +201,7 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation",
                                 "LoanSanction",
-                                "DeductionsFromLoan",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",                 
+                                "DeductionsFromLoan"                 
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -349,9 +347,7 @@ define([],function(){
                             "excludes": [
                                 "LoanSanction",
                                 "DeductionsFromLoan",
-                                "NomineeDetails.nominees.nomineeButton",
-                                "PreliminaryInformation.actualAmountRequired",
-                                "PreliminaryInformation.fundsFromDifferentSources",                  
+                                "NomineeDetails.nominees.nomineeButton"                 
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -562,13 +558,17 @@ define([],function(){
             }
 
              var overridesFields = function (bundlePageObj) {
-                return {                 
+                return {    
+
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
+                        "CollateralDetails.collateral.hypothecatedToBank" : {
+                            "title": "HYPOTHECATED_TO_IREP"
+                        },
                         "PreliminaryInformation.expectedInterestRate": {
                             "type": "select",
-                            "enumCode": "customerinfo_expect_interestrate"
+                            "enumCode": "customerinfo_expect_interestra"
                         },
                         "PreliminaryInformation.emiPaymentDateRequested": {
                             "enumCode": "customerinfo_emirequest_date"

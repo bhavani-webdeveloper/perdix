@@ -371,9 +371,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails.familyMembers.familyMemberFirstName": {
                                     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
-                                "IndividualFinancials.expenditures.frequency": {
-                                    "readonly": true
                                 }
                             }
                         },
@@ -1099,7 +1096,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                     "HouseVerification.rentLeaseAgreement": {
-                        "condition": "model.customer.ownership.toLowerCase() == 'rent' || model.customer.ownership.toLowerCase() == 'lease'",
+                        "condition": "model.customer.udf.userDefinedFieldValues.udf3 == 'Available'",
                         "orderNo": 22,
                         "required": true
                     },
