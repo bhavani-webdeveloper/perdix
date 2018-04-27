@@ -2674,7 +2674,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource=='Existing Customer Referral'",
+                        "condition": "model.lead.leadSource.toUpperCase() =='EXISTING CUSTOMER REFERRAL'",
                         "type": "lov",
 
                         "lovonly": true,
@@ -2792,7 +2792,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource=='Employee referral'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'EMPLOYEE REFERRAL'",
                         "type": "lov",
                         "lovonly": true,
                         "inputMap" : {
