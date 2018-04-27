@@ -302,6 +302,15 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     '</div>'+
 '</div>';
 
+var EQUIFAX_HTML =
+'<div>'+
+    '<h3 ng-show="CBDATA.equifax.equifaxScore" style="font-weight:bold;color:#ccc;">EQUIFAX REPORT</h3>'+
+    '<iframe ng-show="CBDATA.equifax.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
+    '<div ng-hide="CBDATA.equifax.reportHtml">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - Equifax Scores NOT available</b></center>'+
+    '</div>'+
+'</div>';
+
     var CIBIL_HTML =
 '<div>'+
     '<h3 ng-show="CBDATA.cibil.cibilScore.length" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
@@ -601,6 +610,15 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
+            model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
+            if (model.CBType && model.CBType.length) {
+                for (i in model.CBType) {
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:false));
+                }
+            } else {
+                model.CIBIL = true;
+                model.BASE = true;
+            }
             return refreshCB(model);
         },
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
@@ -640,7 +658,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' + HIGHMARK_HTML + CIBIL_HTML + '</div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+ '</div>'
                     }
                 ]
             },
@@ -653,7 +671,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + HIGHMARK_HTML + CIBIL_HTML + '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' + '<hr><hr></div>'
                     }
                 ]
             },
@@ -666,7 +684,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.guarantors">' + HIGHMARK_HTML + CIBIL_HTML + '<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+ '<hr><hr></div>'
                     }
                 ]
             }
