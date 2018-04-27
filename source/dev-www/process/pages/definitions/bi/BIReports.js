@@ -18,7 +18,7 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                     var item;
                     for(var i=0; i < result.length ; i++) {
                         if(result[i].parameter == 'from_date' || result[i].parameter == 'to_date'){
-                            result[i].required = true;
+                            // result[i].required = true;
                             // result[i].operators.push("IN", "between")
                         }
                         item = result[i];
@@ -218,7 +218,12 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                           var blob = new Blob([response.data],{type:headers['content-type']});
                           var link = document.createElement('a');
                           link.href = window.URL.createObjectURL(blob);
-                          link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+                          if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
+                            var filename = headers["content-disposition"].split('filename=')[1];
+                            link.download = filename.substr(1, filename.length - 2);
+                          } else {
+                            link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+                          }
                           link.click();
                           irfProgressMessage.pop("Reports","Report downloaded.", 5000);
                         }, function(err) {
