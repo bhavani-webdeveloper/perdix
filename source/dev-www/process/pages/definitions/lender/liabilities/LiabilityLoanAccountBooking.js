@@ -51,6 +51,56 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             model.liabilityAccount.liabilityLenderDocuments[index].uploadedDate =  moment(new Date()).format('YYYY-MM-DD')
                         }
                     },
+                     "LenderDocumentation.liabilityLenderDocuments.documentName": {
+                        "required": true,
+                        "type": "lov",
+                        lovonly: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var f = $filter('filter')(model.document, {
+                                "field1": model.liabilityAccount.productType
+                            }, true);
+                            return $q.resolve({
+                                "header": {
+                                    "x-total-count": f && f.length
+                                },
+                                "body": f
+                            });
+                        },  
+                        getListDisplayItem: function(item, index) {
+                            return [item.name];
+                        },
+                        onSelect: function(result, model, context) {
+                            model.liabilityAccount.liabilityLenderDocuments[context.arrayIndex].documentName = result.name;
+                        },
+                        "onChange": function(modelValue, form, model) {
+                            model.floatingRate = (modelValue == 'Floating Rate') ? true : false;
+                        },
+
+                    },
+                     "LegalCompliance.liabilityComplianceDocuments.documentName": {
+                        "required": true,
+                         "type": "lov",
+                        lovonly: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var f = $filter('filter')(model.complianceDocument, {
+                                "field1": model.liabilityAccount.productType
+                            }, true);
+                            return $q.resolve({
+                                "header": {
+                                    "x-total-count": f && f.length
+                                },
+                                "body": f
+                            });
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [item.name];
+                        },
+                        onSelect: function(result, model, context) {
+                            model.liabilityAccount.liabilityComplianceDocuments[context.arrayIndex].documentName = result.name;
+                        }
+                    },
                     "LenderDocumentation.liabilityLenderDocuments.otherDocumentName": {
                         "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName == 'Other'",
                         "required": true
@@ -65,6 +115,14 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                             model.liabilityAccount.liabilityComplianceDocuments[index] = new LiabilityComplianceDocuments();
                             model.liabilityAccount.liabilityComplianceDocuments[index].uploadedDate = moment(new Date()).format('YYYY-MM-DD')
                         }
+                    },
+                    "LegalCompliance.liabilityComplianceDocuments.otherDocumentName": {
+                        "condition": "model.liabilityAccount.liabilityComplianceDocuments[arrayIndex].documentName == 'Other'",
+                        "required": true
+                    },
+                    "LenderDocumentation.liabilityLenderDocuments.otherDocumentName": {
+                        "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName == 'Others'",
+                        "required": true
                     },
                     "DisbursementConfirmation": {
                         "orderNo": 60
@@ -504,9 +562,6 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         pLoadInit = obs.toPromise();
                         obs.subscribe(function(res) {
                             PageHelper.hideLoader();
-                            /* if(res.liabilityAccount.currentStage != "LiabilityAccount") {
-                                 irfNavigator.goBack();
-                             }*/
                             model.LiabilityLoanAccountBookingProcess = res;
                             res.liabilityAccount.liabilityComplianceDocuments.pop();
                             res.liabilityAccount.liabilityLenderDocuments.pop()
@@ -515,6 +570,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     schedule.totalInstallmentAmountDue = schedule.principalDue + schedule.penalityDue + schedule.interestDue + schedule.otherFeeChargesDue
                                 }
                             });
+                            model.document = formHelper.enum('lender_document').data;
+                            model.complianceDocument = formHelper.enum('compliance_document').data;
                             model.liabilityAccount = res.liabilityAccount;
                             model.liabilityAccounts = model.liabilityAccount;
                             console.log(model.liabilityAccount.liabilitySchedules)
