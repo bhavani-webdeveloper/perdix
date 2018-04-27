@@ -22,7 +22,7 @@
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
-         "isAccountPosting": true,
+         "isAccountPosting": false,
          "allowedRoles": [
             "WM"
          ]
@@ -31,7 +31,7 @@
          "code": "Completed",
          "name": "Completed",
          "stageType": "CAPTURE",
-         "isAccountPosting": true,
+         "isAccountPosting": false,
          "allowedRoles": [
             "WM"
          ]
@@ -66,7 +66,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -78,7 +78,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -91,7 +91,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -104,7 +104,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -115,7 +115,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -126,7 +126,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -137,7 +137,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -149,7 +149,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -161,7 +161,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -173,7 +173,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -184,7 +184,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -196,7 +196,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -208,7 +208,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -220,7 +220,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -232,7 +232,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -244,7 +244,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -256,7 +256,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                },
@@ -268,7 +268,7 @@
                   "captureStages": [
                      "branchPostingEntry",
                      "branchPostingReview",
-                     "branchPostingSearch",
+                     "Completed",
                      "Rejected"
                   ]
                }
