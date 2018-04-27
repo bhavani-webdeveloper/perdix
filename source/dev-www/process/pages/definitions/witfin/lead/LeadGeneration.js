@@ -42,11 +42,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         }
                     },
                     "sourceDetails.agentName": {
-                        "condition": "model.lead.leadSource=='Buying/Selling Agent'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'BUYING/SELLING AGENT(BROKER)'",
                         "enumCode": "agent"
                     },
                     "sourceDetails.dealerName": {
-                        "condition": "model.lead.leadSource=='Dealer'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)'",
                         "enumCode": "dealer"
                     }
 

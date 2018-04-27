@@ -352,6 +352,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "IndividualInformation.photoImageId": {
+                        "required": true
+                    },
                     "IndividualReferences.verifications": {
                         "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
                         "add": null,
