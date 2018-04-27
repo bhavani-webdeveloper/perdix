@@ -485,17 +485,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     })
                                     .subscribe(function(value) {
                                         PageHelper.showProgress('Repayment', 'Repayment Saved.', 5000);
-                                        //irfNavigator.goBack();
+                                        irfNavigator.goBack();
                                         PageHelper.clearErrors();
                                        return irfNavigator.goBack();
                                     }, function(err) {
-                                        $log.info(err.data.error);
-                                        $log.info("err");
-                                        PageHelper.showProgress('loan', err.data.error, 50000);
-                                        PageHelper.showErrors({
-                                            'message': err
-                                        });
-                                        //PageHelper.showErrors(err.data.error);
+                                        PageHelper.showErrors(err);
                                         PageHelper.hideLoader();
                                     })
                      }
