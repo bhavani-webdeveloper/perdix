@@ -42,6 +42,7 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation",
                                 "LoanSanction",
+                                "LoanMitigants",
                                 "DeductionsFromLoan",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
@@ -49,10 +50,7 @@ define([],function(){
                                 "ProposedUtilizationPlan",                                
                                 "CollateralDetails"
                             ],
-                            "overrides": {
-                                "PreliminaryInformation.expectedInterestRate": {
-                                    "type": "select",
-                                },
+                            "overrides": {                                
                                 "PreliminaryInformation": {
                                     "orderNo": 1
                                 },
@@ -160,6 +158,7 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation",
                                 "LoanSanction",
+                                "LoanMitigants",
                                 "DeductionsFromLoan",                                
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
@@ -567,19 +566,15 @@ define([],function(){
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
+                        "PreliminaryInformation.expectedInterestRate": {
+                            "type": "select",
+                            "enumCode": "customerinfo_expect_interestrate"
+                        },
                         "PreliminaryInformation.emiPaymentDateRequested": {
-                            "titleMap": {
-                                "5th": "5th",
-                                "10th": "10th",
-                                "15th": "15th",
-                            }
+                            "enumCode": "customerinfo_emirequest_date"
                         },
                         "PreliminaryInformation.collectionPaymentType": {
-                            "titleMap":{
-                                "ACH":"ACH",
-                                "PDC":"PDC",
-                                "Others":"Others"
-                            }
+                            "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         "LoanCustomerRelations.loanCustomerRelations": {
                             "add": null,

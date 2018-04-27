@@ -52,14 +52,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                "HouseVerification.place",
                                 "PhysicalAssets",
                                 "IndividualReferences"
                             ],
                             "overrides": {
                                 "KYC": {
                                     "orderNo": 1
-                                },                               
+                                },
+                                "HouseVerification.place":{
+                                    "condition": "model.customer.ownership == 'Rented but own house in different place'",
+                                    "required": true
+                                },                        
                                 "IndividualInformation": {
                                     "orderNo": 2
                                 },
@@ -775,7 +778,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "resolver": "MailingPincodeLOVConfiguration",
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -906,6 +909,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.customerId": {
                         "orderNo": 10
                     },
+                    "IndividualInformation.existingLoan": {
+                        "title": "EXISTING_LOAN_IREP"
+                    },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
                     },
@@ -965,7 +971,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 10
                     },
                     "HouseVerification.ownership": {
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "enumCode": "houseveri_rent_lease_status"
                     },
                     "HouseVerification.inCurrentAddressSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf4",
@@ -1087,12 +1094,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "schema": {
                             "enumCode": "rent_lease_status"
                         },
-                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'",
-                        "orderNo": 21
+                        "condition": "model.customer.ownership.toLowerCase() == 'rent' || model.customer.ownership.toLowerCase() == 'lease'",
+                        "orderNo": 21,
+                        "required": true
                     },
                     "HouseVerification.rentLeaseAgreement": {
-                        "condition": "model.customer.ownership == 'Rental' || model.customer.ownership == 'Leased'",
-                        "orderNo": 22
+                        "condition": "model.customer.ownership.toLowerCase() == 'rent' || model.customer.ownership.toLowerCase() == 'lease'",
+                        "orderNo": 22,
+                        "required": true
                     },
                     "ContactInformation.mailingMandal": {
                         "condition": "!model.customer.mailSameAsResidence"
@@ -1216,6 +1225,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.incomes.incomeSource",
                     "FamilyDetails.familyMembers.incomes.incomeEarned",
                     "FamilyDetails.familyMembers.incomes.frequency",
+                    "FamilyDetails.familyMembers.noOfDependents",
 
                     "Liabilities",
                     "Liabilities.liabilities",

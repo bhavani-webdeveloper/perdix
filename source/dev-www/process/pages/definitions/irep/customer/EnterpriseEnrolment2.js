@@ -14,6 +14,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.pincode": {
                          "title": "pincode"
                     },
+                    "EnterpriseInformation.businessHistory": {
+                         "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
+                         "enumCode": "businessinfo_business_ownership"
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations.registrationType": {
+                         "enumCode": "business_registration_type_upd"
+                    },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                         "title": "Is Disbursement"
                     },
@@ -275,7 +282,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                     "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.EmiAmountdeducted",
+                    "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -528,11 +535,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "schema": {
                                              "enumCode": "rent_lease_status"
                                         },
-                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' "
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
                                     },
                                     "EnterpriseInformation.rentLeaseAgreement": {
-                                        "condition": "model.customer.enterprise.ownership=='Rental' || model.customer.enterprise.ownership=='Leased' ",
-                                        "orderNo":142
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' ",
+                                        "orderNo":142,
+                                        "required": true
 
                                     },
                                     "EnterpriseInformation.businessHistory": {
@@ -2436,7 +2445,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             .then(function(enrolmentProcess){
                                 if (!enrolmentProcess){
                                     /* IF no enrolment present, reset to applicant */
-                                    model.customer.firstName = params.customer.firstName;
+                                    
+                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    //model.customer.firstName = params.customer.firstName;
                                     model.customer.villageName = params.customer.villageName;
                                     model.customer.pincode = params.customer.pincode;
                                     model.customer.area = params.customer.area;
