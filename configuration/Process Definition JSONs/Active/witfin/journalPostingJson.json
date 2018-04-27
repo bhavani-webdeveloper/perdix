@@ -21,7 +21,16 @@
          "order": 3,
          "code": "Rejected",
          "name": "Rejected",
-         "stageType": "ACCOUNTINGPOSTING",
+         "stageType": "CAPTURE",
+         "isAccountPosting": true,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 4,
+         "code": "Completed",
+         "name": "Completed",
+         "stageType": "CAPTURE",
          "isAccountPosting": true,
          "allowedRoles": [
             "WM"
