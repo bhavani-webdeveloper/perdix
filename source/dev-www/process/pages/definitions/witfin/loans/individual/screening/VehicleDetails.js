@@ -20,24 +20,24 @@ define(
 
 
             var self;
-            var validateForm = function(formCtrl){
-                formCtrl.scope.$broadcast('schemaFormValidate');
-                if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-                    return false;
-                }
-                return true;
-            };
+            // var validateForm = function(formCtrl){
+            //     formCtrl.scope.$broadcast('schemaFormValidate');
+            //     if (formCtrl && formCtrl.$invalid) {
+            //         PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+            //         return false;
+            //     }
+            //     return true;
+            // };
 
-            var getRelationFromClass = function(relation){
-                if (relation == 'guarantor'){
-                    return 'Guarantor';
-                } else if (relation == 'applicant'){
-                    return 'Applicant';
-                } else if (relation == 'co-applicant'){
-                    return 'Co-Applicant';
-                }
-            };
+            // var getRelationFromClass = function(relation){
+            //     if (relation == 'guarantor'){
+            //         return 'Guarantor';
+            //     } else if (relation == 'applicant'){
+            //         return 'Applicant';
+            //     } else if (relation == 'co-applicant'){
+            //         return 'Co-Applicant';
+            //     }
+            // };
 
 
 
@@ -59,16 +59,15 @@ define(
                     "VehicleExpensesInformation.VehicleExpenses.expenseType",
                     "VehicleExpensesInformation.VehicleExpenses.expenseAmount",
                     "actionbox",
-                    "actionbox.submit",
-                    "actionbox.save",
+                    "actionbox.save"
                 ];
 
             }
 
             return {
                 "type": "schema-form",
-                "title": "LOAN_REQUEST",
-                "subTitle": "BUSINESS",
+                "title": "VEHICLE_DETAILS",
+                "subTitle": "DETAILS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
 
@@ -77,7 +76,10 @@ define(
 
                     self = this;
                     var formRequest = {
-
+                        "overrides": {},
+                        "includes": getIncludes (model),
+                        "excludes": [],
+                        "options": {}
                     };
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
@@ -113,28 +115,28 @@ define(
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
-                    preSave: function(model, form, formName) {
-                        var deferred = $q.defer();
-                        if (model.customer.firstName) {
-                            deferred.resolve();
-                        } else {
-                            irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
-                            deferred.reject();
-                        }
-                        return deferred.promise;
-                    },
+                    // preSave: function(model, form, formName) {
+                    //     var deferred = $q.defer();
+                    //     if (model.customer.firstName) {
+                    //         deferred.resolve();
+                    //     } else {
+                    //         irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
+                    //         deferred.reject();
+                    //     }
+                    //     return deferred.promise;
+                    // },
                     save: function(model, formCtrl, form, $event){
                         /* Loan SAVE */
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
-                        if (!model.loanAccount.id){
-                            model.loanAccount.isRestructure = false;
-                            model.loanAccount.documentTracking = "PENDING";
-                            model.loanAccount.psychometricCompleted = "NO";
+                        // if (!model.loanAccount.id){
+                        //     model.loanAccount.isRestructure = false;
+                        //     model.loanAccount.documentTracking = "PENDING";
+                        //     model.loanAccount.psychometricCompleted = "NO";
 
-                        }
+                        // }
                         PageHelper.showLoader();
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
@@ -151,61 +153,61 @@ define(
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){
-                        PageHelper.showLoader();
-                        model.loanProcess.sendBack()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
+                    // sendBack: function(model, formCtrl, form, $event){
+                    //     PageHelper.showLoader();
+                    //     model.loanProcess.sendBack()
+                    //         .finally(function () {
+                    //             PageHelper.hideLoader();
+                    //         })
+                    //         .subscribe(function (value) {
 
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
-                            }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
+                    //             PageHelper.showProgress('enrolment', 'Done.', 5000);
+                    //             irfNavigator.goBack();
+                    //         }, function (err) {
+                    //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    //             PageHelper.showErrors(err);
+                    //             PageHelper.hideLoader();
+                    //         });
 
-                    },
-                    proceed: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        PageHelper.clearErrors();
-                        PageHelper.showLoader();
-                        PageHelper.showProgress('enrolment', 'Updating Loan');
-                        model.loanProcess.proceed()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
+                    // },
+                    // proceed: function(model, formCtrl, form, $event){
+                    //     if(PageHelper.isFormInvalid(formCtrl)) {
+                    //         return false;
+                    //     }
+                    //     PageHelper.clearErrors();
+                    //     PageHelper.showLoader();
+                    //     PageHelper.showProgress('enrolment', 'Updating Loan');
+                    //     model.loanProcess.proceed()
+                    //         .finally(function () {
+                    //             PageHelper.hideLoader();
+                    //         })
+                    //         .subscribe(function (value) {
 
-                                Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
-                            }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
-                    },
-                    reject: function(model, formCtrl, form, $event){
-                        PageHelper.showLoader();
-                         model.loanProcess.reject()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
-                            }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
-                    }
+                    //             Utils.removeNulls(value, true);
+                    //             PageHelper.showProgress('enrolment', 'Done.', 5000);
+                    //             irfNavigator.goBack();
+                    //         }, function (err) {
+                    //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    //             PageHelper.showErrors(err);
+                    //             PageHelper.hideLoader();
+                    //         });
+                    // },
+                    // reject: function(model, formCtrl, form, $event){
+                    //     PageHelper.showLoader();
+                    //      model.loanProcess.reject()
+                    //         .finally(function () {
+                    //             PageHelper.hideLoader();
+                    //         })
+                    //         .subscribe(function (value) {
+                    //             Utils.removeNulls(value, true);
+                    //             PageHelper.showProgress('enrolment', 'Done.', 5000);
+                    //             irfNavigator.goBack();
+                    //         }, function (err) {
+                    //             PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    //             PageHelper.showErrors(err);
+                    //             PageHelper.hideLoader();
+                    //         });
+                    // }
                 }
             };
 

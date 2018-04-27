@@ -81,6 +81,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:80
+                        },
+                        {
+                            pageName: 'witfin.loans.individual.screening.VehicleDetails',
+                            title: 'VEHICLE_DETAILS',
+                            pageClass: 'vehicle-details',
+                            minimum: 1,
+                            maximum: 1,
+                            order:90
                         }
                     ]);
                 },
@@ -202,9 +210,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-details',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
-
-                                 $this.bundlePages.push({
+                                $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
@@ -303,7 +316,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     Queries.getVehiclePrice()
                         .then(function (response) {
-                            BundleManager.broadcastEvent("get-vehicle-price", response); 
+                            BundleManager.broadcastEvent("get-vehicle-price", response);
                         })
                     Queries.getCibilHighmarkMandatorySettings()
                         .then(function(settings){

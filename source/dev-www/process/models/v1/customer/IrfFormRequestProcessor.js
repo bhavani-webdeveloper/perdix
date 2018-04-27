@@ -2674,7 +2674,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource.toUpperCase() =='EXISTING CUSTOMER REFERRAL'",
+                        "condition": "model.lead.leadSource == 'Existing Customer Referral'",
                         "type": "lov",
 
                         "lovonly": true,
