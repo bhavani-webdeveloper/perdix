@@ -305,7 +305,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
 var EQUIFAX_HTML =
 '<div>'+
     '<h3 ng-show="CBDATA.equifax.equifaxScore" style="font-weight:bold;color:#ccc;">EQUIFAX REPORT</h3>'+
-    '<iframe ng-show="CBDATA.equifax.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
+    '<iframe ng-show="CBDATA.equifax.reportHtml" id="{{CBDATA._equifaxId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.equifax.reportHtml">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - Equifax Scores NOT available</b></center>'+
     '</div>'+
@@ -587,6 +587,7 @@ var EQUIFAX_HTML =
 
                 for (i in customerIds) {
                     objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
+                    objectifiedBureaus[customerIds[i]]._equifaxId = 'equifax_' + customerIds[i];
                 }
                 deferred.resolve();
             });
@@ -600,6 +601,10 @@ var EQUIFAX_HTML =
         _.forOwn(objectifiedBureaus, function(v, k) {
             if (v.highMark && v.highMark.reportHtml) {
                 $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
+            }
+
+            if (v.equifax && v.equifax.reportHtml) {
+                $('#equifax_'+k)[0].contentWindow.document.write(v.equifax.reportHtml);
             }
         });
     };
