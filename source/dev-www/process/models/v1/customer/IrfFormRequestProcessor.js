@@ -34,6 +34,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "type": "select",
                         key: "customer.customerBranchId",
                         "title": "BRANCH_NAME",
+                        parentEnumCode: "userbranches",
                         "readonly": true
                     },
                     "centreCode": {
@@ -41,7 +42,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "required": true,
                         key: "customer.centreCode",
                         type: "select",
-                        parentEnumCode: "branch_id",
+                        parentEnumCode: "userbranches",
                         parentValueExpr: "model.customer.customerBranchId",
                     },
                     "centreId": {
@@ -49,7 +50,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "customer.centreId",
                         "required": true,
                         type: "select",
-                        parentEnumCode: "branch_id",
+                        parentEnumCode: "userbranches",
                         parentValueExpr: "model.customer.customerBranchId",
                     },
                     "area": {

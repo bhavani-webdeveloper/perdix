@@ -45,6 +45,33 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             return deferred.promise;
         }
 
+        var doBasicLoanDedupeCheck = function (model) {
+            var deferred = $q.defer();
+
+            Queries.getActiveLoansCountByProduct(model.loanAccount.urnNo, model.loanAccount.applicant,
+                model.loanAccount.productCode, model.loanAccount.id).then(function(resp) {
+                    try {
+                        if(resp && Number(resp) > 0) {
+                            deferred.reject({data: {error: "The Entity with URN: " + model.loanAccount.urnNo + 
+                                " and Applicant URN: " + model.loanAccount.applicant + " is already having an active loan or loan application for the same product " 
+                                + model.loanAccount.productCode + "."}});
+                        } else {
+                            deferred.resolve();
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        deferred.reject({data: {error: "Error"}});
+                    }
+
+            }, function(res) {
+                if(res.data) {
+                    res.data.error = res.data.errorMsg;
+                }
+                deferred.reject(res);
+            });
+            return deferred.promise;
+        }
+
         var populateDisbursementDate = function(modelValue,form,model){
             if (modelValue){
                 modelValue = new Date(modelValue);
@@ -68,10 +95,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     //stateParams
                     console.log(model.BackedDatedDisbursement);
                     console.log(model.showLoanBookingDetails);
+                    console.log(model.basicLoanDedupe);
                 });
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanBooking").then(function(data){
                     if(data.postDatedTransactionNotAllowed && data.postDatedTransactionNotAllowed != '') {
                         model.postDatedTransactionNotAllowed = data.postDatedTransactionNotAllowed;
+                    }
+                    if(data.basicLoanDedupe) {
+                        model.basicLoanDedupe = data.basicLoanDedupe;
                     }
                 });
                 IndividualLoan.get({id: $stateParams.pageId})
@@ -539,6 +570,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(model.siteCode == 'sambandh' && SessionStore.getGlobalSetting('individualLoan.cbCheck.required') == "true" && 
                         model.loanAccount.loanAmount >= Number(SessionStore.getGlobalSetting('individualLoan.cbCheck.thresholdAmount'))) {
                         validatePromise.push(isCBCheckValid(model));
+                    }
+
+                    if(model.basicLoanDedupe) {
+                        validatePromise.push(doBasicLoanDedupeCheck(model));
                     }
 
                     $q.all(validatePromise).then(function() {

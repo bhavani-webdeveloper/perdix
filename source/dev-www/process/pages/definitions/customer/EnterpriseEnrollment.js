@@ -35,7 +35,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
-                        type: "select"
+                        type: "select",
+                        enumCode: "userbranches",
                     },
                     {
                         key: "customer.id",
@@ -55,7 +56,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         /*filter: {
                             "parentCode": "model.branch_id"
                         },*/
-                        parentEnumCode:"branch_id"
+                        parentEnumCode:"userbranches",
+                        parentValueExpr: "model.customer.customerBranchId",
                     },
                     {
                         key: "customer.oldCustomerId",

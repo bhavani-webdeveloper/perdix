@@ -71,7 +71,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.customerBranchId",
                     title:"BRANCH_NAME",
-                    type: "select"
+                    type: "select",
+                    enumCode: "userbranches",
                 },
                 {
                     key:"customer.centreId",
@@ -79,8 +80,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     /*filter: {
                         "parentCode": "branch_id"
                     },*/
-                    parentEnumCode:"branch_id",
-                    screenFilter: true
+                    parentEnumCode:"userbranches",
+                    parentValueExpr: "model.customer.customerBranchId",
+                    // screenFilter: true
                 },
                 {
                     key: "customer.oldCustomerId",

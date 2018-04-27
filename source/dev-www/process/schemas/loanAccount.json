@@ -370,6 +370,147 @@
                             },
                             "version": {
                                 "type":  ["null","integer"]
+                            },
+                            "propertyType":{
+                                 "title":"PROPERTY_TYPE",
+                                 "type":["null","string"]
+                              },
+
+                              "extentOfProperty":{
+                                 "title":"EXTENT_OF_PROPERTY",
+                                 "type":["null","number"]
+                              },
+                              "extentOfPropertyUnit":{
+                                 "title":"EXTENT_OF_PROPERTY_UNIT",
+                                 "type":["null","string"]
+                              },
+                              "documentType":{
+                                 "title":"COLLATERAL_DOCUMENT_TYPE",
+                                 "type":["null","string"]
+                              },
+
+                              "collateral4FilePath":{
+                                 "title":"collateral4FilePath",
+                                 "type":["null","string"]
+                              },
+
+                              "collateral5FilePath":{
+                                 "title":"collateral5FilePath",
+                                 "type":["null","string"]
+                              },
+
+                              "documentNumber":{
+                                 "title":"DOCUMENT_NUMBER",
+                                 "type":["null","string"]
+                              },
+
+                              "dateOfRegistration":{
+                                 "title":"DATE_OF_REGISTRATION",
+                                 "type":["null","date"]
+                              },
+
+                              "subRegistrar":{
+                                 "title":"SUB_REGISTRAR",
+                                 "type":["null","string"]
+                              },
+
+                              "subRegistrarPincode":{
+                                 "title":"SUB_REGISTRAR_PINCODE",
+                                 "type":["null", "number"]
+                              },
+
+                              "subRegistrarVillage":{
+                                 "title":"SUB_REGISTRAR_VILLAGE",
+                                 "type":["null","string"]
+                              },
+
+                              "subRegistrarDistrict":{
+                                 "title":"SUB_REGISTRAR_DISTRICT",
+                                 "type":["null","string"]
+                              },
+
+                              "subRegistrarState":{
+                                 "title":"SUB_REGISTRAR_STATE",
+                                 "type":["null","string"]
+                              },
+
+                              "subRegistrarArea":{
+                                 "title":"SUB_REGISTRAR_AREA",
+                                 "type":["null","string"]
+                              },
+
+                              "propertyOwner":{
+                                 "title":"PROPERTY_OWNER",
+                                 "type":["null","string"]
+                              },
+
+                              "relationWithApplicant":{
+                                 "title":"RELATION_WITH_APPLICANT",
+                                 "type":["null","string"]
+                              },
+
+                              "propertyOwnerName":{
+                                 "title":"PROPERTY_OWNER_NAME",
+                                 "type":["null","string"]
+                              },
+                              "doorNo":{
+                                 "title":"DOOR_NO",
+                                 "type":["null","string"]
+                              },
+
+                              "surveyNo":{
+                                 "title":"SURVEY_NUMBER",
+                                 "type":["null","string"]
+                              },
+
+                              "landmark":{
+                                 "title":"LANDMARK",
+                                 "type":["null","string"]
+                              },
+
+                              "village":{
+                                 "title":"VILLAGE_NAME",
+                                 "type":["null","string"]
+                              },
+
+                              "mandal":{
+                                 "title":"MANDAL",
+                                 "type":["null","string"]
+                              },
+
+                              "district":{
+                                 "title":"DISTRICT",
+                                 "type":["null","string"]
+                              },
+
+                              "state":{
+                                 "title":"STATE",
+                                 "type":["null","string"]
+                              },
+
+                              "udf1":{
+                                 "title":"udf1",
+                                 "type":["null","string"]
+                              },
+
+                              "udf4":{
+                                 "title":"udf4",
+                                 "type":["null","string"]
+                              },
+
+                              "udf2":{
+                                 "title":"udf2",
+                                 "type":["null","string"]
+                              },
+
+                              "udf3":{
+                                 "title":"udf3",
+                                 "type":["null","string"]
+                              },
+
+                            "udf5":{
+                                "title":"udf5",
+                                "type":["null","string"]
                             }
                         },
                         "required": [
