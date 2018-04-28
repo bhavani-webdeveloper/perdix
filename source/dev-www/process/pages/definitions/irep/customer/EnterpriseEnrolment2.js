@@ -511,9 +511,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "condition": "model.customer.urnNo",
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.centreId": {
-                                        "readonly": true
-                                    },
                                     "EnterpriseInformation.oldCustomerId": {
                                         "condition": "model.customer.oldCustomerId",
                                         "readonly": true
@@ -795,9 +792,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.urnNo": {
                                         "condition": "model.customer.urnNo",
-                                        "readonly": true
-                                    },
-                                    "EnterpriseInformation.centreId": {
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.oldCustomerId": {
