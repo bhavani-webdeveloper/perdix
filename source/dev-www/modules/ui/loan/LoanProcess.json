@@ -370,6 +370,7 @@
                 "key": "loanAccount.commercialCibilCharge",
                 "type": "amount",
                 "title": "COMMERCIAL_CIBIL_CHARGE"
+                
             }
         }
     },
