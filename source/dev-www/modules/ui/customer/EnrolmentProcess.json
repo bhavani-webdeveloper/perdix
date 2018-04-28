@@ -496,7 +496,7 @@
             },
             "centreId": {
                 "key": "customer.centreId",
-                "type": "select",
+                "type": "lov",
                 "title": "CENTRE",
                 "filter": {
                     "parentCode": "branch_id"
@@ -789,13 +789,6 @@
                 "type": "number",
                 "orderNo": 192
 
-            },
-            "operatedBy": {
-                "key": "",
-                "title": "ENTERPRISE_OPERATED_BY",
-                "type": "select",
-                "orderNo": 193,
-                "enumCode": "enterpise_operated_by"
             },
             "companyRegistered": {
                 "key": "customer.enterprise.companyRegistered",
@@ -1247,17 +1240,22 @@
                     }
                 }
             },
-            "avgDailySaleAmount": {
-                "key": "customer.enterprise.avgDailySaleAmount",
-                "title": "AVERAGE_DAILY_SALE_AMT",
-                "type": "amount"
-            },
-            "workingDaysInMonth": {
-                "key": "customer.enterprise.workingDaysInMonth",
-                "title": "WORKING_DAYS_MON",
-                "type": "number"
-
-            },
+            "dailySales": {
+                "type": "fieldset",
+                "title": "SALESINFO_DAILY_SALES",
+                "items": {
+                    "avgDailySaleAmount": {
+                        "key": "customer.enterprise.avgDailySaleAmount",
+                        "title": "AVERAGE_DAILY_SALE_AMT",
+                        "type": "amount"
+                    },
+                    "workingDaysInMonth": {
+                        "key": "customer.enterprise.workingDaysInMonth",
+                        "title": "WORKING_DAYS_COUNT",
+                        "type": "number"
+                    }
+                }
+            },          
             "enterpriseMonthlySales": {
                 "key": "customer.enterpriseMonthlySales",
                 "type": "array",
@@ -1285,16 +1283,22 @@
                     }
                 }
             },
-            "grossMarginPercentage": {
-                "key": "customer.enterprise.grossMarginPercentage",
-                "type": "number",
-                "title":"GROSS_MARGIN_PERCT"
-            },
-            "netMarginPercentage": {
-                "key": "customer.enterprise.netMarginPercentage",
-                "type": "number",
-                "title": "NET_MARGIN_PRCT"
-            },
+            "marginDetails":{
+                "type": "fieldset",
+                "title": "SALESINFO_MARGIN_DETAILS",
+                "items": {
+                   "grossMarginPercentage": {
+                        "key": "customer.enterprise.grossMarginPercentage",
+                        "type": "number",
+                        "title":"GROSS_MARGIN_PERCT"
+                    },
+                    "netMarginPercentage": {
+                        "key": "customer.enterprise.netMarginPercentage",
+                        "type": "number",
+                        "title": "NET_MARGIN_PRCT"
+                    }
+                }
+            },            
             "expenditures": {
                 "key": "customer.expenditures",
                 "type": "array",
@@ -1374,6 +1378,25 @@
                         "type": "file",
                         "fileType": "application/pdf",
                         "using": "scanner"
+                    }
+                }
+            },
+             "currentAsset": {
+                "key": "customer.currentAssets",
+                "type": "array",
+                "startEmpty": true,
+                "title": "IREP_CRNT_ASSET",
+                "items": {
+                    "assetType": {
+                        "key": "customer.currentAssets[].assetType",
+                        "type": "select",
+                        "enumCode": "current_asset_type",
+                        "title": "CRNT_ASSET_TYPE"
+                    },
+                    "value": {
+                        "key": "customer.currentAssets[].assetValue",
+                        "type": "string",
+                        "title": "CRNT_ASSET_VAL"
                     }
                 }
             },
@@ -1487,6 +1510,7 @@
                 "items": {
                     "liabilityType": {
                         "key": "customer.liabilities[].liabilityType",
+                        "title": "CUSTOMER_LIABILITY_TYPE",
                         "type": "select",
                         "orderNo": 8,
                         "enumCode": "customer_liability_type"
