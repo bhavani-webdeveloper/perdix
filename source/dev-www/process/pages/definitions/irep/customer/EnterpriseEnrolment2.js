@@ -241,7 +241,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.whetherAudited",
                     "EnterpriseInformation.enterpriseCustomerRelations",
                     "EnterpriseInformation.enterpriseCustomerRelations.relationshipType",
-                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId",
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName",
                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness",
                     "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement",
@@ -581,9 +580,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
                                     },
@@ -859,9 +855,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
@@ -1143,9 +1136,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
                                     },
@@ -1372,9 +1362,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
                                     },
@@ -1598,10 +1585,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
+                                    },                                    
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
                                     },
@@ -1827,9 +1811,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
@@ -2057,9 +2038,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
                                     },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
-                                    },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
                                     },
@@ -2285,9 +2263,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
                                         "readonly": true
-                                    },
-                                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
-                                        "resolver": "LinkedToCustomeridLOVConfiguration"
                                     },
                                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
                                         "required": true
