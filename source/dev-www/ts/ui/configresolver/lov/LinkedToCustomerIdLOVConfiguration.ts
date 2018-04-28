@@ -19,7 +19,7 @@ export class LinkedToCustomeridLOVConfiguration extends LOVElementConfiguration 
     };
 
     outputMap: Object = {
-        "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
+        "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId" ,
         "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
     };
 
