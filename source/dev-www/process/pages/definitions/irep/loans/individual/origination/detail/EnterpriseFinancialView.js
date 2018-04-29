@@ -12,6 +12,12 @@ define({
 			"title": "ENTERPRISE_FINANCIAL_VIEW",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+				model.UIUDF = {
+                    'sales_information': {}
+                };
+
+                model.loanAccount = bundleModel.loanAccount;
+
 				model.bundlePageObj = bundlePageObj;
 				model.bundleModel = bundleModel;
 				self = this;
@@ -177,6 +183,45 @@ self.renderForm = function() {
 						return data? data: '0';;
 					}
 				}, {
+					"title": "OPENING_BALANCE",
+					"data": "openingBalance",
+					"className": "text-right",
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							if(full.averageOpeningBalance<0) return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.averageOpeningBalance), null, null, "decimal") ;
+							return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(full.averageOpeningBalance, null, null, "decimal") ;
+							}
+						if(data<0)	
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+					}
+				}, {
+					"title": "CLOSING_BALANCE",
+					"data": "closingBalance",
+					"className": "text-right",
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							if(full.averageClosingBalance<0) return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.averageClosingBalance), null, null, "decimal") ;
+							return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(full.averageClosingBalance, null, null, "decimal") ;
+							}
+						if(data<0)	
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+					}
+				}, {
+					"title": "EMI_AMOUNT_DEDUCTED",
+					"data": "amountOfEmiDeducted",
+					"className": "text-right",
+					render: function(data, type, full, meta){
+						if(full.startMonth == "Average"){
+							if(full.averageEMIAmountDeducted<0) return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.averageEMIAmountDeducted), null, null, "decimal") ;
+							return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(full.averageEMIAmountDeducted, null, null, "decimal") ;
+							}
+						if(data<0)	
+						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
+					}
+				}, {
 					"title": "Bank Statement",
 					"data": "bankStatementPhoto",
 					"className": "text-center",
@@ -240,7 +285,7 @@ self.renderForm = function() {
 		"items": [{
 			"type": "section",
 			"html": '<h4 style="padding:5px 10px;margin:0 -10px 5px;background-color:powderblue">{{form.title}}</h4>',
-			"title": "Invoice vs Cash"
+			"title": "Invoice vs Cash vs Kaccha"
 		}, {
 			"type": "tableview",
 			"key": "summary.cashFlowDetails.invoiceCash.tableData",
@@ -259,6 +304,11 @@ self.renderForm = function() {
 				}, {
 					"title": "Cash",
 					"data": "cash",
+					"className": "text-right",
+					"render": currencyRightRender
+				}, {
+					"title": "Kaccha",
+					"data": "kaccha",
 					"className": "text-right",
 					"render": currencyRightRender
 				},{
@@ -362,6 +412,148 @@ self.renderForm = function() {
 ></nvd3>
 </div>`
 			}]
+		}, {
+			"type": "section",
+			"html": '<h4 style="padding:5px 10px;margin:10px -10px 5px;background-color:lightblue">{{form.title}}</h4>',
+			"title": "Sales information : Daily"
+		}, {
+			"type": "grid",
+			"orientation": "horizontal",
+			"items": [{
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"key": "business.enterprise.avgDailySaleAmount",
+					"title": "AVERAGE_DAILY_SALE_AMT",
+					"type": "amount"
+				}, {
+					"key": "UIUDF.sales_information.avgMonthSaleAmount",
+					"title": "Average Monthly Balance",
+					"type": "amount"
+				}]
+			}, {
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"key": "business.enterprise.workingDaysInMonth",
+					"title": "WORKING_DAYS_COUNT",
+					"type": "number"
+				}]
+			}]
+		}, {
+			"type": "expandablesection",
+			"items": []
+		}, {
+			"type": "section",
+			"html": '<h4 style="padding:5px 10px;margin:10px -10px 5px;background-color:skyblue">{{form.title}}</h4>',
+			"title": "Sales information : Seasonal Sales"
+		}, {
+			"type": "grid",
+			"orientation": "horizontal",
+			"items": [{
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"type": "tableview",
+					"key": "business.enterpriseMonthlySales",
+					"notitle": true,
+					"tableConfig": {
+						"ordering": false,
+						"searching": false,
+						"paginate": false,
+						"pageLength": 10,
+						"responsive": false
+					},
+					getColumns: function() {
+						return [{
+							"title": "Month",
+							"data": "month",
+							"render": function(data, type, full, meta) {
+								if(data !="Average Monthly sales")
+								data = moment(data, 'YYYY-MM-DD').format('MMM, YYYY');
+								return strongRender(data);
+							}
+						}, {
+							"title": "Total Sales",
+							"data": "totalSales",
+							"className": "text-right",
+							"render": currencyRightRender
+						}, {
+							"title": "Season Type",
+							"data": "seasonType"
+						}];
+					}
+				}]
+			}]
+		}, {
+			"type": "expandablesection",
+			"items": []
+		}, {
+			"type": "section",
+			"html": '<h4 style="padding:5px 10px;margin:10px -10px 5px;background-color:lightblue">{{form.title}}</h4>',
+			"title": "Margin Details"
+		}, {
+			"type": "grid",
+			"orientation": "horizontal",
+			"items": [{
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"key": "business.enterprise.grossMarginPercentage",
+					"title": "GROSS_MARGIN_PERCT",
+					"className": "text-right"
+				}]
+			}, {
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"key": "business.enterprise.netMarginPercentage",
+					"title": "NET_MARGIN_PRCT",
+					"className": "text-right"
+				}]
+			}]
+		}, {
+			"type": "expandablesection",
+			"items": []
+		}, {
+			"type": "section",
+			"html": '<h4 style="padding:5px 10px;margin:10px -10px 5px;background-color:skyblue">{{form.title}}</h4>',
+			"title": "Proposed Loan Utilization"
+		}, {
+			"type": "grid",
+			"orientation": "horizontal",
+			"items": [{
+				"type": "grid",
+				"orientation": "vertical",
+				"items": [{
+					"type": "tableview",
+					"key": "loanAccount.loanUtilisationDetail",
+					"notitle": true,
+					"tableConfig": {
+						"ordering": false,
+						"searching": false,
+						"paginate": false,
+						"pageLength": 10,
+						"responsive": false
+					},
+					getColumns: function() {
+						return [{
+							"title": "Utilization type",
+							"data": "utilisationType"
+						}, {
+							"title": "% of fund allocation",
+							"data": "fundAllocationPercentage",
+							"className": "text-right"
+						}, {
+							"title": "Details of consumption plan",
+							"data": "consumptionDetails"
+						}];
+					}
+				}]
+			}]
+		}, {
+			"type": "expandablesection",
+			"items": []
 		}, {
 			"type": "section",
 			"html": '<h4 style="padding:5px 10px;margin:10px -10px 5px;background-color:lightblue">{{form.title}}</h4>',
@@ -542,9 +734,37 @@ self.renderReady = function(eventName) {
 				return Enrollment.getSchema().$promise;
 			},
 			eventListeners: {
-				"financial-summary": function(bundleModel, model, params) {
+				"financial-summary": function(bundleModel, model, params) {					
 
+					model.UIUDF.sales_information.avgMonthSaleAmount = model.business.enterprise.avgDailySaleAmount * model.business.enterprise.workingDaysInMonth
+					model.business.enterpriseMonthlySales = [{
+						"month":"2018-01-01",
+						"totalSales":"2000",
+						"seasonType":"good",
+					},{
+						"month":"2018-02-01",
+						"totalSales":"3000",
+						"seasonType":"good",
+					},{
+						"month":"2018-03-01",
+						"totalSales":"4000",
+						"seasonType":"good",
+					}];
 
+					if(model.business.enterpriseMonthlySales.length>0) {
+						var averageMontlySales = 0;
+						_.forEach(model.business.enterpriseMonthlySales, function(value) {
+							averageMontlySales += parseInt(value.totalSales);
+						});
+
+						averageMontlySales = averageMontlySales/model.business.enterpriseMonthlySales.length;
+						model.business.enterpriseMonthlySales.push({
+							"month":"Average Monthly sales",
+							"totalSales": averageMontlySales,
+							"seasonType":""
+						});
+					}
+					
 					/*Existing or new customer*/
 					if (params[0].data[0]['Existing Customer'] == 'No') {
                         model.existingCustomerStr = "New Customer";
@@ -564,6 +784,10 @@ self.renderReady = function(eventName) {
 						"key": "Cash",
 						"color": "firebrick",
 						"values": []
+					}, {
+						"key": "kaccha",
+						"color": "limegreen",
+						"values": []
 					}];
 					for (i = 0; i < cfd.data.length - 1; i++) {
 						var d = cfd.data[i];
@@ -576,11 +800,13 @@ self.renderReady = function(eventName) {
 							}
 							x.invoice = d.data["Invoice Sales Amount"] || 0;
 							x.cash = d.data["Cash Sales Amount"] || 0;
+							x.kaccha = d.data["Kaccha Sales Amount"] || 0;
 							x.total = d.data["Amount"] || 0;
 						} else {
 							x.month = d["Month"];
 							x.invoice = d["Invoice Sales Amount"] || 0;
 							x.cash = d["Cash Sales Amount"] || 0;
+							x.kaccha = d["Kaccha Sales Amount"] || 0;
 							x.total = d["Amount"] || 0;
 							invoiceCashGraphData[0].values.push({
 								"x": x.month,
@@ -590,6 +816,11 @@ self.renderReady = function(eventName) {
 							invoiceCashGraphData[1].values.push({
 								"x": x.month,
 								"y": x.cash,
+								"series": 1
+							});
+							invoiceCashGraphData[2].values.push({
+								"x": x.month,
+								"y": x.kaccha,
 								"series": 1
 							});
 							
@@ -1127,7 +1358,7 @@ self.renderReady = function(eventName) {
 							"values": []
 						}];
 						var bouncesGraphData = [{
-							"key": "No of EMI Bounces",
+							"key": "No of EMI Bounces",	
 							"color": "limegreen",
 							"values": []
 						}, {
@@ -1144,6 +1375,9 @@ self.renderReady = function(eventName) {
 						for (i = 0; i < model.business.customerBankAccounts.length; i++) {
 							var acc = model.business.customerBankAccounts[i];
 							var totalDeposits = 0;
+							var totalOpeningBalance = 0;
+							var totalClosingBalance = 0;
+							var totalEMIAmountDeducted = 0;
 							var totalWithdrawals = 0;
 							var balnceon15 = 0;
 							var noOfEmiChequeBounced = 0;
@@ -1151,6 +1385,9 @@ self.renderReady = function(eventName) {
 							for (j in acc.bankStatements) {
 								var stat = acc.bankStatements[j];
 								totalDeposits += stat.totalDeposits;
+								totalOpeningBalance += stat.openingBalance;
+								totalClosingBalance += stat.closingBalance;
+								totalEMIAmountDeducted += stat.amountOfEmiDeducted;
 								totalWithdrawals += stat.totalWithdrawals;
 								balnceon15 += stat.balanceAsOn15th;
 								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
@@ -1178,6 +1415,9 @@ self.renderReady = function(eventName) {
 							acc.total = {
 								"startMonth": "Average",
 								"totalDeposits": totalDeposits,
+								"averageOpeningBalance": totalOpeningBalance / acc.bankStatements.length,
+								"averageClosingBalance": totalClosingBalance / acc.bankStatements.length,
+								"averageEMIAmountDeducted": totalEMIAmountDeducted / acc.bankStatements.length,
 								"averageDeposits": totalDeposits / acc.bankStatements.length,
 								"totalWithdrawals": totalWithdrawals,
 								"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
