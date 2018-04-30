@@ -191,7 +191,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
-            model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
+            model.CBType= SessionStore.getGlobalSetting("CBCheckType");
+            if(model.CBType){
+                model.CBType=JSON.parse((model.CBType).replace(/'/g, '"'));
+            }
+            //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
                     (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:false));
