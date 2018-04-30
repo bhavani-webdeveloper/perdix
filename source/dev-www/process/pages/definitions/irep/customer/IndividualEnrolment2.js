@@ -104,7 +104,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
-                                },                                
+                                },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },                      
                                 "IndividualInformation.customerId": {
                                     "readonly": true
                                 },
@@ -175,6 +187,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "ContactInformation": {
                                     "readonly": true
                                 },
@@ -360,6 +384,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers": {
                                     "view": "fixed"
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "IndividualReferences.verifications.referenceFirstName": {
                                     "required": true
                                 },
@@ -403,6 +439,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "TrackDetails": {
                                     "readonly": true
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "reference": {
                                     "readonly": true
                                 },
@@ -441,6 +489,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "Liabilities": {
                                     "readonly": true
                                 },
@@ -480,6 +540,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials": {
                                     "readonly": true
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
@@ -526,6 +598,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "ContactInformation.locality":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                }, 
                                 "IndividualFinancials": {
                                     "readonly": true
                                 },
