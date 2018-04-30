@@ -493,6 +493,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "orderNo": 2
                                     },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
                                     "BankAccounts": {
                                         "orderNo": 3
                                     },
@@ -667,6 +670,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "orderNo": 1,
                                         "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
                                     },
                                     "EnterpriseInformation.isGSTAvailable": {
                                         "required": true
@@ -1470,6 +1476,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseInformation": {
                                         "orderNo": 1,
                                         "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
                                     },
                                     "ContactInformation": {
                                         "orderNo": 2,

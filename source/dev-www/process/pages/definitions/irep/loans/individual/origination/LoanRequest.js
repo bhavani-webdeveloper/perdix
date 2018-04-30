@@ -45,6 +45,8 @@ define([],function(){
                                 "LoanSanction",
                                 "LoanMitigants",
                                 "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium",
@@ -119,6 +121,8 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "NomineeDetails.nominees.nomineeButton",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",                  
@@ -160,7 +164,9 @@ define([],function(){
                                 "LoanRecommendation",
                                 "LoanSanction",
                                 "LoanMitigants",
-                                "DeductionsFromLoan",                                
+                                "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",                                
                                 "AdditionalLoanInformation",
                                 "NomineeDetails",
                                 "ProposedUtilizationPlan",
@@ -202,7 +208,9 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation",
                                 "LoanSanction",
-                                "DeductionsFromLoan"                 
+                                "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter"               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -348,7 +356,9 @@ define([],function(){
                             "excludes": [
                                 "LoanSanction",
                                 "DeductionsFromLoan",
-                                "NomineeDetails.nominees.nomineeButton"                 
+                                "NomineeDetails.nominees.nomineeButton",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter"             
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -559,8 +569,7 @@ define([],function(){
             }
 
              var overridesFields = function (bundlePageObj) {
-                return {    
-
+                return {
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration"
                         },
@@ -746,6 +755,28 @@ define([],function(){
                             model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
                         })
                     }
+
+                /*Loan customer relations */
+                // if (_.hasIn(model.loanAccount, 'loanCustomerRelations') &&
+                // model.loanAccount.loanCustomerRelations!=null &&
+                // model.loanAccount.loanCustomerRelations.length > 0) {
+                // var lcr = model.loanAccount.loanCustomerRelations;
+                // var idArr = [];
+                // for (var i=0;i<lcr.length;i++){
+                //     idArr.push(lcr[i].customerId);
+                // }
+                // Queries.getCustomerBasicDetails({'ids': idArr})
+                //     .then(function(result){
+                //         if (result && result.ids){
+                //             for (var i = 0; i < lcr.length; i++) {
+                //                 var cust = result.ids[lcr[i].customerId];
+                //                 if (cust) {
+                //                     model.loanAccount.loanCustomerRelations[i].name = cust.first_name;
+                //                 }
+                //             }
+                //         }
+                //     });
+                // }
                     /* End of Deviations and Mitigations grouping */
 
                     self = this;

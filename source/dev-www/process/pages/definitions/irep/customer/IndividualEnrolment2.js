@@ -598,6 +598,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "KYC.customerId": {
+                                    "resolver": "IndividualCustomerIDLOVConfiguration"
+                                },
                                 "ContactInformation.locality":{
                                     "readonly": true
                                 },

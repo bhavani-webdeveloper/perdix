@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
+                            maximum: 0,
                             order:20
                         },
                         {

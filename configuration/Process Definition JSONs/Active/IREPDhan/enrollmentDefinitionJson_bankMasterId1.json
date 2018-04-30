@@ -3898,7 +3898,7 @@
             "rawMaterialType": {
               "title": "Raw Material Type",
               "type": "string",
-              "refCodeCategory": "income_type",
+              "refCodeCategory": "purchase_income_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
