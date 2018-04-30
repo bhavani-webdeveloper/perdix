@@ -2,7 +2,9 @@ irf.models.factory('Product', ["$resource", "$httpParamSerializer", "BASE_URL", 
     function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
 
         var endpoint = BASE_URL + '/api/loanproducts';
-        var val = '/getProductMappings?branchId=';
+        var endpoint2 = BASE_URL + '/api/loanproduct';
+        var branchId = '/getProductMappings?branchId=';
+        var productId = '/getBranchMappings?productCode=';
         var resource = $resource(endpoint, null, {
             getSchema: {
                 method: 'GET',
@@ -18,7 +20,7 @@ irf.models.factory('Product', ["$resource", "$httpParamSerializer", "BASE_URL", 
             }),
             get: {
                 method: 'GET',
-                url: endpoint + '/:id'
+                url: endpoint2 + '/:id'
             },
             createProduct: {
                 method: 'POST',
@@ -32,7 +34,7 @@ irf.models.factory('Product', ["$resource", "$httpParamSerializer", "BASE_URL", 
             },
             findProductConfiguration:{
                  method:'GET',
-                url:endpoint +val+':id',
+                url:endpoint +branchId+':id',
                 // isArray:true
 
             },
@@ -41,6 +43,14 @@ irf.models.factory('Product', ["$resource", "$httpParamSerializer", "BASE_URL", 
                 url: endpoint + '/createProductConfigurationList',
                // isArray:true
                // /api/loanproducts/createProductConfigurationList
+            },
+            getBranchMappings:{
+                method:'GET',
+                url:endpoint + productId+ ':id'
+            },
+            createProductCodeConfiList:{
+                method:'POST',
+                url:endpoint+'/createProductCodeConfigurationList'
             }
            
 
