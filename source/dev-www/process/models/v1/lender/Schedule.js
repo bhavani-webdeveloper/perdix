@@ -20,6 +20,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 url: endpoint + lenderAccountNumb + ':id',
                 isArray:true
             },
+             getSchedule :{
+                method:'GET',
+                url : endpoint + "/:id"
+            },
             liabilityRepay:{
                 method: 'POST',
                 url: endpoint2
