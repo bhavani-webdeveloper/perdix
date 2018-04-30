@@ -282,7 +282,8 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                     } else {
                                         $state.go('Page.Engine', {
                                             pageName: 'lender.liabilities.LiabilityPartialRepaymentScreen',
-                                            pageData: item
+                                            pageId: item.id,
+                                            pageData:$stateParams.pageId
                                         })
                                     }
                                 },
