@@ -689,6 +689,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                     },
                     proceed: function (model, formCtrl, form, $event) {
                         $log.info("Inside proceed()");
+                        model.branchProcess.journalEntryDto = Utils.removeNulls(model.branchProcess.journalEntryDto, true);
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }

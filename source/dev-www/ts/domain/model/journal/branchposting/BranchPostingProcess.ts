@@ -74,7 +74,7 @@ export class BranchPostingProcess implements CanApplyPolicy {
    reject(): Observable<BranchPostingProcess>{
         // this.stage = toStage;
         this.journalEntryProcessAction = 'PROCEED';
-        this.stage = 'clearRejectedNoCatch(promise: ZoneAwarePromise<any>)';
+        this.stage = 'Rejected';
         let pmBeforeUpdate:PolicyManager<BranchPostingProcess>  = new PolicyManager(this, BranchPostingPolicyFactory.getInstance(), 'beforeReject', BranchPostingProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
         let obs2 = this.branchRepo.updateJournal(this);

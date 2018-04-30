@@ -9,6 +9,9 @@ import {QueryRepository} from "./query/QueryRepository";
 import { BranchPostingPolicyFactory } from '../model/journal/branchposting/policy/BranchPostingPolicyFactory';
 import { BranchPostingProcess } from '../model/journal/branchposting/BranchPostingProcess';
 import BranchPostingRepository = require('../model/journal/branchposting/BranchRepository');
+
+import { FinconPostingProcess } from '../model/journal/finconaccounting/FinconPostingProcess';
+import FinconRepository = require('../model/journal/finconaccounting/FinconRepository');
 //import {TagMasterRepository} from "../model/TMaster/TagMasterRepository"
 
 
@@ -31,6 +34,8 @@ class RepositoryFactory {
                 return new LiabilityRepaymentRepository();
             case RepositoryIdentifiers.BranchPostingProcess:
                 return new BranchPostingRepository();
+            case RepositoryIdentifiers.FinconPostingProcess:
+                return new FinconRepository();                
             // case RepositoryIdentifiers.TagMasterProcess:
             //     return new TagMasterRepository();
     		default:

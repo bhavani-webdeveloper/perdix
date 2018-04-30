@@ -24,6 +24,10 @@ irf.models.factory('UIRepository', function($resource, $httpParamSerializer, BAS
         getPostingEntryUIRepository: {
             method: 'GET',
             url: 'modules/ui/journal/SingleEntryJournalPosting.json'
+        },
+        getFinconAccountingUIRepository: {
+            method: 'GET',
+            url: 'modules/ui/journal/FinconAccountingEntry.json'
         }
 
     });
