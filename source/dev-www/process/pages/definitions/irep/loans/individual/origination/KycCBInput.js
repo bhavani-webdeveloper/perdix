@@ -157,7 +157,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
                                     for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
@@ -167,7 +167,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
                                     for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
