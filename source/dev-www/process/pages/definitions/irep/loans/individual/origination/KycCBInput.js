@@ -59,7 +59,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName: 'irep.loans.individual.origination.CBCheck',
+                            pageName: 'loans.individual.screening.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
@@ -67,7 +67,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'loans.individual.screening.Review',
+                            pageName: 'irep.loans.individual.origination.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
                             minimum: 1,

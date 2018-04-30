@@ -802,7 +802,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "review.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -820,7 +820,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "review.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -845,7 +845,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "review.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -872,7 +872,7 @@ define([],function(){
                                                 "items": {
                                                 "remarks": {
                                                     "title": "REMARKS",
-                                                    "key": "review.remarks",
+                                                    "key": "loanProcess.remarks",
                                                     "type": "textarea",
                                                     "required": true
                                                 }, 

@@ -1416,7 +1416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && model.customer.currentStage != 'KYCReview'",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='Guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {

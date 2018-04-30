@@ -67,7 +67,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 100
                     }, {
-                        pageName: 'loans.individual.screening.Review',
+                        pageName: 'irep.loans.individual.origination.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,

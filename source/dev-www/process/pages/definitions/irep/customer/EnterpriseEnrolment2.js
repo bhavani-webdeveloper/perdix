@@ -14,6 +14,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.pincode": {
                          "title": "pincode"
                     },
+                    "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
+                         "title": "HYPOTHECATED_TO_IREP"
+
+                    },
                     "EnterpriseInformation.businessHistory": {
                          "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
                          "enumCode": "businessinfo_business_ownershi"
@@ -64,7 +68,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                          "orderNo": 10,
-                         "title": "BUYER_NAME"
+                         "title": "BUYER_NAME",
+                         "resolver": "BuyerNameLOVConfiguration"
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType":{
                          "orderNo": 20,
@@ -2400,7 +2405,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.customer.currentStage",
+                                        "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage == 'Appraisal')",
                                         "orderNo": 1200,
                                         "items": [
                                             {
