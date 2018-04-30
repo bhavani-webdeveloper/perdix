@@ -148,7 +148,8 @@ define({
                     "type": "date",
                 }, {
                     "key": "product.insuranceRateCode",
-                    "type": "string",
+                    "type": "select",
+                    "enumCode":"fee_master"
                 }, {
                     "key": "product.insuranceRequired",
                 }, {
