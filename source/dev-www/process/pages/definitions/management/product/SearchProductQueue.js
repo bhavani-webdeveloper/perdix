@@ -133,6 +133,7 @@ define({
                     },
                     getListItem: function(item) {
                         return [
+                            item.id,
                             item.productCode,
                             item.partnerCode,
                             item.loanType,
@@ -211,7 +212,7 @@ define({
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "management.product.NewProduct",
-                                    pageId: item.productCode,
+                                    pageId: item.id,
                                     pageData: {
                                         _lucCompleted: true
                                     }
@@ -232,6 +233,27 @@ define({
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "management.product.ProductBranch",
+                                    pageId: item.productCode,
+                                    pageData: {
+                                        _lucCompleted: true
+                                    }
+                                }, {
+                                    state: "Page.Engine",
+                                    pageName: "management.product.SearchProductQueue",
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                return true;
+                            }
+                        },
+                        {
+                            name: "BRANCH PRODUCT",
+                            desc: "",
+                            icon: "fa fa-pencil-square-o",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "management.product.BranchProduct",
                                     pageId: item.productCode,
                                     pageData: {
                                         _lucCompleted: true
