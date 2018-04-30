@@ -6,7 +6,6 @@ export class VendorNameLOVConfiguration extends LOVElementConfiguration {
     };
     outputMap: Object = {
     };
-    searchHelper: formHelper,
     search: Function = function(inputModel, form, model, context) {
         let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let $q = AngularResourceService.getInstance().getNGService("$q");

@@ -362,7 +362,7 @@ var navigateToQueue = function(model) {
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_KINARA_EMI",
+                            "title": "Expected EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",
@@ -411,38 +411,7 @@ var navigateToQueue = function(model) {
                         }]
                     }]
                 }]
-            }, {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Deductions From Loan Amount",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.expectedProcessingFeePercentage",
-                            "title": "Expected Processing Fee(in%)",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.expectedCommercialCibilCharge",
-                            "title": "Expected CIBIL Charges",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI(in Rs.)",
-                            "type": "amount"
-                        }]
-                    }]
-                }]
-            }, {
+            },{
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -492,7 +461,7 @@ var navigateToQueue = function(model) {
                                 "title": "Machine Permanently Fixed To Building"
                             }, {
                                 "data": "hypothecatedToBank",
-                                "title": "HYPOTHECATED_TO_KINARA"
+                                "title": "HYPOTHECATED_TO_IREP"
                             }, {
                                 "data": "electricityAvailable",
                                 "title": "Electricity Available"

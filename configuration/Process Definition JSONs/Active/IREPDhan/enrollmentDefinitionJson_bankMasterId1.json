@@ -1951,6 +1951,15 @@
                 "Completed"
               ]
             },
+            "unit": {
+              "title": "AREA_UNITS_OF_ASSETS",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+
+            },
             "registeredOwner": {
               "title": "Name Of Owned Asset",
               "type": "string",

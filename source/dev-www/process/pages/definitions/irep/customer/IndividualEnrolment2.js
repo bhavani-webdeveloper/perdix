@@ -184,6 +184,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
+                                },
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
@@ -420,6 +423,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
+                                },
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
@@ -474,6 +480,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "KYC": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents":{
                                     "readonly": true
                                 },
                                 "IndividualInformation": {
@@ -535,6 +544,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "KYC": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents":{
                                     "readonly": true
                                 },
                                 "IndividualFinancials": {
@@ -662,6 +674,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
+                                },
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
@@ -708,6 +723,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
+                                },
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
@@ -751,6 +769,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "orderNo": 1,
                                     "readonly":true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents":{
+                                    "readonly": true
                                 },
                                 "IndividualInformation": {
                                     "orderNo": 2,
@@ -993,6 +1014,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.customerId": {
                         "orderNo": 10
                     },
+                    "PhysicalAssets.physicalAssets.unit": {
+                          "type": "string"
+                    },
                     "IndividualInformation.existingLoan": {
                         "title": "EXISTING_LOAN_IREP"
                     },
@@ -1213,9 +1237,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingState": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "readonly": true
-                    },
-                    "IndividualInformation.numberOfDependents": {
                         "readonly": true
                     }
                 }
@@ -1544,35 +1565,66 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
-                        model.customer.mobilePhone = obj.mobileNo;
-                        model.customer.gender = obj.gender;
-                        model.customer.firstName = obj.leadName;
-                        model.customer.maritalStatus = obj.maritalStatus;
-                        model.customer.customerBranchId = obj.branchId;
-                        model.customer.centreId = obj.centreId;
-                        model.customer.centreName = obj.centreName;
-                        model.customer.street = obj.addressLine2;
-                        model.customer.doorNo = obj.addressLine1;
-                        model.customer.pincode = obj.pincode;
-                        model.customer.district = obj.district;
-                        model.customer.state = obj.state;
-                        model.customer.locality = obj.area;
-                        model.customer.villageName = obj.cityTownVillage;
-                        model.customer.landLineNo = obj.alternateMobileNo;
-                        model.customer.dateOfBirth = obj.dob;
-                        model.customer.age = obj.age;
-                        model.customer.gender = obj.gender;
-                        model.customer.landLineNo = obj.alternateMobileNo;
+              
+                        return $q.when()
+                            .then(function(){
+                                if (obj.applicantCustomerId){
+                                    return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
+                                } else {
+                                    return null;
+                                }
+                            })
+                            .then(function(enrolmentProcess){
+                                if (enrolmentProcess!=null){
+                                    model.enrolmentProcess = enrolmentProcess;
+                                    model.customer = enrolmentProcess.customer;
+                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                }
+                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
+                                    model.customer.existingLoan = 'YES';
+                                } else {
+                                    model.customer.existingLoan = 'NO';
+                                }
+                                model.customer.mobilePhone = obj.mobileNo;
+                                model.customer.gender = obj.gender;
+                                model.customer.firstName = obj.leadName;
+                                model.customer.maritalStatus = obj.maritalStatus;
+                                model.customer.customerBranchId = obj.branchId;
+                                model.customer.centreId = obj.centreId;
+                                model.customer.centreName = obj.centreName;
+                                model.customer.street = obj.addressLine2;
+                                model.customer.doorNo = obj.addressLine1;
+                                model.customer.pincode = obj.pincode;
+                                model.customer.district = obj.district;
+                                model.customer.state = obj.state;
+                                model.customer.locality = obj.area;
+                                model.customer.villageName = obj.cityTownVillage;
+                                model.customer.landLineNo = obj.alternateMobileNo;
+                                model.customer.dateOfBirth = obj.dob;
+                                model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
+                                model.customer.gender = obj.gender;
+                                model.customer.referredBy = obj.referredBy;
+                                model.customer.landLineNo = obj.alternateMobileNo;
+                                model.customer.landmark = obj.landmark;
+                                model.customer.postOffice = obj.postOffice;
+
+                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                    // $log.info(model.customer.familyMembers[i].relationShip);
+                                    // model.customer.familyMembers[i].educationStatus = obj.educationStatus;
+                                    if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
+                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                     }
+                                }
+                            })
 
 
-                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                            $log.info(model.customer.familyMembers[i].relationShip);
-                            model.customer.familyMembers[i].educationStatus = obj.educationStatus;
-                            /*if (model.customer.familyMembers[i].relationShip == "self") {
-                             model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                             break;
-                             }*/
-                        }
+
+
+
+
+
+
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj

@@ -396,6 +396,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
@@ -438,6 +440,8 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                  "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
@@ -481,6 +485,8 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
@@ -522,6 +528,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
+                                "LoanMitigants",
+                    "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                     "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton"                   
