@@ -185,7 +185,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails.familyMembers.noOfDependents":{
-                                    "readonly": true
+                                    "readonly": true,
+                                    "condition":"model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() == 'self'"
                                 },
                                 "IndividualInformation": {
                                     "readonly": true
@@ -424,7 +425,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails.familyMembers.noOfDependents":{
-                                    "readonly": true
+                                    "readonly": true,
+                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() == 'self'"
                                 },
                                 "IndividualInformation": {
                                     "readonly": true

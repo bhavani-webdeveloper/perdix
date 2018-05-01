@@ -791,8 +791,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "orderNo": 10
                                     },
                                     "CommercialCBCheck": {
-                                        "orderNo": 11,
-                                        "readonly": true
+                                        "orderNo": 11
                                     },
                                     "EnterpriseInformation.customerBranchId": {
                                         "readonly": true
@@ -981,6 +980,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "orderNo":142,
                                         "required": true
 
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"

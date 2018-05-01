@@ -599,9 +599,38 @@ define([],function(){
                             "remove": null,
                             "startEmpty": true
                         },
+                        "NomineeDetails.nominees.nomineeFirstName":{
+                            "orderNo":10
+                        },
+                        "NomineeDetails.nominees.nomineeGender": {
+                            "orderNo": 20
+                        },
+                        "NomineeDetails.nominees.nomineeDOB":{
+                            "orderNo": 30
+                        },
+                        "NomineeDetails.nominees.nomineeRelationship": {
+                            "orderNo": 40
+                        },
                         "NomineeDetails.nominees.nomineePincode": {
-                            "resolver": "PincodeLOVConfiguration"
+                            "resolver": "PincodeLOVConfiguration",
+                            "orderNo":50
+                        },
+                        "NomineeDetails.nominees.nomineeDoorNo": {
+                            "orderNo": 60
+                        },
+                        "NomineeDetails.nominees.nomineeStreet":{
+                            "orderNo": 70
+                        },
+                        "NomineeDetails.nominees.nomineeLocality": {
+                            "orderNo":80
+                        },
+                        "NomineeDetails.nominees.nomineeDistrict":{
+                            "orderNo":90
+                        },
+                        "NomineeDetails.nominees.nomineeState":{
+                            "orderNo":100
                         }
+
                     }
                 }
 
