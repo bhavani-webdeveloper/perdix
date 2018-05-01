@@ -3402,6 +3402,13 @@
                   "captureStages": [
                      "KYC", "LoanInitiation", "PendingForPartner"
                   ]
+               },
+               "udf5": {
+                  "title": "Average Monthly Sales",
+                  "type": "string",
+                  "captureStages": [
+                     "Evaluation"
+                  ]
                }
             }
          },

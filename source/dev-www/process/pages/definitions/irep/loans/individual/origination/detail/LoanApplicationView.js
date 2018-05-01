@@ -2,10 +2,10 @@ define({
     pageUID: "irep.loans.individual.origination.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig", "irfNavigator"
     ],
     $pageFn: function($log, $state, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig, irfNavigator) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>'+data+'</strong>';
         }
@@ -15,74 +15,6 @@ define({
 
             return irfElementsConfig.currency.iconHtml+irfCurrencyFilter(data, null, null, "decimal");
         }
-var navigateToQueue = function(model) {
-                    // Considering this as the success callback
-                    // Deleting offline record on success submission
-                    BundleManager.deleteOffline().then(function() {
-                        PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
-                    });
-
-
-                    
-
-                    if (model.currentStage == 'Screening')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Dedupe')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.DedupeQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ScreeningReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ScreeningReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Application')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ApplicationReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ApplicationReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisal')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'FieldAppraisalReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.FieldAppraisalReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CreditCommitteeReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CreditCommitteeReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'CentralRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'ZonalRiskReview')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Sanction')
-                        $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.LoanSanctionQueue',
-                            pageId: null
-                        });
-                    if (model.currentStage == 'Rejected')
-                        $state.go('Page.LoanOriginationDashboard', null);
-                }
 
             var getStageNameByStageCode = function(stageCode) {
                 var stageName = $filter('translate')(stageCode) || stageCode;
@@ -599,6 +531,11 @@ var navigateToQueue = function(model) {
                             "key": "loanAccount.commercialCibilCharge",
                             "title": "CIBIL Charges",
                             "type": "amount"
+                        }, {
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
+                            "condition": "model.loanAccount.currentStage=='Evaluation'",
+                            "title": "AVERAGE_MONTHLY_SALES",
+                            "type": "amount"
                         }]
                     }]
                 }]
@@ -933,7 +870,7 @@ var navigateToQueue = function(model) {
                             .$promise
                             .then(function(res) {
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
-                                return navigateToQueue(model);
+                                irfNavigator.goBack();
                             }, function(httpRes) {
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -974,7 +911,7 @@ var navigateToQueue = function(model) {
                                         BundleManager.pushEvent('new-loan', model._bundlePageObj, {
                                             loanAccount: model.loanAccount
                                         });
-                                        return navigateToQueue(model);
+                                        irfNavigator.goBack();
                                     }, function(httpRes) {
                                         PageHelper.showErrors(httpRes);
                                     })
@@ -1049,9 +986,9 @@ var navigateToQueue = function(model) {
                             .$promise
                             .then(function(res) {
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
-                                return navigateToQueue(model);
+                                irfNavigator.goBack();
                             }, function(httpRes) {
-                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);  
                                 PageHelper.showErrors(httpRes);
                             })
                             .finally(function() {
@@ -1207,7 +1144,7 @@ var navigateToQueue = function(model) {
                                             }
 
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                                            return navigateToQueue(model);
+                                            irfNavigator.goBack();
                                         }, function(httpRes) {
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);

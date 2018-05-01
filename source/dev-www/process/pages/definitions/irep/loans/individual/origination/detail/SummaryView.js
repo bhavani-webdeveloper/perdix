@@ -505,13 +505,13 @@ define({
 
                 scoreName = null;
                 switch (model.currentStage) {
-                    case "ScreeningReview":
+                    case "Televerification":
                         scoreName = "RiskScore1";
                         break;
                     case "ApplicationReview":
                         scoreName = "RiskScore2";
                         break;
-                    case "FieldAppraisalReview":
+                    case "Evaluation":
                         scoreName = "RiskScore3";
                         break;
                     default:
