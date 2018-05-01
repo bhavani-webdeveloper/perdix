@@ -72,6 +72,7 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
                 }
 
                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
             })
 
 
