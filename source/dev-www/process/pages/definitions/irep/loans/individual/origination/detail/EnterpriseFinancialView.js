@@ -998,6 +998,7 @@ define({
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {	
+                    model.customer = model.enrolmentProcess.customer;
 					model.sellerSummary = params[22].data;
 					if(model.sellerSummary.length > 0) {						
 						model.sellerMonthlyValue = _.sumBy(model.sellerSummary, function(seller) {
