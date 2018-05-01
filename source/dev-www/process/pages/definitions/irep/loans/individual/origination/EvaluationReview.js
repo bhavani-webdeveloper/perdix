@@ -146,6 +146,53 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 loanProcess.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
                                  bundleModel.loanAccount = loanAccount;
 
+                                 bundleModel.applicant = {};
+                                bundleModel.coApplicants = [];
+                                bundleModel.guarantors = [];
+                                bundleModel.business = {};
+                                bundleModel.urnNos = [];
+                                bundleModel.customer_detail = {
+                                    applicant: {},
+                                    coApplicants: {
+                                        id: [],
+                                        urn: []
+                                    },
+                                    guarantors: {
+                                        id: [],
+                                        urn: []
+                                    }
+                                }
+                                var customerIds = {
+                                    coApplicants: [],
+                                    guarantors: []
+                                };
+
+
+                                if (loanAccount.currentStage != 'Evaluation') {
+                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    irfNavigator.goBack();
+                                    return;
+                                }
+
+                                for (var i = 0; i < loanAccount.loanCustomerRelations.length; i++) {
+                                    var cust = loanAccount.loanCustomerRelations[i];
+                                    if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
+                                        bundleModel.urnNos.push(cust.urn);
+                                        customerIds.applicant = cust.customerId;
+                                        bundleModel.customer_detail.applicant.id = cust.customerId;
+                                        bundleModel.customer_detail.applicant.urn = cust.urn;
+                                    } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
+                                        bundleModel.urnNos.push(cust.urn);
+                                        customerIds.coApplicants.push(cust.customerId);
+                                        bundleModel.customer_detail.coApplicants.id.push(cust.customerId);
+                                        bundleModel.customer_detail.coApplicants.urn.push(cust.urn);
+
+                                    } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
+                                        customerIds.guarantors.push(cust.customerId);
+                                        bundleModel.customer_detail.guarantors.id.push(cust.customerId);
+                                        bundleModel.customer_detail.guarantors.urn.push(cust.urn);
+                                    }
+                                }
                                 
                                  $this.bundlePages.push({
                                     pageClass: 'applicant',
