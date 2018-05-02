@@ -22,6 +22,7 @@
         "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
         "Page/LoanOriginationDashboard",
+        "Page/Adhoc/irep.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
