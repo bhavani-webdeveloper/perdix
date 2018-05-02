@@ -120,7 +120,7 @@ define({
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
 					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centre, formHelper);
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'GuarantorAddition',
@@ -174,6 +174,9 @@ define({
 					},
 					getColumns: function() {
 						return [{
+                            title: 'ID',
+                            data: 'id'
+                        },{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
