@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "required": true,
                     },
                     "AdditionalKYC.additionalKYCs": {
+                        startEmpty: true,
                         schema: {
                             maxItems: 1
                         }

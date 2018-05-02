@@ -766,6 +766,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         readonly: true,
                     },
                     "AdditionalKYC.additionalKYCs": {
+                        startEmpty: true,
                         schema: {
                             maxItems: 1
                         }
