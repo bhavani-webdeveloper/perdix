@@ -158,11 +158,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: loanAccount.coApplicantCustomers[i]
+                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
                                     }
@@ -172,7 +172,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: loanAccount.guarantorCustomers[i]
+                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
                                     }

@@ -271,27 +271,22 @@ define([],function(){
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeFirstName": {
-                                    "orderNo": 81,
                                    "required":true,
                                    "resolver": "NomineeFirstNameLOVConfiguration"
                                 },
                                 "NomineeDetails.nominees.nomineeGender": {
-                                   "orderNo": 82,
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeDOB": {
-                                    "orderNo": 83,
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeButton": {
-                                    "orderNo": 84,
+                                    "orderNo": 41,
                                 },
                                 "NomineeDetails.nominees.nomineeDoorNo": {
-                                    "orderNo": 85,
                                    "required":true
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
-                                    "orderNo": 86,
                                    "required": true,
                                    "resolver": "NomineePincodeLOVConfiguration"
                                 },
