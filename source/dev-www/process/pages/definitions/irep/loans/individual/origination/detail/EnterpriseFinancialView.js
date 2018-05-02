@@ -13,11 +13,7 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
 
-				Enrollment.getCustomerById({
-                    id: model.customerId
-                }).$promise.then(function(res) {
-                    model.customer = res;
-                });
+				model.business = model.enrolmentProcess.customer;
 
 				model.UIUDF = {
                     'sales_information': {},
@@ -998,7 +994,6 @@ define({
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {	
-                    model.customer = model.enrolmentProcess.customer;
 					model.sellerSummary = params[22].data;
 					if(model.sellerSummary.length > 0) {						
 						model.sellerMonthlyValue = _.sumBy(model.sellerSummary, function(seller) {
@@ -1014,7 +1009,7 @@ define({
 					model.liability = params[19].subgroups;
 
 					var liability = _.find(model.liability, function(liab){
-                        return liab.summary["Customer ID"] == model.customer.id;
+                        return liab.summary["Customer ID"] == model.business.id;
                     });
 
 					model.liabilities = liability.data;
