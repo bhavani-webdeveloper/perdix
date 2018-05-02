@@ -1012,12 +1012,11 @@ define({
                     model.active_accounts = 0;
                     model.monthly_installment = 0;
                     model.outstanding_bal = 0;
+					var liability = _.find(model.liability, function(liab){
+                        return liab.summary["Customer ID"] == model.business.id;
+                    });
 
-					if(model.liability.length>0) {
-						var liability = _.find(model.liability, function(liab){
-	                        return liab.summary["Customer ID"] == model.business.id;
-	                    });
-
+					if(liability.length>0) {						
 						model.liabilities = liability.data;
 	                    model.active_accounts = model.liabilities.length;
 	                    model.monthly_installment = liability.summary["Total Monthly Installment"];
