@@ -168,7 +168,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
                                 if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
