@@ -222,7 +222,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return siteCode !== 'sambandh' && siteCode !== 'saija' ? true : false;
+								return siteCode !== 'sambandh' && siteCode !== 'saija' && siteCode !== 'IREPDhan' ? true : false;
 							}
 						},{
 							name: "Do KYC and CB",
