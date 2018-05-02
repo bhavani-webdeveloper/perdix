@@ -56,13 +56,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 70
                     }, {
-                        pageName: 'loans.individual.screening.Summary',
-                        title: 'SUMMARY',
-                        pageClass: 'summary',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 6
-                    }, {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
@@ -226,17 +219,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {
-                                            customerId: loanAccount.customerId,
-                                            loanId: loanAccount.id,
-                                            scoreName: 'RiskScore3'
-                                        }
-                                    }
-                                });
 
                                 if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                     $this.bundlePages.push({

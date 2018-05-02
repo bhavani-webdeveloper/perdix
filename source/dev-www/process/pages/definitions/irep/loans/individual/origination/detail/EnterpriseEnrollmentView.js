@@ -742,6 +742,7 @@ define({
             },
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
+                    model.customer = model.enrolmentProcess.customer;
                     model.proxyScore = {};
                     model.proxyScore = params[2].data[5];
                     model.liability = params[19].subgroups;
