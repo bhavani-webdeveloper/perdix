@@ -224,6 +224,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 orderNo: 60,
                                 key: "customer.pincode",
                                 type: "lov",
+                                "title": "PIN_CODE",
                                 fieldType: "number",
                                 autolov: true,
                                 inputMap: {
@@ -537,6 +538,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "fieldset",
                         orderNo: 30,
                         title: "ADDRESS_PROOF",
+                        condition: "!model.customer.addressProofSameAsIdProof",
                         items: {
                             "addressProof": {
                                 key: "customer.addressProof",

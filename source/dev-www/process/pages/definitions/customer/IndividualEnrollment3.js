@@ -1468,16 +1468,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                                 leadReqData.lead.leadStatus = "Complete";
                                 LeadHelper.proceedData(leadReqData);
                             }
-                            if (model.siteCode != 'sambandh') {
-                                EnrollmentHelper.proceedData(res).then(function(resp) {
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go('Page.Landing', null);
-                                }, function(err) {
-                                    Utils.removeNulls(res.customer, true);
-                                    model.customer = res.customer;
-                                });
-                            }
-
+                            EnrollmentHelper.proceedData(res).then(function(resp) {
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                $state.go('Page.Landing', null);
+                            }, function(err) {
+                                Utils.removeNulls(res.customer, true);
+                                model.customer = res.customer;
+                            });
                         });
                     }
                 }

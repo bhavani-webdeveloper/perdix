@@ -13,6 +13,15 @@
     },
     {
       "order": 2,
+      "code": "Stage02",
+      "name": "Stage 2",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ]
+    },
+    {
+      "order": 3,
       "code": "Completed",
       "name": "Completed",
       "stageType": "CAPTURE",
@@ -32,7 +41,6 @@
       "personalProfile",
       "bankdetails",
       "enterprisePersonalProfile",
-      "enterprise",
       "customerPhoto",
       "kyc"
     ],
@@ -49,6 +57,7 @@
             "maximum": 90,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -59,6 +68,7 @@
             "maximum": 300,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -67,6 +77,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -75,6 +86,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -83,6 +95,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -105,6 +118,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -115,6 +129,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -125,6 +140,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed" 
               ]
             },
@@ -134,6 +150,7 @@
               "refCodeCategory": "relation",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -148,6 +165,7 @@
               "refCodeCategory": "gender",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -157,6 +175,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -166,6 +185,7 @@
               "refCodeCategory": "education",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -176,6 +196,7 @@
               "maxLength": 10,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -184,6 +205,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -194,6 +216,7 @@
               "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -204,6 +227,7 @@
               "maxLength": 10,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -212,6 +236,7 @@
               "type": "bigDecimal",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -220,6 +245,7 @@
               "type": "bigDecimal",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -228,6 +254,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
                     ]
                   },
@@ -236,6 +263,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -244,6 +272,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -252,6 +281,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -260,6 +290,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -278,6 +309,7 @@
               "type": "string",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -288,6 +320,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -297,6 +330,7 @@
               "refCodeCategory": "frequency",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -307,6 +341,7 @@
               "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -326,6 +361,7 @@
               "refCodeCategory": "occupation",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -336,6 +372,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -345,6 +382,7 @@
               "refCodeCategory": "frequency",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -355,6 +393,7 @@
               "maximum": 366,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -374,6 +413,7 @@
               "refCodeCategory": "financialAssetInstrumentType",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -384,6 +424,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -393,6 +434,7 @@
               "refCodeCategory": "finanical_asset",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -403,6 +445,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -412,6 +455,7 @@
               "refCodeCategory": "frequency",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -421,6 +465,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -430,6 +475,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -440,6 +486,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -450,6 +497,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -469,6 +517,7 @@
               "refCodeCategory": "liability_loan_type",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -478,6 +527,7 @@
               "refCodeCategory": "loan_source",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -488,6 +538,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -496,6 +547,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -505,6 +557,7 @@
               "refCodeCategory": "frequency",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -515,6 +568,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -525,6 +579,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -535,6 +590,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -545,6 +601,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -555,6 +612,7 @@
               "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -565,6 +623,7 @@
               "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -575,6 +634,7 @@
               "maximum": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -584,6 +644,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -593,6 +654,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -603,6 +665,7 @@
               "maximum": 10000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -630,6 +693,7 @@
             "maxLength": 16,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -640,6 +704,7 @@
             "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -650,6 +715,7 @@
             "maximum": 999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -660,6 +726,7 @@
             "maxLength": 50,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -670,6 +737,7 @@
             "maxLength": 50,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -680,6 +748,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -690,6 +759,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -698,6 +768,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -708,6 +779,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -718,6 +790,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -728,6 +801,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -738,6 +812,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -747,6 +822,7 @@
             "refCodeCategory": "district",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -757,6 +833,7 @@
             "maximum": 999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -767,6 +844,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -777,6 +855,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -787,6 +866,7 @@
             "maximum": 15,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -796,6 +876,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -805,6 +886,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -815,6 +897,7 @@
             "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -825,6 +908,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -835,6 +919,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -843,6 +928,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -853,6 +939,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -863,6 +950,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -873,6 +961,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -883,6 +972,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -893,6 +983,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -903,6 +994,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -913,6 +1005,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -921,6 +1014,7 @@
             "type": "number",           
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -931,6 +1025,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -940,6 +1035,7 @@
             "refCodeCategory": "gender",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -949,6 +1045,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -958,6 +1055,7 @@
             "refCodeCategory": "religion",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -967,6 +1065,7 @@
             "refCodeCategory": "caste",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -976,6 +1075,7 @@
             "refCodeCategory": "language",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -985,6 +1085,7 @@
             "refCodeCategory": "marital_status",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -995,6 +1096,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1005,6 +1107,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1015,6 +1118,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1024,6 +1128,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1034,6 +1139,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1044,6 +1150,7 @@
             "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1054,6 +1161,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1064,6 +1172,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1084,6 +1193,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1093,6 +1203,7 @@
             "refCodeCategory": "enrolledAs",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1101,6 +1212,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1120,6 +1232,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1139,6 +1252,7 @@
             "maxLength": 12,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1147,6 +1261,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ],
             "refCodeCategory": "address_proof"
@@ -1156,6 +1271,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1166,6 +1282,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1174,6 +1291,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1182,6 +1300,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1190,6 +1309,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ],
             "refCodeCategory": "identity_proof"
@@ -1199,6 +1319,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1209,6 +1330,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1217,6 +1339,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1225,6 +1348,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1233,6 +1357,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1241,6 +1366,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1249,6 +1375,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1257,6 +1384,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1265,6 +1393,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1287,6 +1416,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ],
             "refCodeCategory": "identity_proof"
@@ -1296,6 +1426,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1306,6 +1437,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1314,6 +1446,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1322,6 +1455,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1330,6 +1464,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ],
             "refCodeCategory": "kyc"
@@ -1339,6 +1474,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1349,6 +1485,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1357,6 +1494,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1365,6 +1503,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1373,6 +1512,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1381,6 +1521,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1405,6 +1546,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1415,6 +1557,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1425,6 +1568,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1433,6 +1577,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1441,6 +1586,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1449,6 +1595,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1459,6 +1606,7 @@
             "maxLength": 1,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1469,6 +1617,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1479,6 +1628,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1489,6 +1639,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1499,6 +1650,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1509,6 +1661,7 @@
             "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1519,6 +1672,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1529,6 +1683,7 @@
             "maxLength": 500,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1539,6 +1694,7 @@
             "maxLength": 300,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1549,6 +1705,7 @@
             "maximum": 99,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1559,6 +1716,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1569,6 +1727,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1579,6 +1738,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1589,6 +1749,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1599,6 +1760,7 @@
             "maxLength": 50,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1609,6 +1771,7 @@
             "maxLength": 50,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1619,6 +1782,7 @@
             "maximum":10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1629,6 +1793,7 @@
             "maximum":10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1648,6 +1813,7 @@
               "refCodeCategory": "asset_type",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1656,6 +1822,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1664,6 +1831,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1674,6 +1842,7 @@
               "maximum": 100000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1684,6 +1853,7 @@
               "maximum": 1000000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1693,6 +1863,7 @@
               "refCodeCategory": "asset_Details",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1701,6 +1872,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1709,6 +1881,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -1729,6 +1902,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1739,6 +1913,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1749,6 +1924,7 @@
               "maximum": 10000000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -1759,6 +1935,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -1778,6 +1955,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1787,6 +1965,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1797,6 +1976,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1807,6 +1987,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1817,6 +1998,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1827,6 +2009,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1837,6 +2020,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1854,6 +2038,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1869,6 +2054,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -1884,6 +2070,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1894,6 +2081,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1903,6 +2091,7 @@
             "enumCode": "house_ownership",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1912,6 +2101,7 @@
             "minimum": 0,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1923,6 +2113,7 @@
             "enumCode": "condition",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1931,6 +2122,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1941,6 +2133,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1950,6 +2143,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1960,6 +2154,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1970,6 +2165,7 @@
             "maximum": 999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1980,6 +2176,7 @@
             "maximum": 9999999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1990,6 +2187,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -1999,6 +2197,7 @@
             "enumCode": "broad_occupation_type",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2008,6 +2207,7 @@
             "enumCode": "relation_with_business_owner",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2018,6 +2218,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2029,6 +2230,7 @@
             "enumCode": "work_place_type",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2038,6 +2240,7 @@
             "minimum": 0,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2049,6 +2252,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2060,6 +2264,7 @@
             "enumCode": "condition",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2071,6 +2276,7 @@
             "enumCode": "work_place",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2081,6 +2287,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2091,6 +2298,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2102,6 +2310,7 @@
             "enumCode": "condition",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2113,6 +2322,7 @@
             "enumCode": "relation_with_business_owner",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2124,6 +2334,7 @@
             "enumCode": "land_ownership",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2132,6 +2343,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2143,6 +2355,7 @@
             "enumCode": "months",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2151,6 +2364,7 @@
             "type": "number",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2160,6 +2374,7 @@
             "enumCode": "years_in_current_address",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2169,6 +2384,7 @@
             "enumCode": "years_in_current_area",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2178,6 +2394,7 @@
             "enumCode": "years_in_present_area",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2187,6 +2404,7 @@
             "enumCode": "years_in_current_address",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2196,6 +2414,7 @@
             "enumCode": "identity_proof",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2206,6 +2425,7 @@
             "subCategory": "IDENTITYPROOF",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2216,6 +2436,7 @@
             "subCategory": "IDENTITYPROOF",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2224,6 +2445,7 @@
             "title": "SPOUSE_IDENTITY_PROOF_NO",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2232,6 +2454,7 @@
             "title": "INSURANCE_TYPE",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2240,6 +2463,7 @@
             "title": "OWNED_BY",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2248,6 +2472,7 @@
             "title": "OWNED_BY1",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2256,6 +2481,7 @@
             "title": "OWNED_BY2",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -2271,6 +2497,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2279,6 +2506,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -2296,6 +2524,7 @@
             "maxLength": 500,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2304,6 +2533,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2314,6 +2544,7 @@
             "maxLength": 500,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2322,6 +2553,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2330,6 +2562,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -2348,6 +2581,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2356,6 +2590,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -2375,6 +2610,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2385,6 +2621,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2395,6 +2632,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2405,6 +2643,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2415,6 +2654,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2425,6 +2665,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2435,6 +2676,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2445,6 +2687,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2455,6 +2698,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2465,6 +2709,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2475,6 +2720,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2485,6 +2731,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2495,6 +2742,7 @@
             "maximum": 999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2503,6 +2751,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2513,6 +2762,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2523,6 +2773,7 @@
             "maximum": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2533,6 +2784,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2543,6 +2795,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2553,6 +2806,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2563,6 +2817,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2573,6 +2828,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2583,6 +2839,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2593,6 +2850,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2603,6 +2861,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2613,6 +2872,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2623,6 +2883,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2633,6 +2894,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2643,6 +2905,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2653,6 +2916,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2663,6 +2927,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2673,6 +2938,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2683,6 +2949,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2693,6 +2960,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2703,6 +2971,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2713,6 +2982,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2723,6 +2993,7 @@
             "maxLength": 1000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2733,6 +3004,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2743,6 +3015,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -2765,6 +3038,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2775,6 +3049,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2785,6 +3060,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2795,6 +3071,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2805,6 +3082,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2815,6 +3093,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2825,6 +3104,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2834,6 +3114,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2844,6 +3125,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2854,6 +3136,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2864,6 +3147,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2874,6 +3158,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2884,6 +3169,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2894,6 +3180,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2904,6 +3191,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2914,6 +3202,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2924,6 +3213,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2934,6 +3224,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2944,6 +3235,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2954,6 +3246,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2964,6 +3257,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2974,6 +3268,7 @@
             "maximum": 999999,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2984,6 +3279,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -2994,6 +3290,7 @@
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3004,6 +3301,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3014,6 +3312,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3024,6 +3323,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3034,6 +3334,7 @@
             "maxLength": 3,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3044,6 +3345,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3054,6 +3356,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3064,6 +3367,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3074,6 +3378,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3084,6 +3389,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3094,6 +3400,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3104,6 +3411,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3114,6 +3422,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3124,6 +3433,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3134,6 +3444,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3144,6 +3455,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3154,6 +3466,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3164,6 +3477,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3174,6 +3488,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3184,6 +3499,7 @@
             "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3194,6 +3510,7 @@
             "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3204,6 +3521,7 @@
             "maxLength": 10,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3214,6 +3532,7 @@
             "maxLength": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3224,6 +3543,7 @@
             "maximum": 100000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -3245,6 +3565,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3254,6 +3575,7 @@
             "refCodeCategory": "relationship_type",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3262,6 +3584,7 @@
             "type": "number",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3272,6 +3595,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3282,6 +3606,7 @@
             "maximum": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3292,6 +3617,7 @@
             "maximum": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3302,6 +3628,7 @@
             "maximum": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3311,6 +3638,7 @@
             "format": "date",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3321,6 +3649,7 @@
             "maximum": 45,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -3340,6 +3669,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3350,6 +3680,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3360,6 +3691,7 @@
             "maximum": 100,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3370,6 +3702,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3378,6 +3711,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3388,6 +3722,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3398,6 +3733,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3408,6 +3744,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3418,6 +3755,7 @@
             "maximum": 1000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3426,6 +3764,7 @@
             "type": "boolean",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3434,6 +3773,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3442,6 +3782,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3452,6 +3793,7 @@
             "maximum": 10000000,
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           },
@@ -3460,6 +3802,7 @@
             "type": "string",
             "captureStages": [
               "BasicEnrolment",
+              "Stage02",
               "Completed"
             ]
           }
@@ -3484,6 +3827,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3494,6 +3838,7 @@
               "maxLength": 1000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3503,6 +3848,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3512,6 +3858,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3522,6 +3869,7 @@
               "maxLength": 500,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3548,6 +3896,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3558,6 +3907,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3568,6 +3918,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3578,6 +3929,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3588,6 +3940,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3598,6 +3951,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3622,6 +3976,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3630,6 +3985,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3638,6 +3994,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3647,6 +4004,7 @@
               "minimum": 0,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3656,6 +4014,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3679,6 +4038,7 @@
               "refCodeCategory": "occupation",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3689,6 +4049,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3698,6 +4059,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3722,6 +4084,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3731,6 +4094,7 @@
               "refCodeCategory": "income_type",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3741,6 +4105,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3750,6 +4115,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3771,6 +4137,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3781,6 +4148,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3791,6 +4159,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3801,6 +4170,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3810,6 +4180,7 @@
               "refCodeCategory": "collateral_type",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3820,6 +4191,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3830,6 +4202,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3840,6 +4213,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3850,6 +4224,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3860,6 +4235,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3869,6 +4245,7 @@
               "refCodeCategory": "new_machine",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3877,6 +4254,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3886,6 +4264,7 @@
               "refCodeCategory": "decisionmaker",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3895,6 +4274,7 @@
               "refCodeCategory": "decisionmaker",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3905,6 +4285,7 @@
               "maxLength": 500,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3927,6 +4308,7 @@
               "refCodeCategory": "enterprice_asset_types",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3937,6 +4319,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3947,6 +4330,7 @@
               "maximum": 10000000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -3978,6 +4362,7 @@
               "maxLength": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3988,6 +4373,7 @@
               "maxLength": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -3998,6 +4384,7 @@
               "maxLength": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4008,6 +4395,7 @@
               "maxLength": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4018,6 +4406,7 @@
               "maxLength": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4028,6 +4417,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4038,6 +4428,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4048,6 +4439,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4058,6 +4450,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4068,6 +4461,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -4097,6 +4491,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4105,6 +4500,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4115,6 +4511,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4125,6 +4522,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4135,6 +4533,7 @@
               "maxLength": 100,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4145,6 +4544,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4154,6 +4554,7 @@
               "format": "date",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4163,6 +4564,7 @@
               "refCodeCategory": "payment_frequency",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4173,6 +4575,7 @@
               "maximum": 10000000,
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -4196,6 +4599,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4204,6 +4608,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4212,6 +4617,7 @@
               "type": "integer",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4220,6 +4626,7 @@
               "type": "number",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }
@@ -4245,6 +4652,7 @@
               ],
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4253,6 +4661,7 @@
               "type": "string",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4261,6 +4670,7 @@
               "type": "number",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4269,6 +4679,7 @@
               "type": "number",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4277,6 +4688,7 @@
               "type": "number",
               "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4285,6 +4697,7 @@
               "type": "number",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             },
@@ -4293,6 +4706,7 @@
               "type": "number",
                "captureStages": [
                 "BasicEnrolment",
+                "Stage02",
                 "Completed"
               ]
             }

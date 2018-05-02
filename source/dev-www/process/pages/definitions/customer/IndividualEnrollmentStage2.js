@@ -342,6 +342,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "Liabilities1.liabilities.liabilityLoanPurpose": {
                         required: false,
                     },
+                    "Expenditures1.expenditures": {
+                        remove: null
+                    },
                 };
             } else if (model.siteCode == "sambandh") {
                 var customReadonly = false;
@@ -733,6 +736,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "HouseVerification.houseVerificationPhoto": {
                         required: true,
+                    },
+                    "Expenditures1.expenditures": {
+                        remove: null
                     },
                     "Expenditures1.expenditures.expendituresSection.expenditureSource": {
                         required: true,
