@@ -519,7 +519,7 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
+                            "title": "ESTIMATED_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.processingFeePercentage",

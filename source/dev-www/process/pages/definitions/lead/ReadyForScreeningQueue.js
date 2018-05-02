@@ -224,6 +224,24 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 							isApplicable: function(item, index) {
 								return siteCode !== 'sambandh' && siteCode !== 'saija' ? true : false;
 							}
+						},{
+							name: "Do KYC and CB",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								entityManager.setModel('lead.LeadGeneration', {
+									_request: item
+								});
+								$state.go("Page.Bundle", {
+									pageName: "irep.loans.individual.origination.KycCBInput",
+									pageData: {
+										lead_id: item.id
+									}
+								});
+							},
+							isApplicable: function(item, index) {
+								return siteCode == 'IREPDhan' ? true : false;
+							}
 						},
 						{
 							name: "DO_ENROLLMENT",
