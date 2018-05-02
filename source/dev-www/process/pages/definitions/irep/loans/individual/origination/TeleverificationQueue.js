@@ -9,8 +9,8 @@ define({
 			"title": "IREP_TELEVERIFICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				//model.branch = SessionStore.getCurrentBranch().branchName;
+				//model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized"); 
 			},
 			definition: {
@@ -89,8 +89,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Televerification',
-	                    /*'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branch,*/
+	                    'centreCode':  searchOptions.centre,
+	                    'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

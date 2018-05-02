@@ -81,8 +81,8 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    /*'branchName': searchOptions.branch,
-	                    'centreCode': searchOptions.centre,*/
+	                    'branchName': searchOptions.branch,
+	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,

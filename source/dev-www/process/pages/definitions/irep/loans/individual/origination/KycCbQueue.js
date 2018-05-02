@@ -29,7 +29,7 @@ define({
                 searchForm: [
                     "*"
                 ],
-                // autoSearch: true,
+                autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
@@ -122,7 +122,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'KYC',
-                        // 'branchName': branch,
+                        'branchName': branch,
                         'enterprisePincode': searchOptions.pincode,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
@@ -132,8 +132,7 @@ define({
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        // 'centreCode': searchOptions.centreCode
-
+                        'centreCode': searchOptions.centreCode
                     }).$promise;
                 },
                 paginationOptions: {

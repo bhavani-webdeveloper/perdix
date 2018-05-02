@@ -124,8 +124,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'GuarantorAddition',
-	                    /*'centreCode':searchOptions.centreCode,
-	                    'branchName':branch,*/
+	                    'centreCode':searchOptions.centreCode,
+	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

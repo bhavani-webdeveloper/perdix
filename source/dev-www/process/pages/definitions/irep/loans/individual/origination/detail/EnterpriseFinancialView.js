@@ -1008,14 +1008,21 @@ define({
 					}					
 					model.liability = params[19].subgroups;
 
-					var liability = _.find(model.liability, function(liab){
-                        return liab.summary["Customer ID"] == model.business.id;
-                    });
+					model.liabilities = 0;
+                    model.active_accounts = 0;
+                    model.monthly_installment = 0;
+                    model.outstanding_bal = 0;
 
-					model.liabilities = liability.data;
-                    model.active_accounts = model.liabilities.length;
-                    model.monthly_installment = liability.summary["Total Monthly Installment"];
-                    model.outstanding_bal = liability.summary["Total Outstanding Loan Amount"];
+					if(model.liability.length>0) {
+						var liability = _.find(model.liability, function(liab){
+	                        return liab.summary["Customer ID"] == model.business.id;
+	                    });
+
+						model.liabilities = liability.data;
+	                    model.active_accounts = model.liabilities.length;
+	                    model.monthly_installment = liability.summary["Total Monthly Installment"];
+	                    model.outstanding_bal = liability.summary["Total Outstanding Loan Amount"];
+					}
 
 					model.UIUDF.sales_information.avgMonthSaleAmount = model.business.enterprise.avgDailySaleAmount * model.business.enterprise.workingDaysInMonth
 					model.UIUDF.enterprise_monthly_sales = model.business.enterpriseMonthlySales;

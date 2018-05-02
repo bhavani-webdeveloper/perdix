@@ -16,8 +16,8 @@ define({
 			"title": "IREP_APPRAISAL_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				// model.branch = SessionStore.getCurrentBranch().branchName;
+				// model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -30,6 +30,15 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+	                    'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true
+							}
+	                    },
 						"centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
@@ -86,7 +95,7 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'AppraisalReview',
-	                    // 'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -95,7 +104,7 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    // 'centreCode':  searchOptions.centre
+	                    'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {

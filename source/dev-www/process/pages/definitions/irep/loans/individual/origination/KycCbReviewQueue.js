@@ -93,7 +93,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    //'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branch,
 	                    'stage': 'KYCReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
@@ -103,7 +103,7 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    //'centreCode': searchOptions.centre
+	                    'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -161,7 +161,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "IRREP_KYC_CB_REVIEW",
+							name: "IREP_KYC_CB_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

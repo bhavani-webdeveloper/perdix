@@ -9,7 +9,7 @@ define({
 			"title": "REJECTED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				//model.branch = branch;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -87,8 +87,8 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    /*'branchName': branchName,
-	                    'centreCode': searchOptions.centre,*/
+	                    'branchName': branchName,
+	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,

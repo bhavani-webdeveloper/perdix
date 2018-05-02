@@ -124,8 +124,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Appraisal',
-	                    // 'centreCode':searchOptions.centreCode,
-	                    // 'branchName':branch,
+	                    'centreCode':searchOptions.centreCode,
+	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

@@ -52,9 +52,9 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                         'villageName': '',
                         'customerName': '',
                         'page': 1,
-                        'per_page': 1/*,
+                        'per_page': 1,
                         'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode*/
+                        'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
                     }, function() {
@@ -97,8 +97,8 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        // 'branchName': currentBranch.branchName,
-                        // 'centreCode': centre.centreCode
+                        'branchName': currentBranch.branchName,
+                        'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
                         aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
                     }, function() {
@@ -118,8 +118,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     arqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -137,8 +136,7 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     zrrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -156,14 +154,14 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     crrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     crrqMenu.data = '-';
                 });
             }
+
             var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.CreditCommitteeReviewQueue"];
             if (ccrqMenu) {
                 IndividualLoan.search({
@@ -183,22 +181,25 @@ irf.pageCollection.controller(irf.controller("irep.loans.LoanOriginationDashboar
             }
 
 
-            var crrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue"];
-            if (crrqMenu) {
-                IndividualLoan.search({
-                    'stage':'GuarantorAddition',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
-                }).$promise.then(function(response, headerGetter) {
-                    crrqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    crrqMenu.data = '-';
+            var gaqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/irep.loans.individual.origination.GuarantorAdditionQueue"];
+            if (gaqMenu) {
+                _.forEach(centres, function(centre) {
+                    IndividualLoan.search({
+                        'stage':'GuarantorAddition',
+                        'enterprisePincode': '',
+                        'applicantName': '',
+                        'area': '',
+                        'villageName': '',
+                        'customerName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'branchName': currentBranch.branchName,
+                        'centreCode': centre.centreCode
+                    }).$promise.then(function(response, headerGetter) {
+                        gaqMenu.data = Number(response.headers['x-total-count']);
+                    }, function() {
+                        gaqMenu.data = '-';
+                    });
                 });
             }
 
