@@ -1040,8 +1040,8 @@ define([],function(){
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
 
                             }, function (err) {
-                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
                             });
 
