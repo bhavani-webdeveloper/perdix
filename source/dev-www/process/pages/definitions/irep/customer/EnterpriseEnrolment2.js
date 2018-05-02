@@ -137,7 +137,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName":{
                          "orderNo": 10,
-                         "title": "VENDOR_NAME"
+                         "title": "VENDOR_NAME",
+                         "resolver": "VendorNameLOVConfiguration"
                     },                   
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
                          "enumCode" : "purchase_income_type",
