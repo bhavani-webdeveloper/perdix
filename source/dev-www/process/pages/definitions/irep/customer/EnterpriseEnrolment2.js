@@ -663,7 +663,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.incomeThroughSales",                                    
                                     "EnterpriseFinancials.enterpriseMonthlySales",                    
                                     "EnterpriseFinancials.rawMaterialExpenses",
-                                    "EnterpriseFinancials.dailySales",                    
+                                    "EnterpriseFinancials.dailySales",
+                                    "CommercialCBCheck",                   
                                    "EnterpriseFinancials.marginDetails"                   
                                 ],
                                 "overrides": {

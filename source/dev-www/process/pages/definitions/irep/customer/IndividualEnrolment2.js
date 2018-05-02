@@ -42,6 +42,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC": {
                             "excludes": [
                                 "IndividualFinancials",
+                                "FamilyDetails.familyMembers.noOfDependents",
                                 "FamilyDetails.familyMembers.familyMemberFirstName",
                                 "FamilyDetails.familyMembers.anualEducationFee",
                                 "FamilyDetails.familyMembers.salary",
@@ -249,7 +250,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "PhysicalAssets.physicalAssets.vehicleModel",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "FamilyDetails.familyMembers.noOfDependents"
                             ],
                             "overrides": {
                                 "KYC": {
