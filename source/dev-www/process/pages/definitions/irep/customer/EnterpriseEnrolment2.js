@@ -2541,8 +2541,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         PageHelper.hideLoader();
                                     })
                             }, function(err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
+                               PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
                             });
 
@@ -2564,8 +2564,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
                             });
                     }

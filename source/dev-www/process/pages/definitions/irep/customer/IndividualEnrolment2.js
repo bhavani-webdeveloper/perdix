@@ -608,7 +608,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "FamilyDetails.familyMembers.noOfDependents"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -620,10 +621,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.locality":{
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers.familyMemberFirstName": {
+                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                },
                                 "ContactInformation.villageName":{
                                     "readonly": true
                                 },
                                 "ContactInformation.district":{
+                                    "readonly": true
+                                },
+                                "IndividualInformation.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.urnNo": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
@@ -1528,7 +1538,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='Guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {
@@ -1672,8 +1682,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent()
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
                     },
@@ -1695,8 +1706,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                             });
                     },
                     submit: function (model, form, formName) {
@@ -1723,8 +1735,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 })
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
                             });
                     }
