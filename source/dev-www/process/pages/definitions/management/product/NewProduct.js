@@ -365,6 +365,7 @@ define({
             }, {
                 "type": "box",
                 //  "condition": "model.product.purposes.length",
+                "required" : true,
                 "title": "LOAN_PURPOSES",
                 "items": [{
                     key: "product.allLoanPurposesApplicable",
@@ -388,6 +389,7 @@ define({
                     listStyle: "table",
                     key: "allPurposes",
                     title: "PURPOSE",
+                    required : true,
                     selectable: true,
                     editable: true,
                     paginate: false,
@@ -422,6 +424,7 @@ define({
                         "required": true
                     }, {
                         "key": "product.userDefinedFields[].dataType",
+                        "required":true,
                         "type": "select",
                         "titleMap": [{
                             "name": "ALPHABET",
@@ -437,7 +440,8 @@ define({
                             "value": "SPECIAL",
                         }]
                     }, {
-                        "key": "product.userDefinedFields[].size"
+                        "key": "product.userDefinedFields[].size",
+                        "required":true
                     }, {
                         "key": "product.userDefinedFields[].isMandatory"
                     }, {
@@ -469,7 +473,8 @@ define({
                     }, {
                         "key": "product.moduleConfigMasters[].bankId",
                         "type": "select",
-                        "enumCode": "bank"
+                        "enumCode": "bank",
+                        "required":true
                     }, {
                         "key": "product.moduleConfigMasters[].cmsProductName",
                         "type": "string",
