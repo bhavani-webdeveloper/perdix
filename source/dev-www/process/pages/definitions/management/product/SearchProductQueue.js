@@ -102,6 +102,29 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
+                   // var data = searchOptions.frequency;
+                    switch (searchOptions.frequency) {
+                                    case 'Weekly':
+                                        searchOptions.frequency = "W";
+                                        break;
+                                    case 'Monthly':
+                                        searchOptions.frequency = "M";
+                                        break;
+                                    case 'Yearly':
+                                        searchOptions.frequency = "Y";
+                                        break;
+                                    case 'Quarterly':
+                                    searchOptions.frequency = "Q";
+                                        break;
+                                    case 'D':
+                                       searchOptions.frequency = "D"
+                                        break;
+                                    case 'Fortnightly':
+                                       searchOptions.frequency= "F"
+                                        break;
+                                    default:
+                                        return;
+                                }
                     var promise = Product.search({
                         'partnerCode': searchOptions.partnerCode,
                         'productCode': searchOptions.productCode,
