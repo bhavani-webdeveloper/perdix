@@ -5,72 +5,45 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
             "type": "schema-form",
             "title": "ISSUE_DETAILS",
             initialize: function(model, form, formCtrl) {
-                model.auditIssue = model.auditIssue || {};
-                var master = Audit.offline.getAuditMaster();
-                var self = this;
-                self.form = [];
-                $stateParams.pageData = $stateParams.pageData || {};
-                model.readonly = $stateParams.pageData.readonly !== false;
-                model.type = $stateParams.pageData.type;
-                if ($stateParams.pageId) {
-                    PageHelper.showLoader();
-                    Audit.online.getIssueDetails({
-                        issue_id: $stateParams.pageId
-                    }).$promise.then(function(res) {
-                        model.auditIssue = res;
-                        processForm(res);
-                        var optionData = res.options;
-                        if (optionData.type == "dropdown") {
-                            model.auditIssue.option = optionData.type_of_issue_options[0].option_label;
-                        };
-                        model.type_of_issue_id = model.auditIssue.type_of_issue_id;
-                        model.auditIssue.title = master.typeofissues[model.type_of_issue_id].description;
-                        model.auditIssue.branch_name = master.branch_name[res.branch_id].node_code;
-
-                    }, function(errorResponse) {
-                        PageHelper.showErrors(errorResponse);
-                    }).finally(function() {
-                        PageHelper.hideLoader();
-                    });
-                } else {
+                if (!$stateParams.pageId) {
                     irfNavigator.goBack();
                     return;
                 };
-                var formDetails = [];
+                $stateParams.pageData = $stateParams.pageData || {};
+                model.type = $stateParams.pageData.type;
+                model.readonly = $stateParams.pageData.readonly !== false;
+
+                var self = this;
+                self.form = [];
+                model.actions = self.actions;
+                var master = Audit.offline.getAuditMaster();
                 var processForm = function(response) {
-                    for (i in master.sampling_columns_config) {
-                        sampleColumnsConfig = master.sampling_columns_config[i];
-                        for (j in sampleColumnsConfig.columns) {
-                            var columnForm = {
-                                "title": sampleColumnsConfig.columns[j].user_friendly_name,
-                                "readonly": true,
-                                "key": "auditIssue.sample_set.column_values[" + j + "]"
-                            }
-                            var schema = {
-                                pattern: "^[a-zA-Z\. ]+$"
-                            };
-                            switch (sampleColumnsConfig.columns[j].data_type) {
-                                case 'ALPHABETIC':
-                                    columnForm.type = "text";
-                                    columnForm.schema = schema;
-                                    break;
-                                case 'NUMERIC':
-                                    columnForm.type = "number";
-                                    break;
-                                case 'AMOUNT':
-                                    columnForm.type = "amount";
-                                    break;
-                                case 'DATE':
-                                    columnForm.type = "date";
-                                    break;
-                                case 'ALPHANUMERIC':
-                                    columnForm.type = "text";
-                                    break;
-                            }
-                            formDetails.push(columnForm);
-                        }
-                        break;
+                    model.auditIssue = response;
+                    var sampleForm = [];
+                    var optionData = model.auditIssue.options;
+                    if (optionData.type == "dropdown") {
+                        model.auditIssue.option = optionData.type_of_issue_options[0].option_label;
                     };
+                    model.type_of_issue_id = model.auditIssue.type_of_issue_id;
+                    model.auditIssue.title = master.typeofissues[model.type_of_issue_id].description;
+                    model.auditIssue.branch_name = master.branch_name[model.auditIssue.branch_id].node_code;
+
+                    var sampleColumnsConfig = null;
+                    for (i in master.sampling_columns_config) {
+                        if (model.auditIssue.sample_set.scoring_sample_type_id == master.sampling_columns_config[i].scoring_sample_type_id) {
+                            sampleColumnsConfig = master.sampling_columns_config[i];
+                            break;
+                        }
+                    }
+                    for (i in sampleColumnsConfig.columns) {
+                        var sampleColumnForm = {
+                            "title": sampleColumnsConfig.columns[i].user_friendly_name,
+                            "readonly": true,
+                            "key": "auditIssue.sample_set.column_values[" + i + "]"
+                        }
+                        Audit.utils.setFormType(sampleColumnForm, sampleColumnsConfig.columns[i].data_type);
+                        sampleForm.push(sampleColumnForm);
+                    }
 
                     self.form = [{
                             "type": "box",
@@ -185,80 +158,84 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                 "condition": "model.actions.showComments(model, false)",
                                 "required": true
                             }]
-                        }, {
-                            "type": "box",
-                            "title": "SAMPLE",
-                            "items": formDetails
-                        }, {
-                            "type": "box",
-                            "title": "MESSAGE_HISTORY",
-                            "condition": "model.auditIssue.messages.length",
+                    }, {
+                        "type": "box",
+                        "title": "SAMPLE",
+                        "items": sampleForm
+                    }, {
+                        "type": "box",
+                        "title": "MESSAGE_HISTORY",
+                        "condition": "model.auditIssue.messages.length",
+                        "items": [{
+                            "key": "auditIssue.messages",
+                            "type": "array",
+                            "add": null,
+                            "remove": null,
+                            "view": "fixed",
+                            "titleExpr": "actions.getStageTitle(model, arrayIndex)",
                             "items": [{
-                                "key": "auditIssue.messages",
-                                "type": "array",
-                                "add": null,
-                                "remove": null,
-                                "view": "fixed",
-                                "titleExpr": "actions.getStageTitle(model, arrayIndex)",
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "",
-                                    "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
-                        <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
-                        <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
-                                }]
+                                "type": "section",
+                                "htmlClass": "",
+                                "html": '<i class="fa fa-user text-gray">&nbsp;</i> {{model.actions.getUsername(model.auditIssue.messages[arrayIndex].created_id)}}\
+                    <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.auditIssue.messages[arrayIndex].created_on}}\
+                    <br><i class="fa fa-commenting text-gray">&nbsp;</i> <strong>{{model.auditIssue.messages[arrayIndex].comment}}</strong><br>'
                             }]
+                        }]
+                    }, {
+                        "type": "actionbox",
+                        "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status=='X'",
+                        "items": [{
+                            "type": "button",
+                            "title": "UPDATE_ISSUE",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'assign')"
+                        }]
+                    }, {
+                        "type": "actionbox",
+                        "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
+                        "items": [{
+                            "type": "button",
+                            "title": "CLOSE",
+                            "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
+                        }]
+                    }, {
+                        "type": "actionbox",
+                        "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
+                        "items": [{
+                            "type": "button",
+                            "title": "UPDATE_ISSUE",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
                         }, {
-                            "type": "actionbox",
-                            "condition": "!model.readonly && model.type=='audit' && model.auditIssue.status=='X'",
-                            "items": [{
-                                "type": "button",
-                                "title": "UPDATE_ISSUE",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'assign')"
-                            }]
+                            "type": "button",
+                            "title": "ACCEPT",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'accept')"
                         }, {
-                            "type": "actionbox",
-                            "condition": "!model.readonly && model.type=='operation' && (model.auditIssue.status == 'A' || model.auditIssue.status == 'P')",
-                            "items": [{
-                                "type": "button",
-                                "title": "CLOSE",
-                                "onClick": "actions.updateIssue(model, formCtrl, form , 'close')"
-                            }]
+                            "type": "button",
+                            "title": "REJECT",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'reject')"
+                        }]
+                    }, {
+                        "type": "actionbox",
+                        "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
+                        "items": [{
+                            "type": "button",
+                            "title": "UPDATE_ISSUE",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
                         }, {
-                            "type": "actionbox",
-                            "condition": "!model.readonly && model.type == 'operation' && model.auditIssue.status=='DO'",
-                            "items": [{
-                                "type": "button",
-                                "title": "UPDATE_ISSUE",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
-                            }, {
-                                "type": "button",
-                                "title": "ACCEPT",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'accept')"
-                            }, {
-                                "type": "button",
-                                "title": "REJECT",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'reject')"
-                            }]
+                            "type": "button",
+                            "title": "ACCEPT",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'draftAccept')"
                         }, {
-                            "type": "actionbox",
-                            "condition": "!model.readonly && model.type == 'audit' && model.auditIssue.status=='DR'",
-                            "items": [{
-                                "type": "button",
-                                "title": "UPDATE_ISSUE",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'update')"
-                            }, {
-                                "type": "button",
-                                "title": "ACCEPT",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'draftAccept')"
-                            }, {
-                                "type": "button",
-                                "title": "REJECT",
-                                "onClick": "actions.updateIssue(model, formCtrl, form, 'draftReject')"
-                            }]
-                        }],
-                        model.actions = self.actions;
+                            "type": "button",
+                            "title": "REJECT",
+                            "onClick": "actions.updateIssue(model, formCtrl, form, 'draftReject')"
+                        }]
+                    }];
                 }
+
+                PageHelper.showLoader();
+                Audit.online.getIssueDetails({
+                    "issue_id": $stateParams.pageId
+                }).$promise.then(processForm, PageHelper.showErrors).finally(PageHelper.hideLoader);
             },
             form: [],
             schema: {

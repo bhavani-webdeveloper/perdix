@@ -46,6 +46,27 @@ irf.models.factory('Audit', ["$resource", "$log", "SessionStore", "$httpParamSer
                 });
                 return rating;
             },
+            setFormType: function(form, dataType) {
+                switch (dataType) {
+                    case 'ALPHABETIC':
+                        form.type = "text";
+                        form.schema = form.schema || {};
+                        form.schema.pattern = "^[a-zA-Z\. ]+$";
+                        break;
+                    case 'NUMERIC':
+                        form.type = "number";
+                        break;
+                    case 'AMOUNT':
+                        form.type = "amount";
+                        break;
+                    case 'DATE':
+                        form.type = "date";
+                        break;
+                    case 'ALPHANUMERIC':
+                        form.type = "text";
+                        break;
+                }
+            },
             processDisplayRecords: function(onlineAudits, queue_type, queue_status, queue_stage) {
                 var deferred = $q.defer();
                 var displayAudits = {

@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("audit.AuditIssues"), ["$log", "translateFil
                     PageHelper.showProgress("audit", "Audit ID is empty", 5000);
                     return;
                 }
-                $stateParams.pageData = $stateParams.pageData || [];
+                $stateParams.pageData = $stateParams.pageData || {};
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
