@@ -223,6 +223,7 @@
                   "maxLength":100,
                   "captureStages":[
                      "KYC"
+
                   ]
                },
                "tenure":{
@@ -232,6 +233,7 @@
                   "maximum":12,
                   "captureStages":[
                      "KYC", "Sanction", "LoanInitiation", "PendingForPartner","AppraisalReview","KYCReview", "FieldAppraisalReview", "Televerification", "Evaluation", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                  
                   ]
                },
                "productType":{

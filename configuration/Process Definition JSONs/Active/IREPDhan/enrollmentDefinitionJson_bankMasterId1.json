@@ -9,6 +9,7 @@
       "stageType": "CAPTURE",
       "allowedRoles": [
         "WM"
+
       ]
     },
     {
@@ -18,6 +19,7 @@
       "stageType": "CAPTURE",
       "allowedRoles": [
         "WM"
+        
       ]
     }
   ],
