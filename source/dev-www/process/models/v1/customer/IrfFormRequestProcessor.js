@@ -1181,7 +1181,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "expenditures": {
                         key: "customer.expenditures",
                         type: "array",
-                        //remove: null,
                         view: "fixed",
                         titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
                         items: {
