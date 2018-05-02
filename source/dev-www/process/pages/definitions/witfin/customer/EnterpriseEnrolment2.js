@@ -470,9 +470,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "type": "select",
                                     "enumCode": "vehicle_end_use"
                                 },
-                                "BankAccounts.customerBankAccounts.isDisbersementAccount": {
-                                    "type": "checkbox"
-                                },
                                 "EnterpriseInformation": {
                                     "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                                 },
