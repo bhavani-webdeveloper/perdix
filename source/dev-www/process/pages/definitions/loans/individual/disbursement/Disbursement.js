@@ -415,7 +415,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         return;
                     }
 
-                    if (!model.loanAccountDisbursementSchedule.overrideRequested && model.loanAccountDisbursementSchedule.fpVerified!= true) {
+                    if (!model.loanAccountDisbursementSchedule.overrideRequested && model.loanAccountDisbursementSchedule.fpVerified!= true && model.siteCode == 'KGFS') {
                         elementsUtils.alert('Fingerprint not verified.');
                         return;
                     }
