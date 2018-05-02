@@ -1,0 +1,161 @@
+{
+    "FinconAccounting": {
+        "type": "box",
+        "title": "FINCON_ACCOUNTING",
+        "colClass": "col-sm-12",
+        "orderNo": 10,
+        "items": {
+            "transactionSection": {
+                "type": "section",
+                "htmlClass": "col-xs-6 col-md-6",
+                "items": {
+                    "entryType": {
+                         "key": "journal.journalHeader.entryType",
+                         "title": "ENTRY_TYPE",
+                         "orderNo": 10
+                    },
+                    "transactionDate": {
+                        "key": "journal.journalHeader.transactionDate",
+                        "required":true,
+                        "title": "TRANSACTION_DATE",
+                        "type": "date",
+                        "orderNo": 20
+                    },
+                    "transactionBranch": {
+                        "key": "journal.journalHeader.transactionBranch",
+                        "required":true,
+                        "title": "TRANSACTION_BRANCH",
+                        "type": "string",
+                        "orderNo": 30
+                    },
+                     "valueDate": {
+                        "key": "journal.journalHeader.valueDate",
+                        "title": "VALUE_DATE",
+                        "type": "date",
+                        "orderNo": 40
+                    },
+                    "billNumber": {
+                        "key": "journal.journalHeader.billNumber",
+                        "title": "BILL_NO",
+                        "type": "number",
+                        "orderNo": 50
+                    },
+                    "billDate": {
+                        "key": "journal.journalHeader.billDate",
+                        "title": "BILL_DATE",
+                        "type": "date",
+                        "orderNo": 70
+                    }
+                }
+            },
+            "instrumentSection": {
+                "type": "section",
+                "htmlClass": "col-xs-6 col-md-6",
+                "items": {
+                    "billUpload": {
+                        "key": "journal.journalHeader.fileId",
+                        "title": "BILL_UPLOAD",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF",
+                        "orderNo": 60
+                    },
+                    "instrumentType": {
+                        "key": "journal.journalHeader.instrumentType",
+                        "type": "select",
+                        "title": "INSTRUMENT_TYPE",
+                        "enumCode": "journal_instrument_type",
+                        "orderNo": 80
+                    },
+                    "instrumentDate": {
+                        "key": "journal.journalHeader.instrumentDate",
+                        "title": "INSTRUMENT_DATE",
+                        "type": "date",
+                        "orderNo": 90
+                    },
+                    "instrumentNumber": {
+                        "key": "journal.journalHeader.instrumentNumber",
+                        "title": "INSTRUMENT_NUMBER",
+                        "type": "number",
+                        "orderNo": 100
+                    },
+                    "instrumentBankName": {
+                        "key": "journal.journalHeader.instrumentBankName",
+                        "type": "string",
+                        "title": "INSTRUMENT_BANK_NAME",
+                        "orderNo": 110
+                    },
+                    "instrumentBranchName": {
+                        "key": "journal.journalHeader.instrumentBranchName",
+                        "type": "string",
+                        "title": "INSTRUMENT_BRANCH_NAME",
+                        "orderNo": 120
+                    }
+                }
+            }
+
+        }
+    },
+    "AccountEntry": {
+        "type": "box",
+        "title": "ACCOUNT_ENTRY",
+        "orderNo": 20,
+        "colClass": "col-sm-12",
+        "items": {
+            "JournalDetailsGridVIew": {
+                "type": "grid",
+                "orientation": "vertical",
+                "items": {
+                    "journalDetails": {
+                        "type": "array",
+                        "startEmpty": true,
+                        "title": "ACCOUNT_ENTRY",
+                        "key": "journal.journalHeader.journalDetails",
+                        "items": {
+                            "glAcNo": {
+                                "key": "journal.journalHeader.journalDetails[].glAcNo",
+                                "title": "GL_AC_NO",
+                                "type":"lov"
+                            },
+                            "type": {
+                                "key": "journal.journalHeader.journalDetails[].type",
+                                "title": "TYPE",
+                                "type":"string"
+                            },
+                            "transactionAmount": {
+                                "key": "journal.journalHeader.journalDetails[].transactionAmount",
+                                "title": "AMOUNT",
+                                "type":"string"
+                            },
+                            "relatedAccountNo": {
+                                "key": "journal.journalHeader.journalDetails[].relatedAccountNo",
+                                "title": "ACCOUNT_NO",
+                                "type":"string"
+                            },
+                            "remarks": {
+                                "key": "journal.journalHeader.journalDetails[].remarks",
+                                "title": "NARRATION",
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    },
+    "Entries": {
+        "type":"box",
+        "title": "ENTRIES",
+        "colClass":"col-sm-12",
+        "orderNo":"30",
+        "items": {
+            "section1": {
+                "type":"section",
+                "html": "<div class='row'> <div class='col-xs-12'> <table><th>GL_AC_NO</th><th>Type</th><th>Amount</th><th>Loan Account No</th><th>Narration</th><th>Delete</th> <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'> <td><div><input ng-model=\"d['glAcNo']\" class='form-control' sf-field-model><a href='' ng-click='model.openLov($index)'><i class='fa fa-bars color-theme'></i></a></div></td><td> <select class='form-control' ng-model=\"d['drCrIndicator']\" schema-validate='form' ng-options='item.value as item.name for item in model.entryType'> <option value=''>{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option> </select></td><td><input ng-model=\"d['transactionAmount']\" type='number' class='form-control' /></td><td><input ng-model=\"d['relatedAccountNo']\" class='form-control' /><a href='' ng-click='model.openLov()'><i class='fa fa-bars color-theme'></i></a></td><td><textarea ng-model=\"d['remarks']\" class='form-control' /></td><td><a href='' ng-click='model.delete($index)'>Delete</a></td> </tr> </table><div></i><a href='' ng-click='model.addEntry()'><i class='fa fa-plus'>Add Entry</a></div>"
+
+            }
+        }
+    }
+}
