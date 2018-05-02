@@ -59,14 +59,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName: 'irep.loans.individual.origination.CBCheck',
-                            title: 'CB_CHECK',
-                            pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
-                        },
-                        {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
