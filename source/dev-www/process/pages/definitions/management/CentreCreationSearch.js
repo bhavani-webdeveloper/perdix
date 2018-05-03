@@ -90,7 +90,7 @@ define({
 					return [
 
 						{
-							title:'CENTRE_CODE',	
+							title:'CENTRE_CODE_',	
 							data: 'centreCode'
 						},
 						{

@@ -158,6 +158,7 @@ define({
                                     },
                                     {
                                         key: "centre.status",
+                                        "required":true,
                                         type: "radios",
                                         //condition: "model.centre.status = 'ACTIVE'",
                                         titleMap:{
@@ -174,6 +175,7 @@ define({
                                     },
                                     {
                                         key: "centre.centreGpsCaptureDate",
+                                        "required":true,
                                         type: "date",
                                         onChange : function (modelValue, form, model) {
                                             PageHelper.clearErrors();                                      
@@ -293,6 +295,7 @@ define({
                                     },
                                     {
                                         key: "centre.meetingPreference",
+                                        "required":true,
                                         title :"MEETING_FREQUENCY",
                                         type: "select",
                                         titleMap: {
