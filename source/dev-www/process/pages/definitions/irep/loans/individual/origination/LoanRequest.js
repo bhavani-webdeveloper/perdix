@@ -918,7 +918,7 @@ define([],function(){
                                                         "autolov": true,
                                                         "required":true,
                                                         "title": "REJECT_REASON",
-                                                        "resolver": "RejectReasonLOVConfiguration"
+                                                        "resolver": "IREPRejectReasonLOVConfiguration"
                                                     },
                                                     "rejectButton": {
                                                         "key": "review.rejectButton",

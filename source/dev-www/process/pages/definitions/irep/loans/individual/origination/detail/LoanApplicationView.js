@@ -567,20 +567,11 @@ define({
                         bindMap: {},
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-
-                            if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-                                stage1 = "Application";
-                            }
-                            if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                stage1 = "FieldAppraisal";
-                            }
-
-                            var rejectReason = formHelper.enum('application_reject_reason').data;
+                            var rejectReason = formHelper.enum('irep_application_reject_reason').data;
                             var out = [];
                             for (var i = 0; i < rejectReason.length; i++) {
                                 var t = rejectReason[i];
-                                if (t.field1 == stage1) {
+                                if (t.field1 == model.currentStage) {
                                     out.push({
                                         name: t.name,
                                     })
