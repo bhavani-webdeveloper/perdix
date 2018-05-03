@@ -419,26 +419,6 @@ define({
                             "type": "amount"
                         }]
 
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "",
-                            "title": "Total loan amount from Banks",
-                            "type": "amount"
-
-                        }, {
-                            "key": "",
-                            "title": "Total loan amount from MFI/NBFC",
-                            "type": "amount"
-
-                        }, {
-                            "key": "",
-                            "title": "Total loan amount from others",
-                            "type": "amount"
-
-                        }]
-
                     }]
                 }, {
                     "type": "expandablesection",

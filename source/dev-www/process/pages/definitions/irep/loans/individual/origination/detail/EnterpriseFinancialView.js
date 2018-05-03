@@ -17,17 +17,18 @@ define({
 
 				model.UIUDF = {
                     'sales_information': {},
+                    'loan_utilisation': {},
                     'enterprise_monthly_sales': {},
                 };
 
                 model.loanAccount = bundleModel.loanAccount;
 
-                
+                model.UIUDF.loan_utilisation = model.loanAccount.loanUtilisationDetail;
                 if(model.loanAccount.loanUtilisationDetail.length>0) {
                 	var loanUtilisationTotalPercentage = _.sumBy(model.loanAccount.loanUtilisationDetail, function(utitlization) {
                 		return parseInt(utitlization.fundAllocationPercentage);
                 	})
-                	model.loanAccount.loanUtilisationDetail.push({
+                	model.UIUDF.loan_utilisation.push({
                 		"utilisationType": "Total",
                 		"fundAllocationPercentage": loanUtilisationTotalPercentage,
                 		"consumptionDetails":""	
@@ -644,7 +645,7 @@ define({
 								"orientation": "vertical",
 								"items": [{
 									"type": "tableview",
-									"key": "loanAccount.loanUtilisationDetail",
+									"key": "UIUDF.loan_utilisation",
 									"notitle": true,
 									"tableConfig": {
 										"ordering": false,
@@ -743,26 +744,6 @@ define({
 	                                "key": "outstanding_bal",
 	                                "title": "OUTSTANDING_AMOUNT",
 	                                "type": "amount"
-	                            }]
-
-	                        }, {
-	                            "type": "grid",
-	                            "orientation": "vertical",
-	                            "items": [{
-	                                "key": "",
-	                                "title": "Total loan amount from Banks",
-	                                "type": "amount"
-
-	                            }, {
-	                                "key": "",
-	                                "title": "Total loan amount from MFI/NBFC",
-	                                "type": "amount"
-
-	                            }, {
-	                                "key": "",
-	                                "title": "Total loan amount from others",
-	                                "type": "amount"
-
 	                            }]
 
 	                        }]

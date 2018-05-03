@@ -525,9 +525,6 @@ define({
                             "key": "loanAccount.processingFeePercentage",
                             "title": "Processing Fee(in%)"
                         }, {
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI"
-                        }, {
                             "key": "loanAccount.commercialCibilCharge",
                             "title": "CIBIL Charges",
                             "type": "amount"
