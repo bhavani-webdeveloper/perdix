@@ -995,7 +995,8 @@ define({
                     model.active_accounts = 0;
                     model.monthly_installment = 0;
                     model.outstanding_bal = 0;
-					var liability = _.find(model.liability, function(liab){
+                    var liability = [];
+					liability = _.find(model.liability, function(liab){
                         return liab.summary["Customer ID"] == model.business.id;
                     });
 
