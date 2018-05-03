@@ -1065,8 +1065,9 @@ define([],function(){
                                 PageHelper.showProgress('loan-process', 'Loan hold.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
-                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
 
@@ -1085,8 +1086,9 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
                     },
@@ -1101,8 +1103,9 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
                     },
@@ -1120,8 +1123,9 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
                     },

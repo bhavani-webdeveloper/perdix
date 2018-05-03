@@ -166,13 +166,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
-                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanProcess.loanAccount.customerId;
 
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
                                         cbModel: {
-                                            customerId:loanAccount.applicantEnrolmentProcess.customer.customerId,
+                                            customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
                                             scoreName:'RiskScore3'
                                         }

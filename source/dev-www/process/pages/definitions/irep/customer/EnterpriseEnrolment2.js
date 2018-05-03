@@ -68,6 +68,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                          "orderNo": 10,
+                         "required": true,
                          "title": "BUYER_NAME",
                          "resolver": "BuyerNameLOVConfiguration"
                     },
@@ -137,6 +138,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName":{
                          "orderNo": 10,
+                         "required": true,
                          "title": "VENDOR_NAME",
                          "resolver": "VendorNameLOVConfiguration"
                     },                   
@@ -1463,6 +1465,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                           "GuarantorAddition": {
                                 "excludes": [
                                     "EnterpriseAssets",
+                                    "ProxyIndicators",
                                     "EnterpriseFinancials.currentAsset",
                                     "Liabilities.liabilities.liabilityType",
                                     "EnterpriseFinancials.enterpriseMonthlySales",

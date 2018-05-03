@@ -96,10 +96,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                     var loanProcess = bundleModel.loanProcess;
 
                     switch (definition.pageClass){
-                        case 'co-applicant':
-                            /* TODO Add new coApplicant to loan process and return the model accordingly */
-                            PageHelper.showErrors("Cannot add Co-applicant at this stage");
-                            break;
                         case 'guarantor':
                             /* TODO Add new guarantor to loan process and return model accordingly */
                             EnrolmentProcess.createNewProcess()
