@@ -1000,7 +1000,7 @@ define({
                         return liab.summary["Customer ID"] == model.business.id;
                     });
 
-					if(liability.length>0) {						
+					if(liability && liability.length>0) {						
 						model.liabilities = liability.data;
 	                    model.active_accounts = model.liabilities.length;
 	                    model.monthly_installment = liability.summary["Total Monthly Installment"];
