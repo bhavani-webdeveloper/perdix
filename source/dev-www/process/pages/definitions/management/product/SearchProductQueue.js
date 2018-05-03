@@ -116,7 +116,7 @@ define({
                         case 'Quarterly':
                             searchOptions.frequency = "Q";
                             break;
-                        case 'D':
+                        case 'Daily':
                             searchOptions.frequency = "D"
                             break;
                         case 'Fortnightly':
