@@ -594,6 +594,12 @@ define([],function(){
                             "remove": null,
                             "startEmpty": true
                         },
+                        "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType":{
+                            "required":true
+                        },
+                        "ProposedUtilizationPlan.loanUtilisationDetail.fundAllocationPercentage":{
+                            "required": true
+                        },
                         "NomineeDetails.nominees.nomineeFirstName":{
                             "orderNo":10
                         },
