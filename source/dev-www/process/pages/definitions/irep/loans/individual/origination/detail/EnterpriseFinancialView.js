@@ -17,17 +17,19 @@ define({
 
 				model.UIUDF = {
                     'sales_information': {},
-                    'loan_utilisation': {},
+                    'loan_utilisation': [],
                     'enterprise_monthly_sales': {},
                 };
 
                 model.loanAccount = bundleModel.loanAccount;
 
-                model.UIUDF.loan_utilisation = model.loanAccount.loanUtilisationDetail;
+                loanUtilisationTotalPercentage = 0;
                 if(model.loanAccount.loanUtilisationDetail.length>0) {
-                	var loanUtilisationTotalPercentage = _.sumBy(model.loanAccount.loanUtilisationDetail, function(utitlization) {
-                		return parseInt(utitlization.fundAllocationPercentage);
-                	})
+                	_.forEach(model.loanAccount.loanUtilisationDetail, function(utilisation) {
+                		model.UIUDF.loan_utilisation.push(utilisation);
+                		loanUtilisationTotalPercentage += parseInt(utilisation.fundAllocationPercentage);
+                	});
+
                 	model.UIUDF.loan_utilisation.push({
                 		"utilisationType": "Total",
                 		"fundAllocationPercentage": loanUtilisationTotalPercentage,
