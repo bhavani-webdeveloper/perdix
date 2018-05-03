@@ -13,7 +13,7 @@ define({
                     model.editMode = true;
                     model.centre=model.centre||{};
                     model.centre.branchId = SessionStore.getBranchId();
-                    model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || Utils.getCurrentDate();
+                    model.centre.status= model.centre.status||'ACTIVE';
                     if ($stateParams.pageId) {
                         model.editMode = false;
                         var id = $stateParams.pageId;
@@ -25,6 +25,7 @@ define({
                             model.centre.monthlyMeetingTime = moment(model.centre.monthlyMeetingTime).toDate();
                             model.centre.weeklyMeetingTime = moment(model.centre.weeklyMeetingTime).toDate();
                             model.centre.fortnightlyMeetingTime= moment(model.centre.fortnightlyMeetingTime).toDate();
+                            model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
                             
                             var addressArr = model.centre.centreAddress.split("~#");
                             if(addressArr && addressArr.length > 0) {
@@ -157,7 +158,7 @@ define({
                                     {
                                         key: "centre.status",
                                         type: "radios",
-                                        condition: "model.centre.status = 'ACTIVE'",
+                                        //condition: "model.centre.status = 'ACTIVE'",
                                         titleMap:{
                                         "ACTIVE":"ACTIVE",
                                         "INACTIVE":"INACTIVE"
@@ -174,13 +175,11 @@ define({
                                         key: "centre.centreGpsCaptureDate",
                                         type: "date",
                                         onChange : function (modelValue, form, model) {
-                                        PageHelper.clearErrors();
-                                        //model.centre.date_creation = moment(model.centre.centreGpsCaptureDate).format("YYYY-MM-DD");                                        
-                                        var daydiff = moment().diff(model.centre.centreGpsCaptureDate, 'days');
-                                        if(daydiff < 0) {  
-                                            PageHelper.clearErrors();                                  
-                                            PageHelper.setError({message: "Centre Creation Date can not be future date"});                                    
-                                        }
+                                            PageHelper.clearErrors();                                      
+                                            if(model.centre.centreGpsCaptureDate > SessionStore.getCBSDate()) {  
+                                                PageHelper.clearErrors();                                  
+                                                PageHelper.setError({message: "Centre Creation Date can not be future date"});                                    
+                                            }
                                         } 
                                     },
                                     {
@@ -416,8 +415,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingTime",
                                         type: "time"
-                                    }
-                                    
+                                    } 
                                  ]
                         },
                         {
@@ -436,6 +434,18 @@ define({
                         PageHelper.showLoader();
                         PageHelper.clearErrors();
                         PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
+                        if (model.centre.centreGpsCaptureDate) {
+                            if (model.centre.centreGpsCaptureDate > SessionStore.getCBSDate()) {
+                                PageHelper.clearErrors();
+                                PageHelper.hideLoader();
+                                PageHelper.showProgress('centreCreationSubmitRequest', 'validation-error');
+                                PageHelper.setError({
+                                    message: "Centre Creation Date can not be future date"
+                                });
+                                return;
+                            }
+                        }
+                        
                         var tempModelData = _.clone(model.centre);
                         //delete tempModelData['monthlyMeeting'];
                         tempModelData.centreAddress = [tempModelData.centreAddress, tempModelData.locality, tempModelData.villageName, tempModelData.district, tempModelData.state, tempModelData.pincode].join("~#");
