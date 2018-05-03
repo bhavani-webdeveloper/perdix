@@ -102,29 +102,29 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                   // var data = searchOptions.frequency;
+                   if(searchOptions.frequency){
                     switch (searchOptions.frequency) {
-                                    case 'Weekly':
-                                        searchOptions.frequency = "W";
-                                        break;
-                                    case 'Monthly':
-                                        searchOptions.frequency = "M";
-                                        break;
-                                    case 'Yearly':
-                                        searchOptions.frequency = "Y";
-                                        break;
-                                    case 'Quarterly':
-                                    searchOptions.frequency = "Q";
-                                        break;
-                                    case 'D':
-                                       searchOptions.frequency = "D"
-                                        break;
-                                    case 'Fortnightly':
-                                       searchOptions.frequency= "F"
-                                        break;
-                                    default:
-                                        return;
-                                }
+                        case 'Weekly':
+                            searchOptions.frequency = "W";
+                            break;
+                        case 'Monthly':
+                            searchOptions.frequency = "M";
+                            break;
+                        case 'Yearly':
+                            searchOptions.frequency = "Y";
+                            break;
+                        case 'Quarterly':
+                            searchOptions.frequency = "Q";
+                            break;
+                        case 'D':
+                            searchOptions.frequency = "D"
+                            break;
+                        case 'Fortnightly':
+                            searchOptions.frequency = "F"
+                            break;
+                        default:
+                            return;
+                    }};
                     var promise = Product.search({
                         'partnerCode': searchOptions.partnerCode,
                         'productCode': searchOptions.productCode,
@@ -246,47 +246,6 @@ define({
                             },
                             isApplicable: function(item, index) {
 
-                                return true;
-                            }
-                        }, {
-                            name: "PRODUCT BRANCH",
-                            desc: "",
-                            icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
-                                irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "management.product.ProductBranch",
-                                    pageId: item.productCode,
-                                    pageData: {
-                                        _lucCompleted: true
-                                    }
-                                }, {
-                                    state: "Page.Engine",
-                                    pageName: "management.product.SearchProductQueue",
-                                });
-                            },
-                            isApplicable: function(item, index) {
-                                return true;
-                            }
-                        },
-                        {
-                            name: "BRANCH PRODUCT",
-                            desc: "",
-                            icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
-                                irfNavigator.go({
-                                    state: "Page.Engine",
-                                    pageName: "management.product.BranchProduct",
-                                    pageId: item.productCode,
-                                    pageData: {
-                                        _lucCompleted: true
-                                    }
-                                }, {
-                                    state: "Page.Engine",
-                                    pageName: "management.product.SearchProductQueue",
-                                });
-                            },
-                            isApplicable: function(item, index) {
                                 return true;
                             }
                         }];
