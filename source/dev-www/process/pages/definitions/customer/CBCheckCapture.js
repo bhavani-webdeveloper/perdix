@@ -171,7 +171,8 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 							PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
 						}
 						else{
-							PM.pop('cbcheck-submit', 'CB Check Failed' + model.customerName, 5000);
+							PM.pop('cbcheck-submit', 'CB Check Submitted for ', + model.customerName + '. \ 
+								To get latest status Re-initate CB check in CB Status Queue.' , 5000);
 						}
 						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
 					}, function(errorResponse){
