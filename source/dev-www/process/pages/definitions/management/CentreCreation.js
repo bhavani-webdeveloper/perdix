@@ -14,6 +14,7 @@ define({
                     model.centre=model.centre||{};
                     model.centre.branchId = SessionStore.getBranchId();
                     model.centre.status= model.centre.status||'ACTIVE';
+                    model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
                     if ($stateParams.pageId) {
                         model.editMode = false;
                         var id = $stateParams.pageId;
