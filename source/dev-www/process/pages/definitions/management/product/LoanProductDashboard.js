@@ -9,6 +9,8 @@ irf.pageCollection.controller(irf.controller("management.product.LoanProductDash
             "items": [
                 "Page/Engine/management.product.NewProduct",
                 "Page/Engine/management.product.SearchProductQueue",
+                "Page/Engine/management.product.ProductBranch",
+                "Page/Engine/management.product.BranchProduct"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
