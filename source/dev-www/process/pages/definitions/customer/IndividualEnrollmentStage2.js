@@ -23,6 +23,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "AdditionalKYC": {
                         "readonly": customReadonly
                     },
+                    "loanInformation": {
+                        "readonly": customReadonly
+                    },
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
                     },
@@ -362,6 +365,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         "readonly": customReadonly
                     },
                     "AdditionalKYC": {
+                        "readonly": customReadonly
+                    },
+                    "loanInformation": {
                         "readonly": customReadonly
                     },
                     "CustomerInformation.centreId": {
@@ -973,6 +979,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "bankAccounts.customerBankAccounts.accountNumber",
                     "bankAccounts.customerBankAccounts.accountType",
                     "bankAccounts.customerBankAccounts.bankStatementDocId",
+                    "loanInformation",
+                    "loanInformation.requestedLoanAmount",
+                    "loanInformation.requestedLoanPurpose",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
@@ -1165,6 +1174,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     "bankAccounts.customerBankAccounts.accountNumber",
                     "bankAccounts.customerBankAccounts.accountType",
                     "bankAccounts.customerBankAccounts.bankStatementDocId",
+                    "loanInformation",
+                    "loanInformation.requestedLoanAmount",
+                    "loanInformation.requestedLoanPurpose",
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
