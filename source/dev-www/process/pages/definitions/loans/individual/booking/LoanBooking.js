@@ -388,7 +388,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }*/,
                     {
                         "type": "fieldset",
-                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'",
                         "notitle": true,
                         "items": [
                             {
@@ -458,7 +458,201 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 ]
                             }
                         ]
+                    }, 
+                    {
+                        "type":"fieldset",
+                        "title":"COLLATERAL",
+                        "notitle": true,
+                        "condition": "model.siteCode == 'IREPDhan'",
+                        "items":[
+                            {
+                                "key":"loanAccount.collateral",
+                                "title":"COLLATERAL",
+                                "type":"array",
+                                "readonly": true,
+                                "items":[
+                                    {
+                                        "key":"loanAccount.collateral[].collateralType",
+                                        "type":"select"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].propertyType",
+                                        "type":"select",
+                                        "enumCode": "collateral_property_type",
+                                        "required": true,
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].extentOfProperty",
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].extentOfPropertyUnit",
+                                        "condition": "model.loanAccount.collateral[arrayIndex].extentOfProperty",
+                                        "type": "select",
+                                        "enumCode": "property_extent_unit",
+                                        "required": true,
+
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].documentType",
+                                        "type": "select",
+                                        "enumCode": "collateral_document_type",
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].documentNumber"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].dateOfRegistration",
+                                        "title":"DATE_OF_REGISTRATION",
+                                        "type":"date",
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].subRegistrar",
+                                    },
+                                    {
+                                        key: "loanAccount.collateral[].subRegistrarPincode",
+                                        type: "lov",
+                                        "title":"SUB_REGISTRAR_PINCODE",
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "subRegistrarPincode": {
+                                                key: "loanAccount.collateral[].subRegistrarPincode"
+                                            },
+                                            "subRegistrarVillage": {
+                                                key: "loanAccount.collateral[].subRegistrarVillage"
+                                            },
+                                            "subRegistrarArea": {
+                                                key: "loanAccount.collateral[].subRegistrarArea"
+                                            },
+                                            "subRegistrarDistrict": {
+                                                key: "loanAccount.collateral[].subRegistrarDistrict"
+                                            },
+                                            "subRegistrarState": {
+                                                key: "loanAccount.collateral[].subRegistrarState"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "division": "loanAccount.collateral[arrayIndex].subRegistrarArea",
+                                            "region": "loanAccount.collateral[arrayIndex].subRegistrarVillage",
+                                            "pincode": "loanAccount.collateral[arrayIndex].subRegistrarPincode",
+                                            "district": "loanAccount.collateral[arrayIndex].subRegistrarDistrict",
+                                            "state": "loanAccount.collateral[arrayIndex].subRegistrarState",
+                                        },
+                                        searchHelper: formHelper,
+                                        initialize: function (inputModel) {
+                                            $log.warn('in pincode initialize');
+                                            $log.info(inputModel);
+                                        },
+                                        search: function (inputModel, form, model) {
+                                            if (!inputModel.subRegistrarPincode) {
+                                                return $q.reject();
+                                            }
+                                            return Queries.searchPincodes(
+                                                inputModel.subRegistrarPincode,
+                                                inputModel.subRegistrarDistrict,
+                                                inputModel.subRegistrarState,
+                                                inputModel.subRegistrarArea,
+                                                inputModel.subRegistrarVillage
+                                            );
+                                        },
+                                        getListDisplayItem: function (item, index) {
+                                            return [
+                                                item.division + ', ' + item.region,
+                                                item.pincode,
+                                                item.district + ', ' + item.state,
+                                            ];
+                                        },
+                                        onSelect: function (result, model, context) {
+                                            $log.info(result);
+                                        }
+                                    },
+                                    {
+                                        readonly: true,
+                                        key: "loanAccount.collateral[].subRegistrarArea",
+                                    },
+                                    {
+                                        readonly: true,
+                                        key: "loanAccount.collateral[].subRegistrarVillage",
+                                        screenFilter: true
+                                    },
+                                    {
+                                        readonly: true,
+                                        key: "loanAccount.collateral[].subRegistrarDistrict",
+                                        screenFilter: true
+                                    },
+                                    {
+                                        readonly: true,
+                                        key: "loanAccount.collateral[].subRegistrarState",
+                                        screenFilter: true
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].propertyOwner",
+                                        "type": "select",
+                                        "enumCode": "collateral_property_Owner"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].propertyOwnerName",
+                                        "condition": "model.loanAccount.collateral[arrayIndex].propertyOwner == 'Others'",
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].relationWithApplicant",
+                                        "condition": "model.loanAccount.collateral[arrayIndex].propertyOwner == 'Others'",
+                                        "type": "select",
+                                        "enumCode":"relation_with_business_owner"
+                                    },
+                                    {
+                                        "type": "fieldset",
+                                        "title": "PROPERTY_ADDRESS",
+                                        "items": [
+                                            {
+                                                "key":"loanAccount.collateral[].doorNo",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].surveyNo",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].landmark",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].village",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].mandal",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].district",
+                                            },
+                                            {
+                                                "key":"loanAccount.collateral[].state",
+                                            },
+                                        ]
+                                    }
+                            /*,
+                            {
+                                "key":"loanAccount.collateral[].collateral1FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_1"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral2FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_2"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral3FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_3"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].photoFilePath",
+                                "type":"file",
+                                "fileType":"image/*",
+                                "title":"PHOTO"
+                            }*/
+                        ]
                     }
+                ]
+            },
                 ]
             },
             {
