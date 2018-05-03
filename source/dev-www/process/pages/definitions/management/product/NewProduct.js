@@ -48,13 +48,13 @@ define({
                 "type": "box",
                 "title": "PRODUCT_INFORMATION",
                 "items": [{
-                    "key": "product.productCode",
-                    "type": "string",
-                }, {
                     "key": "product.productCategory",
                     "type": "select",
                     "enumCode": "loan_product_category",
                     "required": true,
+                }, {
+                    "key": "product.productCode",
+                    "type": "string",
                 }, {
                     "key": "product.productName",
                     "type": "string",
