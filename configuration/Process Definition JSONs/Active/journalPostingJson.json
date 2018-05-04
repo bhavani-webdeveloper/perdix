@@ -36,7 +36,6 @@
                "transactionAmount",
                "transactionDate",
                "valueDate",
-               "remarks",
 			   "branchId"
             ],
             "properties": {
