@@ -1564,6 +1564,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].extentOfProperty",
+                                "inputmode": "number",
                             },
                             {
                                 "key":"loanAccount.collateral[].extentOfPropertyUnit",
@@ -1593,7 +1594,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key: "loanAccount.collateral[].subRegistrarPincode",
                                 type: "lov",
                                 "title":"SUB_REGISTRAR_PINCODE",
-                                fieldType: "number",
+                                "inputmode": "number",
                                 autolov: true,
                                 inputMap: {
                                     "subRegistrarPincode": {

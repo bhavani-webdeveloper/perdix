@@ -362,6 +362,13 @@
                      "LoanInitiation", "PendingForPartner"
                   ]
                },
+               "loanApplicationDate":{
+                  "title":"Loan Application Date",
+                  "type":"string",
+                  "captureStages":[
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
                "loanAppraisalDate":{
                   "title":"Loan Appraisal Date",
                   "type":"string",
