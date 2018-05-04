@@ -107,6 +107,8 @@ export class LoanProcess {
             if (aIndex == -1){
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = this.applicantEnrolmentProcess.customer.id;
+                lcr.urn = this.applicantEnrolmentProcess.customer.urnNo;
+                lcr.name = this.applicantEnrolmentProcess.customer.firstName;
                 lcr.relation = LoanCustomerRelationTypes.APPLICANT;
                 this.loanAccount.loanCustomerRelations.push(lcr);
             }
@@ -127,6 +129,8 @@ export class LoanProcess {
             if (aIndex == -1){
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = coApplicant.customer.id;
+                lcr.urn = coApplicant.customer.urnNo;
+                lcr.name = coApplicant.customer.firstName;
                 lcr.relation = LoanCustomerRelationTypes.CO_APPLICANT;
                 this.loanAccount.loanCustomerRelations.push(lcr);
             }
@@ -146,6 +150,8 @@ export class LoanProcess {
             if (aIndex == -1){
                 let lcr:LoanCustomerRelation = new LoanCustomerRelation();
                 lcr.customerId = guarantor.customer.id;
+                lcr.urn = guarantor.customer.urnNo;
+                lcr.name = guarantor.customer.firstName;
                 lcr.relation = LoanCustomerRelationTypes.GUARANTOR;
                 this.loanAccount.loanCustomerRelations.push(lcr);
             }

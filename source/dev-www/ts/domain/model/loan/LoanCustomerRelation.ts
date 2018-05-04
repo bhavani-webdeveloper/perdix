@@ -15,5 +15,6 @@ export class LoanCustomerRelation {
     relation: LoanCustomerRelationTypes;
     relationshipWithApplicant: string;
     urn: string;
+    name: string;
     version: number;
 }
