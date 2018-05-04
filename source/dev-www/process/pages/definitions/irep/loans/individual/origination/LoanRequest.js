@@ -96,7 +96,7 @@ define([],function(){
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
-                                    "startEmpty": false
+                                    "startEmpty": true
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.customerId": {
                                    "readonly": true
@@ -793,28 +793,6 @@ define([],function(){
                             model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
                         })
                     }
-
-                /*Loan customer relations */
-                // if (_.hasIn(model.loanAccount, 'loanCustomerRelations') &&
-                // model.loanAccount.loanCustomerRelations!=null &&
-                // model.loanAccount.loanCustomerRelations.length > 0) {
-                // var lcr = model.loanAccount.loanCustomerRelations;
-                // var idArr = [];
-                // for (var i=0;i<lcr.length;i++){
-                //     idArr.push(lcr[i].customerId);
-                // }
-                // Queries.getCustomerBasicDetails({'ids': idArr})
-                //     .then(function(result){
-                //         if (result && result.ids){
-                //             for (var i = 0; i < lcr.length; i++) {
-                //                 var cust = result.ids[lcr[i].customerId];
-                //                 if (cust) {
-                //                     model.loanAccount.loanCustomerRelations[i].name = cust.first_name;
-                //                 }
-                //             }
-                //         }
-                //     });
-                // }
                     /* End of Deviations and Mitigations grouping */
 
                     self = this;
