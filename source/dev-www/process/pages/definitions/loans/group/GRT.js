@@ -48,6 +48,10 @@ define({
                 model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
                }
             }
+
+            for (var i=0; i< model.group.jlgGroupMembers.length; i++){
+                model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = (model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa || 0 )/ 100; 
+            }
         };
 
         var fillNames = function(model) {

@@ -622,12 +622,6 @@ define({
                     //     }
                     // }
 
-                    for (var i=0; i< model.group.jlgGroupMembers.length; i++){
-                        model.group.jlgGroupMembers[i].centreCode = model.group.centreCode;
-                        if(!model.group.id){
-                            model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = model.group.jlgGroupMembers[i].loanAmount;
-                        }   
-                    }
                     PageHelper.clearErrors();
                     PageHelper.showLoader();
                     var reqData = _.cloneDeep(model);
@@ -643,6 +637,12 @@ define({
                             PageHelper.hideLoader();
                         });
                     } else {
+                        for (var i=0; i< reqData.group.jlgGroupMembers.length; i++){
+                            reqData.group.jlgGroupMembers[i].centreCode = reqData.group.centreCode;
+                            if(!reqData.group.id){
+                                reqData.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = reqData.group.jlgGroupMembers[i].loanAmount * 100;
+                            }   
+                        }
                         saveData(reqData).then(function(res) {
                             proceedData(res).then(function(res1) {
                                 irfNavigator.goBack();
