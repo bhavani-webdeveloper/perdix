@@ -378,7 +378,7 @@
 
                               "extentOfProperty":{
                                  "title":"EXTENT_OF_PROPERTY",
-                                 "type":["null","number"]
+                                 "type": ["string","null"]
                               },
                               "extentOfPropertyUnit":{
                                  "title":"EXTENT_OF_PROPERTY_UNIT",
@@ -416,7 +416,7 @@
 
                               "subRegistrarPincode":{
                                  "title":"SUB_REGISTRAR_PINCODE",
-                                 "type":["null", "number"]
+                                 "type": ["string","null"]
                               },
 
                               "subRegistrarVillage":{
