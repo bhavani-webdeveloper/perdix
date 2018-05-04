@@ -296,9 +296,8 @@
                                 
                             },
                             "loanAmountSanctionedInPaisa": {
-                                "type": "integer",
-                                "title": "LoanAmountSanctionedInPaisa"
-                                
+                                 "title": "loanAmountSanctionedInPaisa",
+                                 "type": ["number", "null"]
                             },
                             "loanPurpose1": {
                                 "type": "string",
@@ -418,7 +417,6 @@
                             "literateWitnessLastName",
                             "literateWitnessMiddleName",
                             "loanAmount",
-                            "loanAmountSanctionedInPaisa",
                             "loanPurpose1",
                             "relation",
                             "udf1",
@@ -618,6 +616,10 @@
                                 "type": "integer",
                                 "title": "LoanAmountRequested"
                                 
+                            },
+                            "loanAmountSanctionedInPaisa": {
+                                 "title": "loanAmountSanctionedInPaisa",
+                                 "type": ["number", "null"]
                             },
                             "loanApplicationDate": {
                                 "type": "string",

@@ -879,6 +879,24 @@
                      "captureStages": [
                         "DSC"
                      ]
+                  },
+                  "loanAmountSanctionedInPaisa": {
+                     "title": "loanAmountSanctionedInPaisa",
+                     "type": "number",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "loanAmountRequested": {
+                     "title": "loanAmountRequested",
+                     "type": "number",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
                   }
                }
             }
