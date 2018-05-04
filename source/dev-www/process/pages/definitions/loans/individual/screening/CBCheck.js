@@ -66,7 +66,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 if (customerType == 'APP'){
                     model.customer.inqUnqRefNo = response.inqUnqRefNo;
                     model.customer.EquifaxStatus = response.status;
-                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    if((response.status != 'SUCCESS' && response.status != 'PROCESSED') || response.response=='ACKNOWLEDGEMENT : PROCESSED')
                         model.customer.applicantEquifaxFailed = true;
                     else
                         model.customer.applicantEquifaxFailed = false;
@@ -75,7 +75,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 else if(customerType == 'CO-APP'){
                     model.customer.coapplicants[index].inqUnqRefNo = response.inqUnqRefNo;
                     model.customer.coapplicants[index].EquifaxStatus = response.status;
-                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    if((response.status != 'SUCCESS' && response.status != 'PROCESSED') || response.response=='ACKNOWLEDGEMENT : PROCESSED')
                         model.customer.coapplicants[index].applicantEquifaxFailed = true;
                     else
                         model.customer.coapplicants[index].applicantEquifaxFailed = false;
@@ -83,7 +83,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 else if(customerType == 'GUARANTOR'){
                     model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
                     model.customer.guarantors[index].EquifaxStatus = response.status;
-                    if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    if((response.status != 'SUCCESS' && response.status != 'PROCESSED') || response.response=='ACKNOWLEDGEMENT : PROCESSED')
                         model.customer.guarantors[index].applicantEquifaxFailed = true;
                     else
                         model.customer.guarantors[index].applicantEquifaxFailed = false;
