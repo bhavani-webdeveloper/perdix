@@ -1361,36 +1361,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         return false;
                     }
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                    var selfAvailable = false;
-                    if (model.siteCode != 'saija' && model.customer.familyMembers && model.customer.familyMembers.length > 0) {
-                        for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                            if (model.customer.familyMembers[idx].relationShip == "self") {
-                                selfAvailable = true;
-                                break;
-                            }
-                        }
-                        if (!selfAvailable) {
-                            irfProgressMessage.pop('enrollment-submit', 'Self information in Family Details section is mandatory to proceed.', 5000);
-                            return false;
-                        }
-                    }
-
-                    if (model.siteCode != 'saija' && model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
-                        var spouseInfoReq = true;
-                        for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                            if (model.customer.familyMembers[idx].relationShip == "Husband" ||
-                                model.customer.familyMembers[idx].relationShip == "Wife") {
-                                spouseInfoReq = false;
-                                break;
-                            }
-                        }
-
-                        if (spouseInfoReq) {
-                            irfProgressMessage.pop('enrollment-submit', 'Please add customer Spouse information in Family Details section also to proceed.', 5000);
-                            return false;
-                        }
-                    }
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 
